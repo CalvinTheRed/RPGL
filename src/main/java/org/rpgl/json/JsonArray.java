@@ -9,15 +9,13 @@ import java.util.Collection;
  * @author Calvin Withun 10-16-2022
  *
  * <p>
- * The <code>JsonArray</code> class represents json arrays. All
- * virtual representations of json arrays, such as <code>[1,2,3]</code>,
- * are implemented as instances of this class. <code>JsonArray</code>
- * is a class derived from <code>ArrayList&ltObject&gt</code>.
+ * The <code>JsonArray</code> class represents json arrays. All virtual representations of json arrays, such as
+ * <code>[1,2,3]</code>, are implemented as instances of this class. <code>JsonArray</code>is a class derived from
+ * <code>ArrayList&ltObject&gt</code>.
  * </p>
  * <p>
- * JsonArray objects are mutable; after they are constructed,
- * JsonArray objects can be given new items and they can have their
- * items removed.
+ * JsonArray objects are mutable; after they are constructed, JsonArray objects can be given new items and they can have
+ * their items removed.
  * </p>
  *
  */

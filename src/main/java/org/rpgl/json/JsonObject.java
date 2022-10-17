@@ -11,15 +11,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Calvin Withun 10-16-2022
  *
  * <p>
- * The <code>JsonObject</code> class represents json objects. All virtual
- * representations of json objects, such as <code>{"key":"value"}</code>,
- * are implemented as instances of this class. <code>JsonObject</code> is
- * a class derived from <code>ConcurrentHashMap&ltString,Object&gt</code>.
+ * The <code>JsonObject</code> class represents json objects. All virtual representations of json objects, such as
+ * <code>{"key":"value"}</code>, are implemented as instances of this class. <code>JsonObject</code> is a class derived
+ * from <code>ConcurrentHashMap&ltString,Object&gt</code>.
  * </p>
  * <p>
- * JsonObject objects are mutable; after they are constructed, JsonObject
- * objects can be given new key-value pairs, they can have keys deleted
- * from their contents, and they can have their key-value values modified.
+ * JsonObject objects are mutable; after they are constructed, JsonObject objects can be given new key-value pairs, they
+ * can have keys deletedfrom their contents, and they can have their key-value values modified.
  * </p>
  *
  */

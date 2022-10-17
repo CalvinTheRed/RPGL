@@ -31,7 +31,7 @@ public final class JsonParser {
      * 	</p>
      * 	<p>
      * 	Returns the JSON object represented by the data in the file located at the given file path. A JSON object may
-     * 	not includeany keys which contain the period ( . ) character.
+     * 	not include any keys which contain the period ( . ) character.
      * 	</p>
      *
      * 	@param filepath a file path String
@@ -135,8 +135,7 @@ public final class JsonParser {
      * 	</p>
      *
      * 	@param file a file containing a JSON array to be parsed
-     * 	@return the JSON array represented by the data in the given
-     * 	file.
+     * 	@return the JSON array represented by the data in the given file.
      * 	@throws FileNotFoundException if the file does not exist
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
@@ -259,7 +258,7 @@ public final class JsonParser {
         }
 
         Stack<Character> stack = new Stack<>();
-        JsonObject jobj = new JsonObject();
+        JsonObject jsonObject = new JsonObject();
 
         int beginIndex = 1;
         int currentIndex = beginIndex;
@@ -324,7 +323,7 @@ public final class JsonParser {
                 if (stack.size() == 0) {
                     String entry = data.substring(beginIndex, currentIndex + 1);
                     String key = validateKey(entry);
-                    jobj.put(key, constructJsonObject(entry.substring(key.length() + 3)));
+                    jsonObject.put(key, constructJsonObject(entry.substring(key.length() + 3)));
                     beginIndex = currentIndex + 2;
                     if (dataArray[currentIndex + 1] == ',') {
                         currentIndex++;
@@ -352,7 +351,7 @@ public final class JsonParser {
                 if (stack.size() == 0) {
                     String entry = data.substring(beginIndex, currentIndex + 1);
                     String key = validateKey(entry);
-                    jobj.put(key, constructJsonArray(entry.substring(key.length() + 3)));
+                    jsonObject.put(key, constructJsonArray(entry.substring(key.length() + 3)));
                     beginIndex = currentIndex + 2;
                     if (dataArray[currentIndex + 1] == ',') {
                         currentIndex++;
@@ -365,7 +364,7 @@ public final class JsonParser {
                 if (prev != '}' && prev != ']' && stack.size() == 0) {
                     String entry = data.substring(beginIndex, currentIndex);
                     String key = validateKey(entry);
-                    jobj.put(key, constructJsonPrimitive(entry.substring(key.length() + 3)));
+                    jsonObject.put(key, constructJsonPrimitive(entry.substring(key.length() + 3)));
                     beginIndex = currentIndex + 1;
                 }
 
@@ -377,9 +376,9 @@ public final class JsonParser {
             // of the json file if this code is hit
             String entry = data.substring(beginIndex, currentIndex);
             String key = validateKey(entry);
-            jobj.put(key, constructJsonPrimitive(entry.substring(key.length() + 3)));
+            jsonObject.put(key, constructJsonPrimitive(entry.substring(key.length() + 3)));
         }
-        return jobj;
+        return jsonObject;
     }
 
     /**
