@@ -11,37 +11,31 @@ import java.util.Stack;
  * @author Calvin Withun 10-16-2022
  *
  * <p>
- * The <code>JsonParser</code> class is used to load <code>JsonObject
- * </code> objects from .json files and from Strings containing valid
- * json data. This process ignores whitespace (spaces, tabs, newlines,
- * and carriage returns) which is not located within a String value.
+ * The <code>JsonParser</code> class is used to load <code>JsonObject</code> objects from .json files and from Strings
+ * containing valid json data. This process ignores whitespace (spaces, tabs, newlines,and carriage returns) which is
+ * not located within a String value.
  * </p>
  *
  */
 public final class JsonParser {
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
-     * 	<p>
+     *	<p>
      * 	<b><i>parseObjectFile</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public static JsonObject parseObjectFile(String fiepath)
+     *  public static JsonObject parseObjectFile(String filepath)
      * 	throws FileNotFoundException, JsonFormatException
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	Returns the JSON object represented by the data in the file
-     * 	located at the given file path. A JSON object may not include
-     * 	any keys which contain the period ( ' . ' ) character.
+     * 	Returns the JSON object represented by the data in the file located at the given file path. A JSON object may
+     * 	not includeany keys which contain the period ( . ) character.
      * 	</p>
      *
-     * 	@param filepath - a file path String
-     * 	@return the JSON object represented by the data in the file
-     * 	located at the given file path
+     * 	@param filepath a file path String
+     * 	@return the JSON object represented by the data in the file located at the given file path.
      * 	@throws FileNotFoundException if the file does not exist
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
@@ -50,26 +44,22 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>parseObjectFile</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public static JsonObject parseObjectFile(File file)
+     *  public static JsonObject parseObjectFile(File file)
      * 	throws FileNotFoundException, JsonFormatException
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	Returns the JSON object represented by the data in the given
-     * 	file. A JSON object may not include any keys which contain
-     * 	the period ( ' . ' ) character.
+     * 	Returns the JSON object represented by the data in the given file. A JSON object may not include any keys which
+     * 	contain the period ( . ) character.
      * 	</p>
      *
-     * 	@param file - a file containing a JSON object to be parsed
-     * 	@return the JsonObject represented by the data in the given file
+     * 	@param file a file containing a JSON object to be parsed
+     * 	@return the JsonObject represented by the data in the given file.
      * 	@throws FileNotFoundException if the file does not exist
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
@@ -85,26 +75,22 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>parseObjectString</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public static JsonObject parseObjectString(String data)
+     *  public static JsonObject parseObjectString(String data)
      * 	throws JsonFormatException
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	Returns the JSON object represented in the given String. A
-     * 	JSON object may not include any keys which contain the period
-     * 	( ' . ' ) character.
+     * 	Returns the JSON object represented in the given String. A JSON object may not include any keys which contain
+     * 	the period ( . ) character.
      * 	</p>
      *
-     * 	@param data - a String representation of a JSON object
-     * 	@return the JSON object represented in the given String
+     * 	@param data a String representation of a JSON object
+     * 	@return the JSON object represented in the given String.
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
     public static JsonObject parseObjectString(String data) throws JsonFormatException {
@@ -112,26 +98,21 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>parseArrayFile</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public static JsonObject parseArrayFile(File file)
+     *  public static JsonObject parseArrayFile(File file)
      * 	throws FileNotFoundException, JsonFormatException
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	Returns the JSON array represented by the data in the file
-     * 	located at the given file path.
+     * 	Returns the JSON array represented by the data in the file located at the given file path.
      * 	</p>
      *
-     * 	@param filepath - a file path String
-     * 	@return the JSON array represented by the data in the file
-     * 	located at the given file path
+     * 	@param filepath a file path String
+     * 	@return the JSON array represented by the data in the file located at the given file path.
      * 	@throws FileNotFoundException if the file does not exist
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
@@ -140,26 +121,22 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>parseArrayFile</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public static JsonObject parseArrayFile(File file)
+     *  public static JsonObject parseArrayFile(File file)
      * 	throws FileNotFoundException, JsonFormatException
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	Returns the JSON array represented by the data in the given
-     * 	file.
+     * 	Returns the JSON array represented by the data in the given file.
      * 	</p>
      *
-     * 	@param file - a file containing a JSON array to be parsed
+     * 	@param file a file containing a JSON array to be parsed
      * 	@return the JSON array represented by the data in the given
-     * 	file
+     * 	file.
      * 	@throws FileNotFoundException if the file does not exist
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
@@ -174,15 +151,12 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>parseArrayString</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public static JsonObject parseArrayString(String data)
+     *  public static JsonObject parseArrayString(String data)
      * 	throws JsonFormatException
      * 	</code></pre>
      * 	</p>
@@ -190,8 +164,8 @@ public final class JsonParser {
      * 	Returns the JSON array represented by the given String.
      * 	</p>
      *
-     * 	@param data - a String representing a JSON array
-     * 	@return the JSON array represented by the given String
+     * 	@param data a String representing a JSON array
+     * 	@return the JSON array represented by the given String.
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
     public static JsonArray parseArrayString(String data) throws JsonFormatException {
@@ -199,28 +173,22 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>removeWhitespace</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public static String removeWhitespace(String line)
+     *  public static String removeWhitespace(String line)
      * 	</pre></code>
      * 	</p>
      * 	<p>
-     * 	Returns the String after removing all whitespace characters
-     * 	(' ', '\t', '\n', '\r') not contained within a nested String
-     * 	(e.g. "my string is cool" would become "mystringiscool", but
-     * 	"my string is \"very cool\"" would become "mystringis\"very
-     * 	 cool\"")
+     * 	Returns the String after removing all whitespace characters (' ', '\t', '\n', '\r') not contained within a
+     * 	nested String (e.g. "my string is cool" would become "mystringiscool", but "my string is \"very cool\"" would
+     * 	become "mystringis\"verycool\"")
      * 	</p>
      *
-     * 	@param line - a String to be processed
-     * 	@return the given String after removing all whitespace
-     * 	characters not contained within a nested String
+     * 	@param line a String to be processed
+     * 	@return the given String after removing all whitespace characters not contained within a nested String.
      */
     public static String removeWhitespace(String line) {
         Stack<Character> stack = new Stack<>();
@@ -262,26 +230,22 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>constructJsonObject</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * private static JsonObject constructJsonObject(String data)
+     *  private static JsonObject constructJsonObject(String data)
      * 	throws JsonFormatException
      * 	</pre></code>
      * 	</p>
      * 	<p>
-     * 	Returns the JSON object represented in a given String. A
-     * 	JSON object may not include any keys which contain the period
-     * 	( ' . ' ) character.
+     * 	Returns the JSON object represented in a given String. A JSON object may not include any keys which contain the
+     * 	period ( . ) character.
      * 	</p>
      *
-     * 	@param data - a String representing a JSON object
-     * 	@return the JSON object represented in the given String
+     * 	@param data a String representing a JSON object
+     * 	@return the JSON object represented in the given String.
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
     private static JsonObject constructJsonObject(String data) throws JsonFormatException {
@@ -419,15 +383,12 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>constructJsonList</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * private static JsonList constructJsonList(String data)
+     *  private static JsonList constructJsonList(String data)
      * 	throws JsonFormatException
      * 	</pre></code>
      * 	</p>
@@ -435,8 +396,8 @@ public final class JsonParser {
      * 	Returns the JSON list (array) represented by the given String.
      * 	</p>
      *
-     * 	@param data - a String representing a JSON list (array)
-     * 	@return the JSON list (array) represented by the given String
+     * 	@param data a String representing a JSON list (array)
+     * 	@return the JSON list (array) represented by the given String.
      * 	@throws JsonFormatException if there is a JSON formatting error
      */
     private static JsonArray constructJsonArray(String data) throws JsonFormatException {
@@ -563,15 +524,12 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>constructJsonPrimitive</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * private static String constructJsonPrimitive(String line)
+     *  private static String constructJsonPrimitive(String line)
      * 	throws JsonFormatException
      * 	</pre></code>
      * 	</p>
@@ -579,9 +537,10 @@ public final class JsonParser {
      * 	Returns the primitive data type (String, boolean, long, or double) represented by the given String.
      * 	</p>
      *
-     * 	@param data - a String representation of a primitive data value
-     * 	@return the primitive data value represented by the given String
-     * 	@throws JsonFormatException if the given String does not contain a String representation of a primitive data value
+     * 	@param data a String representation of a primitive data value
+     * 	@return the primitive data value represented by the given String.
+     * 	@throws JsonFormatException if the given String does not contain a String representation of a primitive data
+     * 	value
      */
     private static Object constructJsonPrimitive(String data) throws JsonFormatException {
         if (data.charAt(0) == '"' && data.charAt(data.length() - 1) == '"') {
@@ -609,34 +568,28 @@ public final class JsonParser {
     }
 
     /**
-     * 	<style>
-     * 		.tab{tab-size: 8;}
-     * 	</style>
      * 	<p>
      * 	<b><i>validateKey</i></b>
      * 	</p>
      * 	<p>
-     * 	<code>
-     * private static String validateKey(String entry)
+     * 	<pre class="tab"><code>
+     *  private static String validateKey(String entry)
      * 	throws JsonFormatException
-     * 	</code>
+     * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	Returns the key in a JSON key-value pair. All characters
-     * 	other than the period ( ' . ' ) may be used as a part of a
-     * 	key. You may pass either an entire key-value pair such as
-     * 	"\"key\":\"value\"", or just a key such as "\"key\"".
+     * 	Returns the key in a JSON key-value pair. All characters other than the period ( . ) may be used as a part of a
+     * 	key. You may pass either an entire key-value pair such as"\"key\":\"value\"", or just a key such as "\"key\"".
      * 	</p>
+     * 	<p></p>
      * 	<p>
-     * 	Note that if you pass an entire key-value pair, no characters
-     *  past the first colon ( ' : ' ) character will be considered
-     *  (in other words, this function will work as intended even if
-     *  the value of the key-value pair contains a JSON formatting
-     *  error).
+     * 	Note that if you pass an entire key-value pair, no characters past the first colon ( : ) character will be
+     * 	considered (in other words, this function will work as intended even if the value of the key-value pair contains
+     * 	a JSON formatting error).
      * 	</p>
      *
-     * 	@param entry - a String containing a JSON key
-     * 	@return the key in a JSON key-value pair
+     * 	@param entry a String containing a JSON key
+     * 	@return the key in a JSON key-value pair.
      * 	@throws JsonFormatException if the key is not formatted correctly
      */
     private static String validateKey(String entry) throws JsonFormatException {
