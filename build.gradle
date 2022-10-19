@@ -7,6 +7,9 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://plugins.gradle.org/m2/'
+    }
 }
 
 dependencies {
@@ -16,4 +19,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+git {
+    implementation 'https://github.com/CalvinTheRed/JsonUtils.git', { tag '1.0.0' }
 }
