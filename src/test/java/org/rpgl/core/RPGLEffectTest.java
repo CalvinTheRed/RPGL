@@ -1,10 +1,7 @@
 package org.rpgl.core;
 
 import org.jsonutils.JsonFormatException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.uuidtable.UUIDTable;
@@ -17,15 +14,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class RPGLEffectTest {
 
     @BeforeAll
-    static void setup() throws Exception {
+    static void beforeAll() throws Exception {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
     }
 
     @AfterAll
-    static void cleanup() {
+    static void afterAll() {
         DatapackLoader.DATAPACKS.clear();
+    }
+
+    @AfterEach
+    void afterEach() {
         UUIDTable.clear();
     }
 

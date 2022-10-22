@@ -102,4 +102,13 @@ public final class UUIDTable {
         return (RPGLObject) data;
     }
 
+    /**
+     * This method returns the number of objects being tracked in UUIDTable.
+     *
+     * @return a number
+     */
+    public static int size() {
+        return UUID_TABLE.size();
+    }
+
 }

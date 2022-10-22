@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Shield",
+  "tags": [
+    "shield",
+    "metal"
+  ],
+  "weight": 6,
+  "while_equipped": [ ]
+}

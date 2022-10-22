@@ -1,6 +1,7 @@
 package org.rpgl.core;
 
 import org.jsonutils.JsonObject;
+import org.rpgl.uuidtable.UUIDTable;
 
 /**
  * This class contains a JSON template defining a particular type of RPGLEffect. It is not intended to be used for any
@@ -26,6 +27,7 @@ public class RPGLEffectTemplate extends JsonObject {
      */
     public RPGLEffect newInstance() {
         RPGLEffect effect = new RPGLEffect(this);
+        UUIDTable.register(effect);
         return effect;
     }
 

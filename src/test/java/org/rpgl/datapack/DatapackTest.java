@@ -1,9 +1,6 @@
 package org.rpgl.datapack;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.rpgl.core.*;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -15,15 +12,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class DatapackTest {
 
     @BeforeAll
-    static void setup() throws Exception {
+    static void beforeAll() throws Exception {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
     }
 
     @AfterAll
-    static void cleanup() {
+    static void afterAll() {
         DatapackLoader.DATAPACKS.clear();
+    }
+
+    @AfterEach
+    void afterEach() {
         UUIDTable.clear();
     }
 

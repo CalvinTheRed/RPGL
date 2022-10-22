@@ -1,10 +1,7 @@
 package org.rpgl.core;
 
 import org.jsonutils.JsonArray;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.uuidtable.UUIDTable;
@@ -17,15 +14,19 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RPGLItemTemplateTest {
 
     @BeforeAll
-    static void setup() throws Exception {
+    static void beforeAll() throws Exception {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
     }
 
     @AfterAll
-    static void cleanup() {
+    static void afterAll() {
         DatapackLoader.DATAPACKS.clear();
+    }
+
+    @AfterEach
+    void afterEach() {
         UUIDTable.clear();
     }
 
@@ -52,6 +53,9 @@ public class RPGLItemTemplateTest {
         );
         assertNotNull(UUIDTable.getEffect((Long) whenEquippedEffectUuids.get(1)),
                 "Item test:test_item when_equipped effect index 1 not registered to UUIDTable."
+        );
+        assertEquals(3, UUIDTable.size(),
+                "UUIDTable does not have 3 objects registered to it."
         );
     }
 

@@ -1,0 +1,13 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Leather Armor",
+  "tags": [
+    "armor",
+    "light"
+  ],
+  "armor_base": 11,
+  "weight": 10,
+  "while_equipped": [ ]
+}

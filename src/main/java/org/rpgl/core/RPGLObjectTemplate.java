@@ -1,6 +1,8 @@
 package org.rpgl.core;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonObject;
+import org.rpgl.uuidtable.UUIDTable;
 
 /**
  * This class contains a JSON template defining a particular type of RPGLObject. It is not intended to be used for any
@@ -26,7 +28,55 @@ public class RPGLObjectTemplate extends JsonObject {
      */
     public RPGLObject newInstance() {
         RPGLObject object = new RPGLObject(this);
+        processItems(object);
+        UUIDTable.register(object);
         return object;
+    }
+
+    /**
+     * This helper method converts itemId's in an RPGLObjectTemplate's items object to RPGLItems. The UUID's of these
+     * new RPGLItems replace the original object contents.
+     *
+     * @param object the object being processed.
+     */
+    private static void processItems(RPGLObject object) {
+        Object keyValue = object.get("items");
+        if (keyValue instanceof JsonObject items) {
+
+            // process inventory array (does not include equipped items)
+            JsonArray inventoryUuids = new JsonArray();
+            if (items.get("inventory") instanceof JsonArray) {
+                JsonArray inventoryItemIds = (JsonArray) items.remove("inventory");
+                processInventory(inventoryItemIds);
+                inventoryUuids.addAll(inventoryItemIds);
+            }
+
+            // process equipped items (were not included in inventory array)
+            JsonArray equippedItemUuids = new JsonArray();
+            for (String equipmentSlotName : items.keySet()) {
+                RPGLItem item = RPGLFactory.newItem((String) items.remove(equipmentSlotName));
+                items.put(equipmentSlotName, item.get("uuid"));
+                equippedItemUuids.add(item.get("uuid"));
+            }
+            inventoryUuids.addAll(equippedItemUuids);
+
+            // replace object inventory with array of item UUIDs
+            items.put("inventory", inventoryUuids);
+        }
+    }
+
+    /**
+     * This helper method converts itemId's in an RPGLObjectTemplate's <code>items.inventory</code> array to RPGLItems.
+     * The UUID's of these new RPGLItems replace the original object contents.
+     *
+     * @param inventory the inventory being processed.
+     */
+    private static void processInventory(JsonArray inventory) {
+        while (inventory.get(0) instanceof String) {
+            String itemId = (String) inventory.remove(0);
+            RPGLItem item = RPGLFactory.newItem(itemId);
+            inventory.add(item.get("uuid"));
+        }
     }
 
 }
