@@ -29,6 +29,7 @@ public class RPGLObjectTemplate extends JsonObject {
     public RPGLObject newInstance() {
         RPGLObject object = new RPGLObject(this);
         processItems(object);
+        processEffects(object);
         UUIDTable.register(object);
         return object;
     }
@@ -76,6 +77,24 @@ public class RPGLObjectTemplate extends JsonObject {
             String itemId = (String) inventory.remove(0);
             RPGLItem item = RPGLFactory.newItem(itemId);
             inventory.add(item.get("uuid"));
+        }
+    }
+
+    /**
+     * This helper method converts effectId's in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
+     * these new RPGLEffects replace the original array contents.
+     *
+     * @param object the object being processed.
+     */
+    private static void processEffects(RPGLObject object) {
+        Object keyValue = object.remove("effects");
+        if (keyValue instanceof JsonArray effects) {
+            while (effects.get(0) instanceof String) {
+                String effectId = (String) effects.remove(0);
+                RPGLEffect effect = RPGLFactory.newEffect(effectId);
+                effects.add(effect.get("uuid"));
+            }
+            object.put("effects", effects);
         }
     }
 

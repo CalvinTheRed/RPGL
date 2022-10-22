@@ -40,7 +40,7 @@ public class RPGLItemTemplate extends JsonObject {
      * @param item the item being processed.
      */
     private static void processWhenEquipped(RPGLItem item) {
-        Object keyValue = item.get("when_equipped");
+        Object keyValue = item.remove("when_equipped");
         if (keyValue instanceof JsonArray whenEquipped) {
             while (whenEquipped.get(0) instanceof String) {
                 String effectId = (String) whenEquipped.remove(0);

@@ -24,7 +24,10 @@
       "test:shortbow"
     ]
   },
-  "effects": [ ],
+  "effects": [
+    "test:test_effect",
+    "test:test_effect"
+  ],
   "size": "Small",
   "creature_type": "Humanoid",
   "creature_subtype": "Goblinoid",

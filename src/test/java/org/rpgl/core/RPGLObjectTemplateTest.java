@@ -32,8 +32,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("object items data processed correctly")
-    void objectItemsDataProcessedCorrectly() {
+    @DisplayName("object data processed correctly")
+    void objectDataProcessedCorrectly() {
         RPGLObject object = DatapackLoader.DATAPACKS.get("test").getObjectTemplate("goblin").newInstance();
         JsonObject items = (JsonObject) object.get("items");
 
@@ -90,8 +90,30 @@ public class RPGLObjectTemplateTest {
         assertTrue(inventory.contains(items.get("offhand")),
                 "Object test:goblin offhand item not in inventory"
         );
-        assertEquals(5, UUIDTable.size(),
-                "UUIDTable does not have 5 objects registered to it."
+
+        JsonArray effects = (JsonArray) object.get("effects");
+        assertNotNull(effects,
+                "Object test:goblin missing effects array."
+        );
+        assertEquals(2, effects.size(),
+                "Object test:goblin does not have 2 effects."
+        );
+        assertNotNull(effects.get(0),
+                "Object test:goblin missing uuid at effects[0]."
+        );
+        assertNotNull(effects.get(1),
+                "Object test:goblin missing uuid at effects[1]."
+        );
+        assertNotNull(UUIDTable.getEffect((Long) effects.get(0)),
+                "Object test:goblin effect effects[0] is not registered to UUIDTable."
+        );
+        assertNotNull(UUIDTable.getEffect((Long) effects.get(1)),
+                "Object test:goblin effect effects[1] is not registered to UUIDTable."
+        );
+
+        // 1 object, 4 items, 2 effects
+        assertEquals(7, UUIDTable.size(),
+                "UUIDTable does not have 7 objects registered to it."
         );
     }
 }
