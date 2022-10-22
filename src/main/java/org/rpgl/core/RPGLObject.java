@@ -3,15 +3,20 @@ package org.rpgl.core;
 import org.jsonutils.JsonObject;
 
 /**
+ * RPGLObjects are objects which represent anything which might be placed on a game board (not including the game board
+ * or terrain itself).
  *
  * @author Calvin Withun
- *
- * <p>
- * The <code>RPGLObject</code> class represents anything which might be placed on a game board in a role-playing game.
- * This includes player characters, animals, monsters, dropped items, etc.
- * </p>
- *
  */
 public class RPGLObject extends JsonObject {
+
+    /**
+     * A copy-constructor for the RPGLObject class.
+     *
+     * @param data the data to be copied to this object
+     */
+    RPGLObject(JsonObject data) {
+        this.join(data);
+    }
 
 }

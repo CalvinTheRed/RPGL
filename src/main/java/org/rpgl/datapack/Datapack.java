@@ -1,7 +1,6 @@
 package org.rpgl.datapack;
 
 import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
@@ -14,6 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class represents a datapack, a collection of customizable data used to load novel content into RPGL for the user
+ * to use.
+ *
+ * @author Calvin Withun
+ */
 public class Datapack {
 
     private final Map<String, RPGLEffectTemplate> EFFECT_TEMPLATES = new HashMap<>();
@@ -21,29 +26,13 @@ public class Datapack {
     private final Map<String, RPGLItemTemplate>   ITEM_TEMPLATES   = new HashMap<>();
     private final Map<String, RPGLObjectTemplate> OBJECT_TEMPLATES = new HashMap<>();
 
+    /**
+     * Constructor for the Datapack class. This constructor loads all data located within a single datapack and stores
+     * it in the constructed object for future reference.
+     *
+     * @param directory a datapack directory
+     */
     public Datapack (File directory) {
-        String namespace = directory.getName();
-
-        // verify pack.info file exists and indicates a supported version
-        String version = null;
-        try {
-            JsonObject infoData = JsonParser.parseObjectFile(directory.getAbsolutePath() + "\\pack.info");
-            version = (String) infoData.get("version");
-            assert version != null;
-        } catch (JsonFormatException | FileNotFoundException e) {
-            throw new RuntimeException(String.format(
-                    "datapack {} is missing a pack.info file or it is formatted incorrectly",
-                    namespace
-            ), e);
-        } catch (AssertionError e) {
-            throw new RuntimeException(String.format(
-                    "datapack {} is not supported (version {})",
-                    namespace,
-                    version
-            ), e);
-        }
-
-        // load templates for each data type
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             if (subDirectory.isDirectory()) {
                 switch (subDirectory.getName()) {
@@ -56,6 +45,11 @@ public class Datapack {
         }
     }
 
+    /**
+     * This method loads all effect templates stored in a single directory into the object.
+     *
+     * @param directory an effects directory
+     */
     private void loadEffectTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String effectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
@@ -72,6 +66,11 @@ public class Datapack {
         }
     }
 
+    /**
+     * This method loads all event templates stored in a single directory into the object.
+     *
+     * @param directory an events directory
+     */
     private void loadEventTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String eventId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
@@ -88,6 +87,11 @@ public class Datapack {
         }
     }
 
+    /**
+     * This method loads all item templates stored in a single directory into the object.
+     *
+     * @param directory an items directory
+     */
     private void loadItemTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String itemId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
@@ -104,6 +108,11 @@ public class Datapack {
         }
     }
 
+    /**
+     * This method loads all object templates stored in a single directory into the object.
+     *
+     * @param directory an objects directory
+     */
     private void loadObjectTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String objectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
@@ -120,18 +129,42 @@ public class Datapack {
         }
     }
 
+    /**
+     * This method returns a specified RPGLEffectTemplate object.
+     *
+     * @param effectName an RPGLEffectTemplate name
+     * @return an RPGLEffectTemplate object
+     */
     public RPGLEffectTemplate getEffectTemplate(String effectName) {
         return EFFECT_TEMPLATES.get(effectName);
     }
 
+    /**
+     * This method returns a specified RPGLEventTemplate object.
+     *
+     * @param eventName an RPGLEventTemplate name
+     * @return an RPGLEventTemplate object
+     */
     public RPGLEventTemplate getEventTemplate(String eventName) {
         return EVENT_TEMPLATES.get(eventName);
     }
 
+    /**
+     * This method returns a specified RPGLItemTemplate object.
+     *
+     * @param itemName an RPGLItemTemplate name
+     * @return an RPGLItemTemplate object
+     */
     public RPGLItemTemplate getItemTemplate(String itemName) {
         return ITEM_TEMPLATES.get(itemName);
     }
 
+    /**
+     * This method returns a specified RPGLObjectTemplate object.
+     *
+     * @param objectName an RPGLObjectTemplate name
+     * @return an RPGLObjectTemplate object
+     */
     public RPGLObjectTemplate getObjectTemplate(String objectName) {
         return OBJECT_TEMPLATES.get(objectName);
     }
