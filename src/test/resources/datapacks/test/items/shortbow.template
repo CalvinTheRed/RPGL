@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Shortbow",
+  "damage_dice": [
+    {
+      "count": 1,
+      "size": 6,
+      "type": "piercing"
+    }
+  ],
+  "weapon_properties": [
+    "ammunition",
+    "range",
+    "two_handed"
+  ],
+  "tags": [
+    "simple",
+    "ranged",
+    "bow"
+  ],
+  "range": {
+    "normal": 80,
+    "long": 320
+  },
+  "weight": 2,
+  "while_equipped": [ ]
+}

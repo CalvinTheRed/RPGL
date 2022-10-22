@@ -1,0 +1,13 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Dodge",
+  "subevents": [
+    {
+      "subevent": "give_effect",
+      "effect": "test:dodging",
+      "target": "source"
+    }
+  ]
+}
