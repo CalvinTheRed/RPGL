@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
+import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.Objects;
@@ -25,6 +26,7 @@ public class RPGLObjectTest {
     @AfterAll
     static void cleanup() {
         DatapackLoader.DATAPACKS.clear();
+        UUIDTable.clear();
     }
 
     @Test

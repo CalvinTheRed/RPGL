@@ -26,11 +26,12 @@ public class RPGLItemTemplateTest {
     @AfterAll
     static void cleanup() {
         DatapackLoader.DATAPACKS.clear();
+        UUIDTable.clear();
     }
 
     @Test
     @DisplayName("item when_equipped array processed correctly")
-    void itemWhenProcessedArrayProcessedCorrectly() {
+    void itemWhenEquippedArrayProcessedCorrectly() {
         RPGLItem item = DatapackLoader.DATAPACKS.get("test").getItemTemplate("test_item").newInstance();
         JsonArray whenEquippedEffectUuids = (JsonArray) item.get("when_equipped");
 
