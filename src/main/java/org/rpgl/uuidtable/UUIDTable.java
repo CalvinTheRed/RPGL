@@ -28,7 +28,8 @@ public final class UUIDTable {
     /**
      * This method assigns a JsonObject a UUID and registers it with the UUIDTable. If the passed object already has a
      * UUID, it is registered under that value. This method is intended to be used to register RPGLEffects, RPGLItems,
-     * and RPGLObjects.
+     * and RPGLObjects. This method may cause problems if an object already has a UUID which has already been assigned
+     * to a different object.
      *
      * @param data the JsonObject to be registered
      */

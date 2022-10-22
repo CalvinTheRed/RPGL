@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonObject;
 
 /**
@@ -17,6 +18,14 @@ public class RPGLObject extends JsonObject {
      */
     RPGLObject(JsonObject data) {
         this.join(data);
+    }
+
+    public void addEffect(RPGLEffect effect) {
+        JsonArray effects = (JsonArray) this.get("effects");
+        if (effects == null) {
+            effects = new JsonArray();
+        }
+        effects.add(effect.get("uuid"));
     }
 
 }

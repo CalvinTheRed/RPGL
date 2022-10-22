@@ -5,7 +5,7 @@
   "name": "Dodge",
   "subevents": [
     {
-      "subevent": "give_effect",
+      "subevent": "apply_effect",
       "effect": "test:dodging",
       "target": "source"
     }
