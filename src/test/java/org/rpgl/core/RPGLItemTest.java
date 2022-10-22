@@ -32,9 +32,7 @@ public class RPGLItemTest {
     void verifyItemTemplateContentsAreLoadedCorrectly() throws JsonFormatException {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("test").getItemTemplate("scimitar");
         // if this much is loaded, then it is safe to assume the whole file is loaded
-        assertEquals(
-                "Calvin Withun",
-                itemTemplate.seek("metadata.author"),
+        assertEquals("Calvin Withun", itemTemplate.seek("metadata.author"),
                 "Item template test:scimitar did not load the correct content."
         );
     }

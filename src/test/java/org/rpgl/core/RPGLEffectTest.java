@@ -32,9 +32,7 @@ public class RPGLEffectTest {
     void verifyEffectTemplateContentsAreLoadedCorrectly() throws JsonFormatException {
         RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("test").getEffectTemplate("dodging");
         // if this much is loaded, then it is safe to assume the whole file is loaded
-        assertEquals(
-                "Calvin Withun",
-                effectTemplate.seek("metadata.author"),
+        assertEquals("Calvin Withun", effectTemplate.seek("metadata.author"),
                 "Effect template test:dodging did not load the correct content."
         );
     }

@@ -32,9 +32,7 @@ public class RPGLEventTest {
     void verifyEventTemplateContentsAreLoadedCorrectly() throws JsonFormatException {
         RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("test").getEventTemplate("dodge");
         // if this much is loaded, then it is safe to assume the whole file is loaded
-        assertEquals(
-                "Calvin Withun",
-                eventTemplate.seek("metadata.author"),
+        assertEquals("Calvin Withun", eventTemplate.seek("metadata.author"),
                 "Event template test:dodge did not load the correct content."
         );
     }

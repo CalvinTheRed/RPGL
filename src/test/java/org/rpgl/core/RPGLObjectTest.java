@@ -32,9 +32,7 @@ public class RPGLObjectTest {
     void verifyObjectTemplateContentsAreLoadedCorrectly() throws JsonFormatException {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("test").getObjectTemplate("goblin");
         // if this much is loaded, then it is safe to assume the whole file is loaded
-        assertEquals(
-                "Calvin Withun",
-                objectTemplate.seek("metadata.author"),
+        assertEquals("Calvin Withun", objectTemplate.seek("metadata.author"),
                 "Object template test:goblin did not load the correct content."
         );
     }
