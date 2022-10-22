@@ -25,8 +25,8 @@ public class RPGLObjectTemplate extends JsonObject {
      * @return a new RPGLObject object
      */
     public RPGLObject newInstance() {
-        // TODO write this method
-        return null;
+        RPGLObject object = new RPGLObject(this);
+        return object;
     }
 
 }

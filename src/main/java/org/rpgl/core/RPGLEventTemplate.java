@@ -25,8 +25,8 @@ public class RPGLEventTemplate extends JsonObject {
      * @return a new RPGLEvent object
      */
     public RPGLEvent newInstance() {
-        // TODO write this method
-        return null;
+        RPGLEvent event = new RPGLEvent(this);
+        return event;
     }
 
 }

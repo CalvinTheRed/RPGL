@@ -54,7 +54,7 @@ public class Datapack {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String effectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
-                RPGLEffectTemplate effectTemplate = new RPGLEffectTemplate(JsonParser.parseObjectFile(directory));
+                RPGLEffectTemplate effectTemplate = new RPGLEffectTemplate(JsonParser.parseObjectFile(subDirectory));
                 EFFECT_TEMPLATES.put(effectId, effectTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(
@@ -75,7 +75,7 @@ public class Datapack {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String eventId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
-                RPGLEventTemplate eventTemplate = new RPGLEventTemplate(JsonParser.parseObjectFile(directory));
+                RPGLEventTemplate eventTemplate = new RPGLEventTemplate(JsonParser.parseObjectFile(subDirectory));
                 EVENT_TEMPLATES.put(eventId, eventTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(
@@ -96,7 +96,7 @@ public class Datapack {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String itemId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
-                RPGLItemTemplate itemTemplate = new RPGLItemTemplate(JsonParser.parseObjectFile(directory));
+                RPGLItemTemplate itemTemplate = new RPGLItemTemplate(JsonParser.parseObjectFile(subDirectory));
                 ITEM_TEMPLATES.put(itemId, itemTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(
@@ -117,7 +117,7 @@ public class Datapack {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String objectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
-                RPGLObjectTemplate objectTemplate = new RPGLObjectTemplate(JsonParser.parseObjectFile(directory));
+                RPGLObjectTemplate objectTemplate = new RPGLObjectTemplate(JsonParser.parseObjectFile(subDirectory));
                 OBJECT_TEMPLATES.put(objectId, objectTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(

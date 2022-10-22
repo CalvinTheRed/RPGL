@@ -25,8 +25,8 @@ public class RPGLEffectTemplate extends JsonObject {
      * @return a new RPGLEffect object
      */
     public RPGLEffect newInstance() {
-        // TODO write this method
-        return null;
+        RPGLEffect effect = new RPGLEffect(this);
+        return effect;
     }
 
 }

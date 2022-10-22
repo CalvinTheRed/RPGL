@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Scimitar",
+  "damage_dice": [
+    {
+      "count": 1,
+      "size": 6,
+      "type": "slashing"
+    }
+  ],
+  "weapon_properties": [
+    "finesse",
+    "light"
+  ],
+  "tags": [
+    "martial",
+    "melee",
+    "scimitar",
+    "sword"
+  ],
+  "weight": 3,
+  "while_equipped": [
+
+  ]
+}

@@ -25,8 +25,8 @@ public class RPGLItemTemplate extends JsonObject {
      * @return a new RPGLItem object
      */
     public RPGLItem newInstance() {
-        // TODO write this method
-        return null;
+        RPGLItem item = new RPGLItem(this);
+        return item;
     }
 
 }
