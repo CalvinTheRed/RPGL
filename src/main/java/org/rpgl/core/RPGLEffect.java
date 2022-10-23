@@ -1,6 +1,7 @@
 package org.rpgl.core;
 
 import org.jsonutils.JsonObject;
+import org.rpgl.subevent.Subevent;
 
 /**
  * RPGLEffects are objects assigned to RPGLObjects which influence the final results of Subevents executed by or upon
@@ -17,6 +18,11 @@ public class RPGLEffect extends JsonObject {
      */
     RPGLEffect(JsonObject data) {
         this.join(data);
+    }
+
+    public boolean processSubevent(RPGLObject source, RPGLObject target, Subevent subevent) {
+        // TODO...
+        return false;
     }
 
 }

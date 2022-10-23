@@ -20,4 +20,6 @@ public abstract class Function {
         }
     }
 
+    public abstract void execute(long sourceUuid, long targetUuid, JsonObject data) throws FunctionMismatchException;
+
 }

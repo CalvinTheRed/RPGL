@@ -3,9 +3,14 @@
     "author": "Calvin Withun"
   },
   "name": "Goblin",
-  "ability_scores": [
-    8, 14, 10, 10, 8, 8
-  ],
+  "ability_scores": {
+    "STR": 8,
+    "DEX": 14,
+    "CON": 10,
+    "INT": 10,
+    "WIS": 8,
+    "CHA": 8
+  },
   "health_data": {
     "hit_dice": [
       { "size": 6, "spent": false },

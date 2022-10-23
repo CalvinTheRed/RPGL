@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Fireball",
+  "resources": [
+    "spell_slot_3"
+  ],
+  "area_of_effect": {
+    "type": "sphere",
+    "radius": 20,
+    "range": 150,
+    "spread_around_corners": true
+  },
+  "subevents": [
+    {
+      "subevent": "saving_throw",
+      "save_ability": "DEX",
+      "difficulty_class_ability": "INT",
+      "damage": [
+        {
+          "count": 8,
+          "size": 6,
+          "type": "fire"
+        }
+      ],
+      "damage_on_pass": "half"
+    }
+  ]
+}
