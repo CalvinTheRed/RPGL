@@ -1,6 +1,5 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.SubeventMismatchException;
@@ -34,6 +33,7 @@ public abstract class Subevent {
         this.subeventJson.join(subeventJson);
     }
 
+    @Override
     public abstract Subevent clone();
 
     public abstract Subevent clone(JsonObject subeventJson);
@@ -44,11 +44,11 @@ public abstract class Subevent {
      *
      * @param source the RPGLObject preparing to invoke the Subevent
      */
-    public void prepare(RPGLObject source) throws SubeventMismatchException {
+    public void prepare(RPGLObject source) throws Exception {
 
     }
 
-    public void invoke(RPGLObject source, RPGLObject target) throws SubeventMismatchException, JsonFormatException {
+    public void invoke(RPGLObject source, RPGLObject target) throws Exception {
         this.verifySubevent(this.subeventId);
         while (source.processSubevent(source, target, this) || target.processSubevent(source, target, this));
     }

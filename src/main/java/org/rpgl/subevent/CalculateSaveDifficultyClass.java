@@ -3,13 +3,10 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.exception.SubeventMismatchException;
 
 public class CalculateSaveDifficultyClass extends Subevent {
 
     private static final String SUBEVENT_ID = "calculate_save_difficulty_class";
-
-    private int difficultyClass = 8;
 
     public CalculateSaveDifficultyClass() {
         super(SUBEVENT_ID);
@@ -28,18 +25,18 @@ public class CalculateSaveDifficultyClass extends Subevent {
     }
 
     @Override
-    public void invoke(RPGLObject source, RPGLObject target) throws SubeventMismatchException, JsonFormatException {
-        super.invoke(source, target);
+    public void prepare(RPGLObject source) throws JsonFormatException {
+        this.subeventJson.put("difficulty_class", 8L);
         this.addBonus(source.getProficiencyModifier());
-        this.addBonus(target.getAbilityModifier((String) this.subeventJson.get("spellcasting_ability")));
+        this.addBonus(source.getAbilityModifier((String) this.subeventJson.get("spellcasting_ability")));
     }
 
-    public void addBonus(int bonus) {
-        difficultyClass += bonus;
+    public void addBonus(long bonus) {
+        this.subeventJson.put("difficulty_class", (Long) this.subeventJson.get("difficulty_class") + bonus);
     }
 
-    public int getDifficultyClass() {
-        return this.difficultyClass;
+    public long getSaveDifficultyClass() {
+        return (long) this.subeventJson.get("difficulty_class");
     }
 
 }

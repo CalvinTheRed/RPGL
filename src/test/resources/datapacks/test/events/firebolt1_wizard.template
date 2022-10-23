@@ -15,9 +15,18 @@
       "spellcasting_ability": "intelligence",
       "damage": [
         {
-          "count": 8,
-          "size": 6,
-          "type": "fire"
+          "type": "fire",
+          "dice": [
+            { "size": 6 },
+            { "size": 6 },
+            { "size": 6 },
+            { "size": 6 },
+            { "size": 6 },
+            { "size": 6 },
+            { "size": 6 },
+            { "size": 6 }
+          ],
+          "bonus": 0
         }
       ],
       "damage_on_pass": "half"

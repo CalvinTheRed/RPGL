@@ -46,7 +46,7 @@ public class RPGLObject extends JsonObject {
         return effects;
     }
 
-    public void invokeEvent(RPGLObject[] targets, RPGLEvent event) throws SubeventMismatchException, JsonFormatException {
+    public void invokeEvent(RPGLObject[] targets, RPGLEvent event) throws Exception {
         // assume that any necessary resources have already been spent
         JsonArray subevents = (JsonArray) event.get("subevents");
         for (Object subeventElement : subevents) {
@@ -70,33 +70,42 @@ public class RPGLObject extends JsonObject {
         return wasSubeventProcessed;
     }
 
-    public int getProficiencyModifier() {
-        int level;
+    public long getProficiencyModifier() {
+        long level;
         try {
             JsonArray hitDice = (JsonArray) this.seek("health_data.hit_dice");
             level = hitDice.size();
         } catch (JsonFormatException e) {
-            level = 1;
+            level = 1L;
         }
         return this.getProficiencyModifier(level);
     }
 
-    public int getProficiencyModifier(int level) {
-        return ((level - 1) / 4) + 2;
+    public long getProficiencyModifier(long level) {
+        return ((level - 1L) / 4L) + 2L;
     }
 
-    public int getAbilityModifier(String ability) throws JsonFormatException {
+    public long getAbilityModifier(String ability) throws JsonFormatException {
         // TODO this should eventually operate using a Subevent to get the ability score
         return this.getAbilityModifier((Long) this.seek("ability_scores." + ability));
     }
 
-    public int getAbilityModifier(long abilityScore) {
-        if (abilityScore < 10) {
+    public long getAbilityModifier(long abilityScore) {
+        if (abilityScore < 10L) {
             // integer division rounds toward zero, so abilityScore must be
             // adjusted to calculate the correct values for negative modifiers
             abilityScore --;
         }
-        return (int) ((abilityScore - 10) / 2);
+        return (abilityScore - 10L) / 2L;
+    }
+
+    public long getSaveProficiencyBonus(String ability) {
+        // TODO this should eventually operate using a Subevent to get a proficiency bonus
+        return 0L;
+    }
+
+    public void receiveDamage(JsonObject damageObject) {
+        // TODO reduce health here and use a Subevent to check for resistance, vulnerability, or immunity.
     }
 
 }

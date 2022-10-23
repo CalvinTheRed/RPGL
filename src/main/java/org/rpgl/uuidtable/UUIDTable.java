@@ -5,9 +5,9 @@ import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is dedicated to tracking all JsonObject objects which persist during runtime. Objects are given UUID's so
@@ -21,7 +21,7 @@ public final class UUIDTable {
     private static final Random r;
 
     static {
-        UUID_TABLE = new HashMap<>();
+        UUID_TABLE = new ConcurrentHashMap<>();
         r = new Random(System.currentTimeMillis());
     }
 
