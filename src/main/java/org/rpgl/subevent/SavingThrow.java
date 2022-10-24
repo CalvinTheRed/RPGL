@@ -1,5 +1,6 @@
 package org.rpgl.subevent;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLObject;
@@ -50,9 +51,9 @@ public class SavingThrow extends Subevent {
         this.roll();
         this.checkForReroll(source, target);
         if (this.getSavingThrowTotal() < (Long) this.subeventJson.get("save_difficulty_class")) {
-            this.resolveSaveFailure(source, target);
+            this.resolveSaveFail(source, target);
         } else {
-            this.resolveSaveSuccess(source, target);
+            this.resolveSavePass(source, target);
         }
     }
 
@@ -184,9 +185,6 @@ public class SavingThrow extends Subevent {
                         this.subeventJson.put("base_die_roll", rerollDieValue);
                     }
                     break;
-//                case "choose":
-//                    this might not end up receiving support...
-//                    break;
             }
         }
     }
@@ -195,37 +193,14 @@ public class SavingThrow extends Subevent {
         return (Long) this.subeventJson.get("base_saving_throw") + (Long) this.subeventJson.get("bonus");
     }
 
-    private void resolveSaveSuccess(RPGLObject source, RPGLObject target) {
-
+    private void resolveSavePass(RPGLObject source, RPGLObject target) throws Exception {
+        this.resolvePassDamage(source, target);
+        this.resolveNestedSubevents(source, target, "pass");
     }
 
-    private void resolveSaveFailure(RPGLObject source, RPGLObject target) throws Exception {
-        /*
-         * Take full damage, if damage is dealt
-         */
-        JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
-        if (baseDamage != null) {
-            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(source, target).entrySet()) {
-                String damageType = targetDamageEntry.getKey();
-                if (baseDamage.containsKey(damageType)) {
-                    Long baseTypedDamage = (Long) baseDamage.get(damageType);
-                    baseTypedDamage += (Long) targetDamageEntry.getValue();
-                    if (baseTypedDamage < 1L) {
-                        // You can never deal less than 1 point of damage for any given
-                        // damage type, given that you deal damage of that type at all.
-                        baseTypedDamage = 1L;
-                    }
-                    baseDamage.put(damageType, baseTypedDamage);
-                } else {
-                    baseDamage.entrySet().add(targetDamageEntry);
-                }
-            }
-            target.receiveDamage(baseDamage);
-        }
-        /*
-         * TODO Do anything else entailed by the fail (apply effects, etc)
-         */
-
+    private void resolveSaveFail(RPGLObject source, RPGLObject target) throws Exception {
+        this.resolveFailDamage(source, target);
+        this.resolveNestedSubevents(source, target, "fail");
     }
 
     private JsonObject getTargetDamage(RPGLObject source, RPGLObject target) throws Exception {
@@ -258,6 +233,76 @@ public class SavingThrow extends Subevent {
         targetDamageRoll.invoke(source, target);
 
         return targetDamageRoll.getBaseDamage();
+    }
+
+    private void resolvePassDamage(RPGLObject source, RPGLObject target) throws Exception {
+        JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
+        String damageOnPass = (String) this.subeventJson.get("damage_on_pass");
+        if (baseDamage != null && !"none".equals(damageOnPass)) {
+            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(source, target).entrySet()) {
+                String damageType = targetDamageEntry.getKey();
+                if (baseDamage.containsKey(damageType)) {
+                    Long baseTypedDamage = (Long) baseDamage.get(damageType);
+                    baseTypedDamage += (Long) targetDamageEntry.getValue();
+                    if (baseTypedDamage < 1L) {
+                        // You can never deal less than 1 point of damage for any given
+                        // damage type, given that you deal damage of that type at all.
+                        baseTypedDamage = 1L;
+                    }
+                    baseDamage.put(damageType, baseTypedDamage);
+                } else {
+                    baseDamage.entrySet().add(targetDamageEntry);
+                }
+            }
+
+            if ("half".equals(damageOnPass)) {
+                for (Map.Entry<String, Object> damageEntryElement : baseDamage.entrySet()) {
+                    Long value = (Long) damageEntryElement.getValue();
+                    value /= 2L;
+                    if (value < 1L) {
+                        // You can never deal less than 1 point of damage for any given
+                        // damage type, given that you deal damage of that type at all.
+                        value = 1L;
+                    }
+                    damageEntryElement.setValue(value);
+                }
+                target.receiveDamage(baseDamage);
+            } else if ("all".equals(damageOnPass)) {
+                target.receiveDamage(baseDamage);
+            }
+        }
+    }
+
+    private void resolveFailDamage(RPGLObject source, RPGLObject target) throws Exception {
+        JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
+        if (baseDamage != null) {
+            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(source, target).entrySet()) {
+                String damageType = targetDamageEntry.getKey();
+                if (baseDamage.containsKey(damageType)) {
+                    Long baseTypedDamage = (Long) baseDamage.get(damageType);
+                    baseTypedDamage += (Long) targetDamageEntry.getValue();
+                    if (baseTypedDamage < 1L) {
+                        // You can never deal less than 1 point of damage for any given
+                        // damage type, given that you deal damage of that type at all.
+                        baseTypedDamage = 1L;
+                    }
+                    baseDamage.put(damageType, baseTypedDamage);
+                } else {
+                    baseDamage.entrySet().add(targetDamageEntry);
+                }
+            }
+            target.receiveDamage(baseDamage);
+        }
+    }
+
+    private void resolveNestedSubevents(RPGLObject source, RPGLObject target, String passOrFail) throws Exception {
+        JsonArray subeventJsonArray = (JsonArray) this.subeventJson.get(passOrFail);
+        for (Object subeventJsonElement : subeventJsonArray) {
+            JsonObject subeventJson = (JsonObject) subeventJsonElement;
+            Subevent subevent = Subevent.SUBEVENTS.get((String) subeventJson.get("subevent")).clone(subeventJson);
+            subevent.prepare(source);
+            subevent.invoke(source, target);
+        }
     }
 
 }
