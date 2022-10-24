@@ -30,13 +30,9 @@ public final class DatapackLoader {
     public static void loadDatapacks(File directory) {
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.isDirectory()) {
-                try {
-                    checkPackInfo(file);
-                    Datapack datapack = new Datapack(file);
-                    DATAPACKS.put(file.getName(), datapack);
-                } catch (RuntimeException e) {
-                    // datapack failed to load
-                }
+                checkPackInfo(file);
+                Datapack datapack = new Datapack(file);
+                DATAPACKS.put(file.getName(), datapack);
             }
         }
     }

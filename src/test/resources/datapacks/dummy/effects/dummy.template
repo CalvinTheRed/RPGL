@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Dummy Effect",
+  "behavior": [
+    {
+      "conditions": [
+        {
+          "condition": "true"
+        }
+      ],
+      "functions": [
+        {
+          "function": "test_function"
+        }
+      ]
+    }
+  ]
+}

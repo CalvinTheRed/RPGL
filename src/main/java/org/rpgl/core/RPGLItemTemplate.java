@@ -34,20 +34,20 @@ public class RPGLItemTemplate extends JsonObject {
     }
 
     /**
-     * This helper method converts effectId's in an RPGLItemTemplate's when_equipped array to RPGLEffects. The UUID's of
+     * This helper method converts effectId's in an RPGLItemTemplate's while_equipped array to RPGLEffects. The UUID's of
      * these new RPGLEffects replace the original array contents.
      *
      * @param item the item being processed.
      */
     private static void processWhenEquipped(RPGLItem item) {
-        Object keyValue = item.remove("when_equipped");
-        if (keyValue instanceof JsonArray whenEquipped) {
-            while (whenEquipped.get(0) instanceof String) {
-                String effectId = (String) whenEquipped.remove(0);
+        Object keyValue = item.remove("while_equipped");
+        if (keyValue instanceof JsonArray whileEquipped) {
+            while (!whileEquipped.isEmpty() && whileEquipped.get(0) instanceof String) {
+                String effectId = (String) whileEquipped.remove(0);
                 RPGLEffect effect = RPGLFactory.newEffect(effectId);
-                whenEquipped.add(effect.get("uuid"));
+                whileEquipped.add(effect.get("uuid"));
             }
-            item.put("when_equipped", whenEquipped);
+            item.put("while_equipped", whileEquipped);
         }
     }
 

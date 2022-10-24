@@ -33,86 +33,82 @@ public class RPGLObjectTemplateTest {
 
     @Test
     @DisplayName("object data processed correctly")
-    void objectDataProcessedCorrectly() {
-        RPGLObject object = DatapackLoader.DATAPACKS.get("test").getObjectTemplate("goblin").newInstance();
+    void test1() {
+        RPGLObject object = DatapackLoader.DATAPACKS.get("dummy").getObjectTemplate("dummy").newInstance();
         JsonObject items = (JsonObject) object.get("items");
 
         assertNotNull(items,
-                "Object test:goblin missing items object."
+                "Object dummy:dummy missing items object."
         );
         JsonArray inventory = (JsonArray) items.get("inventory");
 
         assertNotNull(inventory,
-                "Object test:goblin missing items.inventory array."
+                "Object dummy:dummy missing items.inventory array."
         );
         assertEquals(4, inventory.size(),
-                "Object test:goblin does not have 4 items in items.inventory."
+                // mainhand, offhand, and 2 inventory dummy items
+                "Object dummy:dummy does not have 4 items in items.inventory."
         );
         assertNotNull(inventory.get(0),
-                "Object test:goblin missing uuid at items.inventory[0]."
+                "Object dummy:dummy missing uuid at items.inventory[0]."
         );
         assertNotNull(inventory.get(1),
-                "Object test:goblin missing uuid at items.inventory[1]."
+                "Object dummy:dummy missing uuid at items.inventory[1]."
         );
         assertNotNull(inventory.get(2),
-                "Object test:goblin missing uuid at items.inventory[2]."
+                "Object dummy:dummy missing uuid at items.inventory[2]."
         );
         assertNotNull(inventory.get(3),
-                "Object test:goblin missing uuid at items.inventory[3]."
+                "Object dummy:dummy missing uuid at items.inventory[3]."
         );
         assertNotNull(UUIDTable.getItem((Long) inventory.get(0)),
-                "Object test:goblin item items.inventory[0] is not registered to UUIDTable."
+                "Object dummy:dummy item items.inventory[0] is not registered to UUIDTable."
         );
         assertNotNull(UUIDTable.getItem((Long) inventory.get(1)),
-                "Object test:goblin item items.inventory[1] is not registered to UUIDTable."
+                "Object dummy:dummy item items.inventory[1] is not registered to UUIDTable."
         );
         assertNotNull(UUIDTable.getItem((Long) inventory.get(2)),
-                "Object test:goblin item items.inventory[2] is not registered to UUIDTable."
+                "Object dummy:dummy item items.inventory[2] is not registered to UUIDTable."
         );
         assertNotNull(UUIDTable.getItem((Long) inventory.get(3)),
-                "Object test:goblin item items.inventory[3] is not registered to UUIDTable."
-        );
-        assertNotNull(items.get("armor"),
-                "Object test:goblin armor slot empty."
+                "Object dummy:dummy item items.inventory[3] is not registered to UUIDTable."
         );
         assertNotNull(items.get("mainhand"),
-                "Object test:goblin mainhand slot empty."
+                "Object dummy:dummy mainhand slot empty."
         );
         assertNotNull(items.get("offhand"),
-                "Object test:goblin offhand slot empty."
-        );
-        assertTrue(inventory.contains(items.get("armor")),
-                "Object test:goblin armor item not in inventory"
+                "Object dummy:dummy offhand slot empty."
         );
         assertTrue(inventory.contains(items.get("mainhand")),
-                "Object test:goblin mainhand item not in inventory"
+                "Object dummy:dummy mainhand item not in inventory"
         );
         assertTrue(inventory.contains(items.get("offhand")),
-                "Object test:goblin offhand item not in inventory"
+                "Object dummy:dummy offhand item not in inventory"
         );
 
         JsonArray effects = (JsonArray) object.get("effects");
         assertNotNull(effects,
-                "Object test:goblin missing effects array."
+                "Object dummy:dummy missing effects array."
         );
         assertEquals(2, effects.size(),
-                "Object test:goblin does not have 2 effects."
+                "Object dummy:dummy does not have 2 effects."
         );
         assertNotNull(effects.get(0),
-                "Object test:goblin missing uuid at effects[0]."
+                "Object dummy:dummy missing uuid at effects[0]."
         );
         assertNotNull(effects.get(1),
-                "Object test:goblin missing uuid at effects[1]."
+                "Object dummy:dummy missing uuid at effects[1]."
         );
         assertNotNull(UUIDTable.getEffect((Long) effects.get(0)),
-                "Object test:goblin effect effects[0] is not registered to UUIDTable."
+                "Object dummy:dummy effect effects[0] is not registered to UUIDTable."
         );
         assertNotNull(UUIDTable.getEffect((Long) effects.get(1)),
-                "Object test:goblin effect effects[1] is not registered to UUIDTable."
+                "Object dummy:dummy effect effects[1] is not registered to UUIDTable."
         );
 
         // 1 object, 4 items, 2 effects
         assertEquals(7, UUIDTable.size(),
+                // 1 object, 2 effects, 4 items
                 "UUIDTable does not have 7 objects registered to it."
         );
     }

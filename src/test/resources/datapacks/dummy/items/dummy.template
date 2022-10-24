@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Dummy Item",
+  "tags": [ ],
+  "weight": 1,
+  "while_equipped": [
+    "dummy:dummy",
+    "dummy:dummy"
+  ]
+}

@@ -12,14 +12,19 @@ public abstract class Condition {
 
     static {
         CONDITIONS = new HashMap<>();
+        Condition.CONDITIONS.put("all", new All());
+        Condition.CONDITIONS.put("any", new Any());
+        Condition.CONDITIONS.put("false", new False());
+        Condition.CONDITIONS.put("invert", new Invert());
+        Condition.CONDITIONS.put("true", new True());
     }
 
-    public void verifyCondition(String expected, JsonObject data) throws ConditionMismatchException {
-        if (!expected.equals(data.get("condition"))) {
-            throw new ConditionMismatchException(expected, (String) data.get("condition"));
+    public void verifyCondition(String expected, JsonObject conditionJson) throws ConditionMismatchException {
+        if (!expected.equals(conditionJson.get("condition"))) {
+            throw new ConditionMismatchException(expected, (String) conditionJson.get("condition"));
         }
     }
 
-    public abstract boolean evaluate(long sourceUuid, long targetUuid, JsonObject data) throws ConditionMismatchException;
+    public abstract boolean evaluate(long sourceUuid, long targetUuid, JsonObject conditionJson) throws ConditionMismatchException;
 
 }

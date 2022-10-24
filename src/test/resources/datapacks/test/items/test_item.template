@@ -3,7 +3,7 @@
     "author": "Calvin Withun"
   },
   "name": "Test Item",
-  "when_equipped": [
+  "while_equipped": [
     "test:test_effect",
     "test:test_effect"
   ]

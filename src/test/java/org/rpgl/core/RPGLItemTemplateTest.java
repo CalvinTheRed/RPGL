@@ -31,28 +31,28 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
-    @DisplayName("item when_equipped array processed correctly")
+    @DisplayName("item while_equipped array processed correctly")
     void itemWhenEquippedArrayProcessedCorrectly() {
-        RPGLItem item = DatapackLoader.DATAPACKS.get("test").getItemTemplate("test_item").newInstance();
-        JsonArray whenEquippedEffectUuids = (JsonArray) item.get("when_equipped");
+        RPGLItem item = DatapackLoader.DATAPACKS.get("dummy").getItemTemplate("dummy").newInstance();
+        JsonArray whenEquippedEffectUuids = (JsonArray) item.get("while_equipped");
 
         assertNotNull(whenEquippedEffectUuids,
-                "Item test:test_item missing when_equipped array."
+                "Item dummy:dummy missing while_equipped array."
         );
         assertEquals(2, whenEquippedEffectUuids.size(),
-                "Item test:test_item does not have 2 elements in when_equipped array."
+                "Item dummy:dummy does not have 2 elements in while_equipped array."
         );
         assertNotNull(whenEquippedEffectUuids.get(0),
-                "Item test:test_item when_equipped array is missing uuid at index 0."
+                "Item dummy:dummy while_equipped array is missing uuid at index 0."
         );
         assertNotNull(whenEquippedEffectUuids.get(1),
-                "Item test:test_item when_equipped array is missing uuid at index 1."
+                "Item dummy:dummy while_equipped array is missing uuid at index 1."
         );
         assertNotNull(UUIDTable.getEffect((Long) whenEquippedEffectUuids.get(0)),
-                "Item test:test_item when_equipped effect index 0 not registered to UUIDTable."
+                "Item dummy:dummy while_equipped effect index 0 not registered to UUIDTable."
         );
         assertNotNull(UUIDTable.getEffect((Long) whenEquippedEffectUuids.get(1)),
-                "Item test:test_item when_equipped effect index 1 not registered to UUIDTable."
+                "Item dummy:dummy while_equipped effect index 1 not registered to UUIDTable."
         );
         assertEquals(3, UUIDTable.size(),
                 "UUIDTable does not have 3 objects registered to it."

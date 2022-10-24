@@ -2,11 +2,11 @@ package org.rpgl.datapack;
 
 import org.junit.jupiter.api.*;
 import org.rpgl.core.*;
-import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DatapackTest {
@@ -23,48 +23,51 @@ public class DatapackTest {
         DatapackLoader.DATAPACKS.clear();
     }
 
-    @AfterEach
-    void afterEach() {
-        UUIDTable.clear();
-    }
-
     @Test
-    @DisplayName("verify effect template can be loaded")
-    void verifyEffectTemplateCanBeLoaded() {
-        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("test").getEffectTemplate("dodging");
-        assertNotNull(
-                effectTemplate,
-                "Effect template test:dodging failed to load."
+    @DisplayName("verify effect templates can be loaded")
+    void test1() {
+        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("dummy").getEffectTemplate("dummy");
+        assertNotNull(effectTemplate,
+                "Effect template dummy:dummy failed to load."
+        );
+        assertEquals("Dummy Effect", effectTemplate.get("name"),
+                "Effect template dummy:dummy failed to load the correct content."
         );
     }
 
     @Test
-    @DisplayName("verify event template can be loaded")
-    void verifyEventTemplateCanBeLoaded() {
-        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("test").getEventTemplate("dodge");
-        assertNotNull(
-                eventTemplate,
-                "Event template test:dodge failed to load."
+    @DisplayName("verify event templates can be loaded")
+    void test2() {
+        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("dummy").getEventTemplate("dummy");
+        assertNotNull(eventTemplate,
+                "Event template dummy:dummy failed to load."
+        );
+        assertEquals("Dummy Event", eventTemplate.get("name"),
+                "Event template dummy:dummy failed to load the correct content."
         );
     }
 
     @Test
-    @DisplayName("verify item template can be loaded")
-    void verifyItemTemplateCanBeLoaded() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("test").getItemTemplate("scimitar");
-        assertNotNull(
-                itemTemplate,
-                "Item template test:scimitar failed to load."
+    @DisplayName("verify item templates can be loaded")
+    void test3() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("dummy").getItemTemplate("dummy");
+        assertNotNull(itemTemplate,
+                "Item template dummy:dummy failed to load."
+        );
+        assertEquals("Dummy Item", itemTemplate.get("name"),
+                "Item template dummy:dummy failed to load the correct content."
         );
     }
 
     @Test
-    @DisplayName("verify object template can be loaded")
-    void verifyObjectTemplateCanBeLoaded() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("test").getObjectTemplate("goblin");
-        assertNotNull(
-                objectTemplate,
-                "Object template test:goblin failed to load."
+    @DisplayName("verify object templates can be loaded")
+    void test4() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("dummy").getObjectTemplate("dummy");
+        assertNotNull(objectTemplate,
+                "Object template dummy:dummy failed to load."
+        );
+        assertEquals("Dummy Object", objectTemplate.get("name"),
+                "Object template dummy:dummy failed to load the correct content."
         );
     }
 

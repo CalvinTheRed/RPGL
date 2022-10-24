@@ -6,21 +6,18 @@ import org.rpgl.exception.ConditionMismatchException;
 
 public class Any extends Condition {
 
-    private static final String CONDITION_ID = "any";
-
-    static {
-        Condition.CONDITIONS.put(CONDITION_ID, new Any());
-    }
-
     @Override
-    public boolean evaluate(long sourceUuid, long targetUuid, JsonObject data) throws ConditionMismatchException {
-        super.verifyCondition(CONDITION_ID, data);
-        JsonArray nestedConditionsArray = (JsonArray) data.get("conditions");
-        for (Object element : nestedConditionsArray) {
-            if (element instanceof JsonObject conditionData) {
-                Condition condition = Condition.CONDITIONS.get((String) conditionData.get("condition"));
+    public boolean evaluate(long sourceUuid, long targetUuid, JsonObject conditionJson) throws ConditionMismatchException {
+        super.verifyCondition("any", conditionJson);
+        JsonArray nestedConditionJsonArray = (JsonArray) conditionJson.get("conditions");
+        if (nestedConditionJsonArray.size() == 0) {
+            return true;
+        }
+        for (Object nestedConditionJsonElement : nestedConditionJsonArray) {
+            if (nestedConditionJsonElement instanceof JsonObject nestedConditionJson) {
+                Condition nestedCondition = Condition.CONDITIONS.get((String) nestedConditionJson.get("condition"));
                 // once a single element returns true, iteration can stop
-                if (condition.evaluate(sourceUuid, targetUuid, conditionData)) {
+                if (nestedCondition.evaluate(sourceUuid, targetUuid, nestedConditionJson)) {
                     return true;
                 }
             }
