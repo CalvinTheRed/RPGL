@@ -2,22 +2,20 @@ package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
 
-public class TestSubevent extends Subevent {
+public class DummySubevent extends Subevent {
 
-    private static final String SUBEVENT_ID = "test_subevent";
-
-    public TestSubevent() {
-        super(SUBEVENT_ID);
+    public DummySubevent() {
+        super("dummy_subevent");
     }
 
     @Override
     public Subevent clone() {
-        return new TestSubevent();
+        return new DummySubevent();
     }
 
     @Override
     public Subevent clone(JsonObject subeventJson) {
-        Subevent clone = new TestSubevent();
+        Subevent clone = new DummySubevent();
         clone.joinSubeventJson(subeventJson);
         return clone;
     }

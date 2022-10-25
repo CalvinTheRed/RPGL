@@ -19,7 +19,7 @@ public class TrueTest {
                 "\"condition\": \"true\"" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
                 "True Condition should always evaluate to true."
         );
@@ -34,7 +34,7 @@ public class TrueTest {
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(-1L, -1L, conditionJson),
+                () -> condition.evaluate(null, null, conditionJson),
                 "True Condition should throw a ConditionMismatchException if the specified condition doesn't match."
         );
     }

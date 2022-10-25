@@ -4,12 +4,12 @@
   },
   "name": "Hollow Dummy Object",
   "ability_scores": {
-    "STR": 10,
-    "DEX": 10,
-    "CON": 10,
+    "STR": 7,
+    "DEX": 8,
+    "CON": 9,
     "INT": 10,
-    "WIS": 10,
-    "CHA": 10
+    "WIS": 11,
+    "CHA": 12
   },
   "health_data": {
     "hit_dice": [
@@ -20,6 +20,7 @@
     "current": 3,
     "temporary": 0
   },
+  "proficiency_bonus": 2,
   "effects": [ ],
   "items": {
     "inventory": [ ]

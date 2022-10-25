@@ -22,7 +22,7 @@ public class InvertTest {
                 "}" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
                 "Invert Condition should evaluate to true when the nested condition evaluates to false."
         );
@@ -39,7 +39,7 @@ public class InvertTest {
                 "}" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
                 "Invert Condition should evaluate to false when the nested condition evaluates to true."
         );
@@ -54,7 +54,7 @@ public class InvertTest {
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(-1L, -1L, conditionJson),
+                () -> condition.evaluate(null, null, conditionJson),
                 "False Condition should throw a ConditionMismatchException if the specified condition doesn't match."
         );
     }

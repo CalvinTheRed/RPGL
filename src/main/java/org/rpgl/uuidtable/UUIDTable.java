@@ -6,7 +6,7 @@ import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 
 import java.util.Map;
-import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -17,13 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class UUIDTable {
 
-    private static final Map<Long, JsonObject> UUID_TABLE;
-    private static final Random r;
-
-    static {
-        UUID_TABLE = new ConcurrentHashMap<>();
-        r = new Random(System.currentTimeMillis());
-    }
+    private static final Map<String, JsonObject> UUID_TABLE = new ConcurrentHashMap<>();
 
     /**
      * This method assigns a JsonObject a UUID and registers it with the UUIDTable. If the passed object already has a
@@ -34,9 +28,9 @@ public final class UUIDTable {
      * @param data the JsonObject to be registered
      */
     public static void register(JsonObject data) {
-        Long uuid = (Long) data.get("uuid");
+        String uuid = (String) data.get("uuid");
         while (uuid == null || UUID_TABLE.containsKey(uuid)) {
-            uuid = r.nextLong();
+            uuid = UUID.randomUUID().toString();
         }
         UUID_TABLE.put(uuid, data);
         data.put("uuid", uuid);
@@ -47,7 +41,7 @@ public final class UUIDTable {
      *
      * @param uuid the UUID of the JsonObject to be unregistered
      */
-    public static JsonObject unregister(long uuid) {
+    public static JsonObject unregister(String uuid) {
         JsonObject data = UUID_TABLE.remove(uuid);
         if (data != null) {
             data.remove("uuid");
@@ -71,9 +65,9 @@ public final class UUIDTable {
      * @return an RPGLEffect
      * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLEffect.
      */
-    public static RPGLEffect getEffect(long uuid) {
+    public static RPGLEffect getEffect(String uuid) {
         JsonObject data = UUID_TABLE.get(uuid);
-        assert data instanceof RPGLEffect;
+        //assert data instanceof RPGLEffect;
         return (RPGLEffect) data;
     }
 
@@ -84,9 +78,9 @@ public final class UUIDTable {
      * @return an RPGLItem
      * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLItem.
      */
-    public static RPGLItem getItem(long uuid) {
+    public static RPGLItem getItem(String uuid) {
         JsonObject data = UUID_TABLE.get(uuid);
-        assert data instanceof RPGLItem;
+        //assert data instanceof RPGLItem;
         return (RPGLItem) data;
     }
 
@@ -97,9 +91,9 @@ public final class UUIDTable {
      * @return an RPGLObject
      * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLObject.
      */
-    public static RPGLObject getObject(long uuid) {
+    public static RPGLObject getObject(String uuid) {
         JsonObject data = UUID_TABLE.get(uuid);
-        assert data instanceof RPGLObject;
+        //assert data instanceof RPGLObject;
         return (RPGLObject) data;
     }
 

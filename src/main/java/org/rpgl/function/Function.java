@@ -1,6 +1,7 @@
 package org.rpgl.function;
 
 import org.jsonutils.JsonObject;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.FunctionMismatchException;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ public abstract class Function {
 
     static {
         FUNCTIONS = new HashMap<>();
+        Function.FUNCTIONS.put("dummy_function", new DummyFunction());
     }
 
     public void verifyFunction(String expected, JsonObject data) throws FunctionMismatchException {
@@ -20,6 +22,6 @@ public abstract class Function {
         }
     }
 
-    public abstract void execute(long sourceUuid, long targetUuid, JsonObject data) throws FunctionMismatchException;
+    public abstract void execute(RPGLObject source, RPGLObject target, JsonObject functionJson) throws FunctionMismatchException;
 
 }

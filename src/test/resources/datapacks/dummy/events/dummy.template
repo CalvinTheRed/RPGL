@@ -8,7 +8,7 @@
   },
   "subevents": [
     {
-      "subevent": "test_subevent"
+      "subevent": "dummy_subevent"
     }
   ]
 }

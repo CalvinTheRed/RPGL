@@ -26,6 +26,8 @@ public class Datapack {
     private final Map<String, RPGLItemTemplate>   ITEM_TEMPLATES   = new HashMap<>();
     private final Map<String, RPGLObjectTemplate> OBJECT_TEMPLATES = new HashMap<>();
 
+    String datapackNamespace;
+
     /**
      * Constructor for the Datapack class. This constructor loads all data located within a single datapack and stores
      * it in the constructed object for future reference.
@@ -33,6 +35,7 @@ public class Datapack {
      * @param directory a datapack directory
      */
     public Datapack (File directory) {
+        this.datapackNamespace = directory.getName();
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             if (subDirectory.isDirectory()) {
                 switch (subDirectory.getName()) {
@@ -55,6 +58,7 @@ public class Datapack {
             String effectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
                 RPGLEffectTemplate effectTemplate = new RPGLEffectTemplate(JsonParser.parseObjectFile(subDirectory));
+                effectTemplate.put("id", datapackNamespace + ":" + effectId);
                 EFFECT_TEMPLATES.put(effectId, effectTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(
@@ -76,6 +80,7 @@ public class Datapack {
             String eventId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
                 RPGLEventTemplate eventTemplate = new RPGLEventTemplate(JsonParser.parseObjectFile(subDirectory));
+                eventTemplate.put("id", datapackNamespace + ":" + eventId);
                 EVENT_TEMPLATES.put(eventId, eventTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(
@@ -97,6 +102,7 @@ public class Datapack {
             String itemId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
                 RPGLItemTemplate itemTemplate = new RPGLItemTemplate(JsonParser.parseObjectFile(subDirectory));
+                itemTemplate.put("id", datapackNamespace + ":" + itemId);
                 ITEM_TEMPLATES.put(itemId, itemTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(
@@ -118,6 +124,7 @@ public class Datapack {
             String objectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
                 RPGLObjectTemplate objectTemplate = new RPGLObjectTemplate(JsonParser.parseObjectFile(subDirectory));
+                objectTemplate.put("id", datapackNamespace + ":" + objectId);
                 OBJECT_TEMPLATES.put(objectId, objectTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(

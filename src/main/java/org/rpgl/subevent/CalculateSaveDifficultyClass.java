@@ -6,10 +6,8 @@ import org.rpgl.core.RPGLObject;
 
 public class CalculateSaveDifficultyClass extends Subevent {
 
-    private static final String SUBEVENT_ID = "calculate_save_difficulty_class";
-
     public CalculateSaveDifficultyClass() {
-        super(SUBEVENT_ID);
+        super("calculate_save_difficulty_class");
     }
 
     @Override
@@ -27,7 +25,7 @@ public class CalculateSaveDifficultyClass extends Subevent {
     @Override
     public void prepare(RPGLObject source) throws JsonFormatException {
         this.subeventJson.put("difficulty_class", 8L);
-        this.addBonus(source.getProficiencyModifier());
+        this.addBonus(source.getProficiencyBonus());
         this.addBonus(source.getAbilityModifier((String) this.subeventJson.get("spellcasting_ability")));
     }
 

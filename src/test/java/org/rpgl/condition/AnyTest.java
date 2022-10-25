@@ -20,7 +20,7 @@ public class AnyTest {
                 "\"conditions\": [ ]" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
                 "Any Condition should default to evaluating true when no nested Conditions are supplied."
         );
@@ -37,7 +37,7 @@ public class AnyTest {
                 "]" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
                 "Any Condition should evaluate true when the only nested Condition evaluates to true."
         );
@@ -54,7 +54,7 @@ public class AnyTest {
                 "]" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
                 "Any Condition should evaluate false when the only nested Condition evaluates to false."
         );
@@ -72,7 +72,7 @@ public class AnyTest {
                 "]" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
                 "Any Condition should evaluate true when all nested Conditions evaluate to true."
         );
@@ -90,7 +90,7 @@ public class AnyTest {
                 "]" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
                 "Any Condition should evaluate true when only some nested Conditions evaluates to true."
         );
@@ -108,7 +108,7 @@ public class AnyTest {
                 "]" +
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(-1L, -1L, conditionJson);
+        boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
                 "Any Condition should evaluate false when all nested Conditions evaluate to false."
         );
@@ -123,7 +123,7 @@ public class AnyTest {
                 "}";
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(-1L, -1L, conditionJson),
+                () -> condition.evaluate(null, null, conditionJson),
                 "Any Condition should throw a ConditionMismatchException if the specified condition doesn't match."
         );
     }

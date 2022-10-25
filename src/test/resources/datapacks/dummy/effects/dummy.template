@@ -12,7 +12,7 @@
       ],
       "functions": [
         {
-          "function": "test_function"
+          "function": "dummy_function"
         }
       ]
     }

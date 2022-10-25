@@ -28,7 +28,7 @@ public class RPGLItemTemplate extends JsonObject {
      */
     public RPGLItem newInstance() {
         RPGLItem item = new RPGLItem(this);
-        processWhenEquipped(item);
+        processWhileEquipped(item);
         UUIDTable.register(item);
         return item;
     }
@@ -39,16 +39,16 @@ public class RPGLItemTemplate extends JsonObject {
      *
      * @param item the item being processed.
      */
-    private static void processWhenEquipped(RPGLItem item) {
+    private static void processWhileEquipped(RPGLItem item) {
         Object keyValue = item.remove("while_equipped");
-        if (keyValue instanceof JsonArray whileEquipped) {
-            while (!whileEquipped.isEmpty() && whileEquipped.get(0) instanceof String) {
-                String effectId = (String) whileEquipped.remove(0);
-                RPGLEffect effect = RPGLFactory.newEffect(effectId);
-                whileEquipped.add(effect.get("uuid"));
-            }
-            item.put("while_equipped", whileEquipped);
+        JsonArray whileEquippedIdArray = (JsonArray) keyValue;
+        JsonArray whileEquippedUuidArray = new JsonArray();
+        for (Object whileEquippedIdElement : whileEquippedIdArray) {
+            String effectId = (String) whileEquippedIdElement;
+            RPGLEffect effect = RPGLFactory.newEffect(effectId);
+            whileEquippedUuidArray.add(effect.get("uuid"));
         }
+        item.put("while_equipped", whileEquippedUuidArray);
     }
 
 }

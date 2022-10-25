@@ -1,10 +1,12 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.SubeventMismatchException;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public abstract class Subevent {
@@ -12,11 +14,14 @@ public abstract class Subevent {
     public static final Map<String, Subevent> SUBEVENTS;
 
     protected JsonObject subeventJson = new JsonObject();
+    protected LinkedList<RPGLEffect> modifyingEffects = new LinkedList<>();
 
     private final String subeventId;
 
     static {
         SUBEVENTS = new HashMap<>();
+        Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
+        Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
     }
 
     public Subevent(String subeventId) {
@@ -50,7 +55,21 @@ public abstract class Subevent {
 
     public void invoke(RPGLObject source, RPGLObject target) throws Exception {
         this.verifySubevent(this.subeventId);
-        while (source.processSubevent(source, target, this) || target.processSubevent(source, target, this));
+        while (source.processSubevent(source, target, this) | target.processSubevent(source, target, this));
+    }
+
+    public void addModifyingEffect(RPGLEffect effect) {
+        this.modifyingEffects.add(effect);
+    }
+
+    public boolean hasModifyingEffect(RPGLEffect effect) {
+        String effectId = (String) effect.get("id");
+        for (RPGLEffect modifyingEffect : modifyingEffects) {
+            if (effectId.equals(modifyingEffect.get("id"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

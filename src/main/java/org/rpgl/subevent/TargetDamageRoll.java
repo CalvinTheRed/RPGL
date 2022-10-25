@@ -7,10 +7,8 @@ import org.rpgl.math.Die;
 
 public class TargetDamageRoll extends Subevent {
 
-    private static final String SUBEVENT_ID = "target_damage_roll";
-
     public TargetDamageRoll() {
-        super(SUBEVENT_ID);
+        super("target_damage_roll");
     }
 
     @Override

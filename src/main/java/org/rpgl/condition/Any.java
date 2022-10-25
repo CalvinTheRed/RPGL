@@ -2,12 +2,13 @@ package org.rpgl.condition;
 
 import org.jsonutils.JsonArray;
 import org.jsonutils.JsonObject;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 
 public class Any extends Condition {
 
     @Override
-    public boolean evaluate(long sourceUuid, long targetUuid, JsonObject conditionJson) throws ConditionMismatchException {
+    public boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException {
         super.verifyCondition("any", conditionJson);
         JsonArray nestedConditionJsonArray = (JsonArray) conditionJson.get("conditions");
         if (nestedConditionJsonArray.size() == 0) {
@@ -17,7 +18,7 @@ public class Any extends Condition {
             if (nestedConditionJsonElement instanceof JsonObject nestedConditionJson) {
                 Condition nestedCondition = Condition.CONDITIONS.get((String) nestedConditionJson.get("condition"));
                 // once a single element returns true, iteration can stop
-                if (nestedCondition.evaluate(sourceUuid, targetUuid, nestedConditionJson)) {
+                if (nestedCondition.evaluate(source, target, nestedConditionJson)) {
                     return true;
                 }
             }

@@ -5,14 +5,8 @@ import org.rpgl.core.RPGLObject;
 
 public class ContestRerollChance extends Subevent {
 
-    private static final String SUBEVENT_ID = "contest_reroll_chance";
-
-    static {
-        Subevent.SUBEVENTS.put(SUBEVENT_ID, new ContestRerollChance());
-    }
-
     public ContestRerollChance() {
-        super(SUBEVENT_ID);
+        super("contest_reroll_chance");
     }
 
     @Override

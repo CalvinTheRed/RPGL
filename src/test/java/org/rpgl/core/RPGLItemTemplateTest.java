@@ -48,10 +48,10 @@ public class RPGLItemTemplateTest {
         assertNotNull(whenEquippedEffectUuids.get(1),
                 "Item dummy:dummy while_equipped array is missing uuid at index 1."
         );
-        assertNotNull(UUIDTable.getEffect((Long) whenEquippedEffectUuids.get(0)),
+        assertNotNull(UUIDTable.getEffect((String) whenEquippedEffectUuids.get(0)),
                 "Item dummy:dummy while_equipped effect index 0 not registered to UUIDTable."
         );
-        assertNotNull(UUIDTable.getEffect((Long) whenEquippedEffectUuids.get(1)),
+        assertNotNull(UUIDTable.getEffect((String) whenEquippedEffectUuids.get(1)),
                 "Item dummy:dummy while_equipped effect index 1 not registered to UUIDTable."
         );
         assertEquals(3, UUIDTable.size(),

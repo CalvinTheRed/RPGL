@@ -10,17 +10,11 @@ import java.util.Map;
 
 public class SavingThrow extends Subevent {
 
-    private static final String SUBEVENT_ID = "saving_throw";
-
     private int advantageCounter = 0;
     private int disadvantageCounter = 0;
 
-    static {
-        Subevent.SUBEVENTS.put(SUBEVENT_ID, new SavingThrow());
-    }
-
     public SavingThrow() {
-        super(SUBEVENT_ID);
+        super("saving_throw");
     }
 
     @Override

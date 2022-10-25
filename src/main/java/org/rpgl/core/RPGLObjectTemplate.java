@@ -47,9 +47,7 @@ public class RPGLObjectTemplate extends JsonObject {
             // process inventory array (does not include equipped items)
             JsonArray inventoryUuids = new JsonArray();
             if (items.get("inventory") instanceof JsonArray) {
-                JsonArray inventoryItemIds = (JsonArray) items.remove("inventory");
-                processInventory(inventoryItemIds);
-                inventoryUuids.addAll(inventoryItemIds);
+                inventoryUuids.addAll(processInventory((JsonArray) items.remove("inventory")));
             }
 
             // process equipped items (were not included in inventory array)
@@ -70,14 +68,16 @@ public class RPGLObjectTemplate extends JsonObject {
      * This helper method converts itemId's in an RPGLObjectTemplate's <code>items.inventory</code> array to RPGLItems.
      * The UUID's of these new RPGLItems replace the original object contents.
      *
-     * @param inventory the inventory being processed.
+     * @param inventoryIdArray the inventory being processed.
      */
-    private static void processInventory(JsonArray inventory) {
-        while (inventory.get(0) instanceof String) {
-            String itemId = (String) inventory.remove(0);
+    private static JsonArray processInventory(JsonArray inventoryIdArray) {
+        JsonArray inventoryUuidArray = new JsonArray();
+        for (Object inventoryIdElement : inventoryIdArray) {
+            String itemId = (String) inventoryIdElement;
             RPGLItem item = RPGLFactory.newItem(itemId);
-            inventory.add(item.get("uuid"));
+            inventoryUuidArray.add(item.get("uuid"));
         }
+        return inventoryUuidArray;
     }
 
     /**
@@ -88,14 +88,14 @@ public class RPGLObjectTemplate extends JsonObject {
      */
     private static void processEffects(RPGLObject object) {
         Object keyValue = object.remove("effects");
-        if (keyValue instanceof JsonArray effects) {
-            while (effects.get(0) instanceof String) {
-                String effectId = (String) effects.remove(0);
-                RPGLEffect effect = RPGLFactory.newEffect(effectId);
-                effects.add(effect.get("uuid"));
-            }
-            object.put("effects", effects);
+        JsonArray effectIdArray = (JsonArray) keyValue;
+        JsonArray effectUuidArray = new JsonArray();
+        for (Object effectIdElement : effectIdArray) {
+            String effectId = (String) effectIdElement;
+            RPGLEffect effect = RPGLFactory.newEffect(effectId);
+            effectUuidArray.add(effect.get("uuid"));
         }
+        object.put("effects", effectUuidArray);
     }
 
 }

@@ -61,16 +61,16 @@ public class RPGLObjectTemplateTest {
         assertNotNull(inventory.get(3),
                 "Object dummy:dummy missing uuid at items.inventory[3]."
         );
-        assertNotNull(UUIDTable.getItem((Long) inventory.get(0)),
+        assertNotNull(UUIDTable.getItem((String) inventory.get(0)),
                 "Object dummy:dummy item items.inventory[0] is not registered to UUIDTable."
         );
-        assertNotNull(UUIDTable.getItem((Long) inventory.get(1)),
+        assertNotNull(UUIDTable.getItem((String) inventory.get(1)),
                 "Object dummy:dummy item items.inventory[1] is not registered to UUIDTable."
         );
-        assertNotNull(UUIDTable.getItem((Long) inventory.get(2)),
+        assertNotNull(UUIDTable.getItem((String) inventory.get(2)),
                 "Object dummy:dummy item items.inventory[2] is not registered to UUIDTable."
         );
-        assertNotNull(UUIDTable.getItem((Long) inventory.get(3)),
+        assertNotNull(UUIDTable.getItem((String) inventory.get(3)),
                 "Object dummy:dummy item items.inventory[3] is not registered to UUIDTable."
         );
         assertNotNull(items.get("mainhand"),
@@ -99,10 +99,10 @@ public class RPGLObjectTemplateTest {
         assertNotNull(effects.get(1),
                 "Object dummy:dummy missing uuid at effects[1]."
         );
-        assertNotNull(UUIDTable.getEffect((Long) effects.get(0)),
+        assertNotNull(UUIDTable.getEffect((String) effects.get(0)),
                 "Object dummy:dummy effect effects[0] is not registered to UUIDTable."
         );
-        assertNotNull(UUIDTable.getEffect((Long) effects.get(1)),
+        assertNotNull(UUIDTable.getEffect((String) effects.get(1)),
                 "Object dummy:dummy effect effects[1] is not registered to UUIDTable."
         );
 

@@ -1,6 +1,7 @@
 package org.rpgl.condition;
 
 import org.jsonutils.JsonObject;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 
 import java.util.HashMap;
@@ -25,6 +26,6 @@ public abstract class Condition {
         }
     }
 
-    public abstract boolean evaluate(long sourceUuid, long targetUuid, JsonObject conditionJson) throws ConditionMismatchException;
+    public abstract boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException;
 
 }

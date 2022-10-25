@@ -6,10 +6,8 @@ import org.jsonutils.JsonObject;
 
 public class BaseDamageDiceCollection extends Subevent {
 
-    private static final String SUBEVENT_ID = "base_damage_dice_collection";
-
     public BaseDamageDiceCollection() {
-        super(SUBEVENT_ID);
+        super("base_damage_dice_collection");
     }
 
     @Override
