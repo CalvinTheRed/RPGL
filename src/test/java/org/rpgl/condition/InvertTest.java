@@ -12,6 +12,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InvertTest {
 
     @Test
+    @DisplayName("Invert Condition throws ConditionMismatchException when condition type doesn't match")
+    void test0() throws JsonFormatException {
+        Condition condition = new Invert();
+        String conditionJsonString = "{" +
+                "\"condition\": \"not_a_condition\"" +
+                "}";
+        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
+        assertThrows(ConditionMismatchException.class,
+                () -> condition.evaluate(null, null, conditionJson),
+                "False Condition should throw a ConditionMismatchException if the specified condition doesn't match."
+        );
+    }
+
+    @Test
     @DisplayName("Invert Condition should evaluate true when nested condition evaluates to false")
     void test1() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new Invert();
@@ -42,20 +56,6 @@ public class InvertTest {
         boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
                 "Invert Condition should evaluate to false when the nested condition evaluates to true."
-        );
-    }
-
-    @Test
-    @DisplayName("Invert Condition throws ConditionMismatchException when condition type doesn't match")
-    void test3() throws JsonFormatException {
-        Condition condition = new Invert();
-        String conditionJsonString = "{" +
-                "\"condition\": \"not_a_condition\"" +
-                "}";
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson),
-                "False Condition should throw a ConditionMismatchException if the specified condition doesn't match."
         );
     }
 

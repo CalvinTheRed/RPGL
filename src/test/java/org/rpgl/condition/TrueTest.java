@@ -12,6 +12,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TrueTest {
 
     @Test
+    @DisplayName("True Condition throws ConditionMismatchException when condition type doesn't match")
+    void test0() throws JsonFormatException {
+        Condition condition = new True();
+        String conditionJsonString = "{" +
+                "\"condition\": \"not_a_condition\"" +
+                "}";
+        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
+        assertThrows(ConditionMismatchException.class,
+                () -> condition.evaluate(null, null, conditionJson),
+                "True Condition should throw a ConditionMismatchException if the specified condition doesn't match."
+        );
+    }
+
+    @Test
     @DisplayName("True Condition should always evaluate true")
     void test1() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new True();
@@ -22,20 +36,6 @@ public class TrueTest {
         boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
                 "True Condition should always evaluate to true."
-        );
-    }
-
-    @Test
-    @DisplayName("True Condition throws ConditionMismatchException when condition type doesn't match")
-    void test2() throws JsonFormatException {
-        Condition condition = new True();
-        String conditionJsonString = "{" +
-                "\"condition\": \"not_a_condition\"" +
-                "}";
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson),
-                "True Condition should throw a ConditionMismatchException if the specified condition doesn't match."
         );
     }
 

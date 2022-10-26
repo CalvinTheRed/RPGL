@@ -19,6 +19,20 @@ public class DummyFunctionTest {
     }
 
     @Test
+    @DisplayName("DummyFunction Function throws FunctionMismatchException when function type doesn't match")
+    void test0() throws JsonFormatException {
+        Function function = new DummyFunction();
+        String functionJsonString = "{" +
+                "\"function\": \"not_a_function\"" +
+                "}";
+        JsonObject functionJson = JsonParser.parseObjectString(functionJsonString);
+        assertThrows(FunctionMismatchException.class,
+                () -> function.execute(null, null, functionJson),
+                "DummyFunction Function should throw a FunctionMismatchException if the specified function doesn't match."
+        );
+    }
+
+    @Test
     @DisplayName("DummyFunction Function increments counter as expected")
     void test1() throws JsonFormatException, FunctionMismatchException {
         Function function = new DummyFunction();
@@ -29,20 +43,6 @@ public class DummyFunctionTest {
         function.execute(null, null, functionJson);
         assertEquals(1, DummyFunction.counter,
                 "DummyFunction Function should increment static counter variable upon execution."
-        );
-    }
-
-    @Test
-    @DisplayName("DummyFunction Function throws FunctionMismatchException when function type doesn't match")
-    void test2() throws JsonFormatException {
-        Function function = new DummyFunction();
-        String functionJsonString = "{" +
-                "\"function\": \"not_a_function\"" +
-                "}";
-        JsonObject functionJson = JsonParser.parseObjectString(functionJsonString);
-        assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson),
-                "DummyFunction Function should throw a FunctionMismatchException if the specified function doesn't match."
         );
     }
 }

@@ -50,10 +50,10 @@ public class BaseDamageDiceCollection extends Subevent {
         }
     }
 
-    private void addExistingTypedDamage(JsonObject newTypedDamage) throws JsonFormatException {
+    void addExistingTypedDamage(JsonObject newTypedDamage) throws JsonFormatException {
         String damageType = (String) newTypedDamage.get("type");
         JsonObject typedDamage = (JsonObject) this.subeventJson.seek(String.format(
-                "damage[{\"type\":%s}]",
+                "damage[{\"type\":\"%s\"}]",
                 damageType
         ));
 
@@ -64,6 +64,7 @@ public class BaseDamageDiceCollection extends Subevent {
         JsonArray newTypedDamageDice = (JsonArray) newTypedDamage.get("dice");
         if (typedDamageDice == null) {
             typedDamageDice = new JsonArray();
+            typedDamage.put("dice", typedDamageDice);
         }
         if (newTypedDamageDice == null) {
             newTypedDamageDice = new JsonArray();
@@ -84,7 +85,7 @@ public class BaseDamageDiceCollection extends Subevent {
         typedDamage.put("bonus", typedDamageBonus + extraTypedDamageBonus);
     }
 
-    private void addNewTypedDamage(JsonObject typedDamage) {
+    void addNewTypedDamage(JsonObject typedDamage) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         typedDamageArray.add(typedDamage);
     }

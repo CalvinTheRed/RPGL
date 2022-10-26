@@ -1,6 +1,8 @@
 package org.rpgl.datapack;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
+import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
@@ -125,6 +127,19 @@ public class Datapack {
             try {
                 RPGLObjectTemplate objectTemplate = new RPGLObjectTemplate(JsonParser.parseObjectFile(subDirectory));
                 objectTemplate.put("id", datapackNamespace + ":" + objectId);
+                if (objectTemplate.get("effects") == null) {
+                    objectTemplate.put("effects", new JsonArray());
+                }
+                JsonObject items = (JsonObject) objectTemplate.get("items");
+                if (items == null) {
+                    items = new JsonObject();
+                    objectTemplate.put("items", items);
+                }
+                JsonArray inventory = (JsonArray) items.get("inventory");
+                if (inventory == null) {
+                    inventory = new JsonArray();
+                    items.put("inventory", inventory);
+                }
                 OBJECT_TEMPLATES.put(objectId, objectTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
 //                throw new RuntimeException(String.format(

@@ -50,19 +50,11 @@ public class RPGLObject extends JsonObject {
 
     public boolean addEffect(RPGLEffect effect) {
         JsonArray effects = (JsonArray) this.get("effects");
-        if (effects == null) {
-            effects = new JsonArray();
-            this.put("effects", effects);
-        }
         return effects.add(effect.get("uuid"));
     }
 
     public boolean removeEffect(RPGLEffect effect) {
         JsonArray effects = (JsonArray) this.get("effects");
-        if (effects == null) {
-            effects = new JsonArray();
-            this.put("effects", effects);
-        }
         return effects.remove(effect.get("uuid"));
     }
 

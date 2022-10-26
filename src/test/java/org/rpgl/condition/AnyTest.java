@@ -12,6 +12,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AnyTest {
 
     @Test
+    @DisplayName("Any Condition throws ConditionMismatchException when condition type doesn't match")
+    void test0() throws JsonFormatException {
+        Condition condition = new Any();
+        String conditionJsonString = "{" +
+                "\"condition\": \"not_a_condition\"" +
+                "}";
+        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
+        assertThrows(ConditionMismatchException.class,
+                () -> condition.evaluate(null, null, conditionJson),
+                "Any Condition should throw a ConditionMismatchException if the specified condition doesn't match."
+        );
+    }
+
+    @Test
     @DisplayName("Any Condition is true with no nested conditions")
     void test1() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new Any();
@@ -111,20 +125,6 @@ public class AnyTest {
         boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
                 "Any Condition should evaluate false when all nested Conditions evaluate to false."
-        );
-    }
-
-    @Test
-    @DisplayName("Any Condition throws ConditionMismatchException when condition type doesn't match")
-    void test7() throws JsonFormatException {
-        Condition condition = new Any();
-        String conditionJsonString = "{" +
-                "\"condition\": \"not_a_condition\"" +
-                "}";
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson),
-                "Any Condition should throw a ConditionMismatchException if the specified condition doesn't match."
         );
     }
 
