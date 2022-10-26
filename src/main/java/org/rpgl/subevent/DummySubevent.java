@@ -17,6 +17,7 @@ public class DummySubevent extends Subevent {
     public Subevent clone(JsonObject subeventJson) {
         Subevent clone = new DummySubevent();
         clone.joinSubeventJson(subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 

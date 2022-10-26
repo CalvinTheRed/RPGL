@@ -19,6 +19,7 @@ public class BaseDamageDiceCollection extends Subevent {
     public Subevent clone(JsonObject subeventJson) {
         Subevent clone = new BaseDamageDiceCollection();
         clone.joinSubeventJson(subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 

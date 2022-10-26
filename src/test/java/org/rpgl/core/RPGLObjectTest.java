@@ -1,6 +1,5 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonFormatException;
 import org.junit.jupiter.api.*;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
@@ -64,7 +63,7 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("Object can report proficiency bonus")
-    void test3() {
+    void test3() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         assertEquals(2, object.getProficiencyBonus(),
                 "Object dummy:dummy_hollow should have a proficiency bonus of +2."
@@ -102,25 +101,25 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("Object can calculate ability score modifiers from ability scores")
-    void test5() throws JsonFormatException {
+    void test5() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        assertEquals(-2L, object.getAbilityModifier("STR"),
-                "Object dummy:dummy_hollow STR score of 7 should have modifier of -2."
+        assertEquals(-2L, object.getAbilityModifier("str"),
+                "Object dummy:dummy_hollow str score of 7 should have modifier of -2."
         );
-        assertEquals(-1L, object.getAbilityModifier("DEX"),
-                "Object dummy:dummy_hollow DEX score of 8 should have modifier of -1."
+        assertEquals(-1L, object.getAbilityModifier("dex"),
+                "Object dummy:dummy_hollow dex score of 8 should have modifier of -1."
         );
-        assertEquals(-1L, object.getAbilityModifier("CON"),
-                "Object dummy:dummy_hollow CON score of 9 should have modifier of -1."
+        assertEquals(-1L, object.getAbilityModifier("con"),
+                "Object dummy:dummy_hollow con score of 9 should have modifier of -1."
         );
-        assertEquals(0L, object.getAbilityModifier("INT"),
-                "Object dummy:dummy_hollow INT score of 10 should have modifier of 0."
+        assertEquals(0L, object.getAbilityModifier("int"),
+                "Object dummy:dummy_hollow int score of 10 should have modifier of 0."
         );
-        assertEquals(0L, object.getAbilityModifier("WIS"),
-                "Object dummy:dummy_hollow WIS score of 11 should have modifier of 0."
+        assertEquals(0L, object.getAbilityModifier("wis"),
+                "Object dummy:dummy_hollow wis score of 11 should have modifier of 0."
         );
-        assertEquals(1L, object.getAbilityModifier("CHA"),
-                "Object dummy:dummy_hollow CHA score of 12 should have modifier of +1."
+        assertEquals(1L, object.getAbilityModifier("cha"),
+                "Object dummy:dummy_hollow cha score of 12 should have modifier of +1."
         );
     }
 

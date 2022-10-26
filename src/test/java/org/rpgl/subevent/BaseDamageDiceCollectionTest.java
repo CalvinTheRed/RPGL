@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BaseDamageDiceCollectionTest {
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent throws SubeventMismatchException when subevent type doesn't match")
+    @DisplayName("BaseDamageDiceCollection Subevent throws SubeventMismatchException when subevent type doesn't match")
     void test0() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -34,7 +34,7 @@ public class BaseDamageDiceCollectionTest {
     }
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent accurately reports its typed damage")
+    @DisplayName("BaseDamageDiceCollection Subevent accurately reports its typed damage")
     void test1() throws Exception {
         /*
          * Set up the subevent context
@@ -66,7 +66,7 @@ public class BaseDamageDiceCollectionTest {
     }
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent accurately reports the presence of a damage type")
+    @DisplayName("BaseDamageDiceCollection Subevent accurately reports the presence of a damage type")
     void test2() throws Exception {
         /*
          * Set up the subevent context
@@ -89,7 +89,7 @@ public class BaseDamageDiceCollectionTest {
     }
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent accurately reports the absence of a damage type")
+    @DisplayName("BaseDamageDiceCollection Subevent accurately reports the absence of a damage type")
     void test3() throws Exception {
         /*
          * Set up the subevent context
@@ -111,7 +111,7 @@ public class BaseDamageDiceCollectionTest {
     }
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent can add existing typed damage (bonus)")
+    @DisplayName("BaseDamageDiceCollection Subevent can add existing typed damage (bonus)")
     void test4() throws Exception {
         /*
          * Set up the subevent context
@@ -144,7 +144,7 @@ public class BaseDamageDiceCollectionTest {
     }
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent can add existing typed damage (dice)")
+    @DisplayName("BaseDamageDiceCollection Subevent can add existing typed damage (dice)")
     void test5() throws Exception {
         /*
          * Set up the subevent context
@@ -181,7 +181,7 @@ public class BaseDamageDiceCollectionTest {
 
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent can add new typed damage (bonus)")
+    @DisplayName("BaseDamageDiceCollection Subevent can add new typed damage (bonus)")
     void test6() throws Exception {
         /*
          * Set up the subevent context
@@ -213,7 +213,7 @@ public class BaseDamageDiceCollectionTest {
     }
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent can add new typed damage (dice)")
+    @DisplayName("BaseDamageDiceCollection Subevent can add new typed damage (dice)")
     void test7() throws Exception {
         /*
          * Set up the subevent context
@@ -247,7 +247,7 @@ public class BaseDamageDiceCollectionTest {
     }
 
     @Test
-    @DisplayName("BaseDamageDiceCollectionTest Subevent can add typed damage")
+    @DisplayName("BaseDamageDiceCollection Subevent can add typed damage")
     void test8() throws Exception {
         /*
          * Set up the subevent context

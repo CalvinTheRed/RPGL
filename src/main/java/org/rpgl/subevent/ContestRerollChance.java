@@ -18,6 +18,7 @@ public class ContestRerollChance extends Subevent {
     public Subevent clone(JsonObject subeventJson) {
         Subevent clone = new ContestRerollChance();
         clone.joinSubeventJson(subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 

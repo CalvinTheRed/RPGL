@@ -4,12 +4,12 @@
   },
   "name": "Hollow Dummy Object",
   "ability_scores": {
-    "STR": 7,
-    "DEX": 8,
-    "CON": 9,
-    "INT": 10,
-    "WIS": 11,
-    "CHA": 12
+    "str": 7,
+    "dex": 8,
+    "con": 9,
+    "int": 10,
+    "wis": 11,
+    "cha": 12
   },
   "health_data": {
     "hit_dice": [

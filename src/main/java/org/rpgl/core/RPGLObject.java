@@ -1,10 +1,12 @@
 package org.rpgl.core;
 
 import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
+import org.jsonutils.JsonParser;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.subevent.CalculateAbilityScore;
+import org.rpgl.subevent.CalculateProficiencyModifier;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -70,17 +72,34 @@ public class RPGLObject extends JsonObject {
         return effects;
     }
 
-    public Long getProficiencyBonus() {
-        // TODO this should eventually operate using a Subevent to get the proficiency bonus
-        return (Long) this.get("proficiency_bonus");
+    public Long getProficiencyBonus() throws Exception {
+        CalculateProficiencyModifier calculateProficiencyModifier = new CalculateProficiencyModifier();
+        String calculateProficiencyModifierJsonString = "{" +
+                        "\"subevent\":\"calculate_proficiency_modifier\"" +
+                        "}";
+        JsonObject calculateProficiencyModifierJson = JsonParser.parseObjectString(calculateProficiencyModifierJsonString);
+        calculateProficiencyModifier.joinSubeventJson(calculateProficiencyModifierJson);
+        calculateProficiencyModifier.prepare(this);
+        calculateProficiencyModifier.invoke(this, this);
+        return calculateProficiencyModifier.getProficiencyModifier();
     }
 
-    public long getAbilityModifier(String ability) throws JsonFormatException {
-        // TODO this should eventually operate using a Subevent to get the ability score
-        return getAbilityModifier((Long) this.seek("ability_scores." + ability));
+    public Long getAbilityModifier(String ability) throws Exception {
+        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
+        String calculateAbilityScoreJsonString = String.format("{" +
+                        "\"subevent\":\"calculate_ability_score\"," +
+                        "\"ability\":\"%s\"" +
+                        "}",
+                ability
+        );
+        JsonObject calculateAbilityScoreJson = JsonParser.parseObjectString(calculateAbilityScoreJsonString);
+        calculateAbilityScore.joinSubeventJson(calculateAbilityScoreJson);
+        calculateAbilityScore.prepare(this);
+        calculateAbilityScore.invoke(this, this);
+        return getAbilityModifier(calculateAbilityScore.getAbilityScore());
     }
 
-    static long getAbilityModifier(long abilityScore) {
+    static Long getAbilityModifier(long abilityScore) {
         if (abilityScore < 10L) {
             // integer division rounds toward zero, so abilityScore must be
             // adjusted to calculate the correct values for negative modifiers
@@ -89,8 +108,8 @@ public class RPGLObject extends JsonObject {
         return (abilityScore - 10L) / 2L;
     }
 
-    public long getSaveProficiencyBonus(String ability) {
-        // TODO this should eventually operate using a Subevent to get a proficiency bonus
+    public Long getSaveProficiencyBonus(String ability) {
+        // TODO this should use a Subevent evenatually...
         return 0L;
     }
 

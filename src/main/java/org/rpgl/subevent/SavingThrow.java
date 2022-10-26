@@ -26,6 +26,7 @@ public class SavingThrow extends Subevent {
     public Subevent clone(JsonObject subeventJson) {
         Subevent clone = new SavingThrow();
         clone.joinSubeventJson(subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
@@ -55,7 +56,7 @@ public class SavingThrow extends Subevent {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         String calculateSaveDifficultyClassJsonString = String.format("{" +
                         "\"subevent\":\"calculate_save_difficulty_class\"," +
-                        "\"spellcasting_ability\":\"%s\"" +
+                        "\"difficulty_class_ability\":\"%s\"" +
                         "}",
                 this.subeventJson.get("difficulty_class_ability")
         );

@@ -20,6 +20,7 @@ public class TargetDamageRoll extends Subevent {
     public Subevent clone(JsonObject subeventJson) {
         Subevent clone = new TargetDamageRoll();
         clone.joinSubeventJson(subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
