@@ -46,39 +46,43 @@ public class BaseDamageRoll extends Subevent {
         }
     }
 
-    public void rerollDiceLessThan(long threshhold) {
+    public void rerollDiceLessThanOrEqualTo(long threshhold, String damageType) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
-            JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
-            if (typedDamageDieArray == null) {
-                typedDamageDieArray = new JsonArray();
-            }
+            if (damageType == null || damageType.equals(typedDamage.get("type"))) {
+                JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
+                if (typedDamageDieArray == null) {
+                    typedDamageDieArray = new JsonArray();
+                }
 
-            for (Object typedDamageDieElement : typedDamageDieArray) {
-                JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
-                if ((Long) typedDamageDie.get("roll") < threshhold) {
-                    long size = (Long) typedDamageDie.get("size");
-                    long roll = Die.roll(size);
-                    typedDamageDie.put("roll", roll);
+                for (Object typedDamageDieElement : typedDamageDieArray) {
+                    JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
+                    if ((Long) typedDamageDie.get("roll") <= threshhold) {
+                        long size = (Long) typedDamageDie.get("size");
+                        long roll = Die.roll(size);
+                        typedDamageDie.put("roll", roll);
+                    }
                 }
             }
         }
     }
 
-    public void setDiceLessThan(long threshhold, long faceValue) {
+    public void setTypedDiceLessThanOrEqualTo(long threshhold, long faceValue, String damageType) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
-            JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
-            if (typedDamageDieArray == null) {
-                typedDamageDieArray = new JsonArray();
-            }
+            if (damageType == null || damageType.equals(typedDamage.get("type"))) {
+                JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
+                if (typedDamageDieArray == null) {
+                    typedDamageDieArray = new JsonArray();
+                }
 
-            for (Object typedDamageDieElement : typedDamageDieArray) {
-                JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
-                if ((Long) typedDamageDie.get("roll") < threshhold) {
-                    typedDamageDie.put("roll", faceValue);
+                for (Object typedDamageDieElement : typedDamageDieArray) {
+                    JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
+                    if ((Long) typedDamageDie.get("roll") <= threshhold) {
+                        typedDamageDie.put("roll", faceValue);
+                    }
                 }
             }
         }

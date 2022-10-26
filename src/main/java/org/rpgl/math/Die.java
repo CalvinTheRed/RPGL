@@ -21,12 +21,16 @@ public final class Die {
         return dequeue();
     }
 
-    private static void queue(long value) {
+    public static void queue(long value) {
         QUEUE.add(value);
     }
 
     public static long dequeue() {
         return QUEUE.remove();
+    }
+
+    public static void flush() {
+        QUEUE.clear();
     }
 
 }
