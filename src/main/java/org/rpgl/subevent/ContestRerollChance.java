@@ -24,16 +24,18 @@ public class ContestRerollChance extends Subevent {
 
     @Override
     public void prepare(RPGLObject source) {
-        this.subeventJson.put("allow_reroll", false);
+        this.subeventJson.put("reroll_requested", false);
     }
 
-    public void triggerReroll(String rerollMode) {
-        this.subeventJson.put("allow_reroll", true);
-        this.subeventJson.put("reroll_mode", rerollMode);
+    public void requestReroll(String rerollMode) {
+        if (!(Boolean) this.subeventJson.get("reroll_requested")) {
+            this.subeventJson.put("reroll_requested", true);
+            this.subeventJson.put("reroll_mode", rerollMode);
+        }
     }
 
-    public boolean wasRerollTriggered() {
-        return (Boolean) this.subeventJson.get("allow_reroll");
+    public boolean wasRerollRequested() {
+        return (Boolean) this.subeventJson.get("reroll_requested");
     }
 
     public String getRerollMode() {

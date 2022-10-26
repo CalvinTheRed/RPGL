@@ -64,7 +64,7 @@ public class SavingThrow extends Subevent {
         calculateSaveDifficultyClass.joinSubeventJson(calculateSaveDifficultyClassJson);
         //calculateSaveDifficultyClass.prepare(source);
         calculateSaveDifficultyClass.invoke(source, source);
-        this.subeventJson.put("save_difficulty_class", calculateSaveDifficultyClass.getSaveDifficultyClass());
+        this.subeventJson.put("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
 
     private void calculateBaseDamage(RPGLObject source) throws Exception {
@@ -163,7 +163,7 @@ public class SavingThrow extends Subevent {
         contestRerollChance.prepare(source);
         contestRerollChance.invoke(source, source);
 
-        if (contestRerollChance.wasRerollTriggered()) {
+        if (contestRerollChance.wasRerollRequested()) {
             long rerollDieValue = Die.roll(20L);
             String rerollMode = contestRerollChance.getRerollMode();
             switch (rerollMode) {

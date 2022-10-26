@@ -80,7 +80,7 @@ public class CalculateSaveDifficultyClassTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(10L, (Long) calculateSaveDifficultyClass.getSaveDifficultyClass(),
+        assertEquals(10L, calculateSaveDifficultyClass.get(),
                 "CalculateSaveDifficultyClass Subevent did not calculate raw save DC correctly."
         );
     }

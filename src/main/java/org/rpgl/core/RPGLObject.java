@@ -81,7 +81,7 @@ public class RPGLObject extends JsonObject {
         calculateProficiencyModifier.joinSubeventJson(calculateProficiencyModifierJson);
         calculateProficiencyModifier.prepare(this);
         calculateProficiencyModifier.invoke(this, this);
-        return calculateProficiencyModifier.getProficiencyModifier();
+        return calculateProficiencyModifier.get();
     }
 
     public Long getAbilityModifier(String ability) throws Exception {
@@ -96,7 +96,7 @@ public class RPGLObject extends JsonObject {
         calculateAbilityScore.joinSubeventJson(calculateAbilityScoreJson);
         calculateAbilityScore.prepare(this);
         calculateAbilityScore.invoke(this, this);
-        return getAbilityModifier(calculateAbilityScore.getAbilityScore());
+        return getAbilityModifier(calculateAbilityScore.get());
     }
 
     static Long getAbilityModifier(long abilityScore) {

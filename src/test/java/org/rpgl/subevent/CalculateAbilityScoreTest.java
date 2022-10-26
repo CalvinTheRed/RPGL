@@ -59,7 +59,7 @@ public class CalculateAbilityScoreTest {
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent setup method & getter work")
-    void test1() throws JsonFormatException {
+    void test1() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -80,14 +80,14 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(7L, calculateAbilityScore.getAbilityScore(),
+        assertEquals(7L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not report raw ability score correctly."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can set ability")
-    void test2() throws JsonFormatException {
+    void test2() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -109,14 +109,14 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(10L, calculateAbilityScore.getAbilityScore(),
+        assertEquals(10L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not set ability score correctly."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can set ability (override prior set with higher)")
-    void test3() throws JsonFormatException {
+    void test3() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -139,14 +139,14 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(12L, calculateAbilityScore.getAbilityScore(),
+        assertEquals(12L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent should be able to override ability score set value with higher value."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can not set ability (override prior set with lower)")
-    void test4() throws JsonFormatException {
+    void test4() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -169,14 +169,14 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(10L, calculateAbilityScore.getAbilityScore(),
+        assertEquals(10L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent should not be able to override ability score set value with lower value."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can add bonus to ability score")
-    void test5() throws JsonFormatException {
+    void test5() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -198,14 +198,14 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(10L, calculateAbilityScore.getAbilityScore(),
+        assertEquals(10L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not add bonus to ability score properly."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can add bonus to a set ability score")
-    void test6() throws JsonFormatException {
+    void test6() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -228,7 +228,7 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(15L, calculateAbilityScore.getAbilityScore(),
+        assertEquals(15L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not add bonus to set ability score properly."
         );
     }

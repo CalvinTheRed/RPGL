@@ -59,7 +59,7 @@ public class CalculateProficiencyModifierTest {
 
     @Test
     @DisplayName("CalculateProficiencyModifier Subevent setup method & getter work")
-    void test1() throws JsonFormatException {
+    void test1() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -79,14 +79,14 @@ public class CalculateProficiencyModifierTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(2L, (Long) calculateAbilityScore.getProficiencyModifier(),
+        assertEquals(2L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not report raw proficiency correctly."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can set proficiency")
-    void test2() throws JsonFormatException {
+    void test2() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -107,14 +107,14 @@ public class CalculateProficiencyModifierTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, (Long) calculateProficiencyBonus.getProficiencyModifier(),
+        assertEquals(3L, calculateProficiencyBonus.get(),
                 "CalculateAbilityScore Subevent did not set proficiency correctly."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can set proficiency (override prior set with higher)")
-    void test3() throws JsonFormatException {
+    void test3() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -136,14 +136,14 @@ public class CalculateProficiencyModifierTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, (Long) calculateProficiencyBonus.getProficiencyModifier(),
+        assertEquals(4L, calculateProficiencyBonus.get(),
                 "CalculateAbilityScore Subevent should be able to override proficiency set value with higher value."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can not set proficiency (override prior set with lower)")
-    void test4() throws JsonFormatException {
+    void test4() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -165,14 +165,14 @@ public class CalculateProficiencyModifierTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, (Long) calculateProficiencyBonus.getProficiencyModifier(),
+        assertEquals(4L, calculateProficiencyBonus.get(),
                 "CalculateAbilityScore Subevent should not be able to override proficiency set value with lower value."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can add bonus to proficiency")
-    void test5() throws JsonFormatException {
+    void test5() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -193,14 +193,14 @@ public class CalculateProficiencyModifierTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, (Long) calculateProficiencyBonus.getProficiencyModifier(),
+        assertEquals(3L, calculateProficiencyBonus.get(),
                 "CalculateAbilityScore Subevent did not add bonus to proficiency properly."
         );
     }
 
     @Test
     @DisplayName("CalculateAbilityScore Subevent can add bonus to a set proficiency")
-    void test6() throws JsonFormatException {
+    void test6() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -222,7 +222,7 @@ public class CalculateProficiencyModifierTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, (Long) calculateProficiencyBonus.getProficiencyModifier(),
+        assertEquals(4L, calculateProficiencyBonus.get(),
                 "CalculateAbilityScore Subevent did not add bonus to set proficiency properly."
         );
     }
