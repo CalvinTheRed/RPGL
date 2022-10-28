@@ -19,7 +19,7 @@ public class DummyFunction extends Function {
     }
 
     public static void resetCounter() {
-        counter = 0;
+        DummyFunction.counter = 0;
     }
 
 }

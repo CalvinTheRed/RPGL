@@ -3,20 +3,20 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 
-public class CalculateAbilityScore extends Calculation {
+public class CalculateArmorClass extends Calculation {
 
-    public CalculateAbilityScore() {
-        super("calculate_ability_score");
+    public CalculateArmorClass() {
+        super("calculate_armor_class");
     }
 
     @Override
     public Subevent clone() {
-        return new CalculateAbilityScore();
+        return new CalculateArmorClass();
     }
 
     @Override
     public Subevent clone(JsonObject subeventJson) {
-        Subevent clone = new CalculateAbilityScore();
+        Subevent clone = new CalculateArmorClass();
         clone.joinSubeventJson(subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -25,9 +25,8 @@ public class CalculateAbilityScore extends Calculation {
     @Override
     public void prepare(RPGLObject source) throws Exception {
         super.prepare(source);
-        String abilityScoreName = (String) this.subeventJson.get("ability");
-        Long rawAbilityScore = (Long) source.seek("ability_scores." + abilityScoreName);
-        this.subeventJson.put("raw", rawAbilityScore);
+        Long baseArmorClass = 10L + source.getAbilityModifier("dex");
+        this.subeventJson.put("raw", baseArmorClass);
     }
 
 }

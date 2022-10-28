@@ -3,7 +3,7 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 
-public class CalculateSaveDifficultyClass extends AttributeCalculation {
+public class CalculateSaveDifficultyClass extends Calculation {
 
     public CalculateSaveDifficultyClass() {
         super("calculate_save_difficulty_class");

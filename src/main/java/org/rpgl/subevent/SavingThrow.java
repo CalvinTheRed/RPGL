@@ -4,14 +4,10 @@ import org.jsonutils.JsonArray;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.math.Die;
 
 import java.util.Map;
 
-public class SavingThrow extends Subevent {
-
-    private int advantageCounter = 0;
-    private int disadvantageCounter = 0;
+public class SavingThrow extends ContestRoll {
 
     public SavingThrow() {
         super("saving_throw");
@@ -32,20 +28,21 @@ public class SavingThrow extends Subevent {
 
     @Override
     public void prepare(RPGLObject source) throws Exception {
+        super.prepare(source);
         this.calculateDifficultyClass(source);
         if (this.subeventJson.get("damage") != null) {
             this.calculateBaseDamage(source);
         }
-        this.addSaveBonus(source.getAbilityModifier((String) this.subeventJson.get("save_ability")));
-        this.addSaveBonus(source.getSaveProficiencyBonus((String) this.subeventJson.get("save_ability")));
+        this.addBonus(source.getAbilityModifier((String) this.subeventJson.get("save_ability")));
+        this.addBonus(source.getSaveProficiencyBonus((String) this.subeventJson.get("save_ability")));
     }
 
     @Override
     public void invoke(RPGLObject source, RPGLObject target) throws Exception {
         super.invoke(source, target);
         this.roll();
-        this.checkForReroll(source, target);
-        if (this.getSavingThrowTotal() < (Long) this.subeventJson.get("save_difficulty_class")) {
+        this.checkForReroll(source, target); // TODO eventually have this in a while loop?
+        if (this.getRoll() < (Long) this.subeventJson.get("save_difficulty_class")) {
             this.resolveSaveFail(source, target);
         } else {
             this.resolveSavePass(source, target);
@@ -62,7 +59,7 @@ public class SavingThrow extends Subevent {
         );
         JsonObject calculateSaveDifficultyClassJson = JsonParser.parseObjectString(calculateSaveDifficultyClassJsonString);
         calculateSaveDifficultyClass.joinSubeventJson(calculateSaveDifficultyClassJson);
-        //calculateSaveDifficultyClass.prepare(source);
+        calculateSaveDifficultyClass.prepare(source);
         calculateSaveDifficultyClass.invoke(source, source);
         this.subeventJson.put("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
@@ -102,90 +99,6 @@ public class SavingThrow extends Subevent {
          * Replace damage key with base damage calculation
          */
         this.subeventJson.put("damage", baseDamageRoll.getBaseDamage());
-    }
-
-    public void addSaveBonus(long bonus) {
-        Long saveBonus = (Long) this.subeventJson.get("bonus");
-        if (saveBonus == null) {
-            saveBonus = 0L;
-        }
-        saveBonus += bonus;
-        this.subeventJson.put("bonus", saveBonus);
-    }
-
-    public void grantAdvantage() {
-        this.advantageCounter++;
-    }
-
-    public void grantDisadvantage() {
-        this.disadvantageCounter++;
-    }
-
-    public boolean advantageRoll() {
-        return this.advantageCounter > 0 && this.disadvantageCounter == 0;
-    }
-
-    public boolean disadvantageRoll() {
-        return this.disadvantageCounter > 0 && this.advantageCounter == 0;
-    }
-
-    public boolean normalRoll() {
-        return (this.advantageCounter == 0 && this.disadvantageCounter == 0)
-        || (this.advantageCounter > 0 && this.disadvantageCounter > 0);
-    }
-
-    public void roll() {
-        long baseDieRoll = Die.roll(20L);
-        if (this.advantageRoll()) {
-            long advantageRoll = Die.roll(20L);
-            if (advantageRoll > baseDieRoll) {
-                baseDieRoll = advantageRoll;
-            }
-        } else if (this.disadvantageRoll()) {
-            long disadvantageRoll = Die.roll(20L);
-            if (disadvantageRoll < baseDieRoll) {
-                baseDieRoll = disadvantageRoll;
-            }
-        }
-        this.subeventJson.put("base_die_roll", baseDieRoll);
-    }
-
-    public void checkForReroll(RPGLObject source, RPGLObject target) throws Exception {
-        ContestRerollChance contestRerollChance = new ContestRerollChance();
-        String contestRerollChanceJsonString = String.format("{" +
-                        "\"subevent\":\"contest_reroll_chance\"," +
-                        "\"base_die_roll\":%d" +
-                        "}",
-                (long) this.subeventJson.get("base_die_roll")
-        );
-        JsonObject contestRerollChanceJson = JsonParser.parseObjectString(contestRerollChanceJsonString);
-        contestRerollChance.joinSubeventJson(contestRerollChanceJson);
-        contestRerollChance.prepare(source);
-        contestRerollChance.invoke(source, source);
-
-        if (contestRerollChance.wasRerollRequested()) {
-            long rerollDieValue = Die.roll(20L);
-            String rerollMode = contestRerollChance.getRerollMode();
-            switch (rerollMode) {
-                case "use_new":
-                    this.subeventJson.put("base_die_roll", rerollDieValue);
-                    break;
-                case "use_highest":
-                    if (rerollDieValue > (Long) this.subeventJson.get("base_die_roll")) {
-                        this.subeventJson.put("base_die_roll", rerollDieValue);
-                    }
-                    break;
-                case "use_lowest":
-                    if (rerollDieValue < (Long) this.subeventJson.get("base_die_roll")) {
-                        this.subeventJson.put("base_die_roll", rerollDieValue);
-                    }
-                    break;
-            }
-        }
-    }
-
-    public long getSavingThrowTotal() {
-        return (Long) this.subeventJson.get("base_saving_throw") + (Long) this.subeventJson.get("bonus");
     }
 
     private void resolveSavePass(RPGLObject source, RPGLObject target) throws Exception {
@@ -292,11 +205,13 @@ public class SavingThrow extends Subevent {
 
     private void resolveNestedSubevents(RPGLObject source, RPGLObject target, String passOrFail) throws Exception {
         JsonArray subeventJsonArray = (JsonArray) this.subeventJson.get(passOrFail);
-        for (Object subeventJsonElement : subeventJsonArray) {
-            JsonObject subeventJson = (JsonObject) subeventJsonElement;
-            Subevent subevent = Subevent.SUBEVENTS.get((String) subeventJson.get("subevent")).clone(subeventJson);
-            subevent.prepare(source);
-            subevent.invoke(source, target);
+        if (subeventJsonArray != null) {
+            for (Object subeventJsonElement : subeventJsonArray) {
+                JsonObject subeventJson = (JsonObject) subeventJsonElement;
+                Subevent subevent = Subevent.SUBEVENTS.get((String) subeventJson.get("subevent")).clone(subeventJson);
+                subevent.prepare(source);
+                subevent.invoke(source, target);
+            }
         }
     }
 

@@ -53,12 +53,12 @@ public final class DatapackLoader {
             assert version != null; // TODO this needs a better check...
         } catch (JsonFormatException | FileNotFoundException e) {
             throw new RuntimeException(String.format(
-                    "datapack {} is missing a pack.info file or it is formatted incorrectly",
+                    "datapack %s is missing a pack.info file or it is formatted incorrectly",
                     namespace
             ), e);
         } catch (AssertionError e) {
             throw new RuntimeException(String.format(
-                    "datapack {} is not supported (version {})",
+                    "datapack %s is not supported (version %s)",
                     namespace,
                     version
             ), e);

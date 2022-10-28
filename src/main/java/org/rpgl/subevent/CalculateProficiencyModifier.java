@@ -3,7 +3,7 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 
-public class CalculateProficiencyModifier extends AttributeCalculation {
+public class CalculateProficiencyModifier extends Calculation {
 
     public CalculateProficiencyModifier() {
         super("calculate_proficiency_modifier");

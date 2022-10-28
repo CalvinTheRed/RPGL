@@ -20,6 +20,7 @@ public abstract class Subevent {
 
     static {
         SUBEVENTS = new HashMap<>();
+        Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
         Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
     }
@@ -44,13 +45,15 @@ public abstract class Subevent {
     public abstract Subevent clone(JsonObject subeventJson);
 
     /**
-     * This method gives a Subevent the chance to modify itself before it is cloned and sent off to its targets (such as
-     * rolling for damage or calculating a spell save DC).
+     * This method gives a Subevent the chance to modify itself before it is cloned and sent off to its targets. This is
+     * typically only necessary when a single Subevent has several targets.
      *
      * @param source the RPGLObject preparing to invoke the Subevent
+     * @throws Exception when an exception occurs.
      */
     public void prepare(RPGLObject source) throws Exception {
-
+        // This method has no behavior by default. It is left empty
+        // here for ease of developing derived classes elsewhere.
     }
 
     public void invoke(RPGLObject source, RPGLObject target) throws Exception {

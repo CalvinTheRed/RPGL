@@ -2,9 +2,9 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLObject;
 
-public abstract class AttributeCalculation extends Subevent {
+public abstract class Calculation extends Subevent {
 
-    public AttributeCalculation(String subeventId) {
+    public Calculation(String subeventId) {
         super(subeventId);
     }
 
