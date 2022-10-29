@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonArray;
+import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLContext;
@@ -191,7 +192,7 @@ public class SavingThrow extends ContestRoll {
                 }
             }
 
-            //this.deliverFinalDamage(context, baseDamage);
+            this.deliverDamage(context);
         }
     }
 
@@ -214,7 +215,7 @@ public class SavingThrow extends ContestRoll {
                 }
             }
 
-            //this.deliverFinalDamage(context, baseDamage);
+            this.deliverDamage(context);
         }
     }
 
@@ -230,8 +231,19 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
-    void deliverFinalDamage(RPGLContext context, Subevent subevent) {
-        //subevent.getTarget().receiveDamage(subevent, context);
+    void deliverDamage(RPGLContext context) throws Exception {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        String damageDeliveryJsonString = String.format("{" +
+                        "\"subevent\":\"damage_delivery\"," +
+                        "\"damage\":%s" +
+                        "}",
+                this.subeventJson.get("damage")
+        );
+        JsonObject damageDeliveryJson = JsonParser.parseObjectString(damageDeliveryJsonString);
+        damageDelivery.joinSubeventJson(damageDeliveryJson);
+        damageDelivery.setSource(this.getSource());
+        damageDelivery.setTarget(this.getTarget());
+        this.getTarget().receiveDamage(context, damageDelivery);
     }
 
 }

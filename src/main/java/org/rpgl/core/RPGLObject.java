@@ -5,10 +5,7 @@ import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
-import org.rpgl.subevent.CalculateAbilityScore;
-import org.rpgl.subevent.CalculateProficiencyModifier;
-import org.rpgl.subevent.DamageAffinity;
-import org.rpgl.subevent.Subevent;
+import org.rpgl.subevent.*;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.Map;
@@ -123,7 +120,8 @@ public class RPGLObject extends JsonObject {
         return 0L;
     }
 
-    public void receiveDamage(JsonObject damageObject, RPGLContext context) throws Exception {
+    public void receiveDamage(RPGLContext context, DamageDelivery damageDelivery) throws Exception {
+        JsonObject damageObject = damageDelivery.getDamage();
         for (Map.Entry<String, Object> damageObjectEntry : damageObject.entrySet()) {
             String damageType = damageObjectEntry.getKey();
             Long damage = (Long) damageObjectEntry.getValue();
