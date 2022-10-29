@@ -20,9 +20,13 @@ public abstract class Subevent {
 
     static {
         SUBEVENTS = new HashMap<>();
+        // AbilityCheck
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
+        // Damage
         Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
+        // GiveEffect
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
+        // TakeEffect
     }
 
     public Subevent(String subeventId) {

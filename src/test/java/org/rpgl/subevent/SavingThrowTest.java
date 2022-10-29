@@ -24,6 +24,7 @@ public class SavingThrowTest {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
+        Die.setTesting(true);
     }
 
     @AfterAll
@@ -35,11 +36,10 @@ public class SavingThrowTest {
     void afterEach() {
         UUIDTable.clear();
         DummySubevent.resetCounter();
-        Die.flush();
     }
 
     @Test
-    @DisplayName("SavingThrowTest Subevent throws SubeventMismatchException when subevent type doesn't match")
+    @DisplayName("SavingThrow Subevent throws SubeventMismatchException when subevent type doesn't match")
     void test0() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -69,7 +69,8 @@ public class SavingThrowTest {
         String subeventJsonString = "{" +
                 "\"subevent\": \"saving_throw\"," +
                 "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 10" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
@@ -79,7 +80,6 @@ public class SavingThrowTest {
          */
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         savingThrow.prepare(object);
-        Die.queue(10L);
         savingThrow.roll();
 
         /*
@@ -223,7 +223,8 @@ public class SavingThrowTest {
         String subeventJsonString = "{" +
                 "\"subevent\": \"saving_throw\"," +
                 "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 20" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
@@ -233,7 +234,6 @@ public class SavingThrowTest {
          */
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         savingThrow.prepare(object);
-        Die.queue(20L);
         savingThrow.invoke(object, object);
 
         /*
@@ -254,7 +254,8 @@ public class SavingThrowTest {
         String subeventJsonString = "{" +
                 "\"subevent\": \"saving_throw\"," +
                 "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 1" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
@@ -264,7 +265,6 @@ public class SavingThrowTest {
          */
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         savingThrow.prepare(object);
-        Die.queue(1L);
         savingThrow.invoke(object, object);
 
         /*
@@ -290,15 +290,15 @@ public class SavingThrowTest {
                 "   {" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }," +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }," +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 10" +
                 "   },{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }," +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }," +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 10" +
                 "   }" +
@@ -312,10 +312,6 @@ public class SavingThrowTest {
          * Invoke subevent method
          */
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        Die.queue(10L);
-        Die.queue(10L);
-        Die.queue(10L);
-        Die.queue(10L);
         savingThrow.prepare(object);
 
         /*
@@ -423,7 +419,9 @@ public class SavingThrowTest {
         String subeventJsonString = "{" +
                 "\"subevent\": \"saving_throw\"," +
                 "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 20," +
+                "\"determined_second\": 1" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
@@ -434,6 +432,11 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         savingThrow.prepare(object);
         savingThrow.grantDisadvantage();
+        savingThrow.roll();
+
+        /*
+         * Verify subevent behaves as expected
+         */
         assertFalse(savingThrow.advantageRoll(),
                 "SavingThrow Subevent should not be at advantage."
         );
@@ -443,26 +446,13 @@ public class SavingThrowTest {
         assertFalse(savingThrow.normalRoll(),
                 "SavingThrow Subevent should not be a normal roll."
         );
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        Die.queue(20L);
-        Die.queue(1L);
-        savingThrow.roll();
-        assertEquals(1L, savingThrow.get(),
-                "SavingThrow Subevent did not roll with disadvantage correctly."
-        );
-        Die.queue(1L);
-        Die.queue(20L);
-        savingThrow.roll();
         assertEquals(1L, savingThrow.get(),
                 "SavingThrow Subevent did not roll with disadvantage correctly."
         );
     }
 
     @Test
-    @DisplayName("SavingThrow Subevent can roll with advantage")
+    @DisplayName("SavingThrow Subevent can roll with disadvantage (reversed order)")
     void test12() throws Exception {
         /*
          * Set up the subevent context
@@ -471,7 +461,51 @@ public class SavingThrowTest {
         String subeventJsonString = "{" +
                 "\"subevent\": \"saving_throw\"," +
                 "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 1," +
+                "\"determined_second\": 20" +
+                "}";
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
+
+        /*
+         * Invoke subevent method
+         */
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        savingThrow.prepare(object);
+        savingThrow.grantDisadvantage();
+        savingThrow.roll();
+
+        /*
+         * Verify subevent behaves as expected
+         */
+        assertFalse(savingThrow.advantageRoll(),
+                "SavingThrow Subevent should not be at advantage."
+        );
+        assertTrue(savingThrow.disadvantageRoll(),
+                "SavingThrow Subevent should be at disadvantage."
+        );
+        assertFalse(savingThrow.normalRoll(),
+                "SavingThrow Subevent should not be a normal roll."
+        );
+        assertEquals(1L, savingThrow.get(),
+                "SavingThrow Subevent did not roll with disadvantage correctly."
+        );
+    }
+
+    @Test
+    @DisplayName("SavingThrow Subevent can roll with advantage")
+    void test13() throws Exception {
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new SavingThrow();
+        String subeventJsonString = "{" +
+                "\"subevent\": \"saving_throw\"," +
+                "\"save_ability\": \"int\"," +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 20," +
+                "\"determined_second\": 1" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
@@ -482,6 +516,11 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         savingThrow.prepare(object);
         savingThrow.grantAdvantage();
+        savingThrow.roll();
+
+        /*
+         * Verify subevent behaves as expected
+         */
         assertTrue(savingThrow.advantageRoll(),
                 "SavingThrow Subevent should be at advantage."
         );
@@ -491,27 +530,14 @@ public class SavingThrowTest {
         assertFalse(savingThrow.normalRoll(),
                 "SavingThrow Subevent should not be a normal roll."
         );
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        Die.queue(20L);
-        Die.queue(1L);
-        savingThrow.roll();
-        assertEquals(20L, savingThrow.get(),
-                "SavingThrow Subevent did not roll with advantage correctly."
-        );
-        Die.queue(1L);
-        Die.queue(20L);
-        savingThrow.roll();
         assertEquals(20L, savingThrow.get(),
                 "SavingThrow Subevent did not roll with advantage correctly."
         );
     }
 
     @Test
-    @DisplayName("SavingThrow Subevent can roll with normal roll (advantage and disadvantage)")
-    void test13() throws Exception {
+    @DisplayName("SavingThrow Subevent can roll with advantage (reversed order)")
+    void test14() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -519,7 +545,51 @@ public class SavingThrowTest {
         String subeventJsonString = "{" +
                 "\"subevent\": \"saving_throw\"," +
                 "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 1," +
+                "\"determined_second\": 20" +
+                "}";
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
+
+        /*
+         * Invoke subevent method
+         */
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        savingThrow.prepare(object);
+        savingThrow.grantAdvantage();
+        savingThrow.roll();
+
+        /*
+         * Verify subevent behaves as expected
+         */
+        assertTrue(savingThrow.advantageRoll(),
+                "SavingThrow Subevent should be at advantage."
+        );
+        assertFalse(savingThrow.disadvantageRoll(),
+                "SavingThrow Subevent should not be at disadvantage."
+        );
+        assertFalse(savingThrow.normalRoll(),
+                "SavingThrow Subevent should not be a normal roll."
+        );
+        assertEquals(20L, savingThrow.get(),
+                "SavingThrow Subevent did not roll with advantage correctly."
+        );
+    }
+
+    @Test
+    @DisplayName("SavingThrow Subevent can roll with normal roll (advantage and disadvantage)")
+    void test15() throws Exception {
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new SavingThrow();
+        String subeventJsonString = "{" +
+                "\"subevent\": \"saving_throw\"," +
+                "\"save_ability\": \"int\"," +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 20," +
+                "\"determined_second\": 1" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
@@ -531,6 +601,11 @@ public class SavingThrowTest {
         savingThrow.prepare(object);
         savingThrow.grantAdvantage();
         savingThrow.grantDisadvantage();
+        savingThrow.roll();
+
+        /*
+         * Verify subevent behaves as expected
+         */
         assertFalse(savingThrow.advantageRoll(),
                 "SavingThrow Subevent should not be at advantage."
         );
@@ -540,22 +615,186 @@ public class SavingThrowTest {
         assertTrue(savingThrow.normalRoll(),
                 "SavingThrow Subevent should be a normal roll."
         );
+        assertEquals(20L, savingThrow.get(),
+                "SavingThrow Subevent did not roll with both advantage and disadvantage correctly."
+        );
+    }
+
+    @Test
+    @DisplayName("SavingThrow Subevent can roll with normal roll (advantage and disadvantage) (reversed order)")
+    void test16() throws Exception {
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new SavingThrow();
+        String subeventJsonString = "{" +
+                "\"subevent\": \"saving_throw\"," +
+                "\"save_ability\": \"int\"," +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"determined\": 1," +
+                "\"determined_second\": 20" +
+                "}";
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
+
+        /*
+         * Invoke subevent method
+         */
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        savingThrow.prepare(object);
+        savingThrow.grantAdvantage();
+        savingThrow.grantDisadvantage();
+        savingThrow.roll();
 
         /*
          * Verify subevent behaves as expected
          */
-        Die.queue(20L);
-        Die.queue(1L);
-        savingThrow.roll();
-        assertEquals(20L, savingThrow.get(),
-                "SavingThrow Subevent did not roll with both advantage and disadvantage correctly."
+        assertFalse(savingThrow.advantageRoll(),
+                "SavingThrow Subevent should not be at advantage."
         );
-        Die.flush();
-        Die.queue(1L);
-        Die.queue(20L);
-        savingThrow.roll();
+        assertFalse(savingThrow.disadvantageRoll(),
+                "SavingThrow Subevent should not be at disadvantage."
+        );
+        assertTrue(savingThrow.normalRoll(),
+                "SavingThrow Subevent should be a normal roll."
+        );
         assertEquals(1L, savingThrow.get(),
                 "SavingThrow Subevent did not roll with both advantage and disadvantage correctly."
+        );
+    }
+
+    @Test
+    @DisplayName("SavingThrow Subevent can deal damage on a fail")
+    void test17() throws Exception {
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new SavingThrow();
+        String subeventJsonString = "{" +
+                "\"subevent\": \"saving_throw\"," +
+                "\"save_ability\": \"int\"," +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"damage\": [" +
+                "   {" +
+                "   \"type\": \"fire\"," +
+                "   \"dice\": [" +
+                "       { \"size\": 10, \"determined\": 1 }" +
+                "   ]" +
+                "   },{" +
+                "   \"type\": \"cold\"," +
+                "   \"dice\": [" +
+                "       { \"size\": 10, \"determined\": 1 }" +
+                "   ]" +
+                "   }" +
+                "]," +
+                "\"damage_on_pass\": \"none\"," +
+                "\"determined\": 1" +
+                "}";
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
+
+        /*
+         * Invoke subevent method
+         */
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        savingThrow.prepare(object);
+        savingThrow.invoke(object, object);
+
+        /*
+         * Verify subevent behaves as expected
+         */
+        assertEquals(8L, object.seek("health_data.current"),
+                "SavingThrow Subevent should have dealt 2 damage (10-2=8)."
+        );
+    }
+
+    @Test
+    @DisplayName("SavingThrow Subevent can deal no damage on a pass")
+    void test18() throws Exception { // TODO what is happening?
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new SavingThrow();
+        String subeventJsonString = "{" +
+                "\"subevent\": \"saving_throw\"," +
+                "\"save_ability\": \"int\"," +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"damage\": [" +
+                "   {" +
+                "   \"type\": \"fire\"," +
+                "   \"dice\": [" +
+                "       { \"size\": 10, \"determined\": 1 }" +
+                "   ]" +
+                "   },{" +
+                "   \"type\": \"cold\"," +
+                "   \"dice\": [" +
+                "       { \"size\": 10, \"determined\": 1 }" +
+                "   ]" +
+                "   }" +
+                "]," +
+                "\"damage_on_pass\": \"none\"," +
+                "\"determined\": 20" +
+                "}";
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
+
+        /*
+         * Invoke subevent method
+         */
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        savingThrow.prepare(object);
+        savingThrow.invoke(object, object);
+
+        /*
+         * Verify subevent behaves as expected
+         */
+        assertEquals(10L, object.seek("health_data.current"),
+                "SavingThrow Subevent should have dealt no damage (10-0=10)."
+        );
+    }
+
+    @Test
+    @DisplayName("SavingThrow Subevent can deal half damage on a pass")
+    void test19() throws Exception { // TODO what is happening?
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new SavingThrow();
+        String subeventJsonString = "{" +
+                "\"subevent\": \"saving_throw\"," +
+                "\"save_ability\": \"int\"," +
+                "\"difficulty_class_ability\":\"int\"," +
+                "\"damage\": [" +
+                "   {" +
+                "   \"type\": \"fire\"," +
+                "   \"dice\": [" +
+                "       { \"size\": 10, \"determined\": 2 }" +
+                "   ]" +
+                "   },{" +
+                "   \"type\": \"cold\"," +
+                "   \"dice\": [" +
+                "       { \"size\": 10, \"determined\": 2 }" +
+                "   ]" +
+                "   }" +
+                "]," +
+                "\"damage_on_pass\": \"half\"," +
+                "\"determined\": 20" +
+                "}";
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
+
+        /*
+         * Invoke subevent method
+         */
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        savingThrow.prepare(object);
+        savingThrow.invoke(object, object);
+
+        /*
+         * Verify subevent behaves as expected
+         */
+        assertEquals(8L, object.seek("health_data.current"),
+                "SavingThrow Subevent should have dealt no damage (10-(4/2)=8)."
         );
     }
 

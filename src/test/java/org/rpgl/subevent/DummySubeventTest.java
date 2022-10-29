@@ -20,11 +20,18 @@ public class DummySubeventTest {
     @Test
     @DisplayName("DummySubevent Subevent throws SubeventMismatchException when subevent type doesn't match")
     void test0() throws JsonFormatException {
+        /*
+         * Set up the subevent context
+         */
         Subevent subevent = new DummySubevent();
         String subeventJsonString = "{" +
                 "\"subevent\": \"not_a_subevent\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+
+        /*
+         * Verify subevent behaves as expected
+         */
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.clone(subeventJson).invoke(null, null),
                 "DummySubevent Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."

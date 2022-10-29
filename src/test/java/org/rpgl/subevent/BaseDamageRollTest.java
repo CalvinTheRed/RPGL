@@ -3,7 +3,7 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.exception.SubeventMismatchException;
@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BaseDamageRollTest {
 
-    @AfterEach
-    void afterEach() {
-        Die.flush();
+    @BeforeAll
+    static void beforeAll() {
+        Die.setTesting(true);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRollTest Subevent returns the correct final damage values")
+    @DisplayName("BaseDamageRoll Subevent returns the correct final damage values")
     void test1() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -79,7 +79,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRollTest Subevent can roll dice for damage")
+    @DisplayName("BaseDamageRoll Subevent can roll dice for damage")
     void test2() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -91,13 +91,13 @@ public class BaseDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "}]}";
@@ -107,8 +107,6 @@ public class BaseDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         baseDamageRoll.roll();
 
         /*
@@ -122,7 +120,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRollTest Subevent can re-roll typed dice below a given value")
+    @DisplayName("BaseDamageRoll Subevent can re-roll typed dice below a given value")
     void test3() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -134,14 +132,14 @@ public class BaseDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "}]}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
@@ -150,8 +148,6 @@ public class BaseDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         baseDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, "fire");
 
         /*
@@ -165,7 +161,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRollTest Subevent can re-roll all dice below a given value")
+    @DisplayName("BaseDamageRoll Subevent can re-roll all dice below a given value")
     void test4() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -177,14 +173,14 @@ public class BaseDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "}]}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
@@ -193,8 +189,6 @@ public class BaseDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         baseDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, null);
 
         /*
@@ -208,7 +202,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRollTest Subevent can set typed dice below a given value")
+    @DisplayName("BaseDamageRoll Subevent can set typed dice below a given value")
     void test5() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -249,7 +243,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRollTest Subevent can set all dice below a given value")
+    @DisplayName("BaseDamageRoll Subevent can set all dice below a given value")
     void test6() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -290,7 +284,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRollTest Subevent prepare method works")
+    @DisplayName("BaseDamageRoll Subevent prepare method works")
     void test7() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -302,13 +296,13 @@ public class BaseDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "}]}";
@@ -318,8 +312,6 @@ public class BaseDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         baseDamageRoll.prepare(null);
 
         /*

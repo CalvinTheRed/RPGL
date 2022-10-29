@@ -36,14 +36,14 @@ public abstract class ContestRoll extends Calculation {
     }
 
     public void roll() {
-        long baseDieRoll = Die.roll(20L);
+        long baseDieRoll = Die.roll(20L, (Long) this.subeventJson.get("determined"));
         if (this.advantageRoll()) {
-            long advantageRoll = Die.roll(20L);
+            long advantageRoll = Die.roll(20L, (Long) this.subeventJson.get("determined_second"));
             if (advantageRoll > baseDieRoll) {
                 baseDieRoll = advantageRoll;
             }
         } else if (this.disadvantageRoll()) {
-            long disadvantageRoll = Die.roll(20L);
+            long disadvantageRoll = Die.roll(20L, (Long) this.subeventJson.get("determined_second"));
             if (disadvantageRoll < baseDieRoll) {
                 baseDieRoll = disadvantageRoll;
             }
@@ -65,7 +65,7 @@ public abstract class ContestRoll extends Calculation {
         contestRerollChance.invoke(source, source);
 
         if (contestRerollChance.wasRerollRequested()) {
-            long rerollDieValue = Die.roll(20L);
+            long rerollDieValue = Die.roll(20L, (Long) this.subeventJson.get("determined_reroll"));
             String rerollMode = contestRerollChance.getRerollMode();
             switch (rerollMode) {
                 case "use_new":

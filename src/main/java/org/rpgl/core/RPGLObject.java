@@ -7,8 +7,11 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateProficiencyModifier;
+import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
+
+import java.util.Map;
 
 /**
  * RPGLObjects are objects which represent anything which might be placed on a game board (not including the game board
@@ -109,12 +112,52 @@ public class RPGLObject extends JsonObject {
     }
 
     public Long getSaveProficiencyBonus(String ability) {
-        // TODO this should use a Subevent evenatually...
+        // TODO this should use a Subevent eventually...
         return 0L;
     }
 
-    public void receiveDamage(JsonObject damageObject) {
-        // TODO reduce health here and use a Subevent to check for resistance, vulnerability, or immunity.
+    public void receiveDamage(RPGLObject source, JsonObject damageObject) throws Exception {
+        for (Map.Entry<String, Object> damageObjectEntry : damageObject.entrySet()) {
+            String damageType = damageObjectEntry.getKey();
+            Long damage = (Long) damageObjectEntry.getValue();
+
+            DamageAffinity damageAffinity = new DamageAffinity();
+            String damageAffinityJsonString = String.format("{" +
+                            "\"subevent\":\"damage_affinity\"," +
+                            "\"type\":\"%s\"" +
+                            "}",
+                    damageType
+            );
+            JsonObject damageAffinityJson = JsonParser.parseObjectString(damageAffinityJsonString);
+            damageAffinity.joinSubeventJson(damageAffinityJson);
+            damageAffinity.prepare(this);
+            damageAffinity.invoke(source, this);
+            String affinity =  damageAffinity.getAffinity();
+
+            if ("normal".equals(affinity)) {
+                this.reduceHitPoints(damage);
+            } else if ("resistance".equals(affinity)) {
+                this.reduceHitPoints(damage / 2L);
+            } else if ("vulnerability".equals(affinity)) {
+                this.reduceHitPoints(damage * 2L);
+            }
+        }
+    }
+
+    void reduceHitPoints(long amount) {
+        JsonObject healthData = (JsonObject) this.get("health_data");
+        Long temporaryHitPoints = (Long) healthData.get("temporary");
+        Long currentHitPoints = (Long) healthData.get("current");
+        if (amount > temporaryHitPoints) {
+            amount -= temporaryHitPoints;
+            temporaryHitPoints = 0L;
+            currentHitPoints -= amount;
+        } else {
+            temporaryHitPoints -= amount;
+        }
+        healthData.put("temporary", temporaryHitPoints);
+        healthData.put("current", currentHitPoints);
+        // TODO deal with 0 or negative hit points after this...
     }
 
 }

@@ -26,15 +26,15 @@ public abstract class DamageRoll extends Subevent {
             }
 
             for (Object typedDamageDieElement : typedDamageDieArray) {
-                JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
-                long size = (Long) typedDamageDie.get("size");
-                long roll = Die.roll(size);
-                typedDamageDie.put("roll", roll);
+                JsonObject typedDamageDieJson = (JsonObject) typedDamageDieElement;
+                long size = (Long) typedDamageDieJson.get("size");
+                long roll = Die.roll(size, (Long) typedDamageDieJson.get("determined"));
+                typedDamageDieJson.put("roll", roll);
             }
         }
     }
 
-    public void rerollTypedDiceLessThanOrEqualTo(long threshhold, String damageType) {
+    public void rerollTypedDiceLessThanOrEqualTo(long threshold, String damageType) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
@@ -45,18 +45,18 @@ public abstract class DamageRoll extends Subevent {
                 }
 
                 for (Object typedDamageDieElement : typedDamageDieArray) {
-                    JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
-                    if ((Long) typedDamageDie.get("roll") <= threshhold) {
-                        long size = (Long) typedDamageDie.get("size");
-                        long roll = Die.roll(size);
-                        typedDamageDie.put("roll", roll);
+                    JsonObject typedDamageDieJson = (JsonObject) typedDamageDieElement;
+                    if ((Long) typedDamageDieJson.get("roll") <= threshold) {
+                        long size = (Long) typedDamageDieJson.get("size");
+                        long roll = Die.roll(size, (Long) typedDamageDieJson.get("determined_reroll"));
+                        typedDamageDieJson.put("roll", roll);
                     }
                 }
             }
         }
     }
 
-    public void setTypedDiceLessThanOrEqualTo(long threshhold, long faceValue, String damageType) {
+    public void setTypedDiceLessThanOrEqualTo(long threshold, long faceValue, String damageType) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
@@ -68,7 +68,7 @@ public abstract class DamageRoll extends Subevent {
 
                 for (Object typedDamageDieElement : typedDamageDieArray) {
                     JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
-                    if ((Long) typedDamageDie.get("roll") <= threshhold) {
+                    if ((Long) typedDamageDie.get("roll") <= threshold) {
                         typedDamageDie.put("roll", faceValue);
                     }
                 }

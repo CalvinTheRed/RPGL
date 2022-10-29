@@ -3,7 +3,7 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.exception.SubeventMismatchException;
@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TargetDamageRollTest {
 
-    @AfterEach
-    void afterEach() {
-        Die.flush();
+    @BeforeAll
+    static void beforeAll() {
+        Die.setTesting(true);
     }
 
     @Test
@@ -91,13 +91,13 @@ public class TargetDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "}]}";
@@ -107,8 +107,6 @@ public class TargetDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         targetDamageRoll.roll();
 
         /*
@@ -134,14 +132,14 @@ public class TargetDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "}]}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
@@ -150,8 +148,6 @@ public class TargetDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         targetDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, "fire");
 
         /*
@@ -177,14 +173,14 @@ public class TargetDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
+                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
+                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
                 "   ]" +
                 "}]}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
@@ -193,8 +189,6 @@ public class TargetDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         targetDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, null);
 
         /*
@@ -302,13 +296,13 @@ public class TargetDamageRollTest {
                 "{" +
                 "   \"type\": \"fire\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "},{" +
                 "   \"type\": \"cold\"," +
                 "   \"dice\": [" +
-                "       { \"size\": 10 }" +
+                "       { \"size\": 10, \"determined\": 10 }" +
                 "   ]," +
                 "   \"bonus\": 2" +
                 "}]}";
@@ -318,8 +312,6 @@ public class TargetDamageRollTest {
         /*
          * Invoke subevent method
          */
-        Die.queue(10L);
-        Die.queue(10L);
         targetDamageRoll.prepare(null);
 
         /*

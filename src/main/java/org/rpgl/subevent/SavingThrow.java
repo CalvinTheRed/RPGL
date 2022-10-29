@@ -147,6 +147,9 @@ public class SavingThrow extends ContestRoll {
         JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
         String damageOnPass = (String) this.subeventJson.get("damage_on_pass");
         if (baseDamage != null && !"none".equals(damageOnPass)) {
+            /*
+             * Add base and target damage into final damage quantities
+             */
             for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(source, target).entrySet()) {
                 String damageType = targetDamageEntry.getKey();
                 if (baseDamage.containsKey(damageType)) {
@@ -163,6 +166,9 @@ public class SavingThrow extends ContestRoll {
                 }
             }
 
+            /*
+             * Account for half or no damage on pass (this should be a redundant check if this code is reached)
+             */
             if ("half".equals(damageOnPass)) {
                 for (Map.Entry<String, Object> damageEntryElement : baseDamage.entrySet()) {
                     Long value = (Long) damageEntryElement.getValue();
@@ -174,10 +180,9 @@ public class SavingThrow extends ContestRoll {
                     }
                     damageEntryElement.setValue(value);
                 }
-                target.receiveDamage(baseDamage);
-            } else if ("all".equals(damageOnPass)) {
-                target.receiveDamage(baseDamage);
             }
+
+            this.deliverFinalDamage(source, target, baseDamage);
         }
     }
 
@@ -199,7 +204,8 @@ public class SavingThrow extends ContestRoll {
                     baseDamage.entrySet().add(targetDamageEntry);
                 }
             }
-            target.receiveDamage(baseDamage);
+
+            this.deliverFinalDamage(source, target, baseDamage);
         }
     }
 
@@ -213,6 +219,10 @@ public class SavingThrow extends ContestRoll {
                 subevent.invoke(source, target);
             }
         }
+    }
+
+    void deliverFinalDamage(RPGLObject source, RPGLObject target, JsonObject damage) throws Exception {
+        target.receiveDamage(source, damage);
     }
 
 }

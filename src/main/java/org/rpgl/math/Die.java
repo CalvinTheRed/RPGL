@@ -1,36 +1,23 @@
 package org.rpgl.math;
 
-import java.util.Queue;
 import java.util.Random;
-import java.util.concurrent.LinkedTransferQueue;
 
 public final class Die {
 
-    private static final Random R;
-    private static final Queue<Long> QUEUE;
+    private static final Random R = new Random(System.currentTimeMillis());
 
-    static {
-        R = new Random(System.currentTimeMillis());
-        QUEUE = new LinkedTransferQueue<>();
-    }
+    private static boolean testing = false;
 
-    public static long roll(long upperBound) {
-        if (QUEUE.peek() == null) {
+    public static long roll(long upperBound, Long determinedValue) {
+        if (testing && determinedValue != null) {
+            return determinedValue;
+        } else {
             return R.nextLong(upperBound) + 1;
         }
-        return dequeue();
     }
 
-    public static void queue(long value) {
-        QUEUE.add(value);
-    }
-
-    public static long dequeue() {
-        return QUEUE.remove();
-    }
-
-    public static void flush() {
-        QUEUE.clear();
+    public static void setTesting(boolean isTesting) {
+        Die.testing = isTesting;
     }
 
 }

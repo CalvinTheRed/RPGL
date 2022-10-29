@@ -4,7 +4,7 @@ import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 
-public abstract class DamageDiceCollection extends Subevent{
+public abstract class DamageDiceCollection extends Subevent {
 
     public DamageDiceCollection(String subeventId) {
         super(subeventId);
