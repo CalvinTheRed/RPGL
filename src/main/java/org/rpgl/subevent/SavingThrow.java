@@ -1,7 +1,6 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLContext;
