@@ -5,6 +5,7 @@ import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.exception.SubeventMismatchException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,12 +24,13 @@ public class DamageAffinityTest {
                 "\"subevent\": \"not_a_subevent\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Verify subevent behaves as expected
          */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(null, null),
+                () -> subevent.clone(subeventJson).invoke(context),
                 "DamageAffinity Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
@@ -46,11 +48,12 @@ public class DamageAffinityTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent method
          */
-        damageAffinity.prepare(null);
+        damageAffinity.prepare(context);
 
         /*
          * Verify subevent behaves as expected
@@ -78,11 +81,12 @@ public class DamageAffinityTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent method
          */
-        damageAffinity.prepare(null);
+        damageAffinity.prepare(context);
 
         /*
          * Verify subevent behaves as expected
@@ -110,11 +114,12 @@ public class DamageAffinityTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent method
          */
-        damageAffinity.prepare(null);
+        damageAffinity.prepare(context);
 
         /*
          * Verify subevent behaves as expected
@@ -142,11 +147,12 @@ public class DamageAffinityTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent method
          */
-        damageAffinity.prepare(null);
+        damageAffinity.prepare(context);
         damageAffinity.giveImmunity();
         damageAffinity.giveResistance();
 
@@ -171,11 +177,12 @@ public class DamageAffinityTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent method
          */
-        damageAffinity.prepare(null);
+        damageAffinity.prepare(context);
         damageAffinity.giveImmunity();
         damageAffinity.giveVulnerability();
 
@@ -200,11 +207,12 @@ public class DamageAffinityTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent method
          */
-        damageAffinity.prepare(null);
+        damageAffinity.prepare(context);
         damageAffinity.giveResistance();
         damageAffinity.giveVulnerability();
 
@@ -229,11 +237,12 @@ public class DamageAffinityTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent method
          */
-        damageAffinity.prepare(null);
+        damageAffinity.prepare(context);
         damageAffinity.giveImmunity();
         damageAffinity.giveResistance();
         damageAffinity.giveVulnerability();

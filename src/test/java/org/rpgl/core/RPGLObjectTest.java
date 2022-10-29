@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.jsonutils.JsonArray;
 import org.junit.jupiter.api.*;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
@@ -65,7 +66,10 @@ public class RPGLObjectTest {
     @DisplayName("Object can report proficiency bonus")
     void test3() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        assertEquals(2, object.getProficiencyBonus(),
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
+        assertEquals(2, object.getProficiencyBonus(context),
                 "Object dummy:dummy_hollow should have a proficiency bonus of +2."
         );
     }
@@ -103,22 +107,25 @@ public class RPGLObjectTest {
     @DisplayName("Object can calculate ability score modifiers from ability scores")
     void test5() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        assertEquals(-2L, object.getAbilityModifier("str"),
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
+        assertEquals(-2L, object.getAbilityModifier(context, "str"),
                 "Object dummy:dummy_hollow str score of 7 should have modifier of -2."
         );
-        assertEquals(-1L, object.getAbilityModifier("dex"),
+        assertEquals(-1L, object.getAbilityModifier(context, "dex"),
                 "Object dummy:dummy_hollow dex score of 8 should have modifier of -1."
         );
-        assertEquals(-1L, object.getAbilityModifier("con"),
+        assertEquals(-1L, object.getAbilityModifier(context, "con"),
                 "Object dummy:dummy_hollow con score of 9 should have modifier of -1."
         );
-        assertEquals(0L, object.getAbilityModifier("int"),
+        assertEquals(0L, object.getAbilityModifier(context, "int"),
                 "Object dummy:dummy_hollow int score of 10 should have modifier of 0."
         );
-        assertEquals(0L, object.getAbilityModifier("wis"),
+        assertEquals(0L, object.getAbilityModifier(context, "wis"),
                 "Object dummy:dummy_hollow wis score of 11 should have modifier of 0."
         );
-        assertEquals(1L, object.getAbilityModifier("cha"),
+        assertEquals(1L, object.getAbilityModifier(context, "cha"),
                 "Object dummy:dummy_hollow cha score of 12 should have modifier of +1."
         );
     }
@@ -127,8 +134,11 @@ public class RPGLObjectTest {
     @DisplayName("Object can process dummy Event without error")
     void test6() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
         RPGLEvent event = RPGLFactory.newEvent("dummy:dummy");
-        object.invokeEvent(new RPGLObject[] {object}, event);
+        object.invokeEvent(new RPGLObject[] {object}, event, context);
     }
 
     @Test
@@ -137,10 +147,13 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         RPGLEffect effect = RPGLFactory.newEffect("dummy:dummy");
         object.addEffect(effect);
-        UUIDTable.register(effect);
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
+
 
         RPGLEvent event = RPGLFactory.newEvent("dummy:dummy");
-        object.invokeEvent(new RPGLObject[] {object}, event);
+        object.invokeEvent(new RPGLObject[] {object}, event, context);
 
         assertEquals(1, DummyFunction.counter,
                 "Effect dummy:dummy should increment DummyFunction counter when Event dummy:dummy is invoked."
@@ -155,11 +168,13 @@ public class RPGLObjectTest {
         RPGLEffect effect2 = RPGLFactory.newEffect("dummy:dummy");
         object.addEffect(effect1);
         object.addEffect(effect2);
-        UUIDTable.register(effect1);
-        UUIDTable.register(effect2);
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
+
 
         RPGLEvent event = RPGLFactory.newEvent("dummy:dummy");
-        object.invokeEvent(new RPGLObject[] {object}, event);
+        object.invokeEvent(new RPGLObject[] {object}, event, context);
 
         assertEquals(1, DummyFunction.counter,
                 "Effect dummy:dummy should increment DummyFunction counter when Event dummy:dummy is invoked, but only once."

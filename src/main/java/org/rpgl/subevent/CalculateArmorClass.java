@@ -1,7 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 
 public class CalculateArmorClass extends Calculation {
 
@@ -11,7 +11,10 @@ public class CalculateArmorClass extends Calculation {
 
     @Override
     public Subevent clone() {
-        return new CalculateArmorClass();
+        Subevent clone = new CalculateArmorClass();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
@@ -23,9 +26,9 @@ public class CalculateArmorClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLObject source) throws Exception {
-        super.prepare(source);
-        Long baseArmorClass = 10L + source.getAbilityModifier("dex");
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        Long baseArmorClass = 10L + this.getSource().getAbilityModifier(context, "dex");
         this.subeventJson.put("raw", baseArmorClass);
     }
 

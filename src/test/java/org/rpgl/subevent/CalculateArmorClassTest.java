@@ -1,9 +1,11 @@
 package org.rpgl.subevent;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.junit.jupiter.api.*;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -47,12 +49,13 @@ public class CalculateArmorClassTest {
                 "\"subevent\": \"not_a_subevent\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Verify subevent behaves as expected
          */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(null, null),
+                () -> subevent.clone(subeventJson).invoke(context),
                 "CalculateArmorClass Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
@@ -67,12 +70,16 @@ public class CalculateArmorClassTest {
         String subeventJsonString = "{ \"subevent\": \"calculate_armor_class\" }";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateArmorClass calculateArmorClass = (CalculateArmorClass) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateArmorClass.prepare(object);
+        calculateArmorClass.setSource(object);
+        calculateArmorClass.prepare(context);
 
         /*
          * Verify subevent behaves as expected
@@ -92,12 +99,16 @@ public class CalculateArmorClassTest {
         String subeventJsonString = "{ \"subevent\": \"calculate_armor_class\" }";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateArmorClass calculateArmorClass = (CalculateArmorClass) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateArmorClass.prepare(object);
+        calculateArmorClass.setSource(object);
+        calculateArmorClass.prepare(context);
         calculateArmorClass.set(10L);
 
         /*
@@ -118,12 +129,16 @@ public class CalculateArmorClassTest {
         String subeventJsonString = "{ \"subevent\": \"calculate_armor_class\" }";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateArmorClass calculateArmorClass = (CalculateArmorClass) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateArmorClass.prepare(object);
+        calculateArmorClass.setSource(object);
+        calculateArmorClass.prepare(context);
         calculateArmorClass.set(10L);
         calculateArmorClass.set(12L);
 
@@ -145,12 +160,16 @@ public class CalculateArmorClassTest {
         String subeventJsonString = "{ \"subevent\": \"calculate_armor_class\" }";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateArmorClass calculateArmorClass = (CalculateArmorClass) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateArmorClass.prepare(object);
+        calculateArmorClass.setSource(object);
+        calculateArmorClass.prepare(context);
         calculateArmorClass.set(10L);
         calculateArmorClass.set(8L);
 
@@ -172,12 +191,16 @@ public class CalculateArmorClassTest {
         String subeventJsonString = "{ \"subevent\": \"calculate_armor_class\" }";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateArmorClass calculateArmorClass = (CalculateArmorClass) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateArmorClass.prepare(object);
+        calculateArmorClass.setSource(object);
+        calculateArmorClass.prepare(context);
         calculateArmorClass.addBonus(3L);
 
         /*
@@ -198,12 +221,16 @@ public class CalculateArmorClassTest {
         String subeventJsonString = "{ \"subevent\": \"calculate_armor_class\" }";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateArmorClass calculateArmorClass = (CalculateArmorClass) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateArmorClass.prepare(object);
+        calculateArmorClass.setSource(object);
+        calculateArmorClass.prepare(context);
         calculateArmorClass.addBonus(3L);
         calculateArmorClass.set(12L);
 

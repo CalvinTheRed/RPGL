@@ -2,7 +2,7 @@ package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.math.Die;
 
 public abstract class ContestRoll extends Calculation {
@@ -51,7 +51,7 @@ public abstract class ContestRoll extends Calculation {
         this.subeventJson.put("raw", baseDieRoll);
     }
 
-    public boolean checkForReroll(RPGLObject source, RPGLObject target) throws Exception {
+    public boolean checkForReroll(RPGLContext context) throws Exception {
         ContestRerollChance contestRerollChance = new ContestRerollChance();
         String contestRerollChanceJsonString = String.format("{" +
                         "\"subevent\":\"contest_reroll_chance\"," +
@@ -61,8 +61,8 @@ public abstract class ContestRoll extends Calculation {
         );
         JsonObject contestRerollChanceJson = JsonParser.parseObjectString(contestRerollChanceJsonString);
         contestRerollChance.joinSubeventJson(contestRerollChanceJson);
-        contestRerollChance.prepare(source);
-        contestRerollChance.invoke(source, source);
+        contestRerollChance.prepare(context);
+        contestRerollChance.invoke(context);
 
         if (contestRerollChance.wasRerollRequested()) {
             long rerollDieValue = Die.roll(20L, (Long) this.subeventJson.get("determined_reroll"));

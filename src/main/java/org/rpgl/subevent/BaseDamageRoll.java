@@ -10,7 +10,10 @@ public class BaseDamageRoll extends DamageRoll {
 
     @Override
     public Subevent clone() {
-        return new BaseDamageRoll();
+        Subevent clone = new BaseDamageRoll();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override

@@ -10,7 +10,10 @@ public class BaseDamageDiceCollection extends DamageDiceCollection {
 
     @Override
     public Subevent clone() {
-        return new BaseDamageDiceCollection();
+        Subevent clone = new BaseDamageDiceCollection();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override

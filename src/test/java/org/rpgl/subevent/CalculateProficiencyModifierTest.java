@@ -1,9 +1,11 @@
 package org.rpgl.subevent;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.junit.jupiter.api.*;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -47,12 +49,13 @@ public class CalculateProficiencyModifierTest {
                 "\"subevent\": \"not_a_subevent\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Verify subevent behaves as expected
          */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(null, null),
+                () -> subevent.clone(subeventJson).invoke(context),
                 "CalculateProficiencyModifier Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
@@ -68,18 +71,22 @@ public class CalculateProficiencyModifierTest {
                 "\"subevent\": \"calculate_proficiency_modifier\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateAbilityScore = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateAbilityScore.prepare(object);
+        calculateProficiencyModifier.setSource(object);
+        calculateProficiencyModifier.prepare(context);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(2L, calculateAbilityScore.get(),
+        assertEquals(2L, calculateProficiencyModifier.get(),
                 "CalculateAbilityScore Subevent did not report raw proficiency correctly."
         );
     }
@@ -95,19 +102,23 @@ public class CalculateProficiencyModifierTest {
                 "\"subevent\": \"calculate_proficiency_modifier\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyBonus = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateProficiencyBonus.prepare(object);
-        calculateProficiencyBonus.set(3L);
+        calculateProficiencyModifier.setSource(object);
+        calculateProficiencyModifier.prepare(context);
+        calculateProficiencyModifier.set(3L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, calculateProficiencyBonus.get(),
+        assertEquals(3L, calculateProficiencyModifier.get(),
                 "CalculateAbilityScore Subevent did not set proficiency correctly."
         );
     }
@@ -123,20 +134,24 @@ public class CalculateProficiencyModifierTest {
                 "\"subevent\": \"calculate_proficiency_modifier\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyBonus = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateProficiencyBonus.prepare(object);
-        calculateProficiencyBonus.set(3L);
-        calculateProficiencyBonus.set(4L);
+        calculateProficiencyModifier.setSource(object);
+        calculateProficiencyModifier.prepare(context);
+        calculateProficiencyModifier.set(3L);
+        calculateProficiencyModifier.set(4L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyBonus.get(),
+        assertEquals(4L, calculateProficiencyModifier.get(),
                 "CalculateAbilityScore Subevent should be able to override proficiency set value with higher value."
         );
     }
@@ -152,20 +167,24 @@ public class CalculateProficiencyModifierTest {
                 "\"subevent\": \"calculate_proficiency_modifier\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyBonus = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateProficiencyBonus.prepare(object);
-        calculateProficiencyBonus.set(4L);
-        calculateProficiencyBonus.set(3L);
+        calculateProficiencyModifier.setSource(object);
+        calculateProficiencyModifier.prepare(context);
+        calculateProficiencyModifier.set(4L);
+        calculateProficiencyModifier.set(3L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyBonus.get(),
+        assertEquals(4L, calculateProficiencyModifier.get(),
                 "CalculateAbilityScore Subevent should not be able to override proficiency set value with lower value."
         );
     }
@@ -181,19 +200,23 @@ public class CalculateProficiencyModifierTest {
                 "\"subevent\": \"calculate_proficiency_modifier\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyBonus = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateProficiencyBonus.prepare(object);
-        calculateProficiencyBonus.addBonus(1L);
+        calculateProficiencyModifier.setSource(object);
+        calculateProficiencyModifier.prepare(context);
+        calculateProficiencyModifier.addBonus(1L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, calculateProficiencyBonus.get(),
+        assertEquals(3L, calculateProficiencyModifier.get(),
                 "CalculateAbilityScore Subevent did not add bonus to proficiency properly."
         );
     }
@@ -209,20 +232,24 @@ public class CalculateProficiencyModifierTest {
                 "\"subevent\": \"calculate_proficiency_modifier\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyBonus = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateProficiencyBonus.prepare(object);
-        calculateProficiencyBonus.addBonus(1L);
-        calculateProficiencyBonus.set(3L);
+        calculateProficiencyModifier.setSource(object);
+        calculateProficiencyModifier.prepare(context);
+        calculateProficiencyModifier.addBonus(1L);
+        calculateProficiencyModifier.set(3L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyBonus.get(),
+        assertEquals(4L, calculateProficiencyModifier.get(),
                 "CalculateAbilityScore Subevent did not add bonus to set proficiency properly."
         );
     }

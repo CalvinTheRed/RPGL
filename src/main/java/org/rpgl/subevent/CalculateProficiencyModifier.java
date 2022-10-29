@@ -1,7 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 
 public class CalculateProficiencyModifier extends Calculation {
 
@@ -11,7 +11,10 @@ public class CalculateProficiencyModifier extends Calculation {
 
     @Override
     public Subevent clone() {
-        return new CalculateProficiencyModifier();
+        Subevent clone = new CalculateProficiencyModifier();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
@@ -23,9 +26,9 @@ public class CalculateProficiencyModifier extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLObject source) throws Exception {
-        super.prepare(source);
-        Long rawProficiencyModifier = (Long) source.seek("proficiency_bonus");
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        Long rawProficiencyModifier = (Long) this.getSource().seek("proficiency_bonus");
         this.subeventJson.put("raw", rawProficiencyModifier);
     }
 

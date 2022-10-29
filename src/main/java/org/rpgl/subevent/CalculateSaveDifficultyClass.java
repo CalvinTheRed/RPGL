@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 
 public class CalculateSaveDifficultyClass extends Calculation {
@@ -11,7 +12,10 @@ public class CalculateSaveDifficultyClass extends Calculation {
 
     @Override
     public Subevent clone() {
-        return new CalculateSaveDifficultyClass();
+        Subevent clone = new CalculateSaveDifficultyClass();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
@@ -23,11 +27,12 @@ public class CalculateSaveDifficultyClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLObject source) throws Exception {
-        super.prepare(source);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.subeventJson.put("raw", 8L);
-        this.addBonus(source.getProficiencyBonus());
-        this.addBonus(source.getAbilityModifier((String) this.subeventJson.get("difficulty_class_ability")));
+        RPGLObject source = this.getSource();
+        this.addBonus(source.getProficiencyBonus(context));
+        this.addBonus(source.getAbilityModifier(context, (String) this.subeventJson.get("difficulty_class_ability")));
     }
 
 }

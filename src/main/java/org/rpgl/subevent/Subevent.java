@@ -1,9 +1,11 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -21,7 +23,7 @@ public abstract class Subevent {
     static {
         SUBEVENTS = new HashMap<>();
         // AbilityCheck
-        Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
+        // AttackRoll
         // Damage
         Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
         // GiveEffect
@@ -52,17 +54,16 @@ public abstract class Subevent {
      * This method gives a Subevent the chance to modify itself before it is cloned and sent off to its targets. This is
      * typically only necessary when a single Subevent has several targets.
      *
-     * @param source the RPGLObject preparing to invoke the Subevent
      * @throws Exception when an exception occurs.
      */
-    public void prepare(RPGLObject source) throws Exception {
+    public void prepare(RPGLContext context) throws Exception {
         // This method has no behavior by default. It is left empty
         // here for ease of developing derived classes elsewhere.
     }
 
-    public void invoke(RPGLObject source, RPGLObject target) throws Exception {
+    public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);
-        while (source.processSubevent(source, target, this) | target.processSubevent(source, target, this));
+        context.processSubevent(this);
     }
 
     public void addModifyingEffect(RPGLEffect effect) {
@@ -77,6 +78,30 @@ public abstract class Subevent {
             }
         }
         return false;
+    }
+
+    public void setSource(RPGLObject source) {
+        if (source == null) {
+            this.subeventJson.put("source", null);
+        } else {
+            this.subeventJson.put("source", source.get("uuid"));
+        }
+    }
+
+    public void setTarget(RPGLObject target) {
+        if (target == null) {
+            this.subeventJson.put("target", null);
+        } else {
+            this.subeventJson.put("target", target.get("uuid"));
+        }
+    }
+
+    public RPGLObject getSource() {
+        return UUIDTable.getObject((String) this.subeventJson.get("source"));
+    }
+
+    public RPGLObject getTarget() {
+        return UUIDTable.getObject((String) this.subeventJson.get("target"));
     }
 
 }

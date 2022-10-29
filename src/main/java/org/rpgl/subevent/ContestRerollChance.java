@@ -1,7 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 
 public class ContestRerollChance extends Subevent {
 
@@ -11,7 +11,10 @@ public class ContestRerollChance extends Subevent {
 
     @Override
     public Subevent clone() {
-        return new SavingThrow();
+        Subevent clone = new ContestRerollChance();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class ContestRerollChance extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLObject source) {
+    public void prepare(RPGLContext context) {
         this.subeventJson.put("reroll_requested", false);
     }
 

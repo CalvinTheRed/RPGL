@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 
 public abstract class Calculation extends Subevent {
 
@@ -9,7 +9,7 @@ public abstract class Calculation extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLObject source) throws Exception {
+    public void prepare(RPGLContext context) throws Exception {
         this.addBonus(0L);
     }
 

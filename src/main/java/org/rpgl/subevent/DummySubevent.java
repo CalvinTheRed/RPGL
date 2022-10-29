@@ -1,7 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 
 public class DummySubevent extends Subevent {
 
@@ -13,7 +13,10 @@ public class DummySubevent extends Subevent {
 
     @Override
     public Subevent clone() {
-        return new DummySubevent();
+        Subevent clone = new DummySubevent();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
@@ -25,8 +28,8 @@ public class DummySubevent extends Subevent {
     }
 
     @Override
-    public void invoke(RPGLObject source, RPGLObject target) throws Exception {
-        super.invoke(source, target);
+    public void invoke(RPGLContext context) throws Exception {
+        super.invoke(context);
         DummySubevent.counter++;
     }
 

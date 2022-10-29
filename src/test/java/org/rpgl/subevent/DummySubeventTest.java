@@ -6,6 +6,7 @@ import org.jsonutils.JsonParser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.exception.SubeventMismatchException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,12 +29,13 @@ public class DummySubeventTest {
                 "\"subevent\": \"not_a_subevent\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Verify subevent behaves as expected
          */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(null, null),
+                () -> subevent.clone(subeventJson).invoke(context),
                 "DummySubevent Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }

@@ -2,7 +2,7 @@ package org.rpgl.subevent;
 
 import org.jsonutils.JsonArray;
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.math.Die;
 
 public abstract class DamageRoll extends Subevent {
@@ -12,7 +12,7 @@ public abstract class DamageRoll extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLObject source) {
+    public void prepare(RPGLContext context) {
         this.roll();
     }
 

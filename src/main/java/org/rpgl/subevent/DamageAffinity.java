@@ -1,7 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLContext;
 
 public class DamageAffinity extends Subevent {
 
@@ -11,7 +11,10 @@ public class DamageAffinity extends Subevent {
 
     @Override
     public Subevent clone() {
-        return new DamageAffinity();
+        Subevent clone = new DamageAffinity();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class DamageAffinity extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLObject source) {
+    public void prepare(RPGLContext context) {
         this.subeventJson.put("immunity", false);
         this.subeventJson.put("resistance", false);
         this.subeventJson.put("vulnerability", false);

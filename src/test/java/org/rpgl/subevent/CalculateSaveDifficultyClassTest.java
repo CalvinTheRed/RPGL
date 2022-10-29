@@ -1,9 +1,11 @@
 package org.rpgl.subevent;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.junit.jupiter.api.*;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -47,12 +49,13 @@ public class CalculateSaveDifficultyClassTest {
                 "\"subevent\": \"not_a_subevent\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Verify subevent behaves as expected
          */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(null, null),
+                () -> subevent.clone(subeventJson).invoke(context),
                 "CalculateSaveDifficultyClass Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
@@ -70,12 +73,16 @@ public class CalculateSaveDifficultyClassTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = (CalculateSaveDifficultyClass) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateSaveDifficultyClass.prepare(object);
+        calculateSaveDifficultyClass.setSource(object);
+        calculateSaveDifficultyClass.prepare(context);
 
         /*
          * Verify subevent behaves as expected

@@ -30,25 +30,28 @@ public class RPGLObject extends JsonObject {
         this.join(data);
     }
 
-    public void invokeEvent(RPGLObject[] targets, RPGLEvent event) throws Exception {
+    public void invokeEvent(RPGLObject[] targets, RPGLEvent event, RPGLContext context) throws Exception {
         // assume that any necessary resources have already been spent
         JsonArray subeventJsonArray = (JsonArray) event.get("subevents");
         for (Object subeventJsonElement : subeventJsonArray) {
             JsonObject subeventJson = (JsonObject) subeventJsonElement;
             String subeventId = (String) subeventJson.get("subevent");
             Subevent subevent = Subevent.SUBEVENTS.get(subeventId).clone(subeventJson);
-            subevent.prepare(this);
+            subevent.setSource(this);
+            subevent.prepare(context);
             for (RPGLObject target : targets) {
-                subevent.invoke(this, target);
+                Subevent targetClone = subevent.clone();
+                targetClone.setTarget(target);
+                targetClone.invoke(context);
             }
         }
     }
 
-    public boolean processSubevent(RPGLObject source, RPGLObject target, Subevent subevent)
+    public boolean processSubevent(Subevent subevent)
             throws ConditionMismatchException, FunctionMismatchException {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffects()) {
-            wasSubeventProcessed |= effect.processSubevent(source, target, subevent);
+            wasSubeventProcessed |= effect.processSubevent(subevent.getSource(), subevent.getTarget(), subevent);
         }
         return wasSubeventProcessed;
     }
@@ -75,19 +78,21 @@ public class RPGLObject extends JsonObject {
         return effects;
     }
 
-    public Long getProficiencyBonus() throws Exception {
+    public Long getProficiencyBonus(RPGLContext context) throws Exception {
         CalculateProficiencyModifier calculateProficiencyModifier = new CalculateProficiencyModifier();
         String calculateProficiencyModifierJsonString = "{" +
                         "\"subevent\":\"calculate_proficiency_modifier\"" +
                         "}";
         JsonObject calculateProficiencyModifierJson = JsonParser.parseObjectString(calculateProficiencyModifierJsonString);
         calculateProficiencyModifier.joinSubeventJson(calculateProficiencyModifierJson);
-        calculateProficiencyModifier.prepare(this);
-        calculateProficiencyModifier.invoke(this, this);
+        calculateProficiencyModifier.setSource(this);
+        calculateProficiencyModifier.prepare(context);
+        calculateProficiencyModifier.setTarget(this);
+        calculateProficiencyModifier.invoke(context);
         return calculateProficiencyModifier.get();
     }
 
-    public Long getAbilityModifier(String ability) throws Exception {
+    public Long getAbilityModifier(RPGLContext context, String ability) throws Exception {
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         String calculateAbilityScoreJsonString = String.format("{" +
                         "\"subevent\":\"calculate_ability_score\"," +
@@ -97,8 +102,10 @@ public class RPGLObject extends JsonObject {
         );
         JsonObject calculateAbilityScoreJson = JsonParser.parseObjectString(calculateAbilityScoreJsonString);
         calculateAbilityScore.joinSubeventJson(calculateAbilityScoreJson);
-        calculateAbilityScore.prepare(this);
-        calculateAbilityScore.invoke(this, this);
+        calculateAbilityScore.setSource(this);
+        calculateAbilityScore.prepare(context);
+        calculateAbilityScore.setTarget(this);
+        calculateAbilityScore.invoke(context);
         return getAbilityModifier(calculateAbilityScore.get());
     }
 
@@ -111,12 +118,12 @@ public class RPGLObject extends JsonObject {
         return (abilityScore - 10L) / 2L;
     }
 
-    public Long getSaveProficiencyBonus(String ability) {
+    public Long getSaveProficiencyBonus(RPGLContext context, String ability) {
         // TODO this should use a Subevent eventually...
         return 0L;
     }
 
-    public void receiveDamage(RPGLObject source, JsonObject damageObject) throws Exception {
+    public void receiveDamage(JsonObject damageObject, RPGLContext context) throws Exception {
         for (Map.Entry<String, Object> damageObjectEntry : damageObject.entrySet()) {
             String damageType = damageObjectEntry.getKey();
             Long damage = (Long) damageObjectEntry.getValue();
@@ -130,9 +137,11 @@ public class RPGLObject extends JsonObject {
             );
             JsonObject damageAffinityJson = JsonParser.parseObjectString(damageAffinityJsonString);
             damageAffinity.joinSubeventJson(damageAffinityJson);
-            damageAffinity.prepare(this);
-            damageAffinity.invoke(source, this);
-            String affinity =  damageAffinity.getAffinity();
+            damageAffinity.setSource(this);
+            damageAffinity.prepare(context);
+            damageAffinity.setTarget(this);
+            damageAffinity.invoke(context);
+            String affinity = damageAffinity.getAffinity();
 
             if ("normal".equals(affinity)) {
                 this.reduceHitPoints(damage);

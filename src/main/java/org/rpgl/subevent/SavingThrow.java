@@ -3,7 +3,9 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonArray;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.Map;
 
@@ -15,7 +17,10 @@ public class SavingThrow extends ContestRoll {
 
     @Override
     public Subevent clone() {
-        return new SavingThrow();
+        Subevent clone = new SavingThrow();
+        clone.joinSubeventJson(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
@@ -27,29 +32,30 @@ public class SavingThrow extends ContestRoll {
     }
 
     @Override
-    public void prepare(RPGLObject source) throws Exception {
-        super.prepare(source);
-        this.calculateDifficultyClass(source);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        this.calculateDifficultyClass(context);
         if (this.subeventJson.get("damage") != null) {
-            this.calculateBaseDamage(source);
+            this.calculateBaseDamage(context);
         }
-        this.addBonus(source.getAbilityModifier((String) this.subeventJson.get("save_ability")));
-        this.addBonus(source.getSaveProficiencyBonus((String) this.subeventJson.get("save_ability")));
+        RPGLObject source = UUIDTable.getObject((String) this.subeventJson.get("source"));
+        this.addBonus(source.getAbilityModifier(context, (String) this.subeventJson.get("save_ability")));
+        this.addBonus(source.getSaveProficiencyBonus(context, (String) this.subeventJson.get("save_ability")));
     }
 
     @Override
-    public void invoke(RPGLObject source, RPGLObject target) throws Exception {
-        super.invoke(source, target);
+    public void invoke(RPGLContext context) throws Exception {
+        super.invoke(context);
         this.roll();
-        this.checkForReroll(source, target); // TODO eventually have this in a while loop?
+        this.checkForReroll(context); // TODO eventually have this in a while loop?
         if (this.getRoll() < (Long) this.subeventJson.get("save_difficulty_class")) {
-            this.resolveSaveFail(source, target);
+            this.resolveSaveFail(context);
         } else {
-            this.resolveSavePass(source, target);
+            this.resolveSavePass(context);
         }
     }
 
-    private void calculateDifficultyClass(RPGLObject source) throws Exception {
+    private void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         String calculateSaveDifficultyClassJsonString = String.format("{" +
                         "\"subevent\":\"calculate_save_difficulty_class\"," +
@@ -59,12 +65,15 @@ public class SavingThrow extends ContestRoll {
         );
         JsonObject calculateSaveDifficultyClassJson = JsonParser.parseObjectString(calculateSaveDifficultyClassJsonString);
         calculateSaveDifficultyClass.joinSubeventJson(calculateSaveDifficultyClassJson);
-        calculateSaveDifficultyClass.prepare(source);
-        calculateSaveDifficultyClass.invoke(source, source);
+        RPGLObject source = this.getSource();
+        calculateSaveDifficultyClass.setSource(source);
+        calculateSaveDifficultyClass.prepare(context);
+        calculateSaveDifficultyClass.setTarget(source);
+        calculateSaveDifficultyClass.invoke(context);
         this.subeventJson.put("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
 
-    private void calculateBaseDamage(RPGLObject source) throws Exception {
+    private void calculateBaseDamage(RPGLContext context) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
          */
@@ -77,8 +86,8 @@ public class SavingThrow extends ContestRoll {
         );
         JsonObject baseDamageDiceCollectionJson = JsonParser.parseObjectString(baseDamageDiceCollectionJsonString);
         baseDamageDiceCollection.joinSubeventJson(baseDamageDiceCollectionJson);
-        //baseDamageDiceCollection.prepare(source);
-        baseDamageDiceCollection.invoke(source, source);
+        baseDamageDiceCollection.prepare(context);
+        baseDamageDiceCollection.invoke(context);
 
         /*
          * Roll base damage dice
@@ -92,8 +101,8 @@ public class SavingThrow extends ContestRoll {
         );
         JsonObject baseDamageRollJson = JsonParser.parseObjectString(baseDamageRollJsonString);
         baseDamageRoll.joinSubeventJson(baseDamageRollJson);
-        baseDamageRoll.prepare(source);
-        baseDamageRoll.invoke(source, source);
+        baseDamageRoll.prepare(context);
+        baseDamageRoll.invoke(context);
 
         /*
          * Replace damage key with base damage calculation
@@ -101,17 +110,17 @@ public class SavingThrow extends ContestRoll {
         this.subeventJson.put("damage", baseDamageRoll.getBaseDamage());
     }
 
-    private void resolveSavePass(RPGLObject source, RPGLObject target) throws Exception {
-        this.resolvePassDamage(source, target);
-        this.resolveNestedSubevents(source, target, "pass");
+    private void resolveSavePass(RPGLContext context) throws Exception {
+        this.resolvePassDamage(context);
+        this.resolveNestedSubevents(context, "pass");
     }
 
-    private void resolveSaveFail(RPGLObject source, RPGLObject target) throws Exception {
-        this.resolveFailDamage(source, target);
-        this.resolveNestedSubevents(source, target, "fail");
+    private void resolveSaveFail(RPGLContext context) throws Exception {
+        this.resolveFailDamage(context);
+        this.resolveNestedSubevents(context, "fail");
     }
 
-    private JsonObject getTargetDamage(RPGLObject source, RPGLObject target) throws Exception {
+    private JsonObject getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
          */
@@ -122,8 +131,8 @@ public class SavingThrow extends ContestRoll {
                         "}";
         JsonObject targetDamageDiceCollectionJson = JsonParser.parseObjectString(targetDamageDiceCollectionJsonString);
         targetDamageDiceCollection.joinSubeventJson(targetDamageDiceCollectionJson);
-        //baseDamageDiceCollection.prepare(source);
-        targetDamageDiceCollection.invoke(source, target);
+        targetDamageDiceCollection.prepare(context);
+        targetDamageDiceCollection.invoke(context);
 
         /*
          * Roll target damage dice
@@ -137,20 +146,20 @@ public class SavingThrow extends ContestRoll {
         );
         JsonObject targetDamageRollJson = JsonParser.parseObjectString(targetDamageRollJsonString);
         targetDamageRoll.joinSubeventJson(targetDamageRollJson);
-        targetDamageRoll.prepare(source);
-        targetDamageRoll.invoke(source, target);
+        targetDamageRoll.prepare(context);
+        targetDamageRoll.invoke(context);
 
         return targetDamageRoll.getBaseDamage();
     }
 
-    private void resolvePassDamage(RPGLObject source, RPGLObject target) throws Exception {
+    private void resolvePassDamage(RPGLContext context) throws Exception {
         JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
         String damageOnPass = (String) this.subeventJson.get("damage_on_pass");
         if (baseDamage != null && !"none".equals(damageOnPass)) {
             /*
              * Add base and target damage into final damage quantities
              */
-            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(source, target).entrySet()) {
+            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(context).entrySet()) {
                 String damageType = targetDamageEntry.getKey();
                 if (baseDamage.containsKey(damageType)) {
                     Long baseTypedDamage = (Long) baseDamage.get(damageType);
@@ -182,14 +191,14 @@ public class SavingThrow extends ContestRoll {
                 }
             }
 
-            this.deliverFinalDamage(source, target, baseDamage);
+            //this.deliverFinalDamage(context, baseDamage);
         }
     }
 
-    private void resolveFailDamage(RPGLObject source, RPGLObject target) throws Exception {
+    private void resolveFailDamage(RPGLContext context) throws Exception {
         JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
         if (baseDamage != null) {
-            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(source, target).entrySet()) {
+            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(context).entrySet()) {
                 String damageType = targetDamageEntry.getKey();
                 if (baseDamage.containsKey(damageType)) {
                     Long baseTypedDamage = (Long) baseDamage.get(damageType);
@@ -205,24 +214,24 @@ public class SavingThrow extends ContestRoll {
                 }
             }
 
-            this.deliverFinalDamage(source, target, baseDamage);
+            //this.deliverFinalDamage(context, baseDamage);
         }
     }
 
-    private void resolveNestedSubevents(RPGLObject source, RPGLObject target, String passOrFail) throws Exception {
+    private void resolveNestedSubevents(RPGLContext context, String passOrFail) throws Exception {
         JsonArray subeventJsonArray = (JsonArray) this.subeventJson.get(passOrFail);
         if (subeventJsonArray != null) {
             for (Object subeventJsonElement : subeventJsonArray) {
                 JsonObject subeventJson = (JsonObject) subeventJsonElement;
                 Subevent subevent = Subevent.SUBEVENTS.get((String) subeventJson.get("subevent")).clone(subeventJson);
-                subevent.prepare(source);
-                subevent.invoke(source, target);
+                subevent.prepare(context);
+                subevent.invoke(context);
             }
         }
     }
 
-    void deliverFinalDamage(RPGLObject source, RPGLObject target, JsonObject damage) throws Exception {
-        target.receiveDamage(source, damage);
+    void deliverFinalDamage(RPGLContext context, Subevent subevent) {
+        //subevent.getTarget().receiveDamage(subevent, context);
     }
 
 }

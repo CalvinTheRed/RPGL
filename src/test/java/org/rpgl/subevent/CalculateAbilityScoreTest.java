@@ -1,9 +1,11 @@
 package org.rpgl.subevent;
 
+import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.junit.jupiter.api.*;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -47,12 +49,13 @@ public class CalculateAbilityScoreTest {
                 "\"subevent\": \"not_a_subevent\"" +
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        RPGLContext context = new RPGLContext(null);
 
         /*
          * Verify subevent behaves as expected
          */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(null, null),
+                () -> subevent.clone(subeventJson).invoke(context),
                 "CalculateAbilityScore Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
@@ -70,12 +73,16 @@ public class CalculateAbilityScoreTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateAbilityScore.prepare(object);
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(context);
 
         /*
          * Verify subevent behaves as expected
@@ -98,12 +105,16 @@ public class CalculateAbilityScoreTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateAbilityScore.prepare(object);
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(context);
         calculateAbilityScore.set(10L);
 
         /*
@@ -127,12 +138,16 @@ public class CalculateAbilityScoreTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateAbilityScore.prepare(object);
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(context);
         calculateAbilityScore.set(10L);
         calculateAbilityScore.set(12L);
 
@@ -157,12 +172,16 @@ public class CalculateAbilityScoreTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateAbilityScore.prepare(object);
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(context);
         calculateAbilityScore.set(10L);
         calculateAbilityScore.set(8L);
 
@@ -187,12 +206,16 @@ public class CalculateAbilityScoreTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateAbilityScore.prepare(object);
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(context);
         calculateAbilityScore.addBonus(3L);
 
         /*
@@ -216,12 +239,16 @@ public class CalculateAbilityScoreTest {
                 "}";
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent method
          */
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        calculateAbilityScore.prepare(object);
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(context);
         calculateAbilityScore.addBonus(3L);
         calculateAbilityScore.set(12L);
 
