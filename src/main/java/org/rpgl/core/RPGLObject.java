@@ -116,9 +116,25 @@ public class RPGLObject extends JsonObject {
         return (abilityScore - 10L) / 2L;
     }
 
-    public Long getSaveProficiencyBonus(RPGLContext context, String ability) {
-        // TODO this should use a Subevent eventually...
-        return 0L;
+    public Long getSaveProficiencyBonus(RPGLContext context, String saveAbility) throws Exception {
+        GetSaveProficiency getSaveProficiency = new GetSaveProficiency();
+        String getSaveProficiencyJsonString = String.format("{" +
+                        "\"subevent\":\"get_save_proficiency\"," +
+                        "\"save_ability\":\"%s\"" +
+                        "}",
+                saveAbility
+        );
+        JsonObject getSaveProficiencyJson = JsonParser.parseObjectString(getSaveProficiencyJsonString);
+        getSaveProficiency.joinSubeventJson(getSaveProficiencyJson);
+        getSaveProficiency.setSource(this);
+        getSaveProficiency.prepare(context);
+        getSaveProficiency.setTarget(this);
+        getSaveProficiency.invoke(context);
+        if (getSaveProficiency.getIsProficient()) {
+            return this.getProficiencyBonus(context);
+        } else {
+            return 0L;
+        }
     }
 
     public void receiveDamage(RPGLContext context, DamageDelivery damageDelivery) throws Exception {
