@@ -26,7 +26,7 @@ public abstract class Subevent {
         // AttackRoll
         // Damage
         Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
-        // GiveEffect
+        Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
         // TakeEffect
     }

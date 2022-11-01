@@ -786,7 +786,7 @@ public class SavingThrowTest {
 
     @Test
     @DisplayName("SavingThrow Subevent can deal no damage on a pass")
-    void test18() throws Exception { // TODO what is happening?
+    void test18() throws Exception {
         /*
          * Set up the subevent context
          */
@@ -836,7 +836,7 @@ public class SavingThrowTest {
 
     @Test
     @DisplayName("SavingThrow Subevent can deal half damage on a pass")
-    void test19() throws Exception { // TODO what is happening?
+    void test19() throws Exception {
         /*
          * Set up the subevent context
          */

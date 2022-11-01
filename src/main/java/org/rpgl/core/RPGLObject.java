@@ -25,6 +25,7 @@ public class RPGLObject extends JsonObject {
      */
     RPGLObject(JsonObject data) {
         this.join(data);
+        System.out.println("New RPGLObject being created with data: " + data);
     }
 
     public void invokeEvent(RPGLObject[] targets, RPGLEvent event, RPGLContext context) throws Exception {
@@ -63,7 +64,7 @@ public class RPGLObject extends JsonObject {
         return effects.remove(effect.get("uuid"));
     }
 
-    RPGLEffect[] getEffects() {
+    public RPGLEffect[] getEffects() {
         JsonArray effectUuidArray = (JsonArray) this.get("effects");
         RPGLEffect[] effects = new RPGLEffect[effectUuidArray.size()];
         int i = 0;
@@ -155,6 +156,7 @@ public class RPGLObject extends JsonObject {
         JsonObject healthData = (JsonObject) this.get("health_data");
         Long temporaryHitPoints = (Long) healthData.get("temporary");
         Long currentHitPoints = (Long) healthData.get("current");
+        System.out.println("REDUCING HIT POINTS! (removing " + amount + " from " + currentHitPoints + " for " + this.get("uuid") + ")");
         if (amount > temporaryHitPoints) {
             amount -= temporaryHitPoints;
             temporaryHitPoints = 0L;

@@ -18,6 +18,7 @@ public abstract class DamageRoll extends Subevent {
 
     public void roll() {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
+
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
             JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
@@ -36,6 +37,7 @@ public abstract class DamageRoll extends Subevent {
 
     public void rerollTypedDiceLessThanOrEqualTo(long threshold, String damageType) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
+
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
             if (damageType == null || damageType.equals(typedDamage.get("type"))) {
