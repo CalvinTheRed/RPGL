@@ -87,7 +87,7 @@ public class BaseDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
                 "BaseDamageRoll Subevent did not accurately report rolled damage"
         );
     }
@@ -138,7 +138,7 @@ public class BaseDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
                 "BaseDamageRoll Subevent did not roll dice correctly"
         );
     }
@@ -189,7 +189,7 @@ public class BaseDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
                 "BaseDamageRoll Subevent did not re-roll dice correctly"
         );
     }
@@ -240,7 +240,7 @@ public class BaseDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
                 "BaseDamageRoll Subevent did not re-roll dice correctly"
         );
     }
@@ -291,7 +291,7 @@ public class BaseDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
                 "BaseDamageRoll Subevent did not set dice correctly"
         );
     }
@@ -342,7 +342,7 @@ public class BaseDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
                 "BaseDamageRoll Subevent did not set dice correctly"
         );
     }
@@ -393,7 +393,7 @@ public class BaseDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
                 "BaseDamageRoll Subevent did not roll dice correctly"
         );
     }

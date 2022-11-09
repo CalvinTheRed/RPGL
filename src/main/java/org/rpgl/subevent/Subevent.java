@@ -23,7 +23,7 @@ public abstract class Subevent {
     static {
         SUBEVENTS = new HashMap<>();
         // AbilityCheck
-        // AttackRoll
+        Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
         // Damage
         Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());

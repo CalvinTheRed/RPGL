@@ -78,7 +78,7 @@ public abstract class DamageRoll extends Subevent {
         }
     }
 
-    public JsonObject getBaseDamage() {
+    public JsonObject getDamage() {
         JsonObject baseDamage = new JsonObject();
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         for (Object typedDamageElement : typedDamageArray) {

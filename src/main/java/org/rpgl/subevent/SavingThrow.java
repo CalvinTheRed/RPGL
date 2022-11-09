@@ -113,7 +113,7 @@ public class SavingThrow extends ContestRoll {
         /*
          * Replace damage key with base damage calculation
          */
-        this.subeventJson.put("damage", baseDamageRoll.getBaseDamage());
+        this.subeventJson.put("damage", baseDamageRoll.getDamage());
     }
 
     void resolveSavePass(RPGLContext context) throws Exception {
@@ -159,7 +159,7 @@ public class SavingThrow extends ContestRoll {
         targetDamageRoll.prepare(context);
         targetDamageRoll.invoke(context);
 
-        return targetDamageRoll.getBaseDamage();
+        return targetDamageRoll.getDamage();
     }
 
     void resolvePassDamage(RPGLContext context) throws Exception {

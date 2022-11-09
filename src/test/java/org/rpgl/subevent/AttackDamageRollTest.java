@@ -13,7 +13,7 @@ import org.rpgl.math.Die;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TargetDamageRollTest {
+public class AttackDamageRollTest {
 
     @BeforeAll
     static void beforeAll() {
@@ -21,12 +21,12 @@ public class TargetDamageRollTest {
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent throws SubeventMismatchException when subevent type doesn't match")
+    @DisplayName("AttackDamageRoll Subevent throws SubeventMismatchException when subevent type doesn't match")
     void test0() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "not_a_subevent"
@@ -40,20 +40,20 @@ public class TargetDamageRollTest {
          */
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.clone(subeventJson).invoke(context),
-                "TargetDamageRoll Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
+                "AttackDamageRoll Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent returns the correct final damage values")
+    @DisplayName("AttackDamageRoll Subevent returns the correct final damage values")
     void test1() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
-                    "subevent": "target_damage_roll",
+                    "subevent": "attack_damage_roll",
                     "damage": [
                         {
                             "type": "fire",
@@ -75,7 +75,7 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        TargetDamageRoll targetDamageRoll = (TargetDamageRoll) subevent.clone(subeventJson);
+        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Verify subevent behaves as expected
@@ -87,21 +87,21 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), targetDamageRoll.getDamage().toString(),
-                "TargetDamageRoll Subevent did not accurately report rolled damage"
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+                "AttackDamageRoll Subevent did not accurately report rolled damage"
         );
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent can roll dice for damage")
+    @DisplayName("AttackDamageRoll Subevent can roll dice for damage")
     void test2() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
-                    "subevent": "target_damage_roll",
+                    "subevent": "attack_damage_roll",
                     "damage": [
                         {
                             "type": "fire",
@@ -121,12 +121,12 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        TargetDamageRoll targetDamageRoll = (TargetDamageRoll) subevent.clone(subeventJson);
+        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        targetDamageRoll.roll();
+        baseDamageRoll.roll();
 
         /*
          * Verify subevent behaves as expected
@@ -138,21 +138,21 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), targetDamageRoll.getDamage().toString(),
-                "TargetDamageRoll Subevent did not roll dice correctly"
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+                "AttackDamageRoll Subevent did not roll dice correctly"
         );
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent can re-roll typed dice below a given value")
+    @DisplayName("AttackDamageRoll Subevent can re-roll typed dice below a given value")
     void test3() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
-                    "subevent": "target_damage_roll",
+                    "subevent": "attack_damage_roll",
                     "damage": [
                         {
                             "type": "fire",
@@ -172,12 +172,12 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        TargetDamageRoll targetDamageRoll = (TargetDamageRoll) subevent.clone(subeventJson);
+        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        targetDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, "fire");
+        baseDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, "fire");
 
         /*
          * Verify subevent behaves as expected
@@ -189,21 +189,21 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), targetDamageRoll.getDamage().toString(),
-                "TargetDamageRoll Subevent did not re-roll dice correctly"
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+                "AttackDamageRoll Subevent did not re-roll dice correctly"
         );
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent can re-roll all dice below a given value")
+    @DisplayName("AttackDamageRoll Subevent can re-roll all dice below a given value")
     void test4() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
-                    "subevent": "target_damage_roll",
+                    "subevent": "attack_damage_roll",
                     "damage": [
                         {
                             "type": "fire",
@@ -223,12 +223,12 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        TargetDamageRoll targetDamageRoll = (TargetDamageRoll) subevent.clone(subeventJson);
+        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        targetDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, null);
+        baseDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, null);
 
         /*
          * Verify subevent behaves as expected
@@ -240,21 +240,21 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), targetDamageRoll.getDamage().toString(),
-                "TargetDamageRoll Subevent did not re-roll dice correctly"
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+                "AttackDamageRoll Subevent did not re-roll dice correctly"
         );
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent can set typed dice below a given value")
+    @DisplayName("AttackDamageRoll Subevent can set typed dice below a given value")
     void test5() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
-                    "subevent": "target_damage_roll",
+                    "subevent": "attack_damage_roll",
                     "damage": [
                         {
                             "type": "fire",
@@ -274,12 +274,12 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        TargetDamageRoll targetDamageRoll = (TargetDamageRoll) subevent.clone(subeventJson);
+        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        targetDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, "fire");
+        baseDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, "fire");
 
         /*
          * Verify subevent behaves as expected
@@ -291,21 +291,21 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), targetDamageRoll.getDamage().toString(),
-                "TargetDamageRoll Subevent did not set dice correctly"
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+                "AttackDamageRoll Subevent did not set dice correctly"
         );
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent can set all dice below a given value")
+    @DisplayName("AttackDamageRoll Subevent can set all dice below a given value")
     void test6() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
-                    "subevent": "target_damage_roll",
+                    "subevent": "attack_damage_roll",
                     "damage": [
                         {
                             "type": "fire",
@@ -325,12 +325,12 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        TargetDamageRoll targetDamageRoll = (TargetDamageRoll) subevent.clone(subeventJson);
+        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        targetDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, null);
+        baseDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, null);
 
         /*
          * Verify subevent behaves as expected
@@ -342,21 +342,21 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), targetDamageRoll.getDamage().toString(),
-                "TargetDamageRoll Subevent did not set dice correctly"
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+                "AttackDamageRoll Subevent did not set dice correctly"
         );
     }
 
     @Test
-    @DisplayName("TargetDamageRoll Subevent prepare method works")
+    @DisplayName("AttackDamageRoll Subevent prepare method works")
     void test7() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new TargetDamageRoll();
+        Subevent subevent = new BaseDamageRoll();
         String subeventJsonString = """
                 {
-                    "subevent": "target_damage_roll",
+                    "subevent": "attack_damage_roll",
                     "damage": [
                         {
                             "type": "fire",
@@ -376,12 +376,12 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        TargetDamageRoll targetDamageRoll = (TargetDamageRoll) subevent.clone(subeventJson);
+        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        targetDamageRoll.prepare(null);
+        baseDamageRoll.prepare(null);
 
         /*
          * Verify subevent behaves as expected
@@ -393,8 +393,8 @@ public class TargetDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), targetDamageRoll.getDamage().toString(),
-                "TargetDamageRoll Subevent did not roll dice correctly"
+        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+                "AttackDamageRoll Subevent did not roll dice correctly"
         );
     }
 

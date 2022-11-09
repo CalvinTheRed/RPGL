@@ -8,8 +8,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.uuidtable.UUIDTable;
 
-import java.util.Map;
-
 public class AttackRoll extends ContestRoll {
 
     private static final String ITEM_NAMESPACE_REGEX = "[\\w\\d]+:[\\w\\d]+";
@@ -136,33 +134,18 @@ public class AttackRoll extends ContestRoll {
     }
 
     void resolveDamage(RPGLContext context) throws Exception {
-        // TODO consider adding new DamageRoll Subevent for attack rolls, to allow source and target damage to be rolled together...
-        JsonObject baseDamage = this.getBaseDamage(context);
-        if (baseDamage != null) {
-            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(context).entrySet()) {
-                String damageType = targetDamageEntry.getKey();
-                if (baseDamage.containsKey(damageType)) {
-                    Long baseTypedDamage = (Long) baseDamage.get(damageType);
-                    baseTypedDamage += (Long) targetDamageEntry.getValue();
-                    if (baseTypedDamage < 1L) {
-                        // You can never deal less than 1 point of damage for any given
-                        // damage type, given that you deal damage of that type at all.
-                        baseTypedDamage = 1L;
-                    }
-                    baseDamage.put(damageType, baseTypedDamage);
-                } else {
-                    baseDamage.entrySet().add(targetDamageEntry);
-                }
-            }
+        BaseDamageDiceCollection baseDamageDiceCollection = this.getBaseDamageDiceCollection(context);
+        TargetDamageDiceCollection targetDamageDiceCollection = this.getTargetDamageDiceCollection(context);
 
+        baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
+        JsonObject attackDamage = this.getAttackDamage(context, baseDamageDiceCollection.getDamageDiceCollection());
+
+        if (!attackDamage.isEmpty()) {
             this.deliverDamage(context);
         }
     }
 
-    JsonObject getBaseDamage(RPGLContext context) throws Exception {
-        /*
-         * Collect base typed damage dice and bonuses
-         */
+    BaseDamageDiceCollection getBaseDamageDiceCollection(RPGLContext context) throws Exception {
         BaseDamageDiceCollection baseDamageDiceCollection = new BaseDamageDiceCollection();
         String baseDamageDiceCollectionJsonString = String.format("""
                         {
@@ -176,31 +159,10 @@ public class AttackRoll extends ContestRoll {
         baseDamageDiceCollection.joinSubeventJson(baseDamageDiceCollectionJson);
         baseDamageDiceCollection.prepare(context);
         baseDamageDiceCollection.invoke(context);
-
-        /*
-         * Roll base damage dice
-         */
-        BaseDamageRoll baseDamageRoll = new BaseDamageRoll();
-        String baseDamageRollJsonString = String.format("""
-                        {
-                            "subevent": "base_damage_roll",
-                            "damage": %s
-                        }
-                        """,
-                baseDamageDiceCollection.getDamageDiceCollection().toString()
-        );
-        JsonObject baseDamageRollJson = JsonParser.parseObjectString(baseDamageRollJsonString);
-        baseDamageRoll.joinSubeventJson(baseDamageRollJson);
-        baseDamageRoll.prepare(context);
-        baseDamageRoll.invoke(context);
-
-        return baseDamageRoll.getBaseDamage();
+        return baseDamageDiceCollection;
     }
 
-    JsonObject getTargetDamage(RPGLContext context) throws Exception {
-        /*
-         * Collect target typed damage dice and bonuses
-         */
+    TargetDamageDiceCollection getTargetDamageDiceCollection(RPGLContext context) throws Exception {
         TargetDamageDiceCollection targetDamageDiceCollection = new TargetDamageDiceCollection();
         String targetDamageDiceCollectionJsonString = """
                 {
@@ -212,25 +174,24 @@ public class AttackRoll extends ContestRoll {
         targetDamageDiceCollection.joinSubeventJson(targetDamageDiceCollectionJson);
         targetDamageDiceCollection.prepare(context);
         targetDamageDiceCollection.invoke(context);
+        return targetDamageDiceCollection;
+    }
 
-        /*
-         * Roll target damage dice
-         */
-        TargetDamageRoll targetDamageRoll = new TargetDamageRoll();
-        String targetDamageRollJsonString = String.format("""
+    JsonObject getAttackDamage(RPGLContext context, JsonArray damageDiceCollection) throws Exception {
+        AttackDamageRoll attackDamageRoll = new AttackDamageRoll();
+        String attackDamageRollJsonString = String.format("""
                         {
-                            "subevent": "target_damage_roll",
+                            "subevent": "attack_damage_roll",
                             "damage": %s
                         }
                         """,
-                targetDamageDiceCollection.getDamageDiceCollection().toString()
+                damageDiceCollection.toString()
         );
-        JsonObject targetDamageRollJson = JsonParser.parseObjectString(targetDamageRollJsonString);
-        targetDamageRoll.joinSubeventJson(targetDamageRollJson);
-        targetDamageRoll.prepare(context);
-        targetDamageRoll.invoke(context);
-
-        return targetDamageRoll.getBaseDamage();
+        JsonObject attackDamageRollJson = JsonParser.parseObjectString(attackDamageRollJsonString);
+        attackDamageRoll.joinSubeventJson(attackDamageRollJson);
+        attackDamageRoll.prepare(context);
+        attackDamageRoll.invoke(context);
+        return attackDamageRoll.getDamage();
     }
 
     void deliverDamage(RPGLContext context) throws Exception {
