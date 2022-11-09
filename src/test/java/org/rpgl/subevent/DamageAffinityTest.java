@@ -20,9 +20,11 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -42,10 +44,12 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_affinity\"," +
-                "\"type\": \"fire\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_affinity",
+                    "type": "fire"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -75,10 +79,12 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_affinity\"," +
-                "\"type\": \"fire\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_affinity",
+                    "type": "fire"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -108,10 +114,12 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_affinity\"," +
-                "\"type\": \"fire\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_affinity",
+                    "type": "fire"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -141,10 +149,12 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_affinity\"," +
-                "\"type\": \"fire\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_affinity",
+                    "type": "fire"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -171,10 +181,12 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_affinity\"," +
-                "\"type\": \"fire\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_affinity",
+                    "type": "fire"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -201,10 +213,12 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_affinity\"," +
-                "\"type\": \"fire\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_affinity",
+                    "type": "fire"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -231,10 +245,12 @@ public class DamageAffinityTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageAffinity();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_affinity\"," +
-                "\"type\": \"fire\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_affinity",
+                    "type": "fire"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);

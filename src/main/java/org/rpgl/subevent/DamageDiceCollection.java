@@ -40,8 +40,8 @@ public abstract class DamageDiceCollection extends Subevent {
 
     void addExistingTypedDamage(JsonObject newTypedDamage) throws JsonFormatException {
         String damageType = (String) newTypedDamage.get("type");
-        JsonObject typedDamage = (JsonObject) this.subeventJson.seek(String.format(
-                "damage[{\"type\":\"%s\"}]",
+        JsonObject typedDamage = (JsonObject) this.subeventJson.seek(String.format("""
+                        damage[{"type":"%s"}]""",
                 damageType
         ));
 

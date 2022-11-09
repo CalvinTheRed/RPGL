@@ -19,7 +19,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CalculateProficiencyModifierTest {
+public class CalculateBaseArmorClassTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -39,12 +39,12 @@ public class CalculateProficiencyModifierTest {
     }
 
     @Test
-    @DisplayName("CalculateProficiencyModifier Subevent throws SubeventMismatchException when subevent type doesn't match")
+    @DisplayName("CalculateBaseArmorClass Subevent throws SubeventMismatchException when subevent type doesn't match")
     void test0() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateBaseArmorClass();
         String subeventJsonString = """
                 {
                     "subevent": "not_a_subevent"
@@ -58,24 +58,24 @@ public class CalculateProficiencyModifierTest {
          */
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.clone(subeventJson).invoke(context),
-                "CalculateProficiencyModifier Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
+                "CalculateBaseArmorClass Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
 
     @Test
-    @DisplayName("CalculateProficiencyModifier Subevent setup method & getter work")
+    @DisplayName("CalculateBaseArmorClass Subevent setup method & getter work")
     void test1() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateBaseArmorClass();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_base_armor_class"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -84,31 +84,31 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
+        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass.prepare(context);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(2L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not report raw proficiency correctly."
+        assertEquals(9L, calculateBaseArmorClass.get(),
+                "CalculateBaseArmorClass Subevent did not report raw ability score correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can set proficiency")
+    @DisplayName("CalculateBaseArmorClass Subevent can set ability")
     void test2() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateBaseArmorClass();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_base_armor_class"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -117,32 +117,32 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.set(3L);
+        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.set(10L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not set proficiency correctly."
+        assertEquals(10L, calculateBaseArmorClass.get(),
+                "CalculateBaseArmorClass Subevent did not set ability score correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can set proficiency (override prior set with higher)")
+    @DisplayName("CalculateBaseArmorClass Subevent can set ability (override prior set with higher)")
     void test3() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateBaseArmorClass();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_base_armor_class"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -151,33 +151,33 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.set(3L);
-        calculateProficiencyModifier.set(4L);
+        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.set(10L);
+        calculateBaseArmorClass.set(12L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent should be able to override proficiency set value with higher value."
+        assertEquals(12L, calculateBaseArmorClass.get(),
+                "CalculateBaseArmorClass Subevent should be able to override ability score set value with higher value."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can not set proficiency (override prior set with lower)")
+    @DisplayName("CalculateBaseArmorClass Subevent can not set ability (override prior set with lower)")
     void test4() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateBaseArmorClass();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_base_armor_class"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -186,33 +186,33 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.set(4L);
-        calculateProficiencyModifier.set(3L);
+        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.set(10L);
+        calculateBaseArmorClass.set(8L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent should not be able to override proficiency set value with lower value."
+        assertEquals(10L, calculateBaseArmorClass.get(),
+                "CalculateBaseArmorClass Subevent should not be able to override ability score set value with lower value."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can add bonus to proficiency")
+    @DisplayName("CalculateBaseArmorClass Subevent can add bonus to ability score")
     void test5() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateBaseArmorClass();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_base_armor_class"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -221,32 +221,32 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.addBonus(1L);
+        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.addBonus(3L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not add bonus to proficiency properly."
+        assertEquals(12L, calculateBaseArmorClass.get(),
+                "CalculateBaseArmorClass Subevent did not add bonus to ability score properly."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can add bonus to a set proficiency")
+    @DisplayName("CalculateBaseArmorClass Subevent can add bonus to a set ability score")
     void test6() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateBaseArmorClass();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_base_armor_class"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -255,16 +255,16 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.addBonus(1L);
-        calculateProficiencyModifier.set(3L);
+        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.addBonus(3L);
+        calculateBaseArmorClass.set(12L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not add bonus to set proficiency properly."
+        assertEquals(15L, calculateBaseArmorClass.get(),
+                "CalculateBaseArmorClass Subevent did not add bonus to set ability score properly."
         );
     }
 

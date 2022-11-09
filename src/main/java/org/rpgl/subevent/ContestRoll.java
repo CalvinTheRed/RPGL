@@ -53,11 +53,13 @@ public abstract class ContestRoll extends Calculation {
 
     public boolean checkForReroll(RPGLContext context) throws Exception {
         ContestRerollChance contestRerollChance = new ContestRerollChance();
-        String contestRerollChanceJsonString = String.format("{" +
-                        "\"subevent\":\"contest_reroll_chance\"," +
-                        "\"base_die_roll\":%d" +
-                        "}",
-                (Long) this.subeventJson.get("raw")
+        String contestRerollChanceJsonString = String.format("""
+                        {
+                            "subevent": "contest_reroll_chance",
+                            "base_die_roll": %s
+                        }
+                        """,
+                this.subeventJson.get("raw").toString()
         );
         JsonObject contestRerollChanceJson = JsonParser.parseObjectString(contestRerollChanceJsonString);
         contestRerollChance.joinSubeventJson(contestRerollChanceJson);

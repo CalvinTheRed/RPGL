@@ -3,7 +3,12 @@
     "author": "Calvin Withun"
   },
   "name": "Dummy Item",
-  "tags": [ ],
+  "id": "dummy:dummy",
+  "proficiency_tags": [
+    "dagger",
+    "simple",
+    "melee"
+  ],
   "weight": 1,
   "while_equipped": [
     "dummy:dummy",

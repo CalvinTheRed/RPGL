@@ -19,9 +19,11 @@ public class ContestRerollChanceTest {
          * Set up the subevent context
          */
         Subevent subevent = new ContestRerollChance();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -41,9 +43,11 @@ public class ContestRerollChanceTest {
          * Set up the subevent context
          */
         Subevent subevent = new ContestRerollChance();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"contest_reroll_chance\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "contest_reroll_chance"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         ContestRerollChance contestRerollChance = (ContestRerollChance) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -68,9 +72,11 @@ public class ContestRerollChanceTest {
          * Set up the subevent context
          */
         Subevent subevent = new ContestRerollChance();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"contest_reroll_chance\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "contest_reroll_chance"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         ContestRerollChance contestRerollChance = (ContestRerollChance) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);

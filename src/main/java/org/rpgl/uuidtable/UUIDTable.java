@@ -63,11 +63,9 @@ public final class UUIDTable {
      *
      * @param uuid the UUID of a RPGLEffect
      * @return an RPGLEffect
-     * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLEffect.
      */
     public static RPGLEffect getEffect(String uuid) {
         JsonObject data = UUID_TABLE.get(uuid);
-        //assert data instanceof RPGLEffect;
         return (RPGLEffect) data;
     }
 
@@ -76,11 +74,9 @@ public final class UUIDTable {
      *
      * @param uuid the UUID of a RPGLItem
      * @return an RPGLItem
-     * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLItem.
      */
     public static RPGLItem getItem(String uuid) {
         JsonObject data = UUID_TABLE.get(uuid);
-        //assert data instanceof RPGLItem;
         return (RPGLItem) data;
     }
 
@@ -89,11 +85,9 @@ public final class UUIDTable {
      *
      * @param uuid the UUID of a RPGLObject
      * @return an RPGLObject
-     * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLObject.
      */
     public static RPGLObject getObject(String uuid) {
         JsonObject data = UUID_TABLE.get(uuid);
-        //assert data instanceof RPGLObject;
         return (RPGLObject) data;
     }
 

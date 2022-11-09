@@ -15,9 +15,11 @@ public class InvertTest {
     @DisplayName("Invert Condition throws ConditionMismatchException when condition type doesn't match")
     void test0() throws JsonFormatException {
         Condition condition = new Invert();
-        String conditionJsonString = "{" +
-                "\"condition\": \"not_a_condition\"" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "not_a_condition"
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson),
@@ -29,12 +31,14 @@ public class InvertTest {
     @DisplayName("Invert Condition should evaluate true when nested condition evaluates to false")
     void test1() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new Invert();
-        String conditionJsonString = "{" +
-                "\"condition\": \"invert\"," +
-                "\"invert\": {" +
-                "   \"condition\": \"false\"" +
-                "}" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "invert",
+                    "invert": {
+                        "condition": "false"
+                    }
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
@@ -46,12 +50,14 @@ public class InvertTest {
     @DisplayName("Invert Condition should evaluate false when nested condition evaluates to true")
     void test2() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new Invert();
-        String conditionJsonString = "{" +
-                "\"condition\": \"invert\"," +
-                "\"invert\": {" +
-                "   \"condition\": \"true\"" +
-                "}" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "invert",
+                    "invert": {
+                        "condition": "true"
+                    }
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,

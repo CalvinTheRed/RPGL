@@ -44,9 +44,11 @@ public class GiveEffectTest {
          * Set up the subevent context
          */
         Subevent subevent = new GiveEffect();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -66,10 +68,12 @@ public class GiveEffectTest {
          * Set up the subevent context
          */
         Subevent subevent = new GiveEffect();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"give_effect\"," +
-                "\"effect\":\"dummy:dummy\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "give_effect",
+                    "effect": "dummy:dummy"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -98,10 +102,12 @@ public class GiveEffectTest {
          * Set up the subevent context
          */
         Subevent subevent = new GiveEffect();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"give_effect\"," +
-                "\"effect\":\"dummy:dummy\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "give_effect",
+                    "effect": "dummy:dummy"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -131,10 +137,12 @@ public class GiveEffectTest {
          * Set up the subevent context
          */
         Subevent subevent = new GiveEffect();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"give_effect\"," +
-                "\"effect\":\"dummy:dummy\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "give_effect",
+                    "effect": "dummy:dummy"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -165,10 +173,12 @@ public class GiveEffectTest {
          * Set up the subevent context
          */
         Subevent subevent = new GiveEffect();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"give_effect\"," +
-                "\"effect\":\"dummy:dummy\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "give_effect",
+                    "effect": "dummy:dummy"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");

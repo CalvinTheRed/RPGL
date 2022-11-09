@@ -47,9 +47,11 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -69,12 +71,14 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 10" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 10
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -104,11 +108,13 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -138,11 +144,13 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -173,11 +181,13 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -208,11 +218,13 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -243,12 +255,14 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 20" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 20
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -279,12 +293,14 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 1" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 1
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -315,29 +331,32 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"damage\": [" +
-                "   {" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 10 }," +
-                "       { \"size\": 10, \"determined\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 10" +
-                "   },{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 10 }," +
-                "       { \"size\": 10, \"determined\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 10" +
-                "   }" +
-                "]," +
-                "\"damage_on_pass\": \"half\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "determined": 10 },
+                                { "size": 10, "determined": 10 }
+                            ],
+                            "bonus": 10
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "determined": 10 },
+                                { "size": 10, "determined": 10 }
+                            ],
+                            "bonus": 10
+                        }
+                    ],
+                    "damage_on_pass": "half"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -354,10 +373,12 @@ public class SavingThrowTest {
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{" +
-                "\"fire\": 30," +
-                "\"cold\": 30" +
-                "}";
+        String expectedJsonString = """
+                {
+                    "fire": 30,
+                    "cold": 30
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), savingThrow.subeventJson.get("damage").toString(),
                 "SavingThrow Subevent calculated base damage incorrectly."
@@ -371,21 +392,19 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"pass\": [" +
-                "   {" +
-                "   \"subevent\": \"dummy_subevent\"" +
-                "   }" +
-                "]," +
-                "\"fail\": [" +
-                "   {" +
-                "   \"subevent\": \"dummy_subevent\"" +
-                "   }" +
-                "]" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "pass": [
+                        { "subevent": "dummy_subevent" }
+                    ],
+                    "fail": [
+                        { "subevent": "dummy_subevent" }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -417,21 +436,19 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"pass\": [" +
-                "   {" +
-                "   \"subevent\": \"dummy_subevent\"" +
-                "   }" +
-                "]," +
-                "\"fail\": [" +
-                "   {" +
-                "   \"subevent\": \"dummy_subevent\"" +
-                "   }" +
-                "]" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "pass": [
+                        { "subevent": "dummy_subevent" }
+                    ],
+                    "fail": [
+                        { "subevent": "dummy_subevent" }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -463,13 +480,15 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 20," +
-                "\"determined_second\": 1" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 20,
+                    "determined_second": 1
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -509,13 +528,15 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 1," +
-                "\"determined_second\": 20" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 1,
+                    "determined_second": 20
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -555,13 +576,15 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 20," +
-                "\"determined_second\": 1" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 20,
+                    "determined_second": 1
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -601,13 +624,15 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 1," +
-                "\"determined_second\": 20" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 1,
+                    "determined_second": 20
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -647,13 +672,15 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 20," +
-                "\"determined_second\": 1" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 20,
+                    "determined_second": 1
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -694,13 +721,15 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"determined\": 1," +
-                "\"determined_second\": 20" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "determined": 1,
+                    "determined_second": 20
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -741,26 +770,29 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"damage\": [" +
-                "   {" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 1 }" +
-                "   ]" +
-                "   },{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 1 }" +
-                "   ]" +
-                "   }" +
-                "]," +
-                "\"damage_on_pass\": \"none\"," +
-                "\"determined\": 1" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "determined": 1 }
+                            ]
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "determined": 1 }
+                            ]
+                        }
+                    ],
+                    "damage_on_pass": "none",
+                    "determined": 1
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -791,26 +823,29 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"damage\": [" +
-                "   {" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 1 }" +
-                "   ]" +
-                "   },{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 1 }" +
-                "   ]" +
-                "   }" +
-                "]," +
-                "\"damage_on_pass\": \"none\"," +
-                "\"determined\": 20" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "determined": 1 }
+                            ]
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "determined": 1 }
+                            ]
+                        }
+                    ],
+                    "damage_on_pass": "none",
+                    "determined": 20
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -841,26 +876,29 @@ public class SavingThrowTest {
          * Set up the subevent context
          */
         Subevent subevent = new SavingThrow();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"saving_throw\"," +
-                "\"save_ability\": \"int\"," +
-                "\"difficulty_class_ability\":\"int\"," +
-                "\"damage\": [" +
-                "   {" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 2 }" +
-                "   ]" +
-                "   },{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 2 }" +
-                "   ]" +
-                "   }" +
-                "]," +
-                "\"damage_on_pass\": \"half\"," +
-                "\"determined\": 20" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "saving_throw",
+                    "save_ability": "int",
+                    "difficulty_class_ability": "int",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "determined": 2 }
+                            ]
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "determined": 2 }
+                            ]
+                        }
+                    ],
+                    "damage_on_pass": "half",
+                    "determined": 20
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");

@@ -20,9 +20,11 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -42,19 +44,27 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [" +
-                "   {" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [ { \"size\": 10 } ]," +
-                "   \"bonus\": 10" +
-                "   },{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [ { \"size\": 10 } ]," +
-                "   \"bonus\": 10" +
-                "   }" +
-                "]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10 }
+                            ],
+                            "bonus": 10
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10 }
+                            ],
+                            "bonus": 10
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
@@ -74,11 +84,14 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [" +
-                "   { \"type\": \"fire\" }" +
-                "]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [
+                        { "type": "fire" }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
@@ -97,10 +110,12 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [ ]" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [ ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
@@ -119,18 +134,26 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [" +
-                "   { \"type\": \"fire\" }" +
-                "]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [
+                        { "type": "fire" }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        String typedDamageJsonString = "{ \"type\": \"fire\", \"bonus\": 10 }";
+        String typedDamageJsonString = """
+                {
+                    "type": "fire",
+                    "bonus": 10
+                }
+                """;
         JsonObject typedDamageJson = JsonParser.parseObjectString(typedDamageJsonString);
         targetDamageDiceCollection.addExistingTypedDamage(typedDamageJson);
 
@@ -152,21 +175,28 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [" +
-                "   { \"type\": \"fire\" }" +
-                "]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [
+                        { "type": "fire" }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        String typedDamageJsonString = "{" +
-                "\"type\": \"fire\"," +
-                "\"dice\": [ { \"size\": 10 } ]" +
-                "}";
+        String typedDamageJsonString = """
+                {
+                    "type": "fire",
+                    "dice": [
+                        { "size": 10 }
+                    ]
+                }
+                """;
         JsonObject typedDamageJson = JsonParser.parseObjectString(typedDamageJsonString);
         targetDamageDiceCollection.addExistingTypedDamage(typedDamageJson);
 
@@ -189,17 +219,24 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [ ]" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [ ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        String typedDamageJsonString = "{ \"type\": \"fire\", \"bonus\": 10 }";
+        String typedDamageJsonString = """
+                {
+                    "type": "fire",
+                    "bonus": 10
+                }
+                """;
         JsonObject typedDamageJson = JsonParser.parseObjectString(typedDamageJsonString);
         targetDamageDiceCollection.addNewTypedDamage(typedDamageJson);
 
@@ -221,20 +258,26 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [ ]" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [ ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        String typedDamageJsonString = "{" +
-                "\"type\": \"fire\"," +
-                "\"dice\": [ { \"size\": 10 } ]" +
-                "}";
+        String typedDamageJsonString = """
+                {
+                    "type": "fire",
+                    "dice": [
+                        { "size": 10 }
+                    ]
+                }
+                """;
         JsonObject typedDamageJson = JsonParser.parseObjectString(typedDamageJsonString);
         targetDamageDiceCollection.addNewTypedDamage(typedDamageJson);
 
@@ -255,27 +298,38 @@ public class TargetDamageDiceCollectionTest {
          * Set up the subevent context
          */
         Subevent subevent = new TargetDamageDiceCollection();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"target_damage_dice_collection\"," +
-                "\"damage\": [" +
-                "   { \"type\": \"fire\" }" +
-                "]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [
+                        { "type": "fire" }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         TargetDamageDiceCollection targetDamageDiceCollection = (TargetDamageDiceCollection) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        String typedDamageArrayString = "[" +
-                "{" +
-                "\"type\": \"fire\"," +
-                "\"dice\": [ { \"size\": 10 } ]," +
-                "\"bonus\": 10" +
-                "},{" +
-                "\"type\": \"cold\"," +
-                "\"dice\": [ { \"size\": 10 } ]," +
-                "\"bonus\": 10" +
-                "}]";
+        String typedDamageArrayString = """
+                [
+                    {
+                        "type": "fire",
+                        "dice": [
+                            { "size": 10 }
+                        ],
+                        "bonus": 10
+                    },
+                    {
+                        "type": "cold",
+                        "dice": [
+                            { "size": 10 }
+                        ],
+                        "bonus": 10
+                    }
+                ]
+                """;
         JsonArray typedDamageArray = JsonParser.parseArrayString(typedDamageArrayString);
         targetDamageDiceCollection.addTypedDamage(typedDamageArray);
 

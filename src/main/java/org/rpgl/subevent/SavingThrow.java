@@ -36,7 +36,7 @@ public class SavingThrow extends ContestRoll {
         super.prepare(context);
         this.calculateDifficultyClass(context);
         if (this.subeventJson.get("damage") != null) {
-            this.calculateBaseDamage(context);
+            this.getBaseDamage(context);
         }
         RPGLObject source = UUIDTable.getObject((String) this.subeventJson.get("source"));
         this.addBonus(source.getAbilityModifier(context, (String) this.subeventJson.get("save_ability")));
@@ -55,13 +55,15 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
-    private void calculateDifficultyClass(RPGLContext context) throws Exception {
+    void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
-        String calculateSaveDifficultyClassJsonString = String.format("{" +
-                        "\"subevent\":\"calculate_save_difficulty_class\"," +
-                        "\"difficulty_class_ability\":\"%s\"" +
-                        "}",
-                this.subeventJson.get("difficulty_class_ability")
+        String calculateSaveDifficultyClassJsonString = String.format("""
+                        {
+                            "subevent": "calculate_save_difficulty_class",
+                            "difficulty_class_ability": "%s"
+                        }
+                        """,
+                this.subeventJson.get("difficulty_class_ability").toString()
         );
         JsonObject calculateSaveDifficultyClassJson = JsonParser.parseObjectString(calculateSaveDifficultyClassJsonString);
         calculateSaveDifficultyClass.joinSubeventJson(calculateSaveDifficultyClassJson);
@@ -73,15 +75,17 @@ public class SavingThrow extends ContestRoll {
         this.subeventJson.put("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
 
-    private void calculateBaseDamage(RPGLContext context) throws Exception {
+    void getBaseDamage(RPGLContext context) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
          */
         BaseDamageDiceCollection baseDamageDiceCollection = new BaseDamageDiceCollection();
-        String baseDamageDiceCollectionJsonString = String.format("{" +
-                        "\"subevent\":\"base_damage_dice_collection\"," +
-                        "\"damage\":%s" +
-                        "}",
+        String baseDamageDiceCollectionJsonString = String.format("""
+                        {
+                            "subevent": "base_damage_dice_collection",
+                            "damage": %s
+                        }
+                        """,
                 this.subeventJson.get("damage").toString()
         );
         JsonObject baseDamageDiceCollectionJson = JsonParser.parseObjectString(baseDamageDiceCollectionJsonString);
@@ -93,10 +97,12 @@ public class SavingThrow extends ContestRoll {
          * Roll base damage dice
          */
         BaseDamageRoll baseDamageRoll = new BaseDamageRoll();
-        String baseDamageRollJsonString = String.format("{" +
-                        "\"subevent\":\"base_damage_roll\"," +
-                        "\"damage\":%s" +
-                        "}",
+        String baseDamageRollJsonString = String.format("""
+                        {
+                            "subevent": "base_damage_roll",
+                            "damage": %s
+                        }
+                        """,
                 baseDamageDiceCollection.getDamageDiceCollection().toString()
         );
         JsonObject baseDamageRollJson = JsonParser.parseObjectString(baseDamageRollJsonString);
@@ -110,25 +116,27 @@ public class SavingThrow extends ContestRoll {
         this.subeventJson.put("damage", baseDamageRoll.getBaseDamage());
     }
 
-    private void resolveSavePass(RPGLContext context) throws Exception {
+    void resolveSavePass(RPGLContext context) throws Exception {
         this.resolvePassDamage(context);
         this.resolveNestedSubevents(context, "pass");
     }
 
-    private void resolveSaveFail(RPGLContext context) throws Exception {
+    void resolveSaveFail(RPGLContext context) throws Exception {
         this.resolveFailDamage(context);
         this.resolveNestedSubevents(context, "fail");
     }
 
-    private JsonObject getTargetDamage(RPGLContext context) throws Exception {
+    JsonObject getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
          */
         TargetDamageDiceCollection targetDamageDiceCollection = new TargetDamageDiceCollection();
-        String targetDamageDiceCollectionJsonString = "{" +
-                        "\"subevent\":\"target_damage_dice_collection\"," +
-                        "\"damage\":[]" +
-                        "}";
+        String targetDamageDiceCollectionJsonString = """
+                {
+                    "subevent": "target_damage_dice_collection",
+                    "damage": [ ]
+                }
+                """; // TODO can the empty array be moved to prepare()?
         JsonObject targetDamageDiceCollectionJson = JsonParser.parseObjectString(targetDamageDiceCollectionJsonString);
         targetDamageDiceCollection.joinSubeventJson(targetDamageDiceCollectionJson);
         targetDamageDiceCollection.prepare(context);
@@ -138,10 +146,12 @@ public class SavingThrow extends ContestRoll {
          * Roll target damage dice
          */
         TargetDamageRoll targetDamageRoll = new TargetDamageRoll();
-        String targetDamageRollJsonString = String.format("{" +
-                        "\"subevent\":\"target_damage_roll\"," +
-                        "\"damage\":%s" +
-                        "}",
+        String targetDamageRollJsonString = String.format("""
+                        {
+                            "subevent": "target_damage_roll",
+                            "damage": %s
+                        }
+                        """,
                 targetDamageDiceCollection.getDamageDiceCollection().toString()
         );
         JsonObject targetDamageRollJson = JsonParser.parseObjectString(targetDamageRollJsonString);
@@ -152,7 +162,7 @@ public class SavingThrow extends ContestRoll {
         return targetDamageRoll.getBaseDamage();
     }
 
-    private void resolvePassDamage(RPGLContext context) throws Exception {
+    void resolvePassDamage(RPGLContext context) throws Exception {
         JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
         String damageOnPass = (String) this.subeventJson.get("damage_on_pass");
         if (baseDamage != null && !"none".equals(damageOnPass)) {
@@ -195,7 +205,7 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
-    private void resolveFailDamage(RPGLContext context) throws Exception {
+    void resolveFailDamage(RPGLContext context) throws Exception {
         JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
         if (baseDamage != null) {
             for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(context).entrySet()) {
@@ -218,7 +228,7 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
-    private void resolveNestedSubevents(RPGLContext context, String passOrFail) throws Exception {
+    void resolveNestedSubevents(RPGLContext context, String passOrFail) throws Exception {
         JsonArray subeventJsonArray = (JsonArray) this.subeventJson.get(passOrFail);
         if (subeventJsonArray != null) {
             for (Object subeventJsonElement : subeventJsonArray) {
@@ -232,11 +242,13 @@ public class SavingThrow extends ContestRoll {
 
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
-        String damageDeliveryJsonString = String.format("{" +
-                        "\"subevent\":\"damage_delivery\"," +
-                        "\"damage\":%s" +
-                        "}",
-                this.subeventJson.get("damage")
+        String damageDeliveryJsonString = String.format("""
+                        {
+                            "subevent": "damage_delivery",
+                            "damage": %s
+                        }
+                        """,
+                this.subeventJson.get("damage").toString()
         );
         JsonObject damageDeliveryJson = JsonParser.parseObjectString(damageDeliveryJsonString);
         damageDelivery.joinSubeventJson(damageDeliveryJson);

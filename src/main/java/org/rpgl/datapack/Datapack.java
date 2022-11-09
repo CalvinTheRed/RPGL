@@ -63,11 +63,7 @@ public class Datapack {
                 effectTemplate.put("id", datapackNamespace + ":" + effectId);
                 EFFECT_TEMPLATES.put(effectId, effectTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
-//                throw new RuntimeException(String.format(
-//                        "encountered an error trying to load effect {}:{}",
-//                        NAMESPACE,
-//                        effectId
-//                ), e);
+                // TODO manage this exception...
             }
         }
     }
@@ -85,11 +81,7 @@ public class Datapack {
                 eventTemplate.put("id", datapackNamespace + ":" + eventId);
                 EVENT_TEMPLATES.put(eventId, eventTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
-//                throw new RuntimeException(String.format(
-//                        "encountered an error trying to load event {}:{}",
-//                        NAMESPACE,
-//                        eventId
-//                ), e);
+                // TODO manage this exception...
             }
         }
     }
@@ -107,11 +99,7 @@ public class Datapack {
                 itemTemplate.put("id", datapackNamespace + ":" + itemId);
                 ITEM_TEMPLATES.put(itemId, itemTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
-//                throw new RuntimeException(String.format(
-//                        "encountered an error trying to load item {}:{}",
-//                        NAMESPACE,
-//                        itemId
-//                ), e);
+                // TODO manage this exception...
             }
         }
     }
@@ -142,11 +130,7 @@ public class Datapack {
                 }
                 OBJECT_TEMPLATES.put(objectId, objectTemplate);
             } catch (JsonFormatException | FileNotFoundException e) {
-//                throw new RuntimeException(String.format(
-//                        "encountered an error trying to load object {}:{}",
-//                        NAMESPACE,
-//                        objectId
-//                ), e);
+                // TODO manage this exception...
             }
         }
     }

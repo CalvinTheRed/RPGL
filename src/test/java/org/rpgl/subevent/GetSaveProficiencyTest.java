@@ -25,9 +25,11 @@ public class GetSaveProficiencyTest {
          * Set up the subevent context
          */
         Subevent subevent = new GetSaveProficiency();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -47,10 +49,12 @@ public class GetSaveProficiencyTest {
          * Set up the subevent context
          */
         Subevent subevent = new GetSaveProficiency();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"get_save_proficiency\"," +
-                "\"save_ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "get_save_proficiency",
+                    "save_ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GetSaveProficiency getSaveProficiency = (GetSaveProficiency) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -75,10 +79,12 @@ public class GetSaveProficiencyTest {
          * Set up the subevent context
          */
         Subevent subevent = new GetSaveProficiency();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"get_save_proficiency\"," +
-                "\"save_ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "get_save_proficiency",
+                    "save_ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GetSaveProficiency getSaveProficiency = (GetSaveProficiency) subevent.clone(subeventJson);
         RPGLContext context = new RPGLContext(null);
@@ -93,7 +99,7 @@ public class GetSaveProficiencyTest {
          * Verify subevent behaves as expected
          */
         assertTrue(getSaveProficiency.getIsProficient(),
-                "GetSaveProficiency Subevent should default to not indicate proficiency."
+                "GetSaveProficiency Subevent should indicate proficiency after having it granted."
         );
     }
 

@@ -45,9 +45,11 @@ public class CalculateAbilityScoreTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -67,10 +69,12 @@ public class CalculateAbilityScoreTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"calculate_ability_score\"," +
-                "\"ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "calculate_ability_score",
+                    "ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -99,10 +103,12 @@ public class CalculateAbilityScoreTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"calculate_ability_score\"," +
-                "\"ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "calculate_ability_score",
+                    "ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -132,10 +138,12 @@ public class CalculateAbilityScoreTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"calculate_ability_score\"," +
-                "\"ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "calculate_ability_score",
+                    "ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -166,10 +174,12 @@ public class CalculateAbilityScoreTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"calculate_ability_score\"," +
-                "\"ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "calculate_ability_score",
+                    "ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -200,10 +210,12 @@ public class CalculateAbilityScoreTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"calculate_ability_score\"," +
-                "\"ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "calculate_ability_score",
+                    "ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
@@ -233,10 +245,12 @@ public class CalculateAbilityScoreTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"calculate_ability_score\"," +
-                "\"ability\": \"str\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "calculate_ability_score",
+                    "ability": "str"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");

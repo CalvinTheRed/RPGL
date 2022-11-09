@@ -15,9 +15,11 @@ public class FalseTest {
     @DisplayName("False Condition throws ConditionMismatchException when condition type doesn't match")
     void test0() throws JsonFormatException {
         Condition condition = new False();
-        String conditionJsonString = "{" +
-                "\"condition\": \"not_a_condition\"" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "not_a_condition"
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson),
@@ -29,13 +31,15 @@ public class FalseTest {
     @DisplayName("False Condition should always evaluate true")
     void test1() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new False();
-        String conditionJsonString = "{" +
-                "\"condition\": \"false\"" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "false"
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
-                "False Condition should always evaluate to true."
+                "False Condition should always evaluate to false."
         );
     }
 

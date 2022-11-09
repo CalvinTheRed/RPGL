@@ -44,9 +44,11 @@ public class DamageDeliveryTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageDelivery();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -66,12 +68,14 @@ public class DamageDeliveryTest {
          * Set up the subevent context
          */
         Subevent subevent = new DamageDelivery();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"damage_delivery\"," +
-                "\"damage\": {" +
-                "   \"fire\": 1" +
-                "}" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "damage_delivery",
+                    "damage": {
+                        "fire": 1
+                    }
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageDelivery damageDelivery = (DamageDelivery) subevent.clone(subeventJson);
         RPGLObject originalObject = RPGLFactory.newObject("dummy:dummy_hollow");

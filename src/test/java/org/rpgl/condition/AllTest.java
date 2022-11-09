@@ -15,9 +15,11 @@ public class AllTest {
     @DisplayName("All Condition throws ConditionMismatchException when condition type doesn't match")
     void test0() throws JsonFormatException {
         Condition condition = new All();
-        String conditionJsonString = "{" +
-                "\"condition\": \"not_a_condition\"" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "not_a_condition"
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson),
@@ -29,10 +31,12 @@ public class AllTest {
     @DisplayName("All Condition is true with no nested conditions")
     void test1() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new All();
-        String conditionJsonString = "{" +
-                "\"condition\": \"all\"," +
-                "\"conditions\": [ ]" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "all",
+                    "conditions": [ ]
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
@@ -44,12 +48,14 @@ public class AllTest {
     @DisplayName("All Condition is true with single nested true")
     void test2() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new All();
-        String conditionJsonString = "{" +
-                "\"condition\": \"all\"," +
-                "\"conditions\": [" +
-                "   { \"condition\": \"true\" }" +
-                "]" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "all",
+                    "conditions": [
+                        { "condition": "true" }
+                    ]
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
@@ -61,12 +67,14 @@ public class AllTest {
     @DisplayName("All Condition is false with single nested false")
     void test3() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new All();
-        String conditionJsonString = "{" +
-                "\"condition\": \"all\"," +
-                "\"conditions\": [" +
-                "   { \"condition\": \"false\" }" +
-                "]" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "all",
+                    "conditions": [
+                        { "condition": "false" }
+                    ]
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
@@ -78,13 +86,15 @@ public class AllTest {
     @DisplayName("All Condition is true with multiple nested true")
     void test4() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new All();
-        String conditionJsonString = "{" +
-                "\"condition\": \"all\"," +
-                "\"conditions\": [" +
-                "   { \"condition\": \"true\" }," +
-                "   { \"condition\": \"true\" }" +
-                "]" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "all",
+                    "conditions": [
+                        { "condition": "true" },
+                        { "condition": "true" }
+                    ]
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertTrue(result,
@@ -96,13 +106,15 @@ public class AllTest {
     @DisplayName("All Condition is false with nested true and false")
     void test5() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new All();
-        String conditionJsonString = "{" +
-                "\"condition\": \"all\"," +
-                "\"conditions\": [" +
-                "   { \"condition\": \"true\" }," +
-                "   { \"condition\": \"false\" }" +
-                "]" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "all",
+                    "conditions": [
+                        { "condition": "true" },
+                        { "condition": "false" }
+                    ]
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,
@@ -114,13 +126,15 @@ public class AllTest {
     @DisplayName("All Condition is false with multiple nested false")
     void test6() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new All();
-        String conditionJsonString = "{" +
-                "\"condition\": \"all\"," +
-                "\"conditions\": [" +
-                "   { \"condition\": \"false\" }," +
-                "   { \"condition\": \"false\" }" +
-                "]" +
-                "}";
+        String conditionJsonString = """
+                {
+                    "condition": "all",
+                    "conditions": [
+                        { "condition": "false" },
+                        { "condition": "false" }
+                    ]
+                }
+                """;
         JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
         boolean result = condition.evaluate(null, null, conditionJson);
         assertFalse(result,

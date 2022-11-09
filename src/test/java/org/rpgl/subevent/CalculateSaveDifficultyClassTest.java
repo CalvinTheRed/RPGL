@@ -45,9 +45,11 @@ public class CalculateSaveDifficultyClassTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateSaveDifficultyClass();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -67,10 +69,12 @@ public class CalculateSaveDifficultyClassTest {
          * Set up the subevent context
          */
         Subevent subevent = new CalculateSaveDifficultyClass();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"calculate_save_difficulty_class\"," +
-                "\"difficulty_class_ability\": \"int\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "calculate_save_difficulty_class",
+                    "difficulty_class_ability": "int"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = (CalculateSaveDifficultyClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");

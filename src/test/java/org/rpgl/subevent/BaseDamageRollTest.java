@@ -27,9 +27,11 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"not_a_subevent\"" +
-                "}";
+        String subeventJsonString = """
+                {
+                    "subevent": "not_a_subevent"
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         RPGLContext context = new RPGLContext(null);
 
@@ -49,31 +51,41 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"base_damage_roll\"," +
-                "\"damage\": [" +
-                "{" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 10 }," +
-                "       { \"size\": 10, \"roll\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 2" +
-                "},{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 10 }," +
-                "       { \"size\": 10, \"roll\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 2" +
-                "}]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "base_damage_roll",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "roll": 10 },
+                                { "size": 10, "roll": 10 }
+                            ],
+                            "bonus": 2
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "roll": 10 },
+                                { "size": 10, "roll": 10 }
+                            ],
+                            "bonus": 2
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{ \"fire\": 22, \"cold\": 22 }";
+        String expectedJsonString = """
+                {
+                    "fire": 22,
+                    "cold": 22
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
                 "BaseDamageRoll Subevent did not accurately report rolled damage"
@@ -87,22 +99,27 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"base_damage_roll\"," +
-                "\"damage\": [" +
-                "{" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 2" +
-                "},{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 2" +
-                "}]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "base_damage_roll",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "determined": 10 }
+                            ],
+                            "bonus": 2
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "determined": 10 }
+                            ],
+                            "bonus": 2
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
@@ -114,7 +131,12 @@ public class BaseDamageRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{ \"fire\": 12, \"cold\": 12 }";
+        String expectedJsonString = """
+                {
+                    "fire": 12,
+                    "cold": 12
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
                 "BaseDamageRoll Subevent did not roll dice correctly"
@@ -128,22 +150,27 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"base_damage_roll\"," +
-                "\"damage\": [" +
-                "{" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
-                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
-                "   ]" +
-                "},{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
-                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
-                "   ]" +
-                "}]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "base_damage_roll",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "roll": 1, "determined_reroll": 10 },
+                                { "size": 10, "roll": 2, "determined_reroll": 10 }
+                            ]
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "roll": 1, "determined_reroll": 10 },
+                                { "size": 10, "roll": 2, "determined_reroll": 10 }
+                            ]
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
@@ -155,7 +182,12 @@ public class BaseDamageRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{ \"fire\": 12, \"cold\": 3 }";
+        String expectedJsonString = """
+                {
+                    "fire": 12,
+                    "cold": 3
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
                 "BaseDamageRoll Subevent did not re-roll dice correctly"
@@ -169,22 +201,27 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"base_damage_roll\"," +
-                "\"damage\": [" +
-                "{" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
-                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
-                "   ]" +
-                "},{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1, \"determined_reroll\": 10 }," +
-                "       { \"size\": 10, \"roll\": 2, \"determined_reroll\": 10 }," +
-                "   ]" +
-                "}]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "base_damage_roll",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "roll": 1, "determined_reroll": 10 },
+                                { "size": 10, "roll": 2, "determined_reroll": 10 }
+                            ]
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "roll": 1, "determined_reroll": 10 },
+                                { "size": 10, "roll": 2, "determined_reroll": 10 }
+                            ]
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
@@ -196,7 +233,12 @@ public class BaseDamageRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{ \"fire\": 12, \"cold\": 12 }";
+        String expectedJsonString = """
+                {
+                    "fire": 12,
+                    "cold": 12
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
                 "BaseDamageRoll Subevent did not re-roll dice correctly"
@@ -210,22 +252,27 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"base_damage_roll\"," +
-                "\"damage\": [" +
-                "{" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
-                "   ]" +
-                "},{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
-                "   ]" +
-                "}]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "base_damage_roll",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "roll": 1 },
+                                { "size": 10, "roll": 2 }
+                            ]
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "roll": 1 },
+                                { "size": 10, "roll": 2 }
+                            ]
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
@@ -237,7 +284,12 @@ public class BaseDamageRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{ \"fire\": 12, \"cold\": 3 }";
+        String expectedJsonString = """
+                {
+                    "fire": 12,
+                    "cold": 3
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
                 "BaseDamageRoll Subevent did not set dice correctly"
@@ -251,22 +303,27 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"base_damage_roll\"," +
-                "\"damage\": [" +
-                "{" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
-                "   ]" +
-                "},{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"roll\": 1 }," +
-                "       { \"size\": 10, \"roll\": 2 }," +
-                "   ]" +
-                "}]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "base_damage_roll",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "roll": 1 },
+                                { "size": 10, "roll": 2 }
+                            ]
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "roll": 1 },
+                                { "size": 10, "roll": 2 }
+                            ]
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
@@ -278,7 +335,12 @@ public class BaseDamageRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{ \"fire\": 12, \"cold\": 12 }";
+        String expectedJsonString = """
+                {
+                    "fire": 12,
+                    "cold": 12
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
                 "BaseDamageRoll Subevent did not set dice correctly"
@@ -292,22 +354,27 @@ public class BaseDamageRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new BaseDamageRoll();
-        String subeventJsonString = "{" +
-                "\"subevent\": \"base_damage_roll\"," +
-                "\"damage\": [" +
-                "{" +
-                "   \"type\": \"fire\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 2" +
-                "},{" +
-                "   \"type\": \"cold\"," +
-                "   \"dice\": [" +
-                "       { \"size\": 10, \"determined\": 10 }" +
-                "   ]," +
-                "   \"bonus\": 2" +
-                "}]}";
+        String subeventJsonString = """
+                {
+                    "subevent": "base_damage_roll",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "determined": 10 }
+                            ],
+                            "bonus": 2
+                        },
+                        {
+                            "type": "cold",
+                            "dice": [
+                                { "size": 10, "determined": 10 }
+                            ],
+                            "bonus": 2
+                        }
+                    ]
+                }
+                """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
 
@@ -319,7 +386,12 @@ public class BaseDamageRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        String expectedJsonString = "{ \"fire\": 12, \"cold\": 12 }";
+        String expectedJsonString = """
+                {
+                    "fire": 12,
+                    "cold": 12
+                }
+                """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
         assertEquals(expectedJson.toString(), baseDamageRoll.getBaseDamage().toString(),
                 "BaseDamageRoll Subevent did not roll dice correctly"

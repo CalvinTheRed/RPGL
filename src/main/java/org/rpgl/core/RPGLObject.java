@@ -25,7 +25,6 @@ public class RPGLObject extends JsonObject {
      */
     RPGLObject(JsonObject data) {
         this.join(data);
-        System.out.println("New RPGLObject being created with data: " + data);
     }
 
     public void invokeEvent(RPGLObject[] targets, RPGLEvent event, RPGLContext context) throws Exception {
@@ -45,8 +44,7 @@ public class RPGLObject extends JsonObject {
         }
     }
 
-    public boolean processSubevent(Subevent subevent)
-            throws ConditionMismatchException, FunctionMismatchException {
+    public boolean processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffects()) {
             wasSubeventProcessed |= effect.processSubevent(subevent.getSource(), subevent.getTarget(), subevent);
@@ -78,9 +76,11 @@ public class RPGLObject extends JsonObject {
 
     public Long getProficiencyBonus(RPGLContext context) throws Exception {
         CalculateProficiencyModifier calculateProficiencyModifier = new CalculateProficiencyModifier();
-        String calculateProficiencyModifierJsonString = "{" +
-                        "\"subevent\":\"calculate_proficiency_modifier\"" +
-                        "}";
+        String calculateProficiencyModifierJsonString = """
+                {
+                    "subevent": "calculate_proficiency_modifier"
+                }
+                """;
         JsonObject calculateProficiencyModifierJson = JsonParser.parseObjectString(calculateProficiencyModifierJsonString);
         calculateProficiencyModifier.joinSubeventJson(calculateProficiencyModifierJson);
         calculateProficiencyModifier.setSource(this);
@@ -92,10 +92,12 @@ public class RPGLObject extends JsonObject {
 
     public Long getAbilityModifier(RPGLContext context, String ability) throws Exception {
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
-        String calculateAbilityScoreJsonString = String.format("{" +
-                        "\"subevent\":\"calculate_ability_score\"," +
-                        "\"ability\":\"%s\"" +
-                        "}",
+        String calculateAbilityScoreJsonString = String.format("""
+                        {
+                            "subevent": "calculate_ability_score",
+                            "ability": "%s"
+                        }
+                        """,
                 ability
         );
         JsonObject calculateAbilityScoreJson = JsonParser.parseObjectString(calculateAbilityScoreJsonString);
@@ -118,10 +120,12 @@ public class RPGLObject extends JsonObject {
 
     public Long getSaveProficiencyBonus(RPGLContext context, String saveAbility) throws Exception {
         GetSaveProficiency getSaveProficiency = new GetSaveProficiency();
-        String getSaveProficiencyJsonString = String.format("{" +
-                        "\"subevent\":\"get_save_proficiency\"," +
-                        "\"save_ability\":\"%s\"" +
-                        "}",
+        String getSaveProficiencyJsonString = String.format("""
+                        {
+                            "subevent": "get_save_proficiency",
+                            "save_ability": "%s"
+                        }
+                        """,
                 saveAbility
         );
         JsonObject getSaveProficiencyJson = JsonParser.parseObjectString(getSaveProficiencyJsonString);
@@ -144,10 +148,12 @@ public class RPGLObject extends JsonObject {
             Long damage = (Long) damageObjectEntry.getValue();
 
             DamageAffinity damageAffinity = new DamageAffinity();
-            String damageAffinityJsonString = String.format("{" +
-                            "\"subevent\":\"damage_affinity\"," +
-                            "\"type\":\"%s\"" +
-                            "}",
+            String damageAffinityJsonString = String.format("""
+                            {
+                                "subevent": "damage_affinity",
+                                "type": "%s"
+                            }
+                            """,
                     damageType
             );
             JsonObject damageAffinityJson = JsonParser.parseObjectString(damageAffinityJsonString);
@@ -161,7 +167,9 @@ public class RPGLObject extends JsonObject {
             if ("normal".equals(affinity)) {
                 this.reduceHitPoints(damage);
             } else if ("resistance".equals(affinity)) {
-                this.reduceHitPoints(damage / 2L);
+                // resistance cannot reduce damage to 0
+                damage /= 2L;
+                this.reduceHitPoints(damage == 0 ? 1 : damage);
             } else if ("vulnerability".equals(affinity)) {
                 this.reduceHitPoints(damage * 2L);
             }
@@ -172,7 +180,6 @@ public class RPGLObject extends JsonObject {
         JsonObject healthData = (JsonObject) this.get("health_data");
         Long temporaryHitPoints = (Long) healthData.get("temporary");
         Long currentHitPoints = (Long) healthData.get("current");
-        System.out.println("REDUCING HIT POINTS! (removing " + amount + " from " + currentHitPoints + " for " + this.get("uuid") + ")");
         if (amount > temporaryHitPoints) {
             amount -= temporaryHitPoints;
             temporaryHitPoints = 0L;
@@ -183,6 +190,22 @@ public class RPGLObject extends JsonObject {
         healthData.put("temporary", temporaryHitPoints);
         healthData.put("current", currentHitPoints);
         // TODO deal with 0 or negative hit points after this...
+    }
+
+    public long getBaseArmorClass(RPGLContext context) throws Exception {
+        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
+        String calculateBaseArmorClassJsonString = """
+                {
+                    "subevent": "calculate_base_armor_class"
+                }
+                """;
+        JsonObject calculateBaseArmorClassJson = JsonParser.parseObjectString(calculateBaseArmorClassJsonString);
+        calculateBaseArmorClass.joinSubeventJson(calculateBaseArmorClassJson);
+        calculateBaseArmorClass.setSource(this);
+        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.setTarget(this);
+        calculateBaseArmorClass.invoke(context);
+        return calculateBaseArmorClass.get();
     }
 
 }
