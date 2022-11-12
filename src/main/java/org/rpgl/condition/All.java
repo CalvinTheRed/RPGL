@@ -5,6 +5,11 @@ import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 
+/**
+ * This Condition evaluates true if all of its nested Conditions evaluate to true.
+ *
+ * @author Calvin Withun
+ */
 public class All extends Condition {
 
     @Override

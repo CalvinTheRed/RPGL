@@ -4,6 +4,11 @@ import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 
+/**
+ * This Condition evaluates true if its nested Condition evaluates false.
+ *
+ * @author Calvin Withun
+ */
 public class Invert extends Condition {
 
     @Override

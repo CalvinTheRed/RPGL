@@ -4,6 +4,11 @@ import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 
+/**
+ * This Condition always evaluates false.
+ *
+ * @author Calvin Withun
+ */
 public class False extends Condition {
 
     @Override
