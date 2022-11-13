@@ -17,23 +17,48 @@ import org.rpgl.subevent.Subevent;
 public class RPGLEffect extends JsonObject {
 
     /**
-     * A copy-constructor for the RPGLEffect class.
+     * 	<p><b><i>RPGLEffect</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * RPGLEffect(JsonObject effectJson)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	A copy-constructor for the RPGLEffect class.
+     * 	</p>
      *
-     * @param data the data to be copied to this object
+     * @param effectJson the data to be joined to the new RPGLEffect
      */
-    RPGLEffect(JsonObject data) {
-        this.join(data);
+    RPGLEffect(JsonObject effectJson) {
+        this.join(effectJson);
     }
 
-    public boolean processSubevent(RPGLObject source, RPGLObject target, Subevent subevent)
+    /**
+     * 	<p><b><i>processSubevent</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public boolean processSubevent(Subevent subevent)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method checks the passed Subevent against the RPGLEffect's Conditions, and if they evaluate true, the
+     * 	RPGLEffect executes its functions.
+     * 	</p>
+     *
+     * @param subevent a Subevent
+     */
+    public boolean processSubevent(Subevent subevent)
             throws ConditionMismatchException, FunctionMismatchException {
-        JsonArray behaviorArray = (JsonArray) this.get("behavior");
-        for (Object behaviorElement : behaviorArray) {
+        // TODO make "behavior" an object with keys for subeventId's to save on a Subevent... harder to test though?
+        RPGLObject source = subevent.getSource();
+        RPGLObject target = subevent.getTarget();
+        JsonArray behaviors = (JsonArray) this.get("behavior");
+        for (Object behaviorElement : behaviors) {
             JsonObject behavior = (JsonObject) behaviorElement;
-            JsonArray conditionJsonArray = (JsonArray) behavior.get("conditions");
-            if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(source, target, conditionJsonArray)) {
+            JsonArray conditions = (JsonArray) behavior.get("conditions");
+            if (!subevent.hasModifyingEffect(this) && evaluateConditions(source, target, conditions)) {
                 JsonArray functionJsonArray = (JsonArray) behavior.get("functions");
-                this.executeFunctions(source, target, functionJsonArray);
+                executeFunctions(source, target, subevent, functionJsonArray);
                 subevent.addModifyingEffect(this);
                 return true;
             }
@@ -41,25 +66,56 @@ public class RPGLEffect extends JsonObject {
         return false;
     }
 
-    boolean evaluateConditions(RPGLObject source, RPGLObject target, JsonArray conditionJsonArray)
+    /**
+     * 	<p><b><i>evaluateConditions</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static boolean evaluateConditions(RPGLObject source, RPGLObject target, JsonArray conditions)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method evaluates a given collection of Conditions on given RPGLObject sources and targets.
+     * 	</p>
+     *
+     * @param source     a RPGLObject invoking a Subevent
+     * @param target     a RPGLObject targeted by a Subevent
+     * @param conditions a collection of JSON data defining Conditions
+     */
+    static boolean evaluateConditions(RPGLObject source, RPGLObject target, JsonArray conditions)
             throws ConditionMismatchException {
         boolean conditionsMet = true;
-        for (Object conditionJsonElement : conditionJsonArray) {
+        for (Object conditionJsonElement : conditions) {
             JsonObject conditionJson = (JsonObject) conditionJsonElement;
-            String conditionId = (String) conditionJson.get("condition");
-            Condition condition = Condition.CONDITIONS.get(conditionId);
-            conditionsMet &= condition.evaluate(source, target, conditionJson);
+            conditionsMet &= Condition.CONDITIONS
+                    .get((String) conditionJson.get("condition"))
+                    .evaluate(source, target, conditionJson);
         }
         return conditionsMet;
     }
 
-    void executeFunctions(RPGLObject source, RPGLObject target, JsonArray functionJsonArray)
+    /**
+     * 	<p><b><i>executeFunctions</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static void executeFunctions(RPGLObject source, RPGLObject target, JsonArray functions)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method executes a given collection of Functions on given RPGLObjects and Subevents.
+     * 	</p>
+     *
+     * @param source    a RPGLObject invoking a Subevent
+     * @param target    a RPGLObject targeted by a Subevent
+     * @param subevent  a Subevent
+     * @param functions a collection of JSON data defining Functions
+     */
+    static void executeFunctions(RPGLObject source, RPGLObject target, Subevent subevent, JsonArray functions)
             throws FunctionMismatchException {
-        for (Object functionJsonElement : functionJsonArray) {
+        for (Object functionJsonElement : functions) {
             JsonObject functionJson = (JsonObject) functionJsonElement;
-            String functionId = (String) functionJson.get("function");
-            Function function = Function.FUNCTIONS.get(functionId);
-            function.execute(source, target, functionJson);
+            Function.FUNCTIONS
+                    .get((String) functionJson.get("function"))
+                    .execute(source, target, subevent, functionJson);
         }
     }
 

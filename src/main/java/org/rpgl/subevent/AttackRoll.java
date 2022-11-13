@@ -84,6 +84,7 @@ public class AttackRoll extends ContestRoll {
          */
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
         String attackType = (String) this.subeventJson.get("attack_type");
+        assert weapon != null; // TODO is there a better way to do this?
         this.addBonus(this.getSource().getAbilityModifier(context, weapon.getAttackAbility(attackType)));
         /*
          * Add proficiency bonus to the roll (all natural weapon attacks are made with proficiency).
@@ -92,7 +93,7 @@ public class AttackRoll extends ContestRoll {
         /*
          * Copy damage of natural weapon to Subevent JSON.
          */
-        this.subeventJson.put("damage", weapon.getDamage());
+        this.subeventJson.put("damage", weapon.getDamage(attackType));
     }
 
     void prepareItemWeaponAttack(RPGLContext context, String equipmentSlot) throws Exception {
@@ -110,7 +111,7 @@ public class AttackRoll extends ContestRoll {
         /*
          * Copy damage of natural weapon to Subevent JSON.
          */
-        this.subeventJson.put("damage", weapon.getDamage());
+        this.subeventJson.put("damage", weapon.getDamage(attackType));
     }
 
     long getTargetArmorClass(RPGLContext context) throws Exception {

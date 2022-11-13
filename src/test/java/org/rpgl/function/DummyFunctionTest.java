@@ -29,7 +29,7 @@ public class DummyFunctionTest {
                 """;
         JsonObject functionJson = JsonParser.parseObjectString(functionJsonString);
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson),
+                () -> function.execute(null, null, null, functionJson),
                 "DummyFunction Function should throw a FunctionMismatchException if the specified function doesn't match."
         );
     }
@@ -44,7 +44,7 @@ public class DummyFunctionTest {
                 }
                 """;
         JsonObject functionJson = JsonParser.parseObjectString(functionJsonString);
-        function.execute(null, null, functionJson);
+        function.execute(null, null, null, functionJson);
         assertEquals(1, DummyFunction.counter,
                 "DummyFunction Function should increment static counter variable upon execution."
         );

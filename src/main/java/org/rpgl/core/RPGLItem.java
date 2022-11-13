@@ -12,22 +12,82 @@ import org.jsonutils.JsonObject;
 public class RPGLItem extends JsonObject {
 
     /**
-     * A copy-constructor for the RPGLItem class.
+     * 	<p><b><i>RPGLItem</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * RPGLItem(String itemJson)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	A copy-constructor for the RPGLItem class.
+     * 	</p>
      *
-     * @param data the data to be copied to this object
+     * 	@param itemJson the data to be joined to the new RPGLItem object
      */
-    RPGLItem(JsonObject data) {
-        this.join(data);
+    RPGLItem(JsonObject itemJson) {
+        this.join(itemJson);
     }
 
-    public String getAttackAbility(String attackType) throws JsonFormatException {
-        return (String) this.seek("attack_abilities." + attackType);
+    /**
+     * 	<p><b><i>getAttackAbility</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public String getAttackAbility(String attackType)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Returns the ability score the weapon is currently set to use for attacks of the given type.
+     * 	</p>
+     *
+     * 	@param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
+     * 	@return an ability score, or <code>null</code> if an invalid attackType for the RPGLItem was passed
+     */
+    public String getAttackAbility(String attackType) {
+        try {
+            return (String) this.seek("attack_abilities." + attackType);
+        } catch (JsonFormatException e) {
+            // return null if an invalid attackType is provided, rather than throwing an error
+            return null;
+        }
     }
 
-    public JsonArray getDamage() {
-        return (JsonArray) this.get("damage");
+    /**
+     * 	<p><b><i>getDamage</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public JsonArray getDamage()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Returns the damage dice associated with the weapon for attacks of the given type, or <code>null</code> if the
+     * 	passed attack type does not apply to the RPGLItem.
+     * 	</p>
+     *
+     * 	@param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
+     * 	@return the damage associated with the RPGLItem for the given attackType
+     */
+    public JsonArray getDamage(String attackType) {
+        try {
+            return (JsonArray) this.seek("damage." + attackType);
+        } catch (JsonFormatException e) {
+            // return null if the attackType is invalid for the RPGLItem
+            return null;
+        }
     }
 
+    /**
+     * 	<p><b><i>getWeaponProperties</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public JsonArray getWeaponProperties()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Returns the object's weapon properties as a JsonArray.
+     * 	</p>
+     *
+     * 	@return a JsonArray of weapon properties
+     */
     public JsonArray getWeaponProperties() {
         return (JsonArray) this.get("weapon_properties");
     }

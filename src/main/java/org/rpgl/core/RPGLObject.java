@@ -47,7 +47,7 @@ public class RPGLObject extends JsonObject {
     public boolean processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffects()) {
-            wasSubeventProcessed |= effect.processSubevent(subevent.getSource(), subevent.getTarget(), subevent);
+            wasSubeventProcessed |= effect.processSubevent(subevent);
         }
         return wasSubeventProcessed;
     }

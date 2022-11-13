@@ -10,12 +10,20 @@ import org.jsonutils.JsonObject;
 public class RPGLEvent extends JsonObject {
 
     /**
-     * A copy-constructor for the RPGLEvent class.
+     * 	<p><b><i>RPGLEvent</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * RPGLEvent(JsonObject eventJson)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	A copy-constructor for the RPGLEvent class.
+     * 	</p>
      *
-     * @param data the data to be copied to this object
+     * 	@param eventJson the data to be joined to the new RPGLEvent
      */
-    RPGLEvent(JsonObject data) {
-        this.join(data);
+    RPGLEvent(JsonObject eventJson) {
+        this.join(eventJson);
     }
 
 }

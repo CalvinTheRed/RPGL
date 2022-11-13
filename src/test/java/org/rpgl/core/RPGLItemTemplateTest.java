@@ -1,6 +1,7 @@
 package org.rpgl.core;
 
 import org.jsonutils.JsonArray;
+import org.jsonutils.JsonFormatException;
 import org.junit.jupiter.api.*;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
@@ -32,7 +33,7 @@ public class RPGLItemTemplateTest {
 
     @Test
     @DisplayName("item while_equipped array processed correctly")
-    void itemWhenEquippedArrayProcessedCorrectly() {
+    void itemWhenEquippedArrayProcessedCorrectly() throws JsonFormatException {
         RPGLItem item = DatapackLoader.DATAPACKS.get("dummy").getItemTemplate("dummy").newInstance();
         JsonArray whenEquippedEffectUuids = (JsonArray) item.get("while_equipped");
 

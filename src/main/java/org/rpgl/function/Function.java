@@ -3,6 +3,7 @@ package org.rpgl.function;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.subevent.Subevent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,14 +57,15 @@ public abstract class Function {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	Modifies a Subevent or precipitates a new one according to defined parameters.
+     * 	Modifies given Subevents or RPGLObjects according to given parameters.
      * 	</p>
      *
      *  @param source       the RPGLObject which invoked a Subevent
      *  @param target       the RPGLObject the Subevent is being directed at
+     *  @param subevent     the Subevent being invoked
      *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
      * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
-    public abstract void execute(RPGLObject source, RPGLObject target, JsonObject functionJson) throws FunctionMismatchException;
+    public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson) throws FunctionMismatchException;
 
 }

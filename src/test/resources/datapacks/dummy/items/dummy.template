@@ -5,7 +5,6 @@
   "name": "Dummy Item",
   "id": "dummy:dummy",
   "proficiency_tags": [
-    "dagger",
     "simple",
     "melee"
   ],
@@ -13,5 +12,31 @@
   "while_equipped": [
     "dummy:dummy",
     "dummy:dummy"
-  ]
+  ],
+  "damage": {
+    "melee": [
+      {
+        "type": "bludgeoning",
+        "dice": [
+          {
+            "size": 4,
+            "determined": 1
+          }
+        ],
+        "bonus": 0
+      }
+    ],
+    "thrown": [
+      {
+        "type": "bludgeoning",
+        "dice": [
+          {
+            "size": 4,
+            "determined": 1
+          }
+        ],
+        "bonus": 0
+      }
+    ]
+  }
 }
