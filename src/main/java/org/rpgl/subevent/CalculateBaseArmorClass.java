@@ -27,9 +27,8 @@ public class CalculateBaseArmorClass extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
         Long baseArmorClass = 10L + this.getSource().getAbilityModifier(context, "dex");
-        this.subeventJson.put("raw", baseArmorClass);
+        this.subeventJson.put("base", baseArmorClass);
     }
 
 }

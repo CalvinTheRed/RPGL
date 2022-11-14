@@ -275,4 +275,9 @@ public abstract class Subevent {
         return UUIDTable.getObject((String) this.subeventJson.get("target"));
     }
 
+    @Override
+    public String toString() {
+        return this.subeventJson.toString();
+    }
+
 }

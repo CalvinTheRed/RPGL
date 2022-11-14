@@ -1,7 +1,6 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLContext;
 
 public class CalculateEffectiveArmorClass extends Calculation {
 
@@ -23,11 +22,6 @@ public class CalculateEffectiveArmorClass extends Calculation {
         clone.joinSubeventJson(subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
-    }
-
-    @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
     }
 
 }

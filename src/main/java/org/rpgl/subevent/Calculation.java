@@ -1,16 +1,9 @@
 package org.rpgl.subevent;
 
-import org.rpgl.core.RPGLContext;
-
 public abstract class Calculation extends Subevent {
 
     public Calculation(String subeventId) {
         super(subeventId);
-    }
-
-    @Override
-    public void prepare(RPGLContext context) throws Exception {
-        this.addBonus(0L);
     }
 
     public void addBonus(long bonus) {
@@ -31,10 +24,11 @@ public abstract class Calculation extends Subevent {
     public Long get() {
         Long bonus = (Long) this.subeventJson.get("bonus");
         Long set = (Long) this.subeventJson.get("set");
+        bonus = (bonus != null ? bonus : 0L);
         if (set != null) {
             return set + bonus;
         }
-        return (Long) this.subeventJson.get("raw") + bonus;
+        return (Long) this.subeventJson.get("base") + bonus;
     }
 
 }

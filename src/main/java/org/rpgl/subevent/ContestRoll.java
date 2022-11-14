@@ -48,7 +48,7 @@ public abstract class ContestRoll extends Calculation {
                 baseDieRoll = disadvantageRoll;
             }
         }
-        this.subeventJson.put("raw", baseDieRoll);
+        this.subeventJson.put("base", baseDieRoll);
     }
 
     public boolean checkForReroll(RPGLContext context) throws Exception {
@@ -59,7 +59,7 @@ public abstract class ContestRoll extends Calculation {
                             "base_die_roll": %s
                         }
                         """,
-                this.subeventJson.get("raw").toString()
+                this.subeventJson.get("base").toString()
         );
         JsonObject contestRerollChanceJson = JsonParser.parseObjectString(contestRerollChanceJsonString);
         contestRerollChance.joinSubeventJson(contestRerollChanceJson);
@@ -71,16 +71,16 @@ public abstract class ContestRoll extends Calculation {
             String rerollMode = contestRerollChance.getRerollMode();
             switch (rerollMode) {
                 case "use_new":
-                    this.subeventJson.put("raw", rerollDieValue);
+                    this.subeventJson.put("base", rerollDieValue);
                     break;
                 case "use_highest":
-                    if (rerollDieValue > (Long) this.subeventJson.get("raw")) {
-                        this.subeventJson.put("raw", rerollDieValue);
+                    if (rerollDieValue > (Long) this.subeventJson.get("base")) {
+                        this.subeventJson.put("base", rerollDieValue);
                     }
                     break;
                 case "use_lowest":
-                    if (rerollDieValue < (Long) this.subeventJson.get("raw")) {
-                        this.subeventJson.put("raw", rerollDieValue);
+                    if (rerollDieValue < (Long) this.subeventJson.get("base")) {
+                        this.subeventJson.put("base", rerollDieValue);
                     }
                     break;
             }
@@ -90,7 +90,7 @@ public abstract class ContestRoll extends Calculation {
     }
 
     public Long getRoll() {
-        return (Long) this.subeventJson.get("raw") + (Long) this.subeventJson.get("bonus");
+        return (Long) this.subeventJson.get("base") + (Long) this.subeventJson.get("bonus");
     }
 
 }
