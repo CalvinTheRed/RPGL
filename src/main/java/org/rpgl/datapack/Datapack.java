@@ -31,10 +31,18 @@ public class Datapack {
     String datapackNamespace;
 
     /**
-     * Constructor for the Datapack class. This constructor loads all data located within a single datapack and stores
-     * it in the constructed object for future reference.
+     * 	<p><b><i>Datapack</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public Datapack()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Constructor for the Datapack class. This constructor loads all data located within a single datapack and stores
+     *  it in the constructed object for future reference.
+     * 	</p>
      *
-     * @param directory a datapack directory
+     * 	@param directory a File directory for a datapack
      */
     public Datapack (File directory) {
         this.datapackNamespace = directory.getName();
@@ -51,11 +59,19 @@ public class Datapack {
     }
 
     /**
-     * This method loads all effect templates stored in a single directory into the object.
+     * 	<p><b><i>loadEffectTemplates</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void loadEffectTemplates(File directory)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method loads all effect templates stored in a single directory into the object.
+     * 	</p>
      *
-     * @param directory an effects directory
+     * 	@param directory a File directory for the effects in a datapack
      */
-    private void loadEffectTemplates(File directory) {
+    void loadEffectTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             String effectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
             try {
@@ -69,9 +85,17 @@ public class Datapack {
     }
 
     /**
-     * This method loads all event templates stored in a single directory into the object.
+     * 	<p><b><i>loadEventTemplates</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void loadEventTemplates(File directory)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method loads all event templates stored in a single directory into the object.
+     * 	</p>
      *
-     * @param directory an events directory
+     * 	@param directory a File directory for the events in a datapack
      */
     private void loadEventTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
@@ -87,9 +111,17 @@ public class Datapack {
     }
 
     /**
-     * This method loads all item templates stored in a single directory into the object.
+     * 	<p><b><i>loadItemTemplates</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void loadItemTemplates(File directory)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method loads all item templates stored in a single directory into the object.
+     * 	</p>
      *
-     * @param directory an items directory
+     * 	@param directory a File directory for the items in a datapack
      */
     private void loadItemTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
@@ -105,9 +137,17 @@ public class Datapack {
     }
 
     /**
-     * This method loads all object templates stored in a single directory into the object.
+     * 	<p><b><i>loadObjectTemplates</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void loadObjectTemplates(File directory)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method loads all object templates stored in a single directory into the object.
+     * 	</p>
      *
-     * @param directory an objects directory
+     * 	@param directory a File directory for the objects in a datapack
      */
     private void loadObjectTemplates(File directory) {
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
@@ -136,40 +176,68 @@ public class Datapack {
     }
 
     /**
-     * This method returns a specified RPGLEffectTemplate object.
+     * 	<p><b><i>getEffectTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEffectTemplate getEffectTemplate(String effectName)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns a specified RPGLEffectTemplate object.
+     * 	</p>
      *
-     * @param effectName an RPGLEffectTemplate name
-     * @return an RPGLEffectTemplate object
+     * 	@param effectName the name of an effect template stored in this datapack
      */
     public RPGLEffectTemplate getEffectTemplate(String effectName) {
         return EFFECT_TEMPLATES.get(effectName);
     }
 
     /**
-     * This method returns a specified RPGLEventTemplate object.
+     * 	<p><b><i>getEventTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEventTemplate getEventTemplate(String eventName)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns a specified RPGLEventTemplate object.
+     * 	</p>
      *
-     * @param eventName an RPGLEventTemplate name
-     * @return an RPGLEventTemplate object
+     * 	@param eventName the name of an event template stored in this datapack
      */
     public RPGLEventTemplate getEventTemplate(String eventName) {
         return EVENT_TEMPLATES.get(eventName);
     }
 
     /**
-     * This method returns a specified RPGLItemTemplate object.
+     * 	<p><b><i>getItemTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLItemTemplate getItemTemplate(String itemName)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns a specified RPGLItemTemplate object.
+     * 	</p>
      *
-     * @param itemName an RPGLItemTemplate name
-     * @return an RPGLItemTemplate object
+     * 	@param itemName the name of an item template stored in this datapack
      */
     public RPGLItemTemplate getItemTemplate(String itemName) {
         return ITEM_TEMPLATES.get(itemName);
     }
 
     /**
-     * This method returns a specified RPGLObjectTemplate object.
+     * 	<p><b><i>getObjectTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLObjectTemplate getObjectTemplate(String objectName)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns a specified RPGLObjectTemplate object.
+     * 	</p>
      *
-     * @param objectName an RPGLObjectTemplate name
-     * @return an RPGLObjectTemplate object
+     * 	@param objectName the name of an object template stored in this datapack
      */
     public RPGLObjectTemplate getObjectTemplate(String objectName) {
         return OBJECT_TEMPLATES.get(objectName);
