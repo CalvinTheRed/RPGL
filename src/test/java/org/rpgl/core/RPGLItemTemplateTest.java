@@ -1,7 +1,6 @@
 package org.rpgl.core;
 
 import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
 import org.junit.jupiter.api.*;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
@@ -12,6 +11,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for core.RPGLItemTemplate class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLItemTemplateTest {
 
     @BeforeAll
@@ -33,8 +37,9 @@ public class RPGLItemTemplateTest {
 
     @Test
     @DisplayName("item while_equipped array processed correctly")
-    void itemWhenEquippedArrayProcessedCorrectly() throws JsonFormatException {
-        RPGLItem item = DatapackLoader.DATAPACKS.get("dummy").getItemTemplate("dummy").newInstance();
+    void itemWhenEquippedArrayProcessedCorrectly() {
+        RPGLItem item = RPGLFactory.newItem("dummy:dummy");
+        assert item != null;
         JsonArray whenEquippedEffectUuids = (JsonArray) item.get("while_equipped");
 
         assertNotNull(whenEquippedEffectUuids,

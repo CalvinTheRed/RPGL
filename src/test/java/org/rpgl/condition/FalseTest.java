@@ -9,6 +9,11 @@ import org.rpgl.exception.ConditionMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for condition.False class.
+ *
+ * @author Calvin Withun
+ */
 public class FalseTest {
 
     @Test
@@ -28,7 +33,7 @@ public class FalseTest {
     }
 
     @Test
-    @DisplayName("False Condition should always evaluate true")
+    @DisplayName("False Condition should always evaluate false")
     void test1() throws JsonFormatException, ConditionMismatchException {
         Condition condition = new False();
         String conditionJsonString = """

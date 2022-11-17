@@ -11,6 +11,11 @@ import org.rpgl.exception.SubeventMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for subevent.GetSaveProficiency class.
+ *
+ * @author Calvin Withun
+ */
 public class GetSaveProficiencyTest {
 
     @AfterEach
@@ -57,12 +62,6 @@ public class GetSaveProficiencyTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GetSaveProficiency getSaveProficiency = (GetSaveProficiency) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent methods
-         */
-        getSaveProficiency.prepare(context);
 
         /*
          * Verify subevent behaves as expected
@@ -87,12 +86,10 @@ public class GetSaveProficiencyTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GetSaveProficiency getSaveProficiency = (GetSaveProficiency) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
 
         /*
          * Invoke subevent methods
          */
-        getSaveProficiency.prepare(context);
         getSaveProficiency.grantProficiency();
 
         /*

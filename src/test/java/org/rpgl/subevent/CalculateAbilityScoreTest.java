@@ -19,6 +19,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.CalculateAbilityScore class.
+ *
+ * @author Calvin Withun
+ */
 public class CalculateAbilityScoreTest {
 
     @BeforeAll
@@ -63,7 +68,7 @@ public class CalculateAbilityScoreTest {
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent setup method & getter work")
+    @DisplayName("CalculateAbilityScore Subevent prepare method sets base ability score")
     void test1() throws Exception {
         /*
          * Set up the subevent context
@@ -78,6 +83,7 @@ public class CalculateAbilityScoreTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -92,12 +98,12 @@ public class CalculateAbilityScoreTest {
          * Verify subevent behaves as expected
          */
         assertEquals(7L, calculateAbilityScore.get(),
-                "CalculateAbilityScore Subevent did not report raw ability score correctly."
+                "CalculateAbilityScore Subevent did not prepare base ability score correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can set ability")
+    @DisplayName("CalculateAbilityScore Subevent can set ability score")
     void test2() throws Exception {
         /*
          * Set up the subevent context
@@ -112,6 +118,7 @@ public class CalculateAbilityScoreTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -132,7 +139,7 @@ public class CalculateAbilityScoreTest {
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can set ability (override prior set with higher)")
+    @DisplayName("CalculateAbilityScore Subevent can set ability score (override prior set with higher)")
     void test3() throws Exception {
         /*
          * Set up the subevent context
@@ -147,6 +154,7 @@ public class CalculateAbilityScoreTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -168,7 +176,7 @@ public class CalculateAbilityScoreTest {
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can not set ability (override prior set with lower)")
+    @DisplayName("CalculateAbilityScore Subevent can not set ability score (override prior set with lower)")
     void test4() throws Exception {
         /*
          * Set up the subevent context
@@ -183,6 +191,7 @@ public class CalculateAbilityScoreTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -219,6 +228,7 @@ public class CalculateAbilityScoreTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -254,6 +264,7 @@ public class CalculateAbilityScoreTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);

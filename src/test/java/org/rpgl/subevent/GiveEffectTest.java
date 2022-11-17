@@ -18,6 +18,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for subevent.GiveEffect class.
+ *
+ * @author Calvin Withun
+ */
 public class GiveEffectTest {
 
     @BeforeAll
@@ -76,21 +81,11 @@ public class GiveEffectTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
-        RPGLContext context = new RPGLContext(contextArray);
-
-        /*
-         * Invoke subevent methods
-         */
-        giveEffect.setSource(object);
-        giveEffect.prepare(context);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse((Boolean) giveEffect.subeventJson.get("cancel"),
+        assertFalse(giveEffect.isCancelled(),
                 "GiveEffect Subevent should default to not being canceled."
         );
     }
@@ -110,16 +105,10 @@ public class GiveEffectTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
-        RPGLContext context = new RPGLContext(contextArray);
 
         /*
          * Invoke subevent methods
          */
-        giveEffect.setSource(object);
-        giveEffect.prepare(context);
         giveEffect.cancel();
 
         /*
@@ -146,6 +135,7 @@ public class GiveEffectTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -154,7 +144,6 @@ public class GiveEffectTest {
          * Invoke subevent methods
          */
         giveEffect.setSource(object);
-        giveEffect.prepare(context);
         giveEffect.setTarget(object);
         giveEffect.invoke(context);
 
@@ -182,6 +171,7 @@ public class GiveEffectTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -190,7 +180,6 @@ public class GiveEffectTest {
          * Invoke subevent methods
          */
         giveEffect.setSource(object);
-        giveEffect.prepare(context);
         giveEffect.setTarget(object);
         giveEffect.cancel();
         giveEffect.invoke(context);

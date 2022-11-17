@@ -5,7 +5,6 @@ import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.Map;
 
@@ -38,14 +37,17 @@ public class SavingThrow extends ContestRoll {
         if (this.subeventJson.get("damage") != null) {
             this.getBaseDamage(context);
         }
-        RPGLObject source = UUIDTable.getObject((String) this.subeventJson.get("source"));
-        this.addBonus(source.getAbilityModifier(context, (String) this.subeventJson.get("save_ability")));
-        this.addBonus(source.getSaveProficiencyBonus(context, (String) this.subeventJson.get("save_ability")));
     }
 
     @Override
     public void invoke(RPGLContext context) throws Exception {
-        super.invoke(context);
+        this.verifySubevent(this.subeventId);
+
+        RPGLObject target = this.getTarget();
+        this.addBonus(target.getAbilityModifier(context, (String) this.subeventJson.get("save_ability")));
+        this.addBonus(target.getSaveProficiencyBonus(context, (String) this.subeventJson.get("save_ability")));
+        context.processSubevent(this);
+
         this.roll();
         this.checkForReroll(context); // TODO eventually have this in a while loop?
         if (this.getRoll() < (Long) this.subeventJson.get("save_difficulty_class")) {

@@ -11,6 +11,11 @@ import org.rpgl.exception.SubeventMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for subevent.BaseDamageDiceCollection class.
+ *
+ * @author Calvin Withun
+ */
 public class BaseDamageDiceCollectionTest {
 
     @Test
@@ -73,7 +78,7 @@ public class BaseDamageDiceCollectionTest {
          */
         JsonArray typedDamageArray = baseDamageDiceCollection.getDamageDiceCollection();
         assertEquals(subeventJson.get("damage").toString(), typedDamageArray.toString(),
-                "BaseDamageDiceCollection Subevent did not accurately report its damage dice collection."
+                "BaseDamageDiceCollection Subevent did not accurately report its typed damage."
         );
     }
 

@@ -27,8 +27,7 @@ public class CalculateProficiencyModifier extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        Long rawProficiencyModifier = (Long) this.getSource().seek("proficiency_bonus");
-        this.subeventJson.put("base", rawProficiencyModifier);
+        this.subeventJson.put("base", this.getSource().seek("proficiency_bonus"));
     }
 
 }

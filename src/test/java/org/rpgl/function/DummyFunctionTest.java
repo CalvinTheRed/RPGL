@@ -11,6 +11,11 @@ import org.rpgl.exception.FunctionMismatchException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for function.DummyFunction class.
+ *
+ * @author Calvin Withun
+ */
 public class DummyFunctionTest {
 
     @AfterEach

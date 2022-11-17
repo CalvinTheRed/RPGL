@@ -13,6 +13,11 @@ import org.rpgl.math.Die;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.AttackDamageRoll class.
+ *
+ * @author Calvin Withun
+ */
 public class AttackDamageRollTest {
 
     @BeforeAll
@@ -45,7 +50,7 @@ public class AttackDamageRollTest {
     }
 
     @Test
-    @DisplayName("AttackDamageRoll Subevent returns the correct final damage values")
+    @DisplayName("AttackDamageRoll Subevent returns the correct final damage values by type")
     void test1() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -107,15 +112,14 @@ public class AttackDamageRollTest {
                             "type": "fire",
                             "dice": [
                                 { "size": 10, "determined": 10 }
-                            ],
-                            "bonus": 2
+                            ]
                         },
                         {
                             "type": "cold",
                             "dice": [
-                                { "size": 10, "determined": 10 }
-                            ],
-                            "bonus": 2
+                                { "size": 10, "determined": 5 },
+                                { "size": 10, "determined": 5 }
+                            ]
                         }
                     ]
                 }
@@ -133,8 +137,8 @@ public class AttackDamageRollTest {
          */
         String expectedJsonString = """
                 {
-                    "fire": 12,
-                    "cold": 12
+                    "fire": 10,
+                    "cold": 10
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
@@ -348,7 +352,7 @@ public class AttackDamageRollTest {
     }
 
     @Test
-    @DisplayName("AttackDamageRoll Subevent prepare method works")
+    @DisplayName("AttackDamageRoll Subevent prepare method rolls all dice")
     void test7() throws JsonFormatException {
         /*
          * Set up the subevent context

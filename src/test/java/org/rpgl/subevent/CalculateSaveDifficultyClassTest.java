@@ -19,6 +19,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.CalculateSaveDifficultyClass class.
+ *
+ * @author Calvin Withun
+ */
 public class CalculateSaveDifficultyClassTest {
 
     @BeforeAll
@@ -63,7 +68,7 @@ public class CalculateSaveDifficultyClassTest {
     }
 
     @Test
-    @DisplayName("CalculateSaveDifficultyClass Subevent setup method works (all test features included)")
+    @DisplayName("CalculateSaveDifficultyClass Subevent prepare method calculates basic save difficulty class correctly")
     void test1() throws Exception {
         /*
          * Set up the subevent context
@@ -78,6 +83,7 @@ public class CalculateSaveDifficultyClassTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = (CalculateSaveDifficultyClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -92,7 +98,7 @@ public class CalculateSaveDifficultyClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(10L, calculateSaveDifficultyClass.get(),
-                "CalculateSaveDifficultyClass Subevent did not calculate raw save DC correctly."
+                "CalculateSaveDifficultyClass Subevent did not calculates basic save difficulty class correctly."
         );
     }
 

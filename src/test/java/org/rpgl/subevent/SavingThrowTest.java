@@ -19,6 +19,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for subevent.SavingThrow class.
+ *
+ * @author Calvin Withun
+ */
 public class SavingThrowTest {
 
     @BeforeAll
@@ -65,7 +70,7 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("SavingThrow Subevent setup method & roll work")
+    @DisplayName("SavingThrow Subevent prepare method & roll work")
     void test1() throws Exception {
         /*
          * Set up the subevent context
@@ -82,6 +87,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -97,7 +103,7 @@ public class SavingThrowTest {
          * Verify subevent behaves as expected
          */
         assertEquals(10L, savingThrow.get(),
-                "SavingThrow Subevent did not report raw roll correctly."
+                "SavingThrow Subevent did not report base roll correctly."
         );
     }
 
@@ -118,6 +124,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -154,6 +161,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -191,6 +199,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -228,6 +237,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -266,6 +276,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -304,6 +315,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -360,6 +372,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -386,7 +399,7 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("SavingThrow Subevent can invoke nested subevents on pass")
+    @DisplayName("SavingThrow Subevent invokes pass nested subevents and not fail nested subevents on pass")
     void test9() throws Exception {
         /*
          * Set up the subevent context
@@ -408,6 +421,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -430,7 +444,7 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("SavingThrow Subevent can invoke nested subevents on fail")
+    @DisplayName("SavingThrow Subevent invokes fail nested subevents and not pass nested subevents on fail")
     void test10() throws Exception {
         /*
          * Set up the subevent context
@@ -452,6 +466,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -492,6 +507,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -540,6 +556,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -588,6 +605,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -636,6 +654,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -684,6 +703,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -733,6 +753,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -764,7 +785,7 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("SavingThrow Subevent can deal damage on a fail")
+    @DisplayName("SavingThrow Subevent can deal (full) damage on a fail")
     void test17() throws Exception {
         /*
          * Set up the subevent context
@@ -796,6 +817,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -849,6 +871,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -902,6 +925,7 @@ public class SavingThrowTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);

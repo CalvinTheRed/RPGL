@@ -10,6 +10,11 @@ import org.rpgl.exception.SubeventMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for subevent.ContestRerollChance class.
+ *
+ * @author Calvin Withun
+ */
 public class ContestRerollChanceTest {
 
     @Test

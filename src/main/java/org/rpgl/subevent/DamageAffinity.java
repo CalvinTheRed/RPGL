@@ -35,15 +35,15 @@ public class DamageAffinity extends Subevent {
         this.subeventJson.put("vulnerability_revoked", false);
     }
 
-    public void giveImmunity() {
+    public void grantImmunity() {
         this.subeventJson.put("immunity", true);
     }
 
-    public void giveResistance() {
+    public void grantResistance() {
         this.subeventJson.put("resistance", true);
     }
 
-    public void giveVulnerability() {
+    public void grantVulnerability() {
         this.subeventJson.put("vulnerability", true);
     }
 

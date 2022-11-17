@@ -27,9 +27,7 @@ public class CalculateAbilityScore extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        String abilityScoreName = (String) this.subeventJson.get("ability");
-        Long rawAbilityScore = (Long) this.getSource().seek("ability_scores." + abilityScoreName);
-        this.subeventJson.put("base", rawAbilityScore);
+        this.subeventJson.put("base", this.getSource().seek("ability_scores." + this.subeventJson.get("ability")));
     }
 
 }

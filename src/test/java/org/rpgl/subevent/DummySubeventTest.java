@@ -19,6 +19,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.DummySubevent class.
+ *
+ * @author Calvin Withun
+ */
 public class DummySubeventTest {
 
     @BeforeAll
@@ -64,7 +69,7 @@ public class DummySubeventTest {
     }
 
     @Test
-    @DisplayName("DummySubevent Subevent can be prepared and invoked")
+    @DisplayName("DummySubevent Subevent increments counter by 1 when invoked")
     void test1() throws Exception {
         /*
          * Set up the subevent context
@@ -78,6 +83,7 @@ public class DummySubeventTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DummySubevent dummySubevent = (DummySubevent) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -86,7 +92,6 @@ public class DummySubeventTest {
          * Invoke subevent methods
          */
         dummySubevent.setSource(object);
-        dummySubevent.prepare(context);
         dummySubevent.setTarget(object);
         dummySubevent.invoke(context);
 

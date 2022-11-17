@@ -12,6 +12,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for core.RPGLObject class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLObjectTest {
 
     @BeforeAll
@@ -37,6 +42,8 @@ public class RPGLObjectTest {
     void test1() {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         RPGLEffect effect = RPGLFactory.newEffect("dummy:dummy");
+        assert object != null;
+        assert effect != null;
         assertTrue(object.addEffect(effect),
                 "Object dummy:dummy_hollow should be able to add a new Effect to itself."
         );
@@ -51,9 +58,13 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         RPGLEffect effect1 = RPGLFactory.newEffect("dummy:dummy");
         RPGLEffect effect2 = RPGLFactory.newEffect("dummy:dummy");
+        assert object != null;
+        assert effect1 != null;
+        assert effect2 != null;
         object.addEffect(effect1);
         object.addEffect(effect2);
         RPGLEffect[] effectsArray = object.getEffects();
+
         assertEquals(effect1, effectsArray[0],
                 "Object dummy:dummy_hollow should have particular Effect dummy:dummy applied at index 0."
         );
@@ -67,8 +78,10 @@ public class RPGLObjectTest {
     void test3() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
+        assert object != null;
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
+
         assertEquals(2, object.getProficiencyBonus(context),
                 "Object dummy:dummy_hollow should have a proficiency bonus of +2."
         );
@@ -108,8 +121,10 @@ public class RPGLObjectTest {
     void test5() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         JsonArray contextArray = new JsonArray();
+        assert object != null;
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
+
         assertEquals(-2L, object.getAbilityModifier(context, "str"),
                 "Object dummy:dummy_hollow str score of 7 should have modifier of -2."
         );
@@ -134,10 +149,13 @@ public class RPGLObjectTest {
     @DisplayName("Object can process dummy Event without error")
     void test6() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
+
         RPGLEvent event = RPGLFactory.newEvent("dummy:dummy");
+        assert event != null;
         object.invokeEvent(new RPGLObject[] {object}, event, context);
     }
 
@@ -146,13 +164,15 @@ public class RPGLObjectTest {
     void test7() throws Exception {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         RPGLEffect effect = RPGLFactory.newEffect("dummy:dummy");
+        assert object != null;
+        assert effect != null;
         object.addEffect(effect);
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
 
-
         RPGLEvent event = RPGLFactory.newEvent("dummy:dummy");
+        assert event != null;
         object.invokeEvent(new RPGLObject[] {object}, event, context);
 
         assertEquals(1, DummyFunction.counter,
@@ -166,14 +186,17 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         RPGLEffect effect1 = RPGLFactory.newEffect("dummy:dummy");
         RPGLEffect effect2 = RPGLFactory.newEffect("dummy:dummy");
+        assert object != null;
+        assert effect1 != null;
+        assert effect2 != null;
         object.addEffect(effect1);
         object.addEffect(effect2);
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
 
-
         RPGLEvent event = RPGLFactory.newEvent("dummy:dummy");
+        assert event != null;
         object.invokeEvent(new RPGLObject[] {object}, event, context);
 
         assertEquals(1, DummyFunction.counter,

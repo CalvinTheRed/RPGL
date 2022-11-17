@@ -26,7 +26,7 @@ public abstract class Subevent {
     JsonObject subeventJson = new JsonObject();
     LinkedList<RPGLEffect> modifyingEffects = new LinkedList<>();
 
-    private final String subeventId;
+    final String subeventId;
 
     static {
         SUBEVENTS = new HashMap<>();

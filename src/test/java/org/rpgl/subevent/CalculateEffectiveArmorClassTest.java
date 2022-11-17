@@ -19,6 +19,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.CalculateEffectiveArmorClass class.
+ *
+ * @author Calvin Withun
+ */
 public class CalculateEffectiveArmorClassTest {
 
     @BeforeAll
@@ -63,7 +68,7 @@ public class CalculateEffectiveArmorClassTest {
     }
 
     @Test
-    @DisplayName("CalculateEffectiveArmorClass Subevent setup method & getter work")
+    @DisplayName("CalculateEffectiveArmorClass Subevent can be created")
     void test1() throws Exception {
         /*
          * Set up the subevent context
@@ -77,28 +82,17 @@ public class CalculateEffectiveArmorClassTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = (CalculateEffectiveArmorClass) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        JsonArray contextArray = new JsonArray();
-        assert object != null;
-        contextArray.add(object.get("uuid"));
-        RPGLContext context = new RPGLContext(contextArray);
-
-        /*
-         * Invoke subevent method
-         */
-        calculateEffectiveArmorClass.setSource(object);
-        calculateEffectiveArmorClass.prepare(context);
 
         /*
          * Verify subevent behaves as expected
          */
         assertEquals(10L, calculateEffectiveArmorClass.get(),
-                "CalculateEffectiveArmorClass Subevent did not report raw ability score correctly."
+                "CalculateEffectiveArmorClass Subevent did not report effective armor class correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateEffectiveArmorClass Subevent can set ability")
+    @DisplayName("CalculateEffectiveArmorClass Subevent can set effective armor class")
     void test2() throws Exception {
         /*
          * Set up the subevent context
@@ -128,12 +122,12 @@ public class CalculateEffectiveArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(10L, calculateEffectiveArmorClass.get(),
-                "CalculateEffectiveArmorClass Subevent did not set ability score correctly."
+                "CalculateEffectiveArmorClass Subevent did not set effective armor class correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateEffectiveArmorClass Subevent can set ability (override prior set with higher)")
+    @DisplayName("CalculateEffectiveArmorClass Subevent can set effective armor class (override prior set with higher)")
     void test3() throws Exception {
         /*
          * Set up the subevent context
@@ -164,12 +158,12 @@ public class CalculateEffectiveArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(12L, calculateEffectiveArmorClass.get(),
-                "CalculateEffectiveArmorClass Subevent should be able to override ability score set value with higher value."
+                "CalculateEffectiveArmorClass Subevent should be able to override effective armor class set value with higher value."
         );
     }
 
     @Test
-    @DisplayName("CalculateEffectiveArmorClass Subevent can not set ability (override prior set with lower)")
+    @DisplayName("CalculateEffectiveArmorClass Subevent can not set effective armor class (override prior set with lower)")
     void test4() throws Exception {
         /*
          * Set up the subevent context
@@ -200,12 +194,12 @@ public class CalculateEffectiveArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(10L, calculateEffectiveArmorClass.get(),
-                "CalculateEffectiveArmorClass Subevent should not be able to override ability score set value with lower value."
+                "CalculateEffectiveArmorClass Subevent should not be able to override effective armor class set value with lower value."
         );
     }
 
     @Test
-    @DisplayName("CalculateEffectiveArmorClass Subevent can add bonus to ability score")
+    @DisplayName("CalculateEffectiveArmorClass Subevent can add bonus to effective armor class")
     void test5() throws Exception {
         /*
          * Set up the subevent context
@@ -236,12 +230,12 @@ public class CalculateEffectiveArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(13L, calculateEffectiveArmorClass.get(),
-                "CalculateEffectiveArmorClass Subevent did not add bonus to ability score properly."
+                "CalculateEffectiveArmorClass Subevent did not add bonus to effective armor class properly."
         );
     }
 
     @Test
-    @DisplayName("CalculateEffectiveArmorClass Subevent can add bonus to a set ability score")
+    @DisplayName("CalculateEffectiveArmorClass Subevent can add bonus to a set effective armor class")
     void test6() throws Exception {
         /*
          * Set up the subevent context
@@ -272,7 +266,7 @@ public class CalculateEffectiveArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(15L, calculateEffectiveArmorClass.get(),
-                "CalculateEffectiveArmorClass Subevent did not add bonus to set ability score properly."
+                "CalculateEffectiveArmorClass Subevent did not add bonus to set effective armor class properly."
         );
     }
 

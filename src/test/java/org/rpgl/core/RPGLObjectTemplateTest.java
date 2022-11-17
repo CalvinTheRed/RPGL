@@ -12,6 +12,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for core.RPGLObjectTemplate class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLObjectTemplateTest {
 
     @BeforeAll
@@ -34,7 +39,8 @@ public class RPGLObjectTemplateTest {
     @Test
     @DisplayName("object data processed correctly")
     void test1() {
-        RPGLObject object = DatapackLoader.DATAPACKS.get("dummy").getObjectTemplate("dummy").newInstance();
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy");
+        assert object != null;
         JsonObject items = (JsonObject) object.get("items");
 
         assertNotNull(items,

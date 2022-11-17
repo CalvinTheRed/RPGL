@@ -3,6 +3,8 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 
+import java.util.Objects;
+
 public class ContestRerollChance extends Subevent {
 
     public ContestRerollChance() {
@@ -38,7 +40,7 @@ public class ContestRerollChance extends Subevent {
     }
 
     public boolean wasRerollRequested() {
-        return (Boolean) this.subeventJson.get("reroll_requested");
+        return Objects.requireNonNullElse((Boolean) this.subeventJson.get("reroll_requested"), false);
     }
 
     public String getRerollMode() {

@@ -11,6 +11,11 @@ import org.rpgl.exception.SubeventMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for subevent.TargetDamageDiceCollection class.
+ *
+ * @author Calvin Withun
+ */
 public class TargetDamageDiceCollectionTest {
 
     @Test
@@ -209,8 +214,6 @@ public class TargetDamageDiceCollectionTest {
                 "TargetDamageDiceCollection Subevent didn't add the correct typed damage dice."
         );
     }
-
-
 
     @Test
     @DisplayName("TargetDamageDiceCollection Subevent can add new typed damage (bonus)")

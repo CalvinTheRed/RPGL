@@ -13,6 +13,11 @@ import org.rpgl.math.Die;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.TargetDamageRoll class.
+ *
+ * @author Calvin Withun
+ */
 public class TargetDamageRollTest {
 
     @BeforeAll

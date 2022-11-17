@@ -9,6 +9,11 @@ import org.rpgl.exception.ConditionMismatchException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for condition.True class.
+ *
+ * @author Calvin Withun
+ */
 public class TrueTest {
 
     @Test

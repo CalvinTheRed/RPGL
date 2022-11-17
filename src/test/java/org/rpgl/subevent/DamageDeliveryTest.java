@@ -1,6 +1,5 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
@@ -22,6 +21,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.DamageDelivery class.
+ *
+ * @author Calvin Withun
+ */
 public class DamageDeliveryTest {
 
     @BeforeAll
@@ -80,16 +84,13 @@ public class DamageDeliveryTest {
         DamageDelivery damageDelivery = (DamageDelivery) subevent.clone(subeventJson);
         RPGLObject originalObject = RPGLFactory.newObject("dummy:dummy_hollow");
         RPGLObject newObject = RPGLFactory.newObject("dummy:dummy_hollow");
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(originalObject.get("uuid"));
-        contextArray.add(newObject.get("uuid"));
-        RPGLContext context = new RPGLContext(contextArray);
+        assert originalObject != null;
+        assert newObject != null;
 
         /*
          * Invoke subevent method
          */
         damageDelivery.setSource(originalObject);
-        damageDelivery.prepare(context);
         damageDelivery.setTarget(newObject);
 
         /*

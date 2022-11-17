@@ -1,7 +1,8 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
-import org.rpgl.core.RPGLContext;
+
+import java.util.Objects;
 
 public class GetSaveProficiency extends Subevent {
 
@@ -25,17 +26,12 @@ public class GetSaveProficiency extends Subevent {
         return clone;
     }
 
-    @Override
-    public void prepare(RPGLContext context) {
-        this.subeventJson.put("is_proficient", false);
-    }
-
     public void grantProficiency() {
         this.subeventJson.put("is_proficient", true);
     }
 
     public Boolean getIsProficient() {
-        return (Boolean) this.subeventJson.get("is_proficient");
+        return Objects.requireNonNullElse((Boolean) this.subeventJson.get("is_proficient"), false);
     }
 
 }

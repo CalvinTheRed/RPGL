@@ -13,6 +13,11 @@ import org.rpgl.math.Die;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.BaseDamageRoll class.
+ *
+ * @author Calvin Withun
+ */
 public class BaseDamageRollTest {
 
     @BeforeAll
@@ -348,7 +353,7 @@ public class BaseDamageRollTest {
     }
 
     @Test
-    @DisplayName("BaseDamageRoll Subevent prepare method works")
+    @DisplayName("BaseDamageRoll Subevent prepare method rolls all dice")
     void test7() throws JsonFormatException {
         /*
          * Set up the subevent context
@@ -368,7 +373,8 @@ public class BaseDamageRollTest {
                         {
                             "type": "cold",
                             "dice": [
-                                { "size": 10, "determined": 10 }
+                                { "size": 10, "determined": 5 },
+                                { "size": 10, "determined": 5 }
                             ],
                             "bonus": 2
                         }

@@ -19,6 +19,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for subevent.CalculateBaseArmorClass class.
+ *
+ * @author Calvin Withun
+ */
 public class CalculateBaseArmorClassTest {
 
     @BeforeAll
@@ -63,7 +68,7 @@ public class CalculateBaseArmorClassTest {
     }
 
     @Test
-    @DisplayName("CalculateBaseArmorClass Subevent setup method & getter work")
+    @DisplayName("CalculateBaseArmorClass Subevent prepare method sets base armor class")
     void test1() throws Exception {
         /*
          * Set up the subevent context
@@ -77,6 +82,7 @@ public class CalculateBaseArmorClassTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -91,12 +97,12 @@ public class CalculateBaseArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(9L, calculateBaseArmorClass.get(),
-                "CalculateBaseArmorClass Subevent did not report raw ability score correctly."
+                "CalculateBaseArmorClass Subevent did not set base armor class correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateBaseArmorClass Subevent can set ability")
+    @DisplayName("CalculateBaseArmorClass Subevent can set armor class")
     void test2() throws Exception {
         /*
          * Set up the subevent context
@@ -110,6 +116,7 @@ public class CalculateBaseArmorClassTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -125,12 +132,12 @@ public class CalculateBaseArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(10L, calculateBaseArmorClass.get(),
-                "CalculateBaseArmorClass Subevent did not set ability score correctly."
+                "CalculateBaseArmorClass Subevent did not set armor class correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateBaseArmorClass Subevent can set ability (override prior set with higher)")
+    @DisplayName("CalculateBaseArmorClass Subevent can set armor class (override prior set with higher)")
     void test3() throws Exception {
         /*
          * Set up the subevent context
@@ -144,6 +151,7 @@ public class CalculateBaseArmorClassTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -160,12 +168,12 @@ public class CalculateBaseArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(12L, calculateBaseArmorClass.get(),
-                "CalculateBaseArmorClass Subevent should be able to override ability score set value with higher value."
+                "CalculateBaseArmorClass Subevent should be able to override armor class set value with higher value."
         );
     }
 
     @Test
-    @DisplayName("CalculateBaseArmorClass Subevent can not set ability (override prior set with lower)")
+    @DisplayName("CalculateBaseArmorClass Subevent can not set armor class (override prior set with lower)")
     void test4() throws Exception {
         /*
          * Set up the subevent context
@@ -179,6 +187,7 @@ public class CalculateBaseArmorClassTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -195,12 +204,12 @@ public class CalculateBaseArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(10L, calculateBaseArmorClass.get(),
-                "CalculateBaseArmorClass Subevent should not be able to override ability score set value with lower value."
+                "CalculateBaseArmorClass Subevent should not be able to override armor class set value with lower value."
         );
     }
 
     @Test
-    @DisplayName("CalculateBaseArmorClass Subevent can add bonus to ability score")
+    @DisplayName("CalculateBaseArmorClass Subevent can add bonus to armor class")
     void test5() throws Exception {
         /*
          * Set up the subevent context
@@ -214,6 +223,7 @@ public class CalculateBaseArmorClassTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -229,12 +239,12 @@ public class CalculateBaseArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(12L, calculateBaseArmorClass.get(),
-                "CalculateBaseArmorClass Subevent did not add bonus to ability score properly."
+                "CalculateBaseArmorClass Subevent did not add bonus to armor class properly."
         );
     }
 
     @Test
-    @DisplayName("CalculateBaseArmorClass Subevent can add bonus to a set ability score")
+    @DisplayName("CalculateBaseArmorClass Subevent can add bonus to a set armor class")
     void test6() throws Exception {
         /*
          * Set up the subevent context
@@ -248,6 +258,7 @@ public class CalculateBaseArmorClassTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateBaseArmorClass calculateBaseArmorClass = (CalculateBaseArmorClass) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -264,7 +275,7 @@ public class CalculateBaseArmorClassTest {
          * Verify subevent behaves as expected
          */
         assertEquals(15L, calculateBaseArmorClass.get(),
-                "CalculateBaseArmorClass Subevent did not add bonus to set ability score properly."
+                "CalculateBaseArmorClass Subevent did not add bonus to set armor class properly."
         );
     }
 
