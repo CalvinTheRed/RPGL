@@ -5,8 +5,5 @@
   "name": "Hollow Dummy Item",
   "tags": [ ],
   "weight": 1,
-  "while_equipped": [ ],
-  "damage": {
-
-  }
+  "while_equipped": [ ]
 }

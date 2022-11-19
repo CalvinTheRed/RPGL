@@ -50,7 +50,7 @@ public class SavingThrow extends ContestRoll {
 
         this.roll();
         this.checkForReroll(context); // TODO eventually have this in a while loop?
-        if (this.getRoll() < (Long) this.subeventJson.get("save_difficulty_class")) {
+        if (this.get() < (Long) this.subeventJson.get("save_difficulty_class")) {
             this.resolveSaveFail(context);
         } else {
             this.resolveSavePass(context);
@@ -194,11 +194,6 @@ public class SavingThrow extends ContestRoll {
                 for (Map.Entry<String, Object> damageEntryElement : baseDamage.entrySet()) {
                     Long value = (Long) damageEntryElement.getValue();
                     value /= 2L;
-                    if (value < 1L) {
-                        // You can never deal less than 1 point of damage for any given
-                        // damage type, given that you deal damage of that type at all.
-                        value = 1L;
-                    }
                     damageEntryElement.setValue(value);
                 }
             }
@@ -215,11 +210,6 @@ public class SavingThrow extends ContestRoll {
                 if (baseDamage.containsKey(damageType)) {
                     Long baseTypedDamage = (Long) baseDamage.get(damageType);
                     baseTypedDamage += (Long) targetDamageEntry.getValue();
-                    if (baseTypedDamage < 1L) {
-                        // You can never deal less than 1 point of damage for any given
-                        // damage type, given that you deal damage of that type at all.
-                        baseTypedDamage = 1L;
-                    }
                     baseDamage.put(damageType, baseTypedDamage);
                 } else {
                     baseDamage.entrySet().add(targetDamageEntry);
@@ -255,7 +245,9 @@ public class SavingThrow extends ContestRoll {
         JsonObject damageDeliveryJson = JsonParser.parseObjectString(damageDeliveryJsonString);
         damageDelivery.joinSubeventJson(damageDeliveryJson);
         damageDelivery.setSource(this.getSource());
+        damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());
+        damageDelivery.invoke(context);
         this.getTarget().receiveDamage(context, damageDelivery);
     }
 

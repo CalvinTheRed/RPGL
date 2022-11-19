@@ -1,5 +1,7 @@
 package org.rpgl.subevent;
 
+import java.util.Objects;
+
 public abstract class Calculation extends Subevent {
 
     public Calculation(String subeventId) {
@@ -14,6 +16,10 @@ public abstract class Calculation extends Subevent {
         this.subeventJson.put("bonus", currentBonus + bonus);
     }
 
+    public long getBonus() {
+        return Objects.requireNonNullElse((Long) this.subeventJson.get("bonus"), 0L);
+    }
+
     public void set(long value) {
         Long previousValue = (Long) this.subeventJson.get("set");
         if (previousValue == null || previousValue < value) {
@@ -22,9 +28,8 @@ public abstract class Calculation extends Subevent {
     }
 
     public Long get() {
-        Long bonus = (Long) this.subeventJson.get("bonus");
         Long set = (Long) this.subeventJson.get("set");
-        bonus = (bonus != null ? bonus : 0L);
+        Long bonus = this.getBonus();
         if (set != null) {
             return set + bonus;
         }

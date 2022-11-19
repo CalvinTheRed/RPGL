@@ -208,4 +208,20 @@ public class RPGLObject extends JsonObject {
         return calculateBaseArmorClass.get();
     }
 
+    public void giveItem(String itemUuid) {
+        JsonObject items = (JsonObject) this.get("items");
+        JsonArray inventory = (JsonArray) items.get("inventory");
+        inventory.add(itemUuid);
+    }
+
+    public void equipItem(String itemUuid, String equipmentSlot) {
+        // TODO make a subevent for equipping an item
+        JsonObject items = (JsonObject) this.get("items");
+        JsonArray inventory = (JsonArray) items.get("inventory");
+        if (inventory.contains(itemUuid)) {
+            items.put(equipmentSlot, itemUuid);
+            // TODO account for 2-handed items...
+        }
+    }
+
 }

@@ -89,8 +89,4 @@ public abstract class ContestRoll extends Calculation {
         return false;
     }
 
-    public Long getRoll() {
-        return (Long) this.subeventJson.get("base") + (Long) this.subeventJson.get("bonus");
-    }
-
 }

@@ -31,7 +31,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "not_a_subevent"
@@ -55,7 +55,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "attack_damage_roll",
@@ -80,7 +80,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
+        AttackDamageRoll attackDamageRoll = (AttackDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Verify subevent behaves as expected
@@ -92,7 +92,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+        assertEquals(expectedJson.toString(), attackDamageRoll.getDamage().toString(),
                 "AttackDamageRoll Subevent did not accurately report rolled damage"
         );
     }
@@ -103,7 +103,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "attack_damage_roll",
@@ -125,12 +125,12 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
+        AttackDamageRoll attackDamageRoll = (AttackDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        baseDamageRoll.roll();
+        attackDamageRoll.roll();
 
         /*
          * Verify subevent behaves as expected
@@ -142,7 +142,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+        assertEquals(expectedJson.toString(), attackDamageRoll.getDamage().toString(),
                 "AttackDamageRoll Subevent did not roll dice correctly"
         );
     }
@@ -153,7 +153,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "attack_damage_roll",
@@ -176,12 +176,12 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
+        AttackDamageRoll attackDamageRoll = (AttackDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        baseDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, "fire");
+        attackDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, "fire");
 
         /*
          * Verify subevent behaves as expected
@@ -193,7 +193,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+        assertEquals(expectedJson.toString(), attackDamageRoll.getDamage().toString(),
                 "AttackDamageRoll Subevent did not re-roll dice correctly"
         );
     }
@@ -204,7 +204,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "attack_damage_roll",
@@ -227,12 +227,12 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
+        AttackDamageRoll attackDamageRoll = (AttackDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        baseDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, null);
+        attackDamageRoll.rerollTypedDiceLessThanOrEqualTo(1L, null);
 
         /*
          * Verify subevent behaves as expected
@@ -244,7 +244,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+        assertEquals(expectedJson.toString(), attackDamageRoll.getDamage().toString(),
                 "AttackDamageRoll Subevent did not re-roll dice correctly"
         );
     }
@@ -255,7 +255,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "attack_damage_roll",
@@ -278,12 +278,12 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
+        AttackDamageRoll attackDamageRoll = (AttackDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        baseDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, "fire");
+        attackDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, "fire");
 
         /*
          * Verify subevent behaves as expected
@@ -295,7 +295,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+        assertEquals(expectedJson.toString(), attackDamageRoll.getDamage().toString(),
                 "AttackDamageRoll Subevent did not set dice correctly"
         );
     }
@@ -306,7 +306,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "attack_damage_roll",
@@ -329,12 +329,12 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
+        AttackDamageRoll attackDamageRoll = (AttackDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        baseDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, null);
+        attackDamageRoll.setTypedDiceLessThanOrEqualTo(1L, 10L, null);
 
         /*
          * Verify subevent behaves as expected
@@ -346,7 +346,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+        assertEquals(expectedJson.toString(), attackDamageRoll.getDamage().toString(),
                 "AttackDamageRoll Subevent did not set dice correctly"
         );
     }
@@ -357,7 +357,7 @@ public class AttackDamageRollTest {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new BaseDamageRoll();
+        Subevent subevent = new AttackDamageRoll();
         String subeventJsonString = """
                 {
                     "subevent": "attack_damage_roll",
@@ -380,12 +380,12 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        BaseDamageRoll baseDamageRoll = (BaseDamageRoll) subevent.clone(subeventJson);
+        AttackDamageRoll attackDamageRoll = (AttackDamageRoll) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent method
          */
-        baseDamageRoll.prepare(null);
+        attackDamageRoll.prepare(null);
 
         /*
          * Verify subevent behaves as expected
@@ -397,7 +397,7 @@ public class AttackDamageRollTest {
                 }
                 """;
         JsonObject expectedJson = JsonParser.parseObjectString(expectedJsonString);
-        assertEquals(expectedJson.toString(), baseDamageRoll.getDamage().toString(),
+        assertEquals(expectedJson.toString(), attackDamageRoll.getDamage().toString(),
                 "AttackDamageRoll Subevent did not roll dice correctly"
         );
     }
