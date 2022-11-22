@@ -12,11 +12,11 @@ import org.rpgl.exception.SubeventMismatchException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testing class for subevent.GetSaveProficiency class.
+ * Testing class for subevent.GetWeaponProficiency class.
  *
  * @author Calvin Withun
  */
-public class GetSaveProficiencyTest {
+public class GetWeaponProficiencyTest {
 
     @AfterEach
     void afterEach() {
@@ -24,12 +24,12 @@ public class GetSaveProficiencyTest {
     }
 
     @Test
-    @DisplayName("GetSaveProficiency Subevent throws SubeventMismatchException when subevent type doesn't match")
+    @DisplayName("GetWeaponProficiency Subevent throws SubeventMismatchException when subevent type doesn't match")
     void test0() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new GetSaveProficiency();
+        Subevent subevent = new GetWeaponProficiency();
         String subeventJsonString = """
                 {
                     "subevent": "not_a_subevent"
@@ -43,60 +43,60 @@ public class GetSaveProficiencyTest {
          */
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.clone(subeventJson).invoke(context),
-                "GetSaveProficiency Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
+                "GetWeaponProficiency Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
 
     @Test
-    @DisplayName("GetSaveProficiency Subevent defaults to not indicating proficiency")
+    @DisplayName("GetWeaponProficiency Subevent defaults to not indicating proficiency")
     void test1() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new GetSaveProficiency();
+        Subevent subevent = new GetWeaponProficiency();
         String subeventJsonString = """
                 {
-                    "subevent": "get_save_proficiency",
-                    "save_ability": "str"
+                    "subevent": "get_weapon_proficiency",
+                    "item": ""
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        GetSaveProficiency getSaveProficiency = (GetSaveProficiency) subevent.clone(subeventJson);
+        GetWeaponProficiency getWeaponProficiency = (GetWeaponProficiency) subevent.clone(subeventJson);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse(getSaveProficiency.getIsProficient(),
-                "GetSaveProficiency Subevent should default to not indicate proficiency."
+        assertFalse(getWeaponProficiency.getIsProficient(),
+                "GetWeaponProficiency Subevent should default to not indicate proficiency."
         );
     }
 
     @Test
-    @DisplayName("GetSaveProficiency Subevent can update to indicate proficiency")
+    @DisplayName("GetWeaponProficiency Subevent can update to indicate proficiency")
     void test2() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new GetSaveProficiency();
+        Subevent subevent = new GetWeaponProficiency();
         String subeventJsonString = """
                 {
-                    "subevent": "get_save_proficiency",
-                    "save_ability": "str"
+                    "subevent": "get_weapon_proficiency",
+                    "item": ""
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        GetSaveProficiency getSaveProficiency = (GetSaveProficiency) subevent.clone(subeventJson);
+        GetWeaponProficiency getWeaponProficiency = (GetWeaponProficiency) subevent.clone(subeventJson);
 
         /*
          * Invoke subevent methods
          */
-        getSaveProficiency.grantProficiency();
+        getWeaponProficiency.grantProficiency();
 
         /*
          * Verify subevent behaves as expected
          */
-        assertTrue(getSaveProficiency.getIsProficient(),
-                "GetSaveProficiency Subevent should indicate proficiency after having it granted."
+        assertTrue(getWeaponProficiency.getIsProficient(),
+                "GetWeaponProficiency Subevent should indicate proficiency after having it granted."
         );
     }
 

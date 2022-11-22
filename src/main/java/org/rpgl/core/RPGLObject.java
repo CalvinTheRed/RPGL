@@ -118,27 +118,42 @@ public class RPGLObject extends JsonObject {
         return (abilityScore - 10L) / 2L;
     }
 
-    public Long getSaveProficiencyBonus(RPGLContext context, String saveAbility) throws Exception {
-        GetSaveProficiency getSaveProficiency = new GetSaveProficiency();
+    public boolean isProficientInSavingThrow(RPGLContext context, String saveAbility) throws Exception {
+        GetSavingThrowProficiency getSavingThrowProficiency = new GetSavingThrowProficiency();
         String getSaveProficiencyJsonString = String.format("""
                         {
-                            "subevent": "get_save_proficiency",
+                            "subevent": "get_saving_throw_proficiency",
                             "save_ability": "%s"
                         }
                         """,
                 saveAbility
         );
         JsonObject getSaveProficiencyJson = JsonParser.parseObjectString(getSaveProficiencyJsonString);
-        getSaveProficiency.joinSubeventJson(getSaveProficiencyJson);
-        getSaveProficiency.setSource(this);
-        getSaveProficiency.prepare(context);
-        getSaveProficiency.setTarget(this);
-        getSaveProficiency.invoke(context);
-        if (getSaveProficiency.getIsProficient()) {
-            return this.getProficiencyBonus(context);
-        } else {
-            return 0L;
-        }
+        getSavingThrowProficiency.joinSubeventJson(getSaveProficiencyJson);
+        getSavingThrowProficiency.setSource(this);
+        getSavingThrowProficiency.prepare(context);
+        getSavingThrowProficiency.setTarget(this);
+        getSavingThrowProficiency.invoke(context);
+        return getSavingThrowProficiency.getIsProficient();
+    }
+
+    public boolean isProficientWithWeapon(RPGLContext context, String itemUuid) throws Exception {
+        GetWeaponProficiency getWeaponProficiency = new GetWeaponProficiency();
+        String getWeaponProficiencyJsonString = String.format("""
+                        {
+                            "subevent": "get_weapon_proficiency",
+                            "item": "%s"
+                        }
+                        """,
+                itemUuid
+        );
+        JsonObject getSaveProficiencyJson = JsonParser.parseObjectString(getWeaponProficiencyJsonString);
+        getWeaponProficiency.joinSubeventJson(getSaveProficiencyJson);
+        getWeaponProficiency.setSource(this);
+        getWeaponProficiency.prepare(context);
+        getWeaponProficiency.setTarget(this);
+        getWeaponProficiency.invoke(context);
+        return getWeaponProficiency.getIsProficient();
     }
 
     public void receiveDamage(RPGLContext context, DamageDelivery damageDelivery) throws Exception {

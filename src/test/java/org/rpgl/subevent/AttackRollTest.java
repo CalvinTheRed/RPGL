@@ -703,8 +703,8 @@ public class AttackRollTest {
                 ]
                 """;
         JsonArray naturalWeaponDamageArray = JsonParser.parseArrayString(naturalWeaponDamageArrayString);
-        assertEquals(0L, attackRoll.subeventJson.get("bonus"),
-                "AttackRoll Subevent should have a bonus of 0 (STR-2, PROF+2)."
+        assertEquals(-2L, attackRoll.subeventJson.get("bonus"),
+                "AttackRoll Subevent should have a bonus of 0 (STR-2, no PROF)."
                 // TODO refactor this to account for weapon proficiency once it is implemented
         );
         assertEquals(naturalWeaponDamageArray.toString(), attackRoll.subeventJson.get("damage").toString(),

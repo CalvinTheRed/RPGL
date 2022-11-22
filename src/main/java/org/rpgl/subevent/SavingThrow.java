@@ -41,13 +41,22 @@ public class SavingThrow extends ContestRoll {
 
     @Override
     public void invoke(RPGLContext context) throws Exception {
+        /*
+         * Override normal invoke() logic
+         */
         this.verifySubevent(this.subeventId);
 
         RPGLObject target = this.getTarget();
         this.addBonus(target.getAbilityModifier(context, (String) this.subeventJson.get("save_ability")));
-        this.addBonus(target.getSaveProficiencyBonus(context, (String) this.subeventJson.get("save_ability")));
+        if (target.isProficientInSavingThrow(context, (String) this.subeventJson.get("save_ability"))) {
+            this.addBonus(target.getProficiencyBonus(context));
+        }
+
         context.processSubevent(this);
 
+        /*
+         * Resume normal invoke() logic here
+         */
         this.roll();
         this.checkForReroll(context); // TODO eventually have this in a while loop?
         if (this.get() < (Long) this.subeventJson.get("save_difficulty_class")) {

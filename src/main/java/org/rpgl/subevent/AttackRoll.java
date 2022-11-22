@@ -110,9 +110,10 @@ public class AttackRoll extends ContestRoll {
         String attackType = (String) this.subeventJson.get("attack_type");
         this.addBonus(this.getSource().getAbilityModifier(context, weapon.getAttackAbility(attackType)));
 
-        // Add proficiency bonus to the roll (not all natural weapon attacks are made with proficiency).
-        // TODO make a Subevent to check if a RPGLObject is proficient with a RPGLItem before applying bonus
-        this.addBonus(this.getSource().getProficiencyBonus(context));
+        // Add proficiency bonus to the roll if source is proficient with weapon.
+        if (getSource().isProficientWithWeapon(context, (String) weapon.get("uuid"))) {
+            this.addBonus(this.getSource().getProficiencyBonus(context));
+        }
 
         // Copy damage of natural weapon to Subevent JSON.
         this.subeventJson.put("damage", weapon.getDamage(attackType));
