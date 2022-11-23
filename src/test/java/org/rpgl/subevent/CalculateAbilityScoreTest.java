@@ -176,43 +176,6 @@ public class CalculateAbilityScoreTest {
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can not set ability score (override prior set with lower)")
-    void test4() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new CalculateAbilityScore();
-        String subeventJsonString = """
-                {
-                    "subevent": "calculate_ability_score",
-                    "ability": "str"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        assert object != null;
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
-        RPGLContext context = new RPGLContext(contextArray);
-
-        /*
-         * Invoke subevent method
-         */
-        calculateAbilityScore.setSource(object);
-        calculateAbilityScore.prepare(context);
-        calculateAbilityScore.set(10L);
-        calculateAbilityScore.set(8L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(10L, calculateAbilityScore.get(),
-                "CalculateAbilityScore Subevent should not be able to override ability score set value with lower value."
-        );
-    }
-
-    @Test
     @DisplayName("CalculateAbilityScore Subevent can add bonus to ability score")
     void test5() throws Exception {
         /*

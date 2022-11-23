@@ -21,10 +21,7 @@ public abstract class Calculation extends Subevent {
     }
 
     public void set(long value) {
-        Long previousValue = (Long) this.subeventJson.get("set");
-        if (previousValue == null || previousValue < value) {
-            this.subeventJson.put("set", value);
-        }
+        this.subeventJson.put("set", value);
     }
 
     public Long get() {

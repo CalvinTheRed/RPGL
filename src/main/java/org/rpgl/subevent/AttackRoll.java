@@ -53,7 +53,11 @@ public class AttackRoll extends ContestRoll {
         super.invoke(context);
         this.roll();
         long armorClass = this.getTargetArmorClass(context);
-        if (this.get() < armorClass) {
+
+        if (this.isCriticalHit(context)) {
+            this.resolveCriticalHitDamage(context);
+            this.resolveNestedSubevents(context, "hit");
+        } else if (this.isCriticalMiss() || this.get() < armorClass) {
             this.resolveNestedSubevents(context, "miss");
         } else {
             this.resolveDamage(context);
@@ -151,6 +155,16 @@ public class AttackRoll extends ContestRoll {
         this.deliverDamage(context);
     }
 
+    void resolveCriticalHitDamage(RPGLContext context) throws Exception {
+        BaseDamageDiceCollection baseDamageDiceCollection = this.getBaseDamageDiceCollection(context);
+        TargetDamageDiceCollection targetDamageDiceCollection = this.getTargetDamageDiceCollection(context);
+
+        baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
+        baseDamageDiceCollection.doubleDice();
+        this.subeventJson.put("damage", this.getAttackDamage(context, baseDamageDiceCollection.getDamageDiceCollection()));
+        this.deliverDamage(context);
+    }
+
     BaseDamageDiceCollection getBaseDamageDiceCollection(RPGLContext context) throws Exception {
         BaseDamageDiceCollection baseDamageDiceCollection = new BaseDamageDiceCollection();
         String baseDamageDiceCollectionJsonString = String.format("""
@@ -233,6 +247,27 @@ public class AttackRoll extends ContestRoll {
                 subevent.invoke(context);
             }
         }
+    }
+
+    public boolean isCriticalHit(RPGLContext context) throws Exception {
+        CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
+        String calculateCriticalHitThresholdJsonString = """
+                        {
+                            "subevent": "calculate_critical_hit_threshold"
+                        }
+                        """;
+        JsonObject calculateCriticalHitThresholdJson = JsonParser.parseObjectString(calculateCriticalHitThresholdJsonString);
+        calculateCriticalHitThreshold.joinSubeventJson(calculateCriticalHitThresholdJson);
+        calculateCriticalHitThreshold.setSource(this.getSource());
+        calculateCriticalHitThreshold.prepare(context);
+        calculateCriticalHitThreshold.setTarget(this.getTarget());
+        calculateCriticalHitThreshold.invoke(context);
+
+        return (this.get() - this.getBonus()) >= calculateCriticalHitThreshold.get();
+    }
+
+    public boolean isCriticalMiss() {
+        return (this.get() - this.getBonus()) == 1L;
     }
 
 }

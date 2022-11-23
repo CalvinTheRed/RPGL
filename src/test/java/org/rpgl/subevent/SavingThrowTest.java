@@ -183,44 +183,6 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("SavingThrow Subevent can not set roll (override prior set with lower)")
-    void test4() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new SavingThrow();
-        String subeventJsonString = """
-                {
-                    "subevent": "saving_throw",
-                    "save_ability": "int",
-                    "difficulty_class_ability": "int"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        SavingThrow savingThrow = (SavingThrow) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        assert object != null;
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
-        RPGLContext context = new RPGLContext(contextArray);
-
-        /*
-         * Invoke subevent method
-         */
-        savingThrow.setSource(object);
-        savingThrow.prepare(context);
-        savingThrow.set(10L);
-        savingThrow.set(8L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(10L, savingThrow.get(),
-                "SavingThrow Subevent should not be able to override roll set value with lower value."
-        );
-    }
-
-    @Test
     @DisplayName("SavingThrow Subevent can add bonus to a set roll")
     void test5() throws Exception {
         /*

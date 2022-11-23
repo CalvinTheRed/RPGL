@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for subevent.CalculateProficiencyModifier class.
+ * Testing class for subevent.CalculateCriticalHitThreshold class.
  *
  * @author Calvin Withun
  */
-public class CalculateProficiencyModifierTest {
+public class CalculateCriticalHitThresholdTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -44,12 +44,12 @@ public class CalculateProficiencyModifierTest {
     }
 
     @Test
-    @DisplayName("CalculateProficiencyModifier Subevent throws SubeventMismatchException when subevent type doesn't match")
+    @DisplayName("CalculateCriticalHitThreshold Subevent throws SubeventMismatchException when subevent type doesn't match")
     void test0() throws JsonFormatException {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateCriticalHitThreshold();
         String subeventJsonString = """
                 {
                     "subevent": "not_a_subevent"
@@ -63,24 +63,24 @@ public class CalculateProficiencyModifierTest {
          */
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.clone(subeventJson).invoke(context),
-                "CalculateProficiencyModifier Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
+                "CalculateCriticalHitThreshold Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
         );
     }
 
     @Test
-    @DisplayName("CalculateProficiencyModifier Subevent prepare method assigns base proficiency modifier")
+    @DisplayName("CalculateCriticalHitThreshold Subevent prepare method defaults critical hit threshold correctly")
     void test1() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateCriticalHitThreshold();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_critical_hit_threshold"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         assert object != null;
         JsonArray contextArray = new JsonArray();
@@ -90,31 +90,31 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
+        calculateCriticalHitThreshold.setSource(object);
+        calculateCriticalHitThreshold.prepare(context);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(2L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not assign base proficiency modifier correctly."
+        assertEquals(20L, calculateCriticalHitThreshold.get(),
+                "CalculateCriticalHitThreshold Subevent should default to 20."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can set proficiency modifier")
+    @DisplayName("CalculateCriticalHitThreshold Subevent can set critical hit threshold")
     void test2() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateCriticalHitThreshold();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_critical_hit_threshold"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         assert object != null;
         JsonArray contextArray = new JsonArray();
@@ -124,32 +124,32 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.set(3L);
+        calculateCriticalHitThreshold.setSource(object);
+        calculateCriticalHitThreshold.prepare(context);
+        calculateCriticalHitThreshold.set(10L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not set proficiency modifier correctly."
+        assertEquals(10L, calculateCriticalHitThreshold.get(),
+                "CalculateCriticalHitThreshold Subevent did not set critical hit threshold correctly."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can set proficiency modifier (override prior set with higher)")
+    @DisplayName("CalculateCriticalHitThreshold Subevent can set critical hit threshold (override prior set with higher)")
     void test3() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateCriticalHitThreshold();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_critical_hit_threshold"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         assert object != null;
         JsonArray contextArray = new JsonArray();
@@ -159,33 +159,33 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.set(3L);
-        calculateProficiencyModifier.set(4L);
+        calculateCriticalHitThreshold.setSource(object);
+        calculateCriticalHitThreshold.prepare(context);
+        calculateCriticalHitThreshold.set(10L);
+        calculateCriticalHitThreshold.set(12L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent should be able to override proficiency modifier set value with higher value."
+        assertEquals(12L, calculateCriticalHitThreshold.get(),
+                "CalculateCriticalHitThreshold Subevent should be able to override critical hit threshold set value with higher value."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can add bonus to proficiency modifier")
+    @DisplayName("CalculateCriticalHitThreshold Subevent can add bonus to critical hit threshold")
     void test5() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateCriticalHitThreshold();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_critical_hit_threshold"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         assert object != null;
         JsonArray contextArray = new JsonArray();
@@ -195,32 +195,32 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.addBonus(1L);
+        calculateCriticalHitThreshold.setSource(object);
+        calculateCriticalHitThreshold.prepare(context);
+        calculateCriticalHitThreshold.addBonus(-1L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(3L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not add bonus to proficiency modifier properly."
+        assertEquals(19L, calculateCriticalHitThreshold.get(),
+                "CalculateCriticalHitThreshold Subevent did not add bonus to critical hit threshold properly."
         );
     }
 
     @Test
-    @DisplayName("CalculateAbilityScore Subevent can add bonus to a set proficiency modifier")
+    @DisplayName("CalculateCriticalHitThreshold Subevent can add bonus to a set critical hit threshold")
     void test6() throws Exception {
         /*
          * Set up the subevent context
          */
-        Subevent subevent = new CalculateProficiencyModifier();
+        Subevent subevent = new CalculateCriticalHitThreshold();
         String subeventJsonString = """
                 {
-                    "subevent": "calculate_proficiency_modifier"
+                    "subevent": "calculate_critical_hit_threshold"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateProficiencyModifier calculateProficiencyModifier = (CalculateProficiencyModifier) subevent.clone(subeventJson);
+        CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
         assert object != null;
         JsonArray contextArray = new JsonArray();
@@ -230,16 +230,16 @@ public class CalculateProficiencyModifierTest {
         /*
          * Invoke subevent method
          */
-        calculateProficiencyModifier.setSource(object);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.addBonus(1L);
-        calculateProficiencyModifier.set(3L);
+        calculateCriticalHitThreshold.setSource(object);
+        calculateCriticalHitThreshold.prepare(context);
+        calculateCriticalHitThreshold.addBonus(-1L);
+        calculateCriticalHitThreshold.set(19L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(4L, calculateProficiencyModifier.get(),
-                "CalculateAbilityScore Subevent did not add bonus to set proficiency modifier properly."
+        assertEquals(18L, calculateCriticalHitThreshold.get(),
+                "CalculateCriticalHitThreshold Subevent did not add bonus to set critical hit threshold properly."
         );
     }
 

@@ -3,6 +3,7 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
+import org.jsonutils.JsonParser;
 
 public abstract class DamageDiceCollection extends Subevent {
 
@@ -76,6 +77,14 @@ public abstract class DamageDiceCollection extends Subevent {
     void addNewTypedDamage(JsonObject typedDamage) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         typedDamageArray.add(typedDamage);
+    }
+
+    void doubleDice() throws JsonFormatException {
+        for (Object typedDamageObjectElement : this.getDamageDiceCollection()) {
+            JsonObject typedDamageObject = (JsonObject) typedDamageObjectElement;
+            JsonArray typedDamageDice = (JsonArray) typedDamageObject.get("dice");
+            typedDamageDice.addAll(JsonParser.parseArrayString(typedDamageDice.toString()));
+        }
     }
 
     public JsonArray getDamageDiceCollection() {

@@ -163,42 +163,6 @@ public class CalculateEffectiveArmorClassTest {
     }
 
     @Test
-    @DisplayName("CalculateEffectiveArmorClass Subevent can not set effective armor class (override prior set with lower)")
-    void test4() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new CalculateEffectiveArmorClass();
-        String subeventJsonString = """
-                {
-                    "subevent": "calculate_effective_armor_class"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        CalculateEffectiveArmorClass calculateEffectiveArmorClass = (CalculateEffectiveArmorClass) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        JsonArray contextArray = new JsonArray();
-        assert object != null;
-        contextArray.add(object.get("uuid"));
-        RPGLContext context = new RPGLContext(contextArray);
-
-        /*
-         * Invoke subevent method
-         */
-        calculateEffectiveArmorClass.setSource(object);
-        calculateEffectiveArmorClass.prepare(context);
-        calculateEffectiveArmorClass.set(10L);
-        calculateEffectiveArmorClass.set(8L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(10L, calculateEffectiveArmorClass.get(),
-                "CalculateEffectiveArmorClass Subevent should not be able to override effective armor class set value with lower value."
-        );
-    }
-
-    @Test
     @DisplayName("CalculateEffectiveArmorClass Subevent can add bonus to effective armor class")
     void test5() throws Exception {
         /*

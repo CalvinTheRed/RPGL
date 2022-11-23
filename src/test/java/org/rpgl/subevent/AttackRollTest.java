@@ -423,37 +423,6 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can not set a set die roll (second set is lower)")
-    void test12() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 10
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.roll();
-        attackRoll.set(20L);
-        attackRoll.set(1L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(20L, attackRoll.get(),
-                "AttackRoll failed to set its die roll properly."
-        );
-    }
-
-    @Test
     @DisplayName("AttackRoll Subevent can add bonus to roll")
     void test13() throws JsonFormatException {
         /*
@@ -938,7 +907,7 @@ public class AttackRollTest {
                     "miss": [
                         { "subevent": "dummy_subevent" }
                     ],
-                    "determined": 20
+                    "determined": 19
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
@@ -987,7 +956,7 @@ public class AttackRollTest {
                     "miss": [
                         { "subevent": "dummy_subevent" }
                     ],
-                    "determined": 20
+                    "determined": 19
                 }
                 """,
                 weaponId
@@ -1038,7 +1007,7 @@ public class AttackRollTest {
                     "miss": [
                         { "subevent": "dummy_subevent" }
                     ],
-                    "determined": 20
+                    "determined": 19
                 }
                 """,
                 weaponEquipmentSlot
@@ -1071,6 +1040,147 @@ public class AttackRollTest {
         );
         assertEquals(1L, DummySubevent.counter,
                 "AttackRoll Subevent should increment DummySubevent.counter by 1 on hit."
+        );
+    }
+
+    /*
+     * #################################################################################################################
+     *                                            Critical Hits and Misses
+     * #################################################################################################################
+     */
+
+    @Test
+    @DisplayName("AttackRoll Subevent deals extra damage on critical hit")
+    void test26() throws Exception {
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new AttackRoll();
+        String subeventJsonString = """
+                {
+                    "subevent": "attack_roll",
+                    "attack_ability": "int",
+                    "damage": [
+                        {
+                            "type": "fire",
+                            "dice": [
+                                { "size": 10, "determined": 1 },
+                                { "size": 10, "determined": 1 },
+                            ],
+                            "bonus": 1
+                        }
+                    ],
+                    "determined": 20
+                }
+                """;
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
+
+        /*
+         * Invoke subevent methods
+         */
+        attackRoll.setSource(object);
+        attackRoll.prepare(context);
+        attackRoll.setTarget(object);
+        attackRoll.invoke(context);
+
+        /*
+         * Verify subevent behaves as expected
+         * NOTE: critical hit bonus dice share the same determined values as the original dice
+         */
+        assertEquals(5L, object.seek("health_data.current"),
+                "AttackRoll Subevent should deal 5 damage on hit including critical hit damage (10-5=5)"
+        );
+    }
+
+    @Test
+    @DisplayName("AttackRoll Subevent critical hit guarantees hit")
+    void test27() throws Exception {
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new AttackRoll();
+        String subeventJsonString = """
+                {
+                    "subevent": "attack_roll",
+                    "attack_ability": "int",
+                    "damage": [ ],
+                    "hit": [
+                        { "subevent": "dummy_subevent" }
+                    ],
+                    "determined": 20
+                }
+                """;
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
+
+        /*
+         * Invoke subevent methods
+         */
+        attackRoll.setSource(object);
+        attackRoll.prepare(context);
+        attackRoll.setTarget(object);
+        attackRoll.addBonus(-20L); // should miss normally
+        attackRoll.invoke(context);
+
+        /*
+         * Verify subevent behaves as expected
+         */
+        assertEquals(1, DummySubevent.counter,
+                "AttackRoll Subevent should satisfy hit condition on a critical hit."
+        );
+    }
+
+    @Test
+    @DisplayName("AttackRoll Subevent critical miss guarantees miss")
+    void test28() throws Exception {
+        /*
+         * Set up the subevent context
+         */
+        Subevent subevent = new AttackRoll();
+        String subeventJsonString = """
+                {
+                    "subevent": "attack_roll",
+                    "attack_ability": "int",
+                    "damage": [ ],
+                    "miss": [
+                        { "subevent": "dummy_subevent" }
+                    ],
+                    "determined": 1
+                }
+                """;
+        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
+        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        assert object != null;
+        JsonArray contextArray = new JsonArray();
+        contextArray.add(object.get("uuid"));
+        RPGLContext context = new RPGLContext(contextArray);
+
+        /*
+         * Invoke subevent methods
+         */
+        attackRoll.setSource(object);
+        attackRoll.prepare(context);
+        attackRoll.setTarget(object);
+        attackRoll.addBonus(20L); // should hit normally
+        attackRoll.invoke(context);
+
+        /*
+         * Verify subevent behaves as expected
+         */
+        assertEquals(1, DummySubevent.counter,
+                "AttackRoll Subevent should satisfy miss condition on a critical miss."
         );
     }
 
