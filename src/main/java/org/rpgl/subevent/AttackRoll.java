@@ -158,10 +158,13 @@ public class AttackRoll extends ContestRoll {
     void resolveCriticalHitDamage(RPGLContext context) throws Exception {
         BaseDamageDiceCollection baseDamageDiceCollection = this.getBaseDamageDiceCollection(context);
         TargetDamageDiceCollection targetDamageDiceCollection = this.getTargetDamageDiceCollection(context);
+        CriticalHitDamageDiceCollection criticalHitDamageDiceCollection = this.getCriticalHitDamageDiceCollection(
+                context,
+                baseDamageDiceCollection,
+                targetDamageDiceCollection
+        );
 
-        baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
-        baseDamageDiceCollection.doubleDice();
-        this.subeventJson.put("damage", this.getAttackDamage(context, baseDamageDiceCollection.getDamageDiceCollection()));
+        this.subeventJson.put("damage", this.getAttackDamage(context, criticalHitDamageDiceCollection.getDamageDiceCollection()));
         this.deliverDamage(context);
     }
 
@@ -197,6 +200,30 @@ public class AttackRoll extends ContestRoll {
         targetDamageDiceCollection.prepare(context);
         targetDamageDiceCollection.invoke(context);
         return targetDamageDiceCollection;
+    }
+
+    CriticalHitDamageDiceCollection getCriticalHitDamageDiceCollection(RPGLContext context, BaseDamageDiceCollection baseDamageDiceCollection,
+                                                                       TargetDamageDiceCollection targetDamageDiceCollection) throws Exception {
+        // TODO can this method signature be made any cleaner?
+        baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
+
+        CriticalHitDamageDiceCollection criticalHitDamageDiceCollection = new CriticalHitDamageDiceCollection();
+        String criticalHitDamageDiceCollectionJsonString = String.format("""
+                {
+                    "subevent": "critical_hit_damage_dice_collection",
+                    "damage": %s
+                }
+                """,
+                baseDamageDiceCollection.getDamageDiceCollection().toString()
+        );
+        JsonObject criticalHitDamageDiceCollectionJson = JsonParser.parseObjectString(criticalHitDamageDiceCollectionJsonString);
+        criticalHitDamageDiceCollection.joinSubeventJson(criticalHitDamageDiceCollectionJson);
+        criticalHitDamageDiceCollection.setSource(this.getSource());
+        criticalHitDamageDiceCollection.prepare(context);
+        criticalHitDamageDiceCollection.setTarget(this.getTarget());
+        criticalHitDamageDiceCollection.doubleDice();
+        criticalHitDamageDiceCollection.invoke(context);
+        return criticalHitDamageDiceCollection;
     }
 
     JsonObject getAttackDamage(RPGLContext context, JsonArray damageDiceCollection) throws Exception {

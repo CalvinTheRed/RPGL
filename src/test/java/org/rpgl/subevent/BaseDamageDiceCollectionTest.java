@@ -215,8 +215,6 @@ public class BaseDamageDiceCollectionTest {
         );
     }
 
-
-
     @Test
     @DisplayName("BaseDamageDiceCollection Subevent can add new typed damage (bonus)")
     void test6() throws Exception {
