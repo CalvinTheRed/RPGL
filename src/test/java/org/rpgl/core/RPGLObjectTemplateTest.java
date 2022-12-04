@@ -52,7 +52,7 @@ public class RPGLObjectTemplateTest {
                 "Object dummy:dummy missing items.inventory array."
         );
         assertEquals(4, inventory.size(),
-                // mainhand, offhand, and 2 inventory dummy items
+                // hand_1, hand_2, and 2 inventory dummy items
                 "Object dummy:dummy does not have 4 items in items.inventory."
         );
         assertNotNull(inventory.get(0),
@@ -79,17 +79,17 @@ public class RPGLObjectTemplateTest {
         assertNotNull(UUIDTable.getItem((String) inventory.get(3)),
                 "Object dummy:dummy item items.inventory[3] is not registered to UUIDTable."
         );
-        assertNotNull(items.get("mainhand"),
-                "Object dummy:dummy mainhand slot empty."
+        assertNotNull(items.get("hand_1"),
+                "Object dummy:dummy hand_1 slot empty."
         );
-        assertNotNull(items.get("offhand"),
-                "Object dummy:dummy offhand slot empty."
+        assertNotNull(items.get("hand_2"),
+                "Object dummy:dummy hand_2 slot empty."
         );
-        assertTrue(inventory.contains(items.get("mainhand")),
-                "Object dummy:dummy mainhand item not in inventory"
+        assertTrue(inventory.contains(items.get("hand_1")),
+                "Object dummy:dummy hand_1 item not in inventory"
         );
-        assertTrue(inventory.contains(items.get("offhand")),
-                "Object dummy:dummy offhand item not in inventory"
+        assertTrue(inventory.contains(items.get("hand_2")),
+                "Object dummy:dummy hand_2 item not in inventory"
         );
 
         JsonArray effects = (JsonArray) object.get("effects");

@@ -95,6 +95,7 @@ public class AttackRoll extends ContestRoll {
         assert weapon != null; // TODO is there a better way to do this?
         String attackType = (String) this.subeventJson.get("attack_type");
         this.addBonus(this.getSource().getAbilityModifier(context, weapon.getAttackAbility(attackType)));
+        this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll (all natural weapon attacks are made with proficiency).
         this.addBonus(this.getSource().getProficiencyBonus(context));
@@ -113,6 +114,7 @@ public class AttackRoll extends ContestRoll {
         RPGLItem weapon = UUIDTable.getItem((String) this.getSource().seek("items." + equipmentSlot));
         String attackType = (String) this.subeventJson.get("attack_type");
         this.addBonus(this.getSource().getAbilityModifier(context, weapon.getAttackAbility(attackType)));
+        this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll if source is proficient with weapon.
         if (getSource().isProficientWithWeapon(context, (String) weapon.get("uuid"))) {
@@ -295,6 +297,10 @@ public class AttackRoll extends ContestRoll {
 
     public boolean isCriticalMiss() {
         return (this.get() - this.getBonus()) == 1L;
+    }
+
+    void applyWeaponAttackBonus(RPGLItem weapon) {
+        this.addBonus(weapon.getAttackBonus());
     }
 
 }

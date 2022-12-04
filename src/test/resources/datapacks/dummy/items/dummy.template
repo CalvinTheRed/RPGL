@@ -3,7 +3,6 @@
     "author": "Calvin Withun"
   },
   "name": "Dummy Item",
-  "id": "dummy:dummy",
   "proficiency_tags": [
     "simple",
     "melee"

@@ -26,8 +26,8 @@
     "dummy:dummy"
   ],
   "items": {
-    "mainhand": "dummy:dummy_hollow",
-    "offhand": "dummy:dummy_hollow",
+    "hand_1": "dummy:dummy_hollow",
+    "hand_2": "dummy:dummy_hollow",
     "inventory": [
       "dummy:dummy_hollow",
       "dummy:dummy_hollow"

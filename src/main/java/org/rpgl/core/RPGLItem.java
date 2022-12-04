@@ -92,4 +92,22 @@ public class RPGLItem extends JsonObject {
         return (JsonArray) this.get("weapon_properties");
     }
 
+    /**
+     * 	<p><b><i>getAttackBonus</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public long getAttackBonus()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Returns the item's attack bonus (typically reflective of a +N magic weapon's bonus to attack rolls).
+     * 	</p>
+     *
+     * 	@return the item's attack bonus
+     */
+    public long getAttackBonus() {
+        Long attackBonus = (Long) this.get("attack_bonus");
+        return attackBonus != null ? attackBonus : 0L;
+    }
+
 }

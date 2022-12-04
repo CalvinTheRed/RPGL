@@ -629,7 +629,7 @@ public class AttackRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new AttackRoll();
-        String weaponEquipmentSlot = "mainhand";
+        String weaponEquipmentSlot = "hand_1";
         String subeventJsonString = String.format("""
                 {
                     "subevent": "attack_roll",
@@ -642,11 +642,11 @@ public class AttackRollTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        RPGLItem mainhandWeapon = RPGLFactory.newItem("dummy:dummy_hollow");
+        RPGLItem hand1Weapon = RPGLFactory.newItem("dummy:dummy_hollow");
         assert object != null;
-        assert mainhandWeapon != null;
-        object.giveItem((String) mainhandWeapon.get("uuid"));
-        object.equipItem((String) mainhandWeapon.get("uuid"), weaponEquipmentSlot);
+        assert hand1Weapon != null;
+        object.giveItem((String) hand1Weapon.get("uuid"));
+        object.equipItem((String) hand1Weapon.get("uuid"), weaponEquipmentSlot);
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
@@ -995,7 +995,7 @@ public class AttackRollTest {
          * Set up the subevent context
          */
         Subevent subevent = new AttackRoll();
-        String weaponEquipmentSlot = "mainhand";
+        String weaponEquipmentSlot = "hand_1";
         String subeventJsonString = String.format("""
                 {
                     "subevent": "attack_roll",
@@ -1015,11 +1015,11 @@ public class AttackRollTest {
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
         RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
-        RPGLItem mainhandWeapon = RPGLFactory.newItem("dummy:dummy_hollow");
+        RPGLItem hand1Weapon = RPGLFactory.newItem("dummy:dummy_hollow");
         assert object != null;
-        assert mainhandWeapon != null;
-        object.giveItem((String) mainhandWeapon.get("uuid"));
-        object.equipItem((String) mainhandWeapon.get("uuid"), weaponEquipmentSlot);
+        assert hand1Weapon != null;
+        object.giveItem((String) hand1Weapon.get("uuid"));
+        object.equipItem((String) hand1Weapon.get("uuid"), weaponEquipmentSlot);
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
