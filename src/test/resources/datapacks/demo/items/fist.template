@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Fist (Natural Weapon)",
+  "weapon_properties": [
+    "natural"
+  ],
+  "while_equipped": [ ],
+  "damage": {
+    "melee": [
+      {
+        "type": "bludgeoning",
+        "dice": [
+          {
+            "size": 1,
+            "determined": 2
+          }
+        ],
+        "bonus": 0
+      }
+    ]
+  },
+  "attack_bonus": 0
+}

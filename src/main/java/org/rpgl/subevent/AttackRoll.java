@@ -226,8 +226,7 @@ public class AttackRoll extends ContestRoll {
         return targetDamageDiceCollection;
     }
 
-    CriticalHitDamageDiceCollection getCriticalHitDamageDiceCollection(RPGLContext context, BaseDamageDiceCollection baseDamageDiceCollection,
-                                                                       TargetDamageDiceCollection targetDamageDiceCollection) throws Exception {
+    CriticalHitDamageDiceCollection getCriticalHitDamageDiceCollection(RPGLContext context, BaseDamageDiceCollection baseDamageDiceCollection, TargetDamageDiceCollection targetDamageDiceCollection) throws Exception {
         // TODO can this method signature be made any cleaner?
         baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
 

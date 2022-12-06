@@ -89,7 +89,6 @@ public class CalculateBaseArmorClass extends Calculation {
 
         if (hand1ShieldUuid != null) {
             RPGLItem shield = UUIDTable.getItem(hand1ShieldUuid);
-            System.out.println(shield);
             JsonArray shieldTags = (JsonArray) shield.get("tags");
             if (shieldTags.contains("shield")) {
                 hand1ShieldBonus = (Long) shield.get("armor_class_bonus");

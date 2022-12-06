@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Acid Splash",
+  "area_of_effect": { },
+  "subevents": [
+    {
+      "subevent": "saving_throw",
+      "difficulty_class_ability": "int",
+      "save_ability": "dex",
+      "damage": [
+        {
+          "type": "acid",
+          "dice": [
+            {
+              "size": 6,
+              "determined": 3
+            }
+          ],
+          "bonus": 0
+        }
+      ],
+      "damage_on_pass": "none",
+      "determined": 1
+    }
+  ]
+}

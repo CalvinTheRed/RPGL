@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Claw Attack",
+  "area_of_effect": { },
+  "subevents": [
+    {
+      "subevent": "attack_roll",
+      "weapon": "demo:claw",
+      "attack_type": "melee",
+      "determined": 19
+    }
+  ]
+}
