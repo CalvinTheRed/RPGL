@@ -21,7 +21,7 @@ public class HappyFunTimesTest {
     private RPGLObject leatherArmorDummy;
     private RPGLObject chainShirtDummy;
 
-    private static final String STUDDED_LEATHER_DUMMY_JSON_STRING = """
+    private static final String LEATHER_ARMOR_DUMMY_JSON_STRING = """
             {
               "metadata": {
                 "author": "Calvin Withun"
@@ -45,7 +45,7 @@ public class HappyFunTimesTest {
             }
             """;
 
-    private static final String CHAIN_MAIL_DUMMY_JSON_STRING = """
+    private static final String CHAIN_SHIRT_DUMMY_JSON_STRING = """
             {
               "metadata": {
                 "author": "Calvin Withun"
@@ -86,11 +86,11 @@ public class HappyFunTimesTest {
     void beforeEach() throws JsonFormatException {
         leatherArmorDummy = RPGLFactory.newObject("dummy:blank");
         assert leatherArmorDummy != null;
-        leatherArmorDummy.join(JsonParser.parseObjectString(STUDDED_LEATHER_DUMMY_JSON_STRING));
+        leatherArmorDummy.join(JsonParser.parseObjectString(LEATHER_ARMOR_DUMMY_JSON_STRING));
 
         chainShirtDummy = RPGLFactory.newObject("dummy:blank");
         assert chainShirtDummy != null;
-        chainShirtDummy.join(JsonParser.parseObjectString(CHAIN_MAIL_DUMMY_JSON_STRING));
+        chainShirtDummy.join(JsonParser.parseObjectString(CHAIN_SHIRT_DUMMY_JSON_STRING));
     }
 
     @AfterEach
@@ -137,7 +137,7 @@ public class HappyFunTimesTest {
                 context
         );
 
-        System.out.println("Chain armor HP (after): " + chainShirtDummy.seek("health_data.current")); // 25-([1]+1)])=23
+        System.out.println("Chain armor HP (after): " + chainShirtDummy.seek("health_data.current")); // 25-([3]+0)])=22
 
     }
 
