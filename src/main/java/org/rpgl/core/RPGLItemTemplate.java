@@ -107,6 +107,9 @@ public class RPGLItemTemplate extends JsonObject {
         if (item.get("proficiency_tags") == null) {
             item.put("proficiency_tags", new JsonArray(Collections.singleton("improvised")));
         }
+        if (item.get("tags") == null) {
+            item.put("tags", new JsonArray());
+        }
         processItemDamage(item);
     }
 

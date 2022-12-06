@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.jsonutils.JsonArray;
+import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
@@ -34,7 +35,7 @@ public class CalculateBaseArmorClass extends Calculation {
 
         // Set base armor class from armor (or no armor)
         String armorUuid = (String) this.getSource().seek("items.armor");
-        Long baseArmorClass;
+        long baseArmorClass;
         if (armorUuid == null) {
             // if equipment slot is empty, you are unarmored
             baseArmorClass = this.prepareUnarmored(context);
@@ -50,17 +51,10 @@ public class CalculateBaseArmorClass extends Calculation {
             }
         }
 
-        // Add armor class bonus if wielding shield
-        String shieldUuid = (String) this.getSource().seek("items.hand_2");
-        if (shieldUuid != null) {
-            RPGLItem shield = UUIDTable.getItem(shieldUuid);
-            JsonArray shieldTags = (JsonArray) shield.get("tags");
-            if (shieldTags.contains("shield")) {
-                baseArmorClass += (Long) shield.get("armor_class_bonus");
-            }
-        }
+        // Add shield bonus, if applicable
+        baseArmorClass += this.getShieldBonus();
 
-        // Set base armor class
+        // Set base armor class value in json
         this.subeventJson.put("base", baseArmorClass);
     }
 
@@ -84,6 +78,32 @@ public class CalculateBaseArmorClass extends Calculation {
 
     long prepareUnarmored(RPGLContext context) throws Exception {
         return 10L + this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
+    }
+
+    long getShieldBonus() throws JsonFormatException {
+        // Get armor class bonus if wielding shield (you may only benefit from 1 shield at a time, larger bonus is used).
+        String hand1ShieldUuid = (String) this.getSource().seek("items.hand_1");
+        String hand2ShieldUuid = (String) this.getSource().seek("items.hand_2");
+        long hand1ShieldBonus = 0L;
+        long hand2ShieldBonus = 0L;
+
+        if (hand1ShieldUuid != null) {
+            RPGLItem shield = UUIDTable.getItem(hand1ShieldUuid);
+            System.out.println(shield);
+            JsonArray shieldTags = (JsonArray) shield.get("tags");
+            if (shieldTags.contains("shield")) {
+                hand1ShieldBonus = (Long) shield.get("armor_class_bonus");
+            }
+        }
+        if (hand2ShieldUuid != null) {
+            RPGLItem shield = UUIDTable.getItem(hand2ShieldUuid);
+            JsonArray shieldTags = (JsonArray) shield.get("tags");
+            if (shieldTags.contains("shield")) {
+                hand2ShieldBonus = (Long) shield.get("armor_class_bonus");
+            }
+        }
+
+        return Math.max(hand1ShieldBonus, hand2ShieldBonus);
     }
 
 }
