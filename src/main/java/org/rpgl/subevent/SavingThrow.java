@@ -47,7 +47,7 @@ public class SavingThrow extends ContestRoll {
         this.verifySubevent(this.subeventId);
 
         RPGLObject target = this.getTarget();
-        this.addBonus(target.getAbilityModifier(context, (String) this.subeventJson.get("save_ability")));
+        this.addBonus(target.getAbilityModifierFromAbilityScore(context, (String) this.subeventJson.get("save_ability")));
         if (target.isProficientInSavingThrow(context, (String) this.subeventJson.get("save_ability"))) {
             this.addBonus(target.getProficiencyBonus(context));
         }

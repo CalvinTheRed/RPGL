@@ -24,7 +24,7 @@ public abstract class Calculation extends Subevent {
         this.subeventJson.put("set", value);
     }
 
-    public Long get() {
+    public long get() {
         Long set = (Long) this.subeventJson.get("set");
         Long bonus = this.getBonus();
         if (set != null) {

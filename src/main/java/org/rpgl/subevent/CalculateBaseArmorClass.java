@@ -53,7 +53,7 @@ public class CalculateBaseArmorClass extends Calculation {
         // Add armor class bonus if wielding shield
         String shieldUuid = (String) this.getSource().seek("items.hand_2");
         if (shieldUuid != null) {
-            RPGLItem shield = UUIDTable.getItem(armorUuid);
+            RPGLItem shield = UUIDTable.getItem(shieldUuid);
             JsonArray shieldTags = (JsonArray) shield.get("tags");
             if (shieldTags.contains("shield")) {
                 baseArmorClass += (Long) shield.get("armor_class_bonus");
@@ -71,11 +71,11 @@ public class CalculateBaseArmorClass extends Calculation {
         Long dexterityBonusMaximum = (Long) armor.get("dex_bonus_max");
         if (dexterityBonusMaximum == null) {
             // no limit to dexterity bonus
-            Long dexterityBonus = this.getSource().getAbilityModifier(context, "dex");
+            long dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
             baseArmorClass += dexterityBonus;
         } else if (dexterityBonusMaximum > 0L) {
             // non-zero, positive limit to dexterity bonus
-            Long dexterityBonus = this.getSource().getAbilityModifier(context, "dex");
+            long dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
             baseArmorClass += Math.min(dexterityBonus, dexterityBonusMaximum);
         }
 
@@ -83,7 +83,7 @@ public class CalculateBaseArmorClass extends Calculation {
     }
 
     long prepareUnarmored(RPGLContext context) throws Exception {
-        return 10L + this.getSource().getAbilityModifier(context, "dex");
+        return 10L + this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
     }
 
 }

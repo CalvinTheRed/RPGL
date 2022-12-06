@@ -60,6 +60,14 @@ public class RPGLContext {
         }
     }
 
+    public void add(RPGLObject object) {
+        this.contextObjects.put((String) object.get("uuid"), object);
+    }
+
+    public RPGLObject remove(String objectUuid) {
+        return this.contextObjects.remove(objectUuid);
+    }
+
     /**
      * 	<p><b><i>processSubevent</i></b></p>
      * 	<p>

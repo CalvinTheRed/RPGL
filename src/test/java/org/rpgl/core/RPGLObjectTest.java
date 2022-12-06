@@ -90,28 +90,28 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("Object can calculate ability score modifiers")
     void test4() {
-        assertEquals(-2L, RPGLObject.getAbilityModifier(7L),
+        assertEquals(-2L, RPGLObject.getAbilityModifierFromAbilityScore(7L),
                 "Ability score of 7 should have a modifier of -2."
         );
-        assertEquals(-1L, RPGLObject.getAbilityModifier(8L),
+        assertEquals(-1L, RPGLObject.getAbilityModifierFromAbilityScore(8L),
                 "Ability score of 8 should have a modifier of -1."
         );
-        assertEquals(-1L, RPGLObject.getAbilityModifier(9L),
+        assertEquals(-1L, RPGLObject.getAbilityModifierFromAbilityScore(9L),
                 "Ability score of 9 should have a modifier of -1."
         );
-        assertEquals(0L, RPGLObject.getAbilityModifier(10L),
+        assertEquals(0L, RPGLObject.getAbilityModifierFromAbilityScore(10L),
                 "Ability score of 10 should have a modifier of 0."
         );
-        assertEquals(0L, RPGLObject.getAbilityModifier(11L),
+        assertEquals(0L, RPGLObject.getAbilityModifierFromAbilityScore(11L),
                 "Ability score of 11 should have a modifier of 0."
         );
-        assertEquals(1L, RPGLObject.getAbilityModifier(12L),
+        assertEquals(1L, RPGLObject.getAbilityModifierFromAbilityScore(12L),
                 "Ability score of 12 should have a modifier of +1."
         );
-        assertEquals(1L, RPGLObject.getAbilityModifier(13L),
+        assertEquals(1L, RPGLObject.getAbilityModifierFromAbilityScore(13L),
                 "Ability score of 13 should have a modifier of +1."
         );
-        assertEquals(2L, RPGLObject.getAbilityModifier(14L),
+        assertEquals(2L, RPGLObject.getAbilityModifierFromAbilityScore(14L),
                 "Ability score of 14 should have a modifier of +2."
         );
     }
@@ -125,22 +125,22 @@ public class RPGLObjectTest {
         contextArray.add(object.get("uuid"));
         RPGLContext context = new RPGLContext(contextArray);
 
-        assertEquals(-2L, object.getAbilityModifier(context, "str"),
+        assertEquals(-2L, object.getAbilityModifierFromAbilityScore(context, "str"),
                 "Object dummy:dummy_hollow str score of 7 should have modifier of -2."
         );
-        assertEquals(-1L, object.getAbilityModifier(context, "dex"),
+        assertEquals(-1L, object.getAbilityModifierFromAbilityScore(context, "dex"),
                 "Object dummy:dummy_hollow dex score of 8 should have modifier of -1."
         );
-        assertEquals(-1L, object.getAbilityModifier(context, "con"),
+        assertEquals(-1L, object.getAbilityModifierFromAbilityScore(context, "con"),
                 "Object dummy:dummy_hollow con score of 9 should have modifier of -1."
         );
-        assertEquals(0L, object.getAbilityModifier(context, "int"),
+        assertEquals(0L, object.getAbilityModifierFromAbilityScore(context, "int"),
                 "Object dummy:dummy_hollow int score of 10 should have modifier of 0."
         );
-        assertEquals(0L, object.getAbilityModifier(context, "wis"),
+        assertEquals(0L, object.getAbilityModifierFromAbilityScore(context, "wis"),
                 "Object dummy:dummy_hollow wis score of 11 should have modifier of 0."
         );
-        assertEquals(1L, object.getAbilityModifier(context, "cha"),
+        assertEquals(1L, object.getAbilityModifierFromAbilityScore(context, "cha"),
                 "Object dummy:dummy_hollow cha score of 12 should have modifier of +1."
         );
     }

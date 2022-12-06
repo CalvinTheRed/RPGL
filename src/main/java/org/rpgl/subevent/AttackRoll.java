@@ -76,7 +76,7 @@ public class AttackRoll extends ContestRoll {
 
         // Add attack ability score modifier (defined by the Subevent JSON) as a bonus to the roll.
         String attackAbility = (String) this.subeventJson.get("attack_ability");
-        this.addBonus(this.getSource().getAbilityModifier(context, attackAbility));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityScore(context, attackAbility));
 
         // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
         this.addBonus(this.getSource().getProficiencyBonus(context));
@@ -94,7 +94,7 @@ public class AttackRoll extends ContestRoll {
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
         assert weapon != null; // TODO is there a better way to do this?
         String attackType = (String) this.subeventJson.get("attack_type");
-        this.addBonus(this.getSource().getAbilityModifier(context, weapon.getAttackAbility(attackType)));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityScore(context, weapon.getAttackAbility(attackType)));
         this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll (all natural weapon attacks are made with proficiency).
@@ -113,7 +113,7 @@ public class AttackRoll extends ContestRoll {
         //Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = UUIDTable.getItem((String) this.getSource().seek("items." + equipmentSlot));
         String attackType = (String) this.subeventJson.get("attack_type");
-        this.addBonus(this.getSource().getAbilityModifier(context, weapon.getAttackAbility(attackType)));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityScore(context, weapon.getAttackAbility(attackType)));
         this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll if source is proficient with weapon.
@@ -184,6 +184,28 @@ public class AttackRoll extends ContestRoll {
         baseDamageDiceCollection.joinSubeventJson(baseDamageDiceCollectionJson);
         baseDamageDiceCollection.setSource(this.getSource());
         baseDamageDiceCollection.prepare(context);
+
+        // If the attack is made with an item, add attack modifier to damage roll
+        if (this.subeventJson.get("weapon") != null) {
+            RPGLItem weapon = UUIDTable.getItem((String) this.subeventJson.get("weapon"));
+            String attackAbility = weapon.getAttackAbility((String) this.subeventJson.get("attack_type"));
+            long attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityScore(context, attackAbility);
+
+            String damageBonusArrayString = String.format("""
+                    [
+                        {
+                            "type": "%s",
+                            "bonus": %d
+                        }
+                    ]
+                    """,
+                    this.subeventJson.seek("damage[0].type"), // modifier applies to first damage type?
+                    attackAbilityModifier
+            );
+            JsonArray damageBonusArray = JsonParser.parseArrayString(damageBonusArrayString);
+            baseDamageDiceCollection.addTypedDamage(damageBonusArray);
+        }
+
         baseDamageDiceCollection.setTarget(this.getTarget());
         baseDamageDiceCollection.invoke(context);
         return baseDamageDiceCollection;

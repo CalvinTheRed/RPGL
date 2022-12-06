@@ -90,7 +90,7 @@ public class RPGLObject extends JsonObject {
         return calculateProficiencyModifier.get();
     }
 
-    public Long getAbilityModifier(RPGLContext context, String ability) throws Exception {
+    public long getAbilityModifierFromAbilityScore(RPGLContext context, String ability) throws Exception {
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         String calculateAbilityScoreJsonString = String.format("""
                         {
@@ -106,10 +106,10 @@ public class RPGLObject extends JsonObject {
         calculateAbilityScore.prepare(context);
         calculateAbilityScore.setTarget(this);
         calculateAbilityScore.invoke(context);
-        return getAbilityModifier(calculateAbilityScore.get());
+        return getAbilityModifierFromAbilityScore(calculateAbilityScore.get());
     }
 
-    static Long getAbilityModifier(long abilityScore) {
+    static long getAbilityModifierFromAbilityScore(long abilityScore) {
         if (abilityScore < 10L) {
             // integer division rounds toward zero, so abilityScore must be
             // adjusted to calculate the correct values for negative modifiers

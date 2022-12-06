@@ -31,7 +31,7 @@ public class CalculateSaveDifficultyClass extends Calculation {
         this.subeventJson.put("base", 8L);
         RPGLObject source = this.getSource();
         this.addBonus(source.getProficiencyBonus(context));
-        this.addBonus(source.getAbilityModifier(context, (String) this.subeventJson.get("difficulty_class_ability")));
+        this.addBonus(source.getAbilityModifierFromAbilityScore(context, (String) this.subeventJson.get("difficulty_class_ability")));
     }
 
 }
