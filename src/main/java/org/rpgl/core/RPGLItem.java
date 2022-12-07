@@ -51,6 +51,11 @@ public class RPGLItem extends JsonObject {
         }
     }
 
+    public void setAttackAbility(String attackType, String ability) {
+        JsonObject attackAbilities = (JsonObject) this.get("attack_abilities");
+        attackAbilities.put(attackType, ability);
+    }
+
     /**
      * 	<p><b><i>getDamage</i></b></p>
      * 	<p>

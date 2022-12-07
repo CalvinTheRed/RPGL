@@ -182,9 +182,7 @@ public class RPGLObject extends JsonObject {
             if ("normal".equals(affinity)) {
                 this.reduceHitPoints(damage);
             } else if ("resistance".equals(affinity)) {
-                // resistance cannot reduce damage to 0
-                damage /= 2L;
-                this.reduceHitPoints(damage == 0 ? 1 : damage);
+                this.reduceHitPoints(damage / 2L);
             } else if ("vulnerability".equals(affinity)) {
                 this.reduceHitPoints(damage * 2L);
             }

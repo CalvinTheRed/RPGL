@@ -2,26 +2,24 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Dagger",
+  "name": "Spear",
   "proficiency_tags": [
     "simple",
     "melee",
-    "dagger"
+    "spear"
   ],
   "weapon_properties": [
     "simple",
-    "range",
-    "dagger",
-    "finesse",
-    "light",
-    "thrown"
+    "spear",
+    "thrown",
+    "versatile"
   ],
   "range": {
     "normal": 20,
     "long": 60
   },
-  "weight": 1,
-  "cost": "2g",
+  "weight": 3,
+  "cost": "1g",
   "while_equipped": [ ],
   "damage": {
     "melee": [
@@ -29,8 +27,8 @@
         "type": "piercing",
         "dice": [
           {
-            "size": 4,
-            "determined": 2
+            "size": 6,
+            "determined": 4
           }
         ],
         "bonus": 0
@@ -41,8 +39,8 @@
         "type": "piercing",
         "dice": [
           {
-            "size": 4,
-            "determined": 2
+            "size": 6,
+            "determined": 4
           }
         ],
         "bonus": 0
