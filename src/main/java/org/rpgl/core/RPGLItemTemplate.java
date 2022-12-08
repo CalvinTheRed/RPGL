@@ -51,9 +51,22 @@ public class RPGLItemTemplate extends JsonObject {
      */
     public RPGLItem newInstance() throws JsonFormatException {
         RPGLItem item = new RPGLItem(this);
-        processWhileEquipped(item);
-        processOptionalFields(item);
+        item.putIfAbsent("weight",            0L);
+        item.putIfAbsent("attack_bonus",      0L);
+        item.putIfAbsent("cost",              "0g");
+        item.putIfAbsent("weapon_properties", new JsonArray(Collections.singleton("improvised")));
+        item.putIfAbsent("proficiency_tags",  new JsonArray(Collections.singleton("improvised")));
+        item.putIfAbsent("tags",              new JsonArray(Collections.singleton("improvised")));
+        item.putIfAbsent("thrown_range",      JsonParser.parseObjectString("""
+                    {
+                        "normal": 20,
+                        "long": 60
+                    }
+                    """
+        ));
         processDefaultAttackAbilities(item);
+        processEquippedEffects(item);
+        processItemDamage(item);
         UUIDTable.register(item);
         return item;
     }
@@ -72,45 +85,20 @@ public class RPGLItemTemplate extends JsonObject {
      *
      *  @param item an RPGLItem
      */
-    static void processWhileEquipped(RPGLItem item) {
-        Object keyValue = item.remove("while_equipped");
-        JsonArray whileEquippedIdArray = (JsonArray) keyValue;
-        JsonArray whileEquippedUuidArray = new JsonArray();
-        for (Object whileEquippedIdElement : whileEquippedIdArray) {
-            String effectId = (String) whileEquippedIdElement;
-            RPGLEffect effect = RPGLFactory.newEffect(effectId);
-            assert effect != null;
-            whileEquippedUuidArray.add(effect.get("uuid"));
+    static void processEquippedEffects(RPGLItem item) {
+        JsonArray equippedEffectsIdArray = (JsonArray) item.remove("equipped_effects");
+        if (equippedEffectsIdArray == null) {
+            item.put("equipped_effects", new JsonArray());
+        } else {
+            JsonArray equippedEffectsUuidArray = new JsonArray();
+            for (Object equippedEffectIdElement : equippedEffectsIdArray) {
+                String effectId = (String) equippedEffectIdElement;
+                RPGLEffect effect = RPGLFactory.newEffect(effectId);
+                assert effect != null;
+                equippedEffectsUuidArray.add(effect.get("uuid"));
+            }
+            item.put("equipped_effects", equippedEffectsUuidArray);
         }
-        item.put("while_equipped", whileEquippedUuidArray);
-    }
-
-    /**
-     * 	<p><b><i>processOptionalFields</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processOptionalFields(RPGLItem item)
-     * 	throws JsonFormatException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method ensures that all optional fields in the RPGLItem JSON data are defined and present.
-     * 	</p>
-     *
-     *  @param item an RPGLItem
-     *  @throws JsonFormatException if an error occurs while assigning improvised weapon damage to the RPGLItem
-     */
-    static void processOptionalFields(RPGLItem item) throws JsonFormatException {
-        if (item.get("weapon_properties") == null) {
-            item.put("weapon_properties", new JsonArray(Collections.singleton("improvised")));
-        }
-        if (item.get("proficiency_tags") == null) {
-            item.put("proficiency_tags", new JsonArray(Collections.singleton("improvised")));
-        }
-        if (item.get("tags") == null) {
-            item.put("tags", new JsonArray());
-        }
-        processItemDamage(item);
     }
 
     /**

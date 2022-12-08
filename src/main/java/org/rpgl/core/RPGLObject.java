@@ -74,6 +74,18 @@ public class RPGLObject extends JsonObject {
         return effects;
     }
 
+    public String[] getEvents() {
+        JsonArray eventsArray = (JsonArray) this.get("events");
+        String[] events = new String[eventsArray.size()];
+        int i = 0;
+        for (Object eventId : eventsArray) {
+            events[i] = (String) eventId;
+            i++;
+        }
+        // TODO also have a Subevent dedicated to collecting additional Events
+        return events;
+    }
+
     public Long getProficiencyBonus(RPGLContext context) throws Exception {
         CalculateProficiencyModifier calculateProficiencyModifier = new CalculateProficiencyModifier();
         String calculateProficiencyModifierJsonString = """

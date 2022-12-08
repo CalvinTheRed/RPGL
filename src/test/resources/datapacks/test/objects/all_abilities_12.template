@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "All 12's Object",
+  "ability_scores": {
+    "str": 12,
+    "dex": 12,
+    "con": 12,
+    "int": 12,
+    "wis": 12,
+    "cha": 12
+  },
+  "health_data": {
+    "hit_dice": [
+      { "size": 10, "spent": false }
+    ],
+    "base": 100,
+    "max": 100,
+    "current": 100,
+    "temporary": 0
+  },
+  "proficiency_bonus": 2
+}

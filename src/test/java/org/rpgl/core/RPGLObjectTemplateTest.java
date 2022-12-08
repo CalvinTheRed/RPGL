@@ -37,85 +37,121 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("object data processed correctly")
+    @DisplayName("Template sets default effects array")
     void test1() {
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy");
-        assert object != null;
-        JsonObject items = (JsonObject) object.get("items");
+        RPGLObject dummyObject = RPGLFactory.newObject("test:blank");
+        assert dummyObject != null;
 
-        assertNotNull(items,
-                "Object dummy:dummy missing items object."
+        JsonArray effectsArray = (JsonArray) dummyObject.get("effects");
+        assertNotNull(effectsArray,
+                "RPGLObjectTemplate should create an array for a new RPGLObject's effects if none are specified."
         );
-        JsonArray inventory = (JsonArray) items.get("inventory");
-
-        assertNotNull(inventory,
-                "Object dummy:dummy missing items.inventory array."
-        );
-        assertEquals(4, inventory.size(),
-                // hand_1, hand_2, and 2 inventory dummy items
-                "Object dummy:dummy does not have 4 items in items.inventory."
-        );
-        assertNotNull(inventory.get(0),
-                "Object dummy:dummy missing uuid at items.inventory[0]."
-        );
-        assertNotNull(inventory.get(1),
-                "Object dummy:dummy missing uuid at items.inventory[1]."
-        );
-        assertNotNull(inventory.get(2),
-                "Object dummy:dummy missing uuid at items.inventory[2]."
-        );
-        assertNotNull(inventory.get(3),
-                "Object dummy:dummy missing uuid at items.inventory[3]."
-        );
-        assertNotNull(UUIDTable.getItem((String) inventory.get(0)),
-                "Object dummy:dummy item items.inventory[0] is not registered to UUIDTable."
-        );
-        assertNotNull(UUIDTable.getItem((String) inventory.get(1)),
-                "Object dummy:dummy item items.inventory[1] is not registered to UUIDTable."
-        );
-        assertNotNull(UUIDTable.getItem((String) inventory.get(2)),
-                "Object dummy:dummy item items.inventory[2] is not registered to UUIDTable."
-        );
-        assertNotNull(UUIDTable.getItem((String) inventory.get(3)),
-                "Object dummy:dummy item items.inventory[3] is not registered to UUIDTable."
-        );
-        assertNotNull(items.get("hand_1"),
-                "Object dummy:dummy hand_1 slot empty."
-        );
-        assertNotNull(items.get("hand_2"),
-                "Object dummy:dummy hand_2 slot empty."
-        );
-        assertTrue(inventory.contains(items.get("hand_1")),
-                "Object dummy:dummy hand_1 item not in inventory"
-        );
-        assertTrue(inventory.contains(items.get("hand_2")),
-                "Object dummy:dummy hand_2 item not in inventory"
-        );
-
-        JsonArray effects = (JsonArray) object.get("effects");
-        assertNotNull(effects,
-                "Object dummy:dummy missing effects array."
-        );
-        assertEquals(2, effects.size(),
-                "Object dummy:dummy does not have 2 effects."
-        );
-        assertNotNull(effects.get(0),
-                "Object dummy:dummy missing uuid at effects[0]."
-        );
-        assertNotNull(effects.get(1),
-                "Object dummy:dummy missing uuid at effects[1]."
-        );
-        assertNotNull(UUIDTable.getEffect((String) effects.get(0)),
-                "Object dummy:dummy effect effects[0] is not registered to UUIDTable."
-        );
-        assertNotNull(UUIDTable.getEffect((String) effects.get(1)),
-                "Object dummy:dummy effect effects[1] is not registered to UUIDTable."
-        );
-
-        // 1 object, 4 items, 2 effects
-        assertEquals(7, UUIDTable.size(),
-                // 1 object, 2 effects, 4 items
-                "UUIDTable does not have 7 objects registered to it."
+        assertTrue(effectsArray.isEmpty(),
+                "The default effects array should be empty."
         );
     }
+
+    @Test
+    @DisplayName("Template sets default events array")
+    void test2() {
+        RPGLObject dummyObject = RPGLFactory.newObject("test:blank");
+        assert dummyObject != null;
+
+        JsonArray eventsArray = (JsonArray) dummyObject.get("events");
+        assertNotNull(eventsArray,
+                "RPGLObjectTemplate should create an array for a new RPGLObject's events if none are specified."
+        );
+        assertTrue(eventsArray.isEmpty(),
+                "The default events array should be empty."
+        );
+    }
+
+    @Test
+    @DisplayName("Template sets default items data")
+    void test3() {
+        RPGLObject dummyObject = RPGLFactory.newObject("test:blank");
+        assert dummyObject != null;
+
+        JsonObject items = (JsonObject) dummyObject.get("items");
+        assertNotNull(items,
+                "RPGLObjectTemplate should create an object for a new RPGLObject's items if none are specified."
+        );
+        JsonArray inventory = (JsonArray) items.get("inventory");
+        assertNotNull(inventory,
+                "RPGLObjectTemplate should create an array for a new RPGLObject's inventory if none is specified."
+        );
+        assertTrue(inventory.isEmpty(),
+                "The default inventory array should be empty."
+        );
+        assertEquals(1, items.size(),
+                "There should only be one key-value pair in the items object (the inventory)."
+        );
+    }
+
+    @Test
+    @DisplayName("Template creates specified Effects")
+    void test4() {
+        RPGLObject dummyObject = RPGLFactory.newObject("test:blank_plus_effects");
+        assert dummyObject != null;
+
+        JsonArray effectsArray = (JsonArray) dummyObject.get("effects");
+        assertNotNull(effectsArray,
+                "RPGLObjectTemplate should not delete the new RPGLObject's effects array."
+        );
+        assertEquals(1, effectsArray.size(),
+                "The effects array should have one element."
+        );
+        String effectUuid = (String) effectsArray.get(0);
+        assertNotNull(effectUuid,
+                "The effects array element should not be null."
+        );
+        assertNotNull(UUIDTable.getEffect(effectUuid),
+                "The new Effect should be registered in the UUIDTable."
+        );
+
+        // TODO check for source and target of Effects to match the object
+    }
+
+    @Test
+    @DisplayName("Template creates specified Items")
+    void test5() {
+        RPGLObject dummyObject = RPGLFactory.newObject("test:blank_plus_items");
+        assert dummyObject != null;
+
+        JsonObject items = (JsonObject) dummyObject.get("items");
+        assertNotNull(items,
+                "RPGLObjectTemplate should not delete the new RPGLObject's items object."
+        );
+        assertEquals(2, items.size(),
+                "The items object should have two key-value pairs (hand_1 and inventory)."
+        );
+
+        String hand1ItemUuid = (String) items.get("hand_1");
+        assertNotNull(hand1ItemUuid,
+                "Equipment slots should be preserved."
+        );
+        assertNotNull(UUIDTable.getItem(hand1ItemUuid),
+                "Equipment Items should be registered in the UUIDTable."
+        );
+
+        JsonArray inventory = (JsonArray) items.get("inventory");
+        assertNotNull(inventory,
+                "Inventory should be preserved."
+        );
+        assertEquals(2, inventory.size(),
+                "Inventory should contain 2 items (hand_1 item and unequipped inventory item)."
+        );
+        String inventoryItem1Uuid = (String) inventory.get(0);
+        String inventoryItem2Uuid = (String) inventory.get(1);
+        assertNotNull(UUIDTable.getItem(inventoryItem1Uuid),
+                "Inventory Item 1 should be registered in the UUIDTable."
+        );
+        assertNotNull(UUIDTable.getItem(inventoryItem2Uuid),
+                "Inventory Item 2 should be registered in the UUIDTable."
+        );
+        assertEquals(hand1ItemUuid, inventoryItem2Uuid,
+                "Equipment slot item should be copied to inventory array."
+        );
+    }
+
 }
