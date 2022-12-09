@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Light Armor",
+  "tags": [
+    "armor",
+    "light_armor"
+  ],
+  "proficiency_tags": [
+    "armor",
+    "light_armor"
+  ],
+  "base_armor_class": 12
+}

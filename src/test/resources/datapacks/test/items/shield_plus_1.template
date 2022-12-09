@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Shield +1",
+  "tags": [
+    "shield",
+    "metal"
+  ],
+  "proficiency_tags": [
+    "shield"
+  ],
+  "weight": 6,
+  "while_equipped": [ ],
+  "armor_class_bonus": 3,
+  "cost": "10g"
+}

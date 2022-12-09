@@ -7,6 +7,13 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.uuidtable.UUIDTable;
 
+/**
+ * This subevent is dedicated to calculating the armor class against which attack rolls are made. Once the attack roll
+ * is made, the target will have an opportunity to raise its armor class further through the CalculateEffectiveArmorClass
+ * subevent, but reactive changes to armor class are not accounted for in this subevent.
+ *
+ * @author Calvin Withun
+ */
 public class CalculateBaseArmorClass extends Calculation {
 
     public CalculateBaseArmorClass() {
@@ -55,7 +62,7 @@ public class CalculateBaseArmorClass extends Calculation {
         baseArmorClass += this.getShieldBonus();
 
         // Set base armor class value in json
-        this.subeventJson.put("base", baseArmorClass);
+        this.subeventJson.put("base", baseArmorClass); // TODO what is base for as opposed to set?
     }
 
     long prepareArmored(RPGLContext context, RPGLItem armor) throws Exception {

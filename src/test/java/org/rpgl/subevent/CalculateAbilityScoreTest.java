@@ -82,7 +82,7 @@ public class CalculateAbilityScoreTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -97,7 +97,7 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(7L, calculateAbilityScore.get(),
+        assertEquals(12L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not prepare base ability score correctly."
         );
     }
@@ -117,7 +117,7 @@ public class CalculateAbilityScoreTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -153,7 +153,7 @@ public class CalculateAbilityScoreTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -165,12 +165,12 @@ public class CalculateAbilityScoreTest {
         calculateAbilityScore.setSource(object);
         calculateAbilityScore.prepare(context);
         calculateAbilityScore.set(10L);
-        calculateAbilityScore.set(12L);
+        calculateAbilityScore.set(14L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(12L, calculateAbilityScore.get(),
+        assertEquals(14L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent should be able to override ability score set value with higher value."
         );
     }
@@ -190,7 +190,7 @@ public class CalculateAbilityScoreTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -206,7 +206,7 @@ public class CalculateAbilityScoreTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(10L, calculateAbilityScore.get(),
+        assertEquals(15L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not add bonus to ability score properly."
         );
     }
@@ -226,7 +226,7 @@ public class CalculateAbilityScoreTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateAbilityScore calculateAbilityScore = (CalculateAbilityScore) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -238,12 +238,12 @@ public class CalculateAbilityScoreTest {
         calculateAbilityScore.setSource(object);
         calculateAbilityScore.prepare(context);
         calculateAbilityScore.addBonus(3L);
-        calculateAbilityScore.set(12L);
+        calculateAbilityScore.set(14L);
 
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(15L, calculateAbilityScore.get(),
+        assertEquals(17L, calculateAbilityScore.get(),
                 "CalculateAbilityScore Subevent did not add bonus to set ability score properly."
         );
     }
