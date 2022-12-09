@@ -31,48 +31,48 @@ public class DatapackTest {
     @Test
     @DisplayName("verify effect templates can be loaded")
     void test1() {
-        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("dummy").getEffectTemplate("dummy");
+        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("test").getEffectTemplate("dummy");
         assertNotNull(effectTemplate,
-                "Effect template dummy:dummy failed to load."
+                "Effect template test:dummy failed to load."
         );
         assertEquals("Dummy Effect", effectTemplate.get("name"),
-                "Effect template dummy:dummy failed to load the correct content."
+                "Effect template test:dummy failed to load the correct content."
         );
     }
 
     @Test
     @DisplayName("verify event templates can be loaded")
     void test2() {
-        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("dummy").getEventTemplate("dummy");
+        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("test").getEventTemplate("dummy");
         assertNotNull(eventTemplate,
-                "Event template dummy:dummy failed to load."
+                "Event template test:dummy failed to load."
         );
         assertEquals("Dummy Event", eventTemplate.get("name"),
-                "Event template dummy:dummy failed to load the correct content."
+                "Event template test:dummy failed to load the correct content."
         );
     }
 
     @Test
     @DisplayName("verify item templates can be loaded")
     void test3() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("dummy").getItemTemplate("dummy");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("test").getItemTemplate("blank");
         assertNotNull(itemTemplate,
-                "Item template dummy:dummy failed to load."
+                "Item template test:blank failed to load."
         );
-        assertEquals("Dummy Item", itemTemplate.get("name"),
-                "Item template dummy:dummy failed to load the correct content."
+        assertEquals("Blank Item", itemTemplate.get("name"),
+                "Item template test:blank failed to load the correct content."
         );
     }
 
     @Test
     @DisplayName("verify object templates can be loaded")
     void test4() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("dummy").getObjectTemplate("dummy");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("test").getObjectTemplate("blank");
         assertNotNull(objectTemplate,
-                "Object template dummy:dummy failed to load."
+                "Object template test:blank failed to load."
         );
-        assertEquals("Dummy Object", objectTemplate.get("name"),
-                "Object template dummy:dummy failed to load the correct content."
+        assertEquals("Blank Object", objectTemplate.get("name"),
+                "Object template test:blank failed to load the correct content."
         );
     }
 
