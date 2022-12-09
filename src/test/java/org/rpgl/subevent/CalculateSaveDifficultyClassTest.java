@@ -82,7 +82,7 @@ public class CalculateSaveDifficultyClassTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = (CalculateSaveDifficultyClass) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -97,7 +97,7 @@ public class CalculateSaveDifficultyClassTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertEquals(10L, calculateSaveDifficultyClass.get(),
+        assertEquals(11L, calculateSaveDifficultyClass.get(),
                 "CalculateSaveDifficultyClass Subevent did not calculates basic save difficulty class correctly."
         );
     }

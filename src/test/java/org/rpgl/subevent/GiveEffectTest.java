@@ -76,7 +76,7 @@ public class GiveEffectTest {
         String subeventJsonString = """
                 {
                     "subevent": "give_effect",
-                    "effect": "dummy:dummy"
+                    "effect": "test:blank"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
@@ -100,7 +100,7 @@ public class GiveEffectTest {
         String subeventJsonString = """
                 {
                     "subevent": "give_effect",
-                    "effect": "dummy:dummy"
+                    "effect": "test:blank"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
@@ -129,12 +129,12 @@ public class GiveEffectTest {
         String subeventJsonString = """
                 {
                     "subevent": "give_effect",
-                    "effect": "dummy:dummy"
+                    "effect": "test:dummy"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -165,12 +165,12 @@ public class GiveEffectTest {
         String subeventJsonString = """
                 {
                     "subevent": "give_effect",
-                    "effect": "dummy:dummy"
+                    "effect": "test:dummy"
                 }
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));

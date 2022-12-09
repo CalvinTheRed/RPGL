@@ -81,7 +81,7 @@ public class CalculateCriticalHitThresholdTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -115,7 +115,7 @@ public class CalculateCriticalHitThresholdTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -150,7 +150,7 @@ public class CalculateCriticalHitThresholdTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -186,7 +186,7 @@ public class CalculateCriticalHitThresholdTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));
@@ -221,7 +221,7 @@ public class CalculateCriticalHitThresholdTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = (CalculateCriticalHitThreshold) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
         contextArray.add(object.get("uuid"));

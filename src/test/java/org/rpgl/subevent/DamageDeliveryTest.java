@@ -82,8 +82,8 @@ public class DamageDeliveryTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         DamageDelivery damageDelivery = (DamageDelivery) subevent.clone(subeventJson);
-        RPGLObject originalObject = RPGLFactory.newObject("dummy:dummy_hollow");
-        RPGLObject newObject = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject originalObject = RPGLFactory.newObject("test:blank");
+        RPGLObject newObject = RPGLFactory.newObject("test:blank");
         assert originalObject != null;
         assert newObject != null;
 

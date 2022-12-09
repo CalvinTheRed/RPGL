@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Knight",
+  "ability_scores": {
+    "str": 16,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 11,
+    "cha": 15
+  },
+  "health_data": {
+    "hit_dice": [
+      { "size": 8, "spent": false },
+      { "size": 8, "spent": false },
+      { "size": 8, "spent": false },
+      { "size": 8, "spent": false },
+      { "size": 8, "spent": false },
+      { "size": 8, "spent": false },
+      { "size": 8, "spent": false },
+      { "size": 8, "spent": false }
+    ],
+    "base": 52,
+    "max": 52,
+    "current": 52,
+    "temporary": 0
+  },
+  "items": {
+    "hand_1": "demo:greatsword",
+    "armor": "demo:plate_armor",
+    "inventory": [
+      "demo:heavy_crossbow"
+    ]
+  },
+  "events": [
+    "demo:hand_1_attack"
+  ],
+  "proficiency_bonus": 2
+}

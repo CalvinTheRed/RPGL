@@ -105,7 +105,7 @@ public class CalculateEffectiveArmorClassTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = (CalculateEffectiveArmorClass) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
         contextArray.add(object.get("uuid"));
@@ -140,7 +140,7 @@ public class CalculateEffectiveArmorClassTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = (CalculateEffectiveArmorClass) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
         contextArray.add(object.get("uuid"));
@@ -177,7 +177,7 @@ public class CalculateEffectiveArmorClassTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = (CalculateEffectiveArmorClass) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
         contextArray.add(object.get("uuid"));
@@ -212,7 +212,7 @@ public class CalculateEffectiveArmorClassTest {
                 """;
         JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = (CalculateEffectiveArmorClass) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("dummy:dummy_hollow");
+        RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
         contextArray.add(object.get("uuid"));
