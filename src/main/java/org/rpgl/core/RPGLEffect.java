@@ -8,6 +8,8 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.function.Function;
 import org.rpgl.subevent.Subevent;
 
+import java.util.Map;
+
 /**
  * RPGLEffects are objects assigned to RPGLObjects which influence the final results of Subevents executed by or upon
  * those RPGLObjects.
@@ -52,15 +54,19 @@ public class RPGLEffect extends JsonObject {
         // TODO make "behavior" an object with keys for subeventId's to save on a Subevent... harder to test though?
         RPGLObject source = subevent.getSource();
         RPGLObject target = subevent.getTarget();
-        JsonArray behaviors = (JsonArray) this.get("behavior");
-        for (Object behaviorElement : behaviors) {
-            JsonObject behavior = (JsonObject) behaviorElement;
-            JsonArray conditions = (JsonArray) behavior.get("conditions");
-            if (!subevent.hasModifyingEffect(this) && evaluateConditions(source, target, conditions)) {
-                JsonArray functionJsonArray = (JsonArray) behavior.get("functions");
-                executeFunctions(source, target, subevent, functionJsonArray);
-                subevent.addModifyingEffect(this);
-                return true;
+
+        JsonObject subeventFilters = (JsonObject) this.get("subevent_filters");
+        for (Map.Entry<String, Object> subeventFilterEntry : subeventFilters.entrySet()) {
+            if (subevent.getSubeventId().equals(subeventFilterEntry.getKey())) {
+                JsonObject matchedFilter = (JsonObject) subeventFilterEntry.getValue();
+                JsonArray conditions = (JsonArray) matchedFilter.get("conditions");
+                if (!subevent.hasModifyingEffect(this) && evaluateConditions(source, target, conditions)) {
+                    JsonArray functionJsonArray = (JsonArray) matchedFilter.get("functions");
+                    executeFunctions(source, target, subevent, functionJsonArray);
+                    subevent.addModifyingEffect(this);
+                    return true;
+                }
+                break;
             }
         }
         return false;

@@ -275,6 +275,10 @@ public abstract class Subevent {
         return UUIDTable.getObject((String) this.subeventJson.get("target"));
     }
 
+    public String getSubeventId() {
+        return this.subeventId;
+    }
+
     @Override
     public String toString() {
         return this.subeventJson.toString();

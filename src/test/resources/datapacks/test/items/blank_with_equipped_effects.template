@@ -3,6 +3,6 @@
     "author": "Calvin Withun"
   },
   "equipped_effects": [
-    "test:blank"
+    "test:dummy"
   ]
 }

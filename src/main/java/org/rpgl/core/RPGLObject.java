@@ -55,6 +55,7 @@ public class RPGLObject extends JsonObject {
     public boolean addEffect(RPGLEffect effect) {
         JsonArray effects = (JsonArray) this.get("effects");
         return effects.add(effect.get("uuid"));
+        // TODO restrict like effects from being applied to a common object
     }
 
     public boolean removeEffect(RPGLEffect effect) {

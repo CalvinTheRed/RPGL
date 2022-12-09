@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Dummy Event",
+  "area_of_effect": {
+    "type": "self"
+  },
+  "subevents": [
+    {
+      "subevent": "dummy_subevent"
+    }
+  ]
+}
