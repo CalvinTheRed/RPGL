@@ -2,6 +2,13 @@ package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
 
+/**
+ * This Subevent is dedicated to rolling all damage dice collected for an attack roll. This includes the combination of
+ * BaseDamageDiceCollection and TargetDamageDiceCollection Subevents. Damage should only be rolled this way if the
+ * attack roll hits the target.
+ *
+ * @author Calvin Withun
+ */
 public class AttackDamageRoll extends DamageRoll {
 
     public AttackDamageRoll() {

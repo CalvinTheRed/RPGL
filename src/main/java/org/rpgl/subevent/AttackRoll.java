@@ -8,6 +8,12 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.uuidtable.UUIDTable;
 
+/**
+ * This Subevent is dedicated to making an attack roll and resolving all fallout from making the attack. This is a
+ * high-level Subevent which can be referenced in an RPGLEvent template.
+ *
+ * @author Calvin Withun
+ */
 public class AttackRoll extends ContestRoll {
 
     private static final String ITEM_NAMESPACE_REGEX = "[\\w\\d]+:[\\w\\d]+";
@@ -71,6 +77,27 @@ public class AttackRoll extends ContestRoll {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>prepareAttackWithoutWeapon</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void prepareAttackWithoutWeapon(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method prepares the AttackRoll under the assumption that the attack is being made using no weapon. This
+     * 	typically is the case when the attack is a spell or other magical attack. Any damage dealt by the AttackRoll
+     * 	must be specified in the RPGLEvent template when this prepare method is used, since no weapon will be used to
+     * 	determine the damage.
+     * 	</p>
+     *
+     *  @param context the RPGLContext in which the AttackRoll is being prepared
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void prepareAttackWithoutWeapon(RPGLContext context) throws Exception {
         this.subeventJson.put("natural_weapon_attack", false);
 
@@ -87,6 +114,27 @@ public class AttackRoll extends ContestRoll {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>prepareNaturalWeaponAttack</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void prepareNaturalWeaponAttack(RPGLContext context, String weaponId)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method prepares the AttackRoll under the assumption that the attack is being made using a natural weapon
+     * 	such as a claw or fangs or a tail or a slam attack. The natural weapon will only exist during the attack, and
+     * 	will be destroyed once the attack is resolved. Natural weapons should never exist as actual items.
+     * 	</p>
+     *
+     *  @param context  the RPGLContext in which the AttackRoll is being prepared
+     *  @param weaponId a natural weapon ID <code>("datapack:name")</code>
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void prepareNaturalWeaponAttack(RPGLContext context, String weaponId) throws Exception {
         this.subeventJson.put("natural_weapon_attack", true);
 
@@ -107,6 +155,27 @@ public class AttackRoll extends ContestRoll {
         this.subeventJson.put("weapon", weapon.getUuid());
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>prepareItemWeaponAttack</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void prepareItemWeaponAttack(RPGLContext context, String equipmentSlot)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method prepares the AttackRoll under the assumption that the attack is being made using a weapon such as a
+     * 	sword, shortbow, or even an improvised weapon such as a mug. The weapon being used is determined by the content
+     * 	of the equipment slot specified in the method call.
+     * 	</p>
+     *
+     *  @param context       the RPGLContext in which the AttackRoll is being prepared
+     *  @param equipmentSlot an equipment slot (can be anything other than <code>"inventory"</code>)
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void prepareItemWeaponAttack(RPGLContext context, String equipmentSlot) throws Exception {
         this.subeventJson.put("natural_weapon_attack", false);
 
@@ -128,6 +197,26 @@ public class AttackRoll extends ContestRoll {
         this.subeventJson.put("weapon", weapon.getUuid());
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>getTargetArmorClass</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * long getTargetArmorClass(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method evaluates the effective armor class of the target to determine if the attack hits or misses. This
+     * 	value can be influenced by the target after the attack roll is made to attempt to avoid the attack, and may be
+     * 	different than the target's base armor class.
+     * 	</p>
+     *
+     *  @param context the RPGLContext in which the target's armor class is being evaluated
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     long getTargetArmorClass(RPGLContext context) throws Exception {
         long baseArmorClass = this.getTarget().getBaseArmorClass(context);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = new CalculateEffectiveArmorClass();
