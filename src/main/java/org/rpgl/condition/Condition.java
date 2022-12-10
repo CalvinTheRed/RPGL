@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class is used by an RPGLEffect in order to determine whether it should execute its Functions when an RPGLObject
- * invokes a Subevent.
+ * This class represents an abstract condition which must be met in order for an RPGLEffect to execute its Functions on
+ * a Subevent. Most RPGLEffects will include several Condition references.
  *
  * @author Calvin Withun
  */

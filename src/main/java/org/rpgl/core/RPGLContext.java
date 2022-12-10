@@ -45,7 +45,7 @@ public class RPGLContext {
      *  which does not correspond to a RPGLObject will be skipped over.
      * 	</p>
      *
-     * @param objectUuids a list of UUID's corresponding to RPGLObjects.
+     *  @param objectUuids a list of UUID's corresponding to RPGLObjects.
      */
     public RPGLContext(JsonArray objectUuids) {
         contextObjects = new HashMap<>();
@@ -60,10 +60,37 @@ public class RPGLContext {
         }
     }
 
+    /**
+     * 	<p><b><i>add</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public void add(RPGLObject object)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method adds a RPGLObject to the context.
+     * 	</p>
+     *
+     *  @param object an RPGLObject to be added into the context
+     */
     public void add(RPGLObject object) {
-        this.contextObjects.put((String) object.get("uuid"), object);
+        this.contextObjects.put(object.getUuid(), object);
     }
 
+    /**
+     * 	<p><b><i>add</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLObject remove(String objectUuid)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method removes a RPGLObject from the context.
+     * 	</p>
+     *
+     *  @param objectUuid the UUID of an RPGLObject to be removed from context
+     *  @return the RPGLObject removed from context
+     */
     public RPGLObject remove(String objectUuid) {
         return this.contextObjects.remove(objectUuid);
     }
@@ -80,10 +107,10 @@ public class RPGLContext {
      * 	This is the mechanism by which Subevents are intended to be invoked.
      * 	</p>
      *
-     * @param subevent a Subevent
+     *  @param subevent a Subevent
      *
-     * @throws ConditionMismatchException if a Condition was presented incorrectly formatted JSON data
-     * @throws FunctionMismatchException  if a Function was presented incorrectly formatted JSON data.
+     *  @throws ConditionMismatchException if a Condition was presented incorrectly formatted JSON data
+     *  @throws FunctionMismatchException  if a Function was presented incorrectly formatted JSON data.
      */
     public void processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
         boolean wasProcessed;
@@ -100,7 +127,7 @@ public class RPGLContext {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
         for (Map.Entry<String, RPGLObject> contextObjectEntry : contextObjects.entrySet()) {
-            stringBuilder.append(contextObjectEntry.getValue().get("uuid"));
+            stringBuilder.append(contextObjectEntry.getValue().getUuid());
             stringBuilder.append(',');
         }
         stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());

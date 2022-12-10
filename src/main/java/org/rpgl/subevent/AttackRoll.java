@@ -104,7 +104,7 @@ public class AttackRoll extends ContestRoll {
         this.subeventJson.put("damage", weapon.getDamage(attackType));
 
         // Record natural weapon UUID
-        this.subeventJson.put("weapon", weapon.get("uuid"));
+        this.subeventJson.put("weapon", weapon.getUuid());
     }
 
     void prepareItemWeaponAttack(RPGLContext context, String equipmentSlot) throws Exception {
@@ -117,7 +117,7 @@ public class AttackRoll extends ContestRoll {
         this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll if source is proficient with weapon.
-        if (getSource().isProficientWithWeapon(context, (String) weapon.get("uuid"))) {
+        if (getSource().isProficientWithWeapon(context, weapon.getUuid())) {
             this.addBonus(this.getSource().getProficiencyBonus(context));
         }
 
@@ -125,7 +125,7 @@ public class AttackRoll extends ContestRoll {
         this.subeventJson.put("damage", weapon.getDamage(attackType));
 
         // Record natural weapon UUID
-        this.subeventJson.put("weapon", weapon.get("uuid"));
+        this.subeventJson.put("weapon", weapon.getUuid());
     }
 
     long getTargetArmorClass(RPGLContext context) throws Exception {

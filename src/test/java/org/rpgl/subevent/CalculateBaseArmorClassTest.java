@@ -85,7 +85,7 @@ public class CalculateBaseArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -119,7 +119,7 @@ public class CalculateBaseArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -154,7 +154,7 @@ public class CalculateBaseArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -190,7 +190,7 @@ public class CalculateBaseArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -225,7 +225,7 @@ public class CalculateBaseArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -262,10 +262,10 @@ public class CalculateBaseArmorClassTest {
         assert object != null;
         RPGLItem armor = RPGLFactory.newItem("test:light_armor");
         assert armor != null;
-        object.giveItem((String) armor.get("uuid"));
-        object.equipItem((String) armor.get("uuid"), "armor");
+        object.giveItem(armor.getUuid());
+        object.equipItem(armor.getUuid(), "armor");
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -300,10 +300,10 @@ public class CalculateBaseArmorClassTest {
         assert object != null;
         RPGLItem armor = RPGLFactory.newItem("test:medium_armor");
         assert armor != null;
-        object.giveItem((String) armor.get("uuid"));
-        object.equipItem((String) armor.get("uuid"), "armor");
+        object.giveItem(armor.getUuid());
+        object.equipItem(armor.getUuid(), "armor");
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -338,10 +338,10 @@ public class CalculateBaseArmorClassTest {
         assert object != null;
         RPGLItem armor = RPGLFactory.newItem("test:heavy_armor");
         assert armor != null;
-        object.giveItem((String) armor.get("uuid"));
-        object.equipItem((String) armor.get("uuid"), "armor");
+        object.giveItem(armor.getUuid());
+        object.equipItem(armor.getUuid(), "armor");
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -376,10 +376,10 @@ public class CalculateBaseArmorClassTest {
         assert object != null;
         RPGLItem shield = RPGLFactory.newItem("test:shield");
         assert shield != null;
-        object.giveItem((String) shield.get("uuid"));
-        object.equipItem((String) shield.get("uuid"), "hand_1");
+        object.giveItem(shield.getUuid());
+        object.equipItem(shield.getUuid(), "hand_1");
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -416,12 +416,12 @@ public class CalculateBaseArmorClassTest {
         RPGLItem shield2 = RPGLFactory.newItem("test:shield");
         assert shield1 != null;
         assert shield2 != null;
-        object.giveItem((String) shield1.get("uuid"));
-        object.equipItem((String) shield1.get("uuid"), "hand_1");
-        object.giveItem((String) shield2.get("uuid"));
-        object.equipItem((String) shield2.get("uuid"), "hand_2");
+        object.giveItem(shield1.getUuid());
+        object.equipItem(shield1.getUuid(), "hand_1");
+        object.giveItem(shield2.getUuid());
+        object.equipItem(shield2.getUuid(), "hand_2");
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -458,12 +458,12 @@ public class CalculateBaseArmorClassTest {
         RPGLItem shieldPlusOne = RPGLFactory.newItem("test:shield_plus_1");
         assert shield != null;
         assert shieldPlusOne != null;
-        object.giveItem((String) shield.get("uuid"));
-        object.equipItem((String) shield.get("uuid"), "hand_1");
-        object.giveItem((String) shieldPlusOne.get("uuid"));
-        object.equipItem((String) shieldPlusOne.get("uuid"), "hand_2");
+        object.giveItem(shield.getUuid());
+        object.equipItem(shield.getUuid(), "hand_1");
+        object.giveItem(shieldPlusOne.getUuid());
+        object.equipItem(shieldPlusOne.getUuid(), "hand_2");
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*

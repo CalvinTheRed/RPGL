@@ -64,7 +64,7 @@ public class RPGLItemTemplate extends JsonObject {
                     }
                     """
         ));
-        processDefaultAttackAbilities(item);
+        item.defaultAttackAbilities();
         processEquippedEffects(item);
         processItemDamage(item);
         UUIDTable.register(item);
@@ -95,41 +95,10 @@ public class RPGLItemTemplate extends JsonObject {
                 String effectId = (String) equippedEffectIdElement;
                 RPGLEffect effect = RPGLFactory.newEffect(effectId);
                 assert effect != null;
-                equippedEffectsUuidArray.add(effect.get("uuid"));
+                equippedEffectsUuidArray.add(effect.getUuid());
             }
             item.put("equipped_effects", equippedEffectsUuidArray);
         }
-    }
-
-    /**
-     * 	<p><b><i>processDefaultAttackAbilities</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processDefaultAttackAbilities(RPGLItem item)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method defines the default attack abilities for RPGLItems. <i>Melee</i> and <i>thrown</i> attacks
-     * 	default to using <i>str</i>, unless they have the <i>finesse</i> property, in which case they default to
-     * 	<i>dex</i>. <i>Ranged</i> attacks always default to <i>dex</i>.
-     * 	</p>
-     *
-     *  @param item an RPGLItem
-     */
-    static void processDefaultAttackAbilities(RPGLItem item) {
-        // TODO move this into RPGLItem to make it more accessible to the client?
-        JsonObject attackAbilities = new JsonObject();
-        if (item.getWeaponProperties().contains("ranged")) {
-            attackAbilities.put("ranged", "dex");
-        }
-        if (item.getWeaponProperties().contains("finesse")) {
-            attackAbilities.put("melee", "dex");
-            attackAbilities.put("thrown", "dex");
-        } else {
-            attackAbilities.put("melee", "str");
-            attackAbilities.put("thrown", "str");
-        }
-        item.put("attack_abilities", attackAbilities);
     }
 
     /**

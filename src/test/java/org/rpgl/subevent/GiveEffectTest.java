@@ -137,7 +137,7 @@ public class GiveEffectTest {
         RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -173,7 +173,7 @@ public class GiveEffectTest {
         RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*

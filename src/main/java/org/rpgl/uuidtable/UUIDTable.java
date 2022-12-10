@@ -1,6 +1,5 @@
 package org.rpgl.uuidtable;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
@@ -17,34 +16,35 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class UUIDTable {
 
-    private static final Map<String, JsonObject> UUID_TABLE = new ConcurrentHashMap<>();
+    private static final Map<String, UUIDTableElement> UUID_TABLE = new ConcurrentHashMap<>();
 
     /**
-     * This method assigns a JsonObject a UUID and registers it with the UUIDTable. If the passed object already has a
-     * UUID, it is registered under that value. This method is intended to be used to register RPGLEffects, RPGLItems,
-     * and RPGLObjects. This method may cause problems if an object already has a UUID which has already been assigned
-     * to a different object.
+     * This method assigns a UUIDTableElement a UUID and registers it with the UUIDTable. If the passed object already
+     * has a UUID, it is registered under that value. This method is intended to be used to register RPGLEffects,
+     * RPGLItems, and RPGLObjects. This method may cause problems if an object already has a UUID which has already been
+     * assigned to a different object.
      *
-     * @param data the JsonObject to be registered
+     *  @param data the UUIDTableElement to be registered
      */
-    public static void register(JsonObject data) {
-        String uuid = (String) data.get("uuid");
+    public static void register(UUIDTableElement data) {
+        String uuid = data.getUuid();
         while (uuid == null || UUID_TABLE.containsKey(uuid)) {
             uuid = UUID.randomUUID().toString();
         }
         UUID_TABLE.put(uuid, data);
-        data.put("uuid", uuid);
+        data.setUuid(uuid);
     }
 
     /**
-     * This method removes a UUID from its associated JsonObject (if it exists) and removes the UUID from the UUIDTable.
+     * This method deletes a UUID from its associated UUIDTableElement (if it exists) and removes the UUID from the
+     * UUIDTable.
      *
-     * @param uuid the UUID of the JsonObject to be unregistered
+     *  @param uuid the UUID of the UUIDTableElement to be unregistered
      */
-    public static JsonObject unregister(String uuid) {
-        JsonObject data = UUID_TABLE.remove(uuid);
+    public static UUIDTableElement unregister(String uuid) {
+        UUIDTableElement data = UUID_TABLE.remove(uuid);
         if (data != null) {
-            data.remove("uuid");
+            data.deleteUuid();
         }
         return data;
     }
@@ -61,40 +61,37 @@ public final class UUIDTable {
     /**
      * This method returns the RPGLEffect associated with a UUID.
      *
-     * @param uuid the UUID of a RPGLEffect
-     * @return an RPGLEffect
+     *  @param uuid the UUID of a RPGLEffect
+     *  @return an RPGLEffect
      */
     public static RPGLEffect getEffect(String uuid) {
-        JsonObject data = UUID_TABLE.get(uuid);
-        return (RPGLEffect) data;
+        return (RPGLEffect) UUID_TABLE.get(uuid);
     }
 
     /**
      * This method returns the RPGLItem associated with a UUID.
      *
-     * @param uuid the UUID of a RPGLItem
-     * @return an RPGLItem
+     *  @param uuid the UUID of a RPGLItem
+     *  @return an RPGLItem
      */
     public static RPGLItem getItem(String uuid) {
-        JsonObject data = UUID_TABLE.get(uuid);
-        return (RPGLItem) data;
+        return (RPGLItem) UUID_TABLE.get(uuid);
     }
 
     /**
      * This method returns the RPGLObject associated with a UUID.
      *
-     * @param uuid the UUID of a RPGLObject
-     * @return an RPGLObject
+     *  @param uuid the UUID of a RPGLObject
+     *  @return an RPGLObject
      */
     public static RPGLObject getObject(String uuid) {
-        JsonObject data = UUID_TABLE.get(uuid);
-        return (RPGLObject) data;
+        return (RPGLObject) UUID_TABLE.get(uuid);
     }
 
     /**
      * This method returns the number of objects being tracked in UUIDTable.
      *
-     * @return a number
+     *  @return a number
      */
     public static int size() {
         return UUID_TABLE.size();

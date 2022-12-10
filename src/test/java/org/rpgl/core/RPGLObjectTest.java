@@ -79,7 +79,7 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         JsonArray contextArray = new JsonArray();
         assert object != null;
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         assertEquals(2, object.getProficiencyBonus(context),
@@ -122,7 +122,7 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         JsonArray contextArray = new JsonArray();
         assert object != null;
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         assertEquals(1L, object.getAbilityModifierFromAbilityScore(context, "str"),
@@ -136,7 +136,7 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("test:blank");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         object.invokeEvent(
@@ -155,7 +155,7 @@ public class RPGLObjectTest {
         assert effect != null;
         object.addEffect(effect);
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         object.invokeEvent(
@@ -181,7 +181,7 @@ public class RPGLObjectTest {
         object.addEffect(effect1);
         object.addEffect(effect2);
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         RPGLEvent event = RPGLFactory.newEvent("test:dummy");

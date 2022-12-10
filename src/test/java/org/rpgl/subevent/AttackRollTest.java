@@ -638,8 +638,8 @@ public class AttackRollTest {
         RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
         RPGLItem hand1Weapon = RPGLFactory.newItem("test:blank");
         assert hand1Weapon != null;
-        objectAllAbilities12.giveItem((String) hand1Weapon.get("uuid"));
-        objectAllAbilities12.equipItem((String) hand1Weapon.get("uuid"), weaponEquipmentSlot);
+        objectAllAbilities12.giveItem(hand1Weapon.getUuid());
+        objectAllAbilities12.equipItem(hand1Weapon.getUuid(), weaponEquipmentSlot);
         RPGLContext context = new RPGLContext();
         context.add(objectAllAbilities12);
 
@@ -996,8 +996,8 @@ public class AttackRollTest {
         RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
         RPGLItem hand1Weapon = RPGLFactory.newItem("test:blank");
         assert hand1Weapon != null;
-        objectAllAbilities12.giveItem((String) hand1Weapon.get("uuid"));
-        objectAllAbilities12.equipItem((String) hand1Weapon.get("uuid"), weaponEquipmentSlot);
+        objectAllAbilities12.giveItem(hand1Weapon.getUuid());
+        objectAllAbilities12.equipItem(hand1Weapon.getUuid(), weaponEquipmentSlot);
         RPGLContext context = new RPGLContext();
         context.add(objectAllAbilities12);
 

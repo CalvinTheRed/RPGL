@@ -74,7 +74,7 @@ public class RPGLObjectTemplate extends JsonObject {
             String effectId = (String) effectIdElement;
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
             if (effect != null) {
-                effectUuidArray.add(effect.get("uuid"));
+                effectUuidArray.add(effect.getUuid());
             }
         }
         object.put("effects", effectUuidArray);
@@ -108,7 +108,7 @@ public class RPGLObjectTemplate extends JsonObject {
                 String itemId = (String) items.get(equipmentSlotName);
                 RPGLItem item = RPGLFactory.newItem(itemId);
                 assert item != null;
-                String itemUuid = (String) item.get("uuid");
+                String itemUuid = item.getUuid();
                 items.put(equipmentSlotName, itemUuid);
                 equippedItemUuids.add(itemUuid);
             }
@@ -140,7 +140,7 @@ public class RPGLObjectTemplate extends JsonObject {
             String itemId = (String) inventoryIdElement;
             RPGLItem item = RPGLFactory.newItem(itemId);
             if (item != null) {
-                inventoryUuidArray.add(item.get("uuid"));
+                inventoryUuidArray.add(item.getUuid());
             }
         }
         return inventoryUuidArray;

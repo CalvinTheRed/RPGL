@@ -108,7 +108,7 @@ public class CalculateEffectiveArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -143,7 +143,7 @@ public class CalculateEffectiveArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -180,7 +180,7 @@ public class CalculateEffectiveArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -215,7 +215,7 @@ public class CalculateEffectiveArmorClassTest {
         RPGLObject object = RPGLFactory.newObject("test:blank");
         JsonArray contextArray = new JsonArray();
         assert object != null;
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*

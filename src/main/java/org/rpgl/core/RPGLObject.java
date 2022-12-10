@@ -7,7 +7,10 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.*;
 import org.rpgl.uuidtable.UUIDTable;
+import org.rpgl.uuidtable.UUIDTableElement;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -16,12 +19,12 @@ import java.util.Map;
  *
  * @author Calvin Withun
  */
-public class RPGLObject extends JsonObject {
+public class RPGLObject extends UUIDTableElement {
 
     /**
      * A copy-constructor for the RPGLObject class.
      *
-     * @param data the data to be copied to this object
+     *  @param data the data to be copied to this object
      */
     RPGLObject(JsonObject data) {
         this.join(data);
@@ -44,6 +47,7 @@ public class RPGLObject extends JsonObject {
         }
     }
 
+
     public boolean processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffects()) {
@@ -54,37 +58,41 @@ public class RPGLObject extends JsonObject {
 
     public boolean addEffect(RPGLEffect effect) {
         JsonArray effects = (JsonArray) this.get("effects");
-        return effects.add(effect.get("uuid"));
+        return effects.add(effect.getUuid());
         // TODO restrict like effects from being applied to a common object
     }
 
     public boolean removeEffect(RPGLEffect effect) {
         JsonArray effects = (JsonArray) this.get("effects");
-        return effects.remove(effect.get("uuid"));
+        return effects.remove(effect.getUuid());
     }
 
     public RPGLEffect[] getEffects() {
-        JsonArray effectUuidArray = (JsonArray) this.get("effects");
-        RPGLEffect[] effects = new RPGLEffect[effectUuidArray.size()];
-        int i = 0;
-        for (Object effectUuidElement : effectUuidArray) {
-            String effectUuid = (String) effectUuidElement;
-            effects[i] = UUIDTable.getEffect(effectUuid);
-            i++;
+        ArrayList<RPGLEffect> effectsList = new ArrayList<>();
+
+        // Add RPGLEffects from object
+        JsonArray objectEffectUuids = (JsonArray) this.get("effects");
+        for (Object effectUuid : objectEffectUuids) {
+            effectsList.add(UUIDTable.getEffect((String) effectUuid));
         }
-        return effects;
+
+        // Add RPGLEffects from equipped items
+        JsonObject items = (JsonObject) this.get("items");
+        for (Map.Entry<String, Object> itemsEntrySet : items.entrySet()) {
+            String key = itemsEntrySet.getKey();
+            if (!"inventory".equals(key)) {
+                String itemUuid = (String) itemsEntrySet.getValue();
+                Collections.addAll(effectsList, UUIDTable.getItem(itemUuid).getEquippedEffects());
+            }
+        }
+
+        // Return list as array
+        return effectsList.toArray(new RPGLEffect[0]);
     }
 
     public String[] getEvents() {
         JsonArray eventsArray = (JsonArray) this.get("events");
-        String[] events = new String[eventsArray.size()];
-        int i = 0;
-        for (Object eventId : eventsArray) {
-            events[i] = (String) eventId;
-            i++;
-        }
-        // TODO also have a Subevent dedicated to collecting additional Events
-        return events;
+        return eventsArray.toArray(new String[0]); // Ignore this warning, only Strings should be stored in eventsArray.
     }
 
     public Long getProficiencyBonus(RPGLContext context) throws Exception {
@@ -246,6 +254,9 @@ public class RPGLObject extends JsonObject {
         JsonArray inventory = (JsonArray) items.get("inventory");
         if (inventory.contains(itemUuid)) {
             items.put(equipmentSlot, itemUuid);
+            RPGLItem item = UUIDTable.getItem(itemUuid);
+            item.updateEquippedEffects(this);
+            item.defaultAttackAbilities();
             // TODO account for 2-handed items...
         }
     }

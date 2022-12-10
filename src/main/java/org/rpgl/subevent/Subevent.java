@@ -220,7 +220,7 @@ public abstract class Subevent {
         if (source == null) {
             this.subeventJson.put("source", null);
         } else {
-            this.subeventJson.put("source", source.get("uuid"));
+            this.subeventJson.put("source", source.getUuid());
         }
     }
 
@@ -238,11 +238,7 @@ public abstract class Subevent {
      * 	@param target an RPGLObject
      */
     public void setTarget(RPGLObject target) {
-        if (target == null) {
-            this.subeventJson.put("target", null);
-        } else {
-            this.subeventJson.put("target", target.get("uuid"));
-        }
+        this.subeventJson.put("target", target.getUuid());
     }
 
     /**

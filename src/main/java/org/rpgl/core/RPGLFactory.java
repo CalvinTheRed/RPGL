@@ -33,7 +33,7 @@ public final class RPGLFactory {
                     .getEffectTemplate(effectIdSplit[1])
                     .newInstance();
         } catch (NullPointerException e) {
-            return null;
+            throw new RuntimeException("Encountered an error building a new RPGLEffect", e);
         }
     }
 
@@ -59,7 +59,7 @@ public final class RPGLFactory {
                     .getEventTemplate(eventIdSplit[1])
                     .newInstance();
         } catch (NullPointerException e) {
-            return null;
+            throw new RuntimeException("Encountered an error building a new RPGLEvent", e);
         }
     }
 
@@ -85,7 +85,7 @@ public final class RPGLFactory {
                     .getItemTemplate(itemIdSplit[1])
                     .newInstance();
         } catch (NullPointerException | JsonFormatException e) {
-            return null;
+            throw new RuntimeException("Encountered an error building a new RPGLItem", e);
         }
     }
 
@@ -111,7 +111,7 @@ public final class RPGLFactory {
                     .getObjectTemplate(objectIdSplit[1])
                     .newInstance();
         } catch (NullPointerException e) {
-            return null;
+            throw new RuntimeException("Encountered an error building a new RPGLObject", e);
         }
     }
 

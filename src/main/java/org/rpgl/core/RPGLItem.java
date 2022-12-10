@@ -3,13 +3,15 @@ package org.rpgl.core;
 import org.jsonutils.JsonArray;
 import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
+import org.rpgl.uuidtable.UUIDTable;
+import org.rpgl.uuidtable.UUIDTableElement;
 
 /**
  * RPGLItems are objects which represent artifacts that RPGLObjects can use to perform RPGLEvents.
  *
  * @author Calvin Withun
  */
-public class RPGLItem extends JsonObject {
+public class RPGLItem extends UUIDTableElement {
 
     /**
      * 	<p><b><i>RPGLItem</i></b></p>
@@ -51,6 +53,49 @@ public class RPGLItem extends JsonObject {
         }
     }
 
+    /**
+     * 	<p><b><i>defaultAttackAbilities</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static void defaultAttackAbilities(RPGLItem item)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method defines the default attack abilities for RPGLItems. <i>Melee</i> and <i>thrown</i> attacks default
+     * 	to using <i>str</i>, unless they have the <i>finesse</i> property, in which case they default to <i>dex</i>.
+     * 	<i>Ranged</i> attacks always default to <i>dex</i>.
+     * 	</p>
+     */
+    public void defaultAttackAbilities() {
+        JsonObject attackAbilities = new JsonObject();
+        if (this.getWeaponProperties().contains("ranged")) {
+            attackAbilities.put("ranged", "dex");
+        }
+        if (this.getWeaponProperties().contains("finesse")) {
+            attackAbilities.put("melee", "dex");
+            attackAbilities.put("thrown", "dex");
+        } else {
+            attackAbilities.put("melee", "str");
+            attackAbilities.put("thrown", "str");
+        }
+        this.put("attack_abilities", attackAbilities);
+    }
+
+    /**
+     * 	<p><b><i>setAttackAbility</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public void setAttackAbility(String attackType, String ability)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method assigns an ability score to be used for attack and damage rolls made using this item for a given
+     * 	attack type.
+     * 	</p>
+     *
+     * 	@param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
+     *  @param ability    an ability score reference <code>("str", "dex", etc.)</code>
+     */
     public void setAttackAbility(String attackType, String ability) {
         JsonObject attackAbilities = (JsonObject) this.get("attack_abilities");
         attackAbilities.put(attackType, ability);
@@ -113,6 +158,53 @@ public class RPGLItem extends JsonObject {
     public long getAttackBonus() {
         Long attackBonus = (Long) this.get("attack_bonus");
         return attackBonus != null ? attackBonus : 0L;
+    }
+
+    /**
+     * 	<p><b><i>getEquippedEffects</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEffect[] getEquippedEffects()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Returns an array of RPGLEffect objects which are to be applied to anyone who equips this RPGLItem.
+     * 	</p>
+     *
+     * 	@return an array of RPGLEffect objects
+     */
+    public RPGLEffect[] getEquippedEffects() {
+        JsonArray equippedEffectsUuidArray = (JsonArray) this.get("equipped_effects");
+        RPGLEffect[] effects = new RPGLEffect[equippedEffectsUuidArray.size()];
+        int i = 0;
+        for (Object equippedEffectUuidElement : equippedEffectsUuidArray) {
+            String equippedEffectUuid = (String) equippedEffectUuidElement;
+            RPGLEffect effect = UUIDTable.getEffect(equippedEffectUuid);
+            effects[i] = effect;
+            i++;
+        }
+        return effects;
+    }
+
+    /**
+     * 	<p><b><i>updateEquippedEffects</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public void updateEquippedEffects()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Updates the source and target of RPGLEffect objects associated with this RPGLItem. This is to be used whenever a
+     * 	RPGLObject equips the RPGLItem.
+     * 	</p>
+     *
+     *  @param object an RPGLObject which has equipped this RPGLItem
+     */
+    public void updateEquippedEffects(RPGLObject object) {
+        for (RPGLEffect effect : this.getEquippedEffects()) {
+            effect.setSource(object.getUuid());
+            effect.setTarget(object.getUuid());
+        }
     }
 
 }

@@ -89,7 +89,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -126,7 +126,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -163,7 +163,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -201,7 +201,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -240,7 +240,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -279,7 +279,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -336,7 +336,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -385,7 +385,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -430,7 +430,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -471,7 +471,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -520,7 +520,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -569,7 +569,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -618,7 +618,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -667,7 +667,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -717,7 +717,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -781,7 +781,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -835,7 +835,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
@@ -889,7 +889,7 @@ public class SavingThrowTest {
         RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
         assert object != null;
         JsonArray contextArray = new JsonArray();
-        contextArray.add(object.get("uuid"));
+        contextArray.add(object.getUuid());
         RPGLContext context = new RPGLContext(contextArray);
 
         /*
