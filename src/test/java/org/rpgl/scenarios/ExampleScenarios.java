@@ -82,7 +82,7 @@ public class ExampleScenarios {
                 "Knight should have taken 48 damage (52-48=4)"
         );
         assertEquals(4L, knight5.seek("health_data.current"),
-                "Knight should have taken 48 damage (52-(16x[6])=4)"
+                "Knight should have taken 48 damage (52-(16x[3])=4)"
         );
 
         // Knights' turns!
@@ -114,7 +114,7 @@ public class ExampleScenarios {
         );
 
         assertEquals(133L, dragon.seek("health_data.current"),
-                "Dragon should have taken 48 damage (178-(5x([3+3]+3))=133)"
+                "Dragon should have taken 45 damage (178-(5x([3+3]+3))=133)"
         );
     }
 
@@ -122,7 +122,7 @@ public class ExampleScenarios {
     @DisplayName("Kobold fighting a Knight")
     void koboldFightingKnight() throws Exception {
         RPGLObject kobold = Objects.requireNonNull(RPGLFactory.newObject("demo:kobold"));
-        RPGLItem koboldDagger = UUIDTable.getItem((String) kobold.seek("items.hand_1"));
+        RPGLItem koboldDagger = UUIDTable.getItem((String) kobold.seek("items.hand_1")); // TODO make a better interface for this
         RPGLObject knight = Objects.requireNonNull(RPGLFactory.newObject("demo:knight"));
 
         RPGLContext context = new RPGLContext();
@@ -139,7 +139,7 @@ public class ExampleScenarios {
                 context
         );
 
-        assertEquals(52L, knight.seek("health_data.current"),
+        assertEquals(52L, knight.seek("health_data.current"), // TODO make a better interface for this
                 "Knight should have taken 0 damage (kobold missed because it has a bad str modifier for the attack)"
         );
 

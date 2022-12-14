@@ -552,7 +552,7 @@ public class AttackRollTest {
          * Invoke subevent methods
          */
         attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareNaturalWeaponAttack(context, weaponId);
+        attackRoll.prepareNaturalWeaponAttack(weaponId, context);
 
         /*
          * Verify subevent behaves as expected
@@ -647,7 +647,7 @@ public class AttackRollTest {
          * Invoke subevent methods
          */
         attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareItemWeaponAttack(context, weaponEquipmentSlot);
+        attackRoll.prepareItemWeaponAttack(weaponEquipmentSlot, context);
 
         /*
          * Verify subevent behaves as expected
@@ -708,7 +708,7 @@ public class AttackRollTest {
          * Invoke subevent methods
          */
         attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareNaturalWeaponAttack(context, weaponId);
+        attackRoll.prepareNaturalWeaponAttack(weaponId, context);
         attackRoll.setTarget(objectAllAbilities12);
         BaseDamageDiceCollection baseDamageDiceCollection = attackRoll.getBaseDamageDiceCollection(context);
 
@@ -759,7 +759,7 @@ public class AttackRollTest {
          * Invoke subevent methods
          */
         attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareNaturalWeaponAttack(context, weaponId);
+        attackRoll.prepareNaturalWeaponAttack(weaponId, context);
         attackRoll.setTarget(objectAllAbilities12);
         attackRoll.resolveDamage(context);
 
@@ -807,7 +807,7 @@ public class AttackRollTest {
         attackRoll.setSource(objectAllAbilities12);
         attackRoll.prepare(context);
         attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.resolveNestedSubevents(context, "hit");
+        attackRoll.resolveNestedSubevents("hit", context);
 
         /*
          * Verify subevent behaves as expected
@@ -853,7 +853,7 @@ public class AttackRollTest {
         attackRoll.setSource(objectAllAbilities12);
         attackRoll.prepare(context);
         attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.resolveNestedSubevents(context, "miss");
+        attackRoll.resolveNestedSubevents("miss", context);
 
         /*
          * Verify subevent behaves as expected
