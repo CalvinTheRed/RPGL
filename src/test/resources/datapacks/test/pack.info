@@ -1,4 +1,4 @@
 {
     "version": "1.0.0-ALPHA",
-    "description": "a datapack designed for running unit tests"
+    "description": "A datapack built explicitly for running unit tests."
 }

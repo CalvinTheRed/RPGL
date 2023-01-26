@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Medium Armor",
+  "tags": [
+    "armor",
+    "medium_armor"
+  ],
+  "proficiency_tags": [
+    "armor",
+    "medium_armor"
+  ],
+  "base_armor_class": 14,
+  "dex_bonus_max": 2
+}

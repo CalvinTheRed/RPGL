@@ -1,13 +1,12 @@
 package org.rpgl.uuidtable;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is dedicated to tracking all JsonObject objects which persist during runtime. Objects are given UUID's so
@@ -17,39 +16,35 @@ import java.util.Random;
  */
 public final class UUIDTable {
 
-    private static final Map<Long, JsonObject> UUID_TABLE;
-    private static final Random r;
-
-    static {
-        UUID_TABLE = new HashMap<>();
-        r = new Random(System.currentTimeMillis());
-    }
+    private static final Map<String, UUIDTableElement> UUID_TABLE = new ConcurrentHashMap<>();
 
     /**
-     * This method assigns a JsonObject a UUID and registers it with the UUIDTable. If the passed object already has a
-     * UUID, it is registered under that value. This method is intended to be used to register RPGLEffects, RPGLItems,
-     * and RPGLObjects.
+     * This method assigns a UUIDTableElement a UUID and registers it with the UUIDTable. If the passed object already
+     * has a UUID, it is registered under that value. This method is intended to be used to register RPGLEffects,
+     * RPGLItems, and RPGLObjects. This method may cause problems if an object already has a UUID which has already been
+     * assigned to a different object.
      *
-     * @param data the JsonObject to be registered
+     * @param data the UUIDTableElement to be registered
      */
-    public static void register(JsonObject data) {
-        Long uuid = (Long) data.get("uuid");
+    public static void register(UUIDTableElement data) {
+        String uuid = data.getUuid();
         while (uuid == null || UUID_TABLE.containsKey(uuid)) {
-            uuid = r.nextLong();
+            uuid = UUID.randomUUID().toString();
         }
         UUID_TABLE.put(uuid, data);
-        data.put("uuid", uuid);
+        data.setUuid(uuid);
     }
 
     /**
-     * This method removes a UUID from its associated JsonObject (if it exists) and removes the UUID from the UUIDTable.
+     * This method deletes a UUID from its associated UUIDTableElement (if it exists) and removes the UUID from the
+     * UUIDTable.
      *
-     * @param uuid the UUID of the JsonObject to be unregistered
+     * @param uuid the UUID of the UUIDTableElement to be unregistered
      */
-    public static JsonObject unregister(long uuid) {
-        JsonObject data = UUID_TABLE.remove(uuid);
+    public static UUIDTableElement unregister(String uuid) {
+        UUIDTableElement data = UUID_TABLE.remove(uuid);
         if (data != null) {
-            data.remove("uuid");
+            data.deleteUuid();
         }
         return data;
     }
@@ -68,12 +63,9 @@ public final class UUIDTable {
      *
      * @param uuid the UUID of a RPGLEffect
      * @return an RPGLEffect
-     * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLEffect.
      */
-    public static RPGLEffect getEffect(long uuid) {
-        JsonObject data = UUID_TABLE.get(uuid);
-        assert data instanceof RPGLEffect;
-        return (RPGLEffect) data;
+    public static RPGLEffect getEffect(String uuid) {
+        return (RPGLEffect) UUID_TABLE.get(uuid);
     }
 
     /**
@@ -81,12 +73,9 @@ public final class UUIDTable {
      *
      * @param uuid the UUID of a RPGLItem
      * @return an RPGLItem
-     * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLItem.
      */
-    public static RPGLItem getItem(long uuid) {
-        JsonObject data = UUID_TABLE.get(uuid);
-        assert data instanceof RPGLItem;
-        return (RPGLItem) data;
+    public static RPGLItem getItem(String uuid) {
+        return (RPGLItem) UUID_TABLE.get(uuid);
     }
 
     /**
@@ -94,12 +83,9 @@ public final class UUIDTable {
      *
      * @param uuid the UUID of a RPGLObject
      * @return an RPGLObject
-     * @throws AssertionError if the JsonObject associated with the UUID is null or not a RPGLObject.
      */
-    public static RPGLObject getObject(long uuid) {
-        JsonObject data = UUID_TABLE.get(uuid);
-        assert data instanceof RPGLObject;
-        return (RPGLObject) data;
+    public static RPGLObject getObject(String uuid) {
+        return (RPGLObject) UUID_TABLE.get(uuid);
     }
 
     /**

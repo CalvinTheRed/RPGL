@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Punching Bag",
+  "ability_scores": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "health_data": {
+    "hit_dice": [
+      { "size": 10, "spent": false }
+    ],
+    "base": 100,
+    "max": 100,
+    "current": 100,
+    "temporary": 0
+  },
+  "proficiency_bonus": 2
+}

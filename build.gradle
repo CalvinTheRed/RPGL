@@ -22,5 +22,5 @@ test {
 }
 
 git {
-    implementation 'https://github.com/CalvinTheRed/JsonUtils.git', { tag '1.0.0' }
+    implementation 'https://github.com/CalvinTheRed/JsonUtils.git', { tag '1.2.0' }
 }

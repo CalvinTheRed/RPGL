@@ -24,31 +24,44 @@ public final class DatapackLoader {
     }
 
     /**
-     * This method must be called at the beginning of program execution. This is where the process of loading datapacks
-     * into RPGL begins.
+     * 	<p><b><i>loadDatapacks</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static void loadDatapacks(File directory)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method loads all datapacks within a directory into RPGL. This method must be called before any datapack
+     * 	content can be used.
+     * 	</p>
+     *
+     * 	@param directory a File directory containing datapack directories
      */
     public static void loadDatapacks(File directory) {
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.isDirectory()) {
-                try {
-                    checkPackInfo(file);
-                    Datapack datapack = new Datapack(file);
-                    DATAPACKS.put(file.getName(), datapack);
-                } catch (RuntimeException e) {
-                    // datapack failed to load
-                }
+                checkPackInfo(file);
+                Datapack datapack = new Datapack(file);
+                DATAPACKS.put(file.getName(), datapack);
             }
         }
     }
 
     /**
-     * This method verifies a datapack by checking its pack.info file.
+     * 	<p><b><i>checkPackInfo</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static void checkPackInfo(File directory)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method verifies a datapack by checking the content of its pack.info file.
+     * 	</p>
      *
-     * @param directory a datapack directory
-     * @throws RuntimeException if pack.info does not exist, is formatted incorrectly, or specifies an unsupported
-     * version.
+     *  @param directory a File directory for a datapack
+     *  @throws RuntimeException if pack.info does not exist, is formatted incorrectly, or specifies an unsupported
      */
-    private static void checkPackInfo(File directory) {
+    static void checkPackInfo(File directory) {
         String namespace = directory.getName();
         String version = null;
         try {
@@ -57,12 +70,12 @@ public final class DatapackLoader {
             assert version != null; // TODO this needs a better check...
         } catch (JsonFormatException | FileNotFoundException e) {
             throw new RuntimeException(String.format(
-                    "datapack {} is missing a pack.info file or it is formatted incorrectly",
+                    "datapack %s is missing a pack.info file or it is formatted incorrectly",
                     namespace
             ), e);
         } catch (AssertionError e) {
             throw new RuntimeException(String.format(
-                    "datapack {} is not supported (version {})",
+                    "datapack %s is not supported (version %s)",
                     namespace,
                     version
             ), e);

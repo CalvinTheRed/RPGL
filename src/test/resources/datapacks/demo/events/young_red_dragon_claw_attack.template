@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Claw",
+  "area_of_effect": { },
+  "subevents": [
+    {
+      "subevent": "attack_roll",
+      "weapon": "demo:young_red_dragon_claw",
+      "attack_type": "melee",
+      "determined": 19
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Heavy Armor",
+  "tags": [
+    "armor",
+    "heavy_armor"
+  ],
+  "proficiency_tags": [
+    "armor",
+    "heavy_armor"
+  ],
+  "base_armor_class": 18,
+  "dex_bonus_max": 0
+}

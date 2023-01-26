@@ -11,22 +11,38 @@ import org.jsonutils.JsonObject;
 public class RPGLEventTemplate extends JsonObject {
 
     /**
-     * A copy-constructor for the RPGLEventTemplate class.
+     * 	<p><b><i>RPGLEventTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEventTemplate(JsonObject eventTemplateJson)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	The constructor for the RPGLEventTemplate class.
+     * 	</p>
      *
-     * @param data the data to be copied to this object
+     * 	@param eventTemplateJson the JSON data to be joined to the new RPGLEventTemplate object.
      */
-    public RPGLEventTemplate(JsonObject data) {
-        this.join(data);
+    public RPGLEventTemplate(JsonObject eventTemplateJson) {
+        this.join(eventTemplateJson);
     }
 
     /**
-     * This method returns a new RPGLEvent object derived from the JSON template stored in the calling object.
+     * 	<p><b><i>newInstance</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEvent newInstance()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Constructs a new RPGLEvent object corresponding to the contents of the RPGLEventTemplate object. The new object
+     * 	is registered to the UUIDTable class when it is constructed.
+     * 	</p>
      *
-     * @return a new RPGLEvent object
+     * 	@return a new RPGLEvent object
      */
     public RPGLEvent newInstance() {
-        RPGLEvent event = new RPGLEvent(this);
-        return event;
+        return new RPGLEvent(this);
     }
 
 }

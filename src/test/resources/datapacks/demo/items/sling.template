@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Sling",
+  "proficiency_tags": [
+    "simple",
+    "range",
+    "sling"
+  ],
+  "weapon_properties": [
+    "simple",
+    "range",
+    "sling"
+  ],
+  "range": {
+    "normal": 30,
+    "long": 120
+  },
+  "weight": 1,
+  "cost": "1s",
+  "while_equipped": [ ],
+  "damage": {
+    "ranged": [
+      {
+        "type": "bludgeoning",
+        "dice": [
+          {
+            "size": 4,
+            "determined": 2
+          }
+        ],
+        "bonus": 0
+      }
+    ]
+  },
+  "attack_bonus": 0
+}

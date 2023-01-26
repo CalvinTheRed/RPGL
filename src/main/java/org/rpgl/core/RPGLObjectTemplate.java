@@ -13,51 +13,104 @@ import org.rpgl.uuidtable.UUIDTable;
 public class RPGLObjectTemplate extends JsonObject {
 
     /**
-     * A copy-constructor for the RPGLObjectTemplate class.
+     * 	<p><b><i>RPGLObjectTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLObjectTemplate(JsonObject objectTemplateJson)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	The constructor for the RPGLObjectTemplate class.
+     * 	</p>
      *
-     * @param data the data to be copied to this object
+     * 	@param objectTemplateJson the JSON data to be joined to the new RPGLObjectTemplate object.
      */
-    public RPGLObjectTemplate(JsonObject data) {
-        this.join(data);
+    public RPGLObjectTemplate(JsonObject objectTemplateJson) {
+        this.join(objectTemplateJson);
     }
 
     /**
-     * This method returns a new RPGLObject object derived from the JSON template stored in the calling object.
+     * 	<p><b><i>newInstance</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLObject newInstance()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	Constructs a new RPGLObject object corresponding to the contents of the RPGLObjectTemplate object. The new
+     * 	object is registered to the UUIDTable class when it is constructed.
+     * 	</p>
      *
-     * @return a new RPGLObject object
+     * 	@return a new RPGLObject object
      */
     public RPGLObject newInstance() {
         RPGLObject object = new RPGLObject(this);
-        processItems(object);
+        this.putIfAbsent("events", new JsonArray());
         processEffects(object);
+        processItems(object);
         UUIDTable.register(object);
         return object;
     }
 
     /**
-     * This helper method converts itemId's in an RPGLObjectTemplate's items object to RPGLItems. The UUID's of these
-     * new RPGLItems replace the original object contents.
+     * 	<p><b><i>processEffects</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static void processEffects(RPGLObject object)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method converts effect IDs in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
+     *  these new RPGLEffects replace the original array contents.
+     * 	</p>
      *
-     * @param object the object being processed.
+     *  @param object an RPGLObject
      */
-    private static void processItems(RPGLObject object) {
+    static void processEffects(RPGLObject object) {
+        Object keyValue = object.remove("effects");
+        JsonArray effectIdArray = (JsonArray) keyValue;
+        JsonArray effectUuidArray = new JsonArray();
+        for (Object effectIdElement : effectIdArray) {
+            String effectId = (String) effectIdElement;
+            RPGLEffect effect = RPGLFactory.newEffect(effectId);
+            if (effect != null) {
+                effectUuidArray.add(effect.getUuid());
+            }
+        }
+        object.put("effects", effectUuidArray);
+    }
+
+    /**
+     * 	<p><b><i>processItems</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static void processItems(RPGLObject object)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method manages the conversion of item IDs in an RPGLObject's inventory to RPGLItem objects and their
+     * 	UUID's.
+     * 	</p>
+     */
+    static void processItems(RPGLObject object) {
         Object keyValue = object.get("items");
         if (keyValue instanceof JsonObject items) {
 
             // process inventory array (does not include equipped items)
             JsonArray inventoryUuids = new JsonArray();
             if (items.get("inventory") instanceof JsonArray) {
-                JsonArray inventoryItemIds = (JsonArray) items.remove("inventory");
-                processInventory(inventoryItemIds);
-                inventoryUuids.addAll(inventoryItemIds);
+                inventoryUuids.addAll(processInventory((JsonArray) items.remove("inventory")));
             }
 
             // process equipped items (were not included in inventory array)
             JsonArray equippedItemUuids = new JsonArray();
             for (String equipmentSlotName : items.keySet()) {
-                RPGLItem item = RPGLFactory.newItem((String) items.remove(equipmentSlotName));
-                items.put(equipmentSlotName, item.get("uuid"));
-                equippedItemUuids.add(item.get("uuid"));
+                String itemId = (String) items.get(equipmentSlotName);
+                RPGLItem item = RPGLFactory.newItem(itemId);
+                assert item != null;
+                String itemUuid = item.getUuid();
+                items.put(equipmentSlotName, itemUuid);
+                equippedItemUuids.add(itemUuid);
             }
             inventoryUuids.addAll(equippedItemUuids);
 
@@ -67,35 +120,30 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * This helper method converts itemId's in an RPGLObjectTemplate's <code>items.inventory</code> array to RPGLItems.
-     * The UUID's of these new RPGLItems replace the original object contents.
+     * 	<p><b><i>processInventory</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static JsonArray processInventory(RPGLObject object)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method converts item IDs in an RPGLObjectTemplate's <code>items.inventory</code> array to RPGLItems.
+     *  The UUID's of these new RPGLItems replace the original object contents.
+     * 	</p>
      *
-     * @param inventory the inventory being processed.
+     *  @param inventoryIdArray the inventory being processed
+     *  @return a JsonArray of RPGLItem UUID's
      */
-    private static void processInventory(JsonArray inventory) {
-        while (inventory.get(0) instanceof String) {
-            String itemId = (String) inventory.remove(0);
+    static JsonArray processInventory(JsonArray inventoryIdArray) {
+        JsonArray inventoryUuidArray = new JsonArray();
+        for (Object inventoryIdElement : inventoryIdArray) {
+            String itemId = (String) inventoryIdElement;
             RPGLItem item = RPGLFactory.newItem(itemId);
-            inventory.add(item.get("uuid"));
-        }
-    }
-
-    /**
-     * This helper method converts effectId's in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
-     * these new RPGLEffects replace the original array contents.
-     *
-     * @param object the object being processed.
-     */
-    private static void processEffects(RPGLObject object) {
-        Object keyValue = object.remove("effects");
-        if (keyValue instanceof JsonArray effects) {
-            while (effects.get(0) instanceof String) {
-                String effectId = (String) effects.remove(0);
-                RPGLEffect effect = RPGLFactory.newEffect(effectId);
-                effects.add(effect.get("uuid"));
+            if (item != null) {
+                inventoryUuidArray.add(item.getUuid());
             }
-            object.put("effects", effects);
         }
+        return inventoryUuidArray;
     }
 
 }
