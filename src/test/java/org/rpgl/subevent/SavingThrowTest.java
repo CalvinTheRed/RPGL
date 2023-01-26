@@ -485,13 +485,13 @@ public class SavingThrowTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse(savingThrow.advantageRoll(),
+        assertFalse(savingThrow.isAdvantageRoll(),
                 "SavingThrow Subevent should not be at advantage."
         );
-        assertTrue(savingThrow.disadvantageRoll(),
+        assertTrue(savingThrow.isDisadvantageRoll(),
                 "SavingThrow Subevent should be at disadvantage."
         );
-        assertFalse(savingThrow.normalRoll(),
+        assertFalse(savingThrow.isNormalRoll(),
                 "SavingThrow Subevent should not be a normal roll."
         );
         assertEquals(1L, savingThrow.get(),
@@ -534,13 +534,13 @@ public class SavingThrowTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse(savingThrow.advantageRoll(),
+        assertFalse(savingThrow.isAdvantageRoll(),
                 "SavingThrow Subevent should not be at advantage."
         );
-        assertTrue(savingThrow.disadvantageRoll(),
+        assertTrue(savingThrow.isDisadvantageRoll(),
                 "SavingThrow Subevent should be at disadvantage."
         );
-        assertFalse(savingThrow.normalRoll(),
+        assertFalse(savingThrow.isNormalRoll(),
                 "SavingThrow Subevent should not be a normal roll."
         );
         assertEquals(1L, savingThrow.get(),
@@ -583,13 +583,13 @@ public class SavingThrowTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertTrue(savingThrow.advantageRoll(),
+        assertTrue(savingThrow.isAdvantageRoll(),
                 "SavingThrow Subevent should be at advantage."
         );
-        assertFalse(savingThrow.disadvantageRoll(),
+        assertFalse(savingThrow.isDisadvantageRoll(),
                 "SavingThrow Subevent should not be at disadvantage."
         );
-        assertFalse(savingThrow.normalRoll(),
+        assertFalse(savingThrow.isNormalRoll(),
                 "SavingThrow Subevent should not be a normal roll."
         );
         assertEquals(20L, savingThrow.get(),
@@ -632,13 +632,13 @@ public class SavingThrowTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertTrue(savingThrow.advantageRoll(),
+        assertTrue(savingThrow.isAdvantageRoll(),
                 "SavingThrow Subevent should be at advantage."
         );
-        assertFalse(savingThrow.disadvantageRoll(),
+        assertFalse(savingThrow.isDisadvantageRoll(),
                 "SavingThrow Subevent should not be at disadvantage."
         );
-        assertFalse(savingThrow.normalRoll(),
+        assertFalse(savingThrow.isNormalRoll(),
                 "SavingThrow Subevent should not be a normal roll."
         );
         assertEquals(20L, savingThrow.get(),
@@ -682,13 +682,13 @@ public class SavingThrowTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse(savingThrow.advantageRoll(),
+        assertFalse(savingThrow.isAdvantageRoll(),
                 "SavingThrow Subevent should not be at advantage."
         );
-        assertFalse(savingThrow.disadvantageRoll(),
+        assertFalse(savingThrow.isDisadvantageRoll(),
                 "SavingThrow Subevent should not be at disadvantage."
         );
-        assertTrue(savingThrow.normalRoll(),
+        assertTrue(savingThrow.isNormalRoll(),
                 "SavingThrow Subevent should be a normal roll."
         );
         assertEquals(20L, savingThrow.get(),
@@ -732,13 +732,13 @@ public class SavingThrowTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse(savingThrow.advantageRoll(),
+        assertFalse(savingThrow.isAdvantageRoll(),
                 "SavingThrow Subevent should not be at advantage."
         );
-        assertFalse(savingThrow.disadvantageRoll(),
+        assertFalse(savingThrow.isDisadvantageRoll(),
                 "SavingThrow Subevent should not be at disadvantage."
         );
-        assertTrue(savingThrow.normalRoll(),
+        assertTrue(savingThrow.isNormalRoll(),
                 "SavingThrow Subevent should be a normal roll."
         );
         assertEquals(1L, savingThrow.get(),

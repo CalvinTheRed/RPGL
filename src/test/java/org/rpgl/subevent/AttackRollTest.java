@@ -94,13 +94,13 @@ public class AttackRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertTrue(attackRoll.normalRoll(),
+        assertTrue(attackRoll.isNormalRoll(),
                 "Attack should default to normal roll."
         );
-        assertFalse(attackRoll.advantageRoll(),
+        assertFalse(attackRoll.isAdvantageRoll(),
                 "AttackRoll should not default to advantage roll."
         );
-        assertFalse(attackRoll.disadvantageRoll(),
+        assertFalse(attackRoll.isDisadvantageRoll(),
                 "AttackRoll should not default to disadvantage roll."
         );
     }
@@ -128,13 +128,13 @@ public class AttackRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse(attackRoll.normalRoll(),
+        assertFalse(attackRoll.isNormalRoll(),
                 "Attack should not be a normal roll after being granted advantage."
         );
-        assertTrue(attackRoll.advantageRoll(),
+        assertTrue(attackRoll.isAdvantageRoll(),
                 "AttackRoll should be an advantage roll after being granted advantage."
         );
-        assertFalse(attackRoll.disadvantageRoll(),
+        assertFalse(attackRoll.isDisadvantageRoll(),
                 "AttackRoll should not be a disadvantage roll after being granted advantage."
         );
     }
@@ -162,13 +162,13 @@ public class AttackRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertFalse(attackRoll.normalRoll(),
+        assertFalse(attackRoll.isNormalRoll(),
                 "Attack should not be a normal roll after being granted disadvantage."
         );
-        assertFalse(attackRoll.advantageRoll(),
+        assertFalse(attackRoll.isAdvantageRoll(),
                 "AttackRoll should not be an advantage roll after being granted disadvantage."
         );
-        assertTrue(attackRoll.disadvantageRoll(),
+        assertTrue(attackRoll.isDisadvantageRoll(),
                 "AttackRoll should be a disadvantage roll after being granted disadvantage."
         );
     }
@@ -197,13 +197,13 @@ public class AttackRollTest {
         /*
          * Verify subevent behaves as expected
          */
-        assertTrue(attackRoll.normalRoll(),
+        assertTrue(attackRoll.isNormalRoll(),
                 "Attack should be a normal roll after being granted advantage and disadvantage."
         );
-        assertFalse(attackRoll.advantageRoll(),
+        assertFalse(attackRoll.isAdvantageRoll(),
                 "AttackRoll should not be an advantage roll after being granted advantage and disadvantage."
         );
-        assertFalse(attackRoll.disadvantageRoll(),
+        assertFalse(attackRoll.isDisadvantageRoll(),
                 "AttackRoll should not be a disadvantage roll after being granted advantage and disadvantage."
         );
     }

@@ -4,6 +4,16 @@ import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 
+/**
+ * This subevent is dedicated to calculating the save difficulty class against which saving throws are made.
+ * <br>
+ * <br>
+ * Source: the RPGLObject whose save difficulty class is being calculated
+ * <br>
+ * Target: should be the same as the source
+ *
+ * @author Calvin Withun
+ */
 public class CalculateSaveDifficultyClass extends Calculation {
 
     public CalculateSaveDifficultyClass() {

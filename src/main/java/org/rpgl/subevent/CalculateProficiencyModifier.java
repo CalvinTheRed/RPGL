@@ -3,6 +3,16 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 
+/**
+ * This subevent is dedicated to calculating the proficiency bonus of an RPGLObject.
+ * <br>
+ * <br>
+ * Source: the RPGLObject whose proficiency bonus is being calculated
+ * <br>
+ * Target: should be the same as the source
+ *
+ * @author Calvin Withun
+ */
 public class CalculateProficiencyModifier extends Calculation {
 
     public CalculateProficiencyModifier() {

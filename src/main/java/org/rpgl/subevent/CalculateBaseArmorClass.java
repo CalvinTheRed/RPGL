@@ -11,6 +11,11 @@ import org.rpgl.uuidtable.UUIDTable;
  * This subevent is dedicated to calculating the armor class against which attack rolls are made. Once the attack roll
  * is made, the target will have an opportunity to raise its armor class further through the CalculateEffectiveArmorClass
  * subevent, but reactive changes to armor class are not accounted for in this subevent.
+ * <br>
+ * <br>
+ * Source: the RPGLObject whose base armor class is being calculated
+ * <br>
+ * Target: should be the same as the source
  *
  * @author Calvin Withun
  */
@@ -65,6 +70,26 @@ public class CalculateBaseArmorClass extends Calculation {
         this.subeventJson.put("base", baseArmorClass); // TODO what is base for as opposed to set?
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>prepareArmored</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * long prepareArmored(RPGLContext context, RPGLItem armor)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method prepares the subevent if <code>source</code> is wearing armor.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *  @param armor   the armor worn by <code>source</code>
+     *  @return the base armor class of the armored <code>source</code>
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     long prepareArmored(RPGLContext context, RPGLItem armor) throws Exception {
         Long baseArmorClass = (Long) armor.get("base_armor_class");
 
@@ -83,10 +108,47 @@ public class CalculateBaseArmorClass extends Calculation {
         return baseArmorClass;
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>prepareUnarmored</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * long prepareUnarmored(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method prepares the subevent if <code>source</code> is not wearing armor.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *  @return the base armor class of the unarmored <code>source</code>
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     long prepareUnarmored(RPGLContext context) throws Exception {
         return 10L + this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>getShieldBonus</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * long getShieldBonus()
+     * 	throws JsonFormatException
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method returns the highest armor class bonus granted by a shield <code>source</code> is wielding.
+     * 	</p>
+     *
+     *  @return the shield bonus for <code>source</code>.
+     *
+     * 	@throws JsonFormatException if <code>source</code> is missing <code>items.hand_1</code> or <code>items.hand_2</code>.
+     */
     long getShieldBonus() throws JsonFormatException {
         // Get armor class bonus if wielding shield (you may only benefit from 1 shield at a time, larger bonus is used).
         String hand1ShieldUuid = (String) this.getSource().seek("items.hand_1");

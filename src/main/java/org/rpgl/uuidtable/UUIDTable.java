@@ -24,7 +24,7 @@ public final class UUIDTable {
      * RPGLItems, and RPGLObjects. This method may cause problems if an object already has a UUID which has already been
      * assigned to a different object.
      *
-     *  @param data the UUIDTableElement to be registered
+     * @param data the UUIDTableElement to be registered
      */
     public static void register(UUIDTableElement data) {
         String uuid = data.getUuid();
@@ -39,7 +39,7 @@ public final class UUIDTable {
      * This method deletes a UUID from its associated UUIDTableElement (if it exists) and removes the UUID from the
      * UUIDTable.
      *
-     *  @param uuid the UUID of the UUIDTableElement to be unregistered
+     * @param uuid the UUID of the UUIDTableElement to be unregistered
      */
     public static UUIDTableElement unregister(String uuid) {
         UUIDTableElement data = UUID_TABLE.remove(uuid);
@@ -61,8 +61,8 @@ public final class UUIDTable {
     /**
      * This method returns the RPGLEffect associated with a UUID.
      *
-     *  @param uuid the UUID of a RPGLEffect
-     *  @return an RPGLEffect
+     * @param uuid the UUID of a RPGLEffect
+     * @return an RPGLEffect
      */
     public static RPGLEffect getEffect(String uuid) {
         return (RPGLEffect) UUID_TABLE.get(uuid);
@@ -71,8 +71,8 @@ public final class UUIDTable {
     /**
      * This method returns the RPGLItem associated with a UUID.
      *
-     *  @param uuid the UUID of a RPGLItem
-     *  @return an RPGLItem
+     * @param uuid the UUID of a RPGLItem
+     * @return an RPGLItem
      */
     public static RPGLItem getItem(String uuid) {
         return (RPGLItem) UUID_TABLE.get(uuid);
@@ -81,8 +81,8 @@ public final class UUIDTable {
     /**
      * This method returns the RPGLObject associated with a UUID.
      *
-     *  @param uuid the UUID of a RPGLObject
-     *  @return an RPGLObject
+     * @param uuid the UUID of a RPGLObject
+     * @return an RPGLObject
      */
     public static RPGLObject getObject(String uuid) {
         return (RPGLObject) UUID_TABLE.get(uuid);
@@ -91,7 +91,7 @@ public final class UUIDTable {
     /**
      * This method returns the number of objects being tracked in UUIDTable.
      *
-     *  @return a number
+     * @return a number
      */
     public static int size() {
         return UUID_TABLE.size();

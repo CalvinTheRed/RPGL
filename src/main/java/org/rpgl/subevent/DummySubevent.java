@@ -3,6 +3,16 @@ package org.rpgl.subevent;
 import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 
+/**
+ * This Subevent is a dummy Subevent only meant to be used during testing. It has no practical application.
+ * <br>
+ * <br>
+ * Source: any
+ * <br>
+ * Target: any
+ *
+ * @author Calvin Withun
+ */
 public class DummySubevent extends Subevent {
 
     public static int counter = 0;

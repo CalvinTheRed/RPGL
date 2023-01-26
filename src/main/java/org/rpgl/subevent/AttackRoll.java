@@ -93,10 +93,10 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method prepares the AttackRoll under the assumption that the attack is being made using no weapon. This
-     * 	typically is the case when the attack is a spell or other magical attack. Any damage dealt by the AttackRoll
-     * 	must be specified in the RPGLEvent template when this prepare method is used, since no weapon will be used to
-     * 	determine the damage.
+     * 	This helper method prepares the AttackRoll under the assumption that the attack is being made using no weapon.
+     * 	This typically is the case when the attack is a spell or other magical attack. Any damage dealt by the
+     * 	AttackRoll must be specified in the RPGLEvent template when this prepare method is used, since no weapon will be
+     * 	used to determine the damage.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -130,9 +130,9 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method prepares the AttackRoll under the assumption that the attack is being made using a natural weapon
-     * 	such as a claw or fangs or a tail or a slam attack. The natural weapon will only exist during the attack, and
-     * 	will be destroyed once the attack is resolved. Natural weapons should never exist as actual items.
+     * 	This helper method prepares the AttackRoll under the assumption that the attack is being made using a natural
+     * 	weapon such as a claw or fangs or a tail or a slam attack. The natural weapon will only exist during the attack,
+     * 	and will be destroyed once the attack is resolved. Natural weapons should never exist as actual items.
      * 	</p>
      *
      *  @param weaponId a natural weapon ID <code>("datapack:name")</code>
@@ -171,9 +171,9 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method prepares the AttackRoll under the assumption that the attack is being made using a weapon such as a
-     * 	sword, shortbow, or even an improvised weapon such as a mug. The weapon being used is determined by the content
-     * 	of the equipment slot specified in the method call.
+     * 	This helper method prepares the AttackRoll under the assumption that the attack is being made using a weapon
+     * 	such as a sword, shortbow, or even an improvised weapon such as a mug. The weapon being used is determined by
+     * 	the content of the equipment slot specified in the method call.
      * 	</p>
      *
      *  @param equipmentSlot an equipment slot (can be anything other than <code>"inventory"</code>)
@@ -213,9 +213,9 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method evaluates the effective armor class of the target to determine if the attack hits or misses. This
-     * 	value can be influenced by the target after the attack roll is made to attempt to avoid the attack, and may be
-     * 	different than the target's base armor class.
+     * 	This helper method evaluates the effective armor class of the target to determine if the attack hits or misses.
+     * 	This value can be influenced by the target after the attack roll is made to attempt to avoid the attack, and may
+     * 	be different than the target's base armor class.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -254,7 +254,7 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method determines and delivers the damage dealt by the attack roll on a hit.
+     * 	This helper method determines and delivers the damage dealt by the attack roll on a hit.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -281,7 +281,7 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method increases the damage of the attack roll if the attack scored a critical hit.
+     * 	This helper method increases the damage of the attack roll if the attack scored a critical hit.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -312,7 +312,7 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method determines the base damage dice and bonuses dealt by the attack roll on a hit.
+     * 	This helper method determines the base damage dice and bonuses dealt by the attack roll on a hit.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -367,12 +367,12 @@ public class AttackRoll extends ContestRoll {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * long getTargetArmorClass(RPGLContext context)
+     * TargetDamageDiceCollection getTargetDamageDiceCollection(RPGLContext context)
      * 	throws Exception
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method determines any additional damage dice or bonuses dealt to a target on a hit beyond the base damage.
+     * 	This helper method determines any additional damage dice or bonuses dealt to a target on a hit beyond the base damage.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -409,9 +409,9 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method determines the damage dice and bonuses dealt by an attack roll on a critical hit. This doubles the
-     * 	number of dice involved with the base and target damage rolls, and allows for additional bonuses and dice to be
-     * 	applied.
+     * 	This helper method determines the damage dice and bonuses dealt by an attack roll on a critical hit. This
+     * 	doubles the number of dice involved with the base and target damage rolls, and allows for additional bonuses and
+     * 	dice to be applied.
      * 	</p>
      *
      *  @param baseDamageDiceCollection   the base damage dice collection of the attack
@@ -421,12 +421,9 @@ public class AttackRoll extends ContestRoll {
      *
      * 	@throws Exception if an exception occurs.
      */
-    CriticalHitDamageDiceCollection getCriticalHitDamageDiceCollection(
-            BaseDamageDiceCollection baseDamageDiceCollection,
-            TargetDamageDiceCollection targetDamageDiceCollection,
-            RPGLContext context
-    ) throws Exception {
-        // TODO can this method signature be made any cleaner?
+    CriticalHitDamageDiceCollection getCriticalHitDamageDiceCollection(BaseDamageDiceCollection baseDamageDiceCollection,
+                                                                       TargetDamageDiceCollection targetDamageDiceCollection,
+                                                                       RPGLContext context) throws Exception {
         baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
 
         CriticalHitDamageDiceCollection criticalHitDamageDiceCollection = new CriticalHitDamageDiceCollection();
@@ -459,8 +456,8 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method rolls all dice involved in the damage roll of the attack on a hit and reports a collection of damage
-     * 	types and amounts (individual dice rolls are not preserved).
+     * 	This helper method rolls all dice involved in the damage roll of the attack on a hit and reports a collection of
+     * 	damage types and amounts (individual dice rolls are not preserved).
      * 	</p>
      *
      *  @param damageDiceCollection a collection of typed damage dice and bonuses
@@ -499,7 +496,7 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method passes the final damage quantities of the attack to the attack's target.
+     * 	This helper method passes the final damage quantities of the attack to the attack's target.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -536,8 +533,8 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method resolves any additional subevents specified in the AttackRoll json according to whether the attack
-     * 	hit or missed.
+     * 	This helper method resolves any additional subevents specified in the AttackRoll json according to whether the
+     * 	attack hit or missed.
      * 	</p>
      *
      *  @param hitOrMiss a String indicating whether the attack hit <code>("hit")</code> or missed <code>("miss")</code>.
@@ -568,7 +565,7 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method returns whether the attack roll is a critical hit.
+     * 	This helper method returns whether the attack roll is a critical hit.
      * 	</p>
      *
      *  @param context the context this Subevent takes place in
@@ -603,7 +600,7 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method returns whether the attack roll is a critical miss.
+     * 	This helper method returns whether the attack roll is a critical miss.
      * 	</p>
      *
      *  @return true if the attack is a critical miss
@@ -622,7 +619,7 @@ public class AttackRoll extends ContestRoll {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method applies any attack roll bonuses granted by the weapon's json data (typically this bonus is granted
+     * 	This helper method applies any attack roll bonuses granted by the weapon's json data (typically this bonus is granted
      * 	by magical weapons).
      * 	</p>
      *

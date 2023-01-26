@@ -5,6 +5,16 @@ import org.jsonutils.JsonFormatException;
 import org.jsonutils.JsonObject;
 import org.jsonutils.JsonParser;
 
+/**
+ * This Subevent is dedicated to representing a collection of damage dice to be rolled when a critical hit occurs.
+ * <br>
+ * <br>
+ * Source: an RPGLObject delivering a critical hit attack
+ * <br>
+ * Target: an RPGLObject targeted by a critical hit attack
+ *
+ * @author Calvin Withun
+ */
 public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
 
     public CriticalHitDamageDiceCollection() {
@@ -27,6 +37,22 @@ public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
         return clone;
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>doubleDice</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void doubleDice()
+     * 	throws JsonFormatException
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method doubles the number of dice in the damage dice collection.
+     * 	</p>
+     *
+     * 	@throws JsonFormatException if there is a JSON formatting error.
+     */
     void doubleDice() throws JsonFormatException {
         for (Object typedDamageObjectElement : this.getDamageDiceCollection()) {
             JsonObject typedDamageObject = (JsonObject) typedDamageObjectElement;

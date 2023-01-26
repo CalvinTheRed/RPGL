@@ -36,7 +36,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
-        // TakeEffect
+        // RemoveEffect
     }
 
     /**
@@ -71,6 +71,7 @@ public abstract class Subevent {
      * 	</p>
      *
      * 	@param expected the expected subeventId
+     *
      * 	@throws SubeventMismatchException if functionJson is for a different function than the one being executed
      */
     void verifySubevent(String expected) throws SubeventMismatchException {
@@ -131,7 +132,8 @@ public abstract class Subevent {
      * 	assign a source RPGLObject to the Subevent for this method to work reliably.
      * 	</p>
      *
-     * 	@param context the context in which the Subevent is being prepared
+     * 	@param context the context in which the Subevent is being prepared\
+     *
      * 	@throws Exception if an exception occurs (any type of error may occur from calling this method)
      */
     public void prepare(RPGLContext context) throws Exception {
@@ -154,6 +156,7 @@ public abstract class Subevent {
      * 	</p>
      *
      * 	@param context the context in which the Subevent is being invoked
+     *
      * 	@throws Exception if an exception occurs (any type of error may occur from calling this method)
      */
     public void invoke(RPGLContext context) throws Exception {
@@ -192,6 +195,7 @@ public abstract class Subevent {
      * 	</p>
      *
      * 	@param effect an RPGLEffect
+     *  @return true if the Subevent has been modified by an instance of the passed Subevent already
      */
     public boolean hasModifyingEffect(RPGLEffect effect) {
         String effectId = (String) effect.get("id");
@@ -251,6 +255,8 @@ public abstract class Subevent {
      * 	<p>
      * 	Returns the source RPGLObject of the Subevent (or null if one is not assigned).
      * 	</p>
+     *
+     *  @return the RPGLObject which initiated this Subevent
      */
     public RPGLObject getSource() {
         return UUIDTable.getObject((String) this.subeventJson.get("source"));
@@ -266,11 +272,28 @@ public abstract class Subevent {
      * 	<p>
      * 	Returns the target RPGLObject of the Subevent (or null if one is not assigned).
      * 	</p>
+     *
+     *  @return the RPGLObject towards which this Subevent is directed
      */
     public RPGLObject getTarget() {
         return UUIDTable.getObject((String) this.subeventJson.get("target"));
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>getSubeventId</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public String getSubeventId()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns the ID for this Subevent.
+     * 	</p>
+     *
+     *  @return the ID of this SUbevent
+     */
     public String getSubeventId() {
         return this.subeventId;
     }

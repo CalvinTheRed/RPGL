@@ -2,6 +2,18 @@ package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
 
+/**
+ * This subevent is dedicated to calculating the armor class against which attack rolls are made for the purposes of
+ * determining whether an attack hits or misses. This value accounts for reactive increases in armor class made after
+ * the attack roll is determined.
+ * <br>
+ * <br>
+ * Source: the RPGLObject whose effective armor class is being calculated
+ * <br>
+ * Target: should be the same as the source
+ *
+ * @author Calvin Withun
+ */
 public class CalculateEffectiveArmorClass extends Calculation {
 
     public CalculateEffectiveArmorClass() {

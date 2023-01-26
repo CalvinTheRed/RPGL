@@ -5,6 +5,16 @@ import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.math.Die;
 
+/**
+ * This abstract Subevent is dedicated to rolling damage dice.
+ * <br>
+ * <br>
+ * Source: an RPGLObject rolling damage
+ * <br>
+ * Target: an RPGLObject which will later suffer the rolled damage
+ *
+ * @author Calvin Withun
+ */
 public abstract class DamageRoll extends Subevent {
 
     public DamageRoll(String subeventId) {
@@ -16,6 +26,19 @@ public abstract class DamageRoll extends Subevent {
         this.roll();
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>roll</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public void roll()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method rolls all dice associated with the Subevent.
+     * 	</p>
+     */
     public void roll() {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
 
@@ -35,6 +58,19 @@ public abstract class DamageRoll extends Subevent {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>rerollTypedDiceLessThanOrEqualTo</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public void rerollTypedDiceLessThanOrEqualTo(long threshold, String damageType)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given threshold.
+     * 	</p>
+     */
     public void rerollTypedDiceLessThanOrEqualTo(long threshold, String damageType) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
 
@@ -58,6 +94,20 @@ public abstract class DamageRoll extends Subevent {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>setTypedDiceLessThanOrEqualTo</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public void setTypedDiceLessThanOrEqualTo(long threshold, long faceValue, String damageType)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method overrides the face value of all dice of a given damage type whose rolled values are less than or
+     * 	equal to a given threshold.
+     * 	</p>
+     */
     public void setTypedDiceLessThanOrEqualTo(long threshold, long faceValue, String damageType) {
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
         for (Object typedDamageElement : typedDamageArray) {
@@ -78,6 +128,21 @@ public abstract class DamageRoll extends Subevent {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>getDamage</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public JsonObject getDamage()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns the damage dice collection associated with the Subevent.
+     * 	</p>
+     *
+     *  @return a collection of damage dice and bonuses
+     */
     public JsonObject getDamage() {
         JsonObject baseDamage = new JsonObject();
         JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");

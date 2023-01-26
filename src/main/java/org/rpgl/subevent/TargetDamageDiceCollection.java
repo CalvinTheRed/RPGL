@@ -2,6 +2,16 @@ package org.rpgl.subevent;
 
 import org.jsonutils.JsonObject;
 
+/**
+ * This Subevent is dedicated to collecting target-specific damage dice and damage bonuses for an attack roll or saving throw.
+ * <br>
+ * <br>
+ * Source: an RPGLObject making an attack or forcing a saving throw
+ * <br>
+ * Target: an RPGLObject being attacked or making a saving throw
+ *
+ * @author Calvin Withun
+ */
 public class TargetDamageDiceCollection extends DamageDiceCollection {
 
     public TargetDamageDiceCollection() {

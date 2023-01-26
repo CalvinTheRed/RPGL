@@ -8,6 +8,17 @@ import org.rpgl.core.RPGLObject;
 
 import java.util.Map;
 
+/**
+ * This Subevent is dedicated to making a saving throw and resolving all fallout from making the save. This is a
+ * high-level Subevent which can be referenced in an RPGLEvent template.
+ * <br>
+ * <br>
+ * Source: an RPGLObject requiring that other RPGLObjects make a saving throw
+ * <br>
+ * Target: an RPGLObject making a saving throw
+ *
+ * @author Calvin Withun
+ */
 public class SavingThrow extends ContestRoll {
 
     public SavingThrow() {
@@ -66,6 +77,24 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>calculateDifficultyClass</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void calculateDifficultyClass(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method calculates and records the save DC of the saving throw.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         String calculateSaveDifficultyClassJsonString = String.format("""
@@ -86,6 +115,25 @@ public class SavingThrow extends ContestRoll {
         this.subeventJson.put("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>getBaseDamage</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void getBaseDamage(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method collects the base damage of the saving throw. This includes all target-agnostic damage dice and
+     * 	bonuses involved in the saving throw's damage roll.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void getBaseDamage(RPGLContext context) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
@@ -127,16 +175,71 @@ public class SavingThrow extends ContestRoll {
         this.subeventJson.put("damage", baseDamageRoll.getDamage());
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>resolveSavePass</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void resolveSavePass(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method resolves the Subevent in the case that <code>target</code> passes its saving throw.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void resolveSavePass(RPGLContext context) throws Exception {
         this.resolvePassDamage(context);
         this.resolveNestedSubevents(context, "pass");
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>resolveSaveFail</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void resolveSaveFail(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method resolves the Subevent in the case that <code>target</code> fails its saving throw.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void resolveSaveFail(RPGLContext context) throws Exception {
         this.resolveFailDamage(context);
         this.resolveNestedSubevents(context, "fail");
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>getTargetDamage</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * JsonObject getTargetDamage(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method returns all target-specific damage dice and bonuses involved in the saving throw's damage roll.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *  @return a collection of rolled damage dice and bonuses
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     JsonObject getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
@@ -173,6 +276,25 @@ public class SavingThrow extends ContestRoll {
         return targetDamageRoll.getDamage();
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>resolvePassDamage</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void resolvePassDamage(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method determines and delivers the saving throw's damage roll in the case where <code>target</code>
+     * 	passed its saving throw. This may deal half damage or no damage, according to the saving throw JSON data.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void resolvePassDamage(RPGLContext context) throws Exception {
         JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
         String damageOnPass = (String) this.subeventJson.get("damage_on_pass");
@@ -185,10 +307,8 @@ public class SavingThrow extends ContestRoll {
                 if (baseDamage.containsKey(damageType)) {
                     Long baseTypedDamage = (Long) baseDamage.get(damageType);
                     baseTypedDamage += (Long) targetDamageEntry.getValue();
-                    if (baseTypedDamage < 1L) {
-                        // You can never deal less than 1 point of damage for any given
-                        // damage type, given that you deal damage of that type at all.
-                        baseTypedDamage = 1L;
+                    if (baseTypedDamage < 0L) {
+                        baseTypedDamage = 0L; // You can never deal less than 0 points of damage when you deal damage
                     }
                     baseDamage.put(damageType, baseTypedDamage);
                 } else {
@@ -211,6 +331,25 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>resolveFailDamage</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void resolveFailDamage(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method determines and delivers the saving throw's damage roll in the case where <code>target</code>
+     * 	failed its saving throw. This should only ever deal full damage.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void resolveFailDamage(RPGLContext context) throws Exception {
         JsonObject baseDamage = (JsonObject) this.subeventJson.get("damage");
         if (baseDamage != null) {
@@ -229,6 +368,25 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>resolveNestedSubevents</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void resolveNestedSubevents(RPGLContext context, String passOrFail)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method resolves any nested Subevents within this Subevent in accordance to whether <code>target</code>
+     * 	passed or fails its saving throw.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void resolveNestedSubevents(RPGLContext context, String passOrFail) throws Exception {
         JsonArray subeventJsonArray = (JsonArray) this.subeventJson.get(passOrFail);
         if (subeventJsonArray != null) {
@@ -241,6 +399,24 @@ public class SavingThrow extends ContestRoll {
         }
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>deliverDamage</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * void deliverDamage(RPGLContext context)
+     * 	throws Exception
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method delivers a final quantity of damage to <code>target</code> after the saving throw has been calculated.
+     * 	</p>
+     *
+     *  @param context the context this Subevent takes place in
+     *
+     * 	@throws Exception if an exception occurs.
+     */
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
         String damageDeliveryJsonString = String.format("""
