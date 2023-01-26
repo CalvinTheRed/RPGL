@@ -1,4 +1,4 @@
-// this plugins has to go up top
+// this 'plugins' section has to go up top
 plugins {
     id 'com.alexvasilkov.git-dependencies' version '2.0.4'
 }
