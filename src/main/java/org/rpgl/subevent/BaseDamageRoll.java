@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
+import java.util.Map;
 
 /**
  * This Subevent is dedicated to rolling all dice which will be copied to all targets of a damaging RPGLEvent. This
@@ -22,15 +22,15 @@ public class BaseDamageRoll extends DamageRoll {
     @Override
     public Subevent clone() {
         Subevent clone = new BaseDamageRoll();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(Map<String, Object> subeventDataMap) {
         Subevent clone = new BaseDamageRoll();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(subeventDataMap);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

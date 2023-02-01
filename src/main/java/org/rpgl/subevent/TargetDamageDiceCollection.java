@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
+import java.util.Map;
 
 /**
  * This Subevent is dedicated to collecting target-specific damage dice and damage bonuses for an attack roll or saving throw.
@@ -21,15 +21,15 @@ public class TargetDamageDiceCollection extends DamageDiceCollection {
     @Override
     public Subevent clone() {
         Subevent clone = new TargetDamageDiceCollection();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(Map<String, Object> subeventDataMap) {
         Subevent clone = new TargetDamageDiceCollection();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(subeventDataMap);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

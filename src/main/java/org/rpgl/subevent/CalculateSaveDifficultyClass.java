@@ -1,8 +1,9 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
+
+import java.util.Map;
 
 /**
  * This subevent is dedicated to calculating the save difficulty class against which saving throws are made.
@@ -23,22 +24,22 @@ public class CalculateSaveDifficultyClass extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateSaveDifficultyClass();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(Map<String, Object> subeventDataMap) {
         Subevent clone = new CalculateSaveDifficultyClass();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(subeventDataMap);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        this.subeventJson.put("base", 8L);
+        this.subeventJson.put("base", 8);
         RPGLObject source = this.getSource();
         this.addBonus(source.getProficiencyBonus(context));
         this.addBonus(source.getAbilityModifierFromAbilityScore(context, (String) this.subeventJson.get("difficulty_class_ability")));

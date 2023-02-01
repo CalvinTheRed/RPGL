@@ -1,11 +1,9 @@
 package org.rpgl.datapack;
 
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
+import org.rpgl.core.JsonObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -62,23 +60,11 @@ public final class DatapackLoader {
      *  @throws RuntimeException if pack.info does not exist, is formatted incorrectly, or specifies an unsupported
      */
     static void checkPackInfo(File directory) {
-        String namespace = directory.getName();
-        String version = null;
         try {
-            JsonObject infoData = JsonParser.parseObjectFile(directory.getAbsolutePath() + "\\pack.info");
-            version = (String) infoData.get("version");
-            assert version != null; // TODO this needs a better check...
-        } catch (JsonFormatException | FileNotFoundException e) {
-            throw new RuntimeException(String.format(
-                    "datapack %s is missing a pack.info file or it is formatted incorrectly",
-                    namespace
-            ), e);
-        } catch (AssertionError e) {
-            throw new RuntimeException(String.format(
-                    "datapack %s is not supported (version %s)",
-                    namespace,
-                    version
-            ), e);
+            DatapackInfo datapackInfo = JsonObject.MAPPER.readValue(new File(directory.getAbsolutePath() + "\\pack.info"), DatapackInfo.class);
+            assert datapackInfo.version != null; // TODO this needs a better check...
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

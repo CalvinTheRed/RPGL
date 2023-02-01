@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
@@ -92,10 +92,10 @@ public abstract class Subevent {
      * 	be used when Subevents must be created which are not included in <code>Subevent.SUBEVENTS</code>.
      * 	</p>
      *
-     * 	@param subeventJson the JSON data to be joined to the current Subevent JSON
+     * 	@param subeventData a map of the JSON data to be joined to the current Subevent JSON
      */
-    public void joinSubeventJson(JsonObject subeventJson) {
-        this.subeventJson.join(subeventJson);
+    public void joinSubeventData(Map<String, Object> subeventData) {
+        this.subeventJson.join(subeventData);
     }
 
     @Override
@@ -105,7 +105,7 @@ public abstract class Subevent {
      * 	<p><b><i>clone</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public Subevent clone(JsonObject subeventJson)
+     * public Subevent clone(Map&lt;String, Object&gt; subeventDataMap)
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -114,9 +114,9 @@ public abstract class Subevent {
      * 	retrieving a Subevent from the Subevent.SUBEVENTS map.
      * 	</p>
      *
-     * 	@param subeventJson the JSON data to be joined to the new Subevent
+     * 	@param subeventDataMap a map of the JSON data to be joined to the new Subevent
      */
-    public abstract Subevent clone(JsonObject subeventJson);
+    public abstract Subevent clone(Map<String, Object> subeventDataMap);
 
     /**
      * 	<p><b><i>prepare</i></b></p>

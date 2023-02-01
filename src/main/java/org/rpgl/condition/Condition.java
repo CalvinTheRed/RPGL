@@ -1,6 +1,6 @@
 package org.rpgl.condition;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 
@@ -33,7 +33,7 @@ public abstract class Condition {
      * 	<p><b><i>verifyCondition</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * void verifyCondition(String expected, JsonObject conditionJson)
+     * void verifyCondition(String expected, Map&lt;String, Object&gt; conditionJson)
      * 	throws ConditionMismatchException
      * 	</code></pre>
      * 	</p>
@@ -46,7 +46,7 @@ public abstract class Condition {
      *  @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    void verifyCondition(String expected, JsonObject conditionJson) throws ConditionMismatchException {
+    void verifyCondition(String expected, Map<String, Object> conditionJson) throws ConditionMismatchException {
         if (!expected.equals(conditionJson.get("condition"))) {
             throw new ConditionMismatchException(expected, (String) conditionJson.get("condition"));
         }
@@ -56,7 +56,7 @@ public abstract class Condition {
      * 	<p><b><i>evaluate</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public abstract boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson)
+     * public abstract boolean evaluate(RPGLObject source, RPGLObject target, Map&lt;String, Object&gt; conditionJson)
      * 	throws ConditionMismatchException
      * 	</code></pre>
      * 	</p>
@@ -70,6 +70,6 @@ public abstract class Condition {
      * 	@return the result of the evaluation
      * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    public abstract boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException;
+    public abstract boolean evaluate(RPGLObject source, RPGLObject target, Map<String, Object> conditionJson) throws ConditionMismatchException;
 
 }

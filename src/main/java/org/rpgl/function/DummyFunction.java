@@ -1,9 +1,10 @@
 package org.rpgl.function;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.Subevent;
+
+import java.util.Map;
 
 public class DummyFunction extends Function {
 
@@ -14,7 +15,7 @@ public class DummyFunction extends Function {
     }
 
     @Override
-    public void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject data) throws FunctionMismatchException {
+    public void execute(RPGLObject source, RPGLObject target, Subevent subevent, Map<String, Object> data) throws FunctionMismatchException {
         super.verifyFunction("dummy_function", data);
         DummyFunction.counter++;
     }

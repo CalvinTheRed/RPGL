@@ -1,12 +1,12 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonArray;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,7 +47,7 @@ public class RPGLContext {
      *
      *  @param objectUuids a list of UUID's corresponding to RPGLObjects.
      */
-    public RPGLContext(JsonArray objectUuids) {
+    public RPGLContext(List<Object> objectUuids) {
         contextObjects = new HashMap<>();
         if (objectUuids != null) {
             for (Object objectUuidElement : objectUuids) {

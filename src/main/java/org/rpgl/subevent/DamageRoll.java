@@ -1,9 +1,11 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonObject;
+import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.math.Die;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This abstract Subevent is dedicated to rolling damage dice.
@@ -40,19 +42,19 @@ public abstract class DamageRoll extends Subevent {
      * 	</p>
      */
     public void roll() {
-        JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
+        List<Object> typedDamageArray = this.subeventJson.getList("damage");
 
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
-            JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
+            List<Object> typedDamageDieArray = typedDamage.getList("dice");
             if (typedDamageDieArray == null) {
-                typedDamageDieArray = new JsonArray();
+                typedDamageDieArray = new ArrayList<>();
             }
 
             for (Object typedDamageDieElement : typedDamageDieArray) {
                 JsonObject typedDamageDieJson = (JsonObject) typedDamageDieElement;
-                long size = (Long) typedDamageDieJson.get("size");
-                long roll = Die.roll(size, (Long) typedDamageDieJson.get("determined"));
+                int size = (Integer) typedDamageDieJson.get("size");
+                int roll = Die.roll(size, (Integer) typedDamageDieJson.get("determined"));
                 typedDamageDieJson.put("roll", roll);
             }
         }
@@ -64,29 +66,29 @@ public abstract class DamageRoll extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void rerollTypedDiceLessThanOrEqualTo(long threshold, String damageType)
+     * public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType)
      * 	</code></pre>
      * 	</p>
      * 	<p>
      * 	This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given threshold.
      * 	</p>
      */
-    public void rerollTypedDiceLessThanOrEqualTo(long threshold, String damageType) {
-        JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
+    public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType) {
+        List<Object> typedDamageArray = this.subeventJson.getList("damage");
 
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
             if (damageType == null || damageType.equals(typedDamage.get("type"))) {
-                JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
+                List<Object> typedDamageDieArray = typedDamage.getList("dice");
                 if (typedDamageDieArray == null) {
-                    typedDamageDieArray = new JsonArray();
+                    typedDamageDieArray = new ArrayList<>();
                 }
 
                 for (Object typedDamageDieElement : typedDamageDieArray) {
                     JsonObject typedDamageDieJson = (JsonObject) typedDamageDieElement;
-                    if ((Long) typedDamageDieJson.get("roll") <= threshold) {
-                        long size = (Long) typedDamageDieJson.get("size");
-                        long roll = Die.roll(size, (Long) typedDamageDieJson.get("determined_reroll"));
+                    if ((Integer) typedDamageDieJson.get("roll") <= threshold) {
+                        int size = (Integer) typedDamageDieJson.get("size");
+                        int roll = Die.roll(size, (Integer) typedDamageDieJson.get("determined_reroll"));
                         typedDamageDieJson.put("roll", roll);
                     }
                 }
@@ -100,7 +102,7 @@ public abstract class DamageRoll extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void setTypedDiceLessThanOrEqualTo(long threshold, long faceValue, String damageType)
+     * public void setTypedDiceLessThanOrEqualTo(int threshold, int faceValue, String damageType)
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -108,19 +110,19 @@ public abstract class DamageRoll extends Subevent {
      * 	equal to a given threshold.
      * 	</p>
      */
-    public void setTypedDiceLessThanOrEqualTo(long threshold, long faceValue, String damageType) {
-        JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
+    public void setTypedDiceLessThanOrEqualTo(int threshold, int faceValue, String damageType) {
+        List<Object> typedDamageArray = this.subeventJson.getList("damage");
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
             if (damageType == null || damageType.equals(typedDamage.get("type"))) {
-                JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
+                List<Object> typedDamageDieArray = typedDamage.getList("dice");
                 if (typedDamageDieArray == null) {
-                    typedDamageDieArray = new JsonArray();
+                    typedDamageDieArray = new ArrayList<>();
                 }
 
                 for (Object typedDamageDieElement : typedDamageDieArray) {
                     JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
-                    if ((Long) typedDamageDie.get("roll") <= threshold) {
+                    if ((Integer) typedDamageDie.get("roll") <= threshold) {
                         typedDamageDie.put("roll", faceValue);
                     }
                 }
@@ -145,22 +147,22 @@ public abstract class DamageRoll extends Subevent {
      */
     public JsonObject getDamage() {
         JsonObject baseDamage = new JsonObject();
-        JsonArray typedDamageArray = (JsonArray) this.subeventJson.get("damage");
+        List<Object> typedDamageArray = this.subeventJson.getList("damage");
         for (Object typedDamageElement : typedDamageArray) {
             JsonObject typedDamage = (JsonObject) typedDamageElement;
-            JsonArray typedDamageDieArray = (JsonArray) typedDamage.get("dice");
+            List<Object> typedDamageDieArray = typedDamage.getList("dice");
             if (typedDamageDieArray == null) {
-                typedDamageDieArray = new JsonArray();
+                typedDamageDieArray = new ArrayList<>();
             }
-            Long typedDamageBonus = (Long) typedDamage.get("bonus");
+            Integer typedDamageBonus = (Integer) typedDamage.get("bonus");
             if (typedDamageBonus == null) {
-                typedDamageBonus = 0L;
+                typedDamageBonus = 0;
             }
 
-            long sum = typedDamageBonus;
+            int sum = typedDamageBonus;
             for (Object typedDamageDieElement : typedDamageDieArray) {
                 JsonObject typedDamageDie = (JsonObject) typedDamageDieElement;
-                sum += (Long) typedDamageDie.get("roll");
+                sum += (Integer) typedDamageDie.get("roll");
             }
             baseDamage.put((String) typedDamage.get("type"), sum);
         }

@@ -1,9 +1,9 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.math.Die;
+
+import java.util.HashMap;
 
 /**
  * This abstract Subevent is dedicated to performing contest rolls. This includes ability checks, attack rolls, and
@@ -137,14 +137,14 @@ public abstract class ContestRoll extends Calculation {
      * 	</p>
      */
     public void roll() {
-        long baseDieRoll = Die.roll(20L, (Long) this.subeventJson.get("determined"));
+        int baseDieRoll = Die.roll(20, (Integer) this.subeventJson.get("determined"));
         if (this.isAdvantageRoll()) {
-            long advantageRoll = Die.roll(20L, (Long) this.subeventJson.get("determined_second"));
+            int advantageRoll = Die.roll(20, (Integer) this.subeventJson.get("determined_second"));
             if (advantageRoll > baseDieRoll) {
                 baseDieRoll = advantageRoll;
             }
         } else if (this.isDisadvantageRoll()) {
-            long disadvantageRoll = Die.roll(20L, (Long) this.subeventJson.get("determined_second"));
+            int disadvantageRoll = Die.roll(20, (Integer) this.subeventJson.get("determined_second"));
             if (disadvantageRoll < baseDieRoll) {
                 baseDieRoll = disadvantageRoll;
             }
@@ -172,33 +172,28 @@ public abstract class ContestRoll extends Calculation {
      */
     public void checkForReroll(RPGLContext context) throws Exception {
         ContestRerollChance contestRerollChance = new ContestRerollChance();
-        String contestRerollChanceJsonString = String.format("""
-                        {
-                            "subevent": "contest_reroll_chance",
-                            "base_die_roll": %s
-                        }
-                        """,
-                this.subeventJson.get("base").toString()
-        );
-        JsonObject contestRerollChanceJson = JsonParser.parseObjectString(contestRerollChanceJsonString);
-        contestRerollChance.joinSubeventJson(contestRerollChanceJson);
+        Integer base = this.subeventJson.getInteger("base");
+        contestRerollChance.joinSubeventData(new HashMap<>() {{
+            this.put("subevent", "contest_reroll_chance");
+            this.put("base_die_roll", base);
+        }});
         contestRerollChance.prepare(context);
         contestRerollChance.invoke(context);
 
         if (contestRerollChance.wasRerollRequested()) {
-            long rerollDieValue = Die.roll(20L, (Long) this.subeventJson.get("determined_reroll"));
+            int rerollDieValue = Die.roll(20, (Integer) this.subeventJson.get("determined_reroll"));
             String rerollMode = contestRerollChance.getRerollMode();
             switch (rerollMode) {
                 case "use_new":
                     this.subeventJson.put("base", rerollDieValue);
                     break;
                 case "use_highest":
-                    if (rerollDieValue > (Long) this.subeventJson.get("base")) {
+                    if (rerollDieValue > (Integer) this.subeventJson.get("base")) {
                         this.subeventJson.put("base", rerollDieValue);
                     }
                     break;
                 case "use_lowest":
-                    if (rerollDieValue < (Long) this.subeventJson.get("base")) {
+                    if (rerollDieValue < (Integer) this.subeventJson.get("base")) {
                         this.subeventJson.put("base", rerollDieValue);
                     }
                     break;

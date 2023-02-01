@@ -1,7 +1,8 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
+
+import java.util.Map;
 
 /**
  * This subevent is dedicated to calculating the proficiency bonus of an RPGLObject.
@@ -22,15 +23,15 @@ public class CalculateProficiencyModifier extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateProficiencyModifier();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(Map<String, Object> subeventDataMap) {
         Subevent clone = new CalculateProficiencyModifier();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(subeventDataMap);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

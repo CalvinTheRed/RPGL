@@ -1,31 +1,6 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonObject;
-
-/**
- * This class contains a JSON template defining a particular type of RPGLEvent. It is not intended to be used for any
- * purpose other than constructing new RPGLEvent objects.
- *
- * @author Calvin Withun
- */
 public class RPGLEventTemplate extends JsonObject {
-
-    /**
-     * 	<p><b><i>RPGLEventTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLEventTemplate(JsonObject eventTemplateJson)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	The constructor for the RPGLEventTemplate class.
-     * 	</p>
-     *
-     * 	@param eventTemplateJson the JSON data to be joined to the new RPGLEventTemplate object.
-     */
-    public RPGLEventTemplate(JsonObject eventTemplateJson) {
-        this.join(eventTemplateJson);
-    }
 
     /**
      * 	<p><b><i>newInstance</i></b></p>
@@ -42,7 +17,9 @@ public class RPGLEventTemplate extends JsonObject {
      * 	@return a new RPGLEvent object
      */
     public RPGLEvent newInstance() {
-        return new RPGLEvent(this);
+        RPGLEvent event = new RPGLEvent();
+        event.join(this);
+        return event ;
     }
 
 }

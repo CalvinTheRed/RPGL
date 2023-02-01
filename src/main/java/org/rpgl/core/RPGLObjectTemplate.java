@@ -1,33 +1,14 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonObject;
+import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.uuidtable.UUIDTable;
 
-/**
- * This class contains a JSON template defining a particular type of RPGLObject. It is not intended to be used for any
- * purpose other than constructing new RPGLObject objects.
- *
- * @author Calvin Withun
- */
-public class RPGLObjectTemplate extends JsonObject {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    /**
-     * 	<p><b><i>RPGLObjectTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObjectTemplate(JsonObject objectTemplateJson)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	The constructor for the RPGLObjectTemplate class.
-     * 	</p>
-     *
-     * 	@param objectTemplateJson the JSON data to be joined to the new RPGLObjectTemplate object.
-     */
-    public RPGLObjectTemplate(JsonObject objectTemplateJson) {
-        this.join(objectTemplateJson);
-    }
+public class RPGLObjectTemplate extends JsonObject {
 
     /**
      * 	<p><b><i>newInstance</i></b></p>
@@ -44,10 +25,12 @@ public class RPGLObjectTemplate extends JsonObject {
      * 	@return a new RPGLObject object
      */
     public RPGLObject newInstance() {
-        RPGLObject object = new RPGLObject(this);
-        this.putIfAbsent("events", new JsonArray());
+        RPGLObject object = new RPGLObject();
+        object.join(this);
+        this.putIfAbsent("events", new HashMap<String, Object>());
         processEffects(object);
-        processItems(object);
+        processInventory(object);
+        processEquippedItems(object);
         UUIDTable.register(object);
         return object;
     }
@@ -67,9 +50,8 @@ public class RPGLObjectTemplate extends JsonObject {
      *  @param object an RPGLObject
      */
     static void processEffects(RPGLObject object) {
-        Object keyValue = object.remove("effects");
-        JsonArray effectIdArray = (JsonArray) keyValue;
-        JsonArray effectUuidArray = new JsonArray();
+        List<Object> effectIdArray = (List) object.remove("effects");
+        List<Object> effectUuidArray = new ArrayList<>();
         for (Object effectIdElement : effectIdArray) {
             String effectId = (String) effectIdElement;
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
@@ -80,70 +62,27 @@ public class RPGLObjectTemplate extends JsonObject {
         object.put("effects", effectUuidArray);
     }
 
-    /**
-     * 	<p><b><i>processItems</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processItems(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method manages the conversion of item IDs in an RPGLObject's inventory to RPGLItem objects and their
-     * 	UUID's.
-     * 	</p>
-     */
-    static void processItems(RPGLObject object) {
-        Object keyValue = object.get("items");
-        if (keyValue instanceof JsonObject items) {
-
-            // process inventory array (does not include equipped items)
-            JsonArray inventoryUuids = new JsonArray();
-            if (items.get("inventory") instanceof JsonArray) {
-                inventoryUuids.addAll(processInventory((JsonArray) items.remove("inventory")));
-            }
-
-            // process equipped items (were not included in inventory array)
-            JsonArray equippedItemUuids = new JsonArray();
-            for (String equipmentSlotName : items.keySet()) {
-                String itemId = (String) items.get(equipmentSlotName);
-                RPGLItem item = RPGLFactory.newItem(itemId);
-                assert item != null;
-                String itemUuid = item.getUuid();
-                items.put(equipmentSlotName, itemUuid);
-                equippedItemUuids.add(itemUuid);
-            }
-            inventoryUuids.addAll(equippedItemUuids);
-
-            // replace object inventory with array of item UUIDs
-            items.put("inventory", inventoryUuids);
+    static void processEquippedItems(RPGLObject object) {
+        Map<String, Object> equippedItemIds = object.getMap(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        List<Object> inventoryUuids = object.getList(RPGLObjectTO.INVENTORY_ALIAS);
+        Map<String, Object> equippedItemUuids = new HashMap<>();
+        for (Map.Entry<String, Object> equippedItemEntry : equippedItemIds.entrySet()) {
+            String equippedItemId = (String) equippedItemEntry.getValue();
+            RPGLItem item = RPGLFactory.newItem(equippedItemId);
+            equippedItemUuids.put(equippedItemEntry.getKey(), item.getUuid());
+            inventoryUuids.add(item.getUuid());
         }
+        object.put(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItemUuids);
     }
 
-    /**
-     * 	<p><b><i>processInventory</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static JsonArray processInventory(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method converts item IDs in an RPGLObjectTemplate's <code>items.inventory</code> array to RPGLItems.
-     *  The UUID's of these new RPGLItems replace the original object contents.
-     * 	</p>
-     *
-     *  @param inventoryIdArray the inventory being processed
-     *  @return a JsonArray of RPGLItem UUID's
-     */
-    static JsonArray processInventory(JsonArray inventoryIdArray) {
-        JsonArray inventoryUuidArray = new JsonArray();
-        for (Object inventoryIdElement : inventoryIdArray) {
-            String itemId = (String) inventoryIdElement;
-            RPGLItem item = RPGLFactory.newItem(itemId);
-            if (item != null) {
-                inventoryUuidArray.add(item.getUuid());
-            }
+    static void processInventory(RPGLObject object) {
+        List<Object> inventoryItemIds = object.getList(RPGLObjectTO.INVENTORY_ALIAS);
+        List<Object> inventoryItemUuids = new ArrayList<>();
+        for (Object itemId : inventoryItemIds) {
+            RPGLItem item = RPGLFactory.newItem((String) itemId);
+            inventoryItemUuids.add(item.getUuid());
         }
-        return inventoryUuidArray;
+        object.put(RPGLObjectTO.INVENTORY_ALIAS, inventoryItemUuids);
     }
 
 }

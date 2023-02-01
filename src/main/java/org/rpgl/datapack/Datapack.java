@@ -1,16 +1,13 @@
 package org.rpgl.datapack;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
+import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
 import org.rpgl.core.RPGLItemTemplate;
 import org.rpgl.core.RPGLObjectTemplate;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -72,13 +69,13 @@ public class Datapack {
      * 	@param directory a File directory for the effects in a datapack
      */
     void loadEffectTemplates(File directory) {
-        for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
-            String effectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
+        for (File effectFile : Objects.requireNonNull(directory.listFiles())) {
+            String effectId = effectFile.getName().substring(0, effectFile.getName().indexOf('.'));
             try {
-                RPGLEffectTemplate effectTemplate = new RPGLEffectTemplate(JsonParser.parseObjectFile(subDirectory));
-                effectTemplate.put("id", datapackNamespace + ":" + effectId);
-                EFFECT_TEMPLATES.put(effectId, effectTemplate);
-            } catch (JsonFormatException | FileNotFoundException e) {
+                RPGLEffectTemplate rpglEffectTemplate = JsonObject.MAPPER.readValue(effectFile, RPGLEffectTO.class).toRPGLEffectTemplate();
+                rpglEffectTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + effectId);
+                EFFECT_TEMPLATES.put(effectId, rpglEffectTemplate);
+            } catch (IOException e) {
                 // TODO manage this exception...
             }
         }
@@ -98,13 +95,13 @@ public class Datapack {
      * 	@param directory a File directory for the events in a datapack
      */
     private void loadEventTemplates(File directory) {
-        for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
-            String eventId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
+        for (File eventFile : Objects.requireNonNull(directory.listFiles())) {
+            String eventId = eventFile.getName().substring(0, eventFile.getName().indexOf('.'));
             try {
-                RPGLEventTemplate eventTemplate = new RPGLEventTemplate(JsonParser.parseObjectFile(subDirectory));
-                eventTemplate.put("id", datapackNamespace + ":" + eventId);
-                EVENT_TEMPLATES.put(eventId, eventTemplate);
-            } catch (JsonFormatException | FileNotFoundException e) {
+                RPGLEventTemplate rpglEventTemplate = JsonObject.MAPPER.readValue(eventFile, RPGLEventTO.class).toRPGLEventTemplate();
+                rpglEventTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + eventId);
+                EVENT_TEMPLATES.put(eventId, rpglEventTemplate);
+            } catch (IOException e) {
                 // TODO manage this exception...
             }
         }
@@ -124,13 +121,13 @@ public class Datapack {
      * 	@param directory a File directory for the items in a datapack
      */
     private void loadItemTemplates(File directory) {
-        for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
-            String itemId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
+        for (File itemFile : Objects.requireNonNull(directory.listFiles())) {
+            String itemId = itemFile.getName().substring(0, itemFile.getName().indexOf('.'));
             try {
-                RPGLItemTemplate itemTemplate = new RPGLItemTemplate(JsonParser.parseObjectFile(subDirectory));
-                itemTemplate.put("id", datapackNamespace + ":" + itemId);
-                ITEM_TEMPLATES.put(itemId, itemTemplate);
-            } catch (JsonFormatException | FileNotFoundException e) {
+                RPGLItemTemplate rpglItemTemplate = JsonObject.MAPPER.readValue(itemFile, RPGLItemTO.class).toRPGLItemTemplate();
+                rpglItemTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + itemId);
+                ITEM_TEMPLATES.put(itemId, rpglItemTemplate);
+            } catch (IOException e) {
                 // TODO manage this exception...
             }
         }
@@ -150,26 +147,13 @@ public class Datapack {
      * 	@param directory a File directory for the objects in a datapack
      */
     private void loadObjectTemplates(File directory) {
-        for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
-            String objectId = subDirectory.getName().substring(0, subDirectory.getName().indexOf('.'));
+        for (File objectFile : Objects.requireNonNull(directory.listFiles())) {
+            String objectId = objectFile.getName().substring(0, objectFile.getName().indexOf('.'));
             try {
-                RPGLObjectTemplate objectTemplate = new RPGLObjectTemplate(JsonParser.parseObjectFile(subDirectory));
-                objectTemplate.put("id", datapackNamespace + ":" + objectId);
-                if (objectTemplate.get("effects") == null) {
-                    objectTemplate.put("effects", new JsonArray());
-                }
-                JsonObject items = (JsonObject) objectTemplate.get("items");
-                if (items == null) {
-                    items = new JsonObject();
-                    objectTemplate.put("items", items);
-                }
-                JsonArray inventory = (JsonArray) items.get("inventory");
-                if (inventory == null) {
-                    inventory = new JsonArray();
-                    items.put("inventory", inventory);
-                }
-                OBJECT_TEMPLATES.put(objectId, objectTemplate);
-            } catch (JsonFormatException | FileNotFoundException e) {
+                RPGLObjectTemplate rpglObjectTemplate = JsonObject.MAPPER.readValue(objectFile, RPGLObjectTO.class).toRPGLObjectTemplate();
+                rpglObjectTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + objectId);
+                OBJECT_TEMPLATES.put(objectId, rpglObjectTemplate);
+            } catch (IOException e) {
                 // TODO manage this exception...
             }
         }

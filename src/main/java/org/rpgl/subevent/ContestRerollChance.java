@@ -1,8 +1,8 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -24,15 +24,15 @@ public class ContestRerollChance extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new ContestRerollChance();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(Map<String, Object> subeventDataMap) {
         Subevent clone = new ContestRerollChance();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(subeventDataMap);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

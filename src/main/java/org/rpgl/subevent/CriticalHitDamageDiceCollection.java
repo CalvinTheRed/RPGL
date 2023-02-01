@@ -1,9 +1,9 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
+import org.rpgl.core.JsonObject;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * This Subevent is dedicated to representing a collection of damage dice to be rolled when a critical hit occurs.
@@ -24,15 +24,15 @@ public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
     @Override
     public Subevent clone() {
         Subevent clone = new CriticalHitDamageDiceCollection();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(Map<String, Object> subeventDataMap) {
         Subevent clone = new CriticalHitDamageDiceCollection();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(subeventDataMap);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -50,14 +50,12 @@ public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
      * 	<p>
      * 	This helper method doubles the number of dice in the damage dice collection.
      * 	</p>
-     *
-     * 	@throws JsonFormatException if there is a JSON formatting error.
      */
-    void doubleDice() throws JsonFormatException {
+    void doubleDice() {
         for (Object typedDamageObjectElement : this.getDamageDiceCollection()) {
             JsonObject typedDamageObject = (JsonObject) typedDamageObjectElement;
-            JsonArray typedDamageDice = (JsonArray) typedDamageObject.get("dice");
-            typedDamageDice.addAll(JsonParser.parseArrayString(typedDamageDice.toString()));
+            List<Object> typedDamageDice = typedDamageObject.getList("dice");
+            typedDamageDice.addAll(JsonObject.deepClone(typedDamageDice));
         }
     }
 

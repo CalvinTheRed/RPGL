@@ -1,6 +1,6 @@
 package org.rpgl.function;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.Subevent;
@@ -29,7 +29,7 @@ public abstract class Function {
      * 	<p><b><i>verifyFunction</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * void verifyFunction(String expected, JsonObject conditionJson)
+     * void verifyFunction(String expected, Map&lt;String, Object&gt; conditionJson)
      * 	throws FunctionMismatchException
      * 	</code></pre>
      * 	</p>
@@ -42,7 +42,7 @@ public abstract class Function {
      *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
      * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
-    void verifyFunction(String expected, JsonObject functionJson) throws FunctionMismatchException {
+    void verifyFunction(String expected, Map<String, Object> functionJson) throws FunctionMismatchException {
         if (!expected.equals(functionJson.get("function"))) {
             throw new FunctionMismatchException(expected, (String) functionJson.get("function"));
         }
@@ -52,7 +52,7 @@ public abstract class Function {
      * 	<p><b><i>execute</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public abstract void execute(RPGLObject source, RPGLObject target, JsonObject functionJson)
+     * public abstract void execute(RPGLObject source, RPGLObject target, Map&lt;String, Object&gt; functionJson)
      * 	throws FunctionMismatchException
      * 	</code></pre>
      * 	</p>
@@ -66,6 +66,6 @@ public abstract class Function {
      *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
      * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
-    public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson) throws FunctionMismatchException;
+    public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, Map<String, Object> functionJson) throws FunctionMismatchException;
 
 }

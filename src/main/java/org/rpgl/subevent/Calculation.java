@@ -25,17 +25,17 @@ public abstract class Calculation extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void addBonus(long bonus)
+     * public void addBonus(int bonus)
      * 	</code></pre>
      * 	</p>
      * 	<p>
      * 	This method adds a bonus to the value being calculated.
      * 	</p>
      */
-    public void addBonus(long bonus) {
-        Long currentBonus = (Long) this.subeventJson.put("bonus", bonus);
+    public void addBonus(int bonus) {
+        Integer currentBonus = (Integer) this.subeventJson.put("bonus", bonus);
         if (currentBonus == null) {
-            currentBonus = 0L;
+            currentBonus = 0;
         }
         this.subeventJson.put("bonus", currentBonus + bonus);
     }
@@ -46,7 +46,7 @@ public abstract class Calculation extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public long getBonus()
+     * public int getBonus()
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -55,8 +55,8 @@ public abstract class Calculation extends Subevent {
      *
      *  @return the bonus granted to the calculation
      */
-    public long getBonus() {
-        return Objects.requireNonNullElse((Long) this.subeventJson.get("bonus"), 0L);
+    public int getBonus() {
+        return Objects.requireNonNullElse((Integer) this.subeventJson.get("bonus"), 0);
     }
 
     /**
@@ -65,7 +65,7 @@ public abstract class Calculation extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void set(long value)
+     * public void set(int value)
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -73,7 +73,7 @@ public abstract class Calculation extends Subevent {
      * 	bonuses which have been applied to it.
      * 	</p>
      */
-    public void set(long value) {
+    public void set(int value) {
         this.subeventJson.put("set", value);
     }
 
@@ -83,7 +83,7 @@ public abstract class Calculation extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public long get()
+     * public int get()
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -92,13 +92,13 @@ public abstract class Calculation extends Subevent {
      *
      *  @return the result of the calculation
      */
-    public long get() {
-        Long set = (Long) this.subeventJson.get("set");
-        Long bonus = this.getBonus();
+    public int get() {
+        Integer set = (Integer) this.subeventJson.get("set");
+        Integer bonus = this.getBonus();
         if (set != null) {
             return set + bonus;
         }
-        return Objects.requireNonNullElse((Long) this.subeventJson.get("base"), 0L) + bonus; // TODO add methods to interface with "base"?
+        return Objects.requireNonNullElse((Integer) this.subeventJson.get("base"), 0) + bonus; // TODO add methods to interface with "base"?
     }
 
 }

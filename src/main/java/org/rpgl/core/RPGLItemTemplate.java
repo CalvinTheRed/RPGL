@@ -1,37 +1,10 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
 import org.rpgl.uuidtable.UUIDTable;
 
-import java.util.Collections;
+import java.util.*;
 
-/**
- * This class contains a JSON template defining a particular type of RPGLItem. It is not intended to be used for any
- * purpose other than constructing new RPGLItem objects.
- *
- * @author Calvin Withun
- */
 public class RPGLItemTemplate extends JsonObject {
-
-    /**
-     * 	<p><b><i>RPGLItemTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLItemTemplate(JsonObject itemTemplateJson)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	The constructor for the RPGLItemTemplate class.
-     * 	</p>
-     *
-     * 	@param itemTemplateJson the JSON data to be joined to the new RPGLItemTemplate object.
-     */
-    public RPGLItemTemplate(JsonObject itemTemplateJson) {
-        this.join(itemTemplateJson);
-    }
 
     /**
      * 	<p><b><i>newInstance</i></b></p>
@@ -47,23 +20,20 @@ public class RPGLItemTemplate extends JsonObject {
      * 	</p>
      *
      * 	@return a new RPGLItem object
-     * 	@throws JsonFormatException if an error occurs while assigning improvised weapon damage to the RPGLItem
      */
-    public RPGLItem newInstance() throws JsonFormatException {
-        RPGLItem item = new RPGLItem(this);
-        item.putIfAbsent("weight",            0L);
-        item.putIfAbsent("attack_bonus",      0L);
+    public RPGLItem newInstance() {
+        RPGLItem item = new RPGLItem();
+        item.join(this);
+        item.putIfAbsent("weight",            0);
+        item.putIfAbsent("attack_bonus",      0);
         item.putIfAbsent("cost",              "0g");
-        item.putIfAbsent("weapon_properties", new JsonArray(Collections.singleton("improvised")));
-        item.putIfAbsent("proficiency_tags",  new JsonArray(Collections.singleton("improvised")));
-        item.putIfAbsent("tags",              new JsonArray(Collections.singleton("improvised")));
-        item.putIfAbsent("thrown_range",      JsonParser.parseObjectString("""
-                    {
-                        "normal": 20,
-                        "long": 60
-                    }
-                    """
-        ));
+        item.putIfAbsent("weapon_properties", new ArrayList<>(Collections.singleton("improvised")));
+        item.putIfAbsent("proficiency_tags",  new ArrayList<>(Collections.singleton("improvised")));
+        item.putIfAbsent("tags",              new ArrayList<>(Collections.singleton("improvised")));
+        item.putIfAbsent("thrown_range", new HashMap<String, Object>() {{
+            this.put("normal", 20);
+            this.put("long", 60);
+        }});
         item.defaultAttackAbilities();
         processEquippedEffects(item);
         processItemDamage(item);
@@ -86,11 +56,11 @@ public class RPGLItemTemplate extends JsonObject {
      *  @param item an RPGLItem
      */
     static void processEquippedEffects(RPGLItem item) {
-        JsonArray equippedEffectsIdArray = (JsonArray) item.remove("equipped_effects");
+        List<Object> equippedEffectsIdArray = (List<Object>) item.remove("equipped_effects");
         if (equippedEffectsIdArray == null) {
-            item.put("equipped_effects", new JsonArray());
+            item.put("equipped_effects", new ArrayList<>());
         } else {
-            JsonArray equippedEffectsUuidArray = new JsonArray();
+            List<Object> equippedEffectsUuidArray = new ArrayList<>();
             for (Object equippedEffectIdElement : equippedEffectsIdArray) {
                 String effectId = (String) equippedEffectIdElement;
                 RPGLEffect effect = RPGLFactory.newEffect(effectId);
@@ -115,21 +85,17 @@ public class RPGLItemTemplate extends JsonObject {
      * 	</p>
      *
      *  @param item an RPGLItem
-     * 	@throws JsonFormatException if an error occurs while assigning improvised weapon damage to the RPGLItem
      */
-    static void processItemDamage(RPGLItem item) throws JsonFormatException {
-        JsonObject damage = (JsonObject) item.get("damage");
-        if (damage == null) {
-            damage = new JsonObject();
-            item.put("damage", damage);
-        }
+    static void processItemDamage(RPGLItem item) {
+        JsonObject damage = new JsonObject();
+        damage.join(item.getMap("damage"));
 
         if (damage.isEmpty()) {
             setImprovisedItemDamage(item, "melee");
             setImprovisedItemDamage(item, "thrown");
         } else {
-            JsonArray melee = (JsonArray) damage.get("melee");
-            JsonArray thrown = (JsonArray) damage.get("thrown");
+            List<Object> melee = damage.getList("melee");
+            List<Object> thrown = damage.getList("thrown");
             if (melee == null || melee.isEmpty()) {
                 setImprovisedItemDamage(item, "melee");
             }
@@ -153,23 +119,21 @@ public class RPGLItemTemplate extends JsonObject {
      *
      *  @param item       an RPGLItem
      *  @param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
-     * 	@throws JsonFormatException if an error occurs while assigning improvised weapon damage to the RPGLItem
      */
-    static void setImprovisedItemDamage(RPGLItem item, String attackType) throws JsonFormatException {
-        String damageArrayString = """
-                [
-                    {
-                        "type": "bludgeoning",
-                        "dice": [
-                            { "size": 4, "determined": 1 }
-                        ],
-                        "bonus": 0
-                    }
-                ]
-                """;
-        JsonArray damageArray = JsonParser.parseArrayString(damageArrayString);
-        JsonObject damage = (JsonObject) item.get("damage");
-        damage.put(attackType, damageArray);
+    static void setImprovisedItemDamage(RPGLItem item, String attackType) {
+        Map<String, Object> damage = item.getMap("damage");
+        damage.put(attackType, new ArrayList<>() {{
+            this.add(new HashMap<String, Object>() {{
+                this.put("type", "bludgeoning");
+                this.put("dice", new ArrayList<>() {{
+                    this.add(new HashMap<String, Object>() {{
+                        this.put("size", 4);
+                        this.put("determined", 1);
+                    }});
+                }});
+                this.put("bonus", 0);
+            }});
+        }});
     }
 
 }

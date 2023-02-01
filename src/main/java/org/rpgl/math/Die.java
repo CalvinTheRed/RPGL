@@ -14,11 +14,11 @@ public final class Die {
 
     private static boolean testing = false;
 
-    public static long roll(long upperBound, Long determinedValue) {
+    public static int roll(int upperBound, Integer determinedValue) {
         if (testing && determinedValue != null) {
             return determinedValue;
         } else {
-            return R.nextLong(upperBound) + 1;
+            return R.nextInt(upperBound) + 1;
         }
     }
 

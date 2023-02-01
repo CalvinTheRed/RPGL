@@ -1,11 +1,11 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.uuidtable.UUIDTable;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * This subevent is dedicated to calculating the armor class against which attack rolls are made. Once the attack roll
@@ -28,15 +28,15 @@ public class CalculateBaseArmorClass extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateBaseArmorClass();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(Map<String, Object> subeventDataMap) {
         Subevent clone = new CalculateBaseArmorClass();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(subeventDataMap);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -47,13 +47,13 @@ public class CalculateBaseArmorClass extends Calculation {
 
         // Set base armor class from armor (or no armor)
         String armorUuid = (String) this.getSource().seek("items.armor");
-        long baseArmorClass;
+        int baseArmorClass;
         if (armorUuid == null) {
             // if equipment slot is empty, you are unarmored
             baseArmorClass = this.prepareUnarmored(context);
         } else {
             RPGLItem armor = UUIDTable.getItem(armorUuid);
-            JsonArray armorTags = (JsonArray) armor.get("tags");
+            List<Object> armorTags = armor.getList("tags");
             if (armorTags.contains("armor")) {
                 // equipment slot holds armor
                 baseArmorClass = this.prepareArmored(context, armor);
@@ -76,7 +76,7 @@ public class CalculateBaseArmorClass extends Calculation {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * long prepareArmored(RPGLContext context, RPGLItem armor)
+     * int prepareArmored(RPGLContext context, RPGLItem armor)
      * 	throws Exception
      * 	</code></pre>
      * 	</p>
@@ -90,18 +90,18 @@ public class CalculateBaseArmorClass extends Calculation {
      *
      * 	@throws Exception if an exception occurs.
      */
-    long prepareArmored(RPGLContext context, RPGLItem armor) throws Exception {
-        Long baseArmorClass = (Long) armor.get("base_armor_class");
+    int prepareArmored(RPGLContext context, RPGLItem armor) throws Exception {
+        Integer baseArmorClass = armor.getInteger("base_armor_class");
 
         // Add dexterity bonus, if not 0 (or lower)
-        Long dexterityBonusMaximum = (Long) armor.get("dex_bonus_max");
+        Integer dexterityBonusMaximum = armor.getInteger("dex_bonus_max");
         if (dexterityBonusMaximum == null) {
             // no limit to dexterity bonus
-            long dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
+            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
             baseArmorClass += dexterityBonus;
-        } else if (dexterityBonusMaximum > 0L) {
+        } else if (dexterityBonusMaximum > 0) {
             // non-zero, positive limit to dexterity bonus
-            long dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
+            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
             baseArmorClass += Math.min(dexterityBonus, dexterityBonusMaximum);
         }
 
@@ -114,7 +114,7 @@ public class CalculateBaseArmorClass extends Calculation {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * long prepareUnarmored(RPGLContext context)
+     * int prepareUnarmored(RPGLContext context)
      * 	throws Exception
      * 	</code></pre>
      * 	</p>
@@ -127,8 +127,8 @@ public class CalculateBaseArmorClass extends Calculation {
      *
      * 	@throws Exception if an exception occurs.
      */
-    long prepareUnarmored(RPGLContext context) throws Exception {
-        return 10L + this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
+    int prepareUnarmored(RPGLContext context) throws Exception {
+        return 10 + this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
     }
 
     /**
@@ -137,7 +137,7 @@ public class CalculateBaseArmorClass extends Calculation {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * long getShieldBonus()
+     * int getShieldBonus()
      * 	throws JsonFormatException
      * 	</code></pre>
      * 	</p>
@@ -146,28 +146,26 @@ public class CalculateBaseArmorClass extends Calculation {
      * 	</p>
      *
      *  @return the shield bonus for <code>source</code>.
-     *
-     * 	@throws JsonFormatException if <code>source</code> is missing <code>items.hand_1</code> or <code>items.hand_2</code>.
      */
-    long getShieldBonus() throws JsonFormatException {
+    int getShieldBonus() {
         // Get armor class bonus if wielding shield (you may only benefit from 1 shield at a time, larger bonus is used).
-        String hand1ShieldUuid = (String) this.getSource().seek("items.hand_1");
-        String hand2ShieldUuid = (String) this.getSource().seek("items.hand_2");
-        long hand1ShieldBonus = 0L;
-        long hand2ShieldBonus = 0L;
+        String hand1ShieldUuid = this.getSource().seekString("items.hand_1");
+        String hand2ShieldUuid = this.getSource().seekString("items.hand_2");
+        int hand1ShieldBonus = 0;
+        int hand2ShieldBonus = 0;
 
         if (hand1ShieldUuid != null) {
             RPGLItem shield = UUIDTable.getItem(hand1ShieldUuid);
-            JsonArray shieldTags = (JsonArray) shield.get("tags");
+            List<Object> shieldTags = shield.getList("tags");
             if (shieldTags.contains("shield")) {
-                hand1ShieldBonus = (Long) shield.get("armor_class_bonus");
+                hand1ShieldBonus = (Integer) shield.get("armor_class_bonus");
             }
         }
         if (hand2ShieldUuid != null) {
             RPGLItem shield = UUIDTable.getItem(hand2ShieldUuid);
-            JsonArray shieldTags = (JsonArray) shield.get("tags");
+            List<Object> shieldTags = shield.getList("tags");
             if (shieldTags.contains("shield")) {
-                hand2ShieldBonus = (Long) shield.get("armor_class_bonus");
+                hand2ShieldBonus = (Integer) shield.get("armor_class_bonus");
             }
         }
 

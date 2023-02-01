@@ -13,10 +13,7 @@
       {
         "type": "slashing",
         "dice": [
-          {
-            "size": 10,
-            "determined": 5
-          }
+          { "size": 10, "determined": 5 }
         ],
         "bonus": 0
       }
