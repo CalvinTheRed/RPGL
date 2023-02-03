@@ -1,11 +1,9 @@
 package org.rpgl.condition;
 
-import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
-
-import java.util.List;
-import java.util.Map;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Condition evaluates true if all of its nested Conditions evaluate to true.
@@ -15,16 +13,15 @@ import java.util.Map;
 public class All extends Condition {
 
     @Override
-    public boolean evaluate(RPGLObject source, RPGLObject target, Map<String, Object> conditionJson) throws ConditionMismatchException {
+    public boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException {
         super.verifyCondition("all", conditionJson);
-        List<Object> nestedConditionList = (List<Object>) conditionJson.get("conditions");
-        for (Object nestedConditionJsonElement : nestedConditionList) {
-            if (nestedConditionJsonElement instanceof Map nestedConditionJson) {
-                Condition nestedCondition = Condition.CONDITIONS.get((String) nestedConditionJson.get("condition"));
-                // once a single nested condition returns false, iteration can short-circuit
-                if (!nestedCondition.evaluate(source, target, nestedConditionJson)) {
-                    return false;
-                }
+        JsonArray nestedConditionList = conditionJson.getJsonArray("conditions");
+        for (int i = 0; i < nestedConditionList.size(); i++) {
+            JsonObject nestedConditionJson = nestedConditionList.getJsonObject(i);
+            Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
+            // once a single nested condition returns false, iteration can short-circuit
+            if (!nestedCondition.evaluate(source, target, nestedConditionJson)) {
+                return false;
             }
         }
         return true;

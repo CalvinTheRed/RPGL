@@ -35,7 +35,7 @@ public class DatapackTest {
         assertNotNull(effectTemplate,
                 "Effect template test:dummy failed to load."
         );
-        assertEquals("Dummy Effect", effectTemplate.get("name"),
+        assertEquals("Dummy Effect", effectTemplate.getString("name"),
                 "Effect template test:dummy failed to load the correct content."
         );
     }
@@ -47,7 +47,7 @@ public class DatapackTest {
         assertNotNull(eventTemplate,
                 "Event template test:dummy failed to load."
         );
-        assertEquals("Dummy Event", eventTemplate.get("name"),
+        assertEquals("Dummy Event", eventTemplate.getString("name"),
                 "Event template test:dummy failed to load the correct content."
         );
     }
@@ -59,7 +59,7 @@ public class DatapackTest {
         assertNotNull(itemTemplate,
                 "Item template test:blank failed to load."
         );
-        assertEquals("Blank Item", itemTemplate.get("name"),
+        assertEquals("Blank Item", itemTemplate.getString("name"),
                 "Item template test:blank failed to load the correct content."
         );
     }
@@ -71,7 +71,7 @@ public class DatapackTest {
         assertNotNull(objectTemplate,
                 "Object template test:blank failed to load."
         );
-        assertEquals("Blank Object", objectTemplate.get("name"),
+        assertEquals("Blank Object", objectTemplate.getString("name"),
                 "Object template test:blank failed to load the correct content."
         );
     }

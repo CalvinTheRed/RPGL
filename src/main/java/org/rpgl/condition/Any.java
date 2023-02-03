@@ -1,11 +1,9 @@
 package org.rpgl.condition;
 
-import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
-
-import java.util.List;
-import java.util.Map;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Condition evaluates true if one or more of its nested Conditions evaluate to true.
@@ -15,19 +13,18 @@ import java.util.Map;
 public class Any extends Condition {
 
     @Override
-    public boolean evaluate(RPGLObject source, RPGLObject target, Map<String, Object> conditionJson) throws ConditionMismatchException {
+    public boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException {
         super.verifyCondition("any", conditionJson);
-        List<Object> nestedConditionList = (List<Object>) conditionJson.get("conditions");
-        if (nestedConditionList.size() == 0) {
+        JsonArray nestedConditionArray = conditionJson.getJsonArray("conditions");
+        if (nestedConditionArray.size() == 0) {
             return true;
         }
-        for (Object nestedConditionJsonElement : nestedConditionList) {
-            if (nestedConditionJsonElement instanceof Map nestedConditionJson) {
-                Condition nestedCondition = Condition.CONDITIONS.get((String) nestedConditionJson.get("condition"));
-                // once a single element returns true, iteration can short-circuit
-                if (nestedCondition.evaluate(source, target, nestedConditionJson)) {
-                    return true;
-                }
+        for (int i = 0; i < nestedConditionArray.size(); i++) {
+            JsonObject nestedConditionJson = nestedConditionArray.getJsonObject(i);
+            Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
+            // once a single element returns true, iteration can short-circuit
+            if (nestedCondition.evaluate(source, target, nestedConditionJson)) {
+                return true;
             }
         }
         return false;

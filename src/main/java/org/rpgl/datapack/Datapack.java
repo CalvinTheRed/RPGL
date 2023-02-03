@@ -1,6 +1,6 @@
 package org.rpgl.datapack;
 
-import org.rpgl.core.JsonObject;
+import org.rpgl.json.JsonObject;
 import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
 import org.rpgl.core.RPGLItemTemplate;
@@ -73,7 +73,7 @@ public class Datapack {
             String effectId = effectFile.getName().substring(0, effectFile.getName().indexOf('.'));
             try {
                 RPGLEffectTemplate rpglEffectTemplate = JsonObject.MAPPER.readValue(effectFile, RPGLEffectTO.class).toRPGLEffectTemplate();
-                rpglEffectTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + effectId);
+                rpglEffectTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + effectId);
                 EFFECT_TEMPLATES.put(effectId, rpglEffectTemplate);
             } catch (IOException e) {
                 // TODO manage this exception...
@@ -99,7 +99,7 @@ public class Datapack {
             String eventId = eventFile.getName().substring(0, eventFile.getName().indexOf('.'));
             try {
                 RPGLEventTemplate rpglEventTemplate = JsonObject.MAPPER.readValue(eventFile, RPGLEventTO.class).toRPGLEventTemplate();
-                rpglEventTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + eventId);
+                rpglEventTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + eventId);
                 EVENT_TEMPLATES.put(eventId, rpglEventTemplate);
             } catch (IOException e) {
                 // TODO manage this exception...
@@ -125,7 +125,7 @@ public class Datapack {
             String itemId = itemFile.getName().substring(0, itemFile.getName().indexOf('.'));
             try {
                 RPGLItemTemplate rpglItemTemplate = JsonObject.MAPPER.readValue(itemFile, RPGLItemTO.class).toRPGLItemTemplate();
-                rpglItemTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + itemId);
+                rpglItemTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + itemId);
                 ITEM_TEMPLATES.put(itemId, rpglItemTemplate);
             } catch (IOException e) {
                 // TODO manage this exception...
@@ -151,7 +151,7 @@ public class Datapack {
             String objectId = objectFile.getName().substring(0, objectFile.getName().indexOf('.'));
             try {
                 RPGLObjectTemplate rpglObjectTemplate = JsonObject.MAPPER.readValue(objectFile, RPGLObjectTO.class).toRPGLObjectTemplate();
-                rpglObjectTemplate.put(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + objectId);
+                rpglObjectTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + objectId);
                 OBJECT_TEMPLATES.put(objectId, rpglObjectTemplate);
             } catch (IOException e) {
                 // TODO manage this exception...

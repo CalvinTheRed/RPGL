@@ -1,5 +1,7 @@
 package org.rpgl.core;
 
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.*;
@@ -24,13 +26,13 @@ public class RPGLItemTemplate extends JsonObject {
     public RPGLItem newInstance() {
         RPGLItem item = new RPGLItem();
         item.join(this);
-        item.putIfAbsent("weight",            0);
-        item.putIfAbsent("attack_bonus",      0);
-        item.putIfAbsent("cost",              "0g");
-        item.putIfAbsent("weapon_properties", new ArrayList<>(Collections.singleton("improvised")));
-        item.putIfAbsent("proficiency_tags",  new ArrayList<>(Collections.singleton("improvised")));
-        item.putIfAbsent("tags",              new ArrayList<>(Collections.singleton("improvised")));
-        item.putIfAbsent("thrown_range", new HashMap<String, Object>() {{
+        item.asMap().putIfAbsent("weight",            0);
+        item.asMap().putIfAbsent("attack_bonus",      0);
+        item.asMap().putIfAbsent("cost",              "0g");
+        item.asMap().putIfAbsent("weapon_properties", new ArrayList<>(Collections.singleton("improvised")));
+        item.asMap().putIfAbsent("proficiency_tags",  new ArrayList<>(Collections.singleton("improvised")));
+        item.asMap().putIfAbsent("tags",              new ArrayList<>(Collections.singleton("improvised")));
+        item.asMap().putIfAbsent("thrown_range", new HashMap<String, Object>() {{
             this.put("normal", 20);
             this.put("long", 60);
         }});
@@ -56,18 +58,18 @@ public class RPGLItemTemplate extends JsonObject {
      *  @param item an RPGLItem
      */
     static void processEquippedEffects(RPGLItem item) {
-        List<Object> equippedEffectsIdArray = (List<Object>) item.remove("equipped_effects");
+        JsonArray equippedEffectsIdArray = item.removeJsonArray("equipped_effects");
         if (equippedEffectsIdArray == null) {
-            item.put("equipped_effects", new ArrayList<>());
+            item.putJsonArray("equipped_effects", new JsonArray());
         } else {
-            List<Object> equippedEffectsUuidArray = new ArrayList<>();
-            for (Object equippedEffectIdElement : equippedEffectsIdArray) {
-                String effectId = (String) equippedEffectIdElement;
+            JsonArray equippedEffectsUuidArray = new JsonArray();
+            for (int i = 0; i < equippedEffectsIdArray.size(); i++) {
+                String effectId = equippedEffectsIdArray.getString(i);
                 RPGLEffect effect = RPGLFactory.newEffect(effectId);
-                assert effect != null;
-                equippedEffectsUuidArray.add(effect.getUuid());
+                assert effect != null; // TODO better check than this?
+                equippedEffectsUuidArray.addString(effect.getUuid());
             }
-            item.put("equipped_effects", equippedEffectsUuidArray);
+            item.putJsonArray("equipped_effects", equippedEffectsUuidArray);
         }
     }
 
@@ -88,18 +90,18 @@ public class RPGLItemTemplate extends JsonObject {
      */
     static void processItemDamage(RPGLItem item) {
         JsonObject damage = new JsonObject();
-        damage.join(item.getMap("damage"));
+        damage.join(item.getJsonObject("damage"));
 
-        if (damage.isEmpty()) {
+        if (damage.asMap().isEmpty()) {
             setImprovisedItemDamage(item, "melee");
             setImprovisedItemDamage(item, "thrown");
         } else {
-            List<Object> melee = damage.getList("melee");
-            List<Object> thrown = damage.getList("thrown");
-            if (melee == null || melee.isEmpty()) {
+            JsonArray melee = damage.getJsonArray("melee");
+            JsonArray thrown = damage.getJsonArray("thrown");
+            if (melee == null || melee.asList().isEmpty()) {
                 setImprovisedItemDamage(item, "melee");
             }
-            if (thrown == null || thrown.isEmpty()) {
+            if (thrown == null || thrown.asList().isEmpty()) {
                 setImprovisedItemDamage(item, "thrown");
             }
         }
@@ -121,8 +123,8 @@ public class RPGLItemTemplate extends JsonObject {
      *  @param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
      */
     static void setImprovisedItemDamage(RPGLItem item, String attackType) {
-        Map<String, Object> damage = item.getMap("damage");
-        damage.put(attackType, new ArrayList<>() {{
+        JsonObject damage = item.getJsonObject("damage");
+        damage.putJsonArray(attackType, new JsonArray(new ArrayList<>() {{
             this.add(new HashMap<String, Object>() {{
                 this.put("type", "bludgeoning");
                 this.put("dice", new ArrayList<>() {{
@@ -133,7 +135,7 @@ public class RPGLItemTemplate extends JsonObject {
                 }});
                 this.put("bonus", 0);
             }});
-        }});
+        }}));
     }
 
 }

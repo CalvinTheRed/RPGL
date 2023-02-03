@@ -1,5 +1,7 @@
 package org.rpgl.core;
 
+import org.rpgl.json.JsonObject;
+
 public class RPGLEventTemplate extends JsonObject {
 
     /**

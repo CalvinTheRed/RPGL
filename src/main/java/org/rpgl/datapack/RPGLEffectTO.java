@@ -3,6 +3,7 @@ package org.rpgl.datapack;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLEffectTemplate;
+import org.rpgl.json.JsonObject;
 
 import java.util.Map;
 
@@ -27,21 +28,21 @@ public class RPGLEffectTO extends UUIDTableElementTO {
      */
     public RPGLEffectTO(RPGLEffect rpglEffect) {
         super(rpglEffect);
-        this.subeventFilters = rpglEffect.getMap(SUBEVENT_FILTERS_ALIAS);
+        this.subeventFilters = rpglEffect.getJsonObject(SUBEVENT_FILTERS_ALIAS).asMap();
         this.source = rpglEffect.getSource();
         this.target = rpglEffect.getTarget();
     }
 
     public RPGLEffectTemplate toRPGLEffectTemplate() {
         RPGLEffectTemplate rpglEffectTemplate = new RPGLEffectTemplate();
-        rpglEffectTemplate.putAll(super.getTemplateData());
-        rpglEffectTemplate.put(SUBEVENT_FILTERS_ALIAS, subeventFilters);
+        rpglEffectTemplate.asMap().putAll(super.getTemplateData());
+        rpglEffectTemplate.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
         return rpglEffectTemplate;
     }
 
     public RPGLEffect toRPGLEffect() {
         RPGLEffect rpglEffect = new RPGLEffect();
-        rpglEffect.put(SUBEVENT_FILTERS_ALIAS, subeventFilters);
+        rpglEffect.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
         rpglEffect.setSource(source);
         rpglEffect.setTarget(target);
         return rpglEffect;

@@ -1,6 +1,6 @@
 package org.rpgl.datapack;
 
-import org.rpgl.core.JsonObject;
+import org.rpgl.json.JsonObject;
 
 import java.io.File;
 import java.io.IOException;

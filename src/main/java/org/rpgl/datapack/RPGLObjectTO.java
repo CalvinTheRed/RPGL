@@ -3,6 +3,8 @@ package org.rpgl.datapack;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLObjectTemplate;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
 import java.util.List;
 import java.util.Map;
@@ -40,36 +42,36 @@ public class RPGLObjectTO extends UUIDTableElementTO {
      */
     public RPGLObjectTO(RPGLObject rpglObject) {
         super(rpglObject);
-        this.abilityScores = (Map<String, Object>) rpglObject.get(ABILITY_SCORES_ALIAS);
-        this.healthData = (Map<String, Object>) rpglObject.get(HEALTH_DATA_ALIAS);
-        this.equippedItems = (Map<String, Object>) rpglObject.get(EQUIPPED_ITEMS_ALIAS);
-        this.inventory = (List<Object>) rpglObject.get(INVENTORY_ALIAS);
-        this.events = (List<Object>) rpglObject.get(EVENTS_ALIAS);
-        this.effects = (List<Object>) rpglObject.get(EFFECTS_ALIAS);
-        this.proficiencyBonus = (Integer) rpglObject.get(PROFICIENCY_BONUS_ALIAS);
+        this.abilityScores = rpglObject.getJsonObject(ABILITY_SCORES_ALIAS).asMap();
+        this.healthData = rpglObject.getJsonObject(HEALTH_DATA_ALIAS).asMap();
+        this.equippedItems = rpglObject.getJsonObject(EQUIPPED_ITEMS_ALIAS).asMap();
+        this.inventory = rpglObject.getJsonArray(INVENTORY_ALIAS).asList();
+        this.events = rpglObject.getJsonArray(EVENTS_ALIAS).asList();
+        this.effects = rpglObject.getJsonArray(EFFECTS_ALIAS).asList();
+        this.proficiencyBonus = rpglObject.getInteger(PROFICIENCY_BONUS_ALIAS);
     }
 
     public RPGLObjectTemplate toRPGLObjectTemplate() {
         RPGLObjectTemplate rpglObjectTemplate = new RPGLObjectTemplate();
-        rpglObjectTemplate.put(ABILITY_SCORES_ALIAS, abilityScores);
-        rpglObjectTemplate.put(HEALTH_DATA_ALIAS, healthData);
-        rpglObjectTemplate.put(EQUIPPED_ITEMS_ALIAS, equippedItems);
-        rpglObjectTemplate.put(INVENTORY_ALIAS, inventory);
-        rpglObjectTemplate.put(EVENTS_ALIAS, events);
-        rpglObjectTemplate.put(EFFECTS_ALIAS, effects);
-        rpglObjectTemplate.put(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        rpglObjectTemplate.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
+        rpglObjectTemplate.putJsonObject(HEALTH_DATA_ALIAS, new JsonObject(healthData));
+        rpglObjectTemplate.putJsonObject(EQUIPPED_ITEMS_ALIAS, new JsonObject(equippedItems));
+        rpglObjectTemplate.putJsonArray(INVENTORY_ALIAS, new JsonArray(inventory));
+        rpglObjectTemplate.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
+        rpglObjectTemplate.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
+        rpglObjectTemplate.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
         return rpglObjectTemplate;
     }
 
     public RPGLObject toRPGLObject() {
         RPGLObject rpglObject = new RPGLObject();
-        rpglObject.put(ABILITY_SCORES_ALIAS, abilityScores);
-        rpglObject.put(HEALTH_DATA_ALIAS, healthData);
-        rpglObject.put(EQUIPPED_ITEMS_ALIAS, equippedItems);
-        rpglObject.put(INVENTORY_ALIAS, inventory);
-        rpglObject.put(EVENTS_ALIAS, events);
-        rpglObject.put(EFFECTS_ALIAS, effects);
-        rpglObject.put(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        rpglObject.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
+        rpglObject.putJsonObject(HEALTH_DATA_ALIAS, new JsonObject(healthData));
+        rpglObject.putJsonObject(EQUIPPED_ITEMS_ALIAS, new JsonObject(equippedItems));
+        rpglObject.putJsonArray(INVENTORY_ALIAS, new JsonArray(inventory));
+        rpglObject.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
+        rpglObject.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
+        rpglObject.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
         return rpglObject;
     }
 

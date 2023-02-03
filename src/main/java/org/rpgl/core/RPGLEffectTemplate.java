@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 public class RPGLEffectTemplate extends JsonObject {

@@ -1,8 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-
-import java.util.Map;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is a dummy Subevent only meant to be used during testing. It has no practical application.
@@ -31,9 +30,9 @@ public class DummySubevent extends Subevent {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new DummySubevent();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

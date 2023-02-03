@@ -1,8 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-
-import java.util.Map;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to determining the affinity an RPGLObject has for a particular damage type (<code>"normal",
@@ -30,21 +29,21 @@ public class DamageAffinity extends Subevent {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new DamageAffinity();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
     public void prepare(RPGLContext context) {
-        this.subeventJson.put("immunity", false);
-        this.subeventJson.put("resistance", false);
-        this.subeventJson.put("vulnerability", false);
-        this.subeventJson.put("immunity_revoked", false);
-        this.subeventJson.put("resistance_revoked", false);
-        this.subeventJson.put("vulnerability_revoked", false);
+        this.subeventJson.putBoolean("immunity", false);
+        this.subeventJson.putBoolean("resistance", false);
+        this.subeventJson.putBoolean("vulnerability", false);
+        this.subeventJson.putBoolean("immunity_revoked", false);
+        this.subeventJson.putBoolean("resistance_revoked", false);
+        this.subeventJson.putBoolean("vulnerability_revoked", false);
     }
 
     /**
@@ -61,7 +60,7 @@ public class DamageAffinity extends Subevent {
      * 	</p>
      */
     public void grantImmunity() {
-        this.subeventJson.put("immunity", true);
+        this.subeventJson.putBoolean("immunity", true);
     }
 
     /**
@@ -78,7 +77,7 @@ public class DamageAffinity extends Subevent {
      * 	</p>
      */
     public void grantResistance() {
-        this.subeventJson.put("resistance", true);
+        this.subeventJson.putBoolean("resistance", true);
     }
 
     /**
@@ -95,7 +94,7 @@ public class DamageAffinity extends Subevent {
      * 	</p>
      */
     public void grantVulnerability() {
-        this.subeventJson.put("vulnerability", true);
+        this.subeventJson.putBoolean("vulnerability", true);
     }
 
     /**
@@ -112,7 +111,7 @@ public class DamageAffinity extends Subevent {
      * 	</p>
      */
     public void revokeImmunity() {
-        this.subeventJson.put("immunity_revoked", true);
+        this.subeventJson.putBoolean("immunity_revoked", true);
     }
 
     /**
@@ -129,7 +128,7 @@ public class DamageAffinity extends Subevent {
      * 	</p>
      */
     public void revokeResistance() {
-        this.subeventJson.put("resistance_revoked", true);
+        this.subeventJson.putBoolean("resistance_revoked", true);
     }
 
     /**
@@ -146,7 +145,7 @@ public class DamageAffinity extends Subevent {
      * 	</p>
      */
     public void revokeVulnerability() {
-        this.subeventJson.put("vulnerability_revoked", true);
+        this.subeventJson.putBoolean("vulnerability_revoked", true);
     }
 
     /**
@@ -166,12 +165,12 @@ public class DamageAffinity extends Subevent {
      *  "vulnerability"</code>.).
      */
     public String getAffinity() {
-        boolean immunity = (Boolean) this.subeventJson.get("immunity")
-                && !(Boolean) this.subeventJson.get("immunity_revoked");
-        boolean resistance = (Boolean) this.subeventJson.get("resistance")
-                && !(Boolean) this.subeventJson.get("resistance_revoked");
-        boolean vulnerability = (Boolean) this.subeventJson.get("vulnerability")
-                && !(Boolean) this.subeventJson.get("vulnerability_revoked");
+        boolean immunity = this.subeventJson.getBoolean("immunity")
+                && !this.subeventJson.getBoolean("immunity_revoked");
+        boolean resistance = this.subeventJson.getBoolean("resistance")
+                && !this.subeventJson.getBoolean("resistance_revoked");
+        boolean vulnerability = this.subeventJson.getBoolean("vulnerability")
+                && !this.subeventJson.getBoolean("vulnerability_revoked");
 
         if (immunity) {
             return "immunity";

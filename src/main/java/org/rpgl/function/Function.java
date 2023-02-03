@@ -1,8 +1,8 @@
 package org.rpgl.function;
 
-import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
 import java.util.HashMap;
@@ -42,9 +42,9 @@ public abstract class Function {
      *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
      * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
-    void verifyFunction(String expected, Map<String, Object> functionJson) throws FunctionMismatchException {
-        if (!expected.equals(functionJson.get("function"))) {
-            throw new FunctionMismatchException(expected, (String) functionJson.get("function"));
+    void verifyFunction(String expected, JsonObject functionJson) throws FunctionMismatchException {
+        if (!expected.equals(functionJson.getString("function"))) {
+            throw new FunctionMismatchException(expected, functionJson.getString("function"));
         }
     }
 
@@ -66,6 +66,6 @@ public abstract class Function {
      *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
      * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
-    public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, Map<String, Object> functionJson) throws FunctionMismatchException;
+    public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson) throws FunctionMismatchException;
 
 }

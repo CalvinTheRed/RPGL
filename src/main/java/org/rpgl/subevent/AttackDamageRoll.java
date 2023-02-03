@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import java.util.Map;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to rolling all damage dice collected for an attack roll. This includes the combination of
@@ -29,9 +29,9 @@ public class AttackDamageRoll extends DamageRoll {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new AttackDamageRoll();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

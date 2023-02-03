@@ -1,7 +1,7 @@
 package org.rpgl.datapack;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.rpgl.core.JsonObject;
+import org.rpgl.json.JsonObject;
 
 public class UUIDTableElementTO extends DatapackContentTO {
 
@@ -14,7 +14,8 @@ public class UUIDTableElementTO extends DatapackContentTO {
 
     public UUIDTableElementTO(JsonObject rpglObject) {
         super(rpglObject);
-        this.uuid = (String) rpglObject.get(UUID_ALIAS);
+        this.uuid = rpglObject.getString(UUID_ALIAS);
+        // TODO how will this be used when loading in a saved UUIDTableElement file?
     }
 
 }

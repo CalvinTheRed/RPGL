@@ -1,8 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-
-import java.util.Map;
+import org.rpgl.json.JsonObject;
 
 /**
  * This subevent is dedicated to calculating the threshold which must be met on the d20 of an attack to count as a
@@ -30,16 +29,16 @@ public class CalculateCriticalHitThreshold extends Calculation {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CalculateCriticalHitThreshold();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        this.subeventJson.put("base", 20);
+        this.subeventJson.putInteger("base", 20);
     }
 
 }

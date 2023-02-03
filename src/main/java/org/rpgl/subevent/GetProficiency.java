@@ -32,7 +32,7 @@ public abstract class GetProficiency extends Subevent {
      * 	</p>
      */
     public void grantProficiency() {
-        this.subeventJson.put("is_proficient", true);
+        this.subeventJson.putBoolean("is_proficient", true);
     }
 
     /**
@@ -52,6 +52,6 @@ public abstract class GetProficiency extends Subevent {
      *  @return true if <code>source</code> is proficient with whatever it is attempting to use
      */
     public boolean getIsProficient() {
-        return Objects.requireNonNullElse((Boolean) this.subeventJson.get("is_proficient"), false);
+        return Objects.requireNonNullElse(this.subeventJson.getBoolean("is_proficient"), false);
     }
 }

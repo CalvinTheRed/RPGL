@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import java.util.Map;
+import org.rpgl.json.JsonObject;
 
 /**
  * This subevent is dedicated to calculating the armor class against which attack rolls are made for the purposes of
@@ -29,9 +29,9 @@ public class CalculateEffectiveArmorClass extends Calculation {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CalculateEffectiveArmorClass();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

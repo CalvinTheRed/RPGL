@@ -1,7 +1,7 @@
 package org.rpgl.datapack;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.rpgl.core.JsonObject;
+import org.rpgl.json.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +21,9 @@ public class DatapackContentTO {
     String id;
 
     public DatapackContentTO(JsonObject rpglObject) {
-        this.metadata = rpglObject.getMap(METADATA_ALIAS);
-        this.name = (String) rpglObject.get(NAME_ALIAS);
-        this.id = (String) rpglObject.get(ID_ALIAS);
+        this.metadata = rpglObject.getJsonObject(METADATA_ALIAS).asMap();
+        this.name = rpglObject.getString(NAME_ALIAS);
+        this.id = rpglObject.getString(ID_ALIAS);
     }
 
     protected Map<String, Object> getTemplateData() {

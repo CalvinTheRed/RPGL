@@ -2,6 +2,8 @@ package org.rpgl.core;
 
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.UUIDTableElementTO;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 import org.rpgl.uuidtable.UUIDTableElement;
 
@@ -18,12 +20,12 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
 
     @Override
     public void setUuid(String uuid) {
-        this.put(UUIDTableElementTO.UUID_ALIAS, uuid);
+        this.putString(UUIDTableElementTO.UUID_ALIAS, uuid);
     }
 
     @Override
     public void deleteUuid() {
-        this.put(UUIDTableElementTO.UUID_ALIAS, null);
+        this.asMap().remove(UUIDTableElementTO.UUID_ALIAS);
     }
 
     /**
@@ -41,7 +43,7 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      * 	@return an ability score, or <code>null</code> if an invalid attackType for the RPGLItem was passed
      */
     public String getAttackAbility(String attackType) {
-        return this.seekString("attack_abilities." + attackType);
+        return this.getJsonObject("attack_abilities").getString(attackType);
     }
 
     /**
@@ -59,17 +61,17 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      */
     public void defaultAttackAbilities() {
         Map<String, Object> attackAbilities = new HashMap<>();
-        if (this.getWeaponProperties().contains("ranged")) {
+        if (this.getWeaponProperties().asList().contains("ranged")) {
             attackAbilities.put("ranged", "dex");
         }
-        if (this.getWeaponProperties().contains("finesse")) {
+        if (this.getWeaponProperties().asList().contains("finesse")) {
             attackAbilities.put("melee", "dex");
             attackAbilities.put("thrown", "dex");
         } else {
             attackAbilities.put("melee", "str");
             attackAbilities.put("thrown", "str");
         }
-        this.put(RPGLItemTO.ATTACK_ABILITIES_ALIAS, attackAbilities);
+        this.putJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS, new JsonObject(attackAbilities));
     }
 
     /**
@@ -88,7 +90,7 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      *  @param ability    an ability score reference <code>("str", "dex", etc.)</code>
      */
     public void setAttackAbility(String attackType, String ability) {
-        Map<String, Object> attackAbilities = this.getMap("attack_abilities");
+        Map<String, Object> attackAbilities = this.getJsonObject("attack_abilities").asMap();
         attackAbilities.put(attackType, ability);
     }
 
@@ -107,8 +109,8 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      * 	@param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
      * 	@return the damage associated with the RPGLItem for the given attackType
      */
-    public List<Object> getDamage(String attackType) {
-        return this.seekList("damage." + attackType);
+    public JsonArray getDamage(String attackType) {
+        return this.getJsonObject("damage").getJsonArray(attackType);
     }
 
     /**
@@ -124,8 +126,8 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      *
      * 	@return a JsonArray of weapon properties
      */
-    public List<Object> getWeaponProperties() {
-        return this.getList(RPGLItemTO.WEAPON_PROPERTIES_ALIAS);
+    public JsonArray getWeaponProperties() {
+        return this.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS);
     }
 
     /**
@@ -142,7 +144,7 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      * 	@return the item's attack bonus
      */
     public int getAttackBonus() {
-        Integer attackBonus = (Integer) this.get(RPGLItemTO.ATTACK_BONUS_ALIAS);
+        Integer attackBonus = this.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS);
         return attackBonus != null ? attackBonus : 0;
     }
 
@@ -160,7 +162,7 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      * 	@return an array of RPGLEffect objects
      */
     public RPGLEffect[] getEquippedEffects() {
-        List<Object> equippedEffectsUuidArray = this.getList("equipped_effects");
+        List<Object> equippedEffectsUuidArray = this.getJsonArray("equipped_effects").asList();
         RPGLEffect[] effects = new RPGLEffect[equippedEffectsUuidArray.size()];
         int i = 0;
         for (Object equippedEffectUuidElement : equippedEffectsUuidArray) {

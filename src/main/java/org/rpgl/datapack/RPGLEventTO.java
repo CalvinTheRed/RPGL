@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLEventTemplate;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
 import java.util.List;
 import java.util.Map;
@@ -21,9 +23,9 @@ public class RPGLEventTO extends UUIDTableElementTO {
 
     public RPGLEventTemplate toRPGLEventTemplate() {
         RPGLEventTemplate rpglEventTemplate = new RPGLEventTemplate();
-        rpglEventTemplate.putAll(super.getTemplateData());
-        rpglEventTemplate.put(AREA_OF_EFFECT_ALIAS, areaOfEffect);
-        rpglEventTemplate.put(SUBEVENTS_ALIAS, subevents);
+        rpglEventTemplate.asMap().putAll(super.getTemplateData());
+        rpglEventTemplate.putJsonObject(AREA_OF_EFFECT_ALIAS, new JsonObject(areaOfEffect));
+        rpglEventTemplate.putJsonArray(SUBEVENTS_ALIAS, new JsonArray(subevents));
         return rpglEventTemplate;
     }
 
@@ -35,14 +37,14 @@ public class RPGLEventTO extends UUIDTableElementTO {
      */
     public RPGLEventTO(RPGLEvent rpglEvent) {
         super(rpglEvent);
-        this.areaOfEffect = (Map<String, Object>) rpglEvent.get(AREA_OF_EFFECT_ALIAS);
-        this.subevents = (List<Object>) rpglEvent.get(SUBEVENTS_ALIAS);
+        this.areaOfEffect = rpglEvent.getJsonObject(AREA_OF_EFFECT_ALIAS).asMap();
+        this.subevents = rpglEvent.getJsonArray(SUBEVENTS_ALIAS).asList();
     }
 
     public RPGLEffect toRPGLEvent() {
         RPGLEffect rpglEffect = new RPGLEffect();
-        rpglEffect.put(AREA_OF_EFFECT_ALIAS, areaOfEffect);
-        rpglEffect.put(SUBEVENTS_ALIAS, subevents);
+        rpglEffect.putJsonObject(AREA_OF_EFFECT_ALIAS, new JsonObject(areaOfEffect));
+        rpglEffect.putJsonArray(SUBEVENTS_ALIAS, new JsonArray(subevents));
         return rpglEffect;
     }
 

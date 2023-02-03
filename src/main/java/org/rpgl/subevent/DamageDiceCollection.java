@@ -1,8 +1,9 @@
 package org.rpgl.subevent;
 
-import org.rpgl.core.JsonObject;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
-import java.util.*;
+import java.util.Objects;
 
 /**
  * This abstract Subevent is dedicated to collecting unrolled damage dice and bonuses.
@@ -38,11 +39,11 @@ public abstract class DamageDiceCollection extends Subevent {
      *  @return true if the passed damage type is present in the damage dice collection
      */
     public boolean includesDamageType(String damageType) {
-        List<Object> damageDiceArray = this.subeventJson.getList("damage");
+        JsonArray damageDiceArray = this.subeventJson.getJsonArray("damage");
         if (damageDiceArray != null) {
-            for (Object damageDiceElement : damageDiceArray) {
+            for (Object damageDiceElement : damageDiceArray.asList()) {
                 JsonObject damageDice = (JsonObject) damageDiceElement;
-                if (damageDice.get("type").equals(damageType)) {
+                if (damageDice.getString("type").equals(damageType)) {
                     return true;
                 }
             }
@@ -65,9 +66,9 @@ public abstract class DamageDiceCollection extends Subevent {
      *
      *  @param typedDamageArray the typed damage to be included in the damage dice collection
      */
-    public void addTypedDamage(List<Object> typedDamageArray) {
-        for (Object typedDamageElement : typedDamageArray) {
-            JsonObject typedDamage = (JsonObject) typedDamageElement;
+    public void addTypedDamage(JsonArray typedDamageArray) {
+        for (int i = 0; i < typedDamageArray.size(); i++) {
+            JsonObject typedDamage = typedDamageArray.getJsonObject(i);
             if (this.includesDamageType(typedDamage.getString("type"))) {
                 this.addExistingTypedDamage(typedDamage);
             } else {
@@ -82,7 +83,7 @@ public abstract class DamageDiceCollection extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * void addExistingTypedDamage(JsonObject typedDamage)
+     * void addExistingTypedDamage(JsonObject typedDamageToBeAdded)
      * 	throws JsonFormatException
      * 	</code></pre>
      * 	</p>
@@ -90,34 +91,27 @@ public abstract class DamageDiceCollection extends Subevent {
      * 	This helper method adds typed damage whose type is already present in the damage dice collection.
      * 	</p>
      *
-     *  @param typedDamage the typed damage to be added to the damage dice collection
+     *  @param typedDamageToBeAdded the typed damage to be added to the damage dice collection
      */
-    void addExistingTypedDamage(JsonObject typedDamage) {
-        String damageType = (String) typedDamage.get("type");
-        JsonObject existingTypedDamage = JsonObject.mapToJsonObject(this.subeventJson.seekMap(String.format("""
-                        damage[{"type":"%s"}]""",
-                damageType
-        )));
+    void addExistingTypedDamage(JsonObject typedDamageToBeAdded) {
+        String damageTypeToBeAdded = typedDamageToBeAdded.getString("type");
+        JsonObject typedDamage = this.subeventJson.getJsonArray("damage").getJsonObjectMatching("type", damageTypeToBeAdded);
 
         /*
          * Add new damage dice, if any exist
          */
-        List<Object> existingTypedDamageDice = existingTypedDamage.getList("dice");
-        List<Object> typedDamageDice = typedDamage.getList("dice");
-        if (existingTypedDamageDice == null) {
-            existingTypedDamageDice = new ArrayList<>();
-            existingTypedDamage.put("dice", existingTypedDamageDice);
-        }
-        existingTypedDamageDice.addAll(Objects.requireNonNullElse(typedDamageDice, new ArrayList<>()));
+        JsonArray typedDamageDice = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
+        JsonArray typedDamageDiceToBeAdded = Objects.requireNonNullElse(typedDamageToBeAdded.getJsonArray("dice"), new JsonArray());
+        typedDamageDice.asList().addAll(typedDamageDiceToBeAdded.asList());
 
         /*
          * Add extra damage bonus, if it exists
          */
-        Integer existingTypedDamageBonus = (Integer) existingTypedDamage.get("bonus");
-        Integer typedDamageBonus = (Integer) typedDamage.get("bonus");
-        existingTypedDamage.put(
+        Integer typedDamageBonus = Objects.requireNonNullElse(typedDamage.getInteger("bonus"), 0);
+        Integer typedDamageBonusToBeAdded = Objects.requireNonNullElse(typedDamageToBeAdded.getInteger("bonus"), 0);
+        typedDamage.putInteger(
                 "bonus",
-                Objects.requireNonNullElse(existingTypedDamageBonus, 0) + Objects.requireNonNullElse(typedDamageBonus, 0)
+                typedDamageBonus + typedDamageBonusToBeAdded
         );
     }
 
@@ -136,9 +130,9 @@ public abstract class DamageDiceCollection extends Subevent {
      *
      *  @param typedDamage the typed damage to be added to the damage dice collection
      */
-    void addNewTypedDamage(Map<String, Object> typedDamage) {
-        List<Object> typedDamageArray = this.subeventJson.getList("damage");
-        typedDamageArray.add(typedDamage);
+    void addNewTypedDamage(JsonObject typedDamage) {
+        JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
+        typedDamageArray.addJsonObject(typedDamage);
     }
 
     /**
@@ -156,8 +150,8 @@ public abstract class DamageDiceCollection extends Subevent {
      *
      *  @return an array of typed damage dice and bonuses
      */
-    public List<Object> getDamageDiceCollection() {
-        return this.subeventJson.getList("damage");
+    public JsonArray getDamageDiceCollection() {
+        return this.subeventJson.getJsonArray("damage");
     }
 
 }

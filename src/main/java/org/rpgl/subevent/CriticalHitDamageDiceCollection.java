@@ -1,9 +1,7 @@
 package org.rpgl.subevent;
 
-import org.rpgl.core.JsonObject;
-
-import java.util.List;
-import java.util.Map;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to representing a collection of damage dice to be rolled when a critical hit occurs.
@@ -30,9 +28,9 @@ public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CriticalHitDamageDiceCollection();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -52,10 +50,10 @@ public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
      * 	</p>
      */
     void doubleDice() {
-        for (Object typedDamageObjectElement : this.getDamageDiceCollection()) {
-            JsonObject typedDamageObject = (JsonObject) typedDamageObjectElement;
-            List<Object> typedDamageDice = typedDamageObject.getList("dice");
-            typedDamageDice.addAll(JsonObject.deepClone(typedDamageDice));
+        JsonArray damageDiceCollection = this.getDamageDiceCollection();
+        for (int i = 0; i < damageDiceCollection.size(); i++) {
+            JsonArray typedDamageDice = damageDiceCollection.getJsonObject(i).getJsonArray("dice");
+            typedDamageDice.asList().addAll(typedDamageDice.deepClone().asList());
         }
     }
 

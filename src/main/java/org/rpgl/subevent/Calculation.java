@@ -33,11 +33,7 @@ public abstract class Calculation extends Subevent {
      * 	</p>
      */
     public void addBonus(int bonus) {
-        Integer currentBonus = (Integer) this.subeventJson.put("bonus", bonus);
-        if (currentBonus == null) {
-            currentBonus = 0;
-        }
-        this.subeventJson.put("bonus", currentBonus + bonus);
+        this.subeventJson.putInteger("bonus", Objects.requireNonNullElse(this.subeventJson.getInteger("bonus"), 0) + bonus);
     }
 
     /**
@@ -56,7 +52,7 @@ public abstract class Calculation extends Subevent {
      *  @return the bonus granted to the calculation
      */
     public int getBonus() {
-        return Objects.requireNonNullElse((Integer) this.subeventJson.get("bonus"), 0);
+        return Objects.requireNonNullElse(this.subeventJson.getInteger("bonus"), 0);
     }
 
     /**
@@ -74,7 +70,7 @@ public abstract class Calculation extends Subevent {
      * 	</p>
      */
     public void set(int value) {
-        this.subeventJson.put("set", value);
+        this.subeventJson.putInteger("set", value);
     }
 
     /**
@@ -93,12 +89,12 @@ public abstract class Calculation extends Subevent {
      *  @return the result of the calculation
      */
     public int get() {
-        Integer set = (Integer) this.subeventJson.get("set");
+        Integer set = this.subeventJson.getInteger("set");
         Integer bonus = this.getBonus();
         if (set != null) {
             return set + bonus;
         }
-        return Objects.requireNonNullElse((Integer) this.subeventJson.get("base"), 0) + bonus; // TODO add methods to interface with "base"?
+        return Objects.requireNonNullElse(this.subeventJson.getInteger("base"), 0) + bonus; // TODO add methods to interface with "base"?
     }
 
 }

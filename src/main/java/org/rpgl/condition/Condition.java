@@ -1,8 +1,8 @@
 package org.rpgl.condition;
 
-import org.rpgl.core.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.json.JsonObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +46,9 @@ public abstract class Condition {
      *  @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    void verifyCondition(String expected, Map<String, Object> conditionJson) throws ConditionMismatchException {
-        if (!expected.equals(conditionJson.get("condition"))) {
-            throw new ConditionMismatchException(expected, (String) conditionJson.get("condition"));
+    void verifyCondition(String expected, JsonObject conditionJson) throws ConditionMismatchException {
+        if (!expected.equals(conditionJson.getString("condition"))) {
+            throw new ConditionMismatchException(expected, conditionJson.getString("condition"));
         }
     }
 
@@ -70,6 +70,6 @@ public abstract class Condition {
      * 	@return the result of the evaluation
      * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    public abstract boolean evaluate(RPGLObject source, RPGLObject target, Map<String, Object> conditionJson) throws ConditionMismatchException;
+    public abstract boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException;
 
 }

@@ -1,10 +1,10 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLFactory;
+import org.rpgl.json.JsonObject;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -32,9 +32,9 @@ public class GiveEffect extends Subevent {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new GiveEffect();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -43,7 +43,7 @@ public class GiveEffect extends Subevent {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (!this.isCancelled()) {
-            RPGLEffect effect = RPGLFactory.newEffect((String) this.subeventJson.get("effect"));
+            RPGLEffect effect = RPGLFactory.newEffect(this.subeventJson.getString("effect"));
             if (effect != null) {
                 this.getTarget().addEffect(effect);
             }
@@ -65,7 +65,7 @@ public class GiveEffect extends Subevent {
      * 	</p>
      */
     public void cancel() {
-        this.subeventJson.put("cancel", true);
+        this.subeventJson.putBoolean("cancel", true);
     }
 
     /**
@@ -85,7 +85,7 @@ public class GiveEffect extends Subevent {
      *  @return true if the Subevent was cancelled.
      */
     boolean isCancelled() {
-        return Objects.requireNonNullElse((Boolean) this.subeventJson.get("cancel"), false);
+        return Objects.requireNonNullElse(this.subeventJson.getBoolean("cancel"), false);
     }
 
 }

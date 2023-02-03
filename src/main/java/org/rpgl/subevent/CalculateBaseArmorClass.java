@@ -2,10 +2,9 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * This subevent is dedicated to calculating the armor class against which attack rolls are made. Once the attack roll
@@ -34,9 +33,9 @@ public class CalculateBaseArmorClass extends Calculation {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CalculateBaseArmorClass();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -46,15 +45,15 @@ public class CalculateBaseArmorClass extends Calculation {
         // NOTE: you do not need to be proficient in armor or shields to receive their AC benefits
 
         // Set base armor class from armor (or no armor)
-        String armorUuid = (String) this.getSource().seek("items.armor");
+        String armorUuid = this.getSource().getJsonObject("items").getString("armor");
         int baseArmorClass;
         if (armorUuid == null) {
             // if equipment slot is empty, you are unarmored
             baseArmorClass = this.prepareUnarmored(context);
         } else {
             RPGLItem armor = UUIDTable.getItem(armorUuid);
-            List<Object> armorTags = armor.getList("tags");
-            if (armorTags.contains("armor")) {
+            JsonArray armorTags = armor.getJsonArray("tags");
+            if (armorTags.asList().contains("armor")) {
                 // equipment slot holds armor
                 baseArmorClass = this.prepareArmored(context, armor);
             } else {
@@ -67,7 +66,7 @@ public class CalculateBaseArmorClass extends Calculation {
         baseArmorClass += this.getShieldBonus();
 
         // Set base armor class value in json
-        this.subeventJson.put("base", baseArmorClass); // TODO what is base for as opposed to set?
+        this.subeventJson.putInteger("base", baseArmorClass); // TODO what is base for as opposed to set?
     }
 
     /**
@@ -149,23 +148,24 @@ public class CalculateBaseArmorClass extends Calculation {
      */
     int getShieldBonus() {
         // Get armor class bonus if wielding shield (you may only benefit from 1 shield at a time, larger bonus is used).
-        String hand1ShieldUuid = this.getSource().seekString("items.hand_1");
-        String hand2ShieldUuid = this.getSource().seekString("items.hand_2");
+        // TODO generify this eventually to work for any equipment slot whose item is a shield
+        String hand1ShieldUuid = this.getSource().getJsonObject("items").getString("hand_1");
+        String hand2ShieldUuid = this.getSource().getJsonObject("items").getString("hand_2");
         int hand1ShieldBonus = 0;
         int hand2ShieldBonus = 0;
 
         if (hand1ShieldUuid != null) {
             RPGLItem shield = UUIDTable.getItem(hand1ShieldUuid);
-            List<Object> shieldTags = shield.getList("tags");
-            if (shieldTags.contains("shield")) {
-                hand1ShieldBonus = (Integer) shield.get("armor_class_bonus");
+            JsonArray shieldTags = shield.getJsonArray("tags");
+            if (shieldTags.asList().contains("shield")) {
+                hand1ShieldBonus = shield.getInteger("armor_class_bonus");
             }
         }
         if (hand2ShieldUuid != null) {
             RPGLItem shield = UUIDTable.getItem(hand2ShieldUuid);
-            List<Object> shieldTags = shield.getList("tags");
-            if (shieldTags.contains("shield")) {
-                hand2ShieldBonus = (Integer) shield.get("armor_class_bonus");
+            JsonArray shieldTags = shield.getJsonArray("tags");
+            if (shieldTags.asList().contains("shield")) {
+                hand2ShieldBonus = shield.getInteger("armor_class_bonus");
             }
         }
 

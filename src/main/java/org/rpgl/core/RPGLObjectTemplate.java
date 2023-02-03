@@ -1,11 +1,11 @@
 package org.rpgl.core;
 
 import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RPGLObjectTemplate extends JsonObject {
@@ -27,7 +27,7 @@ public class RPGLObjectTemplate extends JsonObject {
     public RPGLObject newInstance() {
         RPGLObject object = new RPGLObject();
         object.join(this);
-        this.putIfAbsent("events", new HashMap<String, Object>());
+        this.asMap().putIfAbsent("events", new HashMap<String, Object>());
         processEffects(object);
         processInventory(object);
         processEquippedItems(object);
@@ -50,39 +50,39 @@ public class RPGLObjectTemplate extends JsonObject {
      *  @param object an RPGLObject
      */
     static void processEffects(RPGLObject object) {
-        List<Object> effectIdArray = (List) object.remove("effects");
-        List<Object> effectUuidArray = new ArrayList<>();
-        for (Object effectIdElement : effectIdArray) {
-            String effectId = (String) effectIdElement;
+        JsonArray effectIdArray = object.removeJsonArray("effects");
+        JsonArray effectUuidArray = new JsonArray();
+        for (int i = 0; i < effectIdArray.size(); i++) {
+            String effectId = effectIdArray.getString(i);
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
             if (effect != null) {
-                effectUuidArray.add(effect.getUuid());
+                effectUuidArray.addString(effect.getUuid());
             }
         }
-        object.put("effects", effectUuidArray);
+        object.putJsonArray("effects", effectUuidArray);
     }
 
     static void processEquippedItems(RPGLObject object) {
-        Map<String, Object> equippedItemIds = object.getMap(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
-        List<Object> inventoryUuids = object.getList(RPGLObjectTO.INVENTORY_ALIAS);
-        Map<String, Object> equippedItemUuids = new HashMap<>();
-        for (Map.Entry<String, Object> equippedItemEntry : equippedItemIds.entrySet()) {
-            String equippedItemId = (String) equippedItemEntry.getValue();
+        JsonObject equippedItemIds = object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        JsonArray inventoryUuids = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonObject equippedItemUuids = new JsonObject();
+        for (Map.Entry<String, Object> equippedItemEntry : equippedItemIds.asMap().entrySet()) {
+            String equippedItemId = equippedItemIds.getString(equippedItemEntry.getKey());
             RPGLItem item = RPGLFactory.newItem(equippedItemId);
-            equippedItemUuids.put(equippedItemEntry.getKey(), item.getUuid());
-            inventoryUuids.add(item.getUuid());
+            equippedItemUuids.putString(equippedItemEntry.getKey(), item.getUuid());
+            inventoryUuids.addString(item.getUuid());
         }
-        object.put(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItemUuids);
+        object.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItemUuids);
     }
 
     static void processInventory(RPGLObject object) {
-        List<Object> inventoryItemIds = object.getList(RPGLObjectTO.INVENTORY_ALIAS);
-        List<Object> inventoryItemUuids = new ArrayList<>();
-        for (Object itemId : inventoryItemIds) {
-            RPGLItem item = RPGLFactory.newItem((String) itemId);
-            inventoryItemUuids.add(item.getUuid());
+        JsonArray inventoryItemIds = object.removeJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonArray inventoryItemUuids = new JsonArray();
+        for (int i = 0; i < inventoryItemIds.size(); i++) {
+            RPGLItem item = RPGLFactory.newItem(inventoryItemIds.getString(i));
+            inventoryItemUuids.addString(item.getUuid());
         }
-        object.put(RPGLObjectTO.INVENTORY_ALIAS, inventoryItemUuids);
+        object.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventoryItemUuids);
     }
 
 }

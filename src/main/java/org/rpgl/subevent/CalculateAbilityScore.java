@@ -1,8 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-
-import java.util.Map;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to rolling all dice which will be copied to all targets of a damaging RPGLEvent. This
@@ -30,16 +29,17 @@ public class CalculateAbilityScore extends Calculation {
     }
 
     @Override
-    public Subevent clone(Map<String, Object> subeventDataMap) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CalculateAbilityScore();
-        clone.joinSubeventData(subeventDataMap);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        this.subeventJson.put("base", this.getSource().seek("ability_scores." + this.subeventJson.get("ability"))); // TODO what is base for as opposed to set?
+        // TODO what is base for as opposed to set?
+        this.subeventJson.putInteger("base", this.getSource().getJsonObject("ability_scores").getInteger(this.subeventJson.getString("ability")));
     }
 
 }
