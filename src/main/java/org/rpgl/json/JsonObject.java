@@ -35,9 +35,9 @@ public class JsonObject {
         for (String key : this.data.keySet()) {
             Object value = this.data.get(key);
             if (value instanceof Map) {
-                clone.data.put(key, this.getJsonObject(key).deepClone());
+                clone.putJsonObject(key, this.getJsonObject(key).deepClone());
             } else if (value instanceof List) {
-                clone.data.put(key, this.getJsonArray(key).deepClone());
+                clone.putJsonArray(key, this.getJsonArray(key).deepClone());
             } else {
                 clone.data.put(key, value);
             }
@@ -60,7 +60,7 @@ public class JsonObject {
                     JsonObject thisJsonObject = new JsonObject();
                     thisJsonObject.join(new JsonObject(thisMap));
                     thisJsonObject.join(new JsonObject(otherMap));
-                    this.data.put(otherKey, thisJsonObject);
+                    this.putJsonObject(otherKey, thisJsonObject);
                 } else {
                     // override this key if this is not also a map
                     this.data.put(otherKey, otherMap);
@@ -200,69 +200,6 @@ public class JsonObject {
     }
 
     // =================================================================================================================
-    //  seek() method and related convenience methods
-    // =================================================================================================================
-
-//    public Object seek(String keyPath) throws JsonObjectSeekException {
-//        // TODO
-//        return null;
-//    }
-//
-//    public JsonObject seekJsonObject(String keyPath) {
-//        try {
-//            return (this.seek(keyPath) instanceof Map value) ? new JsonObject((Map) value) : null;
-//        } catch (JsonObjectSeekException e) {
-//            // TODO log the error
-//            return null;
-//        }
-//    }
-//
-//    public JsonArray seekJsonArray(String keyPath) {
-//        try {
-//            return (this.seek(keyPath) instanceof List value) ? new JsonArray((List) value) : null;
-//        } catch (JsonObjectSeekException e) {
-//            // TODO log the error
-//            return null;
-//        }
-//    }
-//
-//    public String seekString(String keyPath) {
-//        try {
-//            return (this.seek(keyPath) instanceof String value) ? value : null;
-//        } catch (JsonObjectSeekException e) {
-//            // TODO log the error
-//            return null;
-//        }
-//    }
-//
-//    public Integer seekInteger(String keyPath) {
-//        try {
-//            return (this.seek(keyPath) instanceof Integer value) ? value : null;
-//        } catch (JsonObjectSeekException e) {
-//            // TODO log the error
-//            return null;
-//        }
-//    }
-//
-//    public Double seekDouble(String keyPath) {
-//        try {
-//            return (this.seek(keyPath) instanceof Double value) ? value : null;
-//        } catch (JsonObjectSeekException e) {
-//            // TODO log the error
-//            return null;
-//        }
-//    }
-//
-//    public Boolean seekBoolean(String keyPath) {
-//        try {
-//            return (this.seek(keyPath) instanceof Boolean value) ? value : null;
-//        } catch (JsonObjectSeekException e) {
-//            // TODO log the error
-//            return null;
-//        }
-//    }
-
-    // =================================================================================================================
     //  inherited method overrides
     // =================================================================================================================
 
@@ -270,7 +207,7 @@ public class JsonObject {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("{");
 
-        for (String key : this.data.keySet()) {
+        this.data.keySet().stream().sorted().forEach(key -> {
             stringBuilder.append("\"").append(key).append("\":");
 
             Object value = this.data.get(key);
@@ -284,13 +221,21 @@ public class JsonObject {
                 stringBuilder.append(value.toString());
             }
             stringBuilder.append(',');
-        }
+        });
 
         if (stringBuilder.charAt(stringBuilder.length() - 1) == ',') {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         }
 
         return stringBuilder.append('}').toString();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof JsonObject otherJsonObject) {
+            return this.data.equals(otherJsonObject.data);
+        }
+        return false;
     }
 
 }

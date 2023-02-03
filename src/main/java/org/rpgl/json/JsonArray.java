@@ -147,4 +147,12 @@ public class JsonArray {
         return stringBuilder.append(']').toString();
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof JsonArray otherJsonArray) {
+            return this.data.equals(otherJsonArray.data);
+        }
+        return false;
+    }
+
 }
