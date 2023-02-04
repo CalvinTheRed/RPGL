@@ -6,8 +6,8 @@ import org.rpgl.core.RPGLItemTemplate;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RPGLItemTO extends UUIDTableElementTO {
 
@@ -34,25 +34,25 @@ public class RPGLItemTO extends UUIDTableElementTO {
     public static final String ARMOR_CLASS_BONUS_ALIAS = "armor_class_bonus";
 
     @JsonProperty(TAGS_ALIAS)
-    List<Object> tags;
+    ArrayList<Object> tags;
     @JsonProperty(WEIGHT_ALIAS)
     Integer weight;
     @JsonProperty(COST_ALIAS)
     Integer cost;
 
     @JsonProperty(PROFICIENCY_TAGS_ALIAS)
-    List<Object> proficiencyTags;
+    ArrayList<Object> proficiencyTags;
     @JsonProperty(WHILE_EQUIPPED_ALIAS)
-    List<Object> whileEquipped;
+    ArrayList<Object> whileEquipped;
 
     @JsonProperty(WEAPON_PROPERTIES_ALIAS)
-    List<Object> weaponProperties;
+    ArrayList<Object> weaponProperties;
     @JsonProperty(DAMAGE_ALIAS)
-    Map<String, Object> damage;
+    HashMap<String, Object> damage;
     @JsonProperty(ATTACK_BONUS_ALIAS)
     Integer attackBonus;
     @JsonProperty(ATTACK_ABILITIES_ALIAS)
-    Map<String, Object> attackAbilities;
+    HashMap<String, Object> attackAbilities;
 
     @JsonProperty(ARMOR_CLASS_BASE_ALIAS)
     Integer armorClassBase;
@@ -61,6 +61,10 @@ public class RPGLItemTO extends UUIDTableElementTO {
 
     @JsonProperty(ARMOR_CLASS_BONUS_ALIAS)
     Integer armorClassBonus;
+
+    public RPGLItemTO() {
+
+    }
 
     /**
      * Constructor to be used when storing data from a fully instantiated RPGLItem. Intended to be used for saving data.
@@ -84,37 +88,39 @@ public class RPGLItemTO extends UUIDTableElementTO {
     }
 
     public RPGLItemTemplate toRPGLItemTemplate() {
-        RPGLItemTemplate rpglItemTemplate = new RPGLItemTemplate();
-        rpglItemTemplate.asMap().putAll(super.getTemplateData());
-        rpglItemTemplate.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
-        rpglItemTemplate.putInteger(WEIGHT_ALIAS, weight);
-        rpglItemTemplate.putInteger(COST_ALIAS, cost);
-        rpglItemTemplate.putJsonArray(PROFICIENCY_TAGS_ALIAS, new JsonArray(proficiencyTags));
-        rpglItemTemplate.putJsonArray(WHILE_EQUIPPED_ALIAS, new JsonArray(whileEquipped));
-        rpglItemTemplate.putJsonArray(WEAPON_PROPERTIES_ALIAS, new JsonArray(weaponProperties));
-        rpglItemTemplate.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
-        rpglItemTemplate.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
-        rpglItemTemplate.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
-        rpglItemTemplate.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
-        rpglItemTemplate.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
+        RPGLItemTemplate rpglItemTemplate = new RPGLItemTemplate() {{
+            this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
+            this.putInteger(WEIGHT_ALIAS, weight);
+            this.putInteger(COST_ALIAS, cost);
+            this.putJsonArray(PROFICIENCY_TAGS_ALIAS, new JsonArray(proficiencyTags));
+            this.putJsonArray(WHILE_EQUIPPED_ALIAS, new JsonArray(whileEquipped));
+            this.putJsonArray(WEAPON_PROPERTIES_ALIAS, new JsonArray(weaponProperties));
+            this.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
+            this.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
+            this.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
+            this.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
+            this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
+        }};
+        rpglItemTemplate.join(super.getTemplateData());
         return rpglItemTemplate;
     }
 
     public RPGLItem toRPGLItem() {
-        RPGLItem rpglItem = new RPGLItem();
+        RPGLItem rpglItem = new RPGLItem() {{
+            this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
+            this.putInteger(WEIGHT_ALIAS, weight);
+            this.putInteger(COST_ALIAS, cost);
+            this.putJsonArray(PROFICIENCY_TAGS_ALIAS, new JsonArray(proficiencyTags));
+            this.putJsonArray(WHILE_EQUIPPED_ALIAS, new JsonArray(whileEquipped));
+            this.putJsonArray(WEAPON_PROPERTIES_ALIAS, new JsonArray(weaponProperties));
+            this.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
+            this.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
+            this.putJsonObject(ATTACK_ABILITIES_ALIAS, new JsonObject(attackAbilities));
+            this.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
+            this.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
+            this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
+        }};
         rpglItem.join(super.getTemplateData());
-        rpglItem.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
-        rpglItem.putInteger(WEIGHT_ALIAS, weight);
-        rpglItem.putInteger(COST_ALIAS, cost);
-        rpglItem.putJsonArray(PROFICIENCY_TAGS_ALIAS, new JsonArray(proficiencyTags));
-        rpglItem.putJsonArray(WHILE_EQUIPPED_ALIAS, new JsonArray(whileEquipped));
-        rpglItem.putJsonArray(WEAPON_PROPERTIES_ALIAS, new JsonArray(weaponProperties));
-        rpglItem.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
-        rpglItem.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
-        rpglItem.putJsonObject(ATTACK_ABILITIES_ALIAS, new JsonObject(attackAbilities));
-        rpglItem.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
-        rpglItem.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
-        rpglItem.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
         return rpglItem;
     }
 

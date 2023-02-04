@@ -6,8 +6,8 @@ import org.rpgl.core.RPGLObjectTemplate;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RPGLObjectTO extends UUIDTableElementTO {
 
@@ -21,19 +21,23 @@ public class RPGLObjectTO extends UUIDTableElementTO {
     public static final String PROFICIENCY_BONUS_ALIAS = "proficiency_bonus";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
-    Map<String, Object> abilityScores;
+    HashMap<String, Object> abilityScores;
     @JsonProperty(HEALTH_DATA_ALIAS)
-    Map<String, Object> healthData;
+    HashMap<String, Object> healthData;
     @JsonProperty(EQUIPPED_ITEMS_ALIAS)
-    Map<String, Object> equippedItems;
+    HashMap<String, Object> equippedItems;
     @JsonProperty(INVENTORY_ALIAS)
-    List<Object> inventory;
+    ArrayList<Object> inventory;
     @JsonProperty(EVENTS_ALIAS)
-    List<Object> events;
+    ArrayList<Object> events;
     @JsonProperty(EFFECTS_ALIAS)
-    List<Object> effects;
+    ArrayList<Object> effects;
     @JsonProperty(PROFICIENCY_BONUS_ALIAS)
     Integer proficiencyBonus;
+
+    public RPGLObjectTO() {
+
+    }
 
     /**
      * Constructor to be used when storing data from a fully instantiated RPGLObject. Intended to be used for saving data.
@@ -52,26 +56,30 @@ public class RPGLObjectTO extends UUIDTableElementTO {
     }
 
     public RPGLObjectTemplate toRPGLObjectTemplate() {
-        RPGLObjectTemplate rpglObjectTemplate = new RPGLObjectTemplate();
-        rpglObjectTemplate.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
-        rpglObjectTemplate.putJsonObject(HEALTH_DATA_ALIAS, new JsonObject(healthData));
-        rpglObjectTemplate.putJsonObject(EQUIPPED_ITEMS_ALIAS, new JsonObject(equippedItems));
-        rpglObjectTemplate.putJsonArray(INVENTORY_ALIAS, new JsonArray(inventory));
-        rpglObjectTemplate.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
-        rpglObjectTemplate.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
-        rpglObjectTemplate.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        RPGLObjectTemplate rpglObjectTemplate = new RPGLObjectTemplate() {{
+            this.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
+            this.putJsonObject(HEALTH_DATA_ALIAS, new JsonObject(healthData));
+            this.putJsonObject(EQUIPPED_ITEMS_ALIAS, new JsonObject(equippedItems));
+            this.putJsonArray(INVENTORY_ALIAS, new JsonArray(inventory));
+            this.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
+            this.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
+            this.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        }};
+        rpglObjectTemplate.join(super.getTemplateData());
         return rpglObjectTemplate;
     }
 
     public RPGLObject toRPGLObject() {
-        RPGLObject rpglObject = new RPGLObject();
-        rpglObject.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
-        rpglObject.putJsonObject(HEALTH_DATA_ALIAS, new JsonObject(healthData));
-        rpglObject.putJsonObject(EQUIPPED_ITEMS_ALIAS, new JsonObject(equippedItems));
-        rpglObject.putJsonArray(INVENTORY_ALIAS, new JsonArray(inventory));
-        rpglObject.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
-        rpglObject.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
-        rpglObject.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        RPGLObject rpglObject = new RPGLObject() {{
+            this.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
+            this.putJsonObject(HEALTH_DATA_ALIAS, new JsonObject(healthData));
+            this.putJsonObject(EQUIPPED_ITEMS_ALIAS, new JsonObject(equippedItems));
+            this.putJsonArray(INVENTORY_ALIAS, new JsonArray(inventory));
+            this.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
+            this.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
+            this.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        }};
+        rpglObject.join(super.getTemplateData());
         return rpglObject;
     }
 

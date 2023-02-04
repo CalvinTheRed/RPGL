@@ -12,7 +12,6 @@ import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -224,9 +223,9 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      */
     public Integer getProficiencyBonus(RPGLContext context) throws Exception {
         CalculateProficiencyModifier calculateProficiencyModifier = new CalculateProficiencyModifier();
-        calculateProficiencyModifier.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "calculate_proficiency_modifier");
-        }}));
+        calculateProficiencyModifier.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_proficiency_modifier");
+        }});
         calculateProficiencyModifier.setSource(this);
         calculateProficiencyModifier.prepare(context);
         calculateProficiencyModifier.setTarget(this);
@@ -255,10 +254,10 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      */
     public int getAbilityModifierFromAbilityScore(RPGLContext context, String ability) throws Exception {
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
-        calculateAbilityScore.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "calculate_ability_score");
-            this.put("ability", ability);
-        }}));
+        calculateAbilityScore.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_ability_score");
+            this.putString("ability", ability);
+        }});
         calculateAbilityScore.setSource(this);
         calculateAbilityScore.prepare(context);
         calculateAbilityScore.setTarget(this);
@@ -312,10 +311,10 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      */
     public boolean isProficientInSavingThrow(RPGLContext context, String saveAbility) throws Exception {
         GetSavingThrowProficiency getSavingThrowProficiency = new GetSavingThrowProficiency();
-        getSavingThrowProficiency.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "get_saving_throw_proficiency");
-            this.put("save_ability", saveAbility);
-        }}));
+        getSavingThrowProficiency.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "get_saving_throw_proficiency");
+            this.putString("save_ability", saveAbility);
+        }});
         getSavingThrowProficiency.setSource(this);
         getSavingThrowProficiency.prepare(context);
         getSavingThrowProficiency.setTarget(this);
@@ -344,10 +343,10 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      */
     public boolean isProficientWithWeapon(RPGLContext context, String itemUuid) throws Exception {
         GetWeaponProficiency getWeaponProficiency = new GetWeaponProficiency();
-        getWeaponProficiency.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "get_weapon_proficiency");
-            this.put("item", itemUuid);
-        }}));
+        getWeaponProficiency.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "get_weapon_proficiency");
+            this.putString("item", itemUuid);
+        }});
         getWeaponProficiency.setSource(this);
         getWeaponProficiency.prepare(context);
         getWeaponProficiency.setTarget(this);
@@ -381,10 +380,10 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
             Integer damage = (Integer) damageObjectEntry.getValue();
 
             DamageAffinity damageAffinity = new DamageAffinity();
-            damageAffinity.joinSubeventData(new JsonObject(new HashMap<>() {{
-                this.put("subevent", "damage_affinity");
-                this.put("type", damageType);
-            }}));
+            damageAffinity.joinSubeventData(new JsonObject() {{
+                this.putString("subevent", "damage_affinity");
+                this.putString("type", damageType);
+            }});
             damageAffinity.setSource(this);
             damageAffinity.prepare(context);
             damageAffinity.setTarget(this);
@@ -452,9 +451,9 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      */
     public int getBaseArmorClass(RPGLContext context) throws Exception {
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "calculate_base_armor_class");
-        }}));
+        calculateBaseArmorClass.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_base_armor_class");
+        }});
         calculateBaseArmorClass.setSource(this);
         calculateBaseArmorClass.prepare(context);
         calculateBaseArmorClass.setTarget(this);

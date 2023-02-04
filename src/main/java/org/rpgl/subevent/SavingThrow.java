@@ -5,8 +5,6 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -99,10 +97,10 @@ public class SavingThrow extends ContestRoll {
     void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         String difficultyClassAbility = this.subeventJson.getString("difficulty_class_ability");
-        calculateSaveDifficultyClass.joinSubeventData(new JsonObject(new HashMap<>() {{
-            put("subevent", "calculate_save_difficulty_class");
-            put("base", difficultyClassAbility);
-        }}));
+        calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_save_difficulty_class");
+            this.putString("base", difficultyClassAbility);
+        }});
         RPGLObject source = this.getSource();
         calculateSaveDifficultyClass.setSource(source);
         calculateSaveDifficultyClass.prepare(context);
@@ -136,10 +134,10 @@ public class SavingThrow extends ContestRoll {
          */
         BaseDamageDiceCollection baseDamageDiceCollection = new BaseDamageDiceCollection();
         JsonArray damage = this.subeventJson.getJsonArray("damage");
-        baseDamageDiceCollection.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "base_damage_dice_collection");
-            this.put("damage", damage.deepClone().asList());
-        }}));
+        baseDamageDiceCollection.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "base_damage_dice_collection");
+            this.putJsonArray("damage", damage.deepClone());
+        }});
         baseDamageDiceCollection.setSource(this.getSource());
         baseDamageDiceCollection.prepare(context);
         baseDamageDiceCollection.setTarget(this.getTarget());
@@ -149,10 +147,10 @@ public class SavingThrow extends ContestRoll {
          * Roll base damage dice
          */
         BaseDamageRoll baseDamageRoll = new BaseDamageRoll();
-        baseDamageRoll.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "base_damage_roll");
-            this.put("damage", baseDamageDiceCollection.getDamageDiceCollection().deepClone().asList());
-        }}));
+        baseDamageRoll.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "base_damage_roll");
+            this.putJsonArray("damage", baseDamageDiceCollection.getDamageDiceCollection().deepClone());
+        }});
         baseDamageRoll.setSource(this.getSource());
         baseDamageRoll.prepare(context);
         //baseDamageRoll.setTarget(this.getTarget());
@@ -234,10 +232,10 @@ public class SavingThrow extends ContestRoll {
          * Collect target typed damage dice and bonuses
          */
         TargetDamageDiceCollection targetDamageDiceCollection = new TargetDamageDiceCollection();
-        targetDamageDiceCollection.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "target_damage_dice_collection");
-            this.put("damage", new ArrayList<>()); // TODO can the empty array be moved to prepare()?
-        }}));
+        targetDamageDiceCollection.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "target_damage_dice_collection");
+            this.putJsonArray("damage", new JsonArray()); // TODO can the empty array be moved to prepare()?
+        }});
         targetDamageDiceCollection.setSource(this.getSource());
         targetDamageDiceCollection.prepare(context);
         targetDamageDiceCollection.setTarget(this.getTarget());
@@ -247,10 +245,10 @@ public class SavingThrow extends ContestRoll {
          * Roll target damage dice
          */
         TargetDamageRoll targetDamageRoll = new TargetDamageRoll();
-        targetDamageRoll.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "target_damage_roll");
-            this.put("damage", targetDamageDiceCollection.getDamageDiceCollection().deepClone().asList());
-        }}));
+        targetDamageRoll.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "target_damage_roll");
+            this.putJsonArray("damage", targetDamageDiceCollection.getDamageDiceCollection().deepClone());
+        }});
         targetDamageRoll.setSource(this.getSource());
         targetDamageRoll.prepare(context);
         targetDamageRoll.setTarget(this.getTarget());
@@ -403,10 +401,10 @@ public class SavingThrow extends ContestRoll {
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
         JsonObject damage = this.subeventJson.getJsonObject("damage");
-        damageDelivery.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "damage_delivery");
-            this.put("damage", damage.deepClone().asMap());
-        }}));
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "damage_delivery");
+            this.putJsonObject("damage", damage.deepClone());
+        }});
         damageDelivery.setSource(this.getSource());
         damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());

@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Fire Immunity",
+  "description": "Creatures with this effect take 0 fire damage.",
+  "subevent_filters": {
+    "damage_affinity": {
+      "conditions": [
+
+      ],
+      "functions": [
+
+      ]
+    }
+  }
+}

@@ -1,8 +1,7 @@
 package org.rpgl.json;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 /**
  * This class represents a JSON array and provides several utility methods which make it easier to interface with that
@@ -12,26 +11,26 @@ import java.util.Map;
  */
 public class JsonArray {
 
-    List<Object> data;
+    ArrayList<Object> data;
 
     public JsonArray() {
         this.data = new ArrayList<>();
     }
 
-    public JsonArray(List<Object> data) {
+    public JsonArray(ArrayList<Object> data) {
         this.data = data;
     }
 
-    public List<Object> asList() {
+    public ArrayList<Object> asList() {
         return this.data;
     }
 
     public JsonArray deepClone() {
         JsonArray clone = new JsonArray();
         for (Object element : this.data) {
-            if (element instanceof Map map) {
+            if (element instanceof HashMap map) {
                 clone.addJsonObject(new JsonObject(map).deepClone());
-            } else if (element instanceof List list) {
+            } else if (element instanceof ArrayList list) {
                 clone.addJsonArray(new JsonArray(list).deepClone());
             } else {
                 clone.data.add(element);
@@ -49,7 +48,7 @@ public class JsonArray {
     // =================================================================================================================
 
     public JsonObject getJsonObject(int index) {
-        return (this.data.get(index) instanceof Map map) ? new JsonObject(map) : null;
+        return (this.data.get(index) instanceof HashMap map) ? new JsonObject(map) : null;
     }
 
     public JsonObject getJsonObjectMatching(Object... keysAndValues) {
@@ -69,12 +68,12 @@ public class JsonArray {
                         if (listedObjectKeyValue == null) {
                             comparisonFailed = true;
                             break;
-                        } else if (listedObjectKeyValue instanceof Map map) {
+                        } else if (listedObjectKeyValue instanceof HashMap map) {
                             if (!new JsonObject(map).equals(value)) {
                                 comparisonFailed = true;
                                 break;
                             }
-                        } else if (listedObjectKeyValue instanceof List list) {
+                        } else if (listedObjectKeyValue instanceof ArrayList list) {
                             if (!new JsonArray(list).equals(value)) {
                                 comparisonFailed = true;
                                 break;
@@ -96,7 +95,7 @@ public class JsonArray {
     }
 
     public JsonArray getJsonArray(int index) {
-        return (this.data.get(index) instanceof List list) ? new JsonArray(list) : null;
+        return (this.data.get(index) instanceof ArrayList list) ? new JsonArray(list) : null;
     }
 
     public String getString(int index) {
@@ -152,9 +151,9 @@ public class JsonArray {
         StringBuilder stringBuilder = new StringBuilder("[");
 
         for (Object element : this.data) {
-            if (element instanceof Map map) {
+            if (element instanceof HashMap map) {
                 stringBuilder.append(new JsonObject(map));
-            } else if (element instanceof List list) {
+            } else if (element instanceof ArrayList list) {
                 stringBuilder.append(new JsonArray(list));
             } else if (element instanceof String string) {
                 stringBuilder.append('"').append(string).append('"');

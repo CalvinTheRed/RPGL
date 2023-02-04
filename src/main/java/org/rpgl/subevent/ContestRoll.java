@@ -4,8 +4,6 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 
-import java.util.HashMap;
-
 /**
  * This abstract Subevent is dedicated to performing contest rolls. This includes ability checks, attack rolls, and
  * saving throws.
@@ -174,10 +172,10 @@ public abstract class ContestRoll extends Calculation {
     public void checkForReroll(RPGLContext context) throws Exception {
         ContestRerollChance contestRerollChance = new ContestRerollChance();
         Integer base = this.subeventJson.getInteger("base");
-        contestRerollChance.joinSubeventData(new JsonObject(new HashMap<>() {{
-            this.put("subevent", "contest_reroll_chance");
-            this.put("base_die_roll", base);
-        }}));
+        contestRerollChance.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "contest_reroll_chance");
+            this.putInteger("base_die_roll", base);
+        }});
         contestRerollChance.prepare(context);
         contestRerollChance.invoke(context);
 

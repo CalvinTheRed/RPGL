@@ -38,6 +38,7 @@ public final class DatapackLoader {
     public static void loadDatapacks(File directory) {
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             if (file.isDirectory()) {
+                System.out.println("Loading datapack: " + file.getName());
                 checkPackInfo(file);
                 Datapack datapack = new Datapack(file);
                 DATAPACKS.put(file.getName(), datapack);

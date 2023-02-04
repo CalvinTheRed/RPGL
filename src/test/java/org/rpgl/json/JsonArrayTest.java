@@ -9,6 +9,11 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing class for the json.JsonArray class.
+ *
+ * @author Calvin Withun
+ */
 public class JsonArrayTest {
 
     /*

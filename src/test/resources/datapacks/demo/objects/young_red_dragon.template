@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Young Red Dragon",
+  "description": "A young red dragon.",
+  "ability_scores": {
+    "str": 23,
+    "dex": 10,
+    "con": 21,
+    "int": 14,
+    "wis": 11,
+    "cha": 19
+  },
+  "health_data": {
+    "hit_dice": [
+      { "size": 10, "count": 17 }
+    ],
+    "base": 178,
+    "maximum": 178,
+    "current": 178,
+    "temporary": 0
+  },
+  "equipped_items": {
+
+  },
+  "inventory": [
+
+  ],
+  "events": [
+    "demo:young_red_dragon_fire_breath"
+  ],
+  "effects": [
+    "demo:fire_immunity"
+  ],
+  "proficiency_bonus": 4
+}

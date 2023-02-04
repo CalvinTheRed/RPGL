@@ -10,13 +10,11 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Testing class for JsonObject class.
+ * Testing class for the json.JsonObject class.
  *
  * @author Calvin Withun
  */
 public class JsonObjectTest {
-
-    // TODO a lot of places use new JsonObject(new HashMap<>() {{... but they could just use new JsonObject() {{... right?
 
     /**
      * The JsonObject whose join methods are being called for join(...) tests.

@@ -60,7 +60,7 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      * 	</p>
      */
     public void defaultAttackAbilities() {
-        Map<String, Object> attackAbilities = new HashMap<>();
+        HashMap<String, Object> attackAbilities = new HashMap<>();
         if (this.getWeaponProperties().asList().contains("ranged")) {
             attackAbilities.put("ranged", "dex");
         }

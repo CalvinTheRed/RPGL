@@ -5,7 +5,7 @@ import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.json.JsonObject;
 
-import java.util.Map;
+import java.util.HashMap;
 
 public class RPGLEffectTO extends UUIDTableElementTO {
 
@@ -15,11 +15,15 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     public static final String TARGET_ALIAS = "target";
 
     @JsonProperty(SUBEVENT_FILTERS_ALIAS)
-    Map<String, Object> subeventFilters;
+    HashMap<String, Object> subeventFilters;
     @JsonProperty(SOURCE_ALIAS)
     String source;
     @JsonProperty(TARGET_ALIAS)
     String target;
+
+    public RPGLEffectTO() {
+
+    }
 
     /**
      * Constructor to be used when storing data from a fully instantiated RPGLEffect. Intended to be used for saving data.
@@ -34,17 +38,22 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     }
 
     public RPGLEffectTemplate toRPGLEffectTemplate() {
-        RPGLEffectTemplate rpglEffectTemplate = new RPGLEffectTemplate();
-        rpglEffectTemplate.asMap().putAll(super.getTemplateData());
-        rpglEffectTemplate.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
+        RPGLEffectTemplate rpglEffectTemplate = new RPGLEffectTemplate() {{
+            this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
+            // source not needed for template
+            // target not needed for template
+        }};
+        rpglEffectTemplate.join(super.getTemplateData());
         return rpglEffectTemplate;
     }
 
     public RPGLEffect toRPGLEffect() {
-        RPGLEffect rpglEffect = new RPGLEffect();
-        rpglEffect.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
-        rpglEffect.setSource(source);
-        rpglEffect.setTarget(target);
+        RPGLEffect rpglEffect = new RPGLEffect() {{
+            this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
+            this.setSource(source);
+            this.setTarget(target);
+        }};
+        rpglEffect.join(super.getTemplateData());
         return rpglEffect;
     }
 

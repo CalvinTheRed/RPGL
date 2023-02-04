@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Breastplate",
+  "description": "A suit of breastplate armor.",
+  "tags": [
+    "metal",
+    "armor"
+  ],
+  "weight": 20,
+  "cost": 400,
+  "proficiency_tags": [
+    "medium_armor"
+  ],
+  "while_equipped": [
+
+  ],
+  "armor_class_base": 14,
+  "armor_class_dex_limit": 2
+}

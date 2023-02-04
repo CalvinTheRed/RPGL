@@ -12,6 +12,10 @@ public class UUIDTableElementTO extends DatapackContentTO {
     @JsonProperty(UUID_ALIAS)
     String uuid;
 
+    public UUIDTableElementTO() {
+
+    }
+
     public UUIDTableElementTO(JsonObject rpglObject) {
         super(rpglObject);
         this.uuid = rpglObject.getString(UUID_ALIAS);

@@ -2,6 +2,7 @@ package org.rpgl.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,17 +17,17 @@ public class JsonObject {
 
     public static final ObjectMapper MAPPER = new ObjectMapper();
 
-    Map<String, Object> data;
+    HashMap<String, Object> data;
 
     public JsonObject() {
         this.data = new HashMap<>();
     }
 
-    public JsonObject(Map<String, Object> data) {
+    public JsonObject(HashMap<String, Object> data) {
         this.data = data;
     }
 
-    public Map<String, Object> asMap() {
+    public HashMap<String, Object> asMap() {
         return this.data;
     }
 
@@ -34,9 +35,9 @@ public class JsonObject {
         JsonObject clone = new JsonObject();
         for (String key : this.data.keySet()) {
             Object value = this.data.get(key);
-            if (value instanceof Map) {
+            if (value instanceof HashMap) {
                 clone.putJsonObject(key, this.getJsonObject(key).deepClone());
-            } else if (value instanceof List) {
+            } else if (value instanceof ArrayList) {
                 clone.putJsonArray(key, this.getJsonArray(key).deepClone());
             } else {
                 clone.data.put(key, value);
@@ -45,7 +46,7 @@ public class JsonObject {
         return clone;
     }
 
-    public void join(Map<String, Object> other) {
+    public void join(HashMap<String, Object> other) {
         this.join(new JsonObject(other));
     }
 
@@ -53,9 +54,9 @@ public class JsonObject {
         JsonObject otherClone = other.deepClone();
         for (String otherKey : otherClone.data.keySet()) {
             Object otherValue = otherClone.data.get(otherKey);
-            if (otherValue instanceof Map otherMap) {
+            if (otherValue instanceof HashMap otherMap) {
                 Object thisValue = this.data.get(otherKey);
-                if (thisValue instanceof Map thisMap) {
+                if (thisValue instanceof HashMap thisMap) {
                     // nested join if a map is being joined to a map
                     JsonObject thisJsonObject = new JsonObject();
                     thisJsonObject.join(new JsonObject(thisMap));
@@ -65,9 +66,9 @@ public class JsonObject {
                     // override this key if this is not also a map
                     this.data.put(otherKey, otherMap);
                 }
-            } else if (otherValue instanceof List otherList) {
+            } else if (otherValue instanceof ArrayList otherList) {
                 Object thisValue = this.data.get(otherKey);
-                if (thisValue instanceof List thisList) {
+                if (thisValue instanceof ArrayList thisList) {
                     // union if a list if being joined to a list
                     for (Object element : otherList) {
                         if (!thisList.contains(element)) {
@@ -118,11 +119,11 @@ public class JsonObject {
     // =================================================================================================================
 
     public JsonObject getJsonObject(String key) {
-        return (this.data.get(key) instanceof Map value) ? new JsonObject((Map) value) : null;
+        return (this.data.get(key) instanceof HashMap value) ? new JsonObject((HashMap) value) : null;
     }
 
     public JsonArray getJsonArray(String key) {
-        return (this.data.get(key) instanceof List value) ? new JsonArray((List) value) : null;
+        return (this.data.get(key) instanceof ArrayList value) ? new JsonArray((ArrayList) value) : null;
     }
 
     public String getString(String key) {
@@ -217,6 +218,8 @@ public class JsonObject {
                 stringBuilder.append(this.getJsonArray(key).toString());
             } else if (value instanceof String string) {
                 stringBuilder.append('"').append(string).append('"');
+            } else if (value == null) {
+                stringBuilder.append("null");
             } else {
                 stringBuilder.append(value.toString());
             }
