@@ -20,20 +20,9 @@ public class RPGLEventTO extends UUIDTableElementTO {
     @JsonProperty(SUBEVENTS_ALIAS)
     ArrayList<Object> subevents;
 
+    @SuppressWarnings("unused")
     public RPGLEventTO() {
-
-    }
-
-    /**
-     * Constructor to be used when storing data from a fully instantiated RPGLEvent. This has no intended use case at
-     * the time being...
-     *
-     * @param rpglEvent a fully instantiated RPGLEvent
-     */
-    public RPGLEventTO(RPGLEvent rpglEvent) {
-        super(rpglEvent);
-        this.areaOfEffect = rpglEvent.getJsonObject(AREA_OF_EFFECT_ALIAS).asMap();
-        this.subevents = rpglEvent.getJsonArray(SUBEVENTS_ALIAS).asList();
+        // this constructor is needed for jackson-databind to interface with this class
     }
 
     public RPGLEventTemplate toRPGLEventTemplate() {

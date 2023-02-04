@@ -1,7 +1,6 @@
 package org.rpgl.core;
 
 import org.rpgl.datapack.RPGLItemTO;
-import org.rpgl.datapack.UUIDTableElementTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -10,22 +9,7 @@ import org.rpgl.uuidtable.UUIDTableElement;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RPGLItem extends JsonObject implements UUIDTableElement {
-
-    @Override
-    public String getUuid() {
-        return this.getString(UUIDTableElementTO.UUID_ALIAS);
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.putString(UUIDTableElementTO.UUID_ALIAS, uuid);
-    }
-
-    @Override
-    public void deleteUuid() {
-        this.asMap().remove(UUIDTableElementTO.UUID_ALIAS);
-    }
+public class RPGLItem extends UUIDTableElement {
 
     /**
      * 	<p><b><i>getAttackAbility</i></b></p>

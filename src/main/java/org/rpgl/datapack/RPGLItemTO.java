@@ -62,8 +62,9 @@ public class RPGLItemTO extends UUIDTableElementTO {
     @JsonProperty(ARMOR_CLASS_BONUS_ALIAS)
     Integer armorClassBonus;
 
+    @SuppressWarnings("unused")
     public RPGLItemTO() {
-
+        // this constructor is needed for jackson-databind to interface with this class
     }
 
     /**

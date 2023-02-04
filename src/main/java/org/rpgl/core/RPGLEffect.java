@@ -2,7 +2,6 @@ package org.rpgl.core;
 
 import org.rpgl.condition.Condition;
 import org.rpgl.datapack.RPGLEffectTO;
-import org.rpgl.datapack.UUIDTableElementTO;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.function.Function;
@@ -13,22 +12,7 @@ import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.Map;
 
-public class RPGLEffect extends JsonObject implements UUIDTableElement {
-
-    @Override
-    public String getUuid() {
-        return this.getString(UUIDTableElementTO.UUID_ALIAS);
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.putString(UUIDTableElementTO.UUID_ALIAS, uuid);
-    }
-
-    @Override
-    public void deleteUuid() {
-        this.asMap().remove(UUIDTableElementTO.UUID_ALIAS);
-    }
+public class RPGLEffect extends UUIDTableElement {
 
     /**
      * 	<p><b><i>processSubevent</i></b></p>

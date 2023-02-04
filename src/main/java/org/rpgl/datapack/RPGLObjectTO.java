@@ -35,8 +35,9 @@ public class RPGLObjectTO extends UUIDTableElementTO {
     @JsonProperty(PROFICIENCY_BONUS_ALIAS)
     Integer proficiencyBonus;
 
+    @SuppressWarnings("unused")
     public RPGLObjectTO() {
-
+        // this constructor is needed for jackson-databind to interface with this class
     }
 
     /**

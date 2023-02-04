@@ -21,8 +21,9 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     @JsonProperty(TARGET_ALIAS)
     String target;
 
+    @SuppressWarnings("unused")
     public RPGLEffectTO() {
-
+        // this constructor is needed for jackson-databind to interface with this class
     }
 
     /**

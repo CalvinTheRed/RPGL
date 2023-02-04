@@ -25,6 +25,7 @@ public class JsonArray {
         return this.data;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonArray deepClone() {
         JsonArray clone = new JsonArray();
         for (Object element : this.data) {
@@ -47,10 +48,12 @@ public class JsonArray {
     //  get() convenience methods
     // =================================================================================================================
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonObject getJsonObject(int index) {
         return (this.data.get(index) instanceof HashMap map) ? new JsonObject(map) : null;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked", ""})
     public JsonObject getJsonObjectMatching(Object... keysAndValues) {
         if (keysAndValues.length %2 == 0) { // malformed parameter
             for (int i = 0; i < this.size(); i++) {
@@ -62,6 +65,7 @@ public class JsonArray {
                             comparisonFailed = true;
                             break;
                         }
+                        @SuppressWarnings("all")
                         String key = (String) keysAndValues[kvi];
                         Object value = keysAndValues[kvi + 1];
                         Object listedObjectKeyValue = listedJsonObject.asMap().get(key);
@@ -94,6 +98,7 @@ public class JsonArray {
         return null;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonArray getJsonArray(int index) {
         return (this.data.get(index) instanceof ArrayList list) ? new JsonArray(list) : null;
     }
@@ -147,6 +152,7 @@ public class JsonArray {
     // =================================================================================================================
 
     @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
 

@@ -48,6 +48,7 @@ public class JsonObject {
         this.join(new JsonObject(other));
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void join(JsonObject other) {
         JsonObject otherClone = other.deepClone();
         for (String otherKey : otherClone.data.keySet()) {
@@ -128,10 +129,12 @@ public class JsonObject {
     //  get() convenience methods
     // =================================================================================================================
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonObject getJsonObject(String key) {
         return (this.data.get(key) instanceof HashMap value) ? new JsonObject((HashMap) value) : null;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonArray getJsonArray(String key) {
         return (this.data.get(key) instanceof ArrayList value) ? new JsonArray((ArrayList) value) : null;
     }
@@ -231,7 +234,7 @@ public class JsonObject {
             } else if (value == null) {
                 stringBuilder.append("null");
             } else {
-                stringBuilder.append(value.toString());
+                stringBuilder.append(value);
             }
             stringBuilder.append(',');
         });

@@ -23,6 +23,7 @@ import java.util.Objects;
  */
 public class AttackRoll extends ContestRoll {
 
+    @SuppressWarnings("all")
     private static final String ITEM_NAMESPACE_REGEX = "[\\w\\d]+:[\\w\\d]+";
 
     public AttackRoll() {

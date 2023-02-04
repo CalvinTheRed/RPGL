@@ -45,7 +45,6 @@ public class Datapack {
         this.datapackNamespace = directory.getName();
         for (File subDirectory : Objects.requireNonNull(directory.listFiles())) {
             if (subDirectory.isDirectory()) {
-                System.out.println("Loading " + subDirectory.getName() + "...");
                 switch (subDirectory.getName()) {
                     case "effects" -> loadEffectTemplates(subDirectory);
                     case "events"  -> loadEventTemplates(subDirectory);
@@ -72,13 +71,12 @@ public class Datapack {
     void loadEffectTemplates(File directory) {
         for (File effectFile : Objects.requireNonNull(directory.listFiles())) {
             String effectId = effectFile.getName().substring(0, effectFile.getName().indexOf('.'));
-            System.out.println(" - " + effectId);
             try {
                 RPGLEffectTemplate rpglEffectTemplate = JsonObject.MAPPER.readValue(effectFile, RPGLEffectTO.class).toRPGLEffectTemplate();
                 rpglEffectTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + effectId);
                 EFFECT_TEMPLATES.put(effectId, rpglEffectTemplate);
             } catch (IOException e) {
-                System.err.println(e);
+                // TODO handle this error
             }
         }
     }
@@ -99,13 +97,12 @@ public class Datapack {
     private void loadEventTemplates(File directory) {
         for (File eventFile : Objects.requireNonNull(directory.listFiles())) {
             String eventId = eventFile.getName().substring(0, eventFile.getName().indexOf('.'));
-            System.out.println(" - " + eventId);
             try {
                 RPGLEventTemplate rpglEventTemplate = JsonObject.MAPPER.readValue(eventFile, RPGLEventTO.class).toRPGLEventTemplate();
                 rpglEventTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + eventId);
                 EVENT_TEMPLATES.put(eventId, rpglEventTemplate);
             } catch (IOException e) {
-                System.err.println(e);
+                // TODO handle this error
             }
         }
     }
@@ -126,13 +123,12 @@ public class Datapack {
     private void loadItemTemplates(File directory) {
         for (File itemFile : Objects.requireNonNull(directory.listFiles())) {
             String itemId = itemFile.getName().substring(0, itemFile.getName().indexOf('.'));
-            System.out.println(" - " + itemId);
             try {
                 RPGLItemTemplate rpglItemTemplate = JsonObject.MAPPER.readValue(itemFile, RPGLItemTO.class).toRPGLItemTemplate();
                 rpglItemTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + itemId);
                 ITEM_TEMPLATES.put(itemId, rpglItemTemplate);
             } catch (IOException e) {
-                System.err.println(e);
+                // TODO handle this error
             }
         }
     }
@@ -153,13 +149,12 @@ public class Datapack {
     private void loadObjectTemplates(File directory) {
         for (File objectFile : Objects.requireNonNull(directory.listFiles())) {
             String objectId = objectFile.getName().substring(0, objectFile.getName().indexOf('.'));
-            System.out.println(" - " + objectId);
             try {
                 RPGLObjectTemplate rpglObjectTemplate = JsonObject.MAPPER.readValue(objectFile, RPGLObjectTO.class).toRPGLObjectTemplate();
                 rpglObjectTemplate.putString(DatapackContentTO.ID_ALIAS, datapackNamespace + ":" + objectId);
                 OBJECT_TEMPLATES.put(objectId, rpglObjectTemplate);
             } catch (IOException e) {
-                System.err.println(e);
+                // TODO handle this error
             }
         }
     }
