@@ -18,11 +18,27 @@ public abstract class Function {
     /**
      * A map of all Functions which can be used in the JSON of an RPGLEffect.
      */
-    public static final Map<String, Function> FUNCTIONS;
+    public static final Map<String, Function> FUNCTIONS = new HashMap<>();
 
-    static {
-        FUNCTIONS = new HashMap<>();
-        Function.FUNCTIONS.put("dummy_function", new DummyFunction());
+    /**
+     * 	<p><b><i>initialize</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static void initialize(boolean includeTestingFunctions)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method populates Function.FUNCTIONS.
+     * 	</p>
+     *
+     * 	@param includeTestingFunctions whether testing-only Functions should be loaded into RPGL
+     */
+    public static void initialize(boolean includeTestingFunctions) {
+        Function.FUNCTIONS.clear();
+
+        if (includeTestingFunctions) {
+            Function.FUNCTIONS.put("dummy_function", new DummyFunction());
+        }
     }
 
     /**

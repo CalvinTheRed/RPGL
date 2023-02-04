@@ -22,22 +22,39 @@ public abstract class Subevent {
     /**
      * A map of all Subevents which can be used in the JSON of an RPGLEvent.
      */
-    public static final Map<String, Subevent> SUBEVENTS;
+    public static final Map<String, Subevent> SUBEVENTS = new HashMap<>();
 
     JsonObject subeventJson = new JsonObject();
     List<RPGLEffect> modifyingEffects = new LinkedList<>();
 
     final String subeventId;
 
-    static {
-        SUBEVENTS = new HashMap<>();
+    /**
+     * 	<p><b><i>initialize</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static void initialize(boolean includeTestingSubevents)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method populates Condition.CONDITIONS.
+     * 	</p>
+     *
+     * 	@param includeTestingSubevents whether testing-only Subevents should be loaded into RPGL
+     */
+    public static void initialize(boolean includeTestingSubevents) {
+        Subevent.SUBEVENTS.clear();
+
         // AbilityCheck
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
-        // Damage?
-        Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
+        // DealDamage?
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
         // RemoveEffect
+
+        if (includeTestingSubevents) {
+            Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
+        }
     }
 
     /**

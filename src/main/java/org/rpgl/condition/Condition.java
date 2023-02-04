@@ -18,15 +18,32 @@ public abstract class Condition {
     /**
      * A map of all Conditions which can be used in the JSON of an RPGLEffect.
      */
-    public static final Map<String, Condition> CONDITIONS;
+    public static final Map<String, Condition> CONDITIONS = new HashMap<>();
 
-    static {
-        CONDITIONS = new HashMap<>();
+    /**
+     * 	<p><b><i>initialize</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static void initialize(boolean includeTestingConditions)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method populates Condition.CONDITIONS.
+     * 	</p>
+     *
+     * 	@param includeTestingConditions whether testing-only Conditions should be loaded into RPGL
+     */
+    public static void initialize(boolean includeTestingConditions) {
+        Condition.CONDITIONS.clear();
+
         Condition.CONDITIONS.put("all", new All());
         Condition.CONDITIONS.put("any", new Any());
-        Condition.CONDITIONS.put("false", new False());
         Condition.CONDITIONS.put("invert", new Invert());
-        Condition.CONDITIONS.put("true", new True());
+
+        if (includeTestingConditions) {
+            Condition.CONDITIONS.put("false", new False());
+            Condition.CONDITIONS.put("true", new True());
+        }
     }
 
     /**
