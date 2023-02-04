@@ -21,50 +21,44 @@ public class JsonObjectTest {
     /**
      * The JsonObject whose join methods are being called for join(...) tests.
      */
-    private static JsonObject join_jsonObject;
+    private JsonObject join_jsonObject;
 
     /**
      * The JsonObject passed as a parameter to another JsonObject's join(...) method.
      */
-    private static JsonObject join_parameterJsonObject;
+    private JsonObject join_parameterJsonObject;
 
     /**
      * The JsonObject used to test the get(...), put(...), and remove(...) methods
      */
-    private static JsonObject getPutRemove_jsonObject;
+    private JsonObject getPutRemove_jsonObject;
 
     @BeforeEach
     public void beforeEach() {
         // join
-        JsonObjectTest.join_jsonObject = new JsonObject();
-        JsonObjectTest.join_parameterJsonObject = new JsonObject();
+        join_jsonObject = new JsonObject();
+        join_parameterJsonObject = new JsonObject();
         // get, put, remove
-        JsonObjectTest.getPutRemove_jsonObject = new JsonObject();
+        getPutRemove_jsonObject = new JsonObject();
     }
 
     @Test
     @DisplayName("toString: comprehensive unit test")
     void toString_test() {
-        JsonObject toStringJsonObject = new JsonObject();
-
-        JsonObject nestedEmptyJsonObject = new JsonObject();
-        JsonObject nestedPopulatedJsonObject = new JsonObject() {{
-            this.putString("nested_string_key", "nested_string_value");
+        JsonObject toStringJsonObject = new JsonObject() {{
+            this.putJsonObject("empty_object", new JsonObject());
+            this.putJsonObject("populated_object", new JsonObject() {{
+                this.putString("nested_string_key", "nested_string_value");
+            }});
+            this.putJsonArray("empty_array", new JsonArray());
+            this.putJsonArray("populated_array", new JsonArray() {{
+                this.addBoolean(false);
+            }});
+            this.putString("string_key", "string_value");
+            this.putInteger("integer_key", 123);
+            this.putDouble("double_key", 123.456);
+            this.putBoolean("boolean_key", true);
         }};
-
-        JsonArray nestedEmptyArray = new JsonArray();
-        JsonArray nestedPopulatedArray = new JsonArray() {{
-            this.addBoolean(false);
-        }};
-
-        toStringJsonObject.putJsonObject("empty_object", nestedEmptyJsonObject);
-        toStringJsonObject.putJsonObject("populated_object", nestedPopulatedJsonObject);
-        toStringJsonObject.putJsonArray("empty_array", nestedEmptyArray);
-        toStringJsonObject.putJsonArray("populated_array", nestedPopulatedArray);
-        toStringJsonObject.putString("string_key", "string_value");
-        toStringJsonObject.putInteger("integer_key", 123);
-        toStringJsonObject.putDouble("double_key", 123.456);
-        toStringJsonObject.putBoolean("boolean_key", true);
 
         String expected = """
                  {"boolean_key":true,"double_key":123.456,"empty_array":[],"empty_object":{},"integer_key":123,"populated_array":[false],"populated_object":{"nested_string_key":"nested_string_value"},"string_key":"string_value"}""";
@@ -79,30 +73,30 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putInteger("key1", 1);
-        JsonObjectTest.join_parameterJsonObject.putInteger("key2", 2);
+        join_jsonObject.putInteger("key1", 1);
+        join_parameterJsonObject.putInteger("key2", 2);
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(2, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(2, join_jsonObject.asMap().keySet().size(),
                 "second key should be present after joining JsonObject with a new key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "original key should persist after join"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key2"),
+        assertTrue(join_jsonObject.asMap().containsKey("key2"),
                 "new key should transfer over after join"
         );
-        assertEquals(1, JsonObjectTest.join_jsonObject.getInteger("key1"),
+        assertEquals(1, join_jsonObject.getInteger("key1"),
                 "original key's value should persist after join"
         );
-        assertEquals(2, JsonObjectTest.join_jsonObject.getInteger("key2"),
+        assertEquals(2, join_jsonObject.getInteger("key2"),
                 "new key's value should transfer after join"
         );
     }
@@ -113,24 +107,24 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putInteger("key1", 1);
-        JsonObjectTest.join_parameterJsonObject.putInteger("key1", 2);
+        join_jsonObject.putInteger("key1", 1);
+        join_parameterJsonObject.putInteger("key1", 2);
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(1, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(1, join_jsonObject.asMap().keySet().size(),
                 "only 1 key should be present after joining a JsonObject with a shared key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "original key should not change after joining a JsonObject with a shared key"
         );
-        assertEquals(2, JsonObjectTest.join_jsonObject.getInteger("key1"),
+        assertEquals(2, join_jsonObject.getInteger("key1"),
                 "shared key should store the new value after join"
         );
     }
@@ -141,32 +135,32 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putInteger("key1", 1);
-        JsonObjectTest.join_parameterJsonObject.putJsonObject("key1", new JsonObject() {{
+        join_jsonObject.putInteger("key1", 1);
+        join_parameterJsonObject.putJsonObject("key1", new JsonObject() {{
             this.putInteger("key2", 2);
         }});
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(1, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(1, join_jsonObject.asMap().keySet().size(),
                 "only 1 key should be present after joining a JsonObject with a shared key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "original key should not change after joining a JsonObject with a shared key"
         );
-        assertNotNull(JsonObjectTest.join_jsonObject.getJsonObject("key1"),
+        assertNotNull(join_jsonObject.getJsonObject("key1"),
                 "non-null JsonObject value should be present after join"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.getJsonObject("key1").asMap().containsKey("key2"),
+        assertTrue(join_jsonObject.getJsonObject("key1").asMap().containsKey("key2"),
                 "new map value should contain the correct key"
         );
-        assertEquals(2, JsonObjectTest.join_jsonObject.getJsonObject("key1").asMap().get("key2"),
+        assertEquals(2, join_jsonObject.getJsonObject("key1").asMap().get("key2"),
                 "new map value should contain the correct value"
         );
     }
@@ -177,28 +171,28 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putJsonObject("key1", new JsonObject() {{
+        join_jsonObject.putJsonObject("key1", new JsonObject() {{
             this.putInteger("key2", 2);
         }});
-        JsonObjectTest.join_parameterJsonObject.putJsonObject("key1", new JsonObject() {{
+        join_parameterJsonObject.putJsonObject("key1", new JsonObject() {{
             this.putInteger("key3", 3);
         }});
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(1, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(1, join_jsonObject.asMap().keySet().size(),
                 "JsonObject join should have 1 key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "object 1 should hold on to its original key"
         );
-        JsonObject value = JsonObjectTest.join_jsonObject.getJsonObject("key1");
+        JsonObject value = join_jsonObject.getJsonObject("key1");
         assertEquals(2, value.asMap().keySet().size(),
                 "nested map should have 2 keys"
         );
@@ -222,26 +216,26 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putInteger("key1", 1);
-        JsonObjectTest.join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
+        join_jsonObject.putInteger("key1", 1);
+        join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
             this.addString("value");
         }});
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(1, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(1, join_jsonObject.asMap().keySet().size(),
                 "JsonObject join should have 1 key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "object 1 should hold on to its original key"
         );
-        JsonArray value = JsonObjectTest.join_jsonObject.getJsonArray("key1");
+        JsonArray value = join_jsonObject.getJsonArray("key1");
         assertEquals(1, value.asList().size(),
                 "nested list should have 1 element"
         );
@@ -256,28 +250,28 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putJsonArray("key1", new JsonArray() {{
+        join_jsonObject.putJsonArray("key1", new JsonArray() {{
             this.addString("value1");
         }});
-        JsonObjectTest.join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
+        join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
             this.addString("value2");
         }});
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(1, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(1, join_jsonObject.asMap().keySet().size(),
                 "JsonObject join should have 1 key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "object 1 should hold on to its original key"
         );
-        JsonArray value = JsonObjectTest.join_jsonObject.getJsonArray("key1");
+        JsonArray value = join_jsonObject.getJsonArray("key1");
         assertEquals(2, value.asList().size(),
                 "nested list should have 2 elements"
         );
@@ -295,28 +289,28 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putJsonArray("key1", new JsonArray() {{
+        join_jsonObject.putJsonArray("key1", new JsonArray() {{
             this.addString("value");
         }});
-        JsonObjectTest.join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
+        join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
             this.addString("value");
         }});
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(1, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(1, join_jsonObject.asMap().keySet().size(),
                 "JsonObject join should have 1 key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "object 1 should hold on to its original key"
         );
-        JsonArray value = JsonObjectTest.join_jsonObject.getJsonArray("key1");
+        JsonArray value = join_jsonObject.getJsonArray("key1");
         assertEquals(1, value.asList().size(),
                 "nested list should have 1 element"
         );
@@ -331,28 +325,28 @@ public class JsonObjectTest {
         /*
         Set up JsonObject objects for testing
          */
-        JsonObjectTest.join_jsonObject.putJsonArray("key1", new JsonArray() {{
+        join_jsonObject.putJsonArray("key1", new JsonArray() {{
             this.addString("value1");
         }});
-        JsonObjectTest.join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
+        join_parameterJsonObject.putJsonArray("key1", new JsonArray() {{
             this.addString("value2");
         }});
 
         /*
         Invoke join(...) method for testing
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject.asMap());
+        join_jsonObject.join(join_parameterJsonObject.asMap());
 
         /*
         Assertions to confirm expected behavior
          */
-        assertEquals(1, JsonObjectTest.join_jsonObject.asMap().keySet().size(),
+        assertEquals(1, join_jsonObject.asMap().keySet().size(),
                 "JsonObject join should have 1 key"
         );
-        assertTrue(JsonObjectTest.join_jsonObject.asMap().containsKey("key1"),
+        assertTrue(join_jsonObject.asMap().containsKey("key1"),
                 "object 1 should hold on to its original key"
         );
-        JsonArray value = JsonObjectTest.join_jsonObject.getJsonArray("key1");
+        JsonArray value = join_jsonObject.getJsonArray("key1");
         assertEquals(2, value.asList().size(),
                 "nested list should have 2 elements"
         );
@@ -373,26 +367,26 @@ public class JsonObjectTest {
         JsonObject nestedJsonObject = new JsonObject() {{
             this.putString("nested_string_key", "nested_string_value");
         }};
-        JsonObjectTest.join_parameterJsonObject.putJsonObject("object_key", nestedJsonObject);
+        join_parameterJsonObject.putJsonObject("object_key", nestedJsonObject);
 
         /*
         perform join
          */
-        JsonObjectTest.join_jsonObject.join(JsonObjectTest.join_parameterJsonObject);
+        join_jsonObject.join(join_parameterJsonObject);
 
         /*
         make changes to parameter JsonObject
          */
         nestedJsonObject.asMap().clear();
-        JsonObjectTest.join_parameterJsonObject.putInteger("integer_key", 123);
+        join_parameterJsonObject.putInteger("integer_key", 123);
 
         /*
         verify changes made to parameter JsonObject do not impact the calling JsonObject
          */
-        assertFalse(JsonObjectTest.join_jsonObject.getJsonObject("object_key").asMap().isEmpty(),
+        assertFalse(join_jsonObject.getJsonObject("object_key").asMap().isEmpty(),
                 "changing the parameter JsonObject should not impact the calling JsonObject"
         );
-        assertNull(JsonObjectTest.join_jsonObject.getInteger("integer_key"),
+        assertNull(join_jsonObject.getInteger("integer_key"),
                 "additional keys added to the parameter JsonObject should not appear in the calling JsonObject"
         );
     }
@@ -406,29 +400,29 @@ public class JsonObjectTest {
         /*
         verify put(...) behavior
          */
-        JsonObjectTest.getPutRemove_jsonObject.putJsonObject("key", value);
-        assertTrue(JsonObjectTest.getPutRemove_jsonObject.data.get("key") instanceof Map,
+        getPutRemove_jsonObject.putJsonObject("key", value);
+        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof Map,
                 "a Map value should be stored in the JsonObject after calling putJsonObject(...)"
         );
         /*
         verify get(...) behavior
          */
-        assertNotNull(JsonObjectTest.getPutRemove_jsonObject.getJsonObject("key"),
+        assertNotNull(getPutRemove_jsonObject.getJsonObject("key"),
                 "a non-null JsonObject should be returned by getJsonObject(...) once one is stored at the target key"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.getJsonObject("empty_key"),
+        assertNull(getPutRemove_jsonObject.getJsonObject("empty_key"),
                 "null should be returned when a JsonObject is not stored in the target key"
         );
         /*
         verify remove(...) behavior
          */
-        assertEquals(value, JsonObjectTest.getPutRemove_jsonObject.removeJsonObject("key"),
+        assertEquals(value, getPutRemove_jsonObject.removeJsonObject("key"),
                 "the original value should be returned by removeJsonObject(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.data.get("key"),
+        assertNull(getPutRemove_jsonObject.data.get("key"),
                 "nothing should remain in the target key after calling removeJsonObject(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.removeJsonObject("key"),
+        assertNull(getPutRemove_jsonObject.removeJsonObject("key"),
                 "nothing should remain to be removed directly following removeJsonObject(...)"
         );
     }
@@ -442,29 +436,29 @@ public class JsonObjectTest {
         /*
         verify put(...) behavior
          */
-        JsonObjectTest.getPutRemove_jsonObject.putJsonArray("key", value);
-        assertTrue(JsonObjectTest.getPutRemove_jsonObject.data.get("key") instanceof List,
+        getPutRemove_jsonObject.putJsonArray("key", value);
+        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof List,
                 "a List value should be stored in the JsonObject after calling putJsonArray(...)"
         );
         /*
         verify get(...) behavior
          */
-        assertNotNull(JsonObjectTest.getPutRemove_jsonObject.getJsonArray("key"),
+        assertNotNull(getPutRemove_jsonObject.getJsonArray("key"),
                 "a non-null JsonArray should be returned by getJsonArray(...) once one is stored at the target key"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.getJsonArray("empty_key"),
+        assertNull(getPutRemove_jsonObject.getJsonArray("empty_key"),
                 "null should be returned when a JsonArray is not stored in the target key"
         );
         /*
         verify remove(...) behavior
          */
-        assertEquals(value, JsonObjectTest.getPutRemove_jsonObject.removeJsonArray("key"),
+        assertEquals(value, getPutRemove_jsonObject.removeJsonArray("key"),
                 "the original value should be returned by removeJsonArray(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.data.get("key"),
+        assertNull(getPutRemove_jsonObject.data.get("key"),
                 "nothing should remain in the target key after calling removeJsonArray(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.removeJsonArray("key"),
+        assertNull(getPutRemove_jsonObject.removeJsonArray("key"),
                 "nothing should remain to be removed directly following removeJsonArray(...)"
         );
     }
@@ -476,29 +470,29 @@ public class JsonObjectTest {
         /*
         verify put(...) behavior
          */
-        JsonObjectTest.getPutRemove_jsonObject.putString("key", value);
-        assertTrue(JsonObjectTest.getPutRemove_jsonObject.data.get("key") instanceof String,
+        getPutRemove_jsonObject.putString("key", value);
+        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof String,
                 "a String value should be stored in the JsonObject after calling putString(...)"
         );
         /*
         verify get(...) behavior
          */
-        assertNotNull(JsonObjectTest.getPutRemove_jsonObject.getString("key"),
+        assertNotNull(getPutRemove_jsonObject.getString("key"),
                 "a non-null String should be returned by getString(...) once one is stored at the target key"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.getString("empty_key"),
+        assertNull(getPutRemove_jsonObject.getString("empty_key"),
                 "null should be returned when a String is not stored in the target key"
         );
         /*
         verify remove(...) behavior
          */
-        assertEquals(value, JsonObjectTest.getPutRemove_jsonObject.removeString("key"),
+        assertEquals(value, getPutRemove_jsonObject.removeString("key"),
                 "the original value should be returned by removeString(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.data.get("key"),
+        assertNull(getPutRemove_jsonObject.data.get("key"),
                 "nothing should remain in the target key after calling removeString(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.removeString("key"),
+        assertNull(getPutRemove_jsonObject.removeString("key"),
                 "nothing should remain to be removed directly following removeString(...)"
         );
     }
@@ -510,29 +504,29 @@ public class JsonObjectTest {
         /*
         verify put(...) behavior
          */
-        JsonObjectTest.getPutRemove_jsonObject.putInteger("key", value);
-        assertTrue(JsonObjectTest.getPutRemove_jsonObject.data.get("key") instanceof Integer,
+        getPutRemove_jsonObject.putInteger("key", value);
+        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof Integer,
                 "a Integer value should be stored in the JsonObject after calling putInteger(...)"
         );
         /*
         verify get(...) behavior
          */
-        assertNotNull(JsonObjectTest.getPutRemove_jsonObject.getInteger("key"),
+        assertNotNull(getPutRemove_jsonObject.getInteger("key"),
                 "a non-null Integer should be returned by getInteger(...) once one is stored at the target key"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.getInteger("empty_key"),
+        assertNull(getPutRemove_jsonObject.getInteger("empty_key"),
                 "null should be returned when a Integer is not stored in the target key"
         );
         /*
         verify remove(...) behavior
          */
-        assertEquals(value, JsonObjectTest.getPutRemove_jsonObject.removeInteger("key"),
+        assertEquals(value, getPutRemove_jsonObject.removeInteger("key"),
                 "the original value should be returned by removeInteger(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.data.get("key"),
+        assertNull(getPutRemove_jsonObject.data.get("key"),
                 "nothing should remain in the target key after calling removeInteger(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.removeInteger("key"),
+        assertNull(getPutRemove_jsonObject.removeInteger("key"),
                 "nothing should remain to be removed directly following removeInteger(...)"
         );
     }
@@ -544,29 +538,29 @@ public class JsonObjectTest {
         /*
         verify put(...) behavior
          */
-        JsonObjectTest.getPutRemove_jsonObject.putDouble("key", value);
-        assertTrue(JsonObjectTest.getPutRemove_jsonObject.data.get("key") instanceof Double,
+        getPutRemove_jsonObject.putDouble("key", value);
+        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof Double,
                 "a Double value should be stored in the JsonObject after calling putDouble(...)"
         );
         /*
         verify get(...) behavior
          */
-        assertNotNull(JsonObjectTest.getPutRemove_jsonObject.getDouble("key"),
+        assertNotNull(getPutRemove_jsonObject.getDouble("key"),
                 "a non-null Double should be returned by getDouble(...) once one is stored at the target key"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.getDouble("empty_key"),
+        assertNull(getPutRemove_jsonObject.getDouble("empty_key"),
                 "null should be returned when a Double is not stored in the target key"
         );
         /*
         verify remove(...) behavior
          */
-        assertEquals(value, JsonObjectTest.getPutRemove_jsonObject.removeDouble("key"),
+        assertEquals(value, getPutRemove_jsonObject.removeDouble("key"),
                 "the original value should be returned by removeDouble(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.data.get("key"),
+        assertNull(getPutRemove_jsonObject.data.get("key"),
                 "nothing should remain in the target key after calling removeDouble(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.removeDouble("key"),
+        assertNull(getPutRemove_jsonObject.removeDouble("key"),
                 "nothing should remain to be removed directly following removeDouble(...)"
         );
     }
@@ -578,29 +572,29 @@ public class JsonObjectTest {
         /*
         verify put(...) behavior
          */
-        JsonObjectTest.getPutRemove_jsonObject.putBoolean("key", value);
-        assertTrue(JsonObjectTest.getPutRemove_jsonObject.data.get("key") instanceof Boolean,
+        getPutRemove_jsonObject.putBoolean("key", value);
+        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof Boolean,
                 "a Boolean value should be stored in the JsonObject after calling putBoolean(...)"
         );
         /*
         verify get(...) behavior
          */
-        assertNotNull(JsonObjectTest.getPutRemove_jsonObject.getBoolean("key"),
+        assertNotNull(getPutRemove_jsonObject.getBoolean("key"),
                 "a non-null Boolean should be returned by getBoolean(...) once one is stored at the target key"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.getBoolean("empty_key"),
+        assertNull(getPutRemove_jsonObject.getBoolean("empty_key"),
                 "null should be returned when a Boolean is not stored in the target key"
         );
         /*
         verify remove(...) behavior
          */
-        assertEquals(value, JsonObjectTest.getPutRemove_jsonObject.removeBoolean("key"),
+        assertEquals(value, getPutRemove_jsonObject.removeBoolean("key"),
                 "the original value should be returned by removeBoolean(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.data.get("key"),
+        assertNull(getPutRemove_jsonObject.data.get("key"),
                 "nothing should remain in the target key after calling removeBoolean(...)"
         );
-        assertNull(JsonObjectTest.getPutRemove_jsonObject.removeBoolean("key"),
+        assertNull(getPutRemove_jsonObject.removeBoolean("key"),
                 "nothing should remain to be removed directly following removeBoolean(...)"
         );
     }

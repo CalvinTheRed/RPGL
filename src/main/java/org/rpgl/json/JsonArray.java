@@ -30,9 +30,9 @@ public class JsonArray {
         JsonArray clone = new JsonArray();
         for (Object element : this.data) {
             if (element instanceof Map map) {
-                clone.data.add(new JsonObject(map).deepClone().asMap());
+                clone.addJsonObject(new JsonObject(map).deepClone());
             } else if (element instanceof List list) {
-                clone.data.add(new JsonArray(list).deepClone().asList());
+                clone.addJsonArray(new JsonArray(list).deepClone());
             } else {
                 clone.data.add(element);
             }
@@ -53,19 +53,43 @@ public class JsonArray {
     }
 
     public JsonObject getJsonObjectMatching(Object... keysAndValues) {
-        for (int i = 0; keysAndValues.length % 2 == 0 && i < this.data.size(); i++) { // odd length of args returns null
-            JsonObject jsonObject = this.getJsonObject(i);
-            boolean requirementFailed = false;
-            for (int kv = 0; kv < keysAndValues.length; kv += 2) {
-                String key = (String) keysAndValues[kv];
-                Object value = keysAndValues[kv + 1];
-                if (!jsonObject.data.get(key).equals(value)) {
-                    requirementFailed = true;
-                    break;
+        if (keysAndValues.length %2 == 0) { // malformed parameter
+            for (int i = 0; i < this.size(); i++) {
+                JsonObject listedJsonObject = this.getJsonObject(i);
+                if (listedJsonObject != null) {
+                    boolean comparisonFailed = false;
+                    for (int kvi = 0; kvi < keysAndValues.length; kvi += 2) {
+                        if (!(keysAndValues[kvi] instanceof String)) {
+                            comparisonFailed = true;
+                            break;
+                        }
+                        String key = (String) keysAndValues[kvi];
+                        Object value = keysAndValues[kvi + 1];
+                        Object listedObjectKeyValue = listedJsonObject.asMap().get(key);
+                        if (listedObjectKeyValue == null) {
+                            comparisonFailed = true;
+                            break;
+                        } else if (listedObjectKeyValue instanceof Map map) {
+                            if (!new JsonObject(map).equals(value)) {
+                                comparisonFailed = true;
+                                break;
+                            }
+                        } else if (listedObjectKeyValue instanceof List list) {
+                            if (!new JsonArray(list).equals(value)) {
+                                comparisonFailed = true;
+                                break;
+                            }
+                        } else {
+                            if (!listedObjectKeyValue.equals(value)) {
+                                comparisonFailed = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!comparisonFailed) {
+                        return listedJsonObject;
+                    }
                 }
-            }
-            if (!requirementFailed) {
-                return jsonObject;
             }
         }
         return null;
