@@ -157,6 +157,8 @@ public class JsonArray {
                 stringBuilder.append(new JsonArray(list));
             } else if (element instanceof String string) {
                 stringBuilder.append('"').append(string).append('"');
+            } else if (element == null) {
+                stringBuilder.append("null");
             } else {
                 stringBuilder.append(element);
             }

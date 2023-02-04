@@ -4,10 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the json.JsonArray class.
@@ -167,8 +168,8 @@ public class JsonArrayTest {
             this.addString("value");
         }};
         addGet_jsonArray.addJsonArray(element);
-        assertTrue(addGet_jsonArray.data.get(0) instanceof List,
-                "adding a JsonArray should place a List in the JsonArray"
+        assertTrue(addGet_jsonArray.data.get(0) instanceof ArrayList,
+                "adding a JsonArray should place a ArrayList in the JsonArray"
         );
         assertEquals(element, addGet_jsonArray.getJsonArray(0),
                 "the original element should be returned upon calling getJsonArray(...)"

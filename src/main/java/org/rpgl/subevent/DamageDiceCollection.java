@@ -141,7 +141,7 @@ public abstract class DamageDiceCollection extends Subevent {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public List&lt;Object&gt; getDamageDiceCollection()
+     * public JsonArray getDamageDiceCollection()
      * 	</code></pre>
      * 	</p>
      * 	<p>

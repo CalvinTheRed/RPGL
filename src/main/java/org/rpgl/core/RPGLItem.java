@@ -8,7 +8,6 @@ import org.rpgl.uuidtable.UUIDTable;
 import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class RPGLItem extends JsonObject implements UUIDTableElement {
@@ -149,32 +148,6 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
     }
 
     /**
-     * 	<p><b><i>getEquippedEffects</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLEffect[] getEquippedEffects()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns an array of RPGLEffect objects which are to be applied to anyone who equips this RPGLItem.
-     * 	</p>
-     *
-     * 	@return an array of RPGLEffect objects
-     */
-    public RPGLEffect[] getEquippedEffects() {
-        List<Object> equippedEffectsUuidArray = this.getJsonArray("equipped_effects").asList();
-        RPGLEffect[] effects = new RPGLEffect[equippedEffectsUuidArray.size()];
-        int i = 0;
-        for (Object equippedEffectUuidElement : equippedEffectsUuidArray) {
-            String equippedEffectUuid = (String) equippedEffectUuidElement;
-            RPGLEffect effect = UUIDTable.getEffect(equippedEffectUuid);
-            effects[i] = effect;
-            i++;
-        }
-        return effects;
-    }
-
-    /**
      * 	<p><b><i>updateEquippedEffects</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
@@ -189,7 +162,10 @@ public class RPGLItem extends JsonObject implements UUIDTableElement {
      *  @param object an RPGLObject which has equipped this RPGLItem
      */
     public void updateEquippedEffects(RPGLObject object) {
-        for (RPGLEffect effect : this.getEquippedEffects()) {
+        JsonArray whileEquippedEffects = this.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS);
+        for (int i = 0; i < whileEquippedEffects.size(); i++) {
+            String effectUuid = whileEquippedEffects.getString(i);
+            RPGLEffect effect = UUIDTable.getEffect(effectUuid);
             effect.setSource(object.getUuid());
             effect.setTarget(object.getUuid());
         }

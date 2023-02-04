@@ -91,27 +91,39 @@ public class JsonObject {
     // =================================================================================================================
 
     public void putJsonObject(String key, JsonObject jsonObject) {
-        this.data.put(key, jsonObject.data);
+        if (key != null) {
+            this.data.put(key, jsonObject.data);
+        }
     }
 
     public void putJsonArray(String key, JsonArray jsonArray) {
-        this.data.put(key, jsonArray.asList());
+        if (key != null) {
+            this.data.put(key, jsonArray.asList());
+        }
     }
 
     public void putString(String key, String s) {
-        this.data.put(key, s);
+        if (key != null) {
+            this.data.put(key, s);
+        }
     }
 
     public void putInteger(String key, Integer i) {
-        this.data.put(key, i);
+        if (key != null) {
+            this.data.put(key, i);
+        }
     }
 
     public void putDouble(String key, Double d) {
-        this.data.put(key, d);
+        if (key != null) {
+            this.data.put(key, d);
+        }
     }
 
     public void putBoolean(String key, Boolean b) {
-        this.data.put(key, b);
+        if (key != null) {
+            this.data.put(key, b);
+        }
     }
 
     // =================================================================================================================
@@ -212,9 +224,9 @@ public class JsonObject {
             stringBuilder.append("\"").append(key).append("\":");
 
             Object value = this.data.get(key);
-            if (value instanceof Map) {
+            if (value instanceof HashMap) {
                 stringBuilder.append(this.getJsonObject(key).toString());
-            } else if (value instanceof List) {
+            } else if (value instanceof ArrayList) {
                 stringBuilder.append(this.getJsonArray(key).toString());
             } else if (value instanceof String string) {
                 stringBuilder.append('"').append(string).append('"');

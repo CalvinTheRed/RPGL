@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.datapack.UUIDTableElementTO;
 import org.rpgl.exception.ConditionMismatchException;
@@ -10,9 +11,6 @@ import org.rpgl.subevent.*;
 import org.rpgl.uuidtable.UUIDTable;
 import org.rpgl.uuidtable.UUIDTableElement;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class RPGLObject extends JsonObject implements UUIDTableElement {
@@ -105,7 +103,7 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public boolean addEffect(RPGLEffect effect)
+     * public void addEffect(RPGLEffect effect)
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -115,11 +113,9 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      * 	TODO should effects be restricted if they are the same? double-dipping
      *
      * 	@param effect a RPGLEffect to be assigned to the RPGLObject
-     *  @return true if the RPOGLObject's RPGLEffect collection changed as a result of the call
      */
-    public boolean addEffect(RPGLEffect effect) {
-        List<Object> effects = this.getJsonArray("effects").asList();
-        return effects.add(effect.getUuid());
+    public void addEffect(RPGLEffect effect) {
+        this.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).addString(effect.getUuid());
     }
 
     /**
@@ -139,8 +135,7 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      *  @return true if the RPGLObject's RPGLEffect collection contained the specified element
      */
     public boolean removeEffect(RPGLEffect effect) {
-        List<Object> effects = this.getJsonArray("effects").asList();
-        return effects.remove(effect.getUuid());
+        return this.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).asList().remove(effect.getUuid());
     }
 
     /**
@@ -160,26 +155,23 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      *  @return an array of RPGLEffect objects
      */
     public RPGLEffect[] getEffects() {
-        ArrayList<RPGLEffect> effectsList = new ArrayList<>();
-
-        // Add RPGLEffects from object
-        List<Object> objectEffectUuids = this.getJsonArray("effects").asList();
-        for (Object effectUuid : objectEffectUuids) {
-            effectsList.add(UUIDTable.getEffect((String) effectUuid));
+        JsonArray objectEffects = this.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
+        JsonObject equippedItems = this.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        JsonArray equippedItemEffects = new JsonArray();
+        for (Map.Entry<String, Object> equippedItemEntry : equippedItems.asMap().entrySet()) {
+            String equippedItemUuid = equippedItems.getString(equippedItemEntry.getKey());
+            RPGLItem equippedItem = UUIDTable.getItem(equippedItemUuid);
+            equippedItemEffects.asList().addAll(equippedItem.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).asList());
         }
-
-        // Add RPGLEffects from equipped items
-        Map<String, Object> items = this.getJsonObject("items").asMap();
-        for (Map.Entry<String, Object> itemsEntrySet : items.entrySet()) {
-            String key = itemsEntrySet.getKey();
-            if (!"inventory".equals(key)) {
-                String itemUuid = (String) itemsEntrySet.getValue();
-                Collections.addAll(effectsList, UUIDTable.getItem(itemUuid).getEquippedEffects());
+        RPGLEffect[] effects = new RPGLEffect[objectEffects.size() + equippedItemEffects.size()];
+        for (int i = 0; i < effects.length; i++) {
+            if (i < objectEffects.size()) {
+                effects[i] = UUIDTable.getEffect(objectEffects.getString(i));
+            } else {
+                effects[i] = UUIDTable.getEffect(equippedItemEffects.getString(i - objectEffects.size()));
             }
         }
-
-        // Return list as array
-        return effectsList.toArray(new RPGLEffect[0]);
+        return effects;
     }
 
     /**
@@ -192,15 +184,19 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method returns an array of RPGLEvent ID's which this RPGLObject has been granted access to.
+     * 	This method returns an array of RPGLEvents which this RPGLObject has access to.
      * 	</p>
      *
      *  @return an array of RPGLEvent ID Strings
      */
-    public String[] getEvents() {
+    public RPGLEvent[] getEvents() {
         // TODO make a Subevent for collecting additional RPGLEvent ID's
-        List<Object> eventsArray = this.getJsonArray("events").asList();
-        return eventsArray.toArray(new String[0]);
+        JsonArray eventsArray = this.getJsonArray(RPGLObjectTO.EVENTS_ALIAS);
+        RPGLEvent[] events = new RPGLEvent[eventsArray.size()];
+        for (int i = 0; i < events.length; i++) {
+            events[i] = RPGLFactory.newEvent(eventsArray.getString(i));
+        }
+        return events;
     }
 
     /**
@@ -477,9 +473,9 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      *  @param itemUuid a RPGLItem's UUID String
      */
     public void giveItem(String itemUuid) {
-        List<Object> inventory = this.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS).asList();
-        if (!inventory.contains(itemUuid)) {
-            inventory.add(itemUuid);
+        JsonArray inventory = this.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        if (!inventory.asList().contains(itemUuid)) {
+            inventory.addString(itemUuid);
         }
     }
 
@@ -502,10 +498,10 @@ public class RPGLObject extends JsonObject implements UUIDTableElement {
      */
     public void equipItem(String itemUuid, String equipmentSlot) {
         // TODO make a subevent for equipping an item
-        List<Object> inventory = this.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS).asList();
-        if (inventory.contains(itemUuid)) {
-            Map<String, Object> equippedItems = this.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).asMap();
-            equippedItems.put(equipmentSlot, itemUuid);
+        JsonArray inventory = this.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        if (inventory.asList().contains(itemUuid)) {
+            JsonObject equippedItems = this.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+            equippedItems.putString(equipmentSlot, itemUuid);
             RPGLItem item = UUIDTable.getItem(itemUuid);
             item.updateEquippedEffects(this);
             item.defaultAttackAbilities();

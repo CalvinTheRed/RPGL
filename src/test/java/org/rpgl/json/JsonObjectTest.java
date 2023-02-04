@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -435,8 +435,8 @@ public class JsonObjectTest {
         verify put(...) behavior
          */
         getPutRemove_jsonObject.putJsonArray("key", value);
-        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof List,
-                "a List value should be stored in the JsonObject after calling putJsonArray(...)"
+        assertTrue(getPutRemove_jsonObject.data.get("key") instanceof ArrayList,
+                "a ArrayList value should be stored in the JsonObject after calling putJsonArray(...)"
         );
         /*
         verify get(...) behavior
