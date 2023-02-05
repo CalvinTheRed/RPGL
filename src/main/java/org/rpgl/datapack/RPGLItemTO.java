@@ -26,6 +26,9 @@ public class RPGLItemTO extends UUIDTableElementTO {
     public static final String ATTACK_BONUS_ALIAS = "attack_bonus";
     public static final String ATTACK_ABILITIES_ALIAS = "attack_abilities";
 
+    // ranged weapon property aliases
+    public static final String RANGE_ALIAS = "range";
+
     // armor property aliases
     public static final String ARMOR_CLASS_BASE_ALIAS = "armor_class_base";
     public static final String ARMOR_CLASS_DEX_LIMIT_ALIAS = "armor_class_dex_limit";
@@ -53,6 +56,9 @@ public class RPGLItemTO extends UUIDTableElementTO {
     Integer attackBonus;
     @JsonProperty(ATTACK_ABILITIES_ALIAS)
     HashMap<String, Object> attackAbilities;
+
+    @JsonProperty(RANGE_ALIAS)
+    HashMap<String, Object> range;
 
     @JsonProperty(ARMOR_CLASS_BASE_ALIAS)
     Integer armorClassBase;
@@ -83,6 +89,7 @@ public class RPGLItemTO extends UUIDTableElementTO {
         this.damage = rpglItem.getJsonObject(DAMAGE_ALIAS).asMap();
         this.attackBonus = rpglItem.getInteger(ATTACK_BONUS_ALIAS);
         this.attackAbilities = rpglItem.getJsonObject(ATTACK_ABILITIES_ALIAS).asMap();
+        this.range = rpglItem.getJsonObject(RANGE_ALIAS).asMap();
         this.armorClassBase = rpglItem.getInteger(ARMOR_CLASS_BASE_ALIAS);
         this.armorClassDexLimit = rpglItem.getInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS);
         this.armorClassBonus = rpglItem.getInteger(ARMOR_CLASS_BONUS_ALIAS);
@@ -98,6 +105,7 @@ public class RPGLItemTO extends UUIDTableElementTO {
             this.putJsonArray(WEAPON_PROPERTIES_ALIAS, new JsonArray(weaponProperties));
             this.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
             this.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
+            this.putJsonObject(RANGE_ALIAS, new JsonObject(range));
             this.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
             this.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
             this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
@@ -117,6 +125,7 @@ public class RPGLItemTO extends UUIDTableElementTO {
             this.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
             this.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
             this.putJsonObject(ATTACK_ABILITIES_ALIAS, new JsonObject(attackAbilities));
+            this.putJsonObject(RANGE_ALIAS, new JsonObject(range));
             this.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
             this.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
             this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);

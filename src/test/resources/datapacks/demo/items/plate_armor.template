@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Plate Armor",
+  "description": "A suit of plate armor.",
+  "tags": [
+    "metal",
+    "armor"
+  ],
+  "weight": 65,
+  "cost": 1500,
+  "proficiency_tags": [
+    "heavy_armor"
+  ],
+  "while_equipped": [
+
+  ],
+  "armor_class_base": 18,
+  "armor_class_dex_limit": 0
+}

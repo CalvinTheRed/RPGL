@@ -7,6 +7,7 @@ import org.rpgl.uuidtable.UUIDTable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class RPGLItemTemplate extends JsonObject {
 
@@ -34,7 +35,7 @@ public class RPGLItemTemplate extends JsonObject {
         item.asMap().putIfAbsent("weapon_properties", new ArrayList<>(Collections.singleton("improvised")));
         item.asMap().putIfAbsent("proficiency_tags",  new ArrayList<>(Collections.singleton("improvised")));
         item.asMap().putIfAbsent("tags",              new ArrayList<>(Collections.singleton("improvised")));
-        item.asMap().putIfAbsent("thrown_range", new HashMap<String, Object>() {{
+        item.asMap().putIfAbsent("range", new HashMap<String, Object>() {{
             this.put("normal", 20);
             this.put("long", 60);
         }});
@@ -92,19 +93,19 @@ public class RPGLItemTemplate extends JsonObject {
      */
     static void processItemDamage(RPGLItem item) {
         JsonObject damage = new JsonObject();
-        damage.join(item.getJsonObject("damage"));
+        damage.join(Objects.requireNonNullElse(item.getJsonObject("damage"), new JsonObject()));
 
         if (damage.asMap().isEmpty()) {
-            setImprovisedItemDamage(item, "melee");
-            setImprovisedItemDamage(item, "thrown");
+            setImprovisedItemDamage(damage, "melee");
+            setImprovisedItemDamage(damage, "thrown");
         } else {
             JsonArray melee = damage.getJsonArray("melee");
             JsonArray thrown = damage.getJsonArray("thrown");
             if (melee == null || melee.asList().isEmpty()) {
-                setImprovisedItemDamage(item, "melee");
+                setImprovisedItemDamage(damage, "melee");
             }
             if (thrown == null || thrown.asList().isEmpty()) {
-                setImprovisedItemDamage(item, "thrown");
+                setImprovisedItemDamage(damage, "thrown");
             }
         }
     }
@@ -121,11 +122,10 @@ public class RPGLItemTemplate extends JsonObject {
      * 	This helper method assigns the improvised weapon damage die 1d4 to the passed attack type for the RPGLItem.
      * 	</p>
      *
-     *  @param item       an RPGLItem
+     *  @param damage     a JsonObject representing an item's damage
      *  @param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
      */
-    static void setImprovisedItemDamage(RPGLItem item, String attackType) {
-        JsonObject damage = item.getJsonObject("damage");
+    static void setImprovisedItemDamage(JsonObject damage, String attackType) {
         damage.putJsonArray(attackType, new JsonArray(new ArrayList<>() {{
             this.add(new HashMap<String, Object>() {{
                 this.put("type", "bludgeoning");

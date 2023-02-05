@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Knight",
+  "description": "A knight.",
+  "ability_scores": {
+    "str": 16,
+    "dex": 11,
+    "con": 14,
+    "int": 11,
+    "wis": 11,
+    "cha": 15
+  },
+  "health_data": {
+    "hit_dice": [
+      { "size": 8, "count": 8, "determined": 4 }
+    ],
+    "base": 52,
+    "maximum": 52,
+    "current": 52,
+    "temporary": 0
+  },
+  "equipped_items": {
+    "mainhand": "demo:longsword",
+    "offhand": "demo:metal_shield",
+    "armor": "demo:plate_armor"
+  },
+  "inventory": [
+    "demo:heavy_crossbow"
+  ],
+  "events": [
+
+  ],
+  "effects": [
+
+  ],
+  "proficiency_bonus": 2
+}

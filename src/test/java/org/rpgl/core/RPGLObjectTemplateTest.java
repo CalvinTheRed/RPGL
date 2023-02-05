@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.datapack.RPGLObjectTO;
@@ -13,10 +14,12 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class RPGLObjectTemplateTest {
 
@@ -38,6 +41,73 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
+    @DisplayName("processEffects effects are constructed")
+    void processEffects_effectsAreConstructed() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("young_red_dragon");
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processEffects(object);
+
+        JsonArray effectsArray = object.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
+        assertEquals(1, effectsArray.size(),
+                "object should have 1 effect constructed"
+        );
+        for (int i = 0; i < effectsArray.size(); i++) {
+            String effectUuid = effectsArray.getString(i);
+            RPGLEffect effect = UUIDTable.getEffect(effectUuid);
+            assertNotNull(effect,
+                    "effect UUID should be present in UUIDTable"
+            );
+        }
+    }
+
+    @Test
+    @DisplayName("processInventory items are constructed")
+    void processInventory_itemsAreConstructed() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("knight");
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processInventory(object);
+
+        JsonArray inventory = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        assertEquals(1, inventory.size(),
+                "inventory should only have 1 item without calling processEquippedItems()"
+        );
+        for (int i = 0; i < inventory.size(); i++) {
+            String itemUuid = inventory.getString(i);
+            RPGLItem item = UUIDTable.getItem(itemUuid);
+            assertNotNull(item,
+                    "item UUID should be present in UUIDTable"
+            );
+        }
+    }
+
+    @Test
+    @DisplayName("processEquippedItems items are constructed and added to inventory")
+    void processEquippedItems_itemsAreConstructedAndAddedToInventory() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("knight");
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processEquippedItems(object);
+
+        JsonArray inventory = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        assertEquals(4, inventory.size(),
+                "inventory should have 4 items after calling processEquippedItems()"
+        );
+        for (int i = 1; i < inventory.size(); i++) {
+            // start at i=1 to skip the first un-processed inventory item
+            String itemUuid = inventory.getString(i);
+            RPGLItem item = UUIDTable.getItem(itemUuid);
+            assertNotNull(item,
+                    "item UUID should be present in UUIDTable"
+            );
+        }
+    }
+
+    @Test
     @DisplayName("processHealthData hit dice enumeration")
     void processHealthData_hitDiceAreEnumerated() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("young_red_dragon");
@@ -48,7 +118,7 @@ public class RPGLObjectTemplateTest {
 
         JsonArray hitDiceArray = object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getJsonArray("hit_dice");
         assertEquals(17, hitDiceArray.size(),
-                "compact hit dice view should be unpacked"
+                "compact hit dice view should be unpacked into 17 objects"
         );
         for (int i = 0; i < hitDiceArray.size(); i++) {
             JsonObject hitDie = hitDiceArray.getJsonObject(i);
@@ -62,6 +132,54 @@ public class RPGLObjectTemplateTest {
                     "hit die (index " + i + ") has the wrong determined value"
             );
         }
+    }
+
+    @Test
+    @DisplayName("newInstance")
+    void test() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("knight");
+
+        RPGLObject object = objectTemplate.newInstance();
+
+        assertEquals("{\"author\":\"Calvin Withun\"}", object.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+                "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
+        );
+        assertEquals("Knight", object.getString(DatapackContentTO.NAME_ALIAS),
+                "incorrect field value: " + DatapackContentTO.NAME_ALIAS
+        );
+        assertEquals("A knight.", object.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+                "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+
+        assertEquals("{\"cha\":15,\"con\":14,\"dex\":11,\"int\":11,\"str\":16,\"wis\":11}", object.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).toString(),
+                "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
+        );
+        assertEquals("{\"base\":52,\"current\":52,\"hit_dice\":[{\"determined\":4,\"size\":8,\"spent\":false},{\"determined\":4,\"size\":8,\"spent\":false},{\"determined\":4,\"size\":8,\"spent\":false},{\"determined\":4,\"size\":8,\"spent\":false},{\"determined\":4,\"size\":8,\"spent\":false},{\"determined\":4,\"size\":8,\"spent\":false},{\"determined\":4,\"size\":8,\"spent\":false},{\"determined\":4,\"size\":8,\"spent\":false}],\"maximum\":52,\"temporary\":0}", object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
+                "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
+        );
+        JsonObject equippedItems = object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        for (Map.Entry<String, Object> equippedItemsEntry : equippedItems.asMap().entrySet()) {
+            String itemUuid = equippedItems.getString(equippedItemsEntry.getKey());
+            assertNotNull(UUIDTable.getItem(itemUuid),
+                    "item in equipment slot " + equippedItemsEntry.getKey() + " is missing from UUIDTable"
+            );
+        }
+        JsonArray inventory = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        for (int i = 0; i < inventory.size(); i++) {
+            String itemUuid = inventory.getString(i);
+            assertNotNull(UUIDTable.getItem(itemUuid),
+                    "item at inventory index " + i + " is missing from UUIDTable"
+            );
+        }
+        assertEquals("[]", object.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
+                "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
+        );
+        assertEquals("[]", object.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
+                "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
+        );
+        assertEquals(2, object.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS),
+                "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
+        );
     }
 
 }
