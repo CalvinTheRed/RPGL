@@ -42,7 +42,7 @@ public class RPGLEventTemplate extends JsonObject {
                     JsonArray templateDamageDiceArray = damageJson.removeJsonArray("dice");
                     JsonArray damageDiceArray = new JsonArray();
                     for (int k = 0; k < templateDamageDiceArray.size(); k++) {
-                        JsonObject templateDamageDiceDefinition = damageDiceArray.getJsonObject(k);
+                        JsonObject templateDamageDiceDefinition = templateDamageDiceArray.getJsonObject(k);
                         JsonObject damageDie = new JsonObject() {{
                             this.putInteger("size", templateDamageDiceDefinition.getInteger("size"));
                             this.putInteger("determined", templateDamageDiceDefinition.getInteger("determined"));
