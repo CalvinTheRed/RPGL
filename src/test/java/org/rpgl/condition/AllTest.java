@@ -1,0 +1,139 @@
+package org.rpgl.condition;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLCore;
+import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AllTest {
+
+    @BeforeAll
+    static void beforeAll() {
+        RPGLCore.initializeTesting();
+    }
+
+    @Test
+    @DisplayName("evaluate wrong condition")
+    void evaluate_wrongCondition_throwsException() {
+        Condition condition = new All();
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "not_a_condition"
+            }*/
+            this.putString("condition", "not_a_condition");
+        }};
+
+        assertThrows(ConditionMismatchException.class,
+                () -> condition.evaluate(null, null, conditionJson),
+                "All condition should throw a ConditionMismatchException if the specified condition doesn't match"
+        );
+    }
+
+    @Test
+    @DisplayName("evaluate for no sub-conditions")
+    void evaluate_default_true() throws ConditionMismatchException {
+        Condition condition = new All();
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "all",
+                "conditions": [ ]
+            }*/
+            this.putString("condition", "all");
+            this.putJsonArray("conditions", new JsonArray());
+        }};
+
+        assertTrue(condition.evaluate(null, null, conditionJson),
+                "All condition should evaluate true when evaluated without sub-conditions"
+        );
+    }
+
+    @Test
+    @DisplayName("evaluate for true, true")
+    void evaluate_trueTrue_true() throws ConditionMismatchException {
+        Condition condition = new All();
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "all",
+                "conditions": [
+                    { "condition": "true" },
+                    { "condition": "true" }
+                ]
+            }*/
+            this.putString("condition", "all");
+            this.putJsonArray("conditions", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "true");
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "true");
+                }});
+            }});
+        }};
+
+        assertTrue(condition.evaluate(null, null, conditionJson),
+                "All condition should evaluate true for 2 true conditions"
+        );
+    }
+
+    @Test
+    @DisplayName("evaluate for true, false")
+    void evaluate_trueFalse_false() throws ConditionMismatchException {
+        Condition condition = new All();
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "all",
+                "conditions": [
+                    { "condition": "true" },
+                    { "condition": "false" }
+                ]
+            }*/
+            this.putString("condition", "all");
+            this.putJsonArray("conditions", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "true");
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "false");
+                }});
+            }});
+        }};
+
+        assertFalse(condition.evaluate(null, null, conditionJson),
+                "All condition should evaluate false for 1 true and 1 false condition"
+        );
+    }
+
+    @Test
+    @DisplayName("evaluate for false, false")
+    void evaluate_falseFalse_false() throws ConditionMismatchException {
+        Condition condition = new All();
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "all",
+                "conditions": [
+                    { "condition": "false" },
+                    { "condition": "false" }
+                ]
+            }*/
+            this.putString("condition", "all");
+            this.putJsonArray("conditions", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "false");
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "false");
+                }});
+            }});
+        }};
+
+        assertFalse(condition.evaluate(null, null, conditionJson),
+                "All condition should evaluate false for 2 false conditions"
+        );
+    }
+
+}
