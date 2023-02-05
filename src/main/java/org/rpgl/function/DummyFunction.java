@@ -7,11 +7,7 @@ import org.rpgl.subevent.Subevent;
 
 public class DummyFunction extends Function {
 
-    public static int counter;
-
-    static {
-        counter = 0;
-    }
+    public static int counter = 0;
 
     @Override
     public void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson) throws FunctionMismatchException {

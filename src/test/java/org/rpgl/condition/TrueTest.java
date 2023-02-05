@@ -7,8 +7,14 @@ import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the condition.True class.
+ *
+ * @author Calvin Withun
+ */
 public class TrueTest {
 
     @BeforeAll

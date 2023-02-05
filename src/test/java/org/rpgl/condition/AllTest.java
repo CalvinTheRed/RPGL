@@ -8,8 +8,15 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the condition.All class.
+ *
+ * @author Calvin Withun
+ */
 public class AllTest {
 
     @BeforeAll
