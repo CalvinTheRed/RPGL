@@ -12,7 +12,11 @@ import org.rpgl.core.RPGLObjectTemplate;
 import java.io.File;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the datapack.Datapack class.
@@ -517,7 +521,7 @@ public class DatapackTest {
         assertEquals("{\"cha\":19,\"con\":21,\"dex\":10,\"int\":14,\"str\":23,\"wis\":11}", objectTemplate.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
-        assertEquals("{\"base\":178,\"current\":178,\"hit_dice\":[{\"count\":17,\"size\":10}],\"maximum\":178,\"temporary\":0}", objectTemplate.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
+        assertEquals("{\"base\":178,\"current\":178,\"hit_dice\":[{\"count\":17,\"determined\":5,\"size\":10}],\"maximum\":178,\"temporary\":0}", objectTemplate.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
         assertEquals("{}", objectTemplate.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).toString(),

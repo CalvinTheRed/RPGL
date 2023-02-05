@@ -36,7 +36,7 @@ public class RPGLEffect extends UUIDTableElement {
         RPGLObject target = subevent.getTarget();
 
         JsonObject subeventFilters = this.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS);
-        for (Map.Entry<String, Object> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
+        for (Map.Entry<String, ?> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
             if (subevent.getSubeventId().equals(subeventFilterEntry.getKey())) {
                 JsonObject matchedFilter = subeventFilters.getJsonObject(subeventFilterEntry.getKey());
                 JsonArray conditions = matchedFilter.getJsonArray("conditions");

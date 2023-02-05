@@ -6,7 +6,14 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.*;
+import org.rpgl.subevent.CalculateAbilityScore;
+import org.rpgl.subevent.CalculateBaseArmorClass;
+import org.rpgl.subevent.CalculateProficiencyModifier;
+import org.rpgl.subevent.DamageAffinity;
+import org.rpgl.subevent.DamageDelivery;
+import org.rpgl.subevent.GetSavingThrowProficiency;
+import org.rpgl.subevent.GetWeaponProficiency;
+import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 import org.rpgl.uuidtable.UUIDTableElement;
 
@@ -142,7 +149,7 @@ public class RPGLObject extends UUIDTableElement {
         JsonArray objectEffects = this.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
         JsonObject equippedItems = this.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
         JsonArray equippedItemEffects = new JsonArray();
-        for (Map.Entry<String, Object> equippedItemEntry : equippedItems.asMap().entrySet()) {
+        for (Map.Entry<String, ?> equippedItemEntry : equippedItems.asMap().entrySet()) {
             String equippedItemUuid = equippedItems.getString(equippedItemEntry.getKey());
             RPGLItem equippedItem = UUIDTable.getItem(equippedItemUuid);
             equippedItemEffects.asList().addAll(equippedItem.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).asList());
@@ -354,10 +361,10 @@ public class RPGLObject extends UUIDTableElement {
      * 	@throws Exception if an exception occurs.
      */
     public void receiveDamage(RPGLContext context, DamageDelivery damageDelivery) throws Exception {
-        Map<String, Object> damageObject = damageDelivery.getDamage();
-        for (Map.Entry<String, Object> damageObjectEntry : damageObject.entrySet()) {
-            String damageType = damageObjectEntry.getKey();
-            Integer damage = (Integer) damageObjectEntry.getValue();
+        JsonObject damageJson = damageDelivery.getDamage();
+        for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
+            String damageType = damageJsonEntry.getKey();
+            Integer damage = damageJson.getInteger(damageJsonEntry.getKey());
 
             DamageAffinity damageAffinity = new DamageAffinity();
             damageAffinity.joinSubeventData(new JsonObject() {{

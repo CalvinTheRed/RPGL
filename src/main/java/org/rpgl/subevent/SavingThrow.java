@@ -283,11 +283,12 @@ public class SavingThrow extends ContestRoll {
             /*
              * Add base and target damage into final damage quantities
              */
-            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(context).asMap().entrySet()) {
+            JsonObject targetDamage = getTargetDamage(context);
+            for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
                 String damageType = targetDamageEntry.getKey();
                 if (baseDamage.asMap().containsKey(damageType)) {
                     Integer baseTypedDamage = baseDamage.getInteger(damageType);
-                    baseTypedDamage += (Integer) targetDamageEntry.getValue();
+                    baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
                     if (baseTypedDamage < 0) {
                         baseTypedDamage = 0; // You can never deal less than 0 points of damage when you deal damage
                     }
@@ -334,11 +335,12 @@ public class SavingThrow extends ContestRoll {
     void resolveFailDamage(RPGLContext context) throws Exception {
         JsonObject baseDamage = this.subeventJson.getJsonObject("damage");
         if (baseDamage != null) {
-            for (Map.Entry<String, Object> targetDamageEntry : getTargetDamage(context).asMap().entrySet()) {
+            JsonObject targetDamage = getTargetDamage(context);
+            for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
                 String damageType = targetDamageEntry.getKey();
                 if (baseDamage.asMap().containsKey(damageType)) {
                     Integer baseTypedDamage = baseDamage.getInteger(damageType);
-                    baseTypedDamage += (Integer) targetDamageEntry.getValue();
+                    baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
                     baseDamage.putInteger(damageType, baseTypedDamage);
                 } else {
                     baseDamage.asMap().entrySet().add(targetDamageEntry);

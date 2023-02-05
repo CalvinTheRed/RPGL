@@ -2,8 +2,6 @@ package org.rpgl.subevent;
 
 import org.rpgl.json.JsonObject;
 
-import java.util.Map;
-
 /**
  * This Subevent is dedicated to delivering a quantity of typed damage to an RPGLObject.
  * <br>
@@ -51,8 +49,8 @@ public class DamageDelivery extends Subevent {
      *
      *  @return an object of damage types and values
      */
-    public Map<String, Object> getDamage() {
-        return this.subeventJson.getJsonObject("damage").asMap();
+    public JsonObject getDamage() {
+        return this.subeventJson.getJsonObject("damage");
     }
 
 }
