@@ -463,10 +463,10 @@ public class DatapackTest {
         assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
         );
-        assertNull(itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS),
+        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
-        assertNull(itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS),
+        assertEquals("{}", itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
         assertNull(itemTemplate.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
@@ -561,10 +561,10 @@ public class DatapackTest {
         assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
         );
-        assertNull(itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS),
+        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
-        assertNull(itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS),
+        assertEquals("{}", itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
         assertNull(itemTemplate.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),

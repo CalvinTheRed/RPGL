@@ -2,6 +2,7 @@ package org.rpgl.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class represents a JSON array and provides several utility methods which make it easier to interface with that
@@ -18,7 +19,7 @@ public class JsonArray {
     }
 
     public JsonArray(ArrayList<Object> data) {
-        this.data = data;
+        this.data = Objects.requireNonNullElse(data, new ArrayList<>());
     }
 
     public ArrayList<Object> asList() {

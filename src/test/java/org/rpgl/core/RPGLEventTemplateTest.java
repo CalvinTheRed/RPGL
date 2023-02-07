@@ -67,8 +67,11 @@ public class RPGLEventTemplateTest {
     void newInstance_youngRedDragonFireBreathTemplate() {
         RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("demo").getEventTemplate("young_red_dragon_fire_breath");
         RPGLEvent event = eventTemplate.newInstance();
+        String expected;
 
-        assertEquals("{\"author\":\"Calvin Withun\"}", event.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        expected = """
+                {"author":"Calvin Withun"}""";
+        assertEquals(expected, event.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
         assertEquals("Fire Breath", event.getString(RPGLObjectTO.NAME_ALIAS),
@@ -81,7 +84,9 @@ public class RPGLEventTemplateTest {
         assertEquals("{}", event.getJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS).toString(),
                 "incorrect field value: " + RPGLEventTO.AREA_OF_EFFECT_ALIAS
         );
-        assertEquals("[{\"damage\":[{\"bonus\":0,\"dice\":[{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6},{\"determined\":3,\"size\":6}],\"type\":\"fire\"}],\"damage_on_pass\":\"half\",\"determined\":1,\"difficulty_class_ability\":\"con\",\"save_ability\":\"dex\",\"subevent\":\"saving_throw\"}]", event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS).toString(),
+        expected = """
+                [{"damage":[{"bonus":0,"dice":[{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6}],"type":"fire"}],"damage_on_pass":"half","determined":1,"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
+        assertEquals(expected, event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLEventTO.SUBEVENTS_ALIAS
         );
     }

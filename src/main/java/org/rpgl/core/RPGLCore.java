@@ -2,6 +2,7 @@ package org.rpgl.core;
 
 import org.rpgl.condition.Condition;
 import org.rpgl.function.Function;
+import org.rpgl.math.Die;
 import org.rpgl.subevent.Subevent;
 
 /**
@@ -20,14 +21,16 @@ public final class RPGLCore {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method initializes all Conditions, Functions, and Subevents used by RPGL. This method must be called in
-     * 	order for RPGL to function.
+     * 	This method initializes all Conditions, Functions, and Subevents used by RPGL, as well as configures Die to not
+     * 	operate in testing mode. This method must be called in order for RPGL to function.
      * 	</p>
      */
+    @SuppressWarnings("unused") // this is only intended to be used by a client, as it disables testing-only features
     public static void initialize() {
         Condition.initialize(false);
         Function.initialize(false);
         Subevent.initialize(false);
+        Die.setTesting(false);
     }
 
     /**
@@ -38,15 +41,15 @@ public final class RPGLCore {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method initializes all Conditions, Functions, and Subevents used by RPGL. This method must be called in
-     * 	order for RPGL to function. This method initializes testing-only options which are not designed to be used by a
-     * 	client program.
+     * 	This method initializes all Conditions, Functions, and Subevents used by RPGL (including testing-only options),
+     * 	as well as configures Die to operate in testing mode. This method must be called in order for RPGL to function.
      * 	</p>
      */
     public static void initializeTesting() {
         Condition.initialize(true);
         Function.initialize(true);
         Subevent.initialize(true);
+        Die.setTesting(true);
     }
 
 }

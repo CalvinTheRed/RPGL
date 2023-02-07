@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class represents a JSON object and provides several utility methods which make it easier to interface with that
@@ -22,7 +23,7 @@ public class JsonObject {
     }
 
     public JsonObject(HashMap<String, Object> data) {
-        this.data = data;
+        this.data = Objects.requireNonNullElse(data, new HashMap<>());
     }
 
     public HashMap<String, Object> asMap() {

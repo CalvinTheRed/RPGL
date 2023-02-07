@@ -302,10 +302,10 @@ public class SavingThrow extends ContestRoll {
              * Account for half or no damage on pass (this should be a redundant check if this code is reached)
              */
             if ("half".equals(damageOnPass)) {
-                for (Map.Entry<String, Object> damageEntryElement : baseDamage.asMap().entrySet()) {
-                    Integer value = (Integer) damageEntryElement.getValue();
+                for (Map.Entry<String, ?> damageEntryElement : baseDamage.asMap().entrySet()) {
+                    Integer value = baseDamage.removeInteger(damageEntryElement.getKey());
                     value /= 2;
-                    damageEntryElement.setValue(value);
+                    baseDamage.putInteger(damageEntryElement.getKey(), value);
                 }
             }
 

@@ -2,9 +2,13 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.datapack.RPGLItemTO;
+import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
+
+import java.util.Map;
 
 /**
  * This subevent is dedicated to calculating the armor class against which attack rolls are made. Once the attack roll
@@ -147,29 +151,20 @@ public class CalculateBaseArmorClass extends Calculation {
      *  @return the shield bonus for <code>source</code>.
      */
     int getShieldBonus() {
-        // Get armor class bonus if wielding shield (you may only benefit from 1 shield at a time, larger bonus is used).
-        // TODO generify this eventually to work for any equipment slot whose item is a shield
-        String hand1ShieldUuid = this.getSource().getJsonObject("items").getString("hand_1");
-        String hand2ShieldUuid = this.getSource().getJsonObject("items").getString("hand_2");
-        int hand1ShieldBonus = 0;
-        int hand2ShieldBonus = 0;
-
-        if (hand1ShieldUuid != null) {
-            RPGLItem shield = UUIDTable.getItem(hand1ShieldUuid);
-            JsonArray shieldTags = shield.getJsonArray("tags");
-            if (shieldTags.asList().contains("shield")) {
-                hand1ShieldBonus = shield.getInteger("armor_class_bonus");
+        int shieldBonus = 0;
+        JsonObject equippedItems = this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        for (Map.Entry<String, Object> equippedItemsEntry : equippedItems.asMap().entrySet()) {
+            String equipmentSlot = equippedItemsEntry.getKey();
+            String itemUuid = equippedItems.getString(equipmentSlot);
+            RPGLItem item = UUIDTable.getItem(itemUuid);
+            if (item.getJsonArray(RPGLItemTO.TAGS_ALIAS).asList().contains("shield")) {
+                int itemShieldBonus = item.getInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS);
+                if (itemShieldBonus > shieldBonus) {
+                    shieldBonus = itemShieldBonus;
+                }
             }
         }
-        if (hand2ShieldUuid != null) {
-            RPGLItem shield = UUIDTable.getItem(hand2ShieldUuid);
-            JsonArray shieldTags = shield.getJsonArray("tags");
-            if (shieldTags.asList().contains("shield")) {
-                hand2ShieldBonus = shield.getInteger("armor_class_bonus");
-            }
-        }
-
-        return Math.max(hand1ShieldBonus, hand2ShieldBonus);
+        return shieldBonus;
     }
 
 }

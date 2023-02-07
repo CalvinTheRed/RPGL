@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Frostbrand",
+  "description": "A scimitar of legendary reputation, wielded by the Drow hero Drizzt Do'Urden. This blade is said to make its wielder impervious against the flames of even dragons.",
+  "tags": [
+    "metal",
+    "weapon"
+  ],
+  "weight": 3,
+  "cost": 50000,
+  "proficiency_tags": [
+    "martial_melee",
+    "scimitar"
+  ],
+  "while_equipped": [
+    "demo:fire_immunity"
+  ],
+  "weapon_properties": [
+    "melee",
+    "light"
+  ],
+  "damage": {
+    "melee": [
+      {
+        "type": "slashing",
+        "dice": [
+          { "count": 1, "determined": 3, "size": 6 }
+        ],
+        "bonus": 3
+      },
+      {
+        "type": "cold",
+        "dice": [
+          { "count": 1, "determined": 3, "size": 6 }
+        ],
+        "bonus": 0
+      }
+    ]
+  },
+  "attack_bonus": 3
+}

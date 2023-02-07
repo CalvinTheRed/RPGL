@@ -2,31 +2,32 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Longsword",
-  "description": "A longsword.",
+  "name": "Greatsword",
+  "description": "A greatsword.",
   "tags": [
     "metal",
     "weapon"
   ],
-  "weight": 3,
-  "cost": 15,
+  "weight": 6,
+  "cost": 50,
   "proficiency_tags": [
     "martial_melee",
-    "longsword"
+    "greatsword"
   ],
   "while_equipped": [
 
   ],
   "weapon_properties": [
     "melee",
-    "versatile"
+    "heavy",
+    "two_handed"
   ],
   "damage": {
     "melee": [
       {
         "type": "slashing",
         "dice": [
-          { "count": 1, "determined": 4, "size": 8 }
+          { "count": 2, "determined": 3, "size": 6 }
         ],
         "bonus": 0
       }
