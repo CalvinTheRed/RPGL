@@ -33,7 +33,7 @@ public abstract class Calculation extends Subevent {
      * 	</p>
      */
     public void addBonus(int bonus) {
-        this.subeventJson.putInteger("bonus", Objects.requireNonNullElse(this.subeventJson.getInteger("bonus"), 0) + bonus);
+        this.subeventJson.putInteger("bonus", this.getBonus() + bonus);
     }
 
     /**
@@ -102,11 +102,10 @@ public abstract class Calculation extends Subevent {
      */
     public int get() {
         Integer set = this.getSet();
-        Integer bonus = this.getBonus();
         if (set != null) {
-            return set + bonus;
+            return set;
         }
-        return Objects.requireNonNullElse(this.getBase(), 0) + bonus;
+        return Objects.requireNonNullElse(this.getBase(), 0) + this.getBonus();
     }
 
 }
