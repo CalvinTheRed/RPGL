@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -38,8 +39,7 @@ public class CalculateAbilityScore extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        // TODO what is base for as opposed to set?
-        this.subeventJson.putInteger("base", this.getSource().getJsonObject("ability_scores").getInteger(this.subeventJson.getString("ability")));
+        super.setBase(this.getSource().getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).getInteger(this.subeventJson.getString("ability")));
     }
 
 }

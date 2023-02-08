@@ -148,7 +148,7 @@ public abstract class ContestRoll extends Calculation {
                 baseDieRoll = disadvantageRoll;
             }
         }
-        this.subeventJson.putInteger("base", baseDieRoll);
+        super.setBase(baseDieRoll);
     }
 
     /**
@@ -171,7 +171,7 @@ public abstract class ContestRoll extends Calculation {
      */
     public void checkForReroll(RPGLContext context) throws Exception {
         ContestRerollChance contestRerollChance = new ContestRerollChance();
-        Integer base = this.subeventJson.getInteger("base");
+        Integer base = super.getBase();
         contestRerollChance.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_reroll_chance");
             this.putInteger("base_die_roll", base);
@@ -184,16 +184,16 @@ public abstract class ContestRoll extends Calculation {
             String rerollMode = contestRerollChance.getRerollMode();
             switch (rerollMode) {
                 case "use_new":
-                    this.subeventJson.putInteger("base", rerollDieValue);
+                    super.setBase(rerollDieValue);
                     break;
                 case "use_highest":
-                    if (rerollDieValue > this.subeventJson.getInteger("base")) {
-                        this.subeventJson.putInteger("base", rerollDieValue);
+                    if (rerollDieValue > super.getBase()) {
+                        super.setBase(rerollDieValue);
                     }
                     break;
                 case "use_lowest":
-                    if (rerollDieValue < this.subeventJson.getInteger("base")) {
-                        this.subeventJson.putInteger("base", rerollDieValue);
+                    if (rerollDieValue < super.getBase()) {
+                        super.setBase(rerollDieValue);
                     }
                     break;
                 default:

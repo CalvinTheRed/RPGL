@@ -38,7 +38,7 @@ public class CalculateCriticalHitThreshold extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        this.subeventJson.putInteger("base", 20);
+        super.setBase(20);
     }
 
 }

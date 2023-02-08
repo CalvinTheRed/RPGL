@@ -69,8 +69,20 @@ public abstract class Calculation extends Subevent {
      * 	bonuses which have been applied to it.
      * 	</p>
      */
-    public void set(int value) {
+    public void setSet(int value) {
         this.subeventJson.putInteger("set", value);
+    }
+
+    public Integer getSet() {
+        return this.subeventJson.getInteger("set");
+    }
+
+    public void setBase(int value) {
+        this.subeventJson.putInteger("base", value);
+    }
+
+    public Integer getBase() {
+        return this.subeventJson.getInteger("base");
     }
 
     /**
@@ -89,12 +101,12 @@ public abstract class Calculation extends Subevent {
      *  @return the result of the calculation
      */
     public int get() {
-        Integer set = this.subeventJson.getInteger("set");
+        Integer set = this.getSet();
         Integer bonus = this.getBonus();
         if (set != null) {
             return set + bonus;
         }
-        return Objects.requireNonNullElse(this.subeventJson.getInteger("base"), 0) + bonus; // TODO add methods to interface with "base"?
+        return Objects.requireNonNullElse(this.getBase(), 0) + bonus;
     }
 
 }

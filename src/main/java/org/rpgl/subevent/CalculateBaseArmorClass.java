@@ -49,7 +49,7 @@ public class CalculateBaseArmorClass extends Calculation {
         // NOTE: you do not need to be proficient in armor or shields to receive their AC benefits
 
         // Set base armor class from armor (or no armor)
-        String armorUuid = this.getSource().getJsonObject("items").getString("armor");
+        String armorUuid = this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("armor");
         int baseArmorClass;
         if (armorUuid == null) {
             // if equipment slot is empty, you are unarmored
@@ -70,7 +70,7 @@ public class CalculateBaseArmorClass extends Calculation {
         baseArmorClass += this.getShieldBonus();
 
         // Set base armor class value in json
-        this.subeventJson.putInteger("base", baseArmorClass); // TODO what is base for as opposed to set?
+        super.setBase(baseArmorClass);
     }
 
     /**
@@ -97,7 +97,7 @@ public class CalculateBaseArmorClass extends Calculation {
         Integer baseArmorClass = armor.getInteger("base_armor_class");
 
         // Add dexterity bonus, if not 0 (or lower)
-        Integer dexterityBonusMaximum = armor.getInteger("dex_bonus_max");
+        Integer dexterityBonusMaximum = armor.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS);
         if (dexterityBonusMaximum == null) {
             // no limit to dexterity bonus
             int dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");

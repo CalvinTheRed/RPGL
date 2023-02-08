@@ -37,7 +37,7 @@ public class CalculateProficiencyModifier extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        this.subeventJson.putInteger("base", this.getSource().getInteger("proficiency_bonus"));
+        super.setBase(this.getSource().getInteger("proficiency_bonus"));
     }
 
 }
