@@ -9,6 +9,12 @@ import org.rpgl.uuidtable.UUIDTableElement;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class represents any artifact which might appear in an RPGLObject object's inventory. Examples of this include
+ * longswords, teacups, and suits of plate armor.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLItem extends UUIDTableElement {
 
     /**
@@ -26,7 +32,7 @@ public class RPGLItem extends UUIDTableElement {
      * 	@return an ability score, or <code>null</code> if an invalid attackType for the RPGLItem was passed
      */
     public String getAttackAbility(String attackType) {
-        return this.getJsonObject("attack_abilities").getString(attackType);
+        return this.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS).getString(attackType);
     }
 
     /**
@@ -73,7 +79,7 @@ public class RPGLItem extends UUIDTableElement {
      *  @param ability    an ability score reference <code>("str", "dex", etc.)</code>
      */
     public void setAttackAbility(String attackType, String ability) {
-        Map<String, Object> attackAbilities = this.getJsonObject("attack_abilities").asMap();
+        Map<String, Object> attackAbilities = this.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS).asMap();
         attackAbilities.put(attackType, ability);
     }
 
@@ -93,7 +99,7 @@ public class RPGLItem extends UUIDTableElement {
      * 	@return the damage associated with the RPGLItem for the given attackType
      */
     public JsonArray getDamage(String attackType) {
-        return this.getJsonObject("damage").getJsonArray(attackType);
+        return this.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).getJsonArray(attackType);
     }
 
     /**

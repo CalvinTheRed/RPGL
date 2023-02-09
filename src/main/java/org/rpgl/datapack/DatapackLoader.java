@@ -15,11 +15,7 @@ import java.util.Objects;
  */
 public final class DatapackLoader {
 
-    public static final Map<String, Datapack> DATAPACKS;
-
-    static {
-        DATAPACKS = new HashMap<>();
-    }
+    public static final Map<String, Datapack> DATAPACKS = new HashMap<>();
 
     /**
      * 	<p><b><i>loadDatapacks</i></b></p>
@@ -57,6 +53,7 @@ public final class DatapackLoader {
      * 	</p>
      *
      *  @param directory a File directory for a datapack
+     *
      *  @throws RuntimeException if pack.info does not exist, is formatted incorrectly, or specifies an unsupported
      */
     static void checkPackInfo(File directory) {

@@ -7,6 +7,11 @@ import org.rpgl.json.JsonObject;
 
 import java.util.HashMap;
 
+/**
+ * This class is used to create transfer objects between a datapack and RPGL for RPGLEffects.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLEffectTO extends UUIDTableElementTO {
 
     // JSON property aliases
@@ -21,6 +26,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     @JsonProperty(TARGET_ALIAS)
     String target;
 
+    // TODO javadoc here
     @SuppressWarnings("unused")
     public RPGLEffectTO() {
         // this constructor is needed for jackson-databind to interface with this class
@@ -38,6 +44,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
         this.target = rpglEffect.getTarget();
     }
 
+    // TODO javadoc here
     public RPGLEffectTemplate toRPGLEffectTemplate() {
         RPGLEffectTemplate rpglEffectTemplate = new RPGLEffectTemplate() {{
             this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
@@ -48,6 +55,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
         return rpglEffectTemplate;
     }
 
+    // TODO javadoc here
     public RPGLEffect toRPGLEffect() {
         RPGLEffect rpglEffect = new RPGLEffect() {{
             this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));

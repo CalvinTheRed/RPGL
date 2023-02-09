@@ -56,6 +56,7 @@ public abstract class Function {
      *
      * 	@param expected     the expected functionId
      *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
+     *
      * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
     void verifyFunction(String expected, JsonObject functionJson) throws FunctionMismatchException {
@@ -80,6 +81,7 @@ public abstract class Function {
      *  @param target       the RPGLObject the Subevent is being directed at
      *  @param subevent     the Subevent being invoked
      *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
+     *
      * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
     public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson) throws FunctionMismatchException;

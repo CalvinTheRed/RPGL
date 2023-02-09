@@ -9,6 +9,11 @@ import org.rpgl.json.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is used to create transfer objects between a datapack and RPGL for RPGLObjects.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLObjectTO extends UUIDTableElementTO {
 
     // JSON property aliases
@@ -35,6 +40,7 @@ public class RPGLObjectTO extends UUIDTableElementTO {
     @JsonProperty(PROFICIENCY_BONUS_ALIAS)
     Integer proficiencyBonus;
 
+    // TODO javadoc here
     @SuppressWarnings("unused")
     public RPGLObjectTO() {
         // this constructor is needed for jackson-databind to interface with this class
@@ -56,6 +62,7 @@ public class RPGLObjectTO extends UUIDTableElementTO {
         this.proficiencyBonus = rpglObject.getInteger(PROFICIENCY_BONUS_ALIAS);
     }
 
+    // TODO javadoc here
     public RPGLObjectTemplate toRPGLObjectTemplate() {
         RPGLObjectTemplate rpglObjectTemplate = new RPGLObjectTemplate() {{
             this.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
@@ -70,6 +77,7 @@ public class RPGLObjectTO extends UUIDTableElementTO {
         return rpglObjectTemplate;
     }
 
+    // TODO javadoc here
     public RPGLObject toRPGLObject() {
         RPGLObject rpglObject = new RPGLObject() {{
             this.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));

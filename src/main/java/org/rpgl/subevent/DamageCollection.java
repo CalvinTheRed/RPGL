@@ -16,9 +16,9 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public abstract class DamageDiceCollection extends Subevent {
+public abstract class DamageCollection extends Subevent {
 
-    public DamageDiceCollection(String subeventId) {
+    public DamageCollection(String subeventId) {
         super(subeventId);
     }
 
@@ -137,11 +137,11 @@ public abstract class DamageDiceCollection extends Subevent {
 
     /**
      * 	<p>
-     * 	<b><i>getDamageDiceCollection</i></b>
+     * 	<b><i>getDamageCollection</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public JsonArray getDamageDiceCollection()
+     * public JsonArray getDamageCollection()
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -150,7 +150,7 @@ public abstract class DamageDiceCollection extends Subevent {
      *
      *  @return an array of typed damage dice and bonuses
      */
-    public JsonArray getDamageDiceCollection() {
+    public JsonArray getDamageCollection() {
         return this.subeventJson.getJsonArray("damage");
     }
 

@@ -19,6 +19,12 @@ import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.Map;
 
+/**
+ * This class represents anythig which might appear on a battle map. Examples of this include buildings, Goblins, and
+ * discarded items.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLObject extends UUIDTableElement {
 
     /**
@@ -175,7 +181,8 @@ public class RPGLObject extends UUIDTableElement {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method returns an array of RPGLEvents which this RPGLObject has access to.
+     * 	This method returns an array of RPGLEvents which this RPGLObject has access to (including any granted from
+     * 	active effects).
      * 	</p>
      *
      *  @return an array of RPGLEvent ID Strings
@@ -196,7 +203,7 @@ public class RPGLObject extends UUIDTableElement {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public Integer getProficiencyBonus(RPGLContext context)
+     * public int getProficiencyBonus(RPGLContext context)
      * 	throws Exception
      * 	</code></pre>
      * 	</p>
@@ -205,10 +212,11 @@ public class RPGLObject extends UUIDTableElement {
      * 	</p>
      *
      *  @param context the RPGLContext in which the RPGLObject's proficiency bonus is determined
+     *  @return this RPGLObject's proficiency bonus
      *
      * 	@throws Exception if an exception occurs.
      */
-    public Integer getProficiencyBonus(RPGLContext context) throws Exception {
+    public int getProficiencyBonus(RPGLContext context) throws Exception {
         CalculateProficiencyModifier calculateProficiencyModifier = new CalculateProficiencyModifier();
         calculateProficiencyModifier.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_proficiency_modifier");
@@ -236,6 +244,7 @@ public class RPGLObject extends UUIDTableElement {
      *
      *  @param context the RPGLContext in which the RPGLObject's proficiency bonus is determined
      *  @param ability the ability score whose modifier will be determined
+     *  @return the modifier of the target ability
      *
      * 	@throws Exception if an exception occurs.
      */
@@ -266,12 +275,13 @@ public class RPGLObject extends UUIDTableElement {
      * 	</p>
      *
      *  @param abilityScore an ability score number
+     *  @return the modifier for the passed score
      */
     static int getAbilityModifierFromAbilityScore(int abilityScore) {
         if (abilityScore < 10) {
             // integer division rounds toward zero, so abilityScore must be
             // adjusted to calculate the correct values for negative modifiers
-            abilityScore --;
+            abilityScore--;
         }
         return (abilityScore - 10) / 2;
     }
@@ -325,6 +335,7 @@ public class RPGLObject extends UUIDTableElement {
      *
      *  @param context  the RPGLContext in which the RPGLObject's weapon proficiency is determined
      *  @param itemUuid the UUID of a RPGLItem object
+     *  @return true if the RPGLObject is proficient with the item corresponding to the passed UUID
      *
      * 	@throws Exception if an exception occurs.
      */
@@ -397,13 +408,13 @@ public class RPGLObject extends UUIDTableElement {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method directly reduces the hit points of the RPGLObject. This is not intended to be called directly.
+     * 	This helper method directly reduces the hit points of the RPGLObject. This is not intended to be called directly.
      * 	</p>
      *
      *  @param amount a quantity of damage
      */
     void reduceHitPoints(int amount) {
-        Map<String, Object> healthData = this.getJsonObject("health_data").asMap();
+        Map<String, Object> healthData = this.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).asMap();
         Integer temporaryHitPoints = (Integer) healthData.get("temporary");
         Integer currentHitPoints = (Integer) healthData.get("current");
         if (amount > temporaryHitPoints) {
@@ -433,6 +444,7 @@ public class RPGLObject extends UUIDTableElement {
      * 	</p>
      *
      *  @param context the RPGLContext in which the RPGLObject's base armor class is determined
+     *  @return the RPGLObject's base armor class
      *
      * 	@throws Exception if an exception occurs.
      */

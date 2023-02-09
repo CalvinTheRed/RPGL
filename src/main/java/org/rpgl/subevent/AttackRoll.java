@@ -257,11 +257,11 @@ public class AttackRoll extends ContestRoll {
      * 	@throws Exception if an exception occurs.
      */
     void resolveDamage(RPGLContext context) throws Exception {
-        BaseDamageDiceCollection baseDamageDiceCollection = this.getBaseDamageDiceCollection(context);
-        TargetDamageDiceCollection targetDamageDiceCollection = this.getTargetDamageDiceCollection(context);
+        BaseDamageCollection baseDamageCollection = this.getBaseDamageCollection(context);
+        TargetDamageCollection targetDamageCollection = this.getTargetDamageCollection(context);
 
-        baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
-        this.subeventJson.putJsonObject("damage", this.getAttackDamage(baseDamageDiceCollection.getDamageDiceCollection(), context));
+        baseDamageCollection.addTypedDamage(targetDamageCollection.getDamageCollection());
+        this.subeventJson.putJsonObject("damage", this.getAttackDamage(baseDamageCollection.getDamageCollection(), context));
         this.deliverDamage(context);
     }
 
@@ -284,25 +284,25 @@ public class AttackRoll extends ContestRoll {
      * 	@throws Exception if an exception occurs.
      */
     void resolveCriticalHitDamage(RPGLContext context) throws Exception {
-        BaseDamageDiceCollection baseDamageDiceCollection = this.getBaseDamageDiceCollection(context);
-        TargetDamageDiceCollection targetDamageDiceCollection = this.getTargetDamageDiceCollection(context);
-        CriticalHitDamageDiceCollection criticalHitDamageDiceCollection = this.getCriticalHitDamageDiceCollection(
-                baseDamageDiceCollection,
-                targetDamageDiceCollection,
+        BaseDamageCollection baseDamageCollection = this.getBaseDamageCollection(context);
+        TargetDamageCollection targetDamageCollection = this.getTargetDamageCollection(context);
+        CriticalHitDamageCollection criticalHitDamageCollection = this.getCriticalHitDamageCollection(
+                baseDamageCollection,
+                targetDamageCollection,
                 context
         );
 
-        this.subeventJson.putJsonObject("damage", this.getAttackDamage(criticalHitDamageDiceCollection.getDamageDiceCollection(), context));
+        this.subeventJson.putJsonObject("damage", this.getAttackDamage(criticalHitDamageCollection.getDamageCollection(), context));
         this.deliverDamage(context);
     }
 
     /**
      * 	<p>
-     * 	<b><i>getBaseDamageDiceCollection</i></b>
+     * 	<b><i>getBaseDamageCollection</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * BaseDamageDiceCollection getBaseDamageDiceCollection(RPGLContext context)
+     * BaseDamageCollection getBaseDamageCollection(RPGLContext context)
      * 	throws Exception
      * 	</code></pre>
      * 	</p>
@@ -315,14 +315,14 @@ public class AttackRoll extends ContestRoll {
      *
      * 	@throws Exception if an exception occurs.
      */
-    BaseDamageDiceCollection getBaseDamageDiceCollection(RPGLContext context) throws Exception {
-        BaseDamageDiceCollection baseDamageDiceCollection = new BaseDamageDiceCollection();
-        baseDamageDiceCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "base_damage_dice_collection");
+    BaseDamageCollection getBaseDamageCollection(RPGLContext context) throws Exception {
+        BaseDamageCollection baseDamageCollection = new BaseDamageCollection();
+        baseDamageCollection.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "base_damage_collection");
             this.putJsonArray("damage", subeventJson.getJsonArray("damage").deepClone());
         }});
-        baseDamageDiceCollection.setSource(this.getSource());
-        baseDamageDiceCollection.prepare(context);
+        baseDamageCollection.setSource(this.getSource());
+        baseDamageCollection.prepare(context);
 
         // If the attack is made with an item, add attack modifier to damage roll
         if (this.subeventJson.getString("weapon") != null) {
@@ -330,16 +330,16 @@ public class AttackRoll extends ContestRoll {
             String attackAbility = weapon.getAttackAbility(this.subeventJson.getString("attack_type"));
             int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityScore(context, attackAbility);
             String damageType = this.subeventJson.getJsonArray("damage").getJsonObject(0).getString("type");
-            baseDamageDiceCollection.addTypedDamage(new JsonArray() {{
+            baseDamageCollection.addTypedDamage(new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("type", damageType);
                     this.putInteger("bonus", attackAbilityModifier);
                 }});
             }});
         }
-        baseDamageDiceCollection.setTarget(this.getTarget());
-        baseDamageDiceCollection.invoke(context);
-        return baseDamageDiceCollection;
+        baseDamageCollection.setTarget(this.getTarget());
+        baseDamageCollection.invoke(context);
+        return baseDamageCollection;
     }
 
     /**
@@ -348,7 +348,7 @@ public class AttackRoll extends ContestRoll {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * TargetDamageDiceCollection getTargetDamageDiceCollection(RPGLContext context)
+     * TargetDamageCollection getTargetDamageCollection(RPGLContext context)
      * 	throws Exception
      * 	</code></pre>
      * 	</p>
@@ -361,26 +361,26 @@ public class AttackRoll extends ContestRoll {
      *
      * 	@throws Exception if an exception occurs.
      */
-    TargetDamageDiceCollection getTargetDamageDiceCollection(RPGLContext context) throws Exception {
-        TargetDamageDiceCollection targetDamageDiceCollection = new TargetDamageDiceCollection();
-        targetDamageDiceCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "target_damage_dice_collection");
+    TargetDamageCollection getTargetDamageCollection(RPGLContext context) throws Exception {
+        TargetDamageCollection targetDamageCollection = new TargetDamageCollection();
+        targetDamageCollection.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "target_damage_collection");
             this.putJsonArray("damage", new JsonArray()); // TODO can this be moved back to constructor or prepare?
         }});
-        targetDamageDiceCollection.prepare(context);
-        targetDamageDiceCollection.invoke(context);
-        return targetDamageDiceCollection;
+        targetDamageCollection.prepare(context);
+        targetDamageCollection.invoke(context);
+        return targetDamageCollection;
     }
 
     /**
      * 	<p>
-     * 	<b><i>getCriticalHitDamageDiceCollection</i></b>
+     * 	<b><i>getCriticalHitDamageCollection</i></b>
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * CriticalHitDamageDiceCollection getCriticalHitDamageDiceCollection(
-     *  BaseDamageDiceCollection baseDamageDiceCollection,
-     *  TargetDamageDiceCollection targetDamageDiceCollection,
+     * CriticalHitDamageCollection getCriticalHitDamageCollection(
+     *  BaseDamageCollection baseDamageCollection,
+     *  TargetDamageCollection targetDamageCollection,
      *  RPGLContext context
      * ) throws Exception
      * 	</code></pre>
@@ -391,29 +391,29 @@ public class AttackRoll extends ContestRoll {
      * 	dice to be applied.
      * 	</p>
      *
-     *  @param baseDamageDiceCollection   the base damage dice collection of the attack
-     *  @param targetDamageDiceCollection the target damage dice collection of the attack
-     *  @param context                    the context this Subevent takes place in
+     *  @param baseDamageCollection   the base damage dice collection of the attack
+     *  @param targetDamageCollection the target damage dice collection of the attack
+     *  @param context                the context this Subevent takes place in
      *  @return the critical hit damage dice collection for the attack
      *
      * 	@throws Exception if an exception occurs.
      */
-    CriticalHitDamageDiceCollection getCriticalHitDamageDiceCollection(BaseDamageDiceCollection baseDamageDiceCollection,
-                                                                       TargetDamageDiceCollection targetDamageDiceCollection,
-                                                                       RPGLContext context) throws Exception {
-        baseDamageDiceCollection.addTypedDamage(targetDamageDiceCollection.getDamageDiceCollection());
+    CriticalHitDamageCollection getCriticalHitDamageCollection(BaseDamageCollection baseDamageCollection,
+                                                                   TargetDamageCollection targetDamageCollection,
+                                                                   RPGLContext context) throws Exception {
+        baseDamageCollection.addTypedDamage(targetDamageCollection.getDamageCollection());
 
-        CriticalHitDamageDiceCollection criticalHitDamageDiceCollection = new CriticalHitDamageDiceCollection();
-        criticalHitDamageDiceCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "critical_hit_damage_dice_collection");
-            this.putJsonArray("damage", baseDamageDiceCollection.getDamageDiceCollection().deepClone());
+        CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
+        criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "critical_hit_damage_collection");
+            this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
         }});
-        criticalHitDamageDiceCollection.setSource(this.getSource());
-        criticalHitDamageDiceCollection.prepare(context);
-        criticalHitDamageDiceCollection.setTarget(this.getTarget());
-        criticalHitDamageDiceCollection.doubleDice();
-        criticalHitDamageDiceCollection.invoke(context);
-        return criticalHitDamageDiceCollection;
+        criticalHitDamageCollection.setSource(this.getSource());
+        criticalHitDamageCollection.prepare(context);
+        criticalHitDamageCollection.setTarget(this.getTarget());
+        criticalHitDamageCollection.doubleDice();
+        criticalHitDamageCollection.invoke(context);
+        return criticalHitDamageCollection;
     }
 
     /**
@@ -422,7 +422,7 @@ public class AttackRoll extends ContestRoll {
      * 	</p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * JsonObject getAttackDamage(JsonArray damageDiceCollection, RPGLContext context)
+     * JsonObject getAttackDamage(JsonArray damageCollection, RPGLContext context)
      * 	throws Exception
      * 	</code></pre>
      * 	</p>
@@ -431,17 +431,17 @@ public class AttackRoll extends ContestRoll {
      * 	damage types and amounts (individual dice rolls are not preserved).
      * 	</p>
      *
-     *  @param damageDiceCollection a collection of typed damage dice and bonuses
-     *  @param context              the context this Subevent takes place in
+     *  @param damageCollection a collection of typed damage dice and bonuses
+     *  @param context          the context this Subevent takes place in
      *  @return the attack's final damage values by type
      *
      * 	@throws Exception if an exception occurs.
      */
-    JsonObject getAttackDamage(JsonArray damageDiceCollection, RPGLContext context) throws Exception {
+    JsonObject getAttackDamage(JsonArray damageCollection, RPGLContext context) throws Exception {
         AttackDamageRoll attackDamageRoll = new AttackDamageRoll();
         attackDamageRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "attack_damage_roll");
-            this.putJsonArray("damage", damageDiceCollection.deepClone());
+            this.putJsonArray("damage", damageCollection.deepClone());
         }});
         attackDamageRoll.setSource(this.getSource());
         attackDamageRoll.prepare(context);

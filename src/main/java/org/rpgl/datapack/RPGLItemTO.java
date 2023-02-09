@@ -9,6 +9,11 @@ import org.rpgl.json.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is used to create transfer objects between a datapack and RPGL for RPGLItems.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLItemTO extends UUIDTableElementTO {
 
     // universal item property aliases
@@ -68,6 +73,7 @@ public class RPGLItemTO extends UUIDTableElementTO {
     @JsonProperty(ARMOR_CLASS_BONUS_ALIAS)
     Integer armorClassBonus;
 
+    // TODO javadoc here
     @SuppressWarnings("unused")
     public RPGLItemTO() {
         // this constructor is needed for jackson-databind to interface with this class
@@ -95,6 +101,7 @@ public class RPGLItemTO extends UUIDTableElementTO {
         this.armorClassBonus = rpglItem.getInteger(ARMOR_CLASS_BONUS_ALIAS);
     }
 
+    // TODO javadoc here
     public RPGLItemTemplate toRPGLItemTemplate() {
         RPGLItemTemplate rpglItemTemplate = new RPGLItemTemplate() {{
             this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
@@ -114,6 +121,7 @@ public class RPGLItemTO extends UUIDTableElementTO {
         return rpglItemTemplate;
     }
 
+    // TODO javadoc here
     public RPGLItem toRPGLItem() {
         RPGLItem rpglItem = new RPGLItem() {{
             this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));

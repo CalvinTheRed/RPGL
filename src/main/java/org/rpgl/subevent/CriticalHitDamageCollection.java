@@ -13,15 +13,15 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
+public class CriticalHitDamageCollection extends DamageCollection {
 
-    public CriticalHitDamageDiceCollection() {
-        super("critical_hit_damage_dice_collection");
+    public CriticalHitDamageCollection() {
+        super("critical_hit_damage_collection");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new CriticalHitDamageDiceCollection();
+        Subevent clone = new CriticalHitDamageCollection();
         clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -29,7 +29,7 @@ public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new CriticalHitDamageDiceCollection();
+        Subevent clone = new CriticalHitDamageCollection();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -50,9 +50,9 @@ public class CriticalHitDamageDiceCollection extends DamageDiceCollection {
      * 	</p>
      */
     void doubleDice() {
-        JsonArray damageDiceCollection = this.getDamageDiceCollection();
-        for (int i = 0; i < damageDiceCollection.size(); i++) {
-            JsonArray typedDamageDice = damageDiceCollection.getJsonObject(i).getJsonArray("dice");
+        JsonArray damageCollection = this.getDamageCollection();
+        for (int i = 0; i < damageCollection.size(); i++) {
+            JsonArray typedDamageDice = damageCollection.getJsonObject(i).getJsonArray("dice");
             typedDamageDice.asList().addAll(typedDamageDice.deepClone().asList());
         }
     }

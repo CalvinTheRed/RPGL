@@ -12,15 +12,15 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class TargetDamageDiceCollection extends DamageDiceCollection {
+public class TargetDamageCollection extends DamageCollection {
 
-    public TargetDamageDiceCollection() {
-        super("target_damage_dice_collection");
+    public TargetDamageCollection() {
+        super("target_damage_collection");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new TargetDamageDiceCollection();
+        Subevent clone = new TargetDamageCollection();
         clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -28,7 +28,7 @@ public class TargetDamageDiceCollection extends DamageDiceCollection {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new TargetDamageDiceCollection();
+        Subevent clone = new TargetDamageCollection();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;

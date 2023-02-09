@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class is used to contain a "template" to be used in the creation of new RPGLObject objects. Data stored in this
+ * object is copied and then processed to create a specific RPGLObject defined somewhere in a datapack.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLObjectTemplate extends JsonObject {
 
     /**
@@ -67,6 +73,7 @@ public class RPGLObjectTemplate extends JsonObject {
         object.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effectUuidArray);
     }
 
+    // TODO javadoc here
     static void processEquippedItems(RPGLObject object) {
         JsonObject equippedItemIds = object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
         JsonArray inventoryUuids = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
@@ -80,6 +87,7 @@ public class RPGLObjectTemplate extends JsonObject {
         object.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItemUuids);
     }
 
+    // TODO javadoc here
     static void processInventory(RPGLObject object) {
         JsonArray inventoryItemIds = object.removeJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
         JsonArray inventoryItemUuids = new JsonArray();
@@ -92,6 +100,7 @@ public class RPGLObjectTemplate extends JsonObject {
         object.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventoryItemUuids);
     }
 
+    // TODO javadoc here
     static void processHealthData(RPGLObject object) {
         JsonObject healthData = object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS);
         JsonArray templateHitDice = healthData.removeJsonArray("hit_dice");

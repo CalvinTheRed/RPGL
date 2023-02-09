@@ -5,6 +5,12 @@ import org.rpgl.json.JsonObject;
 
 import java.util.HashMap;
 
+/**
+ * This class is used to create transfer objects between a datapack and RPGL. This is the base class for all transfer
+ * objects utilized by RPGL.
+ *
+ * @author Calvin Withun
+ */
 public class DatapackContentTO {
 
     // JSON property aliases
@@ -22,10 +28,12 @@ public class DatapackContentTO {
     @JsonProperty(ID_ALIAS)
     String id;
 
+    // TODO javadoc here
     public DatapackContentTO() {
 
     }
 
+    // TODO javadoc here
     public DatapackContentTO(JsonObject rpglObject) {
         this.metadata = rpglObject.getJsonObject(METADATA_ALIAS).asMap();
         this.name = rpglObject.getString(NAME_ALIAS);
@@ -33,6 +41,7 @@ public class DatapackContentTO {
         this.id = rpglObject.getString(ID_ALIAS);
     }
 
+    // TODO javadoc here
     protected JsonObject getTemplateData() {
         return new JsonObject() {{
             this.putJsonObject(METADATA_ALIAS, new JsonObject(metadata));

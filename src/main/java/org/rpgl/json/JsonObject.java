@@ -10,7 +10,7 @@ import java.util.Objects;
  * This class represents a JSON object and provides several utility methods which make it easier to interface with that
  * data.
  *
- * @author Calvin Withun
+ * @author Calvin Withun TODO javadoc this class
  */
 public class JsonObject {
 

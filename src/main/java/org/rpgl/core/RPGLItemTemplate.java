@@ -8,8 +8,17 @@ import org.rpgl.uuidtable.UUIDTable;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class is used to contain a "template" to be used in the creation of new RPGLItem objects. Data stored in this
+ * object is copied and then processed to create a specific RPGLItem defined somewhere in a datapack.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLItemTemplate extends JsonObject {
 
+    /**
+     * This object represents the damage dealt by an improvised weapon for an arbitrary attack type.
+     */
     private static final JsonArray DEFAULT_TEMPLATE_ITEM_DAMAGE = new JsonArray() {{
         this.addJsonObject(new JsonObject() {{
             this.putString("type", "bludgeoning");
@@ -24,6 +33,9 @@ public class RPGLItemTemplate extends JsonObject {
         }});
     }};
 
+    /**
+     * This object represents the range of an improvised weapon when it is thrown.
+     */
     private static final JsonObject DEFAULT_RANGE = new JsonObject() {{
         this.putInteger("normal", 20);
         this.putInteger("long", 60);
@@ -62,6 +74,7 @@ public class RPGLItemTemplate extends JsonObject {
         return item;
     }
 
+    // TODO javadoc here
     static void processImprovisedTags(RPGLItem item) {
         JsonArray weaponProperties = item.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS);
         if (!weaponProperties.asList().contains("melee")) {
@@ -98,6 +111,7 @@ public class RPGLItemTemplate extends JsonObject {
         item.putJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS, equippedEffectsUuidArray);
     }
 
+    // TODO javadoc here
     static void setDefaultItemDamage(RPGLItem item) {
         JsonObject damage = new JsonObject();
         damage.join(Objects.requireNonNullElse(item.removeJsonObject(RPGLItemTO.DAMAGE_ALIAS), new JsonObject()));
@@ -118,6 +132,7 @@ public class RPGLItemTemplate extends JsonObject {
         item.putJsonObject(RPGLItemTO.DAMAGE_ALIAS, damage);
     }
 
+    // TODO javadoc here
     static void processItemDamage(RPGLItem item) {
         JsonObject damage = item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS);
         for (Map.Entry<String, ?> damageObjectEntry : damage.asMap().entrySet()) {

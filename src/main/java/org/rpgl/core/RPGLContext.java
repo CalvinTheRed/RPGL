@@ -10,13 +10,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class represents the context in which actions take place in this library. This class can most easily be thought
- * of as a RPGLObject tracker for all RPGLObjects involved in the same fight, but this would also be used in non-combat
- * encounters in order to resolve certain Subevents which don't require a fight to be invoked.
+ * This class represents the context in which actions take place in this library. Typically, there will exist one
+ * RPGLContext object for every encounter which takes place in RPGL, though if combat spans a large area, it may make
+ * more sense to break it into several lighter RPGLContext objects. Conversely, if there are many light RPGLContexts
+ * covering a large area, but an RPGLEvent is invoked which covers area delegated to distinct RPGLContexts, it would
+ * make sense to create a temporary RPGLContext to represent the union of several smaller RPGLContext objects.
+ *
+ * @author Calvin Withun
  */
 public class RPGLContext {
 
-    private final Map<String, RPGLObject> contextObjects;
+    private final Map<String, RPGLObject> contextObjects = new HashMap<>();
 
     /**
      * 	<p><b><i>RPGLContext</i></b></p>
@@ -30,7 +34,7 @@ public class RPGLContext {
      * 	</p>
      */
     public RPGLContext() {
-        contextObjects = new HashMap<>();
+
     }
 
     /**
@@ -48,7 +52,6 @@ public class RPGLContext {
      *  @param objectUuids a list of UUID's corresponding to RPGLObjects.
      */
     public RPGLContext(List<Object> objectUuids) {
-        contextObjects = new HashMap<>();
         if (objectUuids != null) {
             for (Object objectUuidElement : objectUuids) {
                 String objectUuid = (String) objectUuidElement;
@@ -99,7 +102,7 @@ public class RPGLContext {
      * 	<p><b><i>processSubevent</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void processSubevent(Subevent subevent)
+     * public void processSubevent(Subevent subevent) TODO throws here
      * 	</code></pre>
      * 	</p>
      * 	<p>

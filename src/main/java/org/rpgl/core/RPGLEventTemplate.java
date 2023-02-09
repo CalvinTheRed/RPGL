@@ -6,6 +6,12 @@ import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
 
+/**
+ * This class is used to contain a "template" to be used in the creation of new RPGLEvent objects. Data stored in this
+ * object is copied and then processed to create a specific RPGLEvent defined somewhere in a datapack.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLEventTemplate extends JsonObject {
 
     /**
@@ -29,6 +35,7 @@ public class RPGLEventTemplate extends JsonObject {
         return event ;
     }
 
+    // TODO javadoc here
     static void processSubeventDamage(RPGLEvent event) {
         JsonArray subevents = event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
         for (int i = 0; i < subevents.size(); i++) {

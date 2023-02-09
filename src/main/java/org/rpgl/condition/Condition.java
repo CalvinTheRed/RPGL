@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.Subevent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +62,7 @@ public abstract class Condition {
      *
      * 	@param expected      the expected conditionId
      *  @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
+     *
      * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
     void verifyCondition(String expected, JsonObject conditionJson) throws ConditionMismatchException {
@@ -73,7 +75,7 @@ public abstract class Condition {
      * 	<p><b><i>evaluate</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public abstract boolean evaluate(RPGLObject source, RPGLObject target, Map&lt;String, Object&gt; conditionJson)
+     * public abstract boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson)
      * 	throws ConditionMismatchException
      * 	</code></pre>
      * 	</p>
@@ -83,10 +85,12 @@ public abstract class Condition {
      *
      * 	@param source        the RPGLObject which invoked a Subevent
      *  @param target        the RPGLObject the Subevent is being directed at
+     *  @param subevent      the Subevent being invoked
      *  @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      * 	@return the result of the evaluation
+     *
      * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    public abstract boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException;
+    public abstract boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws ConditionMismatchException;
 
 }

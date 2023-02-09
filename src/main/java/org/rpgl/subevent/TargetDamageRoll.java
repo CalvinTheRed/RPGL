@@ -3,7 +3,7 @@ package org.rpgl.subevent;
 import org.rpgl.json.JsonObject;
 
 /**
- * This Subevent is dedicated to rolling damage dice collected by a <code>TargetDamageDiceCollection</code> Subevent.
+ * This Subevent is dedicated to rolling damage dice collected by a <code>TargetDamageCollection</code> Subevent.
  * <br>
  * <br>
  * Source: an RPGLObject making an attack

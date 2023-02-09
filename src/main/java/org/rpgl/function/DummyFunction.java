@@ -5,6 +5,12 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
+/**
+ * This class is a dummy function only intended to be used during testing. Its only behavior is to increment a static
+ * counter variable to verify it executed at all.
+ *
+ * @author Calvin Withun
+ */
 public class DummyFunction extends Function {
 
     public static int counter = 0;
@@ -15,6 +21,7 @@ public class DummyFunction extends Function {
         DummyFunction.counter++;
     }
 
+    // TODO javadoc here
     public static void resetCounter() {
         DummyFunction.counter = 0;
     }
