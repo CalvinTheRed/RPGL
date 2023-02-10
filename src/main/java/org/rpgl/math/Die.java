@@ -14,7 +14,7 @@ public final class Die {
 
     private static boolean testing = false;
 
-    // TODO javadoc here. Also... consider having "determined" be an array for dice rolling, which is read as a FIFO queue
+    // TODO javadoc here. Also... consider having "determined" be an array for dice rolling, which is read as a FIFO queue. That way, you don't need all of these arbitrary reroll keys hard-coded in the code...
     public static int roll(int upperBound, Integer determinedValue) {
         if (testing && determinedValue != null) {
             return determinedValue;

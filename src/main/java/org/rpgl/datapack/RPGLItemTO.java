@@ -73,7 +73,9 @@ public class RPGLItemTO extends UUIDTableElementTO {
     @JsonProperty(ARMOR_CLASS_BONUS_ALIAS)
     Integer armorClassBonus;
 
-    // TODO javadoc here
+    /**
+     * Default constructor for RPGLItemTO class.
+     */
     @SuppressWarnings("unused")
     public RPGLItemTO() {
         // this constructor is needed for jackson-databind to interface with this class
@@ -101,7 +103,19 @@ public class RPGLItemTO extends UUIDTableElementTO {
         this.armorClassBonus = rpglItem.getInteger(ARMOR_CLASS_BONUS_ALIAS);
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>toRPGLItemTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLItemTemplate toRPGLItemTemplate()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method translates the stored data into a RPGLItemTemplate object.
+     * 	</p>
+     *
+     * 	@return a RPGLItemTemplate
+     */
     public RPGLItemTemplate toRPGLItemTemplate() {
         RPGLItemTemplate rpglItemTemplate = new RPGLItemTemplate() {{
             this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
@@ -121,7 +135,19 @@ public class RPGLItemTO extends UUIDTableElementTO {
         return rpglItemTemplate;
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>toRPGLItem</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLItem toRPGLItem()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method translates the stored data into a RPGLItem object.
+     * 	</p>
+     *
+     * 	@return a RPGLItem
+     */
     public RPGLItem toRPGLItem() {
         RPGLItem rpglItem = new RPGLItem() {{
             this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
@@ -139,6 +165,7 @@ public class RPGLItemTO extends UUIDTableElementTO {
             this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
         }};
         rpglItem.join(super.getTemplateData());
+        rpglItem.join(super.getUUIDTableElementData());
         return rpglItem;
     }
 

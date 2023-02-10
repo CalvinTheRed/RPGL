@@ -26,7 +26,9 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     @JsonProperty(TARGET_ALIAS)
     String target;
 
-    // TODO javadoc here
+    /**
+     * Default constructor for RPGLEffectTO class.
+     */
     @SuppressWarnings("unused")
     public RPGLEffectTO() {
         // this constructor is needed for jackson-databind to interface with this class
@@ -44,7 +46,19 @@ public class RPGLEffectTO extends UUIDTableElementTO {
         this.target = rpglEffect.getTarget();
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>toRPGLEffectTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEffectTemplate toRPGLEffectTemplate()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method translates the stored data into a RPGLEffectTemplate object.
+     * 	</p>
+     *
+     * 	@return a RPGLEffectTemplate
+     */
     public RPGLEffectTemplate toRPGLEffectTemplate() {
         RPGLEffectTemplate rpglEffectTemplate = new RPGLEffectTemplate() {{
             this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
@@ -55,7 +69,19 @@ public class RPGLEffectTO extends UUIDTableElementTO {
         return rpglEffectTemplate;
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>toRPGLEffect</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEffect toRPGLEffect()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method translates the stored data into a RPGLEffect object.
+     * 	</p>
+     *
+     * 	@return a RPGLEffect
+     */
     public RPGLEffect toRPGLEffect() {
         RPGLEffect rpglEffect = new RPGLEffect() {{
             this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
@@ -63,6 +89,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
             this.setTarget(target);
         }};
         rpglEffect.join(super.getTemplateData());
+        rpglEffect.join(super.getUUIDTableElementData());
         return rpglEffect;
     }
 

@@ -28,20 +28,39 @@ public class DatapackContentTO {
     @JsonProperty(ID_ALIAS)
     String id;
 
-    // TODO javadoc here
+    /**
+     * Default constructor for DatapackContentTO class.
+     */
     public DatapackContentTO() {
-
+        // this constructor is needed for jackson-databind to interface with this class
     }
 
-    // TODO javadoc here
-    public DatapackContentTO(JsonObject rpglObject) {
-        this.metadata = rpglObject.getJsonObject(METADATA_ALIAS).asMap();
-        this.name = rpglObject.getString(NAME_ALIAS);
-        this.description = rpglObject.getString(DESCRIPTION_ALIAS);
-        this.id = rpglObject.getString(ID_ALIAS);
+    /**
+     * Constructor to be used when storing data from a fully instantiated object. Intended to be used for saving data.
+     *
+     * @param jsonObject a fully instantiated object
+     */
+    public DatapackContentTO(JsonObject jsonObject) {
+        this.metadata = jsonObject.getJsonObject(METADATA_ALIAS).asMap();
+        this.name = jsonObject.getString(NAME_ALIAS);
+        this.description = jsonObject.getString(DESCRIPTION_ALIAS);
+        this.id = jsonObject.getString(ID_ALIAS);
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>getTemplateData</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public JsonObject getTemplateData()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns json data representing the data stored by this object relevant to universally shared
+     * 	datapack template data.
+     * 	</p>
+     *
+     * 	@return a JsonObject
+     */
     protected JsonObject getTemplateData() {
         return new JsonObject() {{
             this.putJsonObject(METADATA_ALIAS, new JsonObject(metadata));

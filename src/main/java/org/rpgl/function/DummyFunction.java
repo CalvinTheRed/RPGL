@@ -21,7 +21,9 @@ public class DummyFunction extends Function {
         DummyFunction.counter++;
     }
 
-    // TODO javadoc here
+    /**
+     * Reset the testing counter for this class.
+     */
     public static void resetCounter() {
         DummyFunction.counter = 0;
     }

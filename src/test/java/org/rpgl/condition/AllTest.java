@@ -36,7 +36,7 @@ public class AllTest {
         }};
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson),
+                () -> condition.evaluate(null, null, null, conditionJson),
                 "All condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -54,7 +54,7 @@ public class AllTest {
             this.putJsonArray("conditions", new JsonArray());
         }};
 
-        assertTrue(condition.evaluate(null, null, conditionJson),
+        assertTrue(condition.evaluate(null, null, null, conditionJson),
                 "All condition should evaluate true when evaluated without sub-conditions"
         );
     }
@@ -82,7 +82,7 @@ public class AllTest {
             }});
         }};
 
-        assertTrue(condition.evaluate(null, null, conditionJson),
+        assertTrue(condition.evaluate(null, null, null, conditionJson),
                 "All condition should evaluate true for 2 true conditions"
         );
     }
@@ -110,7 +110,7 @@ public class AllTest {
             }});
         }};
 
-        assertFalse(condition.evaluate(null, null, conditionJson),
+        assertFalse(condition.evaluate(null, null, null, conditionJson),
                 "All condition should evaluate false for 1 true and 1 false condition"
         );
     }
@@ -138,7 +138,7 @@ public class AllTest {
             }});
         }};
 
-        assertFalse(condition.evaluate(null, null, conditionJson),
+        assertFalse(condition.evaluate(null, null, null, conditionJson),
                 "All condition should evaluate false for 2 false conditions"
         );
     }

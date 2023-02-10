@@ -25,7 +25,8 @@ public class RPGLEffect extends UUIDTableElement {
      * 	<p><b><i>processSubevent</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public boolean processSubevent(Subevent subevent) TODO throws here
+     * public boolean processSubevent(Subevent subevent)
+     * 	throws ConditionMismatchException, FunctionMismatchException
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -99,7 +100,7 @@ public class RPGLEffect extends UUIDTableElement {
      * 	<p><b><i>getSource</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void getSource()
+     * public String getSource()
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -116,7 +117,7 @@ public class RPGLEffect extends UUIDTableElement {
      * 	<p><b><i>getTarget</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void getTarget()
+     * public String getTarget()
      * 	</code></pre>
      * 	</p>
      * 	<p>
@@ -133,11 +134,12 @@ public class RPGLEffect extends UUIDTableElement {
      * 	<p><b><i>evaluateConditions</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * static boolean evaluateConditions(RPGLObject source, RPGLObject target, Subevent subevent, JsonArray conditions) TODO throws here
+     * static boolean evaluateConditions(RPGLObject source, RPGLObject target, Subevent subevent, JsonArray conditions)
+     * 	throws ConditionMismatchException
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method evaluates a given collection of Conditions on given RPGLObject sources and targets.
+     * 	This method evaluates a given collection of Conditions on a given RPGLObject source and target.
      * 	</p>
      *
      *  @param source     the RPGLObject which invoked a Subevent
@@ -160,10 +162,11 @@ public class RPGLEffect extends UUIDTableElement {
     }
 
     /**
-     * 	<p><b><i>executeFunctions</i></b></p>
+     * 	<p><b><i>evaluate</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * static void executeFunctions(RPGLObject source, RPGLObject target, JsonArray functions) TODO throws here
+     * static void executeFunctions(RPGLObject source, RPGLObject target, Subevent subevent, JsonArray functions)
+     * 	throws FunctionMismatchException
      * 	</code></pre>
      * 	</p>
      * 	<p>

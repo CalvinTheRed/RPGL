@@ -34,7 +34,7 @@ public class TrueTest {
         }};
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson),
+                () -> condition.evaluate(null, null, null, conditionJson),
                 "True condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -50,7 +50,7 @@ public class TrueTest {
             this.putString("condition", "true");
         }};
 
-        assertTrue(condition.evaluate(null, null, conditionJson),
+        assertTrue(condition.evaluate(null, null, null, conditionJson),
                 "True condition should always evaluate true"
         );
     }

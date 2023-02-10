@@ -35,7 +35,20 @@ public class RPGLEventTemplate extends JsonObject {
         return event ;
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>processSubeventDamage</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static void processSubeventDamage(RPGLEvent event)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This helper method unpacks the condensed representation of damage dice in a RPGLEventTemplate into multiple dice
+     * 	objects in accordance with the <code>count</code> field.
+     * 	</p>
+     *
+     * 	@param event a RPGLEvent being created by this object
+     */
     static void processSubeventDamage(RPGLEvent event) {
         JsonArray subevents = event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
         for (int i = 0; i < subevents.size(); i++) {

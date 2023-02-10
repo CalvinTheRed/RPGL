@@ -12,7 +12,6 @@ import java.util.Objects;
  * Source: an RPGLObject preparing to deal damage
  * <br>
  * Target: an RPGLObject which will later suffer the collected damage
- * //TODO change damage dice collections to just damage collections... makes more sense since it includes bonuses as well
  *
  * @author Calvin Withun
  */

@@ -40,7 +40,9 @@ public class RPGLObjectTO extends UUIDTableElementTO {
     @JsonProperty(PROFICIENCY_BONUS_ALIAS)
     Integer proficiencyBonus;
 
-    // TODO javadoc here
+    /**
+     * Default constructor for RPGLObjectTO class.
+     */
     @SuppressWarnings("unused")
     public RPGLObjectTO() {
         // this constructor is needed for jackson-databind to interface with this class
@@ -62,7 +64,19 @@ public class RPGLObjectTO extends UUIDTableElementTO {
         this.proficiencyBonus = rpglObject.getInteger(PROFICIENCY_BONUS_ALIAS);
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>toRPGLObjectTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLObjectTemplate toRPGLObjectTemplate()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method translates the stored data into a RPGLObjectTemplate object.
+     * 	</p>
+     *
+     * 	@return a RPGLObjectTemplate
+     */
     public RPGLObjectTemplate toRPGLObjectTemplate() {
         RPGLObjectTemplate rpglObjectTemplate = new RPGLObjectTemplate() {{
             this.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
@@ -77,7 +91,19 @@ public class RPGLObjectTO extends UUIDTableElementTO {
         return rpglObjectTemplate;
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>toRPGLObject</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLObject toRPGLObject()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method translates the stored data into a RPGLObject object.
+     * 	</p>
+     *
+     * 	@return a RPGLObject
+     */
     public RPGLObject toRPGLObject() {
         RPGLObject rpglObject = new RPGLObject() {{
             this.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
@@ -89,6 +115,7 @@ public class RPGLObjectTO extends UUIDTableElementTO {
             this.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
         }};
         rpglObject.join(super.getTemplateData());
+        rpglObject.join(super.getUUIDTableElementData());
         return rpglObject;
     }
 

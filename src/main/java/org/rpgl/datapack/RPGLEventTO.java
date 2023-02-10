@@ -1,7 +1,6 @@
 package org.rpgl.datapack;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLEventTemplate;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -25,13 +24,27 @@ public class RPGLEventTO extends UUIDTableElementTO {
     @JsonProperty(SUBEVENTS_ALIAS)
     ArrayList<Object> subevents;
 
-    // TODO javadoc here
+    /**
+     * Default constructor for RPGLEventTO class.
+     */
     @SuppressWarnings("unused")
     public RPGLEventTO() {
         // this constructor is needed for jackson-databind to interface with this class
     }
 
-    // TODO javadoc here
+    /**
+     * 	<p><b><i>toRPGLEventTemplate</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public RPGLEventTemplate toRPGLEventTemplate()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method translates the stored data into a RPGLEventTemplate object.
+     * 	</p>
+     *
+     * 	@return a RPGLEventTemplate
+     */
     public RPGLEventTemplate toRPGLEventTemplate() {
         RPGLEventTemplate rpglEventTemplate = new RPGLEventTemplate() {{
             this.putJsonObject(AREA_OF_EFFECT_ALIAS, new JsonObject(areaOfEffect));
@@ -39,16 +52,6 @@ public class RPGLEventTO extends UUIDTableElementTO {
         }};
         rpglEventTemplate.join(super.getTemplateData());
         return rpglEventTemplate;
-    }
-
-    // TODO javadoc here
-    public RPGLEvent toRPGLEvent() {
-        RPGLEvent rpglEvent = new RPGLEvent() {{
-            this.putJsonObject(AREA_OF_EFFECT_ALIAS, new JsonObject(areaOfEffect));
-            this.putJsonArray(SUBEVENTS_ALIAS, new JsonArray(subevents));
-        }};
-        rpglEvent.join(super.getTemplateData());
-        return rpglEvent;
     }
 
 }

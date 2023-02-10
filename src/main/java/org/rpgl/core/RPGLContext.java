@@ -102,7 +102,8 @@ public class RPGLContext {
      * 	<p><b><i>processSubevent</i></b></p>
      * 	<p>
      * 	<pre class="tab"><code>
-     * public void processSubevent(Subevent subevent) TODO throws here
+     * public void processSubevent(Subevent subevent)
+     * 	throws ConditionMismatchException, FunctionMismatchException
      * 	</code></pre>
      * 	</p>
      * 	<p>
