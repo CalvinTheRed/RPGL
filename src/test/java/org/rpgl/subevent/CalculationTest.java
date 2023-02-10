@@ -10,6 +10,11 @@ import org.rpgl.json.JsonObject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+/**
+ * Testing class for abstract class Calculation.
+ *
+ * @author Calvin Withun
+ */
 public class CalculationTest {
 
     private Calculation calculation;

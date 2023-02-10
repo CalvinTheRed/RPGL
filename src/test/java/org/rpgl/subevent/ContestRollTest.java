@@ -11,6 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for abstract class ContestRoll.
+ *
+ * @author Calvin Withun
+ */
 public class ContestRollTest {
 
     private ContestRoll contestRoll;
@@ -22,7 +27,7 @@ public class ContestRollTest {
 
     @BeforeEach
     void beforeEach() {
-        // create an anonymous class for Calculation for the purpose of running tests on it
+        // create an anonymous class for ContestRoll for the purpose of running tests on it
         contestRoll = new ContestRoll("contest_roll") {
 
             @Override

@@ -40,8 +40,8 @@ public abstract class DamageCollection extends Subevent {
     public boolean includesDamageType(String damageType) {
         JsonArray damageDiceArray = this.subeventJson.getJsonArray("damage");
         if (damageDiceArray != null) {
-            for (Object damageDiceElement : damageDiceArray.asList()) {
-                JsonObject damageDice = (JsonObject) damageDiceElement;
+            for (int i = 0; i < damageDiceArray.size(); i++) {
+                JsonObject damageDice = damageDiceArray.getJsonObject(i);
                 if (damageDice.getString("type").equals(damageType)) {
                     return true;
                 }
