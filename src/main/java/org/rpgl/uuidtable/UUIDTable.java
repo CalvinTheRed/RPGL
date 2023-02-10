@@ -19,79 +19,135 @@ public final class UUIDTable {
     private static final Map<String, UUIDTableElement> UUID_TABLE = new ConcurrentHashMap<>();
 
     /**
-     * This method assigns a UUIDTableElement a UUID and registers it with the UUIDTable. If the passed object already
-     * has a UUID, it is registered under that value. This method is intended to be used to register RPGLEffects,
-     * RPGLItems, and RPGLObjects. This method may cause problems if an object already has a UUID which has already been
-     * assigned to a different object.
+     * 	<p><b><i>register</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * static void register(UUIDTableElement uuidTableElement)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method assigns a UUIDTableElement a UUID and registers it with the UUIDTable. If the passed object already
+     *  has a UUID, it is registered under that value. This method is intended to be used to register RPGLEffects,
+     *  RPGLItems, and RPGLObjects. This method may cause problems if an object already has a UUID which has already been
+     *  assigned to a different object.
+     * 	</p>
      *
-     * @param data the UUIDTableElement to be registered
+     * 	@param uuidTableElement a UUIDTableElement
      */
-    public static void register(UUIDTableElement data) {
-        String uuid = data.getUuid();
+    public static void register(UUIDTableElement uuidTableElement) {
+        String uuid = uuidTableElement.getUuid();
         while (uuid == null || UUID_TABLE.containsKey(uuid)) {
             uuid = UUID.randomUUID().toString();
         }
-        UUID_TABLE.put(uuid, data);
-        data.setUuid(uuid);
+        UUID_TABLE.put(uuid, uuidTableElement);
+        uuidTableElement.setUuid(uuid);
     }
 
     /**
-     * This method deletes a UUID from its associated UUIDTableElement (if it exists) and removes the UUID from the
-     * UUIDTable.
+     * 	<p><b><i>unregister</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static UUIDTableElement unregister(String uuid)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method deletes a UUID from its associated UUIDTableElement (if it exists) and removes the UUID from the
+     *  UUIDTable.
+     * 	</p>
      *
-     * @param uuid the UUID of the UUIDTableElement to be unregistered
+     * 	@param uuid the UUID of a registered UUIDTableElement
      */
     public static UUIDTableElement unregister(String uuid) {
-        UUIDTableElement data = UUID_TABLE.remove(uuid);
-        if (data != null) {
-            data.deleteUuid();
+        UUIDTableElement uuidTableElement = UUID_TABLE.remove(uuid);
+        if (uuidTableElement != null) {
+            uuidTableElement.deleteUuid();
         }
-        return data;
+        return uuidTableElement;
     }
 
     /**
-     * This method clears the UUIDTable. It should only be used during testing.
-     * <br><br>
-     * NOTE: this method does not remove the UUID from any of the associated JsonObjects.
+     * 	<p><b><i>clear</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static void clear()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method clears the UUIDTable. Note that this method does not recursively remove references between
+     * 	UUIDTableElement objects, so attempting to use or re-register some but not all of the unregistered
+     * 	UUIDTableElement objects may result in errors.
+     * 	</p>
      */
     public static void clear() {
         UUID_TABLE.clear();
     }
 
     /**
-     * This method returns the RPGLEffect associated with a UUID.
+     * 	<p><b><i>getEffect</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static RPGLEffect getEffect(String uuid)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns a RPGLEffect object with the passed uuid.
+     * 	</p>
      *
-     * @param uuid the UUID of a RPGLEffect
-     * @return an RPGLEffect
+     *  @param uuid the UUID of a RPGLEffect
+     *  @return a RPGLEffect
      */
     public static RPGLEffect getEffect(String uuid) {
         return (RPGLEffect) UUID_TABLE.get(uuid);
     }
 
     /**
-     * This method returns the RPGLItem associated with a UUID.
+     * 	<p><b><i>getItem</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static RPGLItem getItem(String uuid)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns a RPGLItem object with the passed uuid.
+     * 	</p>
      *
-     * @param uuid the UUID of a RPGLItem
-     * @return an RPGLItem
+     *  @param uuid the UUID of a RPGLItem
+     *  @return a RPGLItem
      */
     public static RPGLItem getItem(String uuid) {
         return (RPGLItem) UUID_TABLE.get(uuid);
     }
 
     /**
-     * This method returns the RPGLObject associated with a UUID.
+     * 	<p><b><i>getObject</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static RPGLObject getObject(String uuid)
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns a RPGLObject object with the passed uuid.
+     * 	</p>
      *
-     * @param uuid the UUID of a RPGLObject
-     * @return an RPGLObject
+     *  @param uuid the UUID of a RPGLObject
+     *  @return a RPGLObject
      */
     public static RPGLObject getObject(String uuid) {
         return (RPGLObject) UUID_TABLE.get(uuid);
     }
 
     /**
-     * This method returns the number of objects being tracked in UUIDTable.
+     * 	<p><b><i>size</i></b></p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public static int size()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns the number of UUIDTableElement objects stored in UUIDTable.
+     * 	</p>
      *
-     * @return a number
+     *  @return the number of UUIDTableElement objects stored in UUIDTable
      */
     public static int size() {
         return UUID_TABLE.size();
