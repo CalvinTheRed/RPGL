@@ -219,7 +219,7 @@ public class RPGLObject extends UUIDTableElement {
     public int getProficiencyBonus(RPGLContext context) throws Exception {
         CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
         calculateProficiencyBonus.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_proficiency_modifier");
+            this.putString("subevent", "calculate_proficiency_bonus");
         }});
         calculateProficiencyBonus.setSource(this);
         calculateProficiencyBonus.prepare(context);
