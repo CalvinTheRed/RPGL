@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 
@@ -136,14 +137,15 @@ public abstract class ContestRoll extends Calculation {
      * 	</p>
      */
     public void roll() {
-        int baseDieRoll = Die.roll(20, this.subeventJson.getInteger("determined"));
+        JsonArray determined = this.subeventJson.getJsonArray("determined");
+        int baseDieRoll = Die.roll(20, determined.asList());
         if (this.isAdvantageRoll()) {
-            int advantageRoll = Die.roll(20, this.subeventJson.getInteger("determined_second"));
+            int advantageRoll = Die.roll(20, determined.asList());
             if (advantageRoll > baseDieRoll) {
                 baseDieRoll = advantageRoll;
             }
         } else if (this.isDisadvantageRoll()) {
-            int disadvantageRoll = Die.roll(20, this.subeventJson.getInteger("determined_second"));
+            int disadvantageRoll = Die.roll(20, determined.asList());
             if (disadvantageRoll < baseDieRoll) {
                 baseDieRoll = disadvantageRoll;
             }
@@ -176,22 +178,24 @@ public abstract class ContestRoll extends Calculation {
             this.putString("subevent", "contest_reroll_chance");
             this.putInteger("base_die_roll", base);
         }});
+        contestRerollChance.setSource(this.getSource());
         contestRerollChance.prepare(context);
+        contestRerollChance.setTarget(this.getTarget());
         contestRerollChance.invoke(context);
 
         if (contestRerollChance.wasRerollRequested()) {
-            int rerollDieValue = Die.roll(20, this.subeventJson.getInteger("determined_reroll"));
+            int rerollDieValue = Die.roll(20, this.subeventJson.getJsonArray("determined_reroll").asList());
             String rerollMode = contestRerollChance.getRerollMode();
             switch (rerollMode) {
-                case "use_new":
+                case ContestRerollChance.USE_NEW:
                     super.setBase(rerollDieValue);
                     break;
-                case "use_highest":
+                case ContestRerollChance.USE_HIGHEST:
                     if (rerollDieValue > super.getBase()) {
                         super.setBase(rerollDieValue);
                     }
                     break;
-                case "use_lowest":
+                case ContestRerollChance.USE_LOWEST:
                     if (rerollDieValue < super.getBase()) {
                         super.setBase(rerollDieValue);
                     }

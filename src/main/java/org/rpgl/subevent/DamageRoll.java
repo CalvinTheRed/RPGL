@@ -48,7 +48,7 @@ public abstract class DamageRoll extends Subevent {
             for (int j = 0; j < typedDamageDieArray.size(); j++) {
                 JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
                 int size = typedDamageDie.getInteger("size");
-                int roll = Die.roll(size, typedDamageDie.getInteger("determined"));
+                int roll = Die.roll(size, typedDamageDie.getJsonArray("determined").asList());
                 typedDamageDie.putInteger("roll", roll);
             }
         }
@@ -77,7 +77,7 @@ public abstract class DamageRoll extends Subevent {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
                     if (typedDamageDie.getInteger("roll") <= threshold) {
                         int size = typedDamageDie.getInteger("size");
-                        int roll = Die.roll(size, typedDamageDie.getInteger("determined_reroll"));
+                        int roll = Die.roll(size, typedDamageDie.getJsonArray("determined").asList());
                         typedDamageDie.putInteger("roll", roll);
                     }
                 }

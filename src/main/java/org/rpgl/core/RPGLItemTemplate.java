@@ -26,7 +26,9 @@ public class RPGLItemTemplate extends JsonObject {
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("count", 1);
                     this.putInteger("size", 4);
-                    this.putInteger("determined", 2);
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(2);
+                    }});
                 }});
             }});
             this.putInteger("bonus", 0);
@@ -183,7 +185,7 @@ public class RPGLItemTemplate extends JsonObject {
                     JsonObject templateDamageDiceDefinition = templateDamageDiceArray.getJsonObject(k);
                     JsonObject damageDie = new JsonObject() {{
                         this.putInteger("size", templateDamageDiceDefinition.getInteger("size"));
-                        this.putInteger("determined", templateDamageDiceDefinition.getInteger("determined"));
+                        this.putJsonArray("determined", templateDamageDiceDefinition.getJsonArray("determined"));
                     }};
                     for (int l = 0; l < templateDamageDiceDefinition.getInteger("count"); l++) {
                         damageDiceArray.addJsonObject(damageDie.deepClone());

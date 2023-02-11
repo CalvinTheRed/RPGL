@@ -14,7 +14,7 @@
   },
   "health_data": {
     "hit_dice": [
-      { "size": 8, "count": 8, "determined": 4 }
+      { "count": 8, "size": 8, "determined": [ 4 ] }
     ],
     "base": 52,
     "maximum": 52,

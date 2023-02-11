@@ -90,7 +90,8 @@ public final class UUIDTable {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method returns a RPGLEffect object with the passed uuid.
+     * 	This method returns a RPGLEffect object with the passed uuid, or null if no RPGLEffect exists for that uuid or
+     * 	the uuid is null.
      * 	</p>
      *
      *  @param uuid the UUID of a RPGLEffect
@@ -108,7 +109,8 @@ public final class UUIDTable {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method returns a RPGLItem object with the passed uuid.
+     * 	This method returns a RPGLItem object with the passed uuid, or null if no RPGLItem exists for that uuid or
+     * 	the uuid is null.
      * 	</p>
      *
      *  @param uuid the UUID of a RPGLItem
@@ -126,14 +128,18 @@ public final class UUIDTable {
      * 	</code></pre>
      * 	</p>
      * 	<p>
-     * 	This method returns a RPGLObject object with the passed uuid.
+     * 	This method returns a RPGLObject object with the passed uuid, or null if no RPGLObject exists for that uuid or
+     * 	the uuid is null.
      * 	</p>
      *
      *  @param uuid the UUID of a RPGLObject
-     *  @return a RPGLObject
+     *  @return a RPGLObject or null
      */
     public static RPGLObject getObject(String uuid) {
-        return (RPGLObject) UUID_TABLE.get(uuid);
+        if (uuid != null) {
+            return (RPGLObject) UUID_TABLE.get(uuid);
+        }
+        return null;
     }
 
     /**

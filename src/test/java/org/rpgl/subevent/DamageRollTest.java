@@ -48,26 +48,30 @@ public class DamageRollTest {
                     this.putString("type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 1);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 2);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 3);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 4);
                         }});
@@ -78,26 +82,30 @@ public class DamageRollTest {
                     this.putString("type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 1);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 2);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 3);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("determined", 1);
-                            this.putInteger("determined_reroll", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
                             this.putInteger("size", 4);
                             this.putInteger("roll", 4);
                         }});
@@ -114,7 +122,7 @@ public class DamageRollTest {
         damageRoll.rerollTypedDiceLessThanOrEqualTo(1, "fire");
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":4,"size":4},{"determined":1,"determined_reroll":4,"roll":2,"size":4},{"determined":1,"determined_reroll":4,"roll":3,"size":4},{"determined":1,"determined_reroll":4,"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":2,"size":4},{"determined":1,"determined_reroll":4,"roll":3,"size":4},{"determined":1,"determined_reroll":4,"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
         assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be re-rolled to a 4"
         );
@@ -126,7 +134,7 @@ public class DamageRollTest {
         damageRoll.setTypedDiceLessThanOrEqualTo(1, 2, "fire");
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":2,"size":4},{"determined":1,"determined_reroll":4,"roll":2,"size":4},{"determined":1,"determined_reroll":4,"roll":3,"size":4},{"determined":1,"determined_reroll":4,"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":2,"size":4},{"determined":1,"determined_reroll":4,"roll":3,"size":4},{"determined":1,"determined_reroll":4,"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
         assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be set to a 2"
         );
@@ -143,26 +151,26 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("roll all dice roll to ones")
+    @DisplayName("roll all dice roll to fours")
     void roll_allDiceRollToOnes() {
         damageRoll.roll();
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
         assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
-                "all dice should roll to 1"
+                "all dice should roll to 4"
         );
     }
 
     @Test
-    @DisplayName("prepare all dice roll to ones")
+    @DisplayName("prepare all dice roll to fours")
     void prepare_allDiceRollToOnes() {
         damageRoll.prepare(new RPGLContext());
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4},{"determined":1,"determined_reroll":4,"roll":1,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
         assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
-                "all dice should roll to 1"
+                "all dice should roll to 4"
         );
     }
 

@@ -128,7 +128,7 @@ public class RPGLObjectTemplateTest {
             assertEquals(10, hitDie.getInteger("size"),
                     "hit die (index " + i + ") has the wrong size"
             );
-            assertEquals(5, hitDie.getInteger("determined"),
+            assertEquals("[5]", hitDie.getJsonArray("determined").toString(),
                     "hit die (index " + i + ") has the wrong determined value"
             );
         }
@@ -159,7 +159,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":52,"current":52,"hit_dice":[{"determined":4,"size":8,"spent":false},{"determined":4,"size":8,"spent":false},{"determined":4,"size":8,"spent":false},{"determined":4,"size":8,"spent":false},{"determined":4,"size":8,"spent":false},{"determined":4,"size":8,"spent":false},{"determined":4,"size":8,"spent":false},{"determined":4,"size":8,"spent":false}],"maximum":52,"temporary":0}""";
+                {"base":52,"current":52,"hit_dice":[{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false}],"maximum":52,"temporary":0}""";
         assertEquals(expected, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
@@ -213,7 +213,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":178,"current":178,"hit_dice":[{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false}],"maximum":178,"temporary":0}""";
+                {"base":178,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"maximum":178,"temporary":0}""";
         assertEquals(expected, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );

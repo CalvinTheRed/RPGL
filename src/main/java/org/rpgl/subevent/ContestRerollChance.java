@@ -17,6 +17,10 @@ import java.util.Objects;
  */
 public class ContestRerollChance extends Subevent {
 
+    public static final String USE_HIGHEST = "use_highest";
+    public static final String USE_LOWEST = "use_lowest";
+    public static final String USE_NEW = "use_new";
+
     public ContestRerollChance() {
         super("contest_reroll_chance");
     }

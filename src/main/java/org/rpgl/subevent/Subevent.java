@@ -260,7 +260,11 @@ public abstract class Subevent {
      * 	@param target an RPGLObject
      */
     public void setTarget(RPGLObject target) {
-        this.subeventJson.putString("target", target.getUuid());
+        if (target == null) {
+            this.subeventJson.putString("target", null);
+        } else {
+            this.subeventJson.putString("target", target.getUuid());
+        }
     }
 
     /**

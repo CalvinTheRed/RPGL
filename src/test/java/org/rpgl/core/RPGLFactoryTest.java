@@ -88,7 +88,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLEventTO.AREA_OF_EFFECT_ALIAS
         );
         expected = """
-                [{"damage":[{"bonus":0,"dice":[{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6},{"determined":3,"size":6}],"type":"fire"}],"damage_on_pass":"half","determined":1,"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
+                [{"damage":[{"bonus":0,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"fire"}],"damage_on_pass":"half","determined":[1],"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
         assertEquals(expected, event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLEventTO.SUBEVENTS_ALIAS
         );
@@ -133,7 +133,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
         expected = """
-                {"melee":[{"bonus":0,"dice":[{"determined":2,"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"determined":2,"size":4}],"type":"bludgeoning"}]}""";
+                {"melee":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
         assertEquals(expected, item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
@@ -185,7 +185,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":178,"current":178,"hit_dice":[{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false},{"determined":5,"size":10,"spent":false}],"maximum":178,"temporary":0}""";
+                {"base":178,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"maximum":178,"temporary":0}""";
         assertEquals(expected, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );

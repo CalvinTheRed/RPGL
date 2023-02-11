@@ -32,7 +32,7 @@
       {
         "type": "piercing",
         "dice": [
-          { "size": 10, "count": 1, "determined": 5 }
+          { "count": 1, "size": 10, "determined": [ 5 ] }
         ],
         "bonus": 0
       }

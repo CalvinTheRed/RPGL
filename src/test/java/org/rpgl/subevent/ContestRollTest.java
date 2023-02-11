@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -106,42 +108,45 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll higher)")
     void roll_defaultBehavior_secondRollHigher() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 10);
-            this.putInteger("determined_second", 15);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(5);
+                this.addInteger(15);
+            }});
+        }});
         contestRoll.roll();
-        assertEquals(10, contestRoll.get(),
-                "default roll behavior should return the first value (10)"
+        assertEquals(5, contestRoll.get(),
+                "default roll behavior should return the first value (5)"
         );
     }
 
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll lower)")
     void roll_defaultBehavior_secondRollLower() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 10);
-            this.putInteger("determined_second", 5);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(15);
+                this.addInteger(5);
+            }});
+        }});
         contestRoll.roll();
-        assertEquals(10, contestRoll.get(),
-                "default roll behavior should return the first value (10)"
+        assertEquals(15, contestRoll.get(),
+                "default roll behavior should return the first value (15)"
         );
     }
 
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll higher)")
     void roll_withAdvantage_secondRollHigher() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 5);
-            this.putInteger("determined_second", 15);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(5);
+                this.addInteger(15);
+            }});
+        }});
         contestRoll.grantAdvantage();
         contestRoll.roll();
         assertEquals(15, contestRoll.get(),
@@ -152,12 +157,13 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll lower)")
     void roll_withAdvantage_secondRollLower() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 15);
-            this.putInteger("determined_second", 5);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(15);
+                this.addInteger(5);
+            }});
+        }});
         contestRoll.grantAdvantage();
         contestRoll.roll();
         assertEquals(15, contestRoll.get(),
@@ -168,12 +174,13 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll higher)")
     void roll_withDisadvantage_firstRollHigher() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 15);
-            this.putInteger("determined_second", 5);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(15);
+                this.addInteger(5);
+            }});
+        }});
         contestRoll.grantDisadvantage();
         contestRoll.roll();
         assertEquals(5, contestRoll.get(),
@@ -184,12 +191,13 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll lower)")
     void roll_withDisadvantage_firstRollLower() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 5);
-            this.putInteger("determined_second", 15);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(5);
+                this.addInteger(15);
+            }});
+        }});
         contestRoll.grantDisadvantage();
         contestRoll.roll();
         assertEquals(5, contestRoll.get(),
@@ -200,12 +208,13 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll advantage and disadvantage behavior rolls the determined value (second roll higher)")
     void roll_withAdvantageAndDisadvantage_firstRollHigher() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 15);
-            this.putInteger("determined_second", 5);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(15);
+                this.addInteger(5);
+            }});
+        }});
         contestRoll.grantAdvantage();
         contestRoll.grantDisadvantage();
         contestRoll.roll();
@@ -217,12 +226,13 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll advantage and disadvantage behavior rolls the determined value (first roll lower)")
     void roll_withAdvantageAndDisadvantage_firstRollLower() {
-        JsonObject subeventJson = new JsonObject() {{
+        contestRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_roll");
-            this.putInteger("determined", 5);
-            this.putInteger("determined_second", 15);
-        }};
-        contestRoll.joinSubeventData(subeventJson);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(5);
+                this.addInteger(15);
+            }});
+        }});
         contestRoll.grantAdvantage();
         contestRoll.grantDisadvantage();
         contestRoll.roll();
@@ -231,6 +241,23 @@ public class ContestRollTest {
         );
     }
 
-    // TODO make a CheckForReroll test
+    @Test
+    @DisplayName("checkForReroll no reroll was requested")
+    void checkForReroll_noRerollRequested() throws Exception {
+        contestRoll.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "contest_roll");
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(5);
+                this.addInteger(15);
+            }});
+        }});
+        contestRoll.roll();
+        contestRoll.checkForReroll(new RPGLContext());
+        assertEquals(5, contestRoll.get(),
+                "original roll should be preserved when no reroll is requested"
+        );
+    }
+
+    // TODO additional unit tests needed for when re-rolls are requested... requires RPGLEffect functionality
 
 }

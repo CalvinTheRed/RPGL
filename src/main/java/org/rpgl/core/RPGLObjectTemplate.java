@@ -150,8 +150,8 @@ public class RPGLObjectTemplate extends JsonObject {
         for (int i = 0; i < templateHitDice.size(); i++) {
             JsonObject templateHitDieDefinition = templateHitDice.getJsonObject(i);
             JsonObject hitDie = new JsonObject() {{
-                this.putInteger("determined", templateHitDieDefinition.getInteger("determined"));
                 this.putInteger("size", templateHitDieDefinition.getInteger("size"));
+                this.putJsonArray("determined", templateHitDieDefinition.getJsonArray("determined"));
                 this.putBoolean("spent", false);
             }};
             for (int j = 0; j < templateHitDieDefinition.getInteger("count"); j++) {
