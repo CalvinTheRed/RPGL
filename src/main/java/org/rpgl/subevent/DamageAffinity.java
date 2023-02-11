@@ -3,6 +3,8 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonObject;
 
+import java.util.Objects;
+
 /**
  * This Subevent is dedicated to determining the affinity an RPGLObject has for a particular damage type (<code>"normal",
  * "immunity", "resistance", "vulnerability"</code>).
@@ -148,39 +150,19 @@ public class DamageAffinity extends Subevent {
         this.subeventJson.putBoolean("vulnerability_revoked", true);
     }
 
-    /**
-     * 	<p>
-     * 	<b><i>getAffinity</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public String getAffinity()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the affinity <code>source</code> has for the given damage type.
-     * 	</p>
-     *
-     *  @return the affinity <code>source</code> has for the given damage type (<code>"normal", "immunity", "resistance",
-     *  "vulnerability"</code>.).
-     */
-    public String getAffinity() {
-        boolean immunity = this.subeventJson.getBoolean("immunity")
-                && !this.subeventJson.getBoolean("immunity_revoked");
-        boolean resistance = this.subeventJson.getBoolean("resistance")
-                && !this.subeventJson.getBoolean("resistance_revoked");
-        boolean vulnerability = this.subeventJson.getBoolean("vulnerability")
-                && !this.subeventJson.getBoolean("vulnerability_revoked");
+    public boolean isImmune() {
+        return Objects.requireNonNullElse(this.subeventJson.getBoolean("immunity"), false)
+                && !Objects.requireNonNullElse(this.subeventJson.getBoolean("immunity_revoked"), false);
+    }
 
-        if (immunity) {
-            return "immunity";
-        } else if (resistance && !vulnerability) {
-            return "resistance";
-        } else if (vulnerability && !resistance) {
-            return "vulnerability";
-        } else {
-            return "normal";
-        }
+    public boolean isResistant() {
+        return Objects.requireNonNullElse(this.subeventJson.getBoolean("resistance"), false)
+                && !Objects.requireNonNullElse(this.subeventJson.getBoolean("resistance_revoked"), false);
+    }
+
+    public boolean isVulnerable() {
+        return Objects.requireNonNullElse(this.subeventJson.getBoolean("vulnerability"), false)
+                && !Objects.requireNonNullElse(this.subeventJson.getBoolean("vulnerability_revoked"), false);
     }
 
 }

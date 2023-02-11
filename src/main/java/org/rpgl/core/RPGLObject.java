@@ -373,9 +373,10 @@ public class RPGLObject extends UUIDTableElement {
      */
     public void receiveDamage(RPGLContext context, DamageDelivery damageDelivery) throws Exception {
         JsonObject damageJson = damageDelivery.getDamage();
+        Integer damage = 0;
         for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
             String damageType = damageJsonEntry.getKey();
-            Integer damage = damageJson.getInteger(damageJsonEntry.getKey());
+            Integer typedDamage = damageJson.getInteger(damageJsonEntry.getKey());
 
             DamageAffinity damageAffinity = new DamageAffinity();
             damageAffinity.joinSubeventData(new JsonObject() {{
@@ -386,15 +387,19 @@ public class RPGLObject extends UUIDTableElement {
             damageAffinity.prepare(context);
             damageAffinity.setTarget(this);
             damageAffinity.invoke(context);
-            String affinity = damageAffinity.getAffinity();
 
-            if ("normal".equals(affinity)) {
-                this.reduceHitPoints(damage);
-            } else if ("resistance".equals(affinity)) {
-                this.reduceHitPoints(damage / 2);
-            } else if ("vulnerability".equals(affinity)) {
-                this.reduceHitPoints(damage * 2);
+            if (!damageAffinity.isImmune()) {
+                if (damageAffinity.isResistant()) {
+                    typedDamage /= 2;
+                }
+                if (damageAffinity.isVulnerable()) {
+                    typedDamage *= 2;
+                }
+                damage += typedDamage;
             }
+        }
+        if (damage > 0) {
+            this.reduceHitPoints(damage);
         }
     }
 
