@@ -20,7 +20,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CalculateProficiencyBonusTest {
+public class CalculateAbilityScoreTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -42,8 +42,8 @@ public class CalculateProficiencyBonusTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
-        calculateProficiencyBonus.joinSubeventData(new JsonObject() {{
+        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
+        calculateAbilityScore.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -51,24 +51,26 @@ public class CalculateProficiencyBonusTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> calculateProficiencyBonus.invoke(new RPGLContext()),
+                () -> calculateAbilityScore.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
 
     @Test
-    @DisplayName("prepare sets base proficiency bonus from source json")
-    void prepare_setsBaseProficiencyBonusFromSourceJson() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+    @DisplayName("prepare sets base of calculation to template ability score")
+    void prepare_setsBaseToTemplateAbilityScore() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
-        context.add(source);
+        context.add(object);
+        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
+        calculateAbilityScore.joinSubeventData(new JsonObject() {{
+            this.putString("ability", "str");
+        }});
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(context);
 
-        CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
-        calculateProficiencyBonus.setSource(source);
-        calculateProficiencyBonus.prepare(context);
-
-        assertEquals(4, calculateProficiencyBonus.getBase(),
-                "prepare() should assign the proficiency bonus from the source json to the subevent base value"
+        assertEquals(23, calculateAbilityScore.get(),
+                "base str score for demo:young_red_dragon should be 23 after prepare()"
         );
     }
 
