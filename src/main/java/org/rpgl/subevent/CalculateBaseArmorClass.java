@@ -66,11 +66,8 @@ public class CalculateBaseArmorClass extends Calculation {
             }
         }
 
-        // Add shield bonus, if applicable
-        baseArmorClass += this.getShieldBonus();
-
         // Set base armor class value in json
-        super.setBase(baseArmorClass);
+        super.setBase(baseArmorClass + this.getShieldBonus());
     }
 
     /**
@@ -94,7 +91,7 @@ public class CalculateBaseArmorClass extends Calculation {
      * 	@throws Exception if an exception occurs.
      */
     int prepareArmored(RPGLContext context, RPGLItem armor) throws Exception {
-        Integer baseArmorClass = armor.getInteger("base_armor_class");
+        Integer baseArmorClass = armor.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS);
 
         // Add dexterity bonus, if not 0 (or lower)
         Integer dexterityBonusMaximum = armor.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS);
