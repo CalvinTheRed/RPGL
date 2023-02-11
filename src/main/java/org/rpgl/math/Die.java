@@ -16,7 +16,7 @@ public final class Die {
     private static boolean testing = false;
 
     public static int roll(int upperBound, List<Object> determinedList) {
-        if (testing && !determinedList.isEmpty()) {
+        if (testing && determinedList != null && !determinedList.isEmpty()) {
             return (Integer) determinedList.remove(0);
         } else {
             return R.nextInt(upperBound) + 1;
