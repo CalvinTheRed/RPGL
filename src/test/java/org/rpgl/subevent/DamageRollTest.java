@@ -43,6 +43,29 @@ public class DamageRollTest {
         };
 
         damageRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "type": "fire",
+                        "dice": [
+                            { "size": 4, "roll": 1, "determined": [ 4 ] },
+                            { "size": 4, "roll": 2, "determined": [ 4 ] },
+                            { "size": 4, "roll": 3, "determined": [ 4 ] },
+                            { "size": 4, "roll": 4, "determined": [ 4 ] }
+                        ],
+                        "bonus": 1
+                    },{
+                        "type": "cold",
+                        "dice": [
+                            { "size": 4, "roll": 1, "determined": [ 4 ] },
+                            { "size": 4, "roll": 2, "determined": [ 4 ] },
+                            { "size": 4, "roll": 3, "determined": [ 4 ] },
+                            { "size": 4, "roll": 4, "determined": [ 4 ] }
+                        ],
+                        "bonus": 1
+                    }
+                ]
+            }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("type", "fire");

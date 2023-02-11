@@ -1,6 +1,6 @@
 package org.rpgl.math;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,8 +15,7 @@ public final class Die {
 
     private static boolean testing = false;
 
-    // TODO javadoc here. Also... consider having "determined" be an array for dice rolling, which is read as a FIFO queue. That way, you don't need all of these arbitrary reroll keys hard-coded in the code...
-    public static int roll(int upperBound, ArrayList<Object> determinedList) {
+    public static int roll(int upperBound, List<Object> determinedList) {
         if (testing && !determinedList.isEmpty()) {
             return (Integer) determinedList.remove(0);
         } else {

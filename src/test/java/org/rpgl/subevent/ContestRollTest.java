@@ -63,6 +63,7 @@ public class ContestRollTest {
     @DisplayName("grantAdvantage should yield only an advantage roll")
     void grantAdvantage_yieldOnlyAdvantageRoll() {
         contestRoll.grantAdvantage();
+
         assertTrue(contestRoll.isAdvantageRoll(),
                 "grantAdvantage should yield an advantage roll"
         );
@@ -78,6 +79,7 @@ public class ContestRollTest {
     @DisplayName("grantDisadvantage should yield only a disadvantage roll")
     void grantDisadvantage_yieldOnlyDisadvantageRoll() {
         contestRoll.grantDisadvantage();
+
         assertFalse(contestRoll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
         );
@@ -94,6 +96,7 @@ public class ContestRollTest {
     void grantAdvantageGrantDisadvantage_yieldOnlyNormalRoll() {
         contestRoll.grantAdvantage();
         contestRoll.grantDisadvantage();
+
         assertFalse(contestRoll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
         );
@@ -109,6 +112,10 @@ public class ContestRollTest {
     @DisplayName("roll default behavior rolls the first value (second roll higher)")
     void roll_defaultBehavior_secondRollHigher() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 5, 15 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(5);
@@ -116,6 +123,7 @@ public class ContestRollTest {
             }});
         }});
         contestRoll.roll();
+
         assertEquals(5, contestRoll.get(),
                 "default roll behavior should return the first value (5)"
         );
@@ -125,6 +133,10 @@ public class ContestRollTest {
     @DisplayName("roll default behavior rolls the first value (second roll lower)")
     void roll_defaultBehavior_secondRollLower() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 15, 5 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(15);
@@ -141,6 +153,10 @@ public class ContestRollTest {
     @DisplayName("roll advantage behavior rolls the higher value (second roll higher)")
     void roll_withAdvantage_secondRollHigher() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 5, 15 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(5);
@@ -158,6 +174,10 @@ public class ContestRollTest {
     @DisplayName("roll advantage behavior rolls the higher value (second roll lower)")
     void roll_withAdvantage_secondRollLower() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 15, 5 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(15);
@@ -175,6 +195,10 @@ public class ContestRollTest {
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll higher)")
     void roll_withDisadvantage_firstRollHigher() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 15, 5 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(15);
@@ -192,6 +216,10 @@ public class ContestRollTest {
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll lower)")
     void roll_withDisadvantage_firstRollLower() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 5, 15 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(5);
@@ -209,6 +237,10 @@ public class ContestRollTest {
     @DisplayName("roll advantage and disadvantage behavior rolls the determined value (second roll higher)")
     void roll_withAdvantageAndDisadvantage_firstRollHigher() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 15, 5 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(15);
@@ -227,6 +259,10 @@ public class ContestRollTest {
     @DisplayName("roll advantage and disadvantage behavior rolls the determined value (first roll lower)")
     void roll_withAdvantageAndDisadvantage_firstRollLower() {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 5, 15 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(5);
@@ -245,6 +281,10 @@ public class ContestRollTest {
     @DisplayName("checkForReroll no reroll was requested")
     void checkForReroll_noRerollRequested() throws Exception {
         contestRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "contest_roll",
+                "determined": [ 5, 15 ]
+            }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(5);

@@ -13,15 +13,15 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class CalculateProficiencyModifier extends Calculation {
+public class CalculateProficiencyBonus extends Calculation {
 
-    public CalculateProficiencyModifier() {
-        super("calculate_proficiency_modifier");
+    public CalculateProficiencyBonus() {
+        super("calculate_proficiency_bonus");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new CalculateProficiencyModifier();
+        Subevent clone = new CalculateProficiencyBonus();
         clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -29,7 +29,7 @@ public class CalculateProficiencyModifier extends Calculation {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new CalculateProficiencyModifier();
+        Subevent clone = new CalculateProficiencyBonus();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;

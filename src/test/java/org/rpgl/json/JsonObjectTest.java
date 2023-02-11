@@ -48,6 +48,20 @@ public class JsonObjectTest {
     @DisplayName("toString: comprehensive unit test")
     void toString_test() {
         JsonObject toStringJsonObject = new JsonObject() {{
+            /*{
+                "empty_object": { },
+                "populated_object": {
+                    "nested_string_key": "nested_string_value"
+                },
+                "empty_array": [ ],
+                "populated_array": [
+                    false
+                ],
+                "string_key": "string_value",
+                "integer_key": 123,
+                "double_key": 123.456,
+                "boolean_key": true
+             }*/
             this.putJsonObject("empty_object", new JsonObject());
             this.putJsonObject("populated_object", new JsonObject() {{
                 this.putString("nested_string_key", "nested_string_value");

@@ -8,7 +8,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateBaseArmorClass;
-import org.rpgl.subevent.CalculateProficiencyModifier;
+import org.rpgl.subevent.CalculateProficiencyBonus;
 import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.GetSavingThrowProficiency;
@@ -217,15 +217,15 @@ public class RPGLObject extends UUIDTableElement {
      * 	@throws Exception if an exception occurs.
      */
     public int getProficiencyBonus(RPGLContext context) throws Exception {
-        CalculateProficiencyModifier calculateProficiencyModifier = new CalculateProficiencyModifier();
-        calculateProficiencyModifier.joinSubeventData(new JsonObject() {{
+        CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
+        calculateProficiencyBonus.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_proficiency_modifier");
         }});
-        calculateProficiencyModifier.setSource(this);
-        calculateProficiencyModifier.prepare(context);
-        calculateProficiencyModifier.setTarget(this);
-        calculateProficiencyModifier.invoke(context);
-        return calculateProficiencyModifier.get();
+        calculateProficiencyBonus.setSource(this);
+        calculateProficiencyBonus.prepare(context);
+        calculateProficiencyBonus.setTarget(this);
+        calculateProficiencyBonus.invoke(context);
+        return calculateProficiencyBonus.get();
     }
 
     /**
