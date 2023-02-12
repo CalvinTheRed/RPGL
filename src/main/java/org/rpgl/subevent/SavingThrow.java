@@ -6,6 +6,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This Subevent is dedicated to making a saving throw and resolving all fallout from making the save. This is a
@@ -57,8 +58,9 @@ public class SavingThrow extends ContestRoll {
         this.verifySubevent(this.subeventId);
 
         RPGLObject target = this.getTarget();
-        this.addBonus(target.getAbilityModifierFromAbilityScore(context, this.subeventJson.getString("save_ability")));
-        if (target.isProficientInSavingThrow(context, this.subeventJson.getString("save_ability"))) {
+        String saveAbility = this.subeventJson.getString("save_ability");
+        this.addBonus(target.getAbilityModifierFromAbilityScore(context, saveAbility));
+        if (target.isProficientInSavingThrow(context, saveAbility)) {
             this.addBonus(target.getProficiencyBonus(context));
         }
 
@@ -68,7 +70,7 @@ public class SavingThrow extends ContestRoll {
          * Resume normal invoke() logic here
          */
         this.roll();
-        this.checkForReroll(context); // TODO eventually have this in a while loop?
+        this.checkForReroll(context); // TODO eventually have this in a while loop? Add this to AttackRoll?
         if (this.get() < this.subeventJson.getInteger("save_difficulty_class")) {
             this.resolveSaveFail(context);
         } else {
@@ -99,7 +101,7 @@ public class SavingThrow extends ContestRoll {
         String difficultyClassAbility = this.subeventJson.getString("difficulty_class_ability");
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_save_difficulty_class");
-            this.putString("base", difficultyClassAbility);
+            this.putString("difficulty_class_ability", difficultyClassAbility);
         }});
         RPGLObject source = this.getSource();
         calculateSaveDifficultyClass.setSource(source);
@@ -153,7 +155,7 @@ public class SavingThrow extends ContestRoll {
         }});
         baseDamageRoll.setSource(this.getSource());
         baseDamageRoll.prepare(context);
-        //baseDamageRoll.setTarget(this.getTarget());
+        baseDamageRoll.setTarget(this.getTarget());
         baseDamageRoll.invoke(context);
 
         /*
@@ -277,9 +279,9 @@ public class SavingThrow extends ContestRoll {
      * 	@throws Exception if an exception occurs.
      */
     void resolvePassDamage(RPGLContext context) throws Exception {
-        JsonObject baseDamage = this.subeventJson.getJsonObject("damage");
+        JsonObject baseDamage = Objects.requireNonNullElse(this.subeventJson.getJsonObject("damage"), new JsonObject());
         String damageOnPass = this.subeventJson.getString("damage_on_pass");
-        if (baseDamage != null && !"none".equals(damageOnPass)) {
+        if (!"none".equals(damageOnPass)) {
             /*
              * Add base and target damage into final damage quantities
              */
@@ -304,8 +306,7 @@ public class SavingThrow extends ContestRoll {
             if ("half".equals(damageOnPass)) {
                 for (Map.Entry<String, ?> damageEntryElement : baseDamage.asMap().entrySet()) {
                     Integer value = baseDamage.removeInteger(damageEntryElement.getKey());
-                    value /= 2;
-                    baseDamage.putInteger(damageEntryElement.getKey(), value);
+                    baseDamage.putInteger(damageEntryElement.getKey(), value / 2);
                 }
             }
 
@@ -333,22 +334,19 @@ public class SavingThrow extends ContestRoll {
      * 	@throws Exception if an exception occurs.
      */
     void resolveFailDamage(RPGLContext context) throws Exception {
-        JsonObject baseDamage = this.subeventJson.getJsonObject("damage");
-        if (baseDamage != null) {
-            JsonObject targetDamage = getTargetDamage(context);
-            for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
-                String damageType = targetDamageEntry.getKey();
-                if (baseDamage.asMap().containsKey(damageType)) {
-                    Integer baseTypedDamage = baseDamage.getInteger(damageType);
-                    baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
-                    baseDamage.putInteger(damageType, baseTypedDamage);
-                } else {
-                    baseDamage.asMap().entrySet().add(targetDamageEntry);
-                }
+        JsonObject baseDamage = Objects.requireNonNullElse(this.subeventJson.getJsonObject("damage"), new JsonObject());
+        JsonObject targetDamage = this.getTargetDamage(context);
+        for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
+            String damageType = targetDamageEntry.getKey();
+            if (baseDamage.asMap().containsKey(damageType)) {
+                Integer baseTypedDamage = baseDamage.getInteger(damageType);
+                baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
+                baseDamage.putInteger(damageType, baseTypedDamage);
+            } else {
+                baseDamage.asMap().entrySet().add(targetDamageEntry);
             }
-
-            this.deliverDamage(context);
         }
+        this.deliverDamage(context);
     }
 
     /**
