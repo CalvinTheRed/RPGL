@@ -8,6 +8,11 @@ import org.rpgl.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for class AttackDamageRoll.
+ *
+ * @author Calvin Withun
+ */
 public class AttackDamageRollTest {
 
     @Test

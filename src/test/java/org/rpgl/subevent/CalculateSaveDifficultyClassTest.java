@@ -20,6 +20,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for class CalculateSaveDifficultyClass.
+ *
+ * @author Calvin Withun
+ */
 public class CalculateSaveDifficultyClassTest {
 
     @BeforeAll

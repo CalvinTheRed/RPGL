@@ -150,16 +150,61 @@ public class DamageAffinity extends Subevent {
         this.subeventJson.putBoolean("vulnerability_revoked", true);
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>isImmune</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public boolean isImmune()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns whether the source is immune to the relevant damage type.
+     * 	</p>
+     *
+     *  @return true if the source is immune to the relevant damage type.
+     */
     public boolean isImmune() {
         return Objects.requireNonNullElse(this.subeventJson.getBoolean("immunity"), false)
                 && !Objects.requireNonNullElse(this.subeventJson.getBoolean("immunity_revoked"), false);
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>isResistant</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public boolean isResistant()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns whether the source is resistant to the relevant damage type.
+     * 	</p>
+     *
+     *  @return true if the source is resistant to the relevant damage type.
+     */
     public boolean isResistant() {
         return Objects.requireNonNullElse(this.subeventJson.getBoolean("resistance"), false)
                 && !Objects.requireNonNullElse(this.subeventJson.getBoolean("resistance_revoked"), false);
     }
 
+    /**
+     * 	<p>
+     * 	<b><i>isVulnerable</i></b>
+     * 	</p>
+     * 	<p>
+     * 	<pre class="tab"><code>
+     * public boolean isVulnerable()
+     * 	</code></pre>
+     * 	</p>
+     * 	<p>
+     * 	This method returns whether the source is vulnerable to the relevant damage type.
+     * 	</p>
+     *
+     *  @return true if the source is vulnerable to the relevant damage type.
+     */
     public boolean isVulnerable() {
         return Objects.requireNonNullElse(this.subeventJson.getBoolean("vulnerability"), false)
                 && !Objects.requireNonNullElse(this.subeventJson.getBoolean("vulnerability_revoked"), false);

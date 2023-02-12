@@ -24,6 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for class GiveEffect.
+ *
+ * @author Calvin Withun
+ */
 public class GiveEffectTest {
 
     @BeforeAll

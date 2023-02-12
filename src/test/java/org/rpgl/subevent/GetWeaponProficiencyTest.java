@@ -8,7 +8,12 @@ import org.rpgl.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GetWeaponProficiiencyTest {
+/**
+ * Testing class for class GetWeaponProficiency.
+ *
+ * @author Calvin Withun
+ */
+public class GetWeaponProficiencyTest {
 
     @Test
     @DisplayName("invoke wrong subevent")

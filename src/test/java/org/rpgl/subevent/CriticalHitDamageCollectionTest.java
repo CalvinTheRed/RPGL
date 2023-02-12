@@ -7,6 +7,11 @@ import org.rpgl.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Testing class for class CriticalHitDamageCollection.
+ *
+ * @author Calvin Withun
+ */
 public class CriticalHitDamageCollectionTest {
 
     @Test
