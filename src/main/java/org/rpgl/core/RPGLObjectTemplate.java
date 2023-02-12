@@ -122,7 +122,6 @@ public class RPGLObjectTemplate extends JsonObject {
         JsonArray inventoryItemUuids = new JsonArray();
         for (int i = 0; i < inventoryItemIds.size(); i++) {
             String itemId = inventoryItemIds.getString(i);
-            System.out.println(itemId);
             RPGLItem item = RPGLFactory.newItem(itemId);
             inventoryItemUuids.addString(item.getUuid());
         }

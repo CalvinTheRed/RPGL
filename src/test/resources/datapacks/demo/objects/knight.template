@@ -30,7 +30,7 @@
     "demo:heavy_crossbow"
   ],
   "events": [
-
+    "demo:weapon_attack_mainhand_melee"
   ],
   "effects": [
 

@@ -3,6 +3,7 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -115,6 +116,7 @@ public class AttackRoll extends ContestRoll {
 
         // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
         this.addBonus(this.getSource().getProficiencyBonus(context));
+        System.out.println(this.getBonus());
 
         // The damage field should already be populated for this type of attack. But in case it is not, set it to empty.
         this.subeventJson.asMap().computeIfAbsent("damage", k -> new ArrayList<>());
@@ -186,7 +188,7 @@ public class AttackRoll extends ContestRoll {
         this.subeventJson.putBoolean("natural_weapon_attack", false);
 
         //Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
-        RPGLItem weapon = UUIDTable.getItem(this.getSource().getJsonObject("items").getString(equipmentSlot));
+        RPGLItem weapon = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(equipmentSlot));
         String attackType = this.subeventJson.getString("attack_type");
         this.addBonus(this.getSource().getAbilityModifierFromAbilityScore(context, weapon.getAttackAbility(attackType)));
         this.applyWeaponAttackBonus(weapon);
@@ -324,7 +326,7 @@ public class AttackRoll extends ContestRoll {
         baseDamageCollection.setSource(this.getSource());
         baseDamageCollection.prepare(context);
 
-        // If the attack is made with an item, add attack modifier to damage roll
+        // If the attack is made with an item, add attack ability modifier to damage roll
         if (this.subeventJson.getString("weapon") != null) {
             RPGLItem weapon = UUIDTable.getItem(this.subeventJson.getString("weapon"));
             String attackAbility = weapon.getAttackAbility(this.subeventJson.getString("attack_type"));
@@ -367,7 +369,9 @@ public class AttackRoll extends ContestRoll {
             this.putString("subevent", "target_damage_collection");
             this.putJsonArray("damage", new JsonArray()); // TODO can this be moved back to constructor or prepare?
         }});
+        targetDamageCollection.setSource(this.getSource());
         targetDamageCollection.prepare(context);
+        targetDamageCollection.setTarget(this.getTarget());
         targetDamageCollection.invoke(context);
         return targetDamageCollection;
     }
@@ -398,9 +402,12 @@ public class AttackRoll extends ContestRoll {
      *
      * 	@throws Exception if an exception occurs.
      */
-    CriticalHitDamageCollection getCriticalHitDamageCollection(BaseDamageCollection baseDamageCollection,
-                                                                   TargetDamageCollection targetDamageCollection,
-                                                                   RPGLContext context) throws Exception {
+    CriticalHitDamageCollection getCriticalHitDamageCollection(
+            BaseDamageCollection baseDamageCollection,
+            TargetDamageCollection targetDamageCollection,
+            RPGLContext context
+    ) throws Exception {
+
         baseDamageCollection.addTypedDamage(targetDamageCollection.getDamageCollection());
 
         CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
@@ -470,10 +477,10 @@ public class AttackRoll extends ContestRoll {
      */
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
-        JsonArray damage = this.subeventJson.getJsonArray("damage");
+        JsonObject damage = this.subeventJson.getJsonObject("damage");
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
-            this.putJsonArray("damage", damage.deepClone());
+            this.putJsonObject("damage", damage.deepClone());
         }});
         damageDelivery.setSource(this.getSource());
         damageDelivery.prepare(context);
@@ -506,7 +513,7 @@ public class AttackRoll extends ContestRoll {
         JsonArray subeventJsonArray = Objects.requireNonNullElse(this.subeventJson.getJsonArray(hitOrMiss), new JsonArray());
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject nestedSubeventJson = subeventJsonArray.getJsonObject(i);
-            Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(nestedSubeventJson);
+            Subevent subevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);
             subevent.prepare(context);
             subevent.invoke(context);
         }
@@ -560,7 +567,7 @@ public class AttackRoll extends ContestRoll {
      *  @return true if the attack is a critical miss
      */
     public boolean isCriticalMiss() {
-        return (this.get() - this.getBonus()) == 1;
+        return this.getBase() == 1;
     }
 
     /**

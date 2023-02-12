@@ -177,7 +177,9 @@ public class RPGLObjectTemplateTest {
                     "item at inventory index " + i + " is missing from UUIDTable"
             );
         }
-        assertEquals("[]", object.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
+        expected = """
+                ["demo:weapon_attack_mainhand_melee"]""";
+        assertEquals(expected, object.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
         assertEquals("[]", object.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
@@ -224,7 +226,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["demo:young_red_dragon_fire_breath"]""";
+                ["demo:young_red_dragon_bite_attack","demo:young_red_dragon_claw_attack","demo:young_red_dragon_fire_breath"]""";
         assertEquals(expected, object.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );

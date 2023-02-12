@@ -726,7 +726,7 @@ public class DatapackTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["demo:young_red_dragon_fire_breath"]""";
+                ["demo:young_red_dragon_bite_attack","demo:young_red_dragon_claw_attack","demo:young_red_dragon_fire_breath"]""";
         assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );

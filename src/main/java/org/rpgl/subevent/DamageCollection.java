@@ -150,7 +150,7 @@ public abstract class DamageCollection extends Subevent {
      *  @return an array of typed damage dice and bonuses
      */
     public JsonArray getDamageCollection() {
-        return this.subeventJson.getJsonArray("damage");
+        return Objects.requireNonNullElse(this.subeventJson.getJsonArray("damage"), new JsonArray());
     }
 
 }

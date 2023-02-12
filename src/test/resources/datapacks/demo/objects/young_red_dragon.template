@@ -21,13 +21,11 @@
     "current": 178,
     "temporary": 0
   },
-  "equipped_items": {
-
-  },
-  "inventory": [
-
-  ],
+  "equipped_items": { },
+  "inventory": [ ],
   "events": [
+    "demo:young_red_dragon_bite_attack",
+    "demo:young_red_dragon_claw_attack",
     "demo:young_red_dragon_fire_breath"
   ],
   "effects": [
