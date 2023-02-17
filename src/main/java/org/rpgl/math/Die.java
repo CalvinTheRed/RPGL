@@ -1,5 +1,6 @@
 package org.rpgl.math;
 
+import org.rpgl.exception.DieSizeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +24,25 @@ public final class Die {
         int roll;
         if (testing && determinedList != null && !determinedList.isEmpty()) {
             roll = (int) determinedList.remove(0);
-        } else {
+        } else if (upperBound > 0) {
             roll = R.nextInt(upperBound) + 1;
+        } else {
+            DieSizeException e = new DieSizeException(upperBound);
+            LOGGER.error(e.getMessage());
+            throw e;
         }
-        LOGGER.debug("[d" + upperBound + "] -> " + roll);
+        logRoll(upperBound, roll);
         return roll;
+    }
+
+    private static void logRoll(int upperBound, int roll) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[d").append(upperBound).append("]");
+        if (upperBound < 10)  {
+            stringBuilder.append(" ");
+        }
+        stringBuilder.append(" -> ").append(roll);
+        LOGGER.debug(stringBuilder.toString());
     }
 
     public static void setTesting(boolean isTesting) {

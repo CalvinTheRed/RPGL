@@ -5,6 +5,8 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This Condition evaluates true if all of its nested Conditions evaluate to true.
@@ -12,6 +14,8 @@ import org.rpgl.subevent.Subevent;
  * @author Calvin Withun
  */
 public class All extends Condition {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(All.class);
 
     @Override
     public boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws ConditionMismatchException {
@@ -22,9 +26,11 @@ public class All extends Condition {
             Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
             // once a single nested condition returns false, iteration can short-circuit
             if (!nestedCondition.evaluate(source, target, subevent, nestedConditionJson)) {
+                LOGGER.debug("false");
                 return false;
             }
         }
+        LOGGER.debug("true");
         return true;
     }
 

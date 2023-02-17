@@ -69,6 +69,7 @@ public class CalculateProficiencyBonusTest {
         context.add(source);
 
         CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
+
         calculateProficiencyBonus.setSource(source);
         calculateProficiencyBonus.prepare(context);
 

@@ -64,14 +64,16 @@ public class CalculateAbilityScoreTest {
     @Test
     @DisplayName("prepare sets base of calculation to template ability score")
     void prepare_setsBaseToTemplateAbilityScore() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         calculateAbilityScore.joinSubeventData(new JsonObject() {{
             this.putString("ability", "str");
         }});
-        calculateAbilityScore.setSource(object);
+
+        calculateAbilityScore.setSource(source);
         calculateAbilityScore.prepare(context);
 
         assertEquals(23, calculateAbilityScore.get(),

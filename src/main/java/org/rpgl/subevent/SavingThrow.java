@@ -120,7 +120,7 @@ public class SavingThrow extends ContestRoll {
         }});
         baseDamageCollection.setSource(this.getSource());
         baseDamageCollection.prepare(context);
-        baseDamageCollection.setTarget(this.getTarget());
+        baseDamageCollection.setTarget(this.getSource());
         baseDamageCollection.invoke(context);
 
         /*
@@ -133,7 +133,7 @@ public class SavingThrow extends ContestRoll {
         }});
         baseDamageRoll.setSource(this.getSource());
         baseDamageRoll.prepare(context);
-        baseDamageRoll.setTarget(this.getTarget());
+        baseDamageRoll.setTarget(this.getSource());
         baseDamageRoll.invoke(context);
 
         /*
@@ -286,7 +286,9 @@ public class SavingThrow extends ContestRoll {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
+                subevent.setSource(this.getSource());
                 subevent.prepare(context);
+                subevent.setTarget(this.getTarget());
                 subevent.invoke(context);
             }
         }

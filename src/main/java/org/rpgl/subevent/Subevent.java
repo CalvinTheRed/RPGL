@@ -6,6 +6,8 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,6 +20,8 @@ import java.util.Map;
  * @author Calvin Withun
  */
 public abstract class Subevent {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Subevent.class);
 
     /**
      * A map of all Subevents which can be used in the JSON of an RPGLEvent.
@@ -69,7 +73,9 @@ public abstract class Subevent {
      */
     void verifySubevent(String expected) throws SubeventMismatchException {
         if (!expected.equals(this.subeventJson.getString("subevent"))) {
-            throw new SubeventMismatchException(expected, this.subeventJson.getString("subevent"));
+            SubeventMismatchException e = new SubeventMismatchException(expected, this.subeventJson.getString("subevent"));
+            LOGGER.error(e.getMessage());
+            throw e;
         }
     }
 

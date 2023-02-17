@@ -4,6 +4,8 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,8 @@ import java.util.Map;
  * @author Calvin Withun
  */
 public abstract class Condition {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Condition.class);
 
     /**
      * A map of all Conditions which can be used in the JSON of an RPGLEffect.
@@ -50,7 +54,9 @@ public abstract class Condition {
      */
     void verifyCondition(String expected, JsonObject conditionJson) throws ConditionMismatchException {
         if (!expected.equals(conditionJson.getString("condition"))) {
-            throw new ConditionMismatchException(expected, conditionJson.getString("condition"));
+            ConditionMismatchException e = new ConditionMismatchException(expected, conditionJson.getString("condition"));
+            LOGGER.error(e.getMessage());
+            throw e;
         }
     }
 

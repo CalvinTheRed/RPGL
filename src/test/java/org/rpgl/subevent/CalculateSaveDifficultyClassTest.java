@@ -64,19 +64,21 @@ public class CalculateSaveDifficultyClassTest {
     @Test
     @DisplayName("prepare calculates DC 17 (young red dragon, Constitution save DC)")
     void prepare_calculatesSeventeen_youngRedDragonConstitutionSaveDC() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
 
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
             this.putString("difficulty_class_ability", "con");
         }});
-        calculateSaveDifficultyClass.setSource(object);
+
+        calculateSaveDifficultyClass.setSource(source);
         calculateSaveDifficultyClass.prepare(context);
 
         assertEquals(17, calculateSaveDifficultyClass.get(),
                 "young red dragon save DC calculated from Constitution should be 17"
         );
     }
+
 }

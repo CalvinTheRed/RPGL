@@ -17,8 +17,22 @@ import java.util.Date;
 public final class RPGLCore {
 
     static{
-        // this is here for slf4j to generate distinct logging files for each instance of RPGL that is run
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        /*
+        Set system properties used for logging file location generation
+         */
+        SimpleDateFormat dateFormat;
+        Date date = new Date();
+        // set year property
+        dateFormat = new SimpleDateFormat("yyyy");
+        System.setProperty("current.date.year", dateFormat.format(date));
+        // set month property
+        dateFormat = new SimpleDateFormat("MM");
+        System.setProperty("current.date.month", dateFormat.format(date));
+        // set day
+        dateFormat = new SimpleDateFormat("dd");
+        System.setProperty("current.date.day", dateFormat.format(date));
+        // set time
+        dateFormat = new SimpleDateFormat("hh-mm-ss");
         System.setProperty("current.date.time", dateFormat.format(new Date()));
     }
 
