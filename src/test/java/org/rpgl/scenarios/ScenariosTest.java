@@ -20,6 +20,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Testing class for miscellaneous scenarios. Tests here are designed to stress test RPGL at a high level.
+ *
+ * @author Calvin Withun
+ */
 public class ScenariosTest {
 
     @BeforeAll

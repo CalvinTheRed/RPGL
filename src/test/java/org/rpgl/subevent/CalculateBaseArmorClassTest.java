@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for class CalculateBaseArmorClass.
+ * Testing class for the org.rpgl.subevent.CalculateBaseArmorClass class.
  *
  * @author Calvin Withun
  */

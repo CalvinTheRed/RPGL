@@ -13,10 +13,20 @@ import org.rpgl.json.JsonObject;
  */
 public class RPGLEvent extends DatapackContent {
 
+    /**
+     * Returns the RPGLEvent's area of effect.
+     *
+     * @return a JsonObject representing the area of effect of the RPGLEvent
+     */
     public JsonObject getAreaOfEffect() {
         return this.getJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS);
     }
 
+    /**
+     * Returns the Subevents composing the RPGLEvent.
+     *
+     * @return a JsonArray containing Subevent instructions
+     */
     public JsonArray getSubevents() {
         return this.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
     }

@@ -16,6 +16,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Testing class for the org.rpgl.core.RPGLEffectTemplate class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLEffectTemplateTest {
 
     @BeforeAll

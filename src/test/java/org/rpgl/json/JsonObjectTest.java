@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the json.JsonObject class.
+ * Testing class for the org.rpgl.json.JsonObject class.
  *
  * @author Calvin Withun
  */

@@ -15,6 +15,11 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Testing class for the org.rpgl.core.RPGLItem class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLItemTest {
 
     @BeforeAll

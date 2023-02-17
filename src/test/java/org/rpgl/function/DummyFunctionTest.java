@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the function.DummyFunction class.
+ * Testing class for the org.rpgl.function.DummyFunction class.
  *
  * @author Calvin Withun
  */

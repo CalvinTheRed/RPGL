@@ -9,7 +9,7 @@ import org.rpgl.json.JsonObject;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for class GetSavingThrowProficiency.
+ * Testing class for the org.rpgl.subevent.GetSavingThrowProficiency class.
  *
  * @author Calvin Withun
  */

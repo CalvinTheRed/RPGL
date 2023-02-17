@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the datapack.Datapack class.
+ * Testing class for the org.rpgl.datapack.Datapack class.
  *
  * @author Calvin Withun
  */

@@ -43,6 +43,9 @@ public class DummySubevent extends Subevent {
         DummySubevent.counter++;
     }
 
+    /**
+     * Resets this class's counter used during testing.
+     */
     public static void resetCounter() {
         DummySubevent.counter = 0;
     }

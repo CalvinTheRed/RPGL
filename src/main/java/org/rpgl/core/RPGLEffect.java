@@ -21,12 +21,17 @@ import java.util.Map;
  */
 public class RPGLEffect extends UUIDTableElement {
 
+    /**
+     * Returns the RPGLEffect Subevent filters.
+     *
+     * @return a JsonObject representing the RPGLEffect object's Subevent filters
+     */
     public JsonObject getSubeventFilters() {
         return this.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS);
     }
 
     /**
-     * This method returns the source of the RPGLEffect.
+     * Returns the source of the RPGLEffect.
      *
      * @return a RPGLObject UUID
      */
@@ -35,7 +40,7 @@ public class RPGLEffect extends UUIDTableElement {
     }
 
     /**
-     * This method sets the source of the RPGLEffect.
+     * Sets the source of the RPGLEffect.
      *
      * @param sourceUuid the UUID of a RPGLObject
      */
@@ -44,7 +49,7 @@ public class RPGLEffect extends UUIDTableElement {
     }
 
     /**
-     * This method returns the target of the RPGLEffect.
+     * Returns the target of the RPGLEffect.
      *
      * @return a RPGLObject UUID
      */
@@ -53,7 +58,7 @@ public class RPGLEffect extends UUIDTableElement {
     }
 
     /**
-     * This method sets the target of the RPGLEffect.
+     * Sets the target of the RPGLEffect.
      *
      * @param targetUuid the UUID of a RPGLObject
      */
@@ -67,7 +72,7 @@ public class RPGLEffect extends UUIDTableElement {
 
     /**
      * This method checks the passed Subevent against the RPGLEffect's Conditions, and if they evaluate true, the
-     *	RPGLEffect executes its functions.
+     * RPGLEffect executes its functions.
      *
      * @param subevent a Subevent
      * @return true if the Subevent was present in this object's subevent filter and if the Conditions in that filter

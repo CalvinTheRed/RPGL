@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for class DamageDelivery.
+ * Testing class for the org.rpgl.subevent.DamageDelivery class.
  *
  * @author Calvin Withun
  */

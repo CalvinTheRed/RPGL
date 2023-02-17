@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the condition.True class.
+ * Testing class for the org.rpgl.condition.True class.
  *
  * @author Calvin Withun
  */

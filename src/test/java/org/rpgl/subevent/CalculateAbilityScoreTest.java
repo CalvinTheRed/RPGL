@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for class CalculateAbilityScore.
+ * Testing class for the org.rpgl.subevent.CalculateAbilityScore class.
  *
  * @author Calvin Withun
  */

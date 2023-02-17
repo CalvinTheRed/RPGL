@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for class AttackRoll.
+ * Testing class for the org.rpgl.subevent.AttackRoll class.
  *
  * @author Calvin Withun
  */

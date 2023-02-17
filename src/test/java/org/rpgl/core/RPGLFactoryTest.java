@@ -22,6 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+/**
+ * Testing class for the org.rpgl.core.RPGLFactory class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLFactoryTest {
 
     @BeforeAll

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the condition.False class.
+ * Testing class for the org.rpgl.condition.False class.
  *
  * @author Calvin Withun
  */

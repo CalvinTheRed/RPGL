@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for class ContestRerollChance.
+ * Testing class for the org.rpgl.subevent.ContestRerollChance class.
  *
  * @author Calvin Withun
  */

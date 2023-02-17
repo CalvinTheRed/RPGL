@@ -13,6 +13,11 @@ import org.rpgl.json.JsonObject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the org.rpgl.core.RPGLEffect class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLEffectTest {
 
     @BeforeAll

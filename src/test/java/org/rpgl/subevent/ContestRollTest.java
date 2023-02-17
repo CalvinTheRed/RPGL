@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for abstract class ContestRoll.
+ * Testing class for the org.rpgl.subevent.ContestRoll class.
  *
  * @author Calvin Withun
  */

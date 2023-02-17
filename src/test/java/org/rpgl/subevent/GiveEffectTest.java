@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for class GiveEffect.
+ * Testing class for the org.rpgl.subevent.GiveEffect class.
  *
  * @author Calvin Withun
  */

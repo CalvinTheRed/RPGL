@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for abstract class DamageCollection.
+ * Testing class for the org.rpgl.subevent.DamageCollection class.
  *
  * @author Calvin Withun
  */

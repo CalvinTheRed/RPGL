@@ -9,7 +9,7 @@ import org.rpgl.json.JsonObject;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for class BaseDamageRoll.
+ * Testing class for the org.rpgl.subevent.BaseDamageRoll class.
  *
  * @author Calvin Withun
  */

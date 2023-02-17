@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for class CalculateSaveDifficultyClass.
+ * Testing class for the org.rpgl.subevent.CalculateSaveDifficultyClass class.
  *
  * @author Calvin Withun
  */

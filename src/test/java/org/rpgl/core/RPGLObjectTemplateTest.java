@@ -21,6 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Testing class for the org.rpgl.core.RPGLObjectTemplate class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLObjectTemplateTest {
 
     @BeforeAll

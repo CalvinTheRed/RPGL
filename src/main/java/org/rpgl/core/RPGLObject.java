@@ -28,30 +28,66 @@ import java.util.Map;
  */
 public class RPGLObject extends UUIDTableElement {
 
+    /**
+     * Returns the RPGLObject's ability scores.
+     *
+     * @return a JsonObject containing the RPGLObject's ability scores
+     */
     public JsonObject getAbilityScores() {
         return this.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS);
     }
 
+    /**
+     * Returns the RPGLObject's health data. This includes hit dice, base health, max health, current health, and
+     * temporary health.
+     *
+     * @return a JsonObject containing health data for the RPGLObject
+     */
     public JsonObject getHealthData() {
         return this.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS);
     }
 
+    /**
+     * Returns all items currently equipped to the RPGLObject, mapped to their corresponding equipment slots.
+     *
+     * @return a JsonObject containing RPGLItems and their equipment slots
+     */
     public JsonObject getEquippedItems() {
         return this.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
     }
 
+    /**
+     * Returns the UUIDs of all items held by the RPGLObject.
+     *
+     * @return a JsonArray of RPGLItem UUIDs
+     */
     public JsonArray getInventory() {
         return this.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
     }
 
+    /**
+     * Returns the IDs (not UUIDs) of all RPGLEvents innately provided to the RPGLObject.
+     *
+     * @return a JsonArray of RPGLEffect IDs
+     */
     public JsonArray getEvents() {
         return this.getJsonArray(RPGLObjectTO.EVENTS_ALIAS);
     }
 
+    /**
+     * Returns the UUIDs of all RPGLEffects applied to the RPGLObject, not including any provided through equipped items.
+     *
+     * @return a JsonArray of RPGLItem UUIDs
+     */
     public JsonArray getEffects() {
         return this.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
     }
 
+    /**
+     * Returns the base proficiency bonus of the RPGLObject, not modified by any effects.
+     *
+     * @return the RPGLObject's base proficiency bonus
+     */
     public Integer getProficiencyBonus() {
         return this.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS);
     }
@@ -61,10 +97,10 @@ public class RPGLObject extends UUIDTableElement {
     // =================================================================================================================
 
     /**
-     * This method returns an array of RPGLEvents which this RPGLObject has access to (including any granted from
-     * active effects).
+     * Returns a List of all RPGLEvent objects associated with the RPGLObject. This includes RPGLEvents granted by
+     * effects.
      *
-     * @return an array of RPGLEvent ID Strings
+     * @return a List of RPGLEvent objects
      */
     public List<RPGLEvent> getEventObjects() {
         // TODO make a Subevent for collecting additional RPGLEvent ID's
@@ -76,6 +112,12 @@ public class RPGLObject extends UUIDTableElement {
         return events;
     }
 
+    /**
+     * Returns a List of all RPGLEffect objects associated with the RPGLObject. This includes RPGLEffects granted by
+     * equipped items.
+     *
+     * @return a List of RPGLEffect objects
+     */
     public List<RPGLEffect> getEffectObjects() {
         List<RPGLEffect> effects = new ArrayList<>();
 

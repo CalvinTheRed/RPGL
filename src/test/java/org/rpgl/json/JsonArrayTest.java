@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the json.JsonArray class.
+ * Testing class for the org.rpgl.json.JsonArray class.
  *
  * @author Calvin Withun
  */

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * Testing class for abstract class Calculation.
+ * Testing class for the org.rpgl.subevent.Calculation class.
  *
  * @author Calvin Withun
  */

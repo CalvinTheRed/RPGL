@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for class CalculateProficiencyBonus.
+ * Testing class for the org.rpgl.subevent.CalculateProficiencyBonus class.
  *
  * @author Calvin Withun
  */

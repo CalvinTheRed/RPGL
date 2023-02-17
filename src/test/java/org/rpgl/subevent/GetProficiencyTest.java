@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for abstract class GetProficiency.
+ * Testing class for the org.rpgl.subevent.GetProficiency class.
  *
  * @author Calvin Withun
  */
