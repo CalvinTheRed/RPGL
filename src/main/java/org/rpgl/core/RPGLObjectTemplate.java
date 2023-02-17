@@ -18,18 +18,10 @@ import java.util.Map;
 public class RPGLObjectTemplate extends JsonObject {
 
     /**
-     * 	<p><b><i>newInstance</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObject newInstance()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Constructs a new RPGLObject object corresponding to the contents of the RPGLObjectTemplate object. The new
-     * 	object is registered to the UUIDTable class when it is constructed.
-     * 	</p>
+     * Constructs a new RPGLObject object corresponding to the contents of the RPGLObjectTemplate object. The new
+     * object is registered to the UUIDTable class when it is constructed.
      *
-     * 	@return a new RPGLObject object
+     * @return a new RPGLObject object
      */
     public RPGLObject newInstance() {
         RPGLObject object = new RPGLObject();
@@ -47,18 +39,10 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processEffects</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processEffects(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method converts effect IDs in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
-     *  these new RPGLEffects replace the original array contents.
-     * 	</p>
+     * This helper method converts effect IDs in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
+     * these new RPGLEffects replace the original array contents.
      *
-     *  @param object an RPGLObject
+     * @param object an RPGLObject
      */
     static void processEffects(RPGLObject object) {
         JsonArray effectIdArray = object.removeJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
@@ -74,24 +58,16 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processEquippedItems</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processEquippedItems(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method processes the equipped items as defined by an RPGLObjectTemplate. All items are created,
-     * 	loaded into UUIDTable, and then assigned to the corresponding equipment slots in the object being created and
-     * 	are appended to the inventory list. Note that this method must be called AFTER the <code>processInventory()</code>
-     * 	method to work properly.
-     * 	</p>
+     * This helper method processes the equipped items as defined by an RPGLObjectTemplate. All items are created,
+     * loaded into UUIDTable, and then assigned to the corresponding equipment slots in the object being created and
+     * are appended to the inventory list. Note that this method must be called AFTER the <code>processInventory()</code>
+     * method to work properly.
      *
-     * 	@param object a RPGLObject being created by this object
+     * @param object a RPGLObject being created by this object
      */
     static void processEquippedItems(RPGLObject object) {
-        JsonObject equippedItemIds = object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
-        JsonArray inventoryUuids = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonObject equippedItemIds = object.getEquippedItems();
+        JsonArray inventoryUuids = object.getInventory();
         JsonObject equippedItemUuids = new JsonObject();
         for (Map.Entry<String, ?> equippedItemEntry : equippedItemIds.asMap().entrySet()) {
             String equippedItemId = equippedItemIds.getString(equippedItemEntry.getKey());
@@ -103,19 +79,11 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processInventory</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processInventory(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method processes the equipment as defined by an RPGLObjectTemplate. All items are created and added
-     * 	to the inventory list. Note that this method must be called BEFORE the <code>processEquippedItems()</code>
-     * 	method for that method to work properly.
-     * 	</p>
+     * This helper method processes the equipment as defined by an RPGLObjectTemplate. All items are created and added
+     * to the inventory list. Note that this method must be called BEFORE the <code>processEquippedItems()</code>
+     * method for that method to work properly.
      *
-     * 	@param object a RPGLObject being created by this object
+     * @param object a RPGLObject being created by this object
      */
     static void processInventory(RPGLObject object) {
         JsonArray inventoryItemIds = object.removeJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
@@ -129,21 +97,13 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processHealthData</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processHealthData(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method unpacks the condensed representation of hit dice in a RPGLObjectTemplate into multiple dice
-     * 	objects in accordance with the <code>count</code> field.
-     * 	</p>
+     * This helper method unpacks the condensed representation of hit dice in a RPGLObjectTemplate into multiple dice
+     * objects in accordance with the <code>count</code> field.
      *
-     * 	@param object a RPGLObject being created by this object
+     * @param object a RPGLObject being created by this object
      */
     static void processHealthData(RPGLObject object) {
-        JsonObject healthData = object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS);
+        JsonObject healthData = object.getHealthData();
         JsonArray templateHitDice = healthData.removeJsonArray("hit_dice");
         JsonArray hitDice = new JsonArray();
         for (int i = 0; i < templateHitDice.size(); i++) {

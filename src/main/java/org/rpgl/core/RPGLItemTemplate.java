@@ -44,19 +44,10 @@ public class RPGLItemTemplate extends JsonObject {
     }};
 
     /**
-     * 	<p><b><i>newInstance</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLItem newInstance()
-     * 	throws JsonFormatException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Constructs a new RPGLItem object corresponding to the contents of the RPGLItemTemplate object. The new object is
-     * 	registered to the UUIDTable class when it is constructed.
-     * 	</p>
+     * Constructs a new RPGLItem object corresponding to the contents of the RPGLItemTemplate object. The new object is
+     * registered to the UUIDTable class when it is constructed.
      *
-     * 	@return a new RPGLItem object
+     * @return a new RPGLItem object
      */
     public RPGLItem newInstance() {
         RPGLItem item = new RPGLItem();
@@ -77,21 +68,13 @@ public class RPGLItemTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processImprovisedTags</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processImprovisedTags(RPGLItem item)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method adds the <code>improvised_melee</code> and <code>improvised_thrown</code> weapon property
-     * 	tags to the item, as appropriate based on its other weapon property tags.
-     * 	</p>
+     * This helper method adds the <code>improvised_melee</code> and <code>improvised_thrown</code> weapon property
+     * tags to the item, as appropriate based on its other weapon property tags.
      *
-     * 	@param item a RPGLItem being created by this object
+     * @param item a RPGLItem being created by this object
      */
     static void processImprovisedTags(RPGLItem item) {
-        JsonArray weaponProperties = item.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS);
+        JsonArray weaponProperties = item.getWeaponProperties();
         if (!weaponProperties.asList().contains("melee")) {
             weaponProperties.addString("improvised_melee");
         }
@@ -101,18 +84,10 @@ public class RPGLItemTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processWhileEquipped</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processWhileEquipped(RPGLItem item)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method converts effectId's in an RPGLItemTemplate's while_equipped array to RPGLEffects. The UUID's
-     * 	of these new RPGLEffects replace the original array contents.
-     * 	</p>
+     * This helper method converts effectId's in an RPGLItemTemplate's while_equipped array to RPGLEffects. The UUID's
+     * of these new RPGLEffects replace the original array contents.
      *
-     *  @param item a RPGLItem being created by this object
+     * @param item a RPGLItem being created by this object
      */
     static void processEquippedEffects(RPGLItem item) {
         JsonArray equippedEffectsIdArray = Objects.requireNonNullElse(item.removeJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS), new JsonArray());
@@ -126,17 +101,9 @@ public class RPGLItemTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>setDefaultItemDamage</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void setDefaultItemDamage(RPGLItem item)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method sets the damage for an item in the cases where it would function as an improvised weapon.
-     * 	</p>
+     * This helper method sets the damage for an item in the cases where it would function as an improvised weapon.
      *
-     * 	@param item a RPGLItem being created by this object
+     * @param item a RPGLItem being created by this object
      */
     static void setDefaultItemDamage(RPGLItem item) {
         JsonObject damage = new JsonObject();
@@ -159,21 +126,13 @@ public class RPGLItemTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processItemDamage</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processItemDamage(RPGLItem item)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method unpacks the condensed representation of damage dice in a RPGLItemTemplate into multiple dice
-     * 	objects in accordance with the <code>count</code> field.
-     * 	</p>
+     * This helper method unpacks the condensed representation of damage dice in a RPGLItemTemplate into multiple dice
+     * objects in accordance with the <code>count</code> field.
      *
-     * 	@param item a RPGLItem being created by this object
+     * @param item a RPGLItem being created by this object
      */
     static void processItemDamage(RPGLItem item) {
-        JsonObject damage = item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS);
+        JsonObject damage = item.getDamage();
         for (Map.Entry<String, ?> damageObjectEntry : damage.asMap().entrySet()) {
             String attackType = damageObjectEntry.getKey();
             JsonArray attackTypeDamageArray = damage.getJsonArray(attackType);

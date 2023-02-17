@@ -32,35 +32,19 @@ public class JsonArray {
     }
 
     /**
-     * 	<p><b><i>asList</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public ArrayList&lt;Object&gt; asList()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the data encapsulated by this object.
-     * 	</p>
+     * Returns the data encapsulated by this object.
      *
-     * 	@return an ArrayList
+     * @return an ArrayList
      */
     public ArrayList<Object> asList() {
         return this.data;
     }
 
     /**
-     * 	<p><b><i>deepClone</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonArray deepClone()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns a deep clone of this object. The clone contains an exact copy of the contents of this object, but making
-     * 	changes to the clone or its contents will not impact this object.
-     * 	</p>
+     * Returns a deep clone of this object. The clone contains an exact copy of the contents of this object, but making
+     * changes to the clone or its contents will not impact this object.
      *
-     * 	@return a JsonArray
+     * @return a JsonArray
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonArray deepClone() {
@@ -78,17 +62,9 @@ public class JsonArray {
     }
 
     /**
-     * 	<p><b><i>size</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public int size()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the number of elements in the encapsulated list.
-     * 	</p>
+     * Returns the number of elements in the encapsulated list.
      *
-     * 	@return the number of elements in the encapsulated list
+     * @return the number of elements in the encapsulated list
      */
     public int size() {
         return this.data.size();
@@ -99,17 +75,9 @@ public class JsonArray {
     // =================================================================================================================
 
     /**
-     * 	<p><b><i>getJsonObject</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonObject getJsonObject(int index)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the JsonObject stored at the passed index, or null if the stored element is of a different type.
-     * 	</p>
+     * Returns the JsonObject stored at the passed index, or null if the stored element is of a different type.
      *
-     * 	@return a JsonObject or null
+     * @return a JsonObject or null
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonObject getJsonObject(int index) {
@@ -117,22 +85,14 @@ public class JsonArray {
     }
 
     /**
-     * 	<p><b><i>getJsonObject</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonObject getJsonObjectMatching(Object... keysAndValues)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the first JsonObject element stored in the encapsulated list whose contents match the passed keys and
-     * 	values, or null if no matching elements are found. The parameter for this list should be in sets of two: a json
-     * 	"key" followed by a json "value". If the parameter is not evenly sized, this method will return null. If any
-     * 	"key" element in the parameter is not a String, this method will return null.
-     * 	</p>
+     * Returns the first JsonObject element stored in the encapsulated list whose contents match the passed keys and
+     * values, or null if no matching elements are found. The parameter for this list should be in sets of two: a json
+     * "key" followed by a json "value". If the parameter is not evenly sized, this method will return null. If any
+     * "key" element in the parameter is not a String, this method will return null.
      *
-     * 	@return a JsonObject or null
+     * @return a JsonObject or null
      *
-     * 	TODO consider having a keys parameter and a values parameter? More readable and intuitive that way...
+     * TODO consider having a keys parameter and a values parameter? More readable and intuitive that way...
      */
     @SuppressWarnings({"rawtypes", "unchecked", ""})
     public JsonObject getJsonObjectMatching(Object... keysAndValues) {
@@ -179,17 +139,9 @@ public class JsonArray {
     }
 
     /**
-     * 	<p><b><i>getJsonArray</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonArray getJsonArray(int index)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the JsonArray stored at the passed index, or null if the stored element is of a different type.
-     * 	</p>
+     * Returns the JsonArray stored at the passed index, or null if the stored element is of a different type.
      *
-     * 	@return a JsonArray or null
+     * @return a JsonArray or null
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public JsonArray getJsonArray(int index) {
@@ -197,68 +149,36 @@ public class JsonArray {
     }
 
     /**
-     * 	<p><b><i>getString</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public String getString(int index)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the String stored at the passed index, or null if the stored element is of a different type.
-     * 	</p>
+     * Returns the String stored at the passed index, or null if the stored element is of a different type.
      *
-     * 	@return a String or null
+     * @return a String or null
      */
     public String getString(int index) {
         return (this.data.get(index) instanceof String s) ? s : null;
     }
 
     /**
-     * 	<p><b><i>getInteger</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public Integer getInteger(int index)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the Integer stored at the passed index, or null if the stored element is of a different type.
-     * 	</p>
+     * Returns the Integer stored at the passed index, or null if the stored element is of a different type.
      *
-     * 	@return a Integer or null
+     * @return a Integer or null
      */
     public Integer getInteger(int index) {
         return (this.data.get(index) instanceof Integer i) ? i : null;
     }
 
     /**
-     * 	<p><b><i>getDouble</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public Double getDouble(int index)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the Double stored at the passed index, or null if the stored element is of a different type.
-     * 	</p>
+     * Returns the Double stored at the passed index, or null if the stored element is of a different type.
      *
-     * 	@return a Double or null
+     * @return a Double or null
      */
     public Double getDouble(int index) {
         return (this.data.get(index) instanceof Double d) ? d : null;
     }
 
     /**
-     * 	<p><b><i>getBoolean</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public Boolean getBoolean(int index)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the Boolean stored at the passed index, or null if the stored element is of a different type.
-     * 	</p>
+     * Returns the Boolean stored at the passed index, or null if the stored element is of a different type.
      *
-     * 	@return a Boolean or null
+     * @return a Boolean or null
      */
     public Boolean getBoolean(int index) {
         return (this.data.get(index) instanceof Boolean b) ? b : null;
@@ -269,102 +189,54 @@ public class JsonArray {
     // =================================================================================================================
 
     /**
-     * 	<p><b><i>addJsonObject</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addJsonObject(JsonObject jsonObject)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Appends the passed JsonObject (as a map) to the encapsulated list.
-     * 	</p>
+     * Appends the passed JsonObject (as a map) to the encapsulated list.
      *
-     * 	@param jsonObject a JsonObject
+     * @param jsonObject a JsonObject
      */
     public void addJsonObject(JsonObject jsonObject) {
         this.data.add(jsonObject.asMap());
     }
 
     /**
-     * 	<p><b><i>addJsonArray</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addJsonArray(JsonArray jsonArray)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Appends the passed JsonArray (as a list) to the encapsulated list.
-     * 	</p>
+     * Appends the passed JsonArray (as a list) to the encapsulated list.
      *
-     * 	@param jsonArray a JsonArray
+     * @param jsonArray a JsonArray
      */
     public void addJsonArray(JsonArray jsonArray) {
         this.data.add(jsonArray.asList());
     }
 
     /**
-     * 	<p><b><i>addString</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addString(String s)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Appends the passed String to the encapsulated list.
-     * 	</p>
+     * Appends the passed String to the encapsulated list.
      *
-     * 	@param s a String
+     * @param s a String
      */
     public void addString(String s) {
         this.data.add(s);
     }
 
     /**
-     * 	<p><b><i>addInteger</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addInteger(Integer i)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Appends the passed Integer to the encapsulated list.
-     * 	</p>
+     * Appends the passed Integer to the encapsulated list.
      *
-     * 	@param i a Integer
+     * @param i a Integer
      */
     public void addInteger(Integer i) {
         this.data.add(i);
     }
 
     /**
-     * 	<p><b><i>addDouble</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addDouble(Double d)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Appends the passed Double to the encapsulated list.
-     * 	</p>
+     * Appends the passed Double to the encapsulated list.
      *
-     * 	@param d a Double
+     * @param d a Double
      */
     public void addDouble(Double d) {
         this.data.add(d);
     }
 
     /**
-     * 	<p><b><i>addBoolean</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addBoolean(Boolean b)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Appends the passed Boolean to the encapsulated list.
-     * 	</p>
+     * Appends the passed Boolean to the encapsulated list.
      *
-     * 	@param b a Boolean
+     * @param b a Boolean
      */
     public void addBoolean(Boolean b) {
         this.data.add(b);

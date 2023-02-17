@@ -51,7 +51,7 @@ public class RPGLItemTemplateTest {
 
         String expected = """
                 {"melee":[{"bonus":0,"dice":[{"count":1,"determined":[2],"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"count":1,"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
+        assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
     }
@@ -67,7 +67,7 @@ public class RPGLItemTemplateTest {
 
         String expected = """
                 {"melee":[{"bonus":0,"dice":[{"count":1,"determined":[4],"size":8}],"type":"slashing"}],"thrown":[{"bonus":0,"dice":[{"count":1,"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
+        assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
     }
@@ -84,7 +84,7 @@ public class RPGLItemTemplateTest {
 
         String expected = """
                 {"melee":[{"bonus":0,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"slashing"}],"thrown":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
+        assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
     }
@@ -98,7 +98,7 @@ public class RPGLItemTemplateTest {
 
         RPGLItemTemplate.processEquippedEffects(item);
 
-        JsonArray whileEquipped = item.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS);
+        JsonArray whileEquipped = item.getWhileEquippedEffects();
         assertEquals(1, whileEquipped.size(),
                 "there should be 1 element in the while_equipped field after calling processEquippedEffects() method"
         );
@@ -119,7 +119,7 @@ public class RPGLItemTemplateTest {
 
         RPGLItemTemplate.processImprovisedTags(item);
 
-        JsonArray weaponProperties = item.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS);
+        JsonArray weaponProperties = item.getWeaponProperties();
         assertTrue(weaponProperties.asList().contains("improvised_melee"),
                 "weapon properties array missing improvised_melee tag"
         );
@@ -137,7 +137,7 @@ public class RPGLItemTemplateTest {
 
         RPGLItemTemplate.processImprovisedTags(item);
 
-        JsonArray weaponProperties = item.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS);
+        JsonArray weaponProperties = item.getWeaponProperties();
         assertFalse(weaponProperties.asList().contains("improvised_melee"),
                 "weapon properties array should not contain improvised_melee tag"
         );
@@ -155,61 +155,64 @@ public class RPGLItemTemplateTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, item.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, item.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Teacup", item.getString(DatapackContentTO.NAME_ALIAS),
+        assertEquals("Teacup", item.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A teacup.", item.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+        assertEquals("A teacup.", item.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("demo:teacup", item.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
-        assertEquals("[]", item.getJsonArray(RPGLItemTO.TAGS_ALIAS).toString(),
+        assertEquals("[]", item.getTags().toString(),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
         );
-        assertEquals(0, item.getInteger(RPGLItemTO.WEIGHT_ALIAS),
+        assertEquals(0, item.getWeight(),
                 "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
-        assertEquals(0, item.getInteger(RPGLItemTO.COST_ALIAS),
+        assertEquals(0, item.getCost(),
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        assertEquals("[]", item.getJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS).toString(),
+        assertEquals("[]", item.getProficiencyTags().toString(),
                 "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
         );
-        assertEquals("[]", item.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
+        assertEquals("[]", item.getWhileEquippedEffects().toString(),
                 "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
         );
         expected = """
                 ["improvised_melee","improvised_thrown"]""";
-        assertEquals(expected, item.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
+        assertEquals(expected, item.getWeaponProperties().toString(),
                 "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
         expected = """
                 {"melee":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
+        assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
-        assertEquals(0, item.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
+        assertEquals(0, item.getAttackBonus(),
                 "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
         );
         expected = """
                 {"melee":"str","thrown":"str"}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS).toString(),
+        assertEquals(expected, item.getAttackAbilities().toString(),
                 "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
         );
         expected = """
                 {"long":60,"normal":20}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.RANGE_ALIAS).toString(),
+        assertEquals(expected, item.getRange().toString(),
                 "incorrect field value: " + RPGLItemTO.RANGE_ALIAS
         );
-        assertNull(item.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
+        assertNull(item.getArmorClassBase(),
                 "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
         );
-        assertNull(item.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS),
+        assertNull(item.getArmorClassDexLimit(),
                 "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS
         );
-        assertNull(item.getInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS),
+        assertNull(item.getArmorClassBonus(),
                 "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS
         );
     }

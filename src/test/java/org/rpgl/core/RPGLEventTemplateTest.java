@@ -9,7 +9,6 @@ import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.datapack.RPGLEventTO;
-import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -47,7 +46,7 @@ public class RPGLEventTemplateTest {
 
         RPGLEventTemplate.processSubeventDamage(event);
 
-        JsonArray damageDiceArray = event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS).getJsonObject(0).getJsonArray("damage").getJsonObject(0).getJsonArray("dice");
+        JsonArray damageDiceArray = event.getSubevents().getJsonObject(0).getJsonArray("damage").getJsonObject(0).getJsonArray("dice");
         assertEquals(16, damageDiceArray.size(),
                 "compact hit dice view should be unpacked into 16 objects"
         );
@@ -71,22 +70,25 @@ public class RPGLEventTemplateTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, event.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, event.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Fire Breath", event.getString(RPGLObjectTO.NAME_ALIAS),
+        assertEquals("Fire Breath", event.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("The dragon breathes fire.", event.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
+        assertEquals("The dragon breathes fire.", event.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("demo:young_red_dragon_fire_breath", event.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
-        assertEquals("{}", event.getJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS).toString(),
+        assertEquals("{}", event.getAreaOfEffect().toString(),
                 "incorrect field value: " + RPGLEventTO.AREA_OF_EFFECT_ALIAS
         );
         expected = """
                 [{"damage":[{"bonus":0,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"fire"}],"damage_on_pass":"half","determined":[1],"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
-        assertEquals(expected, event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS).toString(),
+        assertEquals(expected, event.getSubevents().toString(),
                 "incorrect field value: " + RPGLEventTO.SUBEVENTS_ALIAS
         );
     }

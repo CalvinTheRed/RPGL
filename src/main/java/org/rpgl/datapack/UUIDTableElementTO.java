@@ -34,21 +34,13 @@ public class UUIDTableElementTO extends DatapackContentTO {
      */
     public UUIDTableElementTO(UUIDTableElement uuidTableElement) {
         super(uuidTableElement);
-        this.uuid = uuidTableElement.getString(UUID_ALIAS);
+        this.uuid = uuidTableElement.getUuid();
     }
 
     /**
-     * 	<p><b><i>getUUIDTableElementData</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonObject getUUIDTableElementData()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns json data representing the data stored by this object relevant to UUIDTableElement data.
-     * 	</p>
+     * This method returns json data representing the data stored by this object relevant to UUIDTableElement data.
      *
-     * 	@return a JsonObject
+     * @return a JsonObject
      */
     public JsonObject getUUIDTableElementData() {
         return new JsonObject() {{

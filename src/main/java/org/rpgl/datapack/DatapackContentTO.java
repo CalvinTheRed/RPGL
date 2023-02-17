@@ -38,28 +38,20 @@ public class DatapackContentTO {
     /**
      * Constructor to be used when storing data from a fully instantiated object. Intended to be used for saving data.
      *
-     * @param jsonObject a fully instantiated object
+     * @param datapackContent a fully instantiated DatapackContent object
      */
-    public DatapackContentTO(JsonObject jsonObject) {
-        this.metadata = jsonObject.getJsonObject(METADATA_ALIAS).asMap();
-        this.name = jsonObject.getString(NAME_ALIAS);
-        this.description = jsonObject.getString(DESCRIPTION_ALIAS);
-        this.id = jsonObject.getString(ID_ALIAS);
+    public DatapackContentTO(DatapackContent datapackContent) {
+        this.metadata = datapackContent.getMetadata().asMap();
+        this.name = datapackContent.getName();
+        this.description = datapackContent.getDescription();
+        this.id = datapackContent.getId();
     }
 
     /**
-     * 	<p><b><i>getTemplateData</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonObject getTemplateData()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns json data representing the data stored by this object relevant to universally shared
-     * 	datapack template data.
-     * 	</p>
+     * This method returns json data representing the data stored by this object relevant to universally shared
+     * datapack template data.
      *
-     * 	@return a JsonObject
+     * @return a JsonObject
      */
     protected JsonObject getTemplateData() {
         return new JsonObject() {{

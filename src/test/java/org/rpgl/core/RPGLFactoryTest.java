@@ -49,19 +49,22 @@ public class RPGLFactoryTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, effect.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, effect.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Fire Immunity", effect.getString(DatapackContentTO.NAME_ALIAS),
+        assertEquals("Fire Immunity", effect.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("Creatures with this effect take 0 fire damage.", effect.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+        assertEquals("Creatures with this effect take 0 fire damage.", effect.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertEquals("demo:fire_immunity", effect.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
         expected = """
                 {"damage_affinity":{"conditions":[],"functions":[]}}""";
-        assertEquals(expected, effect.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS).toString(),
+        assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );
     }
@@ -74,22 +77,25 @@ public class RPGLFactoryTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, event.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, event.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Fire Breath", event.getString(RPGLObjectTO.NAME_ALIAS),
+        assertEquals("Fire Breath", event.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("The dragon breathes fire.", event.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
+        assertEquals("The dragon breathes fire.", event.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("demo:young_red_dragon_fire_breath", event.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
-        assertEquals("{}", event.getJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS).toString(),
+        assertEquals("{}", event.getAreaOfEffect().toString(),
                 "incorrect field value: " + RPGLEventTO.AREA_OF_EFFECT_ALIAS
         );
         expected = """
                 [{"damage":[{"bonus":0,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"fire"}],"damage_on_pass":"half","determined":[1],"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
-        assertEquals(expected, event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS).toString(),
+        assertEquals(expected, event.getSubevents().toString(),
                 "incorrect field value: " + RPGLEventTO.SUBEVENTS_ALIAS
         );
     }
@@ -102,61 +108,64 @@ public class RPGLFactoryTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, item.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, item.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Teacup", item.getString(DatapackContentTO.NAME_ALIAS),
+        assertEquals("Teacup", item.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A teacup.", item.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+        assertEquals("A teacup.", item.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("demo:teacup", item.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
-        assertEquals("[]", item.getJsonArray(RPGLItemTO.TAGS_ALIAS).toString(),
+        assertEquals("[]", item.getTags().toString(),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
         );
-        assertEquals(0, item.getInteger(RPGLItemTO.WEIGHT_ALIAS),
+        assertEquals(0, item.getWeight(),
                 "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
-        assertEquals(0, item.getInteger(RPGLItemTO.COST_ALIAS),
+        assertEquals(0, item.getCost(),
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        assertEquals("[]", item.getJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS).toString(),
+        assertEquals("[]", item.getProficiencyTags().toString(),
                 "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
         );
-        assertEquals("[]", item.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
+        assertEquals("[]", item.getWhileEquippedEffects().toString(),
                 "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
         );
         expected = """
                 ["improvised_melee","improvised_thrown"]""";
-        assertEquals(expected, item.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
+        assertEquals(expected, item.getWeaponProperties().toString(),
                 "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
         expected = """
                 {"melee":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
+        assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
-        assertEquals(0, item.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
+        assertEquals(0, item.getAttackBonus(),
                 "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
         );
         expected = """
                 {"melee":"str","thrown":"str"}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS).toString(),
+        assertEquals(expected, item.getAttackAbilities().toString(),
                 "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
         );
         expected = """
                 {"long":60,"normal":20}""";
-        assertEquals(expected, item.getJsonObject(RPGLItemTO.RANGE_ALIAS).toString(),
+        assertEquals(expected, item.getRange().toString(),
                 "incorrect field value: " + RPGLItemTO.RANGE_ALIAS
         );
-        assertNull(item.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
+        assertNull(item.getArmorClassBase(),
                 "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
         );
-        assertNull(item.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS),
+        assertNull(item.getArmorClassDexLimit(),
                 "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS
         );
-        assertNull(item.getInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS),
+        assertNull(item.getArmorClassBonus(),
                 "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS
         );
     }
@@ -169,45 +178,48 @@ public class RPGLFactoryTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, object.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, object.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Young Red Dragon", object.getString(DatapackContentTO.NAME_ALIAS),
+        assertEquals("Young Red Dragon", object.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A young red dragon.", object.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+        assertEquals("A young red dragon.", object.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertEquals("demo:young_red_dragon", object.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
         expected = """
                 {"cha":19,"con":21,"dex":10,"int":14,"str":23,"wis":11}""";
-        assertEquals(expected, object.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).toString(),
+        assertEquals(expected, object.getAbilityScores().toString(),
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
                 {"base":178,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"maximum":178,"temporary":0}""";
-        assertEquals(expected, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
+        assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
-        assertEquals("{}", object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).toString(),
+        assertEquals("{}", object.getEquippedItems().toString(),
                 "incorrect field value: " + RPGLObjectTO.EQUIPPED_ITEMS_ALIAS
         );
-        assertEquals("[]", object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS).toString(),
+        assertEquals("[]", object.getInventory().toString(),
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
                 ["demo:young_red_dragon_bite_attack","demo:young_red_dragon_claw_attack","demo:young_red_dragon_fire_breath"]""";
-        assertEquals(expected, object.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
+        assertEquals(expected, object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
-        JsonArray effects = object.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
+        JsonArray effects = object.getEffects();
         for (int i = 0; i < effects.size(); i++) {
             String effectUuid = effects.getString(i);
             assertNotNull(UUIDTable.getEffect(effectUuid),
                     "effect at effects index " + i + " is missing from UUIDTable"
             );
         }
-        assertEquals(4, object.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS),
+        assertEquals(4, object.getProficiencyBonus(),
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
         );
     }

@@ -1,6 +1,5 @@
 package org.rpgl.core;
 
-import org.rpgl.datapack.RPGLEventTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -15,18 +14,10 @@ import java.util.ArrayList;
 public class RPGLEventTemplate extends JsonObject {
 
     /**
-     * 	<p><b><i>newInstance</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLEvent newInstance()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Constructs a new RPGLEvent object corresponding to the contents of the RPGLEventTemplate object. The new object
-     * 	is registered to the UUIDTable class when it is constructed.
-     * 	</p>
+     * Constructs a new RPGLEvent object corresponding to the contents of the RPGLEventTemplate object. The new object
+     * is registered to the UUIDTable class when it is constructed.
      *
-     * 	@return a new RPGLEvent object
+     * @return a new RPGLEvent object
      */
     public RPGLEvent newInstance() {
         RPGLEvent event = new RPGLEvent();
@@ -36,21 +27,13 @@ public class RPGLEventTemplate extends JsonObject {
     }
 
     /**
-     * 	<p><b><i>processSubeventDamage</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processSubeventDamage(RPGLEvent event)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method unpacks the condensed representation of damage dice in a RPGLEventTemplate into multiple dice
-     * 	objects in accordance with the <code>count</code> field.
-     * 	</p>
+     * This helper method unpacks the condensed representation of damage dice in a RPGLEventTemplate into multiple dice
+     * objects in accordance with the <code>count</code> field.
      *
-     * 	@param event a RPGLEvent being created by this object
+     * @param event a RPGLEvent being created by this object
      */
     static void processSubeventDamage(RPGLEvent event) {
-        JsonArray subevents = event.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
+        JsonArray subevents = event.getSubevents();
         for (int i = 0; i < subevents.size(); i++) {
             JsonObject subeventJson = subevents.getJsonObject(i);
             JsonArray damageArray = subeventJson.getJsonArray("damage");

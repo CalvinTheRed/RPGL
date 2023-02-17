@@ -33,17 +33,9 @@ public class RPGLEventTO extends UUIDTableElementTO {
     }
 
     /**
-     * 	<p><b><i>toRPGLEventTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLEventTemplate toRPGLEventTemplate()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method translates the stored data into a RPGLEventTemplate object.
-     * 	</p>
+     * This method translates the stored data into a RPGLEventTemplate object.
      *
-     * 	@return a RPGLEventTemplate
+     * @return a RPGLEventTemplate
      */
     public RPGLEventTemplate toRPGLEventTemplate() {
         RPGLEventTemplate rpglEventTemplate = new RPGLEventTemplate() {{

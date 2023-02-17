@@ -30,17 +30,9 @@ public abstract class Subevent {
     final String subeventId;
 
     /**
-     * 	<p><b><i>initialize</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public static void initialize(boolean includeTestingSubevents)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method populates Condition.CONDITIONS.
-     * 	</p>
+     * This method populates Condition.CONDITIONS.
      *
-     * 	@param includeTestingSubevents whether testing-only Subevents should be loaded into RPGL
+     * @param includeTestingSubevents whether testing-only Subevents should be loaded into RPGL
      */
     public static void initialize(boolean includeTestingSubevents) {
         Subevent.SUBEVENTS.clear();
@@ -58,39 +50,22 @@ public abstract class Subevent {
     }
 
     /**
-     * 	<p><b><i>Subevent</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * Subevent(String subeventId)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Constructor for Subevent. New Subevents should be constructed via cloning from <code>Subevent.SUBEVENTS</code>
-     * 	rather than through the use of constructors.
-     * 	</p>
+     * Constructor for Subevent. New Subevents should be constructed via cloning from <code>Subevent.SUBEVENTS</code>
+     * rather than through the use of constructors.
      *
-     * 	@param subeventId the ID for the Subevent being constructed
+     * @param subeventId the ID for the Subevent being constructed
      */
     public Subevent(String subeventId) {
         this.subeventId = subeventId;
     }
 
     /**
-     * 	<p><b><i>verifySubevent</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * void verifySubevent(String expected, JsonObject subeventJson)
-     * 	throws SubeventMismatchException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Verifies that the additional information provided to <code>invoke(...)</code> is intended for the Subevent type
-     * 	being invoked.
-     * 	</p>
+     * Verifies that the additional information provided to <code>invoke(...)</code> is intended for the Subevent type
+     * being invoked.
      *
-     * 	@param expected the expected subeventId
+     * @param expected the expected subeventId
      *
-     * 	@throws SubeventMismatchException if functionJson is for a different function than the one being executed
+     * @throws SubeventMismatchException if functionJson is for a different function than the one being executed
      */
     void verifySubevent(String expected) throws SubeventMismatchException {
         if (!expected.equals(this.subeventJson.getString("subevent"))) {
@@ -99,18 +74,10 @@ public abstract class Subevent {
     }
 
     /**
-     * 	<p><b><i>joinSubeventJson</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void joinSubeventJson(JsonObject subeventJson)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method joins the passed JSON data to the current Subevent JSON data. This method is primarily intended to
-     * 	be used when Subevents must be created which are not included in <code>Subevent.SUBEVENTS</code>.
-     * 	</p>
+     * This method joins the passed JSON data to the current Subevent JSON data. This method is primarily intended to be
+     * used when Subevents must be created which are not included in <code>Subevent.SUBEVENTS</code>.
      *
-     * 	@param subeventData the JSON data to be joined to the current Subevent JSON
+     * @param subeventData the JSON data to be joined to the current Subevent JSON
      */
     public void joinSubeventData(JsonObject subeventData) {
         this.subeventJson.join(subeventData);
@@ -121,39 +88,22 @@ public abstract class Subevent {
     public abstract Subevent clone();
 
     /**
-     * 	<p><b><i>clone</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public Subevent clone(Map&lt;String, Object&gt; subeventDataMap)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method creates a new and independent Subevent of the same type as the calling Subevent. The provided JSON
-     * 	data will be used to populate the new Subevent. This method's primary use case is to create a new Subevent when
-     * 	retrieving a Subevent from the Subevent.SUBEVENTS map.
-     * 	</p>
+     * This method creates a new and independent Subevent of the same type as the calling Subevent. The provided JSON
+     * data will be used to populate the new Subevent. This method's primary use case is to create a new Subevent when
+     * retrieving a Subevent from the Subevent.SUBEVENTS map.
      *
-     * 	@param jsonData the JSON data to be joined to the new Subevent after being cloned
+     * @param jsonData the JSON data to be joined to the new Subevent after being cloned
      */
     public abstract Subevent clone(JsonObject jsonData);
 
     /**
-     * 	<p><b><i>prepare</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void prepare(RPGLContext context)
-     * 	throws Exception
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Gives a Subevent the opportunity to prepare information prior to being copied out to each individual target.
-     * 	This method might not do anything for simpler Subevents. The <code>setSource(...)</code> method must be used to
-     * 	assign a source RPGLObject to the Subevent for this method to work reliably.
-     * 	</p>
+     * Gives a Subevent the opportunity to prepare information prior to being copied out to each individual target.
+     * This method might not do anything for simpler Subevents. The <code>setSource(...)</code> method must be used to
+     * assign a source RPGLObject to the Subevent for this method to work reliably.
      *
-     * 	@param context the context in which the Subevent is being prepared\
+     * @param context the context in which the Subevent is being prepared\
      *
-     * 	@throws Exception if an exception occurs (any type of error may occur from calling this method)
+     * @throws Exception if an exception occurs (any type of error may occur from calling this method)
      */
     public void prepare(RPGLContext context) throws Exception {
         // This method has no behavior by default. It is left empty
@@ -161,22 +111,13 @@ public abstract class Subevent {
     }
 
     /**
-     * 	<p><b><i>invoke</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void invoke(RPGLContext context)
-     * 	throws Exception
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method causes the Subevent to be submitted to all RPGLEffects in scope of the RPGLContext provided and then
-     * 	execute its intended behavior. The <code>setTarget(...)</code> method must be used to assign a target RPGLObject
-     * 	to the Subevent for this method to work reliably.
-     * 	</p>
+     * This method causes the Subevent to be submitted to all RPGLEffects in scope of the RPGLContext provided and then
+     * execute its intended behavior. The <code>setTarget(...)</code> method must be used to assign a target RPGLObject
+     * to the Subevent for this method to work reliably.
      *
-     * 	@param context the context in which the Subevent is being invoked
+     * @param context the context in which the Subevent is being invoked
      *
-     * 	@throws Exception if an exception occurs (any type of error may occur from calling this method)
+     * @throws Exception if an exception occurs (any type of error may occur from calling this method)
      */
     public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);
@@ -184,37 +125,21 @@ public abstract class Subevent {
     }
 
     /**
-     * 	<p><b><i>addModifyingEffect</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addModifyingEffect(RPGLEffect effect)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Adds a modifying RPGLEffect to the Subevent. Once a RPGLEffect is added in this way, the Subevent cannot be
-     * 	modified by another RPGLEffect with the same effectId. RPGLEffects added in this way cannot be removed, and
-     * 	carry over when the <code>clone()</code> method is called (but not <code>clone(...)</code>).
-     * 	</p>
+     * Adds a modifying RPGLEffect to the Subevent. Once a RPGLEffect is added in this way, the Subevent cannot be
+     * modified by another RPGLEffect with the same effectId. RPGLEffects added in this way cannot be removed, and
+     * carry over when the <code>clone()</code> method is called (but not <code>clone(...)</code>).
      *
-     * 	@param effect an RPGLEffect which has executed Functions in response to this Subevent being invoked
+     * @param effect an RPGLEffect which has executed Functions in response to this Subevent being invoked
      */
     public void addModifyingEffect(RPGLEffect effect) {
         this.modifyingEffects.add(effect);
     }
 
     /**
-     * 	<p><b><i>hasModifyingEffect</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public boolean hasModifyingEffect(RPGLEffect effect)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Checks if the Subevent has already been modified by an RPGLEffect with the same effectId as the passed RPGLEffect.
-     * 	</p>
+     * Checks if the Subevent has already been modified by an RPGLEffect with the same effectId as the passed RPGLEffect.
      *
-     * 	@param effect an RPGLEffect
-     *  @return true if the Subevent has been modified by an instance of the passed Subevent already
+     * @param effect an RPGLEffect
+     * @return true if the Subevent has been modified by an instance of the passed Subevent already
      */
     public boolean hasModifyingEffect(RPGLEffect effect) {
         String effectId = effect.getString("id");
@@ -227,17 +152,9 @@ public abstract class Subevent {
     }
 
     /**
-     * 	<p><b><i>setSource</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void setSource(RPGLObject source)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Assigns a RPGLObject as the source of this Subevent.
-     * 	</p>
+     * Assigns a RPGLObject as the source of this Subevent.
      *
-     * 	@param source an RPGLObject
+     * @param source an RPGLObject
      */
     public void setSource(RPGLObject source) {
         if (source == null) {
@@ -248,17 +165,9 @@ public abstract class Subevent {
     }
 
     /**
-     * 	<p><b><i>setTarget</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void setTarget(RPGLObject source)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Assigns a RPGLObject as the target of this Subevent.
-     * 	</p>
+     * Assigns a RPGLObject as the target of this Subevent.
      *
-     * 	@param target an RPGLObject
+     * @param target an RPGLObject
      */
     public void setTarget(RPGLObject target) {
         if (target == null) {
@@ -269,53 +178,27 @@ public abstract class Subevent {
     }
 
     /**
-     * 	<p><b><i>setSource</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObject getSource()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the source RPGLObject of the Subevent (or null if one is not assigned).
-     * 	</p>
+     * Returns the source RPGLObject of the Subevent (or null if one is not assigned).
      *
-     *  @return the RPGLObject which initiated this Subevent
+     * @return the RPGLObject which initiated this Subevent
      */
     public RPGLObject getSource() {
         return UUIDTable.getObject(this.subeventJson.getString("source"));
     }
 
     /**
-     * 	<p><b><i>setTarget</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObject getTarget()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the target RPGLObject of the Subevent (or null if one is not assigned).
-     * 	</p>
+     * Returns the target RPGLObject of the Subevent (or null if one is not assigned).
      *
-     *  @return the RPGLObject towards which this Subevent is directed
+     * @return the RPGLObject towards which this Subevent is directed
      */
     public RPGLObject getTarget() {
         return UUIDTable.getObject(this.subeventJson.getString("target"));
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getSubeventId</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public String getSubeventId()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the ID for this Subevent.
-     * 	</p>
+     * This method returns the ID for this Subevent.
      *
-     *  @return the ID of this SUbevent
+     * @return the ID of this SUbevent
      */
     public String getSubeventId() {
         return this.subeventId;

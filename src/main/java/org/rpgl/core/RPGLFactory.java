@@ -11,18 +11,10 @@ import org.rpgl.datapack.DatapackLoader;
 public final class RPGLFactory {
 
     /**
-     * <p><b><i>newEffect</i></b></p>
-     * <p>
-     * <pre class="tab"><code>
-     * public static RPGLEffect newEffect(String effectId)
-     * 	</code></pre>
-     * </p>
-     * <p>
      * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
-     * </p>
      *
-     *  @param effectId an effect ID <code>(namespace:name)</code>
-     *  @return a new RPGLEffect object
+     * @param effectId an effect ID <code>(namespace:name)</code>
+     * @return a new RPGLEffect object
      */
     public static RPGLEffect newEffect(String effectId) {
         String[] effectIdSplit = effectId.split(":");
@@ -37,18 +29,10 @@ public final class RPGLFactory {
     }
 
     /**
-     * <p><b><i>newEvent</i></b></p>
-     * <p>
-     * <pre class="tab"><code>
-     * public static RPGLEvent newEvent(String eventId)
-     * 	</code></pre>
-     * </p>
-     * <p>
      * This method creates a new RPGLEvent instance according to template data stored at the given event ID.
-     * </p>
      *
-     *  @param eventId an event ID <code>(namespace:name)</code>
-     *  @return a new RPGLEvent object
+     * @param eventId an event ID <code>(namespace:name)</code>
+     * @return a new RPGLEvent object
      */
     public static RPGLEvent newEvent(String eventId) {
         String[] eventIdSplit = eventId.split(":");
@@ -63,18 +47,10 @@ public final class RPGLFactory {
     }
 
     /**
-     * 	<p><b><i>newItem</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public static RPGLItem newItem(String itemId)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method creates a new RPGLItem instance according to template data stored at the given item ID.
-     * 	</p>
+     * This method creates a new RPGLItem instance according to template data stored at the given item ID.
      *
-     *  @param itemId an item ID <code>(namespace:name)</code>
-     * 	@return a new RPGLItem object
+     * @param itemId an item ID <code>(namespace:name)</code>
+     * @return a new RPGLItem object
      */
     public static RPGLItem newItem(String itemId) {
         String[] itemIdSplit = itemId.split(":");
@@ -89,18 +65,10 @@ public final class RPGLFactory {
     }
 
     /**
-     * <p><b><i>newObject</i></b></p>
-     * <p>
-     * <pre class="tab"><code>
-     * public static RPGLObject newObject(String objectId)
-     * 	</code></pre>
-     * </p>
-     * <p>
      * This method creates a new RPGLObject instance according to template data stored at the given object ID.
-     * </p>
      *
-     *  @param objectId an object ID <code>(namespace:name)</code>
-     *  @return a new RPGLObject object
+     * @param objectId an object ID <code>(namespace:name)</code>
+     * @return a new RPGLObject object
      */
     public static RPGLObject newObject(String objectId) {
         String[] objectIdSplit = objectId.split(":");

@@ -35,19 +35,9 @@ public class DamageDelivery extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getDamage</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonObject getDamage()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the typed damage being delivered to <code>target</code>.
-     * 	</p>
+     * This method returns the typed damage being delivered to <code>target</code>.
      *
-     *  @return an object of damage types and values
+     * @return an object of damage types and values
      */
     public JsonObject getDamage() {
         return this.subeventJson.getJsonObject("damage");

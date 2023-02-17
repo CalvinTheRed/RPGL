@@ -49,121 +49,51 @@ public class DamageAffinity extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>grantImmunity</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void grantImmunity()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method informs the Subevent that <code>source</code> is immune to the given damage type.
-     * 	</p>
+     * This method informs the Subevent that <code>source</code> is immune to the given damage type.
      */
     public void grantImmunity() {
         this.subeventJson.putBoolean("immunity", true);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>grantResistance</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void grantResistance()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method informs the Subevent that <code>source</code> is resistant to the given damage type.
-     * 	</p>
+     * This method informs the Subevent that <code>source</code> is resistant to the given damage type.
      */
     public void grantResistance() {
         this.subeventJson.putBoolean("resistance", true);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>grantVulnerability</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void grantVulnerability()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method informs the Subevent that <code>source</code> is vulnerable to the given damage type.
-     * 	</p>
+     * This method informs the Subevent that <code>source</code> is vulnerable to the given damage type.
      */
     public void grantVulnerability() {
         this.subeventJson.putBoolean("vulnerability", true);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>revokeImmunity</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void revokeImmunity()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method informs the Subevent that <code>source</code> has had its immunity to the given damage type revoked.
-     * 	</p>
+     * This method informs the Subevent that <code>source</code> has had its immunity to the given damage type revoked.
      */
     public void revokeImmunity() {
         this.subeventJson.putBoolean("immunity_revoked", true);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>revokeResistance</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void revokeResistance()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method informs the Subevent that <code>source</code> has had its resistance to the given damage type revoked.
-     * 	</p>
+     * This method informs the Subevent that <code>source</code> has had its resistance to the given damage type revoked.
      */
     public void revokeResistance() {
         this.subeventJson.putBoolean("resistance_revoked", true);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>revokeVulnerability</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void revokeVulnerability()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method informs the Subevent that <code>source</code> has had its vulnerability to the given damage type revoked.
-     * 	</p>
+     * This method informs the Subevent that <code>source</code> has had its vulnerability to the given damage type revoked.
      */
     public void revokeVulnerability() {
         this.subeventJson.putBoolean("vulnerability_revoked", true);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>isImmune</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public boolean isImmune()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns whether the source is immune to the relevant damage type.
-     * 	</p>
+     * This method returns whether the source is immune to the relevant damage type.
      *
-     *  @return true if the source is immune to the relevant damage type.
+     * @return true if the source is immune to the relevant damage type.
      */
     public boolean isImmune() {
         return Objects.requireNonNullElse(this.subeventJson.getBoolean("immunity"), false)
@@ -171,19 +101,9 @@ public class DamageAffinity extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>isResistant</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public boolean isResistant()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns whether the source is resistant to the relevant damage type.
-     * 	</p>
+     * This method returns whether the source is resistant to the relevant damage type.
      *
-     *  @return true if the source is resistant to the relevant damage type.
+     * @return true if the source is resistant to the relevant damage type.
      */
     public boolean isResistant() {
         return Objects.requireNonNullElse(this.subeventJson.getBoolean("resistance"), false)
@@ -191,19 +111,9 @@ public class DamageAffinity extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>isVulnerable</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public boolean isVulnerable()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns whether the source is vulnerable to the relevant damage type.
-     * 	</p>
+     * This method returns whether the source is vulnerable to the relevant damage type.
      *
-     *  @return true if the source is vulnerable to the relevant damage type.
+     * @return true if the source is vulnerable to the relevant damage type.
      */
     public boolean isVulnerable() {
         return Objects.requireNonNullElse(this.subeventJson.getBoolean("vulnerability"), false)

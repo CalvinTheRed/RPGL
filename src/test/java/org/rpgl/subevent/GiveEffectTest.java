@@ -17,6 +17,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -103,11 +104,11 @@ public class GiveEffectTest {
         giveEffect.setTarget(object);
         giveEffect.invoke(context);
 
-        RPGLEffect[] effects = object.getEffects();
-        assertEquals(1, effects.length,
+        List<RPGLEffect> effects = object.getEffectObjects();
+        assertEquals(1, effects.size(),
                 "commoner should have 1 effect after the subevent is invoked"
         );
-        assertEquals("demo:fire_immunity", effects[0].getString(DatapackContentTO.ID_ALIAS),
+        assertEquals("demo:fire_immunity", effects.get(0).getString(DatapackContentTO.ID_ALIAS),
                 "the commoner's subevent should match the effect specified in the subevent json"
         );
     }
@@ -130,8 +131,8 @@ public class GiveEffectTest {
         giveEffect.cancel();
         giveEffect.invoke(context);
 
-        RPGLEffect[] effects = object.getEffects();
-        assertEquals(0, effects.length,
+        List<RPGLEffect> effects = object.getEffectObjects();
+        assertEquals(0, effects.size(),
                 "commoner should have 0 effects after the subevent is invoked"
         );
     }

@@ -44,19 +44,22 @@ public class RPGLEffectTemplateTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, effect.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, effect.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Fire Immunity", effect.getString(DatapackContentTO.NAME_ALIAS),
+        assertEquals("Fire Immunity", effect.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("Creatures with this effect take 0 fire damage.", effect.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+        assertEquals("Creatures with this effect take 0 fire damage.", effect.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertEquals("demo:fire_immunity", effect.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
         expected = """
                 {"damage_affinity":{"conditions":[],"functions":[]}}""";
-        assertEquals(expected, effect.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS).toString(),
+        assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );
     }

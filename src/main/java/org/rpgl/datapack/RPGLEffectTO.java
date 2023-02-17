@@ -41,23 +41,15 @@ public class RPGLEffectTO extends UUIDTableElementTO {
      */
     public RPGLEffectTO(RPGLEffect rpglEffect) {
         super(rpglEffect);
-        this.subeventFilters = rpglEffect.getJsonObject(SUBEVENT_FILTERS_ALIAS).asMap();
+        this.subeventFilters = rpglEffect.getSubeventFilters().asMap();
         this.source = rpglEffect.getSource();
         this.target = rpglEffect.getTarget();
     }
 
     /**
-     * 	<p><b><i>toRPGLEffectTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLEffectTemplate toRPGLEffectTemplate()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method translates the stored data into a RPGLEffectTemplate object.
-     * 	</p>
+     * This method translates the stored data into a RPGLEffectTemplate object.
      *
-     * 	@return a RPGLEffectTemplate
+     * @return a RPGLEffectTemplate
      */
     public RPGLEffectTemplate toRPGLEffectTemplate() {
         RPGLEffectTemplate rpglEffectTemplate = new RPGLEffectTemplate() {{
@@ -70,17 +62,9 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     }
 
     /**
-     * 	<p><b><i>toRPGLEffect</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLEffect toRPGLEffect()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method translates the stored data into a RPGLEffect object.
-     * 	</p>
+     * This method translates the stored data into a RPGLEffect object.
      *
-     * 	@return a RPGLEffect
+     * @return a RPGLEffect
      */
     public RPGLEffect toRPGLEffect() {
         RPGLEffect rpglEffect = new RPGLEffect() {{

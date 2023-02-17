@@ -20,134 +20,64 @@ public abstract class Calculation extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>addBonus</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addBonus(int bonus)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method adds a bonus to the value being calculated.
-     * 	</p>
+     * This method adds a bonus to the value being calculated.
      *
-     *  @param bonus a bonus to be added to the calculation
+     * @param bonus a bonus to be added to the calculation
      */
     public void addBonus(int bonus) {
         this.subeventJson.putInteger("bonus", this.getBonus() + bonus);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getBonus</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public int getBonus()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the bonus of the calculation.
-     * 	</p>
+     * This method returns the bonus of the calculation.
      *
-     *  @return the bonus granted to the calculation
+     * @return the bonus granted to the calculation
      */
     public int getBonus() {
         return Objects.requireNonNullElse(this.subeventJson.getInteger("bonus"), 0);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>setSet</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void setSet(int value)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method sets the calculated value. Once the calculation is set, the returned value will not include any
-     * 	bonuses which have been applied to it.
-     * 	</p>
+     * This method sets the calculated value. Once the calculation is set, the returned value will not include any
+     * bonuses which have been applied to it.
      *
-     *  @param value the new set value of the calculation
+     * @param value the new set value of the calculation
      */
     public void setSet(int value) {
         this.subeventJson.putInteger("set", value);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getSet</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public Integer getSet()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the set value of the calculation.
-     * 	</p>
+     * This method returns the set value of the calculation.
      *
-     *  @return the set value of the calculation
+     * @return the set value of the calculation
      */
     public Integer getSet() {
         return this.subeventJson.getInteger("set");
     }
 
     /**
-     * 	<p>
-     * 	<b><i>setBase</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void setBase(int value)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method sets the calculation's base value.
-     * 	</p>
+     * This method sets the calculation's base value.
      *
-     *  @param value the new base value of the calculation
+     * @param value the new base value of the calculation
      */
     public void setBase(int value) {
         this.subeventJson.putInteger("base", value);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getBase</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public Integer getBase()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the base value of the calculation.
-     * 	</p>
+     * This method returns the base value of the calculation.
      *
-     *  @return the base value of the calculation
+     * @return the base value of the calculation
      */
     public Integer getBase() {
         return this.subeventJson.getInteger("base");
     }
 
     /**
-     * 	<p>
-     * 	<b><i>get</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public int get()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the result of the calculation.
-     * 	</p>
+     * This method returns the result of the calculation.
      *
-     *  @return the result of the calculation
+     * @return the result of the calculation
      */
     public int get() {
         Integer set = this.getSet();

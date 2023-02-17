@@ -88,33 +88,25 @@ public class RPGLItemTO extends UUIDTableElementTO {
      */
     public RPGLItemTO(RPGLItem rpglItem) {
         super(rpglItem);
-        this.tags = rpglItem.getJsonArray(TAGS_ALIAS).asList();
-        this.weight = rpglItem.getInteger(WEIGHT_ALIAS);
-        this.cost = rpglItem.getInteger(COST_ALIAS);
-        this.proficiencyTags = rpglItem.getJsonArray(PROFICIENCY_TAGS_ALIAS).asList();
-        this.whileEquipped = rpglItem.getJsonArray(WHILE_EQUIPPED_ALIAS).asList();
-        this.weaponProperties = rpglItem.getJsonArray(WEAPON_PROPERTIES_ALIAS).asList();
-        this.damage = rpglItem.getJsonObject(DAMAGE_ALIAS).asMap();
-        this.attackBonus = rpglItem.getInteger(ATTACK_BONUS_ALIAS);
-        this.attackAbilities = rpglItem.getJsonObject(ATTACK_ABILITIES_ALIAS).asMap();
-        this.range = rpglItem.getJsonObject(RANGE_ALIAS).asMap();
-        this.armorClassBase = rpglItem.getInteger(ARMOR_CLASS_BASE_ALIAS);
-        this.armorClassDexLimit = rpglItem.getInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS);
-        this.armorClassBonus = rpglItem.getInteger(ARMOR_CLASS_BONUS_ALIAS);
+        this.tags = rpglItem.getTags().asList();
+        this.weight = rpglItem.getWeight();
+        this.cost = rpglItem.getCost();
+        this.proficiencyTags = rpglItem.getProficiencyTags().asList();
+        this.whileEquipped = rpglItem.getWhileEquippedEffects().asList();
+        this.weaponProperties = rpglItem.getWeaponProperties().asList();
+        this.damage = rpglItem.getDamage().asMap();
+        this.attackBonus = rpglItem.getAttackBonus();
+        this.attackAbilities = rpglItem.getAttackAbilities().asMap();
+        this.range = rpglItem.getRange().asMap();
+        this.armorClassBase = rpglItem.getArmorClassBase();
+        this.armorClassDexLimit = rpglItem.getArmorClassDexLimit();
+        this.armorClassBonus = rpglItem.getArmorClassBonus();
     }
 
     /**
-     * 	<p><b><i>toRPGLItemTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLItemTemplate toRPGLItemTemplate()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method translates the stored data into a RPGLItemTemplate object.
-     * 	</p>
+     * This method translates the stored data into a RPGLItemTemplate object.
      *
-     * 	@return a RPGLItemTemplate
+     * @return a RPGLItemTemplate
      */
     public RPGLItemTemplate toRPGLItemTemplate() {
         RPGLItemTemplate rpglItemTemplate = new RPGLItemTemplate() {{
@@ -136,17 +128,9 @@ public class RPGLItemTO extends UUIDTableElementTO {
     }
 
     /**
-     * 	<p><b><i>toRPGLItem</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLItem toRPGLItem()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method translates the stored data into a RPGLItem object.
-     * 	</p>
+     * This method translates the stored data into a RPGLItem object.
      *
-     * 	@return a RPGLItem
+     * @return a RPGLItem
      */
     public RPGLItem toRPGLItem() {
         RPGLItem rpglItem = new RPGLItem() {{

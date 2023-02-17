@@ -21,17 +21,9 @@ public abstract class Function {
     public static final Map<String, Function> FUNCTIONS = new HashMap<>();
 
     /**
-     * 	<p><b><i>initialize</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public static void initialize(boolean includeTestingFunctions)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method populates Function.FUNCTIONS.
-     * 	</p>
+     * This method populates Function.FUNCTIONS.
      *
-     * 	@param includeTestingFunctions whether testing-only Functions should be loaded into RPGL
+     * @param includeTestingFunctions whether testing-only Functions should be loaded into RPGL
      */
     public static void initialize(boolean includeTestingFunctions) {
         Function.FUNCTIONS.clear();
@@ -42,22 +34,13 @@ public abstract class Function {
     }
 
     /**
-     * 	<p><b><i>verifyFunction</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * void verifyFunction(String expected, Map&lt;String, Object&gt; conditionJson)
-     * 	throws FunctionMismatchException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Verifies that the additional information provided to <code>execute(...)</code> is intended for the Function
-     * 	type being executed.
-     * 	</p>
+     * Verifies that the additional information provided to <code>execute(...)</code> is intended for the Function
+     * type being executed.
      *
-     * 	@param expected     the expected functionId
-     *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
+     * @param expected     the expected functionId
+     * @param functionJson a JsonObject containing additional information necessary for the function to be executed
      *
-     * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
+     * @throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
     void verifyFunction(String expected, JsonObject functionJson) throws FunctionMismatchException {
         if (!expected.equals(functionJson.getString("function"))) {
@@ -66,23 +49,14 @@ public abstract class Function {
     }
 
     /**
-     * 	<p><b><i>execute</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public abstract void execute(RPGLObject source, RPGLObject target, Map&lt;String, Object&gt; functionJson)
-     * 	throws FunctionMismatchException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Modifies given Subevents or RPGLObjects according to given parameters.
-     * 	</p>
+     * Modifies given Subevents or RPGLObjects according to given parameters.
      *
-     *  @param source       the RPGLObject which invoked a Subevent
-     *  @param target       the RPGLObject the Subevent is being directed at
-     *  @param subevent     the Subevent being invoked
-     *  @param functionJson a JsonObject containing additional information necessary for the function to be executed
+     * @param source       the RPGLObject which invoked a Subevent
+     * @param target       the RPGLObject the Subevent is being directed at
+     * @param subevent     the Subevent being invoked
+     * @param functionJson a JsonObject containing additional information necessary for the function to be executed
      *
-     * 	@throws FunctionMismatchException if functionJson is for a different function than the one being executed
+     * @throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
     public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson) throws FunctionMismatchException;
 

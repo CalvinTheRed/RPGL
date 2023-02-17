@@ -47,19 +47,9 @@ public class ContestRerollChance extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>requestReroll</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void requestReroll(String rerollMode)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method informs the subevent that a re-roll has been requested, and which type of re-roll was requested.
-     * 	</p>
+     * This method informs the subevent that a re-roll has been requested, and which type of re-roll was requested.
      *
-     *  @param rerollMode the type of reroll which was requested (<code>"use_new", "use_highest", "use_lowest"</code>).
+     * @param rerollMode the type of reroll which was requested (<code>"use_new", "use_highest", "use_lowest"</code>).
      */
     public void requestReroll(String rerollMode) {
         if (!Objects.requireNonNullElse(this.subeventJson.getBoolean("reroll_requested"), false)) {
@@ -69,38 +59,18 @@ public class ContestRerollChance extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>prepareAttackWithoutWeapon</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public boolean wasRerollRequested()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns whether a re-roll was requested.
-     * 	</p>
+     * This method returns whether a re-roll was requested.
      *
-     * 	@return true if a re-roll has been requested
+     * @return true if a re-roll has been requested
      */
     public boolean wasRerollRequested() {
         return Objects.requireNonNullElse(this.subeventJson.getBoolean("reroll_requested"), false);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getRerollMode</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public String getRerollMode()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the requested re-roll mode.
-     * 	</p>
+     * This method returns the requested re-roll mode.
      *
-     * 	@return the requested re-roll mode (<code>"use_new", "use_highest", "use_lowest"</code>)
+     * @return the requested re-roll mode (<code>"use_new", "use_highest", "use_lowest"</code>)
      */
     public String getRerollMode() {
         return this.subeventJson.getString("reroll_mode");

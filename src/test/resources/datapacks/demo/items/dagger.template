@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Dagger",
+  "description": "A dagger.",
+  "tags": [
+    "metal",
+    "weapon"
+  ],
+  "weight": 1,
+  "cost": 2,
+  "proficiency_tags": [
+    "simple_melee",
+    "dagger"
+  ],
+  "while_equipped": [
+
+  ],
+  "weapon_properties": [
+    "melee",
+    "finesse",
+    "light",
+    "thrown"
+  ],
+  "damage": {
+    "melee": [
+      {
+        "type": "piercing",
+        "dice": [
+          { "count": 1, "size": 4, "determined": [ 2 ] }
+        ],
+        "bonus": 0
+      }
+    ],
+    "thrown": [
+      {
+        "type": "piercing",
+        "dice": [
+          { "count": 1, "size": 4, "determined": [ 2 ] }
+        ],
+        "bonus": 0
+      }
+    ]
+  },
+  "attack_bonus": 0
+}

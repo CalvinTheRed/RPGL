@@ -36,18 +36,7 @@ public class CriticalHitDamageCollection extends DamageCollection {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>doubleDice</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * void doubleDice()
-     * 	throws JsonFormatException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method doubles the number of dice in the damage dice collection.
-     * 	</p>
+     * This helper method doubles the number of dice in the damage dice collection.
      */
     void doubleDice() {
         JsonArray damageCollection = this.getDamageCollection();

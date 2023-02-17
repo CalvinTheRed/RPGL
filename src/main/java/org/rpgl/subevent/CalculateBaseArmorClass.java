@@ -71,24 +71,13 @@ public class CalculateBaseArmorClass extends Calculation {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>prepareArmored</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * int prepareArmored(RPGLContext context, RPGLItem armor)
-     * 	throws Exception
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method prepares the subevent if <code>source</code> is wearing armor.
-     * 	</p>
+     * This helper method prepares the subevent if <code>source</code> is wearing armor.
      *
-     *  @param context the context this Subevent takes place in
-     *  @param armor   the armor worn by <code>source</code>
-     *  @return the base armor class of the armored <code>source</code>
+     * @param context the context this Subevent takes place in
+     * @param armor   the armor worn by <code>source</code>
+     * @return the base armor class of the armored <code>source</code>
      *
-     * 	@throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs.
      */
     int prepareArmored(RPGLContext context, RPGLItem armor) throws Exception {
         Integer baseArmorClass = armor.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS);
@@ -97,11 +86,11 @@ public class CalculateBaseArmorClass extends Calculation {
         Integer dexterityBonusMaximum = armor.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS);
         if (dexterityBonusMaximum == null) {
             // no limit to dexterity bonus
-            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
+            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName(context, "dex");
             baseArmorClass += dexterityBonus;
         } else if (dexterityBonusMaximum > 0) {
             // non-zero, positive limit to dexterity bonus
-            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
+            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName(context, "dex");
             baseArmorClass += Math.min(dexterityBonus, dexterityBonusMaximum);
         }
 
@@ -109,43 +98,21 @@ public class CalculateBaseArmorClass extends Calculation {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>prepareUnarmored</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * int prepareUnarmored(RPGLContext context)
-     * 	throws Exception
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method prepares the subevent if <code>source</code> is not wearing armor.
-     * 	</p>
+     * This helper method prepares the subevent if <code>source</code> is not wearing armor.
      *
-     *  @param context the context this Subevent takes place in
-     *  @return the base armor class of the unarmored <code>source</code>
+     * @param context the context this Subevent takes place in
+     * @return the base armor class of the unarmored <code>source</code>
      *
-     * 	@throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs.
      */
     int prepareUnarmored(RPGLContext context) throws Exception {
-        return 10 + this.getSource().getAbilityModifierFromAbilityScore(context, "dex");
+        return 10 + this.getSource().getAbilityModifierFromAbilityName(context, "dex");
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getShieldBonus</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * int getShieldBonus()
-     * 	throws JsonFormatException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method returns the highest armor class bonus granted by a shield <code>source</code> is wielding.
-     * 	</p>
+     * This helper method returns the highest armor class bonus granted by a shield <code>source</code> is wielding.
      *
-     *  @return the shield bonus for <code>source</code>.
+     * @return the shield bonus for <code>source</code>.
      */
     int getShieldBonus() {
         int shieldBonus = 0;

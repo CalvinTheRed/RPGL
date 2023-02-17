@@ -1,27 +1,19 @@
 package org.rpgl.uuidtable;
 
+import org.rpgl.datapack.DatapackContent;
 import org.rpgl.datapack.UUIDTableElementTO;
-import org.rpgl.json.JsonObject;
 
 /**
  * This class is the base class of any object which gets stored in UUIDTable.
  *
  * @author Calvin Withun
  */
-public class UUIDTableElement extends JsonObject {
+public class UUIDTableElement extends DatapackContent {
 
     /**
-     * 	<p><b><i>getUuid</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public String getUuid()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Returns the UUID of this object.
-     * 	</p>
+     * Returns the UUID of this object.
      *
-     * 	@return the UUID of this object
+     * @return the UUID of this object
      */
     public String getUuid() {
         return this.getString(UUIDTableElementTO.UUID_ALIAS);
@@ -29,32 +21,16 @@ public class UUIDTableElement extends JsonObject {
 
 
     /**
-     * 	<p><b><i>setUuid</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void setUuid(String uuid)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Sets the UUID of this object.
-     * 	</p>
+     * Sets the UUID of this object.
      *
-     * 	@param uuid the UUID to be assigned to this object
+     * @param uuid the UUID to be assigned to this object
      */
     public void setUuid(String uuid) {
         this.putString(UUIDTableElementTO.UUID_ALIAS, uuid);
     }
 
     /**
-     * 	<p><b><i>deleteUuid</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void deleteUuid()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Deletes the key-value pair storing this object's UUID.
-     * 	</p>
+     * Deletes the key-value pair storing this object's UUID.
      */
     public void deleteUuid() {
         this.asMap().remove(UUIDTableElementTO.UUID_ALIAS);

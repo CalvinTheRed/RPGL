@@ -71,7 +71,7 @@ public class RPGLObjectTemplateTest {
 
         RPGLObjectTemplate.processInventory(object);
 
-        JsonArray inventory = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonArray inventory = object.getInventory();
         assertEquals(1, inventory.size(),
                 "inventory should only have 1 item without calling processEquippedItems()"
         );
@@ -93,7 +93,7 @@ public class RPGLObjectTemplateTest {
 
         RPGLObjectTemplate.processEquippedItems(object);
 
-        JsonArray inventory = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonArray inventory = object.getInventory();
         assertEquals(4, inventory.size(),
                 "inventory should have 4 items after calling processEquippedItems()"
         );
@@ -116,7 +116,7 @@ public class RPGLObjectTemplateTest {
 
         RPGLObjectTemplate.processHealthData(object);
 
-        JsonArray hitDiceArray = object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getJsonArray("hit_dice");
+        JsonArray hitDiceArray = object.getHealthData().getJsonArray("hit_dice");
         assertEquals(17, hitDiceArray.size(),
                 "compact hit dice view should be unpacked into 17 objects"
         );
@@ -143,34 +143,37 @@ public class RPGLObjectTemplateTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, object.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, object.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Knight", object.getString(DatapackContentTO.NAME_ALIAS),
+        assertEquals("Knight", object.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A knight.", object.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+        assertEquals("A knight.", object.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertEquals("demo:knight", object.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
         expected = """
                 {"cha":15,"con":14,"dex":11,"int":11,"str":16,"wis":11}""";
-        assertEquals(expected, object.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).toString(),
+        assertEquals(expected, object.getAbilityScores().toString(),
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
                 {"base":52,"current":52,"hit_dice":[{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false}],"maximum":52,"temporary":0}""";
-        assertEquals(expected, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
+        assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
-        JsonObject equippedItems = object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        JsonObject equippedItems = object.getEquippedItems();
         for (Map.Entry<String, Object> equippedItemsEntry : equippedItems.asMap().entrySet()) {
             String itemUuid = equippedItems.getString(equippedItemsEntry.getKey());
             assertNotNull(UUIDTable.getItem(itemUuid),
                     "item in equipment slot " + equippedItemsEntry.getKey() + " is missing from UUIDTable"
             );
         }
-        JsonArray inventory = object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonArray inventory = object.getInventory();
         for (int i = 0; i < inventory.size(); i++) {
             String itemUuid = inventory.getString(i);
             assertNotNull(UUIDTable.getItem(itemUuid),
@@ -179,13 +182,13 @@ public class RPGLObjectTemplateTest {
         }
         expected = """
                 ["demo:weapon_attack_mainhand_melee"]""";
-        assertEquals(expected, object.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
+        assertEquals(expected, object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
-        assertEquals("[]", object.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
+        assertEquals("[]", object.getEffects().toString(),
                 "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
         );
-        assertEquals(2, object.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS),
+        assertEquals(2, object.getProficiencyBonus(),
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
         );
     }
@@ -199,45 +202,45 @@ public class RPGLObjectTemplateTest {
 
         expected = """
                 {"author":"Calvin Withun"}""";
-        assertEquals(expected, object.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
+        assertEquals(expected, object.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Young Red Dragon", object.getString(DatapackContentTO.NAME_ALIAS),
+        assertEquals("Young Red Dragon", object.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A young red dragon.", object.getString(DatapackContentTO.DESCRIPTION_ALIAS),
+        assertEquals("A young red dragon.", object.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
 
         expected = """
                 {"cha":19,"con":21,"dex":10,"int":14,"str":23,"wis":11}""";
-        assertEquals(expected, object.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).toString(),
+        assertEquals(expected, object.getAbilityScores().toString(),
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
                 {"base":178,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"maximum":178,"temporary":0}""";
-        assertEquals(expected, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
+        assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
-        assertEquals("{}", object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).toString(),
+        assertEquals("{}", object.getEquippedItems().toString(),
                 "incorrect field value: " + RPGLObjectTO.EQUIPPED_ITEMS_ALIAS
         );
-        assertEquals("[]", object.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS).toString(),
+        assertEquals("[]", object.getInventory().toString(),
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
                 ["demo:young_red_dragon_bite_attack","demo:young_red_dragon_claw_attack","demo:young_red_dragon_fire_breath"]""";
-        assertEquals(expected, object.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
+        assertEquals(expected, object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
-        JsonArray effects = object.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
+        JsonArray effects = object.getEffects();
         for (int i = 0; i < effects.size(); i++) {
             String effectUuid = effects.getString(i);
             assertNotNull(UUIDTable.getEffect(effectUuid),
                     "effect at effects index " + i + " is missing from UUIDTable"
             );
         }
-        assertEquals(4, object.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS),
+        assertEquals(4, object.getProficiencyBonus(),
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
         );
     }

@@ -55,27 +55,19 @@ public class RPGLObjectTO extends UUIDTableElementTO {
      */
     public RPGLObjectTO(RPGLObject rpglObject) {
         super(rpglObject);
-        this.abilityScores = rpglObject.getJsonObject(ABILITY_SCORES_ALIAS).asMap();
-        this.healthData = rpglObject.getJsonObject(HEALTH_DATA_ALIAS).asMap();
-        this.equippedItems = rpglObject.getJsonObject(EQUIPPED_ITEMS_ALIAS).asMap();
-        this.inventory = rpglObject.getJsonArray(INVENTORY_ALIAS).asList();
-        this.events = rpglObject.getJsonArray(EVENTS_ALIAS).asList();
-        this.effects = rpglObject.getJsonArray(EFFECTS_ALIAS).asList();
-        this.proficiencyBonus = rpglObject.getInteger(PROFICIENCY_BONUS_ALIAS);
+        this.abilityScores = rpglObject.getAbilityScores().asMap();
+        this.healthData = rpglObject.getHealthData().asMap();
+        this.equippedItems = rpglObject.getEquippedItems().asMap();
+        this.inventory = rpglObject.getInventory().asList();
+        this.events = rpglObject.getEvents().asList();
+        this.effects = rpglObject.getEffects().asList();
+        this.proficiencyBonus = rpglObject.getProficiencyBonus();
     }
 
     /**
-     * 	<p><b><i>toRPGLObjectTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObjectTemplate toRPGLObjectTemplate()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method translates the stored data into a RPGLObjectTemplate object.
-     * 	</p>
+     * This method translates the stored data into a RPGLObjectTemplate object.
      *
-     * 	@return a RPGLObjectTemplate
+     * @return a RPGLObjectTemplate
      */
     public RPGLObjectTemplate toRPGLObjectTemplate() {
         RPGLObjectTemplate rpglObjectTemplate = new RPGLObjectTemplate() {{
@@ -92,17 +84,9 @@ public class RPGLObjectTO extends UUIDTableElementTO {
     }
 
     /**
-     * 	<p><b><i>toRPGLObject</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObject toRPGLObject()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method translates the stored data into a RPGLObject object.
-     * 	</p>
+     * This method translates the stored data into a RPGLObject object.
      *
-     * 	@return a RPGLObject
+     * @return a RPGLObject
      */
     public RPGLObject toRPGLObject() {
         RPGLObject rpglObject = new RPGLObject() {{

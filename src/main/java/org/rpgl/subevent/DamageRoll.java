@@ -29,17 +29,7 @@ public abstract class DamageRoll extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>roll</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void roll()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method rolls all dice associated with the Subevent.
-     * 	</p>
+     * This method rolls all dice associated with the Subevent.
      */
     public void roll() {
         JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
@@ -55,17 +45,7 @@ public abstract class DamageRoll extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>rerollTypedDiceLessThanOrEqualTo</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given threshold.
-     * 	</p>
+     * This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given threshold.
      */
     public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType) {
         JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
@@ -86,18 +66,8 @@ public abstract class DamageRoll extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>setTypedDiceLessThanOrEqualTo</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void setTypedDiceLessThanOrEqualTo(int threshold, int faceValue, String damageType)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method overrides the face value of all dice of a given damage type whose rolled values are less than or
-     * 	equal to a given threshold.
-     * 	</p>
+     * This method overrides the face value of all dice of a given damage type whose rolled values are less than or
+     * equal to a given threshold.
      */
     public void setTypedDiceLessThanOrEqualTo(int threshold, int faceValue, String damageType) {
         JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
@@ -116,19 +86,9 @@ public abstract class DamageRoll extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getDamage</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonObject getDamage()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the damage dice collection associated with the Subevent.
-     * 	</p>
+     * This method returns the damage dice collection associated with the Subevent.
      *
-     *  @return a collection of damage dice and bonuses
+     * @return a collection of damage dice and bonuses
      */
     public JsonObject getDamage() {
         JsonObject baseDamage = new JsonObject();

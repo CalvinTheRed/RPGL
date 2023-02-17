@@ -22,17 +22,9 @@ public abstract class Condition {
     public static final Map<String, Condition> CONDITIONS = new HashMap<>();
 
     /**
-     * 	<p><b><i>initialize</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public static void initialize(boolean includeTestingConditions)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method populates Condition.CONDITIONS.
-     * 	</p>
+     * This method populates Condition.CONDITIONS.
      *
-     * 	@param includeTestingConditions whether testing-only Conditions should be loaded into RPGL
+     * @param includeTestingConditions whether testing-only Conditions should be loaded into RPGL
      */
     public static void initialize(boolean includeTestingConditions) {
         Condition.CONDITIONS.clear();
@@ -48,22 +40,13 @@ public abstract class Condition {
     }
 
     /**
-     * 	<p><b><i>verifyCondition</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * void verifyCondition(String expected, Map&lt;String, Object&gt; conditionJson)
-     * 	throws ConditionMismatchException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Verifies that the additional information provided to <code>evaluate(...)</code> is intended for the Condition
+     * Verifies that the additional information provided to <code>evaluate(...)</code> is intended for the Condition
      * 	type being evaluated.
-     * 	</p>
      *
-     * 	@param expected      the expected conditionId
-     *  @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
+     * @param expected      the expected conditionId
+     * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      *
-     * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
+     * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
     void verifyCondition(String expected, JsonObject conditionJson) throws ConditionMismatchException {
         if (!expected.equals(conditionJson.getString("condition"))) {
@@ -72,24 +55,15 @@ public abstract class Condition {
     }
 
     /**
-     * 	<p><b><i>evaluate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public abstract boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson)
-     * 	throws ConditionMismatchException
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Evaluates a Subevent or RPGLObject to determine if a defined condition is satisfied.
-     * 	</p>
+     * Evaluates a Subevent or RPGLObject to determine if a defined condition is satisfied.
      *
-     * 	@param source        the RPGLObject which invoked a Subevent
-     *  @param target        the RPGLObject the Subevent is being directed at
-     *  @param subevent      the Subevent being invoked
-     *  @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
-     * 	@return the result of the evaluation
+     * @param source        the RPGLObject which invoked a Subevent
+     * @param target        the RPGLObject the Subevent is being directed at
+     * @param subevent      the Subevent being invoked
+     * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
+     * @return the result of the evaluation
      *
-     * 	@throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
+     * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
     public abstract boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws ConditionMismatchException;
 

@@ -12,18 +12,10 @@ import org.rpgl.uuidtable.UUIDTable;
 public class RPGLEffectTemplate extends JsonObject {
 
     /**
-     * 	<p><b><i>newInstance</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLEffect newInstance()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Constructs a new RPGLEffect object corresponding to the contents of the RPGLEffectTemplate object. The new
-     * 	object is registered to the UUIDTable class when it is constructed.
-     * 	</p>
+     * Constructs a new RPGLEffect object corresponding to the contents of the RPGLEffectTemplate object. The new
+     * object is registered to the UUIDTable class when it is constructed.
      *
-     * 	@return a new RPGLEffect object
+     * @return a new RPGLEffect object
      */
     public RPGLEffect newInstance() {
         RPGLEffect effect = new RPGLEffect();

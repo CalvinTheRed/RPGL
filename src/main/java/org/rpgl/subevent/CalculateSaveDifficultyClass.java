@@ -40,8 +40,8 @@ public class CalculateSaveDifficultyClass extends Calculation {
     public void prepare(RPGLContext context) throws Exception {
         super.setBase(8);
         RPGLObject source = this.getSource();
-        this.addBonus(source.getProficiencyBonus(context));
-        this.addBonus(source.getAbilityModifierFromAbilityScore(context, this.subeventJson.getString("difficulty_class_ability")));
+        this.addBonus(source.getEffectiveProficiencyBonus(context));
+        this.addBonus(source.getAbilityModifierFromAbilityName(context, this.subeventJson.getString("difficulty_class_ability")));
     }
 
 }
