@@ -1,9 +1,9 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.json.JsonObject;
 
 /**
- * This Subevent is dedicated to rolling damage dice collected by a <code>TargetDamageDiceCollection</code> Subevent.
+ * This Subevent is dedicated to rolling damage dice collected by a <code>TargetDamageCollection</code> Subevent.
  * <br>
  * <br>
  * Source: an RPGLObject making an attack
@@ -21,15 +21,15 @@ public class TargetDamageRoll extends DamageRoll {
     @Override
     public Subevent clone() {
         Subevent clone = new TargetDamageRoll();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new TargetDamageRoll();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

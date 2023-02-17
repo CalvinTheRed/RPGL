@@ -1,392 +1,145 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
+import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.json.JsonObject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for subevent.DamageAffinity class.
+ * Testing class for the org.rpgl.subevent.DamageAffinity class.
  *
  * @author Calvin Withun
  */
 public class DamageAffinityTest {
 
-    @Test
-    @DisplayName("DamageAffinity Subevent throws SubeventMismatchException when subevent type doesn't match")
-    void test0() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "not_a_subevent"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        RPGLContext context = new RPGLContext(null);
+    @AfterAll
+    static void afterAll() {
+        DatapackLoader.DATAPACKS.clear();
+    }
 
-        /*
-         * Verify subevent behaves as expected
-         */
+    @Test
+    @DisplayName("invoke wrong subevent")
+    void invoke_wrongSubevent_throwsException() {
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "not_a_subevent"
+            }*/
+            this.putString("subevent", "not_a_subevent");
+        }});
+
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(context),
-                "DamageAffinity Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
+                () -> damageAffinity.invoke(new RPGLContext()),
+                "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
 
     @Test
-    @DisplayName("DamageAffinity Subevent defaults to normal damage")
-    void test1() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
+    @DisplayName("getAffinity reports not immune, not resistant, not vulnerable (default behavior)")
+    void getAffinity_notImmuneNotResistantNotVulnerable_defaultBehavior() {
+        DamageAffinity damageAffinity = new DamageAffinity();
 
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("normal", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should default to normal damage."
+        assertFalse(damageAffinity.isImmune(),
+                "damageAffinity should not report immune by default"
+        );
+        assertFalse(damageAffinity.isResistant(),
+                "damageAffinity should not report resistant by default"
+        );
+        assertFalse(damageAffinity.isVulnerable(),
+                "damageAffinity should not report vulnerable by default"
         );
     }
 
     @Test
-    @DisplayName("DamageAffinity Subevent can grant immunity")
-    void test2() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
+    @DisplayName("getAffinity reports not immune, not resistant, not vulnerable (after prepare())")
+    void getAffinity_notImmuneNotResistantNotVulnerable_afterPrepare() {
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.prepare(new RPGLContext());
 
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
+        assertFalse(damageAffinity.isImmune(),
+                "damageAffinity should not report immune after prepare()"
+        );
+        assertFalse(damageAffinity.isResistant(),
+                "damageAffinity should not report resistant after prepare()"
+        );
+        assertFalse(damageAffinity.isVulnerable(),
+                "damageAffinity should not report vulnerable after prepare()"
+        );
+    }
+
+    @Test
+    @DisplayName("getAffinity reports immune (grant immunity)")
+    void getAffinity_immune_grantImmunity() {
+        DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.grantImmunity();
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("immunity", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report immunity when immunity is granted."
+        assertTrue(damageAffinity.isImmune(),
+                "damageAffinity should report immune after granting immunity"
         );
     }
 
     @Test
-    @DisplayName("DamageAffinity Subevent can revoke granted immunity")
-    void test3() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
+    @DisplayName("getAffinity reports not immune (grant and revoke immunity)")
+    void getAffinity_notImmune_grantImmunityRevokeImmunity() {
+        DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.grantImmunity();
         damageAffinity.revokeImmunity();
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("normal", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report normal when immunity is granted and revoked."
+        assertFalse(damageAffinity.isImmune(),
+                "damageAffinity should not report immune after granting and revoking immunity"
         );
     }
 
     @Test
-    @DisplayName("DamageAffinity Subevent can grant resistance")
-    void test4() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
+    @DisplayName("getAffinity reports resistant (grant resistance)")
+    void getAffinity_resistant_grantResistance() {
+        DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.grantResistance();
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("resistance", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report resistance when resistance is granted."
+        assertTrue(damageAffinity.isResistant(),
+                "damageAffinity should report resistant after granting immunity"
         );
     }
 
     @Test
-    @DisplayName("DamageAffinity Subevent can revoke granted resistance")
-    void test5() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
+    @DisplayName("getAffinity reports not immune (grant and revoke immunity)")
+    void getAffinity_notResistant_grantResistanceRevokeResistance() {
+        DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.grantResistance();
         damageAffinity.revokeResistance();
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("normal", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report normal when resistance is granted and revoked."
+        assertFalse(damageAffinity.isResistant(),
+                "damageAffinity should not report resistant after granting and revoking resistance"
         );
     }
 
     @Test
-    @DisplayName("DamageAffinity Subevent can grant vulnerability")
-    void test6() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
+    @DisplayName("getAffinity reports vulnerable (grant vulnerability)")
+    void getAffinity_vulnerable_grantVulnerability() {
+        DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.grantVulnerability();
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("vulnerability", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report vulnerability when vulnerability is granted."
+        assertTrue(damageAffinity.isVulnerable(),
+                "damageAffinity should report vulnerable after granting vulnerability"
         );
     }
 
     @Test
-    @DisplayName("DamageAffinity Subevent can revoke granted vulnerability")
-    void test7() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
+    @DisplayName("getAffinity reports not vulnerable (grant and revoke vulnerability)")
+    void getAffinity_notVulnerable_grantVulnerabilityRevokeVulnerability() {
+        DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.grantVulnerability();
         damageAffinity.revokeVulnerability();
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("normal", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report normal when vulnerability is granted and revoked."
-        );
-    }
-
-    @Test
-    @DisplayName("DamageAffinity Subevent reports affinity correctly: immunity and resistance")
-    void test8() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
-        damageAffinity.grantImmunity();
-        damageAffinity.grantResistance();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("immunity", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report immunity when it has immunity and resistance."
-        );
-    }
-
-    @Test
-    @DisplayName("DamageAffinity Subevent reports affinity correctly: immunity and vulnerability")
-    void test9() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
-        damageAffinity.grantImmunity();
-        damageAffinity.grantVulnerability();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("immunity", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report immunity when it has immunity and vulnerability."
-        );
-    }
-
-    @Test
-    @DisplayName("DamageAffinity Subevent reports affinity correctly: resistance and vulnerability")
-    void test10() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
-        damageAffinity.grantResistance();
-        damageAffinity.grantVulnerability();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("normal", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report normal when it has resistance and vulnerability."
-        );
-    }
-
-    @Test
-    @DisplayName("DamageAffinity Subevent reports affinity correctly: immunity and resistance and vulnerability")
-    void test11() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new DamageAffinity();
-        String subeventJsonString = """
-                {
-                    "subevent": "damage_affinity",
-                    "type": "fire"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        DamageAffinity damageAffinity = (DamageAffinity) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
-
-        /*
-         * Invoke subevent method
-         */
-        damageAffinity.prepare(context);
-        damageAffinity.grantImmunity();
-        damageAffinity.grantResistance();
-        damageAffinity.grantVulnerability();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals("immunity", damageAffinity.getAffinity(),
-                "DamageAffinity Subevent should report immunity when it has immunity and resistance and vulnerability."
+        assertFalse(damageAffinity.isVulnerable(),
+                "damageAffinity should not report vulnerable after granting and revoking vulnerability"
         );
     }
 

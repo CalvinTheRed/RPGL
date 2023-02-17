@@ -1,106 +1,79 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.json.JsonObject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for subevent.ContestRerollChance class.
+ * Testing class for the org.rpgl.subevent.ContestRerollChance class.
  *
  * @author Calvin Withun
  */
 public class ContestRerollChanceTest {
 
-    @Test
-    @DisplayName("ContestRerollChance Subevent throws SubeventMismatchException when subevent type doesn't match")
-    void test0() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new ContestRerollChance();
-        String subeventJsonString = """
-                {
-                    "subevent": "not_a_subevent"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        RPGLContext context = new RPGLContext(null);
+    @BeforeAll
+    static void beforeAll() {
+        RPGLCore.initializeTesting();
+    }
 
-        /*
-         * Verify subevent behaves as expected
-         */
+    @Test
+    @DisplayName("invoke wrong subevent")
+    void invoke_wrongSubevent_throwsException() {
+        ContestRerollChance contestRerollChance = new ContestRerollChance();
+        contestRerollChance.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "not_a_subevent"
+            }*/
+            this.putString("subevent", "not_a_subevent");
+        }});
+
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(context),
-                "ContestRerollChance Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
+                () -> contestRerollChance.invoke(new RPGLContext()),
+                "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
 
     @Test
-    @DisplayName("ContestRerollChance Subevent defaults to false")
-    void test1() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new ContestRerollChance();
-        String subeventJsonString = """
-                {
-                    "subevent": "contest_reroll_chance"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        ContestRerollChance contestRerollChance = (ContestRerollChance) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
+    @DisplayName("prepare no reroll is requested by default")
+    void default_noRerollRequested() {
+        ContestRerollChance contestRerollChance = new ContestRerollChance();
 
-        /*
-         * Invoke subevent methods
-         */
-        contestRerollChance.prepare(context);
-
-        /*
-         * Verify subevent behaves as expected
-         */
         assertFalse(contestRerollChance.wasRerollRequested(),
-                "ContestRerollChance Subevent should default to false."
+                "a reroll should not be requested by default preceding prepare() call"
         );
     }
 
     @Test
-    @DisplayName("ContestRerollChance Subevent can have reroll requested")
-    void test2() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new ContestRerollChance();
-        String subeventJsonString = """
-                {
-                    "subevent": "contest_reroll_chance"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        ContestRerollChance contestRerollChance = (ContestRerollChance) subevent.clone(subeventJson);
-        RPGLContext context = new RPGLContext(null);
+    @DisplayName("prepare no reroll is requested by default")
+    void prepare_noRerollRequestedByDefault() {
+        ContestRerollChance contestRerollChance = new ContestRerollChance();
+        contestRerollChance.prepare(new RPGLContext());
 
-        /*
-         * Invoke subevent method
-         */
-        contestRerollChance.prepare(context);
-        contestRerollChance.requestReroll("reroll_mode");
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertTrue(contestRerollChance.wasRerollRequested(),
-                "ContestRerollChance Subevent did not properly report when a reroll was requested."
-        );
-        assertEquals("reroll_mode", contestRerollChance.getRerollMode(),
-                "ContestRerollChance Subevent did not properly report reroll mode."
+        assertFalse(contestRerollChance.wasRerollRequested(),
+                "a reroll should not be requested by default following prepare() call"
         );
     }
 
+    @Test
+    @DisplayName("requestReroll sets reroll request to true and stores reroll mode")
+    void requestReroll_setsRerollRequestedToTrueAndStoresRerollMode() {
+        ContestRerollChance contestRerollChance = new ContestRerollChance();
+        contestRerollChance.requestReroll(ContestRerollChance.USE_HIGHEST);
+
+        assertTrue(contestRerollChance.wasRerollRequested(),
+                "a reroll should be requested following requestReroll() call"
+        );
+        assertEquals(ContestRerollChance.USE_HIGHEST, contestRerollChance.getRerollMode(),
+                "reroll mode should reflect the passed value"
+        );
+    }
 }

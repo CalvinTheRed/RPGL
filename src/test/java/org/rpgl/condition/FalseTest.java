@@ -1,50 +1,57 @@
 package org.rpgl.condition;
 
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.json.JsonObject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for condition.False class.
+ * Testing class for the org.rpgl.condition.False class.
  *
  * @author Calvin Withun
  */
 public class FalseTest {
 
+    @BeforeAll
+    static void beforeFalse() {
+        RPGLCore.initializeTesting();
+    }
+
     @Test
-    @DisplayName("False Condition throws ConditionMismatchException when condition type doesn't match")
-    void test0() throws JsonFormatException {
+    @DisplayName("evaluate wrong condition")
+    void evaluate_wrongCondition_throwsException() {
         Condition condition = new False();
-        String conditionJsonString = """
-                {
-                    "condition": "not_a_condition"
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "not_a_condition"
+            }*/
+            this.putString("condition", "not_a_condition");
+        }};
+
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson),
-                "False Condition should throw a ConditionMismatchException if the specified condition doesn't match."
+                () -> condition.evaluate(null, null, null, conditionJson),
+                "False condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("False Condition should always evaluate false")
-    void test1() throws JsonFormatException, ConditionMismatchException {
+    @DisplayName("evaluate default behavior")
+    void evaluate_default_false() throws ConditionMismatchException {
         Condition condition = new False();
-        String conditionJsonString = """
-                {
-                    "condition": "false"
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(null, null, conditionJson);
-        assertFalse(result,
-                "False Condition should always evaluate to false."
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "false"
+            }*/
+            this.putString("condition", "false");
+        }};
+
+        assertFalse(condition.evaluate(null, null, null, conditionJson),
+                "False condition should always evaluate false"
         );
     }
 

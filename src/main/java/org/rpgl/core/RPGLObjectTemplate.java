@@ -1,149 +1,123 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonObject;
+import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * This class contains a JSON template defining a particular type of RPGLObject. It is not intended to be used for any
- * purpose other than constructing new RPGLObject objects.
+ * This class is used to contain a "template" to be used in the creation of new RPGLObject objects. Data stored in this
+ * object is copied and then processed to create a specific RPGLObject defined somewhere in a datapack.
  *
  * @author Calvin Withun
  */
 public class RPGLObjectTemplate extends JsonObject {
 
     /**
-     * 	<p><b><i>RPGLObjectTemplate</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObjectTemplate(JsonObject objectTemplateJson)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	The constructor for the RPGLObjectTemplate class.
-     * 	</p>
+     * Constructs a new RPGLObject object corresponding to the contents of the RPGLObjectTemplate object. The new
+     * object is registered to the UUIDTable class when it is constructed.
      *
-     * 	@param objectTemplateJson the JSON data to be joined to the new RPGLObjectTemplate object.
-     */
-    public RPGLObjectTemplate(JsonObject objectTemplateJson) {
-        this.join(objectTemplateJson);
-    }
-
-    /**
-     * 	<p><b><i>newInstance</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public RPGLObject newInstance()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	Constructs a new RPGLObject object corresponding to the contents of the RPGLObjectTemplate object. The new
-     * 	object is registered to the UUIDTable class when it is constructed.
-     * 	</p>
-     *
-     * 	@return a new RPGLObject object
+     * @return a new RPGLObject object
      */
     public RPGLObject newInstance() {
-        RPGLObject object = new RPGLObject(this);
-        this.putIfAbsent("events", new JsonArray());
+        RPGLObject object = new RPGLObject();
+        object.join(this);
+        this.asMap().putIfAbsent(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, new HashMap<String, Object>());
+        this.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.EVENTS_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());
         processEffects(object);
-        processItems(object);
+        processInventory(object);
+        processEquippedItems(object);
+        processHealthData(object);
         UUIDTable.register(object);
         return object;
     }
 
     /**
-     * 	<p><b><i>processEffects</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processEffects(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method converts effect IDs in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
-     *  these new RPGLEffects replace the original array contents.
-     * 	</p>
+     * This helper method converts effect IDs in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
+     * these new RPGLEffects replace the original array contents.
      *
-     *  @param object an RPGLObject
+     * @param object an RPGLObject
      */
     static void processEffects(RPGLObject object) {
-        Object keyValue = object.remove("effects");
-        JsonArray effectIdArray = (JsonArray) keyValue;
+        JsonArray effectIdArray = object.removeJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
         JsonArray effectUuidArray = new JsonArray();
-        for (Object effectIdElement : effectIdArray) {
-            String effectId = (String) effectIdElement;
+        for (int i = 0; i < effectIdArray.size(); i++) {
+            String effectId = effectIdArray.getString(i);
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
             if (effect != null) {
-                effectUuidArray.add(effect.getUuid());
+                effectUuidArray.addString(effect.getUuid());
             }
         }
-        object.put("effects", effectUuidArray);
+        object.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effectUuidArray);
     }
 
     /**
-     * 	<p><b><i>processItems</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static void processItems(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method manages the conversion of item IDs in an RPGLObject's inventory to RPGLItem objects and their
-     * 	UUID's.
-     * 	</p>
-     */
-    static void processItems(RPGLObject object) {
-        Object keyValue = object.get("items");
-        if (keyValue instanceof JsonObject items) {
-
-            // process inventory array (does not include equipped items)
-            JsonArray inventoryUuids = new JsonArray();
-            if (items.get("inventory") instanceof JsonArray) {
-                inventoryUuids.addAll(processInventory((JsonArray) items.remove("inventory")));
-            }
-
-            // process equipped items (were not included in inventory array)
-            JsonArray equippedItemUuids = new JsonArray();
-            for (String equipmentSlotName : items.keySet()) {
-                String itemId = (String) items.get(equipmentSlotName);
-                RPGLItem item = RPGLFactory.newItem(itemId);
-                assert item != null;
-                String itemUuid = item.getUuid();
-                items.put(equipmentSlotName, itemUuid);
-                equippedItemUuids.add(itemUuid);
-            }
-            inventoryUuids.addAll(equippedItemUuids);
-
-            // replace object inventory with array of item UUIDs
-            items.put("inventory", inventoryUuids);
-        }
-    }
-
-    /**
-     * 	<p><b><i>processInventory</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * static JsonArray processInventory(RPGLObject object)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method converts item IDs in an RPGLObjectTemplate's <code>items.inventory</code> array to RPGLItems.
-     *  The UUID's of these new RPGLItems replace the original object contents.
-     * 	</p>
+     * This helper method processes the equipped items as defined by an RPGLObjectTemplate. All items are created,
+     * loaded into UUIDTable, and then assigned to the corresponding equipment slots in the object being created and
+     * are appended to the inventory list. Note that this method must be called AFTER the <code>processInventory()</code>
+     * method to work properly.
      *
-     *  @param inventoryIdArray the inventory being processed
-     *  @return a JsonArray of RPGLItem UUID's
+     * @param object a RPGLObject being created by this object
      */
-    static JsonArray processInventory(JsonArray inventoryIdArray) {
-        JsonArray inventoryUuidArray = new JsonArray();
-        for (Object inventoryIdElement : inventoryIdArray) {
-            String itemId = (String) inventoryIdElement;
+    static void processEquippedItems(RPGLObject object) {
+        JsonObject equippedItemIds = object.getEquippedItems();
+        JsonArray inventoryUuids = object.getInventory();
+        JsonObject equippedItemUuids = new JsonObject();
+        for (Map.Entry<String, ?> equippedItemEntry : equippedItemIds.asMap().entrySet()) {
+            String equippedItemId = equippedItemIds.getString(equippedItemEntry.getKey());
+            RPGLItem item = RPGLFactory.newItem(equippedItemId);
+            equippedItemUuids.putString(equippedItemEntry.getKey(), item.getUuid());
+            inventoryUuids.addString(item.getUuid());
+        }
+        object.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItemUuids);
+    }
+
+    /**
+     * This helper method processes the equipment as defined by an RPGLObjectTemplate. All items are created and added
+     * to the inventory list. Note that this method must be called BEFORE the <code>processEquippedItems()</code>
+     * method for that method to work properly.
+     *
+     * @param object a RPGLObject being created by this object
+     */
+    static void processInventory(RPGLObject object) {
+        JsonArray inventoryItemIds = object.removeJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonArray inventoryItemUuids = new JsonArray();
+        for (int i = 0; i < inventoryItemIds.size(); i++) {
+            String itemId = inventoryItemIds.getString(i);
             RPGLItem item = RPGLFactory.newItem(itemId);
-            if (item != null) {
-                inventoryUuidArray.add(item.getUuid());
+            inventoryItemUuids.addString(item.getUuid());
+        }
+        object.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventoryItemUuids);
+    }
+
+    /**
+     * This helper method unpacks the condensed representation of hit dice in a RPGLObjectTemplate into multiple dice
+     * objects in accordance with the <code>count</code> field.
+     *
+     * @param object a RPGLObject being created by this object
+     */
+    static void processHealthData(RPGLObject object) {
+        JsonObject healthData = object.getHealthData();
+        JsonArray templateHitDice = healthData.removeJsonArray("hit_dice");
+        JsonArray hitDice = new JsonArray();
+        for (int i = 0; i < templateHitDice.size(); i++) {
+            JsonObject templateHitDieDefinition = templateHitDice.getJsonObject(i);
+            JsonObject hitDie = new JsonObject() {{
+                this.putInteger("size", templateHitDieDefinition.getInteger("size"));
+                this.putJsonArray("determined", templateHitDieDefinition.getJsonArray("determined"));
+                this.putBoolean("spent", false);
+            }};
+            for (int j = 0; j < templateHitDieDefinition.getInteger("count"); j++) {
+                hitDice.addJsonObject(hitDie.deepClone());
             }
         }
-        return inventoryUuidArray;
+        healthData.putJsonArray("hit_dice", hitDice);
     }
 
 }

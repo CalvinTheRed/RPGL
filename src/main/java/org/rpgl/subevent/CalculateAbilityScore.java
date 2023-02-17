@@ -1,7 +1,8 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
+import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to rolling all dice which will be copied to all targets of a damaging RPGLEvent. This
@@ -23,22 +24,22 @@ public class CalculateAbilityScore extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateAbilityScore();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CalculateAbilityScore();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        this.subeventJson.put("base", this.getSource().seek("ability_scores." + this.subeventJson.get("ability"))); // TODO what is base for as opposed to set?
+        super.setBase(this.getSource().getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).getInteger(this.subeventJson.getString("ability")));
     }
 
 }

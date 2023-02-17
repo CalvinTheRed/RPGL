@@ -3,31 +3,36 @@
     "author": "Calvin Withun"
   },
   "name": "Heavy Crossbow",
+  "description": "A heavy crossbow.",
+  "tags": [
+    "weapon"
+  ],
+  "weight": 18,
+  "cost": 50,
   "proficiency_tags": [
-    "martial",
-    "range",
+    "martial_ranged",
     "heavy_crossbow"
   ],
+  "while_equipped": [
+
+  ],
   "weapon_properties": [
-    "martial",
-    "range",
-    "heavy_crossbow",
+    "ammunition",
     "heavy",
     "loading",
+    "ranged",
     "two_handed"
   ],
   "range": {
     "normal": 100,
     "long": 400
   },
-  "weight": 18,
-  "cost": "50g",
   "damage": {
     "ranged": [
       {
         "type": "piercing",
         "dice": [
-          { "size": 10, "determined": 5 }
+          { "count": 1, "size": 10, "determined": [ 5 ] }
         ],
         "bonus": 0
       }

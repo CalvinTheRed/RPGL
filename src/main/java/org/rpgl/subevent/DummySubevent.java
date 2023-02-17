@@ -1,7 +1,7 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is a dummy Subevent only meant to be used during testing. It has no practical application.
@@ -24,15 +24,15 @@ public class DummySubevent extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new DummySubevent();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new DummySubevent();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -43,6 +43,9 @@ public class DummySubevent extends Subevent {
         DummySubevent.counter++;
     }
 
+    /**
+     * Resets this class's counter used during testing.
+     */
     public static void resetCounter() {
         DummySubevent.counter = 0;
     }

@@ -1,63 +1,39 @@
 package org.rpgl.uuidtable;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.datapack.DatapackContent;
+import org.rpgl.datapack.UUIDTableElementTO;
 
 /**
- * 	This class represents any object which can be stored in the UUIDTable.
+ * This class is the base class of any object which gets stored in UUIDTable.
  *
  * @author Calvin Withun
  */
-public abstract class UUIDTableElement extends JsonObject {
+public class UUIDTableElement extends DatapackContent {
 
     /**
-     * 	<p><b><i>setUuid</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void setUuid(String uuid)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method assigns a UUID to the UUIDTableElement object.
-     * 	</p>
+     * Returns the UUID of this object.
      *
-     *  @param uuid a UUID String
-     */
-    public void setUuid(String uuid) {
-        this.put("uuid", uuid);
-    }
-
-    /**
-     * 	<p><b><i>deleteUuid</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public String deleteUuid()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method deletes and returns the UUID from the UUIDTableElement, in order to guard against future UUID
-     * 	collisions.
-     * 	</p>
-     *
-     *  @return a UUID String
-     */
-    public String deleteUuid() {
-        return (String) this.remove("uuid");
-    }
-
-    /**
-     * 	<p><b><i>getUuid</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public String getUuid()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the UUIDTableElement object's assigned UUID.
-     * 	</p>
-     *
-     *  @return a UUID String
+     * @return the UUID of this object
      */
     public String getUuid() {
-        return (String) this.get("uuid");
+        return this.getString(UUIDTableElementTO.UUID_ALIAS);
     }
+
+
+    /**
+     * Sets the UUID of this object.
+     *
+     * @param uuid the UUID to be assigned to this object
+     */
+    public void setUuid(String uuid) {
+        this.putString(UUIDTableElementTO.UUID_ALIAS, uuid);
+    }
+
+    /**
+     * Deletes the key-value pair storing this object's UUID.
+     */
+    public void deleteUuid() {
+        this.asMap().remove(UUIDTableElementTO.UUID_ALIAS);
+    }
+
 }

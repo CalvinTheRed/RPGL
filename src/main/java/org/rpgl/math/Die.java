@@ -1,5 +1,6 @@
 package org.rpgl.math;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -14,11 +15,11 @@ public final class Die {
 
     private static boolean testing = false;
 
-    public static long roll(long upperBound, Long determinedValue) {
-        if (testing && determinedValue != null) {
-            return determinedValue;
+    public static int roll(int upperBound, List<Object> determinedList) {
+        if (testing && determinedList != null && !determinedList.isEmpty()) {
+            return (Integer) determinedList.remove(0);
         } else {
-            return R.nextLong(upperBound) + 1;
+            return R.nextInt(upperBound) + 1;
         }
     }
 

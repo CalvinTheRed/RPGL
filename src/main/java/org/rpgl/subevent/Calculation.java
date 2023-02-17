@@ -20,85 +20,71 @@ public abstract class Calculation extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>addBonus</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void addBonus(long bonus)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method adds a bonus to the value being calculated.
-     * 	</p>
-     */
-    public void addBonus(long bonus) {
-        Long currentBonus = (Long) this.subeventJson.put("bonus", bonus);
-        if (currentBonus == null) {
-            currentBonus = 0L;
-        }
-        this.subeventJson.put("bonus", currentBonus + bonus);
-    }
-
-    /**
-     * 	<p>
-     * 	<b><i>getBonus</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public long getBonus()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the bonus of the calculation.
-     * 	</p>
+     * This method adds a bonus to the value being calculated.
      *
-     *  @return the bonus granted to the calculation
+     * @param bonus a bonus to be added to the calculation
      */
-    public long getBonus() {
-        return Objects.requireNonNullElse((Long) this.subeventJson.get("bonus"), 0L);
+    public void addBonus(int bonus) {
+        this.subeventJson.putInteger("bonus", this.getBonus() + bonus);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>set</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void set(long value)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method sets the calculated value. Once the calculation is set, the returned value will not include any
-     * 	bonuses which have been applied to it.
-     * 	</p>
-     */
-    public void set(long value) {
-        this.subeventJson.put("set", value);
-    }
-
-    /**
-     * 	<p>
-     * 	<b><i>get</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public long get()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the result of the calculation.
-     * 	</p>
+     * This method returns the bonus of the calculation.
      *
-     *  @return the result of the calculation
+     * @return the bonus granted to the calculation
      */
-    public long get() {
-        Long set = (Long) this.subeventJson.get("set");
-        Long bonus = this.getBonus();
+    public int getBonus() {
+        return Objects.requireNonNullElse(this.subeventJson.getInteger("bonus"), 0);
+    }
+
+    /**
+     * This method sets the calculated value. Once the calculation is set, the returned value will not include any
+     * bonuses which have been applied to it.
+     *
+     * @param value the new set value of the calculation
+     */
+    public void setSet(int value) {
+        this.subeventJson.putInteger("set", value);
+    }
+
+    /**
+     * This method returns the set value of the calculation.
+     *
+     * @return the set value of the calculation
+     */
+    public Integer getSet() {
+        return this.subeventJson.getInteger("set");
+    }
+
+    /**
+     * This method sets the calculation's base value.
+     *
+     * @param value the new base value of the calculation
+     */
+    public void setBase(int value) {
+        this.subeventJson.putInteger("base", value);
+    }
+
+    /**
+     * This method returns the base value of the calculation.
+     *
+     * @return the base value of the calculation
+     */
+    public Integer getBase() {
+        return this.subeventJson.getInteger("base");
+    }
+
+    /**
+     * This method returns the result of the calculation.
+     *
+     * @return the result of the calculation
+     */
+    public int get() {
+        Integer set = this.getSet();
         if (set != null) {
-            return set + bonus;
+            return set;
         }
-        return Objects.requireNonNullElse((Long) this.subeventJson.get("base"), 0L) + bonus; // TODO add methods to interface with "base"?
+        return Objects.requireNonNullElse(this.getBase(), 0) + this.getBonus();
     }
 
 }

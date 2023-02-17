@@ -1,27 +1,35 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
+import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.exception.SubeventMismatchException;
-import org.rpgl.math.Die;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for subevent.AttackRoll class.
+ * Testing class for the org.rpgl.subevent.AttackRoll class.
  *
  * @author Calvin Withun
  */
@@ -32,7 +40,7 @@ public class AttackRollTest {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
-        Die.setTesting(true);
+        RPGLCore.initializeTesting();
     }
 
     @AfterAll
@@ -47,1111 +55,792 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent throws SubeventMismatchException when subevent type doesn't match")
-    void test0() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "not_a_subevent"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        RPGLContext context = new RPGLContext(null);
+    @DisplayName("invoke wrong subevent")
+    void invoke_wrongSubevent_throwsException() {
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "not_a_subevent"
+            }*/
+            this.putString("subevent", "not_a_subevent");
+        }});
 
-        /*
-         * Verify subevent behaves as expected
-         */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(context),
-                "AttackRoll Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
-        );
-    }
-
-    /*
-     * #################################################################################################################
-     *                                             Attack roll stuff
-     * #################################################################################################################
-     */
-
-    @Test
-    @DisplayName("AttackRoll Subevent defaults to normal roll")
-    void test1() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertTrue(attackRoll.isNormalRoll(),
-                "Attack should default to normal roll."
-        );
-        assertFalse(attackRoll.isAdvantageRoll(),
-                "AttackRoll should not default to advantage roll."
-        );
-        assertFalse(attackRoll.isDisadvantageRoll(),
-                "AttackRoll should not default to disadvantage roll."
+                () -> attackRoll.invoke(new RPGLContext()),
+                "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can be granted advantage")
-    void test2() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+    @DisplayName("applyWeaponAttackBonus adds bonus to roll (longsword +1)")
+    void applyWeaponAttackBonus_addsBonusToRoll_longswordPlusOne() {
+        AttackRoll attackRoll = new AttackRoll();
+        RPGLItem item = RPGLFactory.newItem("demo:longsword_plus_one");
+        attackRoll.applyWeaponAttackBonus(item);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.grantAdvantage();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertFalse(attackRoll.isNormalRoll(),
-                "Attack should not be a normal roll after being granted advantage."
-        );
-        assertTrue(attackRoll.isAdvantageRoll(),
-                "AttackRoll should be an advantage roll after being granted advantage."
-        );
-        assertFalse(attackRoll.isDisadvantageRoll(),
-                "AttackRoll should not be a disadvantage roll after being granted advantage."
+        assertEquals(1, attackRoll.getBonus(),
+                "weapon bonus of 1 should be applied to the attack roll"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can be granted disadvantage")
-    void test3() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+    @DisplayName("isCriticalMiss returns true (base roll of 1)")
+    void isCriticalMiss_returnsTrue_baseRollOne() {
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.setBase(1);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.grantDisadvantage();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertFalse(attackRoll.isNormalRoll(),
-                "Attack should not be a normal roll after being granted disadvantage."
-        );
-        assertFalse(attackRoll.isAdvantageRoll(),
-                "AttackRoll should not be an advantage roll after being granted disadvantage."
-        );
-        assertTrue(attackRoll.isDisadvantageRoll(),
-                "AttackRoll should be a disadvantage roll after being granted disadvantage."
+        assertTrue(attackRoll.isCriticalMiss(),
+                "attack roll with base of 1 should register as a critical miss"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can be granted advantage and disadvantage")
-    void test4() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+    @DisplayName("isCriticalMiss returns false (base roll exceeding 1)")
+    void isCriticalMiss_returnsFalse_baseRollExceedingOne() {
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.setBase(10);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.grantAdvantage();
-        attackRoll.grantDisadvantage();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertTrue(attackRoll.isNormalRoll(),
-                "Attack should be a normal roll after being granted advantage and disadvantage."
-        );
-        assertFalse(attackRoll.isAdvantageRoll(),
-                "AttackRoll should not be an advantage roll after being granted advantage and disadvantage."
-        );
-        assertFalse(attackRoll.isDisadvantageRoll(),
-                "AttackRoll should not be a disadvantage roll after being granted advantage and disadvantage."
+        assertFalse(attackRoll.isCriticalMiss(),
+                "attack roll with base exceeding 1 should not register as a critical miss"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can roll a flat die (no advantage or disadvantage)")
-    void test5() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 10
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+    @DisplayName("isCriticalHit returns true (base roll of 20)")
+    void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.setBase(20);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.roll();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(10L, attackRoll.get(),
-                "AttackRoll failed to roll a flat die."
+        assertTrue(attackRoll.isCriticalHit(new RPGLContext()),
+                "attack roll with base of 20 should register as a critical hit"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can roll a flat die (with advantage)")
-    void test6() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 1,
-                    "determined_second": 20
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
+    @DisplayName("isCriticalHit returns false (base roll below 20)")
+    void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.setBase(10);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.grantAdvantage();
-        attackRoll.roll();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(20L, attackRoll.get(),
-                "AttackRoll failed to correctly roll a flat die with advantage."
+        assertFalse(attackRoll.isCriticalHit(new RPGLContext()),
+                "attack roll with base below 20 should not register as a critical hit"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can roll a flat die (with advantage) (reverse order)")
-    void test7() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 20,
-                    "determined_second": 1
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.grantAdvantage();
-        attackRoll.roll();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(20L, attackRoll.get(),
-                "AttackRoll failed to correctly roll a flat die with advantage."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent can roll a flat die (with disadvantage)")
-    void test8() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 1,
-                    "determined_second": 20
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.grantDisadvantage();
-        attackRoll.roll();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1L, attackRoll.get(),
-                "AttackRoll failed to correctly roll a flat die with disadvantage."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent can roll a flat die (with disadvantage) (reverse order)")
-    void test9() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 20,
-                    "determined_second": 1
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.grantDisadvantage();
-        attackRoll.roll();
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1L, attackRoll.get(),
-                "AttackRoll failed to correctly roll a flat die with advantage."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent can set its die roll")
-    void test10() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 10
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.roll();
-        attackRoll.set(1L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1L, attackRoll.get(),
-                "AttackRoll failed to set its die roll."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent can set a set die roll (second set is greater)")
-    void test11() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 10
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.roll();
-        attackRoll.set(1L);
-        attackRoll.set(20L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(20L, attackRoll.get(),
-                "AttackRoll failed to set its die roll properly."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent can add bonus to roll")
-    void test13() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 10
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.roll();
-        attackRoll.addBonus(2L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(12L, attackRoll.get(),
-                "AttackRoll failed to add bonus properly."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent can add bonus to set roll")
-    void test14() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "determined": 1
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.roll();
-        attackRoll.set(10L);
-        attackRoll.addBonus(2L);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(12L, attackRoll.get(),
-                "AttackRoll failed to add bonus to set roll properly."
-        );
-    }
-
-    /*
-     * #################################################################################################################
-     *                                  AttackRoll preparing different attack types
-     * #################################################################################################################
-     */
-
-    @Test
-    @DisplayName("AttackRoll Subevent can prepare attack without weapon")
-    void test15() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "attack_ability": "str"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareAttackWithoutWeapon(context);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(3L, attackRoll.subeventJson.get("bonus"),
-                "AttackRoll Subevent should have a bonus of 3 (STR+1, PROF+2)."
-        );
-        assertEquals("[]", attackRoll.subeventJson.get("damage").toString(),
-                "AttackRoll should create empty damage array if none is provided by template."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent can prepare natural weapon attack")
-    void test16() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponId = "test:blank";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee"
-                }
-                """,
-                weaponId
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareNaturalWeaponAttack(weaponId, context);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        String naturalWeaponDamageArrayString = """
-                [
+    @DisplayName("resolveNestedSubevents invoked DummySubevent (on hit)")
+    void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "hit": [
                     {
-                        "type": "bludgeoning",
-                        "dice": [
-                            { "size": 4, "determined": 1 }
-                        ],
-                        "bonus": 0
+                        "subevent": "dummy_subevent"
                     }
                 ]
-                """;
-        JsonArray naturalWeaponDamageArray = JsonParser.parseArrayString(naturalWeaponDamageArrayString);
-        assertEquals(3L, attackRoll.subeventJson.get("bonus"),
-                "AttackRoll Subevent should have a bonus of 0 (STR+1, PROF+2)."
-        );
-        assertEquals(naturalWeaponDamageArray.toString(), attackRoll.subeventJson.get("damage").toString(),
-                "AttackRoll should have natural weapon damage stored (improvised damage for the purposes of this test)."
-        );
-        assertNotNull(UUIDTable.getItem((String) attackRoll.subeventJson.get("weapon")),
-                "AttackRoll should record the natural weapon's UUID."
-        );
-    }
+            }*/
+            this.putJsonArray("hit", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("subevent", "dummy_subevent");
+                }});
+            }});
+        }});
+        attackRoll.resolveNestedSubevents("hit", new RPGLContext());
 
-    @Test
-    @DisplayName("AttackRoll Subevent natural weapons do not persist after invoke")
-    void test17() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "test:blank",
-                    "attack_type": "melee"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.invoke(context);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertNull(UUIDTable.getItem((String) attackRoll.subeventJson.get("weapon")),
-                "The recorded natural weapon UUID should no longer be present in UUIDTable after AttackRoll is invoked."
+        assertEquals(1, DummySubevent.counter,
+                "DummySubevent counter should increment by 1 from resolving nested subevents on hit"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can prepare item weapon attack")
-    void test18() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponEquipmentSlot = "hand_1";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee"
-                }
-                """,
-                weaponEquipmentSlot
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLItem hand1Weapon = RPGLFactory.newItem("test:blank");
-        assert hand1Weapon != null;
-        objectAllAbilities12.giveItem(hand1Weapon.getUuid());
-        objectAllAbilities12.equipItem(hand1Weapon.getUuid(), weaponEquipmentSlot);
-        RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareItemWeaponAttack(weaponEquipmentSlot, context);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        String naturalWeaponDamageArrayString = """
-                [
+    @DisplayName("resolveNestedSubevents invoked DummySubevent (on miss)")
+    void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "miss": [
                     {
-                        "type": "bludgeoning",
-                        "dice": [
-                            { "size": 4, "determined": 1 }
-                        ],
-                        "bonus": 0
+                        "subevent": "dummy_subevent"
                     }
                 ]
-                """;
-        JsonArray naturalWeaponDamageArray = JsonParser.parseArrayString(naturalWeaponDamageArrayString);
-        assertEquals(1L, attackRoll.subeventJson.get("bonus"),
-                "AttackRoll Subevent should have a bonus of 0 (STR+1, no PROF)."
-        );
-        assertEquals(naturalWeaponDamageArray.toString(), attackRoll.subeventJson.get("damage").toString(),
-                "AttackRoll should have item weapon damage stored (improvised damage for the purposes of this test)."
-        );
-        assertNotNull(UUIDTable.getItem((String) attackRoll.subeventJson.get("weapon")),
-                "AttackRoll should record the item weapon's UUID."
+            }*/
+            this.putJsonArray("miss", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("subevent", "dummy_subevent");
+                }});
+            }});
+        }});
+        attackRoll.resolveNestedSubevents("miss", new RPGLContext());
+
+        assertEquals(1, DummySubevent.counter,
+                "DummySubevent counter should increment by 1 from resolving nested subevents on miss"
         );
     }
 
-    /*
-     * #################################################################################################################
-     *                                                  Damage Stuff
-     * #################################################################################################################
-     */
+    @Test
+    @DisplayName("deliverDamage object loses health")
+    void deliverDamage_objectLosesHealth() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": {
+                    "fire": 10
+                }
+            }*/
+            this.putJsonObject("damage", new JsonObject() {{
+                this.putInteger("fire", 10);
+            }});
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+        attackRoll.deliverDamage(context);
+
+        assertEquals(42, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+                "Knight should have 42 health left (52-10=42)"
+        );
+    }
 
     @Test
-    @DisplayName("AttackRoll Subevent can calculate base damage dice collection")
-    void test19() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponId = "test:blank";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee"
-                }
-                """,
-                weaponId
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
+    @DisplayName("getAttackDamage damage is rolled")
+    void getAttackDamage_damageIsRolled() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareNaturalWeaponAttack(weaponId, context);
-        attackRoll.setTarget(objectAllAbilities12);
-        BaseDamageDiceCollection baseDamageDiceCollection = attackRoll.getBaseDamageDiceCollection(context);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+        JsonObject attackDamage = attackRoll.getAttackDamage(new JsonArray() {{
+            /*[
+                {
+                    "type": "fire",
+                    "dice": [
+                        { "size": 6, "determined": [ 3 ] },
+                        { "size": 6, "determined": [ 3 ] },
+                        { "size": 6, "determined": [ 3 ] }
+                    ],
+                    "bonus": 1
+                },{
+                    "type": "cold",
+                    "dice": [
+                        { "size": 6, "determined": [ 3 ] },
+                        { "size": 6, "determined": [ 3 ] },
+                        { "size": 6, "determined": [ 3 ] }
+                    ],
+                    "bonus": 1
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("type", "fire");
+                this.putJsonArray("dice", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putInteger("size", 6);
+                        this.putJsonArray("determined", new JsonArray() {{
+                            this.addInteger(3);
+                        }});
+                    }});
+                    this.addJsonObject(new JsonObject() {{
+                        this.putInteger("size", 6);
+                        this.putJsonArray("determined", new JsonArray() {{
+                            this.addInteger(3);
+                        }});
+                    }});
+                    this.addJsonObject(new JsonObject() {{
+                        this.putInteger("size", 6);
+                        this.putJsonArray("determined", new JsonArray() {{
+                            this.addInteger(3);
+                        }});
+                    }});
+                }});
+                this.putInteger("bonus", 1);
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("type", "cold");
+                this.putJsonArray("dice", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putInteger("size", 6);
+                        this.putJsonArray("determined", new JsonArray() {{
+                            this.addInteger(3);
+                        }});
+                    }});
+                    this.addJsonObject(new JsonObject() {{
+                        this.putInteger("size", 6);
+                        this.putJsonArray("determined", new JsonArray() {{
+                            this.addInteger(3);
+                        }});
+                    }});
+                    this.addJsonObject(new JsonObject() {{
+                        this.putInteger("size", 6);
+                        this.putJsonArray("determined", new JsonArray() {{
+                            this.addInteger(3);
+                        }});
+                    }});
+                }});
+                this.putInteger("bonus", 1);
+            }});
+        }}, context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        String baseDamageArrayString = """
-                [
+        String expected = """
+                {"cold":10,"fire":10}""";
+        assertEquals(expected, attackDamage.toString(),
+                "getAttackDamage should yield 10 cold and fire damage"
+        );
+    }
+
+    @Test
+    @DisplayName("getCriticalHitDamageCollection doubles dice")
+    void getCriticalHitDamageCollection_doublesDice() throws Exception {
+        AttackRoll attackRoll = new AttackRoll();
+
+        BaseDamageCollection baseDamageCollection = new BaseDamageCollection();
+        baseDamageCollection.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
                     {
-                        "type": "bludgeoning",
+                        "type": "fire",
                         "dice": [
-                            { "size": 4, "determined": 1 }
+                            { "size": 6, "determined": [ 3 ] }
                         ],
                         "bonus": 1
                     }
                 ]
-                """;
-        JsonArray expectedBaseDamageDiceCollection = JsonParser.parseArrayString(baseDamageArrayString);
-        assertEquals(expectedBaseDamageDiceCollection.toString(), baseDamageDiceCollection.getDamageDiceCollection().toString(),
-                "AttackRoll subevent should be able to collect base damage dice correctly."
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 1);
+                }});
+            }});
+        }});
+
+        CriticalHitDamageCollection criticalHitDamageCollection = attackRoll.getCriticalHitDamageCollection(
+                baseDamageCollection,
+                new TargetDamageCollection(),
+                new RPGLContext()
+        );
+
+        String expected = """
+                [{"bonus":1,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"fire"}]""";
+        assertEquals(expected, criticalHitDamageCollection.getDamageCollection().toString(),
+                "the number of dice should be doubled after calling getCriticalHitDamageCollection"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can resolve damage")
-    void test20() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponId = "test:blank";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee"
-                }
-                """,
-                weaponId
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+    @DisplayName("getTargetDamageCollection returns empty array (default behavior)")
+    void getTargetDamageCollection_returnsEmptyArray_default() throws Exception {
+        AttackRoll attackRoll = new AttackRoll();
+        TargetDamageCollection targetDamageCollection = attackRoll.getTargetDamageCollection(new RPGLContext());
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepareNaturalWeaponAttack(weaponId, context);
-        attackRoll.setTarget(objectAllAbilities12);
+        assertEquals("[]", targetDamageCollection.getDamageCollection().toString(),
+                "getTargetDamageCollection should return empty array by default"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseDamageCollection calculates base damage collection")
+    void getBaseDamageCollection_calculatesBaseDamageCollection() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLItem item = UUIDTable.getItem(object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("mainhand"));
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "weapon": <RPGLItem UUID>,
+                "attack_type": "melee",
+                "damage": [
+                    {
+                        "type": "slashing",
+                        "dice": [
+                            { "size": 8, "determined": [ 4 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putString("weapon", item.getUuid());
+            this.putString("attack_type", "melee");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 8);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
+        BaseDamageCollection baseDamageCollection = attackRoll.getBaseDamageCollection(context);
+
+        String expected = """
+                [{"bonus":3,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
+        assertEquals(expected, baseDamageCollection.getDamageCollection().toString(),
+                "base damage should be collected properly including ability score modifier damage bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("resolveCriticalHitDamage deals critical damage")
+    void resolveCriticalHitDamage_dealsCriticalDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLItem item = UUIDTable.getItem(object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("mainhand"));
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "weapon": <RPGLItem UUID>,
+                "attack_type": "melee",
+                "damage": [
+                    {
+                        "type": "slashing",
+                        "dice": [
+                            { "size": 8, "determined": [ 4 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putString("weapon", item.getUuid());
+            this.putString("attack_type", "melee");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 8);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
+        attackRoll.resolveCriticalHitDamage(context);
+
+        assertEquals(41, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+                "resolveCriticalHitDamage should deduct 11 ((4x2)+3) hit points from the knight to leave 41 (52-11=41)"
+        );
+    }
+
+    @Test
+    @DisplayName("resolveDamage deals damage")
+    void resolveDamage_dealsDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLItem item = UUIDTable.getItem(object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("mainhand"));
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "weapon": <RPGLItem UUID>,
+                "attack_type": "melee",
+                "damage": [
+                    {
+                        "type": "slashing",
+                        "dice": [
+                            { "size": 8, "determined": [ 4 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putString("weapon", item.getUuid());
+            this.putString("attack_type", "melee");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 8);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
         attackRoll.resolveDamage(context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(98L, objectAllAbilities12.seek("health_data.current"),
-                "AttackRoll subevent should be able to resolve damage (100-([1]+1)=98)"
+        assertEquals(45, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+                "resolveCriticalHitDamage should deduct 7 (4+3) hit points from the knight to leave 45 (52-7=45)"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can resolve nested subevents (hit)")
-    void test21() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponId = "test:blank";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee",
-                    "hit": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "miss": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "determined": 20
-                }
-                """,
-                weaponId
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
+    @DisplayName("getTargetArmorClass calculate 20 armor class")
+    void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.resolveNestedSubevents("hit", context);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1L, DummySubevent.counter,
-                "AttackRoll Subevent should increment DummySubevent.counter by 1 on hit."
+        assertEquals(20, attackRoll.getTargetArmorClass(context),
+                "target armor class should be 20 (plate armor + shield)"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent can resolve nested subevents (miss)")
-    void test22() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponId = "test:blank";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee",
-                    "hit": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "miss": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "determined": 20
-                }
-                """,
-                weaponId
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
+    @DisplayName("prepareItemWeaponAttack stores weapon damage and stores weapon UUID")
+    void prepareItemWeaponAttack_storesWeaponDamageAndStoresWeaponUUID() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.resolveNestedSubevents("miss", context);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("attack_type", "melee");
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1L, DummySubevent.counter,
-                "AttackRoll Subevent should increment DummySubevent.counter by 1 on hit."
+        attackRoll.prepareItemWeaponAttack("mainhand", context);
+
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
+        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+                "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
+        );
+        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+                "weapon UUID should be present in UUIDTable"
+        );
+        // TODO assertion for attack bonus accounting for proficiency...
+    }
+
+    @Test
+    @DisplayName("prepareNaturalWeaponAttack stores weapon damage and stores weapon UUID")
+    void prepareNaturalWeaponAttack_storesWeaponDamageAndStoresWeaponUUID() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("attack_type", "melee");
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
+        attackRoll.prepareNaturalWeaponAttack("demo:young_red_dragon_bite", context);
+
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
+        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+                "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
+        );
+        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+                "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
+        );
+        assertEquals(10, attackRoll.getBonus(),
+                "attack roll should have a bonus of 10 (proficiency bonus of 4 + str modifier of 6)"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent complete scenario (no weapon attack)")
-    void test23() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "attack_ability": "int",
-                    "damage": [
-                        {
-                            "type": "fire",
-                            "dice": [
-                                { "size": 10, "determined": 1 },
-                                { "size": 10, "determined": 1 },
-                            ],
-                            "bonus": 1
-                        }
-                    ],
-                    "hit": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "miss": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "determined": 19
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
+    @DisplayName("prepareAttackWithoutWeapon stores damage")
+    void prepareAttackWithoutWeapon_storesDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "ranged",
+                "attack_ability": "int",
+                "damage": [
+                    {
+                        "type": "fire",
+                        "dice": [
+                            { "size": 10, "determined": [ 5 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putString("attack_type", "ranged");
+            this.putString("attack_ability","int");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 10);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(5);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
+        attackRoll.prepareAttackWithoutWeapon(context);
+
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
+        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+                "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
+        );
+        assertEquals(6, attackRoll.getBonus(),
+                "attack roll should have a bonus of 6 (proficiency of 4 + int modifier of 2)"
+        );
+    }
+
+    @Test
+    @DisplayName("prepare stores weapon damage and stores weapon UUID (item weapon)")
+    void prepare_storesWeaponDamageAndStoresWeaponUUID_itemWeapon() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("weapon", "mainhand");
+            this.putString("attack_type", "melee");
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
         attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
+
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
+        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+                "weapon damage should be stored in the subevent following prepare() call"
+        );
+        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+                "weapon UUID should be present in UUIDTable"
+        );
+        // TODO assertion for attack bonus accounting for proficiency...
+    }
+
+    @Test
+    @DisplayName("prepare stores weapon damage and stores weapon UUID (natural weapon)")
+    void prepare_storesWeaponDamageAndStoresWeaponUUID_naturalWeapon() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("weapon", "demo:young_red_dragon_bite");
+            this.putString("attack_type", "melee");
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
+        attackRoll.prepare(context);
+
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
+        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+                "weapon damage should be stored in the subevent following prepare() call"
+        );
+        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+                "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
+        );
+        assertEquals(10, attackRoll.getBonus(),
+                "attack roll should have a bonus of 10 (proficiency bonus of 4 + str modifier of 6)"
+        );
+    }
+
+    @Test
+    @DisplayName("prepare stores damage (no weapon)")
+    void prepare_storesDamage_noWeapon() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "ranged",
+                "attack_ability": "int",
+                "damage": [
+                    {
+                        "type": "fire",
+                        "dice": [
+                            { "size": 10, "determined": [ 5 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putString("attack_type", "ranged");
+            this.putString("attack_ability","int");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 10);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(5);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+
+        attackRoll.prepare(context);
+
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
+        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+                "weapon damage should be stored in the subevent following prepare() call"
+        );
+        assertEquals(6, attackRoll.getBonus(),
+                "attack roll should have a bonus of 6 (proficiency of 4 + int modifier of 2)"
+        );
+    }
+
+    @Test
+    @DisplayName("invoke stores weapon damage (hit)")
+    void invoke_storesWeaponDamage_hit() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "mainhand");
+            this.putString("attack_type", "melee");
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(19);
+            }});
+        }});
+        attackRoll.setSource(object);
+        attackRoll.prepare(context);
+        attackRoll.setTarget(object);
         attackRoll.invoke(context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(97L, objectAllAbilities12.seek("health_data.current"),
-                "AttackRoll Subevent should deal 3 damage on hit (100-([1+1]+1)=97)"
-        );
-        assertEquals(1L, DummySubevent.counter,
-                "AttackRoll Subevent should increment DummySubevent.counter by 1 on hit."
+        assertEquals(45, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+                "target should take 7 damage after hit (52-7=45)"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent complete scenario (natural weapon attack)")
-    void test24() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponId = "test:blank";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee",
-                    "hit": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "miss": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "determined": 19
-                }
-                """,
-                weaponId
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
+    @DisplayName("invoke stores weapon damage (critical hit)")
+    void invoke_storesWeaponDamage_criticalHit() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "mainhand");
+            this.putString("attack_type", "melee");
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(20);
+            }});
+        }});
+        attackRoll.setSource(object);
         attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
+        attackRoll.setTarget(object);
         attackRoll.invoke(context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(98L, objectAllAbilities12.seek("health_data.current"),
-                "AttackRoll Subevent should deal 2 damage on hit (100-([1]+1)=98)"
-        );
-        assertEquals(1L, DummySubevent.counter,
-                "AttackRoll Subevent should increment DummySubevent.counter by 1 on hit."
+        assertEquals(41, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+                "target should take 11 damage after hit (52-11=41)"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent complete scenario (item weapon attack)")
-    void test25() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String weaponEquipmentSlot = "hand_1";
-        String subeventJsonString = String.format("""
-                {
-                    "subevent": "attack_roll",
-                    "weapon": "%s",
-                    "attack_type": "melee",
-                    "hit": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "miss": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "determined": 19
-                }
-                """,
-                weaponEquipmentSlot
-        );
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLItem hand1Weapon = RPGLFactory.newItem("test:blank");
-        assert hand1Weapon != null;
-        objectAllAbilities12.giveItem(hand1Weapon.getUuid());
-        objectAllAbilities12.equipItem(hand1Weapon.getUuid(), weaponEquipmentSlot);
+    @DisplayName("invoke stores weapon damage (miss)")
+    void invoke_storesWeaponDamage_miss() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "mainhand");
+            this.putString("attack_type", "melee");
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(1);
+            }});
+        }});
+        attackRoll.setSource(object);
         attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
+        attackRoll.setTarget(object);
         attackRoll.invoke(context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(98L, objectAllAbilities12.seek("health_data.current"),
-                "AttackRoll Subevent should deal 2 damage on hit (100-([1]+1)=98)"
-        );
-        assertEquals(1L, DummySubevent.counter,
-                "AttackRoll Subevent should increment DummySubevent.counter by 1 on hit."
-        );
-    }
-
-    /*
-     * #################################################################################################################
-     *                                            Critical Hits and Misses
-     * #################################################################################################################
-     */
-
-    @Test
-    @DisplayName("AttackRoll Subevent deals extra damage on critical hit")
-    void test26() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "attack_ability": "int",
-                    "damage": [
-                        {
-                            "type": "fire",
-                            "dice": [
-                                { "size": 10, "determined": 1 },
-                                { "size": 10, "determined": 1 },
-                            ],
-                            "bonus": 1
-                        }
-                    ],
-                    "determined": 20
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.invoke(context);
-
-        /*
-         * Verify subevent behaves as expected
-         * NOTE: critical hit bonus dice share the same determined values as the original dice
-         */
-        assertEquals(95L, objectAllAbilities12.seek("health_data.current"),
-                "AttackRoll Subevent should deal 5 damage on hit including critical hit damage (100-5=95)"
+        assertEquals(52, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+                "target should take 0 damage on a miss"
         );
     }
 
     @Test
-    @DisplayName("AttackRoll Subevent critical hit guarantees hit")
-    void test27() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "attack_ability": "int",
-                    "damage": [ ],
-                    "hit": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "determined": 20
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
+    @DisplayName("invoke natural weapons do not persist after subevent")
+    void invoke_naturalWeaponDoesNotPersist() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "demo:young_red_dragon_bite");
+            this.putString("attack_type", "melee");
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(10);
+            }});
+        }});
+        attackRoll.setSource(object);
         attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.addBonus(-20L); // should miss normally
+        attackRoll.setTarget(object);
+        String itemUuid = attackRoll.subeventJson.getString("weapon");
         attackRoll.invoke(context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1, DummySubevent.counter,
-                "AttackRoll Subevent should satisfy hit condition on a critical hit."
-        );
-    }
-
-    @Test
-    @DisplayName("AttackRoll Subevent critical miss guarantees miss")
-    void test28() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new AttackRoll();
-        String subeventJsonString = """
-                {
-                    "subevent": "attack_roll",
-                    "attack_ability": "int",
-                    "damage": [ ],
-                    "miss": [
-                        { "subevent": "dummy_subevent" }
-                    ],
-                    "determined": 1
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        AttackRoll attackRoll = (AttackRoll) subevent.clone(subeventJson);
-        RPGLObject objectAllAbilities12 = Objects.requireNonNull(RPGLFactory.newObject("test:all_abilities_12"));
-        RPGLContext context = new RPGLContext();
-        context.add(objectAllAbilities12);
-
-        /*
-         * Invoke subevent methods
-         */
-        attackRoll.setSource(objectAllAbilities12);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(objectAllAbilities12);
-        attackRoll.addBonus(20L); // should hit normally
-        attackRoll.invoke(context);
-
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1, DummySubevent.counter,
-                "AttackRoll Subevent should satisfy miss condition on a critical miss."
+        assertNull(UUIDTable.getItem(itemUuid),
+                "natural weapon should not persist in UUIDTable after the subevent is invoked"
         );
     }
 

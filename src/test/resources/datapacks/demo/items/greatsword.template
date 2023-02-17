@@ -3,27 +3,31 @@
     "author": "Calvin Withun"
   },
   "name": "Greatsword",
+  "description": "A greatsword.",
+  "tags": [
+    "metal",
+    "weapon"
+  ],
+  "weight": 6,
+  "cost": 50,
   "proficiency_tags": [
-    "martial",
-    "melee",
+    "martial_melee",
     "greatsword"
   ],
+  "while_equipped": [
+
+  ],
   "weapon_properties": [
-    "martial",
     "melee",
-    "greatsword",
     "heavy",
     "two_handed"
   ],
-  "weight": 15,
-  "cost": "50g",
   "damage": {
     "melee": [
       {
         "type": "slashing",
         "dice": [
-          { "size": 6, "determined": 3 },
-          { "size": 6, "determined": 3 }
+          { "count": 2, "size": 6, "determined": [ 3 ] }
         ],
         "bonus": 0
       }

@@ -1,19 +1,25 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonArray;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
-import org.rpgl.function.DummyFunction;
+import org.rpgl.json.JsonArray;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for core.RPGLObject class.
+ * Testing class for the org.rpgl.core.RPGLObject class.
  *
  * @author Calvin Withun
  */
@@ -24,6 +30,7 @@ public class RPGLObjectTest {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
+        RPGLCore.initializeTesting();
     }
 
     @AfterAll
@@ -34,162 +41,256 @@ public class RPGLObjectTest {
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
-        DummyFunction.resetCounter();
     }
 
     @Test
-    @DisplayName("Object can add and remove effects")
-    void test1() {
-        RPGLObject object = RPGLFactory.newObject("test:blank");
-        RPGLEffect effect = RPGLFactory.newEffect("test:dummy");
-        assert object != null;
-        assert effect != null;
-        assertTrue(object.addEffect(effect),
-                "RPGLObject should be able to add a new Effect to itself."
-        );
-        assertTrue(object.removeEffect(effect),
-                "RPGLObject should be able to remove an Effect which was applied to it."
+    @DisplayName("equipItem item successfully equipped (mainhand, item in inventory)")
+    void equipItem_itemSuccessfullyEquipped_mainhandItemInInventory() {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        String crossbowUuid = knight.getInventory().getString(0);
+        knight.equipItem(crossbowUuid, "mainhand");
+
+        assertEquals(crossbowUuid, knight.getEquippedItems().getString("mainhand"),
+                "heavy crossbow should be equipped in the mainhand slot"
         );
     }
 
     @Test
-    @DisplayName("Object can report effects applied to it")
-    void test2() {
-        RPGLObject object = RPGLFactory.newObject("test:blank");
-        RPGLEffect effect1 = RPGLFactory.newEffect("test:dummy");
-        RPGLEffect effect2 = RPGLFactory.newEffect("test:dummy");
-        assert object != null;
-        assert effect1 != null;
-        assert effect2 != null;
-        object.addEffect(effect1);
-        object.addEffect(effect2);
-        RPGLEffect[] effectsArray = object.getEffects();
+    @DisplayName("equipItem item not equipped (mainhand, item absent from inventory)")
+    void equipItem_itemNotEquipped_mainhandItemAbsentFromInventory() {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        String daggerUuid = RPGLFactory.newItem("demo:dagger").getUuid();
+        knight.equipItem(daggerUuid, "mainhand");
 
-        assertEquals(effect1, effectsArray[0],
-                "RPGLObject should have particular Effect applied at index 0."
-        );
-        assertEquals(effect2, effectsArray[1],
-                "RPGLObject should have particular Effect applied at index 1."
+        assertNotEquals(daggerUuid, knight.getEquippedItems().getString("mainhand"),
+                "dagger should not be equipped in the mainhand slot"
         );
     }
 
     @Test
-    @DisplayName("Object can report proficiency bonus")
-    void test3() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
-        JsonArray contextArray = new JsonArray();
-        assert object != null;
-        contextArray.add(object.getUuid());
-        RPGLContext context = new RPGLContext(contextArray);
+    @DisplayName("giveItem item added to inventory (item not already present)")
+    void giveItem_itemAddedToInventory_itemNotAlreadyPresent() {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        String daggerUuid = RPGLFactory.newItem("demo:dagger").getUuid();
+        knight.giveItem(daggerUuid);
 
-        assertEquals(2, object.getProficiencyBonus(context),
-                "RPGLObject should have a proficiency bonus of +2."
+        assertTrue(knight.getInventory().asList().contains(daggerUuid),
+                "dagger should be present in the knight's inventory"
         );
     }
 
     @Test
-    @DisplayName("Object can calculate ability score modifiers")
-    void test4() {
-        assertEquals(-2L, RPGLObject.getAbilityModifierFromAbilityScore(7L),
-                "Ability score of 7 should have a modifier of -2."
-        );
-        assertEquals(-1L, RPGLObject.getAbilityModifierFromAbilityScore(8L),
-                "Ability score of 8 should have a modifier of -1."
-        );
-        assertEquals(-1L, RPGLObject.getAbilityModifierFromAbilityScore(9L),
-                "Ability score of 9 should have a modifier of -1."
-        );
-        assertEquals(0L, RPGLObject.getAbilityModifierFromAbilityScore(10L),
-                "Ability score of 10 should have a modifier of 0."
-        );
-        assertEquals(0L, RPGLObject.getAbilityModifierFromAbilityScore(11L),
-                "Ability score of 11 should have a modifier of 0."
-        );
-        assertEquals(1L, RPGLObject.getAbilityModifierFromAbilityScore(12L),
-                "Ability score of 12 should have a modifier of +1."
-        );
-        assertEquals(1L, RPGLObject.getAbilityModifierFromAbilityScore(13L),
-                "Ability score of 13 should have a modifier of +1."
-        );
-        assertEquals(2L, RPGLObject.getAbilityModifierFromAbilityScore(14L),
-                "Ability score of 14 should have a modifier of +2."
+    @DisplayName("giveItem item added to inventory (item already present)")
+    void giveItem_itemAddedToInventory_itemAlreadyPresent() {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        JsonArray inventory = knight.getInventory();
+        String alreadyHeldItemUuid = inventory.getString(0);
+        knight.giveItem(alreadyHeldItemUuid);
+
+        int count = 0;
+        for (int i = 0; i < inventory.size(); i++) {
+            String itemUuid = inventory.getString(i);
+            if (alreadyHeldItemUuid.equals(itemUuid)) {
+                count++;
+            }
+        }
+        assertEquals(1, count,
+                "item should not be added if it is already present"
         );
     }
 
     @Test
-    @DisplayName("Object can calculate ability score modifiers from ability scores")
-    void test5() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("test:all_abilities_12");
-        JsonArray contextArray = new JsonArray();
-        assert object != null;
-        contextArray.add(object.getUuid());
-        RPGLContext context = new RPGLContext(contextArray);
+    @DisplayName("getBaseArmorClass calculates 20")
+    void getBaseArmorClass_calculatesTwenty() throws Exception {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(knight);
 
-        assertEquals(1L, object.getAbilityModifierFromAbilityScore(context, "str"),
-                "str score of 12 should have modifier of +1."
+        assertEquals(20, knight.getBaseArmorClass(context),
+                "demo:knight should have 20 AC"
         );
     }
 
     @Test
-    @DisplayName("Object can process dummy Event without error")
-    void test6() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("test:blank");
-        assert object != null;
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.getUuid());
-        RPGLContext context = new RPGLContext(contextArray);
+    @DisplayName("reduceHitPoints deducts correct number of hit points (no temporary hit points)")
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() {
+        RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        youngRedDragon.reduceHitPoints(10);
 
-        object.invokeEvent(
-                new RPGLObject[] {object},
-                Objects.requireNonNull(RPGLFactory.newEvent("test:dummy")),
+        assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
+                "demo:young_red_dragon should lose 10 hit points (178-10=168)"
+        );
+    }
+
+    @Test
+    @DisplayName("reduceHitPoints deducts correct number of hit points (few temporary hit points)")
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() {
+        RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        youngRedDragon.getHealthData().putInteger("temporary", 10);
+        youngRedDragon.reduceHitPoints(20);
+
+        assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
+                "demo:young_red_dragon should net lose 10 hit points (178+10-20=168)"
+        );
+    }
+
+    @Test
+    @DisplayName("reduceHitPoints deducts correct number of hit points (many temporary hit points)")
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() {
+        RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        youngRedDragon.getHealthData().putInteger("temporary", 20);
+        youngRedDragon.reduceHitPoints(10);
+
+        assertEquals(178, youngRedDragon.getHealthData().getInteger("current"),
+                "demo:young_red_dragon should lose no hit points (178)"
+        );
+        assertEquals(10, youngRedDragon.getHealthData().getInteger("temporary"),
+                "demo:young_red_dragon should lose 10 temporary hit points (20-10=10)"
+        );
+    }
+
+    //TODO tests for taking damage
+
+    // TODO tests for getting weapon proficiency
+
+    // TODO tests for getting saving throw proficiency
+
+    @Test
+    @DisplayName("getAbilityModifierFromAbilityScore returns correct modifier")
+    void getAbilityModifierFromAbilityScore_returnsCorrectModifier() {
+        assertEquals(-2, RPGLObject.getAbilityModifierFromAbilityName( 7));
+        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityName( 8));
+        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityName( 9));
+        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityName(10));
+        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityName(11));
+        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityName(12));
+        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityName(13));
+    }
+
+    @Test
+    @DisplayName("getAbilityModifierFromAbilityName returns correct modifier")
+    void getAbilityModifierFromAbilityName_returnsCorrectModifier() throws Exception {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(knight);
+
+        assertEquals(3, knight.getAbilityModifierFromAbilityName(context, "str"),
+                "demo:knight str of 16 should have modifier of +3"
+        );
+        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "dex"),
+                "demo:knight dex of 11 should have modifier of +0"
+        );
+        assertEquals(2, knight.getAbilityModifierFromAbilityName(context, "con"),
+                "demo:knight con of 14 should have modifier of +2"
+        );
+        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "int"),
+                "demo:knight int of 11 should have modifier of +0"
+        );
+        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "wis"),
+                "demo:knight wis of 11 should have modifier of +0"
+        );
+        assertEquals(2, knight.getAbilityModifierFromAbilityName(context, "cha"),
+                "demo:knight cha of 15 should have modifier of +2"
+        );
+    }
+
+    @Test
+    @DisplayName("getProficiencyBonus returns correct bonus")
+    void getProficiencyBonus_returnsCorrectValue() throws Exception {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(knight);
+
+        assertEquals(2, knight.getEffectiveProficiencyBonus(context),
+                "demo:knight should have proficiency bonus of 2"
+        );
+    }
+
+    @Test
+    @DisplayName("getEvents returns an array of the correct events")
+    void getEvents_returnsArrayOfCorrectEvents() {
+        RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
+
+        List<RPGLEvent> events = youngRedDragon.getEventObjects();
+
+        assertEquals(3, events.size(),
+                "demo:young_red_dragon should have 3 RPGLEvents"
+        );
+        assertEquals("demo:young_red_dragon_bite_attack", events.get(0).getId(),
+                "demo:young_red_dragon should have the demo:young_red_dragon_bite_attack event"
+        );
+        assertEquals("demo:young_red_dragon_claw_attack", events.get(1).getId(),
+                "demo:young_red_dragon should have the demo:young_red_dragon_claw_attack event"
+        );
+        assertEquals("demo:young_red_dragon_fire_breath", events.get(2).getId(),
+                "demo:young_red_dragon should have the demo:young_red_dragon_fire_breath event"
+        );
+    }
+
+    @Test
+    @DisplayName("getEffects returns an array of the correct effects")
+    void getEffects_returnsArrayOfCorrectEffects() {
+        RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
+
+        List<RPGLEffect> effects = youngRedDragon.getEffectObjects();
+
+        assertEquals(1, effects.size(),
+                "demo:young_red_dragon should have 1 RPGLEffect"
+        );
+        assertEquals("demo:fire_immunity", effects.get(0).getId(),
+                "demo:young_red_dragon should have the demo:fire_immunity effect"
+        );
+    }
+
+    @Test
+    @DisplayName("addRemoveEffect effects can be added and removed")
+    void addRemoveEffect_effectsCanBeAddedAndRemoved() {
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(knight);
+
+        RPGLEffect fireImmunity = RPGLFactory.newEffect("demo:fire_immunity");
+        List<RPGLEffect> effects;
+
+        knight.addEffect(fireImmunity);
+        effects = knight.getEffectObjects();
+        assertEquals(1, effects.size(),
+                "demo:knight should have 1 effect"
+        );
+        assertEquals("demo:fire_immunity", effects.get(0).getId(),
+                "demo:knight should have the demo:fire_immunity effect"
+        );
+
+        assertTrue(knight.removeEffect(fireImmunity.getUuid()),
+                "the provided UUID should correspond to an effect assigned to the knight"
+        );
+        effects = knight.getEffectObjects();
+        assertEquals(0, effects.size(),
+                "demo:knight should have 0 effects"
+        );
+    }
+
+    @Test
+    @DisplayName("invokeEvent event behaves properly")
+    void invokeEvent_eventBehavesProperly() throws Exception {
+        RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject knight = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
+        context.add(knight);
+
+        youngRedDragon.invokeEvent(
+                new RPGLObject[] { knight },
+                RPGLFactory.newEvent("demo:young_red_dragon_fire_breath"),
                 context
         );
-    }
 
-    @Test
-    @DisplayName("Object can process dummy Event with dummy Effect")
-    void test7() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("test:blank");
-        RPGLEffect effect = RPGLFactory.newEffect("test:dummy");
-        assert object != null;
-        assert effect != null;
-        object.addEffect(effect);
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.getUuid());
-        RPGLContext context = new RPGLContext(contextArray);
-
-        object.invokeEvent(
-                new RPGLObject[] {object},
-                Objects.requireNonNull(RPGLFactory.newEvent("test:dummy")),
-                context
-        );
-
-        assertEquals(1, DummyFunction.counter,
-                "Effect dummy:dummy should increment DummyFunction counter when Event dummy:dummy is invoked."
-        );
-    }
-
-    @Test
-    @DisplayName("Object can process dummy Event with 2 dummy Effects")
-    void test8() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("test:blank");
-        RPGLEffect effect1 = RPGLFactory.newEffect("test:dummy");
-        RPGLEffect effect2 = RPGLFactory.newEffect("test:dummy");
-        assert object != null;
-        assert effect1 != null;
-        assert effect2 != null;
-        object.addEffect(effect1);
-        object.addEffect(effect2);
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.getUuid());
-        RPGLContext context = new RPGLContext(contextArray);
-
-        RPGLEvent event = RPGLFactory.newEvent("test:dummy");
-        assert event != null;
-        object.invokeEvent(new RPGLObject[] {object}, event, context);
-
-        assertEquals(1, DummyFunction.counter,
-                "RPGLEffect test:dummy should increment DummyFunction counter when RPGLEvent test:dummy is invoked, but only once."
+        assertEquals(4, knight.getHealthData().getInteger("current"),
+                "demo:knight should have 4 health left after failing a save against demo:young_red_dragon's breath attack"
         );
     }
 

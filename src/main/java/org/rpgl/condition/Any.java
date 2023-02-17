@@ -1,9 +1,10 @@
 package org.rpgl.condition;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.Subevent;
 
 /**
  * This Condition evaluates true if one or more of its nested Conditions evaluate to true.
@@ -13,19 +14,18 @@ import org.rpgl.exception.ConditionMismatchException;
 public class Any extends Condition {
 
     @Override
-    public boolean evaluate(RPGLObject source, RPGLObject target, JsonObject conditionJson) throws ConditionMismatchException {
+    public boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws ConditionMismatchException {
         super.verifyCondition("any", conditionJson);
-        JsonArray nestedConditionJsonArray = (JsonArray) conditionJson.get("conditions");
-        if (nestedConditionJsonArray.size() == 0) {
+        JsonArray nestedConditionArray = conditionJson.getJsonArray("conditions");
+        if (nestedConditionArray.size() == 0) {
             return true;
         }
-        for (Object nestedConditionJsonElement : nestedConditionJsonArray) {
-            if (nestedConditionJsonElement instanceof JsonObject nestedConditionJson) {
-                Condition nestedCondition = Condition.CONDITIONS.get((String) nestedConditionJson.get("condition"));
-                // once a single element returns true, iteration can stop
-                if (nestedCondition.evaluate(source, target, nestedConditionJson)) {
-                    return true;
-                }
+        for (int i = 0; i < nestedConditionArray.size(); i++) {
+            JsonObject nestedConditionJson = nestedConditionArray.getJsonObject(i);
+            Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
+            // once a single element returns true, iteration can short-circuit
+            if (nestedCondition.evaluate(source, target, subevent, nestedConditionJson)) {
+                return true;
             }
         }
         return false;

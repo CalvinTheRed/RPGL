@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Rapier",
+  "description": "A rapier.",
+  "tags": [
+    "metal",
+    "weapon"
+  ],
+  "weight": 3,
+  "cost": 25,
+  "proficiency_tags": [
+    "martial_melee",
+    "rapier"
+  ],
+  "while_equipped": [
+
+  ],
+  "weapon_properties": [
+    "melee",
+    "finesse"
+  ],
+  "damage": {
+    "melee": [
+      {
+        "type": "piercing",
+        "dice": [
+          { "count": 1, "size": 8, "determined": [ 4 ] }
+        ],
+        "bonus": 0
+      }
+    ]
+  },
+  "attack_bonus": 0
+}

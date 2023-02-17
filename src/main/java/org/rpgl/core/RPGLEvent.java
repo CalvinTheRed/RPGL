@@ -1,29 +1,38 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.datapack.DatapackContent;
+import org.rpgl.datapack.RPGLEventTO;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
 /**
- * RPGLEvents are combinations of Subevents which define an emergent event which can be performed by a RPGLObject.
+ * This class represents any high-level verbs which occur in RPGL. Examples of this include actions such as casting
+ * Fireball, swinging a Longsword, or taking the Dodge action.
  *
  * @author Calvin Withun
  */
-public class RPGLEvent extends JsonObject {
+public class RPGLEvent extends DatapackContent {
 
     /**
-     * 	<p><b><i>RPGLEvent</i></b></p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * RPGLEvent(JsonObject eventJson)
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	A copy-constructor for the RPGLEvent class.
-     * 	</p>
+     * Returns the RPGLEvent's area of effect.
      *
-     * 	@param eventJson the data to be joined to the new RPGLEvent
+     * @return a JsonObject representing the area of effect of the RPGLEvent
      */
-    RPGLEvent(JsonObject eventJson) {
-        this.join(eventJson);
+    public JsonObject getAreaOfEffect() {
+        return this.getJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS);
     }
+
+    /**
+     * Returns the Subevents composing the RPGLEvent.
+     *
+     * @return a JsonArray containing Subevent instructions
+     */
+    public JsonArray getSubevents() {
+        return this.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
+    }
+
+    // =================================================================================================================
+    // Methods not derived directly from transfer objects
+    // =================================================================================================================
 
 }

@@ -1,19 +1,28 @@
 package org.rpgl.core;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonObject;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
+import org.rpgl.datapack.RPGLItemTO;
+import org.rpgl.json.JsonArray;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for core.RPGLItemTemplate class.
+ * Testing class for the org.rpgl.core.RPGLItemTemplate class.
  *
  * @author Calvin Withun
  */
@@ -37,312 +46,179 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
-    @DisplayName("Template sets default cost")
-    void test1() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
+    @DisplayName("setDefaultItemDamage default damage is added if absent (no melee, no thrown)")
+    void setDefaultItemDamage_defaultDamageIsAddedIfAbsent_noMeleeNoThrown() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("teacup");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
 
-        String cost = (String) dummyItem.get("cost");
-        assertNotNull(cost,
-                "RPGLItemTemplate should create a default cost for a new RPGLItem if one isn't specified."
-        );
-        assertEquals("0g", cost,
-                "The default cost should be 0."
+        RPGLItemTemplate.setDefaultItemDamage(item);
+
+        String expected = """
+                {"melee":[{"bonus":0,"dice":[{"count":1,"determined":[2],"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"count":1,"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
+        assertEquals(expected, item.getDamage().toString(),
+                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
     }
 
     @Test
-    @DisplayName("Template sets default weight")
-    void test2() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
+    @DisplayName("setDefaultItemDamage default damage is added if absent (no thrown)")
+    void setDefaultItemDamage_defaultDamageIsAddedIfAbsent_noThrown() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("longsword");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
 
-        Long weight = (Long) dummyItem.get("weight");
-        assertNotNull(weight,
-                "RPGLItemTemplate should create a default weight for a new RPGLItem if one isn't specified."
-        );
-        assertEquals(0, weight,
-                "The default weight should be 0."
+        RPGLItemTemplate.setDefaultItemDamage(item);
+
+        String expected = """
+                {"melee":[{"bonus":0,"dice":[{"count":1,"determined":[4],"size":8}],"type":"slashing"}],"thrown":[{"bonus":0,"dice":[{"count":1,"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
+        assertEquals(expected, item.getDamage().toString(),
+                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
     }
 
     @Test
-    @DisplayName("Template sets default attack bonus")
-    void test3() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
+    @DisplayName("processItemDamage unpacks damage dice")
+    void processItemDamage_unpacksDamageDice() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("greatsword");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
 
-        Long attackBonus = (Long) dummyItem.get("attack_bonus");
-        assertNotNull(attackBonus,
-                "RPGLItemTemplate should create a default attack bonus for a new RPGLItem if one isn't specified."
-        );
-        assertEquals(0, attackBonus,
-                "The default attack bonus should be 0."
+        RPGLItemTemplate.setDefaultItemDamage(item);
+        RPGLItemTemplate.processItemDamage(item);
+
+        String expected = """
+                {"melee":[{"bonus":0,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"slashing"}],"thrown":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
+        assertEquals(expected, item.getDamage().toString(),
+                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
     }
 
     @Test
-    @DisplayName("Template sets default weapon properties")
-    void test4() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
+    @DisplayName("processEquippedEffects effects are created and loaded in UUIDTable")
+    void processEquippedEffects_effectsCreatedAndLoadedInUUIDTable() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("frostbrand");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
 
-        JsonArray weaponProperties = (JsonArray) dummyItem.get("weapon_properties");
-        assertNotNull(weaponProperties,
-                "RPGLItemTemplate should create a default weapon properties array for a new RPGLItem if one isn't specified."
+        RPGLItemTemplate.processEquippedEffects(item);
+
+        JsonArray whileEquipped = item.getWhileEquippedEffects();
+        assertEquals(1, whileEquipped.size(),
+                "there should be 1 element in the while_equipped field after calling processEquippedEffects() method"
         );
-        assertEquals(1, weaponProperties.size(),
-                "The default weapon properties array should have 1 element."
+        for (int i = 0; i < whileEquipped.size(); i++) {
+            String effectUuid = whileEquipped.getString(i);
+            assertNotNull(UUIDTable.getEffect(effectUuid),
+                    "effect (index " + i + ") absent from UUIDTable"
+            );
+        }
+    }
+
+    @Test
+    @DisplayName("processImprovisedTags improvised weapon property tags added (not melee, not thrown)")
+    void processImprovisedTags_improvisedWeaponPropertyTagsAdded_notMeleeNotThrown() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("teacup");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
+
+        RPGLItemTemplate.processImprovisedTags(item);
+
+        JsonArray weaponProperties = item.getWeaponProperties();
+        assertTrue(weaponProperties.asList().contains("improvised_melee"),
+                "weapon properties array missing improvised_melee tag"
         );
-        assertEquals("improvised", weaponProperties.get(0),
-                "The element in the default weapon properties array should be improvised."
+        assertTrue(weaponProperties.asList().contains("improvised_thrown"),
+                "weapon properties array missing improvised_thrown tag"
         );
     }
 
     @Test
-    @DisplayName("Template sets default proficiency tags")
-    void test5() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
+    @DisplayName("processImprovisedTags improvised weapon property tags added (not thrown)")
+    void processImprovisedTags_improvisedWeaponPropertyTagsAdded_notThrown() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("longsword");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
 
-        JsonArray proficiencyTags = (JsonArray) dummyItem.get("proficiency_tags");
-        assertNotNull(proficiencyTags,
-                "RPGLItemTemplate should create a default proficiency tags array for a new RPGLItem if one isn't specified."
+        RPGLItemTemplate.processImprovisedTags(item);
+
+        JsonArray weaponProperties = item.getWeaponProperties();
+        assertFalse(weaponProperties.asList().contains("improvised_melee"),
+                "weapon properties array should not contain improvised_melee tag"
         );
-        assertEquals(1, proficiencyTags.size(),
-                "The default proficiency tags array should have 1 element."
-        );
-        assertEquals("improvised", proficiencyTags.get(0),
-                "The element in the default proficiency tags array should be improvised."
+        assertTrue(weaponProperties.asList().contains("improvised_thrown"),
+                "weapon properties array missing improvised_thrown tag"
         );
     }
 
     @Test
-    @DisplayName("Template sets default tags")
-    void test6() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
+    @DisplayName("newInstance comprehensive test using demo:teacup template")
+    void newInstance_teacupTemplate() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("teacup");
+        RPGLItem item = itemTemplate.newInstance();
+        String expected;
 
-        JsonArray tags = (JsonArray) dummyItem.get("tags");
-        assertNotNull(tags,
-                "RPGLItemTemplate should create a default tags array for a new RPGLItem if one isn't specified."
+        expected = """
+                {"author":"Calvin Withun"}""";
+        assertEquals(expected, item.getMetadata().toString(),
+                "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals(1, tags.size(),
-                "The default tags array should have 1 element."
+        assertEquals("Teacup", item.getName(),
+                "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("improvised", tags.get(0),
-                "The element in the default tags array should be improvised."
+        assertEquals("A teacup.", item.getDescription(),
+                "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-    }
+        assertEquals("demo:teacup", item.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
-    @Test
-    @DisplayName("Template sets default thrown range")
-    void test7() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
-
-        JsonObject thrownRange = (JsonObject) dummyItem.get("thrown_range");
-        assertNotNull(thrownRange,
-                "RPGLItemTemplate should create a default thrown range for a new RPGLItem if one isn't specified."
+        assertEquals("[]", item.getTags().toString(),
+                "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
         );
-        assertEquals(2, thrownRange.size(),
-                "Thrown range should have 2 key-value pairs (normal and long)."
+        assertEquals(0, item.getWeight(),
+                "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
-        Long normalRange = (Long) thrownRange.get("normal");
-        Long longRange = (Long) thrownRange.get("long");
-        assertNotNull(normalRange,
-                "Normal thrown range should not be null."
+        assertEquals(0, item.getCost(),
+                "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        assertNotNull(longRange,
-                "Long thrown range should not be null."
+        assertEquals("[]", item.getProficiencyTags().toString(),
+                "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
         );
-        assertEquals(20L, normalRange,
-                "Normal thrown range should be 20."
+        assertEquals("[]", item.getWhileEquippedEffects().toString(),
+                "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
         );
-        assertEquals(60L, longRange,
-                "Long thrown range should be 60."
+        expected = """
+                ["improvised_melee","improvised_thrown"]""";
+        assertEquals(expected, item.getWeaponProperties().toString(),
+                "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
-    }
-
-    @Test
-    @DisplayName("Template sets default attack abilities")
-    void test8() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
-
-        JsonObject attackAbilities = (JsonObject) dummyItem.get("attack_abilities");
-        assertNotNull(attackAbilities,
-                "Template should insert attack abilities."
+        expected = """
+                {"melee":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
+        assertEquals(expected, item.getDamage().toString(),
+                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
-        assertEquals(2, attackAbilities.size(),
-                "Attack ability should have 2 key-value pairs (melee and thrown)."
+        assertEquals(0, item.getAttackBonus(),
+                "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
         );
-        String meleeAttackAbility = (String) attackAbilities.get("melee");
-        String thrownAttackAbility = (String) attackAbilities.get("thrown");
-        assertNotNull(meleeAttackAbility,
-                "Melee attack ability should not be null."
+        expected = """
+                {"melee":"str","thrown":"str"}""";
+        assertEquals(expected, item.getAttackAbilities().toString(),
+                "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
         );
-        assertNotNull(thrownAttackAbility,
-                "Thrown attack ability should not be null."
+        expected = """
+                {"long":60,"normal":20}""";
+        assertEquals(expected, item.getRange().toString(),
+                "incorrect field value: " + RPGLItemTO.RANGE_ALIAS
         );
-        assertEquals("str", meleeAttackAbility,
-                "Melee attack ability should be str."
+        assertNull(item.getArmorClassBase(),
+                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
         );
-        assertEquals("str", thrownAttackAbility,
-                "Thrown attack ability should be str."
+        assertNull(item.getArmorClassDexLimit(),
+                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS
         );
-    }
-
-    @Test
-    @DisplayName("Template sets default attack abilities (finesse)")
-    void test9() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank_with_finesse");
-        assert dummyItem != null;
-
-        JsonObject attackAbilities = (JsonObject) dummyItem.get("attack_abilities");
-        assertNotNull(attackAbilities,
-                "Template should insert attack abilities."
-        );
-        assertEquals(2, attackAbilities.size(),
-                "Attack ability should have 2 key-value pairs (melee and thrown)."
-        );
-        String meleeAttackAbility = (String) attackAbilities.get("melee");
-        String thrownAttackAbility = (String) attackAbilities.get("thrown");
-        assertNotNull(meleeAttackAbility,
-                "Melee attack ability should not be null."
-        );
-        assertNotNull(thrownAttackAbility,
-                "Thrown attack ability should not be null."
-        );
-        assertEquals("dex", meleeAttackAbility,
-                "Melee attack ability should be dex."
-        );
-        assertEquals("dex", thrownAttackAbility,
-                "Thrown attack ability should be dex."
-        );
-    }
-
-    @Test
-    @DisplayName("Template sets default equipped effects")
-    void test10() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
-
-        JsonArray equippedEffects = (JsonArray) dummyItem.get("equipped_effects");
-        assertNotNull(equippedEffects,
-                "Template should add a default equipped effects array for a new RPGLItem if one isn't specified."
-        );
-        assertTrue(equippedEffects.isEmpty(),
-                "Default equipped effects array should be empty."
-        );
-    }
-
-    @Test
-    @DisplayName("Template sets default damage values")
-    void test11() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank");
-        assert dummyItem != null;
-
-        JsonObject damage = (JsonObject) dummyItem.get("damage");
-        assertNotNull(damage,
-                "Template should add default damage for a new RPGLItem if one isn't specified."
-        );
-        assertEquals(2, damage.size(),
-                "Damage should have 2 key-value pairs (melee, thrown)."
-        );
-        JsonArray meleeDamage = (JsonArray) damage.get("melee");
-        JsonArray thrownDamage = (JsonArray) damage.get("thrown");
-        assertNotNull(meleeDamage,
-                "Melee damage value should not be null."
-        );
-        assertNotNull(thrownDamage,
-                "Thrown damage value should not be null."
-        );
-        assertEquals(1, meleeDamage.size(),
-                "Melee damage array should only have 1 entry (bludgeoning)."
-        );
-        assertEquals(1, thrownDamage.size(),
-                "Thrown damage array should only have 1 entry (bludgeoning)."
-        );
-        JsonObject meleeDamageDiceCollection = (JsonObject) meleeDamage.get(0);
-        JsonObject thrownDamageDiceCollection = (JsonObject) thrownDamage.get(0);
-        assertNotNull(meleeDamageDiceCollection,
-                "Melee damage dice collection should not be null."
-        );
-        assertNotNull(thrownDamageDiceCollection,
-                "Thrown damage dice collection should not be null."
-        );
-        String meleeDamageType = (String) meleeDamageDiceCollection.get("type");
-        String thrownDamageType = (String) thrownDamageDiceCollection.get("type");
-        assertNotNull(meleeDamageType,
-                "Melee damage type should not be null."
-        );
-        assertNotNull(thrownDamageType,
-                "Thrown damage type should not be null."
-        );
-        assertEquals("bludgeoning", meleeDamageType,
-                "Melee damage type should be bludgeoning."
-        );
-        assertEquals("bludgeoning", thrownDamageType,
-                "Thrown damage type should be bludgeoning."
-        );
-        Long meleeBonus = (Long) meleeDamageDiceCollection.get("bonus");
-        Long thrownBonus = (Long) thrownDamageDiceCollection.get("bonus");
-        assertNotNull(meleeBonus,
-                "Melee damage bonus should not be null."
-        );
-        assertNotNull(thrownBonus,
-                "Thrown damage bonus should not be null."
-        );
-        assertEquals(0L, meleeBonus,
-                "Melee damage bonus should be 0."
-        );
-        assertEquals(0L, thrownBonus,
-                "Thrown damage bonus should be 0."
-        );
-        JsonArray meleeDice = (JsonArray) meleeDamageDiceCollection.get("dice");
-        JsonArray thrownDice = (JsonArray) thrownDamageDiceCollection.get("dice");
-        assertNotNull(meleeDice,
-                "Melee dice should not be null."
-        );
-        assertNotNull(thrownDice,
-                "Thrown dice should not be null."
-        );
-        JsonObject meleeDie = (JsonObject) meleeDice.get(0);
-        JsonObject thrownDie = (JsonObject) meleeDice.get(0);
-        assertNotNull(meleeDie,
-                "Melee die should not be null."
-        );
-        assertNotNull(thrownDie,
-                "Thrown die should not be null."
-        );
-        assertEquals(4L, meleeDie.get("size"),
-                "Melee die should be a d4."
-        );
-        assertEquals(4L, thrownDie.get("size"),
-                "Thrown die should be a d4."
-        );
-    }
-
-    @Test
-    @DisplayName("Template processes equipped effects")
-    void test12() {
-        RPGLItem dummyItem = RPGLFactory.newItem("test:blank_with_equipped_effects");
-        assert dummyItem != null;
-
-        JsonArray equippedEffects = (JsonArray) dummyItem.get("equipped_effects");
-        assertNotNull(equippedEffects,
-                "Template should preserve the default equipped effects array for a new RPGLItem."
-        );
-        assertEquals(1, equippedEffects.size(),
-                "Equipped effects array should have 1 element."
-        );
-        String effectUuid = (String) equippedEffects.get(0);
-        assertNotNull(effectUuid,
-                "Equipped effect UUID should not be null."
-        );
-        assertNotNull(UUIDTable.getEffect(effectUuid),
-                "Equipped Effect should be registered in the UUIDTable."
+        assertNull(item.getArmorClassBonus(),
+                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS
         );
     }
 

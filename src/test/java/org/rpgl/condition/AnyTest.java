@@ -1,149 +1,145 @@
 package org.rpgl.condition;
 
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for condition.Any class.
+ * Testing class for the org.rpgl.condition.Any class.
  *
  * @author Calvin Withun
  */
 public class AnyTest {
 
+    @BeforeAll
+    static void beforeAll() {
+        RPGLCore.initializeTesting();
+    }
+
     @Test
-    @DisplayName("Any Condition throws ConditionMismatchException when condition type doesn't match")
-    void test0() throws JsonFormatException {
+    @DisplayName("evaluate wrong condition")
+    void evaluate_wrongCondition_throwsException() {
         Condition condition = new Any();
-        String conditionJsonString = """
-                {
-                    "condition": "not_a_condition"
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "not_a_condition"
+            }*/
+            this.putString("condition", "not_a_condition");
+        }};
+
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson),
-                "Any Condition should throw a ConditionMismatchException if the specified condition doesn't match."
+                () -> condition.evaluate(null, null, null, conditionJson),
+                "Any condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("Any Condition is true with no nested conditions")
-    void test1() throws JsonFormatException, ConditionMismatchException {
+    @DisplayName("evaluate for no sub-conditions")
+    void evaluate_default_true() throws ConditionMismatchException {
         Condition condition = new Any();
-        String conditionJsonString = """
-                {
-                    "condition": "any",
-                    "conditions": [ ]
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(null, null, conditionJson);
-        assertTrue(result,
-                "Any Condition should default to evaluating true when no nested Conditions are supplied."
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "any",
+                "conditions": [ ]
+            }*/
+            this.putString("condition", "any");
+            this.putJsonArray("conditions", new JsonArray());
+        }};
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson),
+                "Any condition should evaluate true for no sub-conditions"
         );
     }
 
     @Test
-    @DisplayName("Any Condition is true with single nested true")
-    void test2() throws JsonFormatException, ConditionMismatchException {
+    @DisplayName("evaluate for true, true")
+    void evaluate_trueTrue_true() throws ConditionMismatchException {
         Condition condition = new Any();
-        String conditionJsonString = """
-                {
-                    "condition": "any",
-                    "conditions": [
-                        { "condition": "true" }
-                    ]
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(null, null, conditionJson);
-        assertTrue(result,
-                "Any Condition should evaluate true when the only nested Condition evaluates to true."
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "any",
+                "conditions": [
+                    { "condition": "true" },
+                    { "condition": "true" }
+                ]
+            }*/
+            this.putString("condition", "any");
+            this.putJsonArray("conditions", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "true");
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "true");
+                }});
+            }});
+        }};
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson),
+                "Any condition should evaluate true for 2 true conditions"
         );
     }
 
     @Test
-    @DisplayName("Any Condition is false with single nested false")
-    void test3() throws JsonFormatException, ConditionMismatchException {
+    @DisplayName("evaluate for true, false")
+    void evaluate_trueFalse_true() throws ConditionMismatchException {
         Condition condition = new Any();
-        String conditionJsonString = """
-                {
-                    "condition": "any",
-                    "conditions": [
-                        { "condition": "false" }
-                    ]
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(null, null, conditionJson);
-        assertFalse(result,
-                "Any Condition should evaluate false when the only nested Condition evaluates to false."
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "any",
+                "conditions": [
+                    { "condition": "true" },
+                    { "condition": "false" }
+                ]
+            }*/
+            this.putString("condition", "any");
+            this.putJsonArray("conditions", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "true");
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "false");
+                }});
+            }});
+        }};
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson),
+                "Any condition should evaluate true for 1 true and 1 false condition"
         );
     }
 
     @Test
-    @DisplayName("Any Condition is true with multiple nested true")
-    void test4() throws JsonFormatException, ConditionMismatchException {
+    @DisplayName("evaluate for false, false")
+    void evaluate_falseFalse_false() throws ConditionMismatchException {
         Condition condition = new Any();
-        String conditionJsonString = """
-                {
-                    "condition": "any",
-                    "conditions": [
-                        { "condition": "true" },
-                        { "condition": "true" }
-                    ]
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(null, null, conditionJson);
-        assertTrue(result,
-                "Any Condition should evaluate true when all nested Conditions evaluate to true."
-        );
-    }
+        JsonObject conditionJson = new JsonObject() {{
+            /*{
+                "condition": "any",
+                "conditions": [
+                    { "condition": "false" },
+                    { "condition": "false" }
+                ]
+            }*/
+            this.putString("condition", "any");
+            this.putJsonArray("conditions", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "false");
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("condition", "false");
+                }});
+            }});
+        }};
 
-    @Test
-    @DisplayName("Any Condition is true with nested true and false")
-    void test5() throws JsonFormatException, ConditionMismatchException {
-        Condition condition = new Any();
-        String conditionJsonString = """
-                {
-                    "condition": "any",
-                    "conditions": [
-                        { "condition": "true" },
-                        { "condition": "false" }
-                    ]
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(null, null, conditionJson);
-        assertTrue(result,
-                "Any Condition should evaluate true when only some nested Conditions evaluates to true."
-        );
-    }
-
-    @Test
-    @DisplayName("Any Condition is false with multiple nested false")
-    void test6() throws JsonFormatException, ConditionMismatchException {
-        Condition condition = new Any();
-        String conditionJsonString = """
-                {
-                    "condition": "any",
-                    "conditions": [
-                        { "condition": "false" },
-                        { "condition": "false" }
-                    ]
-                }
-                """;
-        JsonObject conditionJson = JsonParser.parseObjectString(conditionJsonString);
-        boolean result = condition.evaluate(null, null, conditionJson);
-        assertFalse(result,
-                "Any Condition should evaluate false when all nested Conditions evaluate to false."
+        assertFalse(condition.evaluate(null, null, null, conditionJson),
+                "Any condition should evaluate false for 2 false conditions"
         );
     }
 

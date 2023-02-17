@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to delivering a quantity of typed damage to an RPGLObject.
@@ -21,36 +21,26 @@ public class DamageDelivery extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new DamageDelivery();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new DamageDelivery();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     /**
-     * 	<p>
-     * 	<b><i>getDamage</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public JsonObject getDamage()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method returns the typed damage being delivered to <code>target</code>.
-     * 	</p>
+     * This method returns the typed damage being delivered to <code>target</code>.
      *
-     *  @return an object of damage types and values
+     * @return an object of damage types and values
      */
     public JsonObject getDamage() {
-        return (JsonObject) this.subeventJson.get("damage");
+        return this.subeventJson.getJsonObject("damage");
     }
 
 }

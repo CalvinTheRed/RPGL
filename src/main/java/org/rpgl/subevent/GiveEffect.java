@@ -1,9 +1,9 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.json.JsonObject;
 
 import java.util.Objects;
 
@@ -26,15 +26,15 @@ public class GiveEffect extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new GiveEffect();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new GiveEffect();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -43,7 +43,7 @@ public class GiveEffect extends Subevent {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (!this.isCancelled()) {
-            RPGLEffect effect = RPGLFactory.newEffect((String) this.subeventJson.get("effect"));
+            RPGLEffect effect = RPGLFactory.newEffect(this.subeventJson.getString("effect"));
             if (effect != null) {
                 this.getTarget().addEffect(effect);
             }
@@ -51,41 +51,20 @@ public class GiveEffect extends Subevent {
     }
 
     /**
-     * 	<p>
-     * 	<b><i>cancel</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * public void cancel()
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This method "cancels" this Subevent, causing the RPGLEffect to not be applied to <code>target</code>. This is
-     * 	meant to be used in cases where <code>target</code> is immune to select status effects.
-     * 	</p>
+     * This method "cancels" this Subevent, causing the RPGLEffect to not be applied to <code>target</code>. This is
+     * meant to be used in cases where <code>target</code> is immune to select status effects.
      */
     public void cancel() {
-        this.subeventJson.put("cancel", true);
+        this.subeventJson.putBoolean("cancel", true);
     }
 
     /**
-     * 	<p>
-     * 	<b><i>isCancelled</i></b>
-     * 	</p>
-     * 	<p>
-     * 	<pre class="tab"><code>
-     * boolean isCancelled()
-     * 	throws Exception
-     * 	</code></pre>
-     * 	</p>
-     * 	<p>
-     * 	This helper method returns whether the Subevent was cancelled.
-     * 	</p>
+     * This helper method returns whether the Subevent was cancelled.
      *
-     *  @return true if the Subevent was cancelled.
+     * @return true if the Subevent was cancelled.
      */
     boolean isCancelled() {
-        return Objects.requireNonNullElse((Boolean) this.subeventJson.get("cancel"), false);
+        return Objects.requireNonNullElse(this.subeventJson.getBoolean("cancel"), false);
     }
 
 }

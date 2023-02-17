@@ -1,57 +1,66 @@
 package org.rpgl.function;
 
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.DummySubevent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for function.DummyFunction class.
+ * Testing class for the org.rpgl.function.DummyFunction class.
  *
  * @author Calvin Withun
  */
 public class DummyFunctionTest {
 
+    @BeforeAll
+    static void beforeAll() {
+        RPGLCore.initializeTesting();
+    }
+
     @AfterEach
     void afterEach() {
-        DummyFunction.resetCounter();
+        DummySubevent.resetCounter();
     }
 
     @Test
-    @DisplayName("DummyFunction Function throws FunctionMismatchException when function type doesn't match")
-    void test0() throws JsonFormatException {
+    @DisplayName("execute wrong function")
+    void execute_wrongFunction_throwsException() {
         Function function = new DummyFunction();
-        String functionJsonString = """
-                {
-                    "function": "not_a_function"
-                }
-                """;
-        JsonObject functionJson = JsonParser.parseObjectString(functionJsonString);
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "not_a_function"
+            }*/
+            this.putString("function", "not_a_function");
+        }};
+
         assertThrows(FunctionMismatchException.class,
                 () -> function.execute(null, null, null, functionJson),
-                "DummyFunction Function should throw a FunctionMismatchException if the specified function doesn't match."
+                "DummyFunction function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("DummyFunction Function increments counter as expected")
-    void test1() throws JsonFormatException, FunctionMismatchException {
+    @DisplayName("execute default behavior")
+    void execute_default_increasesStaticCounter() throws FunctionMismatchException {
         Function function = new DummyFunction();
-        String functionJsonString = """
-                {
-                    "function": "dummy_function"
-                }
-                """;
-        JsonObject functionJson = JsonParser.parseObjectString(functionJsonString);
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "dummy_function"
+            }*/
+           this.putString("function", "dummy_function");
+        }};
+
         function.execute(null, null, null, functionJson);
         assertEquals(1, DummyFunction.counter,
-                "DummyFunction Function should increment static counter variable upon execution."
+                "DummyFunction function should increment static counter variable upon execution"
         );
     }
+
 }

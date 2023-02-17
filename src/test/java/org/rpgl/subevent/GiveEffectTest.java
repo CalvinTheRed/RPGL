@@ -1,25 +1,32 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonArray;
-import org.jsonutils.JsonFormatException;
-import org.jsonutils.JsonObject;
-import org.jsonutils.JsonParser;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for subevent.GiveEffect class.
+ * Testing class for the org.rpgl.subevent.GiveEffect class.
  *
  * @author Calvin Withun
  */
@@ -43,153 +50,93 @@ public class GiveEffectTest {
     }
 
     @Test
-    @DisplayName("GiveEffect Subevent throws SubeventMismatchException when subevent type doesn't match")
-    void test0() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new GiveEffect();
-        String subeventJsonString = """
-                {
-                    "subevent": "not_a_subevent"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        RPGLContext context = new RPGLContext(null);
+    @DisplayName("invoke wrong subevent")
+    void invoke_wrongSubevent_throwsException() {
+        GiveEffect giveEffect = new GiveEffect();
+        giveEffect.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "not_a_subevent"
+            }*/
+            this.putString("subevent", "not_a_subevent");
+        }});
 
-        /*
-         * Verify subevent behaves as expected
-         */
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.clone(subeventJson).invoke(context),
-                "GiveEffect Subevent should throw a SubeventMismatchException if the specified subevent doesn't match."
+                () -> giveEffect.invoke(new RPGLContext()),
+                "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
 
     @Test
-    @DisplayName("GiveEffect Subevent defaults to not being canceled")
-    void test1() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new GiveEffect();
-        String subeventJsonString = """
-                {
-                    "subevent": "give_effect",
-                    "effect": "test:blank"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
+    @DisplayName("isCancelled returns false (by default)")
+    void isCancelled_returnsFalse_default() {
+        GiveEffect giveEffect = new GiveEffect();
 
-        /*
-         * Verify subevent behaves as expected
-         */
         assertFalse(giveEffect.isCancelled(),
-                "GiveEffect Subevent should default to not being canceled."
+                "giveEffect should not be cancelled by default"
         );
     }
 
     @Test
-    @DisplayName("GiveEffect Subevent can be canceled")
-    void test2() throws JsonFormatException {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new GiveEffect();
-        String subeventJsonString = """
-                {
-                    "subevent": "give_effect",
-                    "effect": "test:blank"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
-
-        /*
-         * Invoke subevent methods
-         */
+    @DisplayName("isCancelled returns true (when cancelled)")
+    void isCancelled_returnsTrue_cancelled() {
+        GiveEffect giveEffect = new GiveEffect();
         giveEffect.cancel();
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertTrue((Boolean) giveEffect.subeventJson.get("cancel"),
-                "GiveEffect Subevent did not cancel correctly."
+        assertTrue(giveEffect.isCancelled(),
+                "giveEffect should not be cancelled by default"
         );
     }
 
     @Test
-    @DisplayName("GiveEffect Subevent gives Effect to target when not canceled")
-    void test3() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new GiveEffect();
-        String subeventJsonString = """
-                {
-                    "subevent": "give_effect",
-                    "effect": "test:dummy"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("test:blank");
-        assert object != null;
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.getUuid());
-        RPGLContext context = new RPGLContext(contextArray);
+    @DisplayName("invoke gives effect (not cancelled)")
+    void invoke_givesEffect_notCancelled() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
+        GiveEffect giveEffect = new GiveEffect();
+        giveEffect.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "give_effect");
+            this.putString("effect", "demo:fire_immunity");
+        }});
         giveEffect.setSource(object);
+        giveEffect.prepare(context);
         giveEffect.setTarget(object);
         giveEffect.invoke(context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(1, object.getEffects().length,
-                "GiveEffect Subevent did not apply Effect correctly."
+        List<RPGLEffect> effects = object.getEffectObjects();
+        assertEquals(1, effects.size(),
+                "commoner should have 1 effect after the subevent is invoked"
+        );
+        assertEquals("demo:fire_immunity", effects.get(0).getString(DatapackContentTO.ID_ALIAS),
+                "the commoner's subevent should match the effect specified in the subevent json"
         );
     }
 
     @Test
-    @DisplayName("GiveEffect Subevent does not give Effect to target when canceled")
-    void test4() throws Exception {
-        /*
-         * Set up the subevent context
-         */
-        Subevent subevent = new GiveEffect();
-        String subeventJsonString = """
-                {
-                    "subevent": "give_effect",
-                    "effect": "test:dummy"
-                }
-                """;
-        JsonObject subeventJson = JsonParser.parseObjectString(subeventJsonString);
-        GiveEffect giveEffect = (GiveEffect) subevent.clone(subeventJson);
-        RPGLObject object = RPGLFactory.newObject("test:blank");
-        assert object != null;
-        JsonArray contextArray = new JsonArray();
-        contextArray.add(object.getUuid());
-        RPGLContext context = new RPGLContext(contextArray);
+    @DisplayName("invoke does not give effect (cancelled)")
+    void invoke_doesNotGiveEffect_cancelled() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLContext context = new RPGLContext();
+        context.add(object);
 
-        /*
-         * Invoke subevent methods
-         */
+        GiveEffect giveEffect = new GiveEffect();
+        giveEffect.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "give_effect");
+            this.putString("effect", "demo:fire_immunity");
+        }});
         giveEffect.setSource(object);
+        giveEffect.prepare(context);
         giveEffect.setTarget(object);
         giveEffect.cancel();
         giveEffect.invoke(context);
 
-        /*
-         * Verify subevent behaves as expected
-         */
-        assertEquals(0, object.getEffects().length,
-                "GiveEffect Subevent did not apply Effect correctly."
+        List<RPGLEffect> effects = object.getEffectObjects();
+        assertEquals(0, effects.size(),
+                "commoner should have 0 effects after the subevent is invoked"
         );
     }
+
+    // TODO still need test for not giving an effect already applied to the target
 
 }

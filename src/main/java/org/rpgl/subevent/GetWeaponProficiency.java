@@ -1,6 +1,6 @@
 package org.rpgl.subevent;
 
-import org.jsonutils.JsonObject;
+import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to determining whether an RPGLObject is proficient with a weapon.
@@ -21,15 +21,15 @@ public class GetWeaponProficiency extends GetProficiency {
     @Override
     public Subevent clone() {
         Subevent clone = new GetWeaponProficiency();
-        clone.joinSubeventJson(this.subeventJson);
+        clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject subeventJson) {
+    public Subevent clone(JsonObject jsonData) {
         Subevent clone = new GetWeaponProficiency();
-        clone.joinSubeventJson(subeventJson);
+        clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

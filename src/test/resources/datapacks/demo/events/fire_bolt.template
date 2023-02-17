@@ -3,6 +3,7 @@
     "author": "Calvin Withun"
   },
   "name": "Fire Bolt",
+  "description": "The creature casts a magical fire bolt.",
   "area_of_effect": { },
   "subevents": [
     {
@@ -13,15 +14,12 @@
         {
           "type": "fire",
           "dice": [
-            {
-              "size": 10,
-              "determined": 5
-            }
+            { "size": 10, "determined": [ 5 ] }
           ],
           "bonus": 0
         }
       ],
-      "determined": 19
+      "determined": [ 19 ]
     }
   ]
 }

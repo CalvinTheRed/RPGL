@@ -24,74 +24,80 @@ public final class UUIDTable {
      * RPGLItems, and RPGLObjects. This method may cause problems if an object already has a UUID which has already been
      * assigned to a different object.
      *
-     * @param data the UUIDTableElement to be registered
+     * @param uuidTableElement a UUIDTableElement
      */
-    public static void register(UUIDTableElement data) {
-        String uuid = data.getUuid();
+    public static void register(UUIDTableElement uuidTableElement) {
+        String uuid = uuidTableElement.getUuid();
         while (uuid == null || UUID_TABLE.containsKey(uuid)) {
             uuid = UUID.randomUUID().toString();
         }
-        UUID_TABLE.put(uuid, data);
-        data.setUuid(uuid);
+        UUID_TABLE.put(uuid, uuidTableElement);
+        uuidTableElement.setUuid(uuid);
     }
 
     /**
      * This method deletes a UUID from its associated UUIDTableElement (if it exists) and removes the UUID from the
      * UUIDTable.
      *
-     * @param uuid the UUID of the UUIDTableElement to be unregistered
+     * @param uuid the UUID of a registered UUIDTableElement
      */
     public static UUIDTableElement unregister(String uuid) {
-        UUIDTableElement data = UUID_TABLE.remove(uuid);
-        if (data != null) {
-            data.deleteUuid();
+        UUIDTableElement uuidTableElement = UUID_TABLE.remove(uuid);
+        if (uuidTableElement != null) {
+            uuidTableElement.deleteUuid();
         }
-        return data;
+        return uuidTableElement;
     }
 
     /**
-     * This method clears the UUIDTable. It should only be used during testing.
-     * <br><br>
-     * NOTE: this method does not remove the UUID from any of the associated JsonObjects.
+     * This method clears the UUIDTable. Note that this method does not recursively remove references between
+     * UUIDTableElement objects, so attempting to use or re-register some but not all of the unregistered
+     * UUIDTableElement objects may result in errors.
      */
     public static void clear() {
         UUID_TABLE.clear();
     }
 
     /**
-     * This method returns the RPGLEffect associated with a UUID.
+     * This method returns a RPGLEffect object with the passed uuid, or null if no RPGLEffect exists for that uuid or
+     * the uuid is null.
      *
      * @param uuid the UUID of a RPGLEffect
-     * @return an RPGLEffect
+     * @return a RPGLEffect
      */
     public static RPGLEffect getEffect(String uuid) {
         return (RPGLEffect) UUID_TABLE.get(uuid);
     }
 
     /**
-     * This method returns the RPGLItem associated with a UUID.
+     * This method returns a RPGLItem object with the passed uuid, or null if no RPGLItem exists for that uuid or
+     * the uuid is null.
      *
      * @param uuid the UUID of a RPGLItem
-     * @return an RPGLItem
+     * @return a RPGLItem
      */
     public static RPGLItem getItem(String uuid) {
         return (RPGLItem) UUID_TABLE.get(uuid);
     }
 
     /**
-     * This method returns the RPGLObject associated with a UUID.
+     * This method returns a RPGLObject object with the passed uuid, or null if no RPGLObject exists for that uuid or
+     * the uuid is null.
      *
      * @param uuid the UUID of a RPGLObject
-     * @return an RPGLObject
+     * @return a RPGLObject or null
      */
     public static RPGLObject getObject(String uuid) {
-        return (RPGLObject) UUID_TABLE.get(uuid);
+        if (uuid != null) {
+            return (RPGLObject) UUID_TABLE.get(uuid);
+        }
+        return null;
     }
 
     /**
-     * This method returns the number of objects being tracked in UUIDTable.
+     * This method returns the number of UUIDTableElement objects stored in UUIDTable.
      *
-     * @return a number
+     * @return the number of UUIDTableElement objects stored in UUIDTable
      */
     public static int size() {
         return UUID_TABLE.size();
