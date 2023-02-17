@@ -1,5 +1,8 @@
 package org.rpgl.math;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.Random;
 
@@ -11,16 +14,20 @@ import java.util.Random;
  */
 public final class Die {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Die.class);
     private static final Random R = new Random(System.currentTimeMillis());
 
     private static boolean testing = false;
 
     public static int roll(int upperBound, List<Object> determinedList) {
+        int roll;
         if (testing && determinedList != null && !determinedList.isEmpty()) {
-            return (Integer) determinedList.remove(0);
+            roll = (int) determinedList.remove(0);
         } else {
-            return R.nextInt(upperBound) + 1;
+            roll = R.nextInt(upperBound) + 1;
         }
+        LOGGER.debug("[d" + upperBound + "] -> " + roll);
+        return roll;
     }
 
     public static void setTesting(boolean isTesting) {

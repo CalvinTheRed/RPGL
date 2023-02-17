@@ -5,6 +5,9 @@ import org.rpgl.function.Function;
 import org.rpgl.math.Die;
 import org.rpgl.subevent.Subevent;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * This class is a high-level controller for RPGL, intended to make it easier for a client program to interface wit
  * necessary methods used to prepare RPGL for use.
@@ -12,6 +15,12 @@ import org.rpgl.subevent.Subevent;
  * @author Calvin Withun
  */
 public final class RPGLCore {
+
+    static{
+        // this is here for slf4j to generate distinct logging files for each instance of RPGL that is run
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        System.setProperty("current.date.time", dateFormat.format(new Date()));
+    }
 
     /**
      * This method initializes all Conditions, Functions, and Subevents used by RPGL, as well as configures Die to not
