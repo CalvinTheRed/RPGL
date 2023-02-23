@@ -11,7 +11,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
-import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -69,9 +68,11 @@ public class SavingThrowTest {
     @Test
     @DisplayName("deliverDamage delivers damage to target")
     void deliverDamage_deliversDamageToTarget() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -84,18 +85,25 @@ public class SavingThrowTest {
                 this.putInteger("cold", 10);
             }});
         }});
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
         savingThrow.deliverDamage(context);
 
-        assertEquals(168, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "young red dragon should take 10 cold damage (178-10=168)"
+        assertEquals(42, target.getHealthData().getInteger("current"),
+                "target should take 10 cold damage (52-10=42)"
         );
     }
 
     @Test
     @DisplayName("resolveNestedSubevents increments counter on pass (DummySubevent)")
     void resolveNestedSubevents_incrementsCounterOnPass_dummySubevent() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
@@ -111,7 +119,10 @@ public class SavingThrowTest {
                 }});
             }});
         }});
-        savingThrow.resolveNestedSubevents(new RPGLContext(), "pass");
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
+        savingThrow.resolveNestedSubevents(context, "pass");
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested pass subevent"
@@ -121,6 +132,12 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveNestedSubevents increments counter on fail (DummySubevent)")
     void resolveNestedSubevents_incrementsCounterOnFail_dummySubevent() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
@@ -136,7 +153,10 @@ public class SavingThrowTest {
                 }});
             }});
         }});
-        savingThrow.resolveNestedSubevents(new RPGLContext(), "fail");
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
+        savingThrow.resolveNestedSubevents(context, "fail");
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested fail subevent"
@@ -146,9 +166,11 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveFailDamage target takes full damage")
     void resolveFailDamage_targetTakesFullDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -161,22 +183,24 @@ public class SavingThrowTest {
                 this.putInteger("cold", 10);
             }});
         }});
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
         savingThrow.resolveFailDamage(context);
 
-        assertEquals(168, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take 10 cold damage after resolving fail damage (178-10=168)"
+        assertEquals(42, target.getHealthData().getInteger("current"),
+                "target should take 10 cold damage after resolving fail damage (52-10=42)"
         );
-        // TODO create another test including target damage bonuses to cover full method
     }
 
     @Test
     @DisplayName("resolvePassDamage target takes no damage on pass")
     void resolvePassDamage_targetTakesNoDamageOnPass() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -191,22 +215,24 @@ public class SavingThrowTest {
                 this.putInteger("cold", 10);
             }});
         }});
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
         savingThrow.resolvePassDamage(context);
 
-        assertEquals(178, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take no damage after resolving pass damage (178-0=178)"
+        assertEquals(52, target.getHealthData().getInteger("current"),
+                "target should take no damage after resolving pass damage (52-0=52)"
         );
-        // TODO create another test including target damage bonuses to cover full method
     }
 
     @Test
     @DisplayName("resolvePassDamage target takes half damage on pass")
     void resolvePassDamage_targetTakesHalfDamageOnPass() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -221,24 +247,29 @@ public class SavingThrowTest {
                 this.putInteger("cold", 10);
             }});
         }});
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
         savingThrow.resolvePassDamage(context);
 
-        assertEquals(173, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take half damage after resolving pass damage (178-5=173)"
+        assertEquals(47, target.getHealthData().getInteger("current"),
+                "target should take half damage after resolving pass damage (52-5=47)"
         );
-        // TODO create another test including target damage bonuses to cover full method
     }
 
     @Test
     @DisplayName("getTargetDamage returns empty object (default)")
     void getTargetDamage_returnsEmptyObject_default() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
         JsonObject targetDamage = savingThrow.getTargetDamage(context);
 
         assertEquals("{}", targetDamage.toString(),
@@ -249,9 +280,11 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveSaveFail target takes full damage")
     void resolveSaveFail_targetTakesFullDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -274,12 +307,13 @@ public class SavingThrowTest {
                 }});
             }});
         }});
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
         savingThrow.resolveSaveFail(context);
 
-        assertEquals(168, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take 10 cold damage after resolving fail damage (178-10=168)"
+        assertEquals(42, target.getHealthData().getInteger("current"),
+                "target should take 10 cold damage after resolving fail damage (52-10=42)"
         );
         assertEquals(1, DummySubevent.counter,
                 "counter should increment by 1 from nested pass subevent"
@@ -289,9 +323,11 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveSavePass target takes half damage")
     void resolveSavePass_targetTakesHalfDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -316,12 +352,13 @@ public class SavingThrowTest {
                 }});
             }});
         }});
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+
+        savingThrow.setSource(source);
+        savingThrow.setTarget(target);
         savingThrow.resolveSavePass(context);
 
-        assertEquals(173, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take half damage after resolving pass damage (178-5=173)"
+        assertEquals(47, target.getHealthData().getInteger("current"),
+                "target should take half damage after resolving pass damage (52-5=47)"
         );
         assertEquals(1, DummySubevent.counter,
                 "counter should increment by 1 from nested pass subevent"
@@ -331,6 +368,12 @@ public class SavingThrowTest {
     @Test
     @DisplayName("getBaseDamage stores base damage value")
     void getBaseDamage_storesBaseDamageValue() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
@@ -366,7 +409,9 @@ public class SavingThrowTest {
                 }});
             }});
         }});
-        savingThrow.getBaseDamage(new RPGLContext());
+
+        savingThrow.setSource(source);
+        savingThrow.getBaseDamage(context);
 
         String expected = """
                 {"cold":10}""";
@@ -378,16 +423,18 @@ public class SavingThrowTest {
     @Test
     @DisplayName("calculateDifficultyClass calculates 17 (young red dragon using con)")
     void calculateDifficultyClass_calculatesSeventeen_youngRedDragonUsingCon() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             this.putString("difficulty_class_ability", "con");
         }});
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+
+        savingThrow.setSource(source);
         savingThrow.calculateDifficultyClass(context);
 
         assertEquals(17, savingThrow.subeventJson.getInteger("save_difficulty_class"),
@@ -398,9 +445,11 @@ public class SavingThrowTest {
     @Test
     @DisplayName("prepare calculates save DC and stores base damage")
     void prepare_calculatesSaveDifficultyClassAndStoresBaseDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -439,7 +488,8 @@ public class SavingThrowTest {
                 }});
             }});
         }});
-        savingThrow.setSource(object);
+
+        savingThrow.setSource(source);
         savingThrow.prepare(context);
 
         assertEquals(17, savingThrow.subeventJson.getInteger("save_difficulty_class"),
@@ -455,9 +505,11 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke deals proper damage on fail")
     void invoke_dealsProperDamageOnFail() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -506,22 +558,25 @@ public class SavingThrowTest {
                 this.addInteger(1);
             }});
         }});
-        savingThrow.setSource(object);
+
+        savingThrow.setSource(source);
         savingThrow.prepare(context);
-        savingThrow.setTarget(object);
+        savingThrow.setTarget(target);
         savingThrow.invoke(context);
 
-        assertEquals(168, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "invoke should deal full damage on a fail (178-10=168)"
+        assertEquals(42, target.getHealthData().getInteger("current"),
+                "invoke should deal full damage on a fail (52-10=42)"
         );
     }
 
     @Test
     @DisplayName("invoke deals half damage on pass")
     void invoke_dealsHalfDamageOnPass() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -570,13 +625,13 @@ public class SavingThrowTest {
                 this.addInteger(20);
             }});
         }});
-        savingThrow.setSource(object);
+        savingThrow.setSource(source);
         savingThrow.prepare(context);
-        savingThrow.setTarget(object);
+        savingThrow.setTarget(target);
         savingThrow.invoke(context);
 
-        assertEquals(173, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "invoke should deal full damage on a fail (178-5=173)"
+        assertEquals(47, target.getHealthData().getInteger("current"),
+                "invoke should deal full damage on a fail (52-5=47)"
         );
     }
 

@@ -72,6 +72,7 @@ public class CriticalHitDamageCollectionTest {
                 }});
             }});
         }});
+
         criticalHitDamageCollection.doubleDice();
 
         String expected = """

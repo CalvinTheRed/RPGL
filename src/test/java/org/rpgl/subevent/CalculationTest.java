@@ -123,4 +123,5 @@ public class CalculationTest {
                 "get should return set (12) when set is not null"
         );
     }
+
 }

@@ -1,13 +1,23 @@
 package org.rpgl.subevent;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.datapack.DatapackLoader;
+import org.rpgl.datapack.DatapackTest;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.uuidtable.UUIDTable;
+
+import java.io.File;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -23,8 +33,16 @@ public class ContestRollTest {
     private ContestRoll contestRoll;
 
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAll() throws Exception {
+        DatapackLoader.loadDatapacks(
+                new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
+        );
         RPGLCore.initializeTesting();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        DatapackLoader.DATAPACKS.clear();
     }
 
     @BeforeEach
@@ -43,6 +61,11 @@ public class ContestRollTest {
             }
 
         };
+    }
+
+    @AfterEach
+    void afterEach() {
+        UUIDTable.clear();
     }
 
     @Test
@@ -280,6 +303,10 @@ public class ContestRollTest {
     @Test
     @DisplayName("checkForReroll no reroll was requested")
     void checkForReroll_noRerollRequested() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        contestRoll.setSource(source);
+        contestRoll.setTarget(target);
         contestRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",

@@ -1,6 +1,8 @@
 package org.rpgl.core;
 
 import org.rpgl.datapack.DatapackLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is a factory which creates RPGL-x objects. Any time such objects are needed, they should be created using
@@ -9,6 +11,8 @@ import org.rpgl.datapack.DatapackLoader;
  * @author Calvin Withun
  */
 public final class RPGLFactory {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RPGLFactory.class);
 
     /**
      * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
@@ -19,11 +23,14 @@ public final class RPGLFactory {
     public static RPGLEffect newEffect(String effectId) {
         String[] effectIdSplit = effectId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
+            RPGLEffect effect = DatapackLoader.DATAPACKS
                     .get(effectIdSplit[0])
                     .getEffectTemplate(effectIdSplit[1])
                     .newInstance();
+            LOGGER.debug("created new RPGLEffect (" + effect.getUuid() + ") " + effectId);
+            return effect;
         } catch (NullPointerException e) {
+            LOGGER.error("encountered an error creating RPGLEffect: " + effectId);
             throw new RuntimeException("Encountered an error building a new RPGLEffect", e);
         }
     }
@@ -37,11 +44,14 @@ public final class RPGLFactory {
     public static RPGLEvent newEvent(String eventId) {
         String[] eventIdSplit = eventId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
+            RPGLEvent event = DatapackLoader.DATAPACKS
                     .get(eventIdSplit[0])
                     .getEventTemplate(eventIdSplit[1])
                     .newInstance();
+            LOGGER.debug("created new RPGLEvent " + eventId);
+            return event;
         } catch (NullPointerException e) {
+            LOGGER.error("encountered an error creating RPGLEvent: " + eventId);
             throw new RuntimeException("Encountered an error building a new RPGLEvent", e);
         }
     }
@@ -55,11 +65,14 @@ public final class RPGLFactory {
     public static RPGLItem newItem(String itemId) {
         String[] itemIdSplit = itemId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
+            RPGLItem item = DatapackLoader.DATAPACKS
                     .get(itemIdSplit[0])
                     .getItemTemplate(itemIdSplit[1])
                     .newInstance();
+            LOGGER.debug("created new RPGLItem   (" + item.getUuid() + ") " + itemId);
+            return item;
         } catch (NullPointerException e) {
+            LOGGER.error("encountered an error creating RPGLItem: " + itemId);
             throw new RuntimeException("Encountered an error building a new RPGLItem", e);
         }
     }
@@ -73,11 +86,14 @@ public final class RPGLFactory {
     public static RPGLObject newObject(String objectId) {
         String[] objectIdSplit = objectId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
+            RPGLObject object = DatapackLoader.DATAPACKS
                     .get(objectIdSplit[0])
                     .getObjectTemplate(objectIdSplit[1])
                     .newInstance();
+            LOGGER.debug("created new RPGLObject (" + object.getUuid() + ") " + objectId);
+            return object;
         } catch (NullPointerException e) {
+            LOGGER.error("encountered an error creating RPGLObject: " + objectId);
             throw new RuntimeException("Encountered an error building a new RPGLObject", e);
         }
     }

@@ -9,7 +9,6 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
@@ -90,25 +89,27 @@ public class GiveEffectTest {
     @Test
     @DisplayName("invoke gives effect (not cancelled)")
     void invoke_givesEffect_notCancelled() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         GiveEffect giveEffect = new GiveEffect();
         giveEffect.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "give_effect");
             this.putString("effect", "demo:fire_immunity");
         }});
-        giveEffect.setSource(object);
+        giveEffect.setSource(source);
         giveEffect.prepare(context);
-        giveEffect.setTarget(object);
+        giveEffect.setTarget(target);
         giveEffect.invoke(context);
 
-        List<RPGLEffect> effects = object.getEffectObjects();
+        List<RPGLEffect> effects = target.getEffectObjects();
         assertEquals(1, effects.size(),
                 "commoner should have 1 effect after the subevent is invoked"
         );
-        assertEquals("demo:fire_immunity", effects.get(0).getString(DatapackContentTO.ID_ALIAS),
+        assertEquals("demo:fire_immunity", effects.get(0).getId(),
                 "the commoner's subevent should match the effect specified in the subevent json"
         );
     }
@@ -116,22 +117,24 @@ public class GiveEffectTest {
     @Test
     @DisplayName("invoke does not give effect (cancelled)")
     void invoke_doesNotGiveEffect_cancelled() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         GiveEffect giveEffect = new GiveEffect();
         giveEffect.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "give_effect");
             this.putString("effect", "demo:fire_immunity");
         }});
-        giveEffect.setSource(object);
+        giveEffect.setSource(source);
         giveEffect.prepare(context);
-        giveEffect.setTarget(object);
+        giveEffect.setTarget(target);
         giveEffect.cancel();
         giveEffect.invoke(context);
 
-        List<RPGLEffect> effects = object.getEffectObjects();
+        List<RPGLEffect> effects = target.getEffectObjects();
         assertEquals(0, effects.size(),
                 "commoner should have 0 effects after the subevent is invoked"
         );

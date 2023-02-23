@@ -105,7 +105,6 @@ public class AttackRoll extends ContestRoll {
 
         // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
         this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
-        System.out.println(this.getBonus());
 
         // The damage field should already be populated for this type of attack. But in case it is not, set it to empty.
         this.subeventJson.asMap().computeIfAbsent("damage", k -> new ArrayList<>());
@@ -262,7 +261,7 @@ public class AttackRoll extends ContestRoll {
                 }});
             }});
         }
-        baseDamageCollection.setTarget(this.getTarget());
+        baseDamageCollection.setTarget(this.getSource());
         baseDamageCollection.invoke(context);
         return baseDamageCollection;
     }
@@ -380,7 +379,9 @@ public class AttackRoll extends ContestRoll {
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject nestedSubeventJson = subeventJsonArray.getJsonObject(i);
             Subevent subevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);
+            subevent.setSource(this.getSource());
             subevent.prepare(context);
+            subevent.setTarget(this.getTarget());
             subevent.invoke(context);
         }
     }

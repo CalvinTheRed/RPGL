@@ -4,6 +4,8 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +16,8 @@ import java.util.Map;
  * @author Calvin Withun
  */
 public abstract class Function {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Function.class);
 
     /**
      * A map of all Functions which can be used in the JSON of an RPGLEffect.
@@ -44,7 +48,9 @@ public abstract class Function {
      */
     void verifyFunction(String expected, JsonObject functionJson) throws FunctionMismatchException {
         if (!expected.equals(functionJson.getString("function"))) {
-            throw new FunctionMismatchException(expected, functionJson.getString("function"));
+            FunctionMismatchException e = new FunctionMismatchException(expected, functionJson.getString("function"));
+            LOGGER.error(e.getMessage());
+            throw e;
         }
     }
 

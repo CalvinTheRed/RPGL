@@ -9,7 +9,7 @@ import org.rpgl.json.JsonObject;
  * <br>
  * Source: an RPGLObject invoking an RPGLEvent which deals damage
  * <br>
- * Target: an RPGLObject being targeted by the damaging RPGLEvent
+ * Target: should be the same as the source
  *
  * @author Calvin Withun
  */

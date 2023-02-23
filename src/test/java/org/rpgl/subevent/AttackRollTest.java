@@ -108,10 +108,19 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns true (base roll of 20)")
     void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         AttackRoll attackRoll = new AttackRoll();
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.setBase(20);
 
-        assertTrue(attackRoll.isCriticalHit(new RPGLContext()),
+        assertTrue(attackRoll.isCriticalHit(context),
                 "attack roll with base of 20 should register as a critical hit"
         );
     }
@@ -119,10 +128,19 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns false (base roll below 20)")
     void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         AttackRoll attackRoll = new AttackRoll();
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.setBase(10);
 
-        assertFalse(attackRoll.isCriticalHit(new RPGLContext()),
+        assertFalse(attackRoll.isCriticalHit(context),
                 "attack roll with base below 20 should not register as a critical hit"
         );
     }
@@ -130,6 +148,12 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on hit)")
     void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -145,6 +169,9 @@ public class AttackRollTest {
                 }});
             }});
         }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.resolveNestedSubevents("hit", new RPGLContext());
 
         assertEquals(1, DummySubevent.counter,
@@ -155,6 +182,12 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on miss)")
     void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -170,6 +203,9 @@ public class AttackRollTest {
                 }});
             }});
         }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.resolveNestedSubevents("miss", new RPGLContext());
 
         assertEquals(1, DummySubevent.counter,
@@ -180,9 +216,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("deliverDamage object loses health")
     void deliverDamage_objectLosesHealth() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -195,11 +233,12 @@ public class AttackRollTest {
                 this.putInteger("fire", 10);
             }});
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.deliverDamage(context);
 
-        assertEquals(42, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+        assertEquals(42, target.getHealthData().getInteger("current"),
                 "Knight should have 42 health left (52-10=42)"
         );
     }
@@ -207,13 +246,16 @@ public class AttackRollTest {
     @Test
     @DisplayName("getAttackDamage damage is rolled")
     void getAttackDamage_damageIsRolled() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         JsonObject attackDamage = attackRoll.getAttackDamage(new JsonArray() {{
             /*[
                 {
@@ -294,6 +336,12 @@ public class AttackRollTest {
     @Test
     @DisplayName("getCriticalHitDamageCollection doubles dice")
     void getCriticalHitDamageCollection_doublesDice() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         AttackRoll attackRoll = new AttackRoll();
 
         BaseDamageCollection baseDamageCollection = new BaseDamageCollection();
@@ -325,10 +373,12 @@ public class AttackRollTest {
             }});
         }});
 
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         CriticalHitDamageCollection criticalHitDamageCollection = attackRoll.getCriticalHitDamageCollection(
                 baseDamageCollection,
                 new TargetDamageCollection(),
-                new RPGLContext()
+                context
         );
 
         String expected = """
@@ -341,8 +391,17 @@ public class AttackRollTest {
     @Test
     @DisplayName("getTargetDamageCollection returns empty array (default behavior)")
     void getTargetDamageCollection_returnsEmptyArray_default() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         AttackRoll attackRoll = new AttackRoll();
-        TargetDamageCollection targetDamageCollection = attackRoll.getTargetDamageCollection(new RPGLContext());
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        TargetDamageCollection targetDamageCollection = attackRoll.getTargetDamageCollection(context);
 
         assertEquals("[]", targetDamageCollection.getDamageCollection().toString(),
                 "getTargetDamageCollection should return empty array by default"
@@ -352,12 +411,15 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamageCollection calculates base damage collection")
     void getBaseDamageCollection_calculatesBaseDamageCollection() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
-        RPGLItem item = UUIDTable.getItem(object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("mainhand"));
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
+
+        RPGLItem item = UUIDTable.getItem(source.getEquippedItems().getString("mainhand"));
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "weapon": <RPGLItem UUID>,
@@ -389,9 +451,9 @@ public class AttackRollTest {
                 }});
             }});
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         BaseDamageCollection baseDamageCollection = attackRoll.getBaseDamageCollection(context);
 
         String expected = """
@@ -404,12 +466,15 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveCriticalHitDamage deals critical damage")
     void resolveCriticalHitDamage_dealsCriticalDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
-        RPGLItem item = UUIDTable.getItem(object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("mainhand"));
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
+
+        RPGLItem item = UUIDTable.getItem(source.getEquippedItems().getString("mainhand"));
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "weapon": <RPGLItem UUID>,
@@ -441,12 +506,12 @@ public class AttackRollTest {
                 }});
             }});
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.resolveCriticalHitDamage(context);
 
-        assertEquals(41, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+        assertEquals(41, target.getHealthData().getInteger("current"),
                 "resolveCriticalHitDamage should deduct 11 ((4x2)+3) hit points from the knight to leave 41 (52-11=41)"
         );
     }
@@ -454,12 +519,15 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveDamage deals damage")
     void resolveDamage_dealsDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
-        RPGLItem item = UUIDTable.getItem(object.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("mainhand"));
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
+
+        RPGLItem item = UUIDTable.getItem(source.getEquippedItems().getString("mainhand"));
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "weapon": <RPGLItem UUID>,
@@ -491,12 +559,12 @@ public class AttackRollTest {
                 }});
             }});
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.resolveDamage(context);
 
-        assertEquals(45, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+        assertEquals(45, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
                 "resolveCriticalHitDamage should deduct 7 (4+3) hit points from the knight to leave 45 (52-7=45)"
         );
     }
@@ -504,13 +572,16 @@ public class AttackRollTest {
     @Test
     @DisplayName("getTargetArmorClass calculate 20 armor class")
     void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
 
         assertEquals(20, attackRoll.getTargetArmorClass(context),
                 "target armor class should be 20 (plate armor + shield)"
@@ -520,17 +591,19 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepareItemWeaponAttack stores weapon damage and stores weapon UUID")
     void prepareItemWeaponAttack_storesWeaponDamageAndStoresWeaponUUID() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("attack_type", "melee");
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.prepareItemWeaponAttack("mainhand", context);
 
         String expected = """
@@ -547,23 +620,25 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepareNaturalWeaponAttack stores weapon damage and stores weapon UUID")
     void prepareNaturalWeaponAttack_storesWeaponDamageAndStoresWeaponUUID() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("attack_type", "melee");
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.prepareNaturalWeaponAttack("demo:young_red_dragon_bite", context);
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
         assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
-                "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
+                "weapon damage should be stored in the subevent following prepareNaturalWeaponAttack() call"
         );
         assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
                 "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
@@ -576,9 +651,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepareAttackWithoutWeapon stores damage")
     void prepareAttackWithoutWeapon_storesDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -612,9 +689,9 @@ public class AttackRollTest {
                 }});
             }});
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
         attackRoll.prepareAttackWithoutWeapon(context);
 
         String expected = """
@@ -630,18 +707,19 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare stores weapon damage and stores weapon UUID (item weapon)")
     void prepare_storesWeaponDamageAndStoresWeaponUUID_itemWeapon() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("weapon", "mainhand");
             this.putString("attack_type", "melee");
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
         attackRoll.prepare(context);
 
         String expected = """
@@ -658,18 +736,19 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare stores weapon damage and stores weapon UUID (natural weapon)")
     void prepare_storesWeaponDamageAndStoresWeaponUUID_naturalWeapon() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("weapon", "demo:young_red_dragon_bite");
             this.putString("attack_type", "melee");
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
         attackRoll.prepare(context);
 
         String expected = """
@@ -688,9 +767,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare stores damage (no weapon)")
     void prepare_storesDamage_noWeapon() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -724,9 +805,8 @@ public class AttackRollTest {
                 }});
             }});
         }});
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
 
+        attackRoll.setSource(source);
         attackRoll.prepare(context);
 
         String expected = """
@@ -742,9 +822,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke stores weapon damage (hit)")
     void invoke_storesWeaponDamage_hit() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -755,12 +837,13 @@ public class AttackRollTest {
                 this.addInteger(19);
             }});
         }});
-        attackRoll.setSource(object);
+
+        attackRoll.setSource(source);
         attackRoll.prepare(context);
-        attackRoll.setTarget(object);
+        attackRoll.setTarget(target);
         attackRoll.invoke(context);
 
-        assertEquals(45, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+        assertEquals(45, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
                 "target should take 7 damage after hit (52-7=45)"
         );
     }
@@ -768,9 +851,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke stores weapon damage (critical hit)")
     void invoke_storesWeaponDamage_criticalHit() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -781,12 +866,12 @@ public class AttackRollTest {
                 this.addInteger(20);
             }});
         }});
-        attackRoll.setSource(object);
+        attackRoll.setSource(source);
         attackRoll.prepare(context);
-        attackRoll.setTarget(object);
+        attackRoll.setTarget(target);
         attackRoll.invoke(context);
 
-        assertEquals(41, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+        assertEquals(41, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
                 "target should take 11 damage after hit (52-11=41)"
         );
     }
@@ -794,9 +879,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke stores weapon damage (miss)")
     void invoke_storesWeaponDamage_miss() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -807,12 +894,13 @@ public class AttackRollTest {
                 this.addInteger(1);
             }});
         }});
-        attackRoll.setSource(object);
+
+        attackRoll.setSource(source);
         attackRoll.prepare(context);
-        attackRoll.setTarget(object);
+        attackRoll.setTarget(target);
         attackRoll.invoke(context);
 
-        assertEquals(52, object.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
+        assertEquals(52, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
                 "target should take 0 damage on a miss"
         );
     }
@@ -820,9 +908,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke natural weapons do not persist after subevent")
     void invoke_naturalWeaponDoesNotPersist() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
-        context.add(object);
+        context.add(source);
+        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -833,9 +923,10 @@ public class AttackRollTest {
                 this.addInteger(10);
             }});
         }});
-        attackRoll.setSource(object);
+
+        attackRoll.setSource(source);
         attackRoll.prepare(context);
-        attackRoll.setTarget(object);
+        attackRoll.setTarget(target);
         String itemUuid = attackRoll.subeventJson.getString("weapon");
         attackRoll.invoke(context);
 
