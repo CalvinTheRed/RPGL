@@ -177,11 +177,13 @@ public class SavingThrowTest {
             /*{
                 "damage": {
                     "cold": 10
-                }
+                },
+                "tags": [ ]
             }*/
             this.putJsonObject("damage", new JsonObject() {{
                 this.putInteger("cold", 10);
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         savingThrow.setSource(source);
@@ -240,12 +242,14 @@ public class SavingThrowTest {
                 "damage_on_pass": "half",
                 "damage": {
                     "cold": 10
-                }
+                },
+                "tags": [ ]
             }*/
             this.putString("damage_on_pass", "half");
             this.putJsonObject("damage", new JsonObject() {{
                 this.putInteger("cold", 10);
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         savingThrow.setSource(source);
@@ -267,6 +271,9 @@ public class SavingThrowTest {
         context.add(target);
 
         SavingThrow savingThrow = new SavingThrow();
+        savingThrow.joinSubeventData(new JsonObject() {{
+            this.putJsonArray("tags", new JsonArray());
+        }});
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
@@ -296,7 +303,8 @@ public class SavingThrowTest {
                     {
                         "subevent": "dummy_subevent"
                     }
-                ]
+                ],
+                "tags": [ ]
             }*/
             this.putJsonObject("damage", new JsonObject() {{
                 this.putInteger("cold", 10);
@@ -306,6 +314,7 @@ public class SavingThrowTest {
                     this.putString("subevent", "dummy_subevent");
                 }});
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         savingThrow.setSource(source);
@@ -340,7 +349,8 @@ public class SavingThrowTest {
                     {
                         "subevent": "dummy_subevent"
                     }
-                ]
+                ],
+                "tags": [ ]
             }*/
             this.putString("damage_on_pass", "half");
             this.putJsonObject("damage", new JsonObject() {{
@@ -351,6 +361,7 @@ public class SavingThrowTest {
                     this.putString("subevent", "dummy_subevent");
                 }});
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         savingThrow.setSource(source);
@@ -386,7 +397,8 @@ public class SavingThrowTest {
                         ],
                         "bonus": 0
                     }
-                ]
+                ],
+                "tags": [ ]
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -408,6 +420,7 @@ public class SavingThrowTest {
                     this.putInteger("bonus", 0);
                 }});
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         savingThrow.setSource(source);

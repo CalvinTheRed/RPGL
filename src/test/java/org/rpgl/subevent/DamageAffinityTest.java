@@ -59,7 +59,7 @@ public class DamageAffinityTest {
 
     @Test
     @DisplayName("getAffinity reports not immune, not resistant, not vulnerable (after prepare())")
-    void getAffinity_notImmuneNotResistantNotVulnerable_afterPrepare() {
+    void getAffinity_notImmuneNotResistantNotVulnerable_afterPrepare() throws Exception {
         DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.prepare(new RPGLContext());
 

@@ -54,7 +54,7 @@ public class ContestRerollChanceTest {
 
     @Test
     @DisplayName("prepare no reroll is requested by default")
-    void prepare_noRerollRequestedByDefault() {
+    void prepare_noRerollRequestedByDefault() throws Exception {
         ContestRerollChance contestRerollChance = new ContestRerollChance();
         contestRerollChance.prepare(new RPGLContext());
 

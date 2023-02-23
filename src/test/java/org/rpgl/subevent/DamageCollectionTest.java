@@ -1,7 +1,6 @@
 package org.rpgl.subevent;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
@@ -19,34 +18,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class DamageCollectionTest {
 
-    private DamageCollection damageCollection;
-
     @BeforeAll
     static void beforeAll() {
         RPGLCore.initializeTesting();
     }
 
-    @BeforeEach
-    void beforeEach() {
-        // create an anonymous class for DamageCollection for the purpose of running tests on it
-        damageCollection = new DamageCollection("damage_collection") {
-
-            @Override
-            public Subevent clone() {
-                return this;
-            }
-
-            @Override
-            public Subevent clone(JsonObject jsonData) {
-                return this;
-            }
-
-        };
-    }
-
     @Test
     @DisplayName("addNewTypedDamage new damage values are added")
     void addNewTypedDamage_newDamageValuesAdded() {
+        DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());
         }});
@@ -88,6 +68,7 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("addNewTypedDamage additional damage values are added")
     void addExistingTypedDamage_additionalDamageValuesAdded() {
+        DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": [
@@ -144,6 +125,7 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("addTypedDamage additional damage values are added (new damage type)")
     void addTypedDamage_additionalDamageValuesAdded_newDamageType() {
+        DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());
         }});
@@ -187,6 +169,7 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("addTypedDamage additional damage values are added (existing damage type)")
     void addTypedDamage_additionalDamageValuesAdded_existingDamageType() {
+        DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": [
@@ -245,6 +228,7 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("includesDamageType returns tue (type is present)")
     void includesDamageType_returnsTrue_typePresent() {
+        DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": [
@@ -272,6 +256,7 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("includesDamageType returns tue (type is present)")
     void includesDamageType_returnsFalse_typeAbsent() {
+        DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());
         }});

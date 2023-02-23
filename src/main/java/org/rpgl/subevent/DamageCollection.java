@@ -15,10 +15,30 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public abstract class DamageCollection extends Subevent {
+public class DamageCollection extends Subevent {
+
+    public DamageCollection() {
+        super("damage_collection");
+    }
 
     public DamageCollection(String subeventId) {
         super(subeventId);
+    }
+
+    @Override
+    public Subevent clone() {
+        Subevent clone = new DamageCollection();
+        clone.joinSubeventData(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
+    }
+
+    @Override
+    public Subevent clone(JsonObject jsonData) {
+        Subevent clone = new DamageCollection();
+        clone.joinSubeventData(jsonData);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     /**

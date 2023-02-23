@@ -27,21 +27,7 @@ public class DamageRollTest {
 
     @BeforeEach
     void beforeEach() {
-        // create an anonymous class for DamageRoll for the purpose of running tests on it
-        damageRoll = new DamageRoll("damage_roll") {
-
-            @Override
-            public Subevent clone() {
-                return this;
-            }
-
-            @Override
-            public Subevent clone(JsonObject jsonData) {
-                return this;
-            }
-
-        };
-
+        damageRoll = new DamageRoll();
         damageRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": [
@@ -187,7 +173,7 @@ public class DamageRollTest {
 
     @Test
     @DisplayName("prepare all dice roll to fours")
-    void prepare_allDiceRollToOnes() {
+    void prepare_allDiceRollToOnes() throws Exception {
         damageRoll.prepare(new RPGLContext());
 
         String expected = """

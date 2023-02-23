@@ -38,6 +38,7 @@ public class CalculateCriticalHitThreshold extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         super.setBase(20);
     }
 

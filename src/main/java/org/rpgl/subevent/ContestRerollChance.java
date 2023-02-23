@@ -42,7 +42,8 @@ public class ContestRerollChance extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) {
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.subeventJson.putBoolean("reroll_requested", false);
     }
 

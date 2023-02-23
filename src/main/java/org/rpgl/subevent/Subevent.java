@@ -4,6 +4,7 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
@@ -64,6 +65,16 @@ public abstract class Subevent {
     }
 
     /**
+     * Returns whether the provided tag is present in the Subevent.
+     *
+     * @param tag a tag
+     * @return true if the tag is present, false otherwise
+     */
+    public boolean hasTag(String tag) {
+        return this.subeventJson.getJsonArray("tags").asList().contains(tag);
+    }
+
+    /**
      * Verifies that the additional information provided to <code>invoke(...)</code> is intended for the Subevent type
      * being invoked.
      *
@@ -111,8 +122,9 @@ public abstract class Subevent {
      * @throws Exception if an exception occurs (any type of error may occur from calling this method)
      */
     public void prepare(RPGLContext context) throws Exception {
-        // This method has no behavior by default. It is left empty
-        // here for ease of developing derived classes elsewhere.
+        if (this.subeventJson.getJsonArray("tags") == null) {
+            this.subeventJson.putJsonArray("tags", new JsonArray());
+        }
     }
 
     /**

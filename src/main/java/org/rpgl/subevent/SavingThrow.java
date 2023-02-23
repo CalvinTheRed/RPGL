@@ -112,11 +112,15 @@ public class SavingThrow extends ContestRoll {
         /*
          * Collect base typed damage dice and bonuses
          */
-        BaseDamageCollection baseDamageCollection = new BaseDamageCollection();
+        DamageCollection baseDamageCollection = new DamageCollection();
         JsonArray damage = this.subeventJson.getJsonArray("damage");
         baseDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "base_damage_collection");
+            this.putString("subevent", "damage_collection");
             this.putJsonArray("damage", damage.deepClone());
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.addString("base_damage_collection");
+            }});
         }});
         baseDamageCollection.setSource(this.getSource());
         baseDamageCollection.prepare(context);
@@ -126,10 +130,14 @@ public class SavingThrow extends ContestRoll {
         /*
          * Roll base damage dice
          */
-        BaseDamageRoll baseDamageRoll = new BaseDamageRoll();
+        DamageRoll baseDamageRoll = new DamageRoll();
         baseDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "base_damage_roll");
+            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.addString("base_damage_roll");
+            }});
         }});
         baseDamageRoll.setSource(this.getSource());
         baseDamageRoll.prepare(context);
@@ -178,9 +186,13 @@ public class SavingThrow extends ContestRoll {
         /*
          * Collect target typed damage dice and bonuses
          */
-        TargetDamageCollection targetDamageCollection = new TargetDamageCollection();
+        DamageCollection targetDamageCollection = new DamageCollection();
         targetDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "target_damage_collection");
+            this.putString("subevent", "damage_collection");
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.addString("target_damage_collection");
+            }});
         }});
         targetDamageCollection.setSource(this.getSource());
         targetDamageCollection.prepare(context);
@@ -190,10 +202,14 @@ public class SavingThrow extends ContestRoll {
         /*
          * Roll target damage dice
          */
-        TargetDamageRoll targetDamageRoll = new TargetDamageRoll();
+        DamageRoll targetDamageRoll = new DamageRoll();
         targetDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "target_damage_roll");
+            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", targetDamageCollection.getDamageCollection().deepClone());
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.addString("target_damage_roll");
+            }});
         }});
         targetDamageRoll.setSource(this.getSource());
         targetDamageRoll.prepare(context);

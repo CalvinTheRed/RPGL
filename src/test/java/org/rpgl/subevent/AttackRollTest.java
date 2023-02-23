@@ -253,6 +253,9 @@ public class AttackRollTest {
         context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putJsonArray("tags", new JsonArray());
+        }});
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
@@ -344,8 +347,8 @@ public class AttackRollTest {
 
         AttackRoll attackRoll = new AttackRoll();
 
-        BaseDamageCollection baseDamageCollection = new BaseDamageCollection();
-        baseDamageCollection.joinSubeventData(new JsonObject() {{
+        DamageCollection damageCollection = new DamageCollection();
+        damageCollection.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": [
                     {
@@ -376,8 +379,8 @@ public class AttackRollTest {
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
         CriticalHitDamageCollection criticalHitDamageCollection = attackRoll.getCriticalHitDamageCollection(
-                baseDamageCollection,
-                new TargetDamageCollection(),
+                damageCollection,
+                new DamageCollection(),
                 context
         );
 
@@ -398,10 +401,13 @@ public class AttackRollTest {
         context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            this.putJsonArray("tags", new JsonArray());
+        }});
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        TargetDamageCollection targetDamageCollection = attackRoll.getTargetDamageCollection(context);
+        DamageCollection targetDamageCollection = attackRoll.getTargetDamageCollection(context);
 
         assertEquals("[]", targetDamageCollection.getDamageCollection().toString(),
                 "getTargetDamageCollection should return empty array by default"
@@ -432,7 +438,8 @@ public class AttackRollTest {
                         ],
                         "bonus": 0
                     }
-                ]
+                ],
+                "tags": [ ]
             }*/
             this.putString("weapon", item.getUuid());
             this.putString("attack_type", "melee");
@@ -450,11 +457,12 @@ public class AttackRollTest {
                     this.putInteger("bonus", 0);
                 }});
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        BaseDamageCollection baseDamageCollection = attackRoll.getBaseDamageCollection(context);
+        DamageCollection baseDamageCollection = attackRoll.getBaseDamageCollection(context);
 
         String expected = """
                 [{"bonus":3,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
@@ -487,7 +495,8 @@ public class AttackRollTest {
                         ],
                         "bonus": 0
                     }
-                ]
+                ],
+                "tags": [ ]
             }*/
             this.putString("weapon", item.getUuid());
             this.putString("attack_type", "melee");
@@ -505,6 +514,7 @@ public class AttackRollTest {
                     this.putInteger("bonus", 0);
                 }});
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         attackRoll.setSource(source);
@@ -540,7 +550,8 @@ public class AttackRollTest {
                         ],
                         "bonus": 0
                     }
-                ]
+                ],
+                "tags": [ ]
             }*/
             this.putString("weapon", item.getUuid());
             this.putString("attack_type", "melee");
@@ -558,6 +569,7 @@ public class AttackRollTest {
                     this.putInteger("bonus", 0);
                 }});
             }});
+            this.putJsonArray("tags", new JsonArray());
         }});
 
         attackRoll.setSource(source);

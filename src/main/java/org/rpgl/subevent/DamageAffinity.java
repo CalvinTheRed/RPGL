@@ -39,7 +39,8 @@ public class DamageAffinity extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) {
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.subeventJson.putBoolean("immunity", false);
         this.subeventJson.putBoolean("resistance", false);
         this.subeventJson.putBoolean("vulnerability", false);

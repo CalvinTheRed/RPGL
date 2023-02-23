@@ -17,14 +17,31 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public abstract class DamageRoll extends Subevent {
+public class DamageRoll extends Subevent {
 
-    public DamageRoll(String subeventId) {
-        super(subeventId);
+    public DamageRoll() {
+        super("damage_roll");
     }
 
     @Override
-    public void prepare(RPGLContext context) {
+    public Subevent clone() {
+        Subevent clone = new DamageRoll();
+        clone.joinSubeventData(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
+    }
+
+    @Override
+    public Subevent clone(JsonObject jsonData) {
+        Subevent clone = new DamageRoll();
+        clone.joinSubeventData(jsonData);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
+    }
+
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.roll();
     }
 
