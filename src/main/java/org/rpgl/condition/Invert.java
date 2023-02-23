@@ -22,7 +22,7 @@ public class Invert extends Condition {
         JsonObject nestedConditionJson = conditionJson.getJsonObject("invert");
         Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
         boolean result = !nestedCondition.evaluate(source, target, subevent, nestedConditionJson);
-        LOGGER.debug("" + result);
+        LOGGER.debug(Boolean.toString(result));
         return result;
     }
 }
