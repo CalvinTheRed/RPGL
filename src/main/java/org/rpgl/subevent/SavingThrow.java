@@ -44,6 +44,7 @@ public class SavingThrow extends ContestRoll {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
+        this.addTag("saving_throw");
         this.calculateDifficultyClass(context);
         if (this.subeventJson.getJsonArray("damage") != null) {
             this.getBaseDamage(context);

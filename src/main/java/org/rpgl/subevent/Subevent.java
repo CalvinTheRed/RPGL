@@ -44,10 +44,10 @@ public abstract class Subevent {
 
         // AbilityCheck
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
-        // DealDamage?
+        Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
-        Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
         // RemoveEffect
+        Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
 
         if (includeTestingSubevents) {
             Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
@@ -67,13 +67,21 @@ public abstract class Subevent {
     /**
      * Returns whether the provided tag is present in the Subevent.
      *
-     * @param tag a tag
+     * @param tag a subevent tag
      * @return true if the tag is present, false otherwise
      */
     public boolean hasTag(String tag) {
         return this.subeventJson.getJsonArray("tags").asList().contains(tag);
     }
 
+    /**
+     * Adds a tag to the subevent tags array.
+     *
+     * @param tag a subevent tag
+     */
+    public void addTag(String tag) {
+        this.subeventJson.getJsonArray("tags").addString(tag);
+    }
     /**
      * Verifies that the additional information provided to <code>invoke(...)</code> is intended for the Subevent type
      * being invoked.
