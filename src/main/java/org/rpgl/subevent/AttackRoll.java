@@ -125,7 +125,6 @@ public class AttackRoll extends ContestRoll {
 
         // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
-        assert weapon != null; // TODO is there a better way to do this?
         String attackType = this.subeventJson.getString("attack_type");
         this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, weapon.getAttackAbility(attackType)));
         this.applyWeaponAttackBonus(weapon);
@@ -279,7 +278,6 @@ public class AttackRoll extends ContestRoll {
         TargetDamageCollection targetDamageCollection = new TargetDamageCollection();
         targetDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "target_damage_collection");
-            this.putJsonArray("damage", new JsonArray()); // TODO can this be moved back to constructor or prepare?
         }});
         targetDamageCollection.setSource(this.getSource());
         targetDamageCollection.prepare(context);

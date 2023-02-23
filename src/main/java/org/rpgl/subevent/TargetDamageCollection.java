@@ -1,5 +1,7 @@
 package org.rpgl.subevent;
 
+import org.rpgl.core.RPGLContext;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -32,6 +34,11 @@ public class TargetDamageCollection extends DamageCollection {
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
+    }
+
+    @Override
+    public void prepare(RPGLContext context) {
+        this.subeventJson.putJsonArray("damage", new JsonArray());
     }
 
 }

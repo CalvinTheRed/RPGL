@@ -89,9 +89,8 @@ public abstract class Subevent {
         this.subeventJson.join(subeventData);
     }
 
-    // TODO is this clone method ever going to be used?
     @Override
-    public abstract Subevent clone();
+    public abstract Subevent clone(); // used to clone modified Subevents out to targets
 
     /**
      * This method creates a new and independent Subevent of the same type as the calling Subevent. The provided JSON

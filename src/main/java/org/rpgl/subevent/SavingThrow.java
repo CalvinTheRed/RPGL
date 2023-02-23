@@ -181,7 +181,6 @@ public class SavingThrow extends ContestRoll {
         TargetDamageCollection targetDamageCollection = new TargetDamageCollection();
         targetDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "target_damage_collection");
-            this.putJsonArray("damage", new JsonArray()); // TODO can the empty array be moved to prepare()?
         }});
         targetDamageCollection.setSource(this.getSource());
         targetDamageCollection.prepare(context);

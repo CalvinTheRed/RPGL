@@ -1,7 +1,6 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.json.JsonObject;
 
@@ -43,10 +42,7 @@ public class GiveEffect extends Subevent {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (!this.isCancelled()) {
-            RPGLEffect effect = RPGLFactory.newEffect(this.subeventJson.getString("effect"));
-            if (effect != null) {
-                this.getTarget().addEffect(effect);
-            }
+            this.getTarget().addEffect(RPGLFactory.newEffect(this.subeventJson.getString("effect")));
         }
     }
 
