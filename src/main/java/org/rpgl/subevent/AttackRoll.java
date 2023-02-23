@@ -50,8 +50,9 @@ public class AttackRoll extends ContestRoll {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        String weapon = this.subeventJson.getString("weapon");
+        this.addTag("attack_roll");
 
+        String weapon = this.subeventJson.getString("weapon");
         if (weapon == null) {
             this.prepareAttackWithoutWeapon(context);
         } else {
