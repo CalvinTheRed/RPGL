@@ -5,6 +5,8 @@ import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
 import org.rpgl.core.RPGLItemTemplate;
 import org.rpgl.core.RPGLObjectTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.Objects;
  * @author Calvin Withun
  */
 public class Datapack {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Datapack.class);
 
     private final Map<String, RPGLEffectTemplate> EFFECT_TEMPLATES = new HashMap<>();
     private final Map<String, RPGLEventTemplate>  EVENT_TEMPLATES  = new HashMap<>();
@@ -60,7 +64,7 @@ public class Datapack {
                 rpglEffectTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + effectId);
                 this.EFFECT_TEMPLATES.put(effectId, rpglEffectTemplate);
             } catch (IOException e) {
-                // TODO handle this error
+                LOGGER.error(e.getMessage());
             }
         }
     }
@@ -78,7 +82,7 @@ public class Datapack {
                 rpglEventTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + eventId);
                 this.EVENT_TEMPLATES.put(eventId, rpglEventTemplate);
             } catch (IOException e) {
-                // TODO handle this error
+                LOGGER.error(e.getMessage());
             }
         }
     }
@@ -96,7 +100,7 @@ public class Datapack {
                 rpglItemTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + itemId);
                 this.ITEM_TEMPLATES.put(itemId, rpglItemTemplate);
             } catch (IOException e) {
-                // TODO handle this error
+                LOGGER.error(e.getMessage());
             }
         }
     }
@@ -114,7 +118,7 @@ public class Datapack {
                 rpglObjectTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + objectId);
                 this.OBJECT_TEMPLATES.put(objectId, rpglObjectTemplate);
             } catch (IOException e) {
-                // TODO handle this error
+                LOGGER.error(e.getMessage());
             }
         }
     }

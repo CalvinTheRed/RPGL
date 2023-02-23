@@ -4,6 +4,8 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This abstract Subevent is dedicated to performing contest rolls. This includes ability checks, attack rolls, and
@@ -18,6 +20,8 @@ import org.rpgl.math.Die;
  * @author Calvin Withun
  */
 public abstract class ContestRoll extends Calculation {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContestRoll.class);
 
     private int advantageCounter = 0;
     private int disadvantageCounter = 0;
@@ -130,8 +134,9 @@ public abstract class ContestRoll extends Calculation {
                     }
                     break;
                 default:
-                    // TODO log error here
-                    throw new Exception("ContestRerollChance reroll_mode invalid: " + rerollMode);
+                    Exception e = new Exception("ContestRerollChance reroll_mode invalid: " + rerollMode);
+                    LOGGER.error(e.getMessage());
+                    throw e;
             }
         }
     }
