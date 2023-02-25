@@ -4,40 +4,47 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This abstract Subevent is dedicated to performing contest rolls. This includes ability checks, attack rolls, and
- * saving throws.
+ * This abstract Subevent is dedicated to performing rolls. This includes ability checks, attack rolls, and saving throws.
  * //TODO create a "fail" method to cause the contest roll to automatically fail (Dex saves while asleep for example)
  * <br>
  * <br>
- * Source: an RPGLObject making a contest roll
+ * Source: an RPGLObject making a roll
  * <br>
- * Target: an RPGLObject against whom a contest roll is being made
+ * Target: an RPGLObject against whom a roll is being made
  *
  * @author Calvin Withun
  */
-public abstract class ContestRoll extends Calculation {
+public abstract class Roll extends Calculation {
 
-    private int advantageCounter = 0;
-    private int disadvantageCounter = 0;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Roll.class);
 
-    public ContestRoll(String subeventId) {
+    public Roll(String subeventId) {
         super(subeventId);
+    }
+
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        this.subeventJson.putBoolean("has_advantage", false);
+        this.subeventJson.putBoolean("has_disadvantage", false);
     }
 
     /**
      * This method informs the subevent that advantage has been granted to the contest roll.
      */
     public void grantAdvantage() {
-        this.advantageCounter++;
+        this.subeventJson.putBoolean("has_advantage", true);
     }
 
     /**
      * This method informs the subevent that disadvantage has been granted to the contest roll.
      */
     public void grantDisadvantage() {
-        this.disadvantageCounter++;
+        this.subeventJson.putBoolean("has_disadvantage", true);
     }
 
     /**
@@ -47,7 +54,7 @@ public abstract class ContestRoll extends Calculation {
      * @return true if the contest roll is being made with advantage
      */
     public boolean isAdvantageRoll() {
-        return this.advantageCounter > 0 && this.disadvantageCounter == 0;
+        return this.subeventJson.getBoolean("has_advantage") && !this.subeventJson.getBoolean("has_disadvantage");
     }
 
     /**
@@ -57,7 +64,7 @@ public abstract class ContestRoll extends Calculation {
      * @return true if the contest roll is being made with disadvantage
      */
     public boolean isDisadvantageRoll() {
-        return this.disadvantageCounter > 0 && this.advantageCounter == 0;
+        return this.subeventJson.getBoolean("has_disadvantage") && !this.subeventJson.getBoolean("has_advantage");
     }
 
     /**
@@ -68,8 +75,7 @@ public abstract class ContestRoll extends Calculation {
      * @return true if the contest roll is being made with neither advantage nor disadvantage
      */
     public boolean isNormalRoll() {
-        return (this.advantageCounter == 0 && this.disadvantageCounter == 0)
-                || (this.advantageCounter > 0 && this.disadvantageCounter > 0);
+        return this.subeventJson.getBoolean("has_advantage") == this.subeventJson.getBoolean("has_disadvantage");
     }
 
     /**
@@ -101,37 +107,38 @@ public abstract class ContestRoll extends Calculation {
      * @throws Exception if an exception occurs.
      */
     public void checkForReroll(RPGLContext context) throws Exception {
-        ContestRerollChance contestRerollChance = new ContestRerollChance();
+        RollRerollChance rollRerollChance = new RollRerollChance();
         Integer base = super.getBase();
-        contestRerollChance.joinSubeventData(new JsonObject() {{
+        rollRerollChance.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "contest_reroll_chance");
             this.putInteger("base_die_roll", base);
         }});
-        contestRerollChance.setSource(this.getSource());
-        contestRerollChance.prepare(context);
-        contestRerollChance.setTarget(this.getTarget());
-        contestRerollChance.invoke(context);
+        rollRerollChance.setSource(this.getSource());
+        rollRerollChance.prepare(context);
+        rollRerollChance.setTarget(this.getTarget());
+        rollRerollChance.invoke(context);
 
-        if (contestRerollChance.wasRerollRequested()) {
+        if (rollRerollChance.wasRerollRequested()) {
             int rerollDieValue = Die.roll(20, this.subeventJson.getJsonArray("determined_reroll").asList());
-            String rerollMode = contestRerollChance.getRerollMode();
+            String rerollMode = rollRerollChance.getRerollMode();
             switch (rerollMode) {
-                case ContestRerollChance.USE_NEW:
+                case RollRerollChance.USE_NEW:
                     super.setBase(rerollDieValue);
                     break;
-                case ContestRerollChance.USE_HIGHEST:
+                case RollRerollChance.USE_HIGHEST:
                     if (rerollDieValue > super.getBase()) {
                         super.setBase(rerollDieValue);
                     }
                     break;
-                case ContestRerollChance.USE_LOWEST:
+                case RollRerollChance.USE_LOWEST:
                     if (rerollDieValue < super.getBase()) {
                         super.setBase(rerollDieValue);
                     }
                     break;
                 default:
-                    // TODO log error here
-                    throw new Exception("ContestRerollChance reroll_mode invalid: " + rerollMode);
+                    Exception e = new Exception("ContestRerollChance reroll_mode invalid: " + rerollMode);
+                    LOGGER.error(e.getMessage());
+                    throw e;
             }
         }
     }

@@ -1,0 +1,72 @@
+package org.rpgl.subevent;
+
+import org.rpgl.core.RPGLContext;
+import org.rpgl.json.JsonObject;
+
+import java.util.Objects;
+
+/**
+ * This subevent is dedicated to performing an ability check. AbilityCheck by itself does not cause anything to happen,
+ * it is just a roll calculation. It must be used as a part of a Contest to cause something to happen.
+ * <br>
+ * <br>
+ * Source: an RPGLObject performing an ability check
+ * <br>
+ * Target: should be the same as the source
+ *
+ * @author Calvin Withun
+ */
+public class AbilityCheck extends Roll {
+
+    public AbilityCheck() {
+        super("ability_check");
+    }
+
+    @Override
+    public Subevent clone() {
+        Subevent clone = new AbilityCheck();
+        clone.joinSubeventData(this.subeventJson);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
+    }
+
+    @Override
+    public Subevent clone(JsonObject jsonData) {
+        Subevent clone = new AbilityCheck();
+        clone.joinSubeventData(jsonData);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
+    }
+
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        this.addTag("ability_check");
+    }
+
+    @Override
+    public void invoke(RPGLContext context) throws Exception {
+        super.invoke(context);
+        this.roll();
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, this.subeventJson.getString("ability")));
+
+        GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
+        getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "get_ability_check_proficiency");
+            this.putString("skill", Objects.requireNonNullElse(subeventJson.getString("skill"), "")); // TODO accommodate tools in naming convention here?
+        }});
+        getAbilityCheckProficiency.setSource(this.getSource());
+        getAbilityCheckProficiency.prepare(context);
+        getAbilityCheckProficiency.setTarget(this.getSource());
+        getAbilityCheckProficiency.invoke(context);
+
+        if (getAbilityCheckProficiency.isHalfProficient()) {
+            this.addBonus(this.getSource().getProficiencyBonus() / 2);
+        } else if (getAbilityCheckProficiency.isProficient()) {
+            this.addBonus(this.getSource().getProficiencyBonus());
+        } else if (getAbilityCheckProficiency.isExpert()) {
+            this.addBonus(this.getSource().getProficiencyBonus() * 2);
+        }
+    }
+
+}

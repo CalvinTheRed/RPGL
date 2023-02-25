@@ -3,24 +3,24 @@ package org.rpgl.subevent;
 import org.rpgl.json.JsonObject;
 
 /**
- * This Subevent is dedicated to rolling damage dice collected by a <code>TargetDamageCollection</code> Subevent.
+ * This Subevent is dedicated to determining whether an RPGLObject is proficient with an ability check.
  * <br>
  * <br>
- * Source: an RPGLObject making an attack
+ * Source: an RPGLObject attempting to determine if it is proficient with a saving throw
  * <br>
- * Target: an RPGLObject being attacked
+ * Target: should be the same as the source
  *
  * @author Calvin Withun
  */
-public class TargetDamageRoll extends DamageRoll {
+public class GetAbilityCheckProficiency extends GetProficiency {
 
-    public TargetDamageRoll() {
-        super("target_damage_roll");
+    public GetAbilityCheckProficiency() {
+        super("get_ability_check_proficiency");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new TargetDamageRoll();
+        Subevent clone = new GetAbilityCheckProficiency();
         clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -28,7 +28,7 @@ public class TargetDamageRoll extends DamageRoll {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new TargetDamageRoll();
+        Subevent clone = new GetAbilityCheckProficiency();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;

@@ -1,6 +1,8 @@
 package org.rpgl.datapack;
 
 import org.rpgl.json.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.Objects;
  * @author Calvin Withun
  */
 public final class DatapackLoader {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatapackLoader.class);
 
     public static final Map<String, Datapack> DATAPACKS = new HashMap<>();
 
@@ -45,6 +49,7 @@ public final class DatapackLoader {
             DatapackInfo datapackInfo = JsonObject.MAPPER.readValue(new File(directory.getAbsolutePath() + "\\pack.info"), DatapackInfo.class);
             assert datapackInfo.version != null; // TODO this needs a better check...
         } catch (IOException e) {
+            LOGGER.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }

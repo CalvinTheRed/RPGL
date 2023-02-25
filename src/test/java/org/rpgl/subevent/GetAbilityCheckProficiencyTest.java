@@ -9,17 +9,17 @@ import org.rpgl.json.JsonObject;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.subevent.BaseDamageRoll class.
+ * Testing class for the org.rpgl.subevent.GetAbilityCheckProficiency class.
  *
  * @author Calvin Withun
  */
-public class BaseDamageRollTest {
+public class GetAbilityCheckProficiencyTest {
 
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        BaseDamageRoll baseDamageRoll = new BaseDamageRoll();
-        baseDamageRoll.joinSubeventData(new JsonObject() {{
+        GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
+        getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -27,7 +27,7 @@ public class BaseDamageRollTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> baseDamageRoll.invoke(new RPGLContext()),
+                () -> getAbilityCheckProficiency.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

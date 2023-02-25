@@ -15,19 +15,19 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class ContestRerollChance extends Subevent {
+public class RollRerollChance extends Subevent {
 
     public static final String USE_HIGHEST = "use_highest";
     public static final String USE_LOWEST = "use_lowest";
     public static final String USE_NEW = "use_new";
 
-    public ContestRerollChance() {
+    public RollRerollChance() {
         super("contest_reroll_chance");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new ContestRerollChance();
+        Subevent clone = new RollRerollChance();
         clone.joinSubeventData(this.subeventJson);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -35,14 +35,15 @@ public class ContestRerollChance extends Subevent {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new ContestRerollChance();
+        Subevent clone = new RollRerollChance();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public void prepare(RPGLContext context) {
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.subeventJson.putBoolean("reroll_requested", false);
     }
 

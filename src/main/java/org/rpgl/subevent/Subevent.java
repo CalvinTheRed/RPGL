@@ -4,6 +4,7 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
@@ -41,12 +42,12 @@ public abstract class Subevent {
     public static void initialize(boolean includeTestingSubevents) {
         Subevent.SUBEVENTS.clear();
 
-        // AbilityCheck
-        Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
-        // DealDamage?
-        Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
-        Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
-        // RemoveEffect
+        Subevent.SUBEVENTS.put("attack_roll",   new AttackRoll());
+        Subevent.SUBEVENTS.put("contest",       new Contest());
+        Subevent.SUBEVENTS.put("deal_damage",   new DealDamage());
+        Subevent.SUBEVENTS.put("give_effect",   new GiveEffect());
+        //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
+        Subevent.SUBEVENTS.put("saving_throw",  new SavingThrow());
 
         if (includeTestingSubevents) {
             Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
@@ -63,6 +64,24 @@ public abstract class Subevent {
         this.subeventId = subeventId;
     }
 
+    /**
+     * Returns whether the provided tag is present in the Subevent.
+     *
+     * @param tag a subevent tag
+     * @return true if the tag is present, false otherwise
+     */
+    public boolean hasTag(String tag) {
+        return this.subeventJson.getJsonArray("tags").asList().contains(tag);
+    }
+
+    /**
+     * Adds a tag to the subevent tags array.
+     *
+     * @param tag a subevent tag
+     */
+    public void addTag(String tag) {
+        this.subeventJson.getJsonArray("tags").addString(tag);
+    }
     /**
      * Verifies that the additional information provided to <code>invoke(...)</code> is intended for the Subevent type
      * being invoked.
@@ -89,7 +108,12 @@ public abstract class Subevent {
         this.subeventJson.join(subeventData);
     }
 
-    // TODO is this clone method ever going to be used?
+    /**
+     * This method creates a deep clone of the Subevent. This method is meant to be used to clone a modified Subevent
+     * prior to distributing clones to the targets of an RPGLEvent.
+     *
+     * @return a deep clone of the Subevent
+     */
     @Override
     public abstract Subevent clone();
 
@@ -99,6 +123,7 @@ public abstract class Subevent {
      * retrieving a Subevent from the Subevent.SUBEVENTS map.
      *
      * @param jsonData the JSON data to be joined to the new Subevent after being cloned
+     * @return a new instance of the Subevent with the passed json data joined to it
      */
     public abstract Subevent clone(JsonObject jsonData);
 
@@ -112,8 +137,9 @@ public abstract class Subevent {
      * @throws Exception if an exception occurs (any type of error may occur from calling this method)
      */
     public void prepare(RPGLContext context) throws Exception {
-        // This method has no behavior by default. It is left empty
-        // here for ease of developing derived classes elsewhere.
+        if (this.subeventJson.getJsonArray("tags") == null) {
+            this.subeventJson.putJsonArray("tags", new JsonArray());
+        }
     }
 
     /**

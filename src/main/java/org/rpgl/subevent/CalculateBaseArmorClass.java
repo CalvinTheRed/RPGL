@@ -46,8 +46,7 @@ public class CalculateBaseArmorClass extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
-        // NOTE: you do not need to be proficient in armor or shields to receive their AC benefits
-
+        super.prepare(context);
         // Set base armor class from armor (or no armor)
         String armorUuid = this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("armor");
         int baseArmorClass;

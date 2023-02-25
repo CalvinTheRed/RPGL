@@ -149,7 +149,7 @@ public class RPGLObjectTest {
         );
     }
 
-    //TODO tests for taking damage
+    // TODO tests for taking damage
 
     // TODO tests for getting weapon proficiency
 

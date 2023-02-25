@@ -39,6 +39,7 @@ public class CalculateAbilityScore extends Calculation {
 
     @Override
     public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         super.setBase(this.getSource().getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).getInteger(this.subeventJson.getString("ability")));
     }
 

@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Fire Breath",
+  "description": "The dragon breathes fire.",
+  "area_of_effect": {
+
+  },
+  "subevents": [
+    {
+      "subevent": "deal_damage",
+      "tags": [ "spell" ],
+      "damage": [
+        {
+          "type": "force",
+          "dice": [
+            { "count": 1, "size": 4, "determined": [ 2 ] }
+          ],
+          "bonus": 1
+        }
+      ]
+    }
+  ]
+}
