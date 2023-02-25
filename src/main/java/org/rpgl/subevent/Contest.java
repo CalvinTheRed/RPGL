@@ -9,6 +9,18 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
+/**
+ * This subevent is dedicated to facilitating contests where one RPGLObject makes an ability check against another
+ * RPGLObject's ability check, a save DC, or a static value. The source can win, or the target can win. Oftentimes,
+ * further subevents are only invoked if the source wins.
+ * <br>
+ * <br>
+ * Source: an RPGLObject initiating a contest
+ * <br>
+ * Target: an RPGLObject being challenged to a contest
+ *
+ * @author Calvin Withun
+ */
 public class Contest extends Subevent {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Contest.class);
@@ -63,6 +75,13 @@ public class Contest extends Subevent {
         }
     }
 
+    /**
+     * This helper method returns the result of the source.
+     *
+     * @param context the context in which the subevent is invoked
+     * @return the source's result
+     * @throws Exception if an exception occurs
+     */
     int getSourceResult(RPGLContext context) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(this.subeventJson.getJsonObject("source_contest"));
@@ -74,6 +93,13 @@ public class Contest extends Subevent {
         return abilityCheck.get();
     }
 
+    /**
+     * This helper method returns the result of the target.
+     *
+     * @param context the context in which the subevent is invoked
+     * @return the target's result
+     * @throws Exception if an exception occurs
+     */
     int getTargetResult(RPGLContext context) throws Exception {
         Integer targetResult = this.subeventJson.getInteger("target_contest");
         if (targetResult != null) {
@@ -93,6 +119,13 @@ public class Contest extends Subevent {
         throw e;
     }
 
+    /**
+     * This helper method returns the result of the target when it is a save difficulty class calculation.
+     *
+     * @param context the context in which the subevent is invoked
+     * @return the target's result
+     * @throws Exception if an exception occurs
+     */
     int getTargetResultAsSaveDifficultyClass(JsonObject targetJson, RPGLContext context) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         calculateSaveDifficultyClass.joinSubeventData(targetJson);
@@ -103,6 +136,13 @@ public class Contest extends Subevent {
         return calculateSaveDifficultyClass.get();
     }
 
+    /**
+     * This helper method returns the result of the target when it is an ability check.
+     *
+     * @param context the context in which the subevent is invoked
+     * @return the target's result
+     * @throws Exception if an exception occurs
+     */
     int getTargetResultAsAbilityCheck(JsonObject targetJson, RPGLContext context) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(targetJson);
@@ -114,6 +154,13 @@ public class Contest extends Subevent {
         return abilityCheck.get();
     }
 
+    /**
+     * This helper method resolves the subevents for the source or the target, according to the victor of the contest.
+     *
+     * @param whoWins a key indicating who won the contest (<code>source_wins</code> or <code>target_wins</code>)
+     * @param context the context in which the subevent is invoked
+     * @throws Exception if an exception occurs
+     */
     void resolveNestedSubevents(String whoWins, RPGLContext context) throws Exception {
         JsonArray subeventJsonArray = Objects.requireNonNullElse(this.subeventJson.getJsonArray(whoWins), new JsonArray());
         for (int i = 0; i < subeventJsonArray.size(); i++) {
