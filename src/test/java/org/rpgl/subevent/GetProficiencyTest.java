@@ -46,11 +46,11 @@ public class GetProficiencyTest {
     @Test
     @DisplayName("comprehensive unit test")
     void comprehensiveUnitTest() {
-        assertFalse(getProficiency.getIsProficient(),
+        assertFalse(getProficiency.isProficient(),
                 "GetProficiency should default to not granting proficiency"
         );
         getProficiency.grantProficiency();
-        assertTrue(getProficiency.getIsProficient(),
+        assertTrue(getProficiency.isProficient(),
                 "GrantProficiency should report proficiency has been granted after it was granted"
         );
     }

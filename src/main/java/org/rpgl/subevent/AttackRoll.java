@@ -22,7 +22,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class AttackRoll extends ContestRoll {
+public class AttackRoll extends Roll {
 
     @SuppressWarnings("all")
     private static final String ITEM_NAMESPACE_REGEX = "[\\w\\d]+:[\\w\\d]+";

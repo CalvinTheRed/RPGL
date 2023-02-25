@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.subevent.ContestRoll class.
+ * Testing class for the org.rpgl.subevent.Roll class.
  *
  * @author Calvin Withun
  */
-public class ContestRollTest {
+public class RollTest {
 
-    private ContestRoll contestRoll;
+    private Roll roll;
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -47,8 +47,8 @@ public class ContestRollTest {
 
     @BeforeEach
     void beforeEach() {
-        // create an anonymous class for ContestRoll for the purpose of running tests on it
-        contestRoll = new ContestRoll("contest_roll") {
+        // create an anonymous class for Roll for the purpose of running tests on it
+        roll = new Roll("roll") {
 
             @Override
             public Subevent clone() {
@@ -71,13 +71,13 @@ public class ContestRollTest {
     @Test
     @DisplayName("default behavior should yield only a normal roll")
     void default_yieldOnlyNormalRoll() {
-        assertFalse(contestRoll.isAdvantageRoll(),
+        assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
         );
-        assertFalse(contestRoll.isDisadvantageRoll(),
+        assertFalse(roll.isDisadvantageRoll(),
                 "grantAdvantage should not yield a disadvantage roll"
         );
-        assertTrue(contestRoll.isNormalRoll(),
+        assertTrue(roll.isNormalRoll(),
                 "grantAdvantage should yield a normal roll"
         );
     }
@@ -85,15 +85,15 @@ public class ContestRollTest {
     @Test
     @DisplayName("grantAdvantage should yield only an advantage roll")
     void grantAdvantage_yieldOnlyAdvantageRoll() {
-        contestRoll.grantAdvantage();
+        roll.grantAdvantage();
 
-        assertTrue(contestRoll.isAdvantageRoll(),
+        assertTrue(roll.isAdvantageRoll(),
                 "grantAdvantage should yield an advantage roll"
         );
-        assertFalse(contestRoll.isDisadvantageRoll(),
+        assertFalse(roll.isDisadvantageRoll(),
                 "grantAdvantage should not yield a disadvantage roll"
         );
-        assertFalse(contestRoll.isNormalRoll(),
+        assertFalse(roll.isNormalRoll(),
                 "grantAdvantage should not yield a normal roll"
         );
     }
@@ -101,15 +101,15 @@ public class ContestRollTest {
     @Test
     @DisplayName("grantDisadvantage should yield only a disadvantage roll")
     void grantDisadvantage_yieldOnlyDisadvantageRoll() {
-        contestRoll.grantDisadvantage();
+        roll.grantDisadvantage();
 
-        assertFalse(contestRoll.isAdvantageRoll(),
+        assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
         );
-        assertTrue(contestRoll.isDisadvantageRoll(),
+        assertTrue(roll.isDisadvantageRoll(),
                 "grantAdvantage should yield a disadvantage roll"
         );
-        assertFalse(contestRoll.isNormalRoll(),
+        assertFalse(roll.isNormalRoll(),
                 "grantAdvantage should not yield a normal roll"
         );
     }
@@ -117,16 +117,16 @@ public class ContestRollTest {
     @Test
     @DisplayName("grantAdvantage and grantDisadvantage should yield only a normal roll")
     void grantAdvantageGrantDisadvantage_yieldOnlyNormalRoll() {
-        contestRoll.grantAdvantage();
-        contestRoll.grantDisadvantage();
+        roll.grantAdvantage();
+        roll.grantDisadvantage();
 
-        assertFalse(contestRoll.isAdvantageRoll(),
+        assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
         );
-        assertFalse(contestRoll.isDisadvantageRoll(),
+        assertFalse(roll.isDisadvantageRoll(),
                 "grantAdvantage should not yield a disadvantage roll"
         );
-        assertTrue(contestRoll.isNormalRoll(),
+        assertTrue(roll.isNormalRoll(),
                 "grantAdvantage should yield a normal roll"
         );
     }
@@ -134,7 +134,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll higher)")
     void roll_defaultBehavior_secondRollHigher() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 5, 15 ]
@@ -145,9 +145,9 @@ public class ContestRollTest {
                 this.addInteger(15);
             }});
         }});
-        contestRoll.roll();
+        roll.roll();
 
-        assertEquals(5, contestRoll.get(),
+        assertEquals(5, roll.get(),
                 "default roll behavior should return the first value (5)"
         );
     }
@@ -155,7 +155,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll lower)")
     void roll_defaultBehavior_secondRollLower() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 15, 5 ]
@@ -166,8 +166,8 @@ public class ContestRollTest {
                 this.addInteger(5);
             }});
         }});
-        contestRoll.roll();
-        assertEquals(15, contestRoll.get(),
+        roll.roll();
+        assertEquals(15, roll.get(),
                 "default roll behavior should return the first value (15)"
         );
     }
@@ -175,7 +175,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll higher)")
     void roll_withAdvantage_secondRollHigher() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 5, 15 ]
@@ -186,9 +186,9 @@ public class ContestRollTest {
                 this.addInteger(15);
             }});
         }});
-        contestRoll.grantAdvantage();
-        contestRoll.roll();
-        assertEquals(15, contestRoll.get(),
+        roll.grantAdvantage();
+        roll.roll();
+        assertEquals(15, roll.get(),
                 "advantage roll behavior should return the higher value (15)"
         );
     }
@@ -196,7 +196,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll lower)")
     void roll_withAdvantage_secondRollLower() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 15, 5 ]
@@ -207,9 +207,9 @@ public class ContestRollTest {
                 this.addInteger(5);
             }});
         }});
-        contestRoll.grantAdvantage();
-        contestRoll.roll();
-        assertEquals(15, contestRoll.get(),
+        roll.grantAdvantage();
+        roll.roll();
+        assertEquals(15, roll.get(),
                 "advantage roll behavior should return the higher value (15)"
         );
     }
@@ -217,7 +217,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll higher)")
     void roll_withDisadvantage_firstRollHigher() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 15, 5 ]
@@ -228,9 +228,9 @@ public class ContestRollTest {
                 this.addInteger(5);
             }});
         }});
-        contestRoll.grantDisadvantage();
-        contestRoll.roll();
-        assertEquals(5, contestRoll.get(),
+        roll.grantDisadvantage();
+        roll.roll();
+        assertEquals(5, roll.get(),
                 "disadvantage roll behavior should return the lower value (5)"
         );
     }
@@ -238,7 +238,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll lower)")
     void roll_withDisadvantage_firstRollLower() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 5, 15 ]
@@ -249,9 +249,9 @@ public class ContestRollTest {
                 this.addInteger(15);
             }});
         }});
-        contestRoll.grantDisadvantage();
-        contestRoll.roll();
-        assertEquals(5, contestRoll.get(),
+        roll.grantDisadvantage();
+        roll.roll();
+        assertEquals(5, roll.get(),
                 "disadvantage roll behavior should return the lower value (5)"
         );
     }
@@ -259,7 +259,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll advantage and disadvantage behavior rolls the determined value (second roll higher)")
     void roll_withAdvantageAndDisadvantage_firstRollHigher() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 15, 5 ]
@@ -270,10 +270,10 @@ public class ContestRollTest {
                 this.addInteger(5);
             }});
         }});
-        contestRoll.grantAdvantage();
-        contestRoll.grantDisadvantage();
-        contestRoll.roll();
-        assertEquals(15, contestRoll.get(),
+        roll.grantAdvantage();
+        roll.grantDisadvantage();
+        roll.roll();
+        assertEquals(15, roll.get(),
                 "advantage and disadvantage roll behavior should return the first value (15)"
         );
     }
@@ -281,7 +281,7 @@ public class ContestRollTest {
     @Test
     @DisplayName("roll advantage and disadvantage behavior rolls the determined value (first roll lower)")
     void roll_withAdvantageAndDisadvantage_firstRollLower() {
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 5, 15 ]
@@ -292,10 +292,10 @@ public class ContestRollTest {
                 this.addInteger(15);
             }});
         }});
-        contestRoll.grantAdvantage();
-        contestRoll.grantDisadvantage();
-        contestRoll.roll();
-        assertEquals(5, contestRoll.get(),
+        roll.grantAdvantage();
+        roll.grantDisadvantage();
+        roll.roll();
+        assertEquals(5, roll.get(),
                 "advantage and disadvantage roll behavior should return the first value (5)"
         );
     }
@@ -305,9 +305,9 @@ public class ContestRollTest {
     void checkForReroll_noRerollRequested() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        contestRoll.setSource(source);
-        contestRoll.setTarget(target);
-        contestRoll.joinSubeventData(new JsonObject() {{
+        roll.setSource(source);
+        roll.setTarget(target);
+        roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
                 "determined": [ 5, 15 ]
@@ -318,9 +318,9 @@ public class ContestRollTest {
                 this.addInteger(15);
             }});
         }});
-        contestRoll.roll();
-        contestRoll.checkForReroll(new RPGLContext());
-        assertEquals(5, contestRoll.get(),
+        roll.roll();
+        roll.checkForReroll(new RPGLContext());
+        assertEquals(5, roll.get(),
                 "original roll should be preserved when no reroll is requested"
         );
     }

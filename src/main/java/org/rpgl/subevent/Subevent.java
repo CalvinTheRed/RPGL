@@ -42,12 +42,12 @@ public abstract class Subevent {
     public static void initialize(boolean includeTestingSubevents) {
         Subevent.SUBEVENTS.clear();
 
-        // AbilityCheck
-        Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
-        Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
-        Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
-        // RemoveEffect
-        Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
+        Subevent.SUBEVENTS.put("attack_roll",   new AttackRoll());
+        Subevent.SUBEVENTS.put("contest",       new Contest());
+        Subevent.SUBEVENTS.put("deal_damage",   new DealDamage());
+        Subevent.SUBEVENTS.put("give_effect",   new GiveEffect());
+        //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
+        Subevent.SUBEVENTS.put("saving_throw",  new SavingThrow());
 
         if (includeTestingSubevents) {
             Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());

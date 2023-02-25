@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author Calvin Withun
  */
-public class ContestRerollChanceTest {
+public class RollRerollChanceTest {
 
     @BeforeAll
     static void beforeAll() {
@@ -28,8 +28,8 @@ public class ContestRerollChanceTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        ContestRerollChance contestRerollChance = new ContestRerollChance();
-        contestRerollChance.joinSubeventData(new JsonObject() {{
+        RollRerollChance rollRerollChance = new RollRerollChance();
+        rollRerollChance.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -37,7 +37,7 @@ public class ContestRerollChanceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> contestRerollChance.invoke(new RPGLContext()),
+                () -> rollRerollChance.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -45,9 +45,9 @@ public class ContestRerollChanceTest {
     @Test
     @DisplayName("prepare no reroll is requested by default")
     void default_noRerollRequested() {
-        ContestRerollChance contestRerollChance = new ContestRerollChance();
+        RollRerollChance rollRerollChance = new RollRerollChance();
 
-        assertFalse(contestRerollChance.wasRerollRequested(),
+        assertFalse(rollRerollChance.wasRerollRequested(),
                 "a reroll should not be requested by default preceding prepare() call"
         );
     }
@@ -55,10 +55,10 @@ public class ContestRerollChanceTest {
     @Test
     @DisplayName("prepare no reroll is requested by default")
     void prepare_noRerollRequestedByDefault() throws Exception {
-        ContestRerollChance contestRerollChance = new ContestRerollChance();
-        contestRerollChance.prepare(new RPGLContext());
+        RollRerollChance rollRerollChance = new RollRerollChance();
+        rollRerollChance.prepare(new RPGLContext());
 
-        assertFalse(contestRerollChance.wasRerollRequested(),
+        assertFalse(rollRerollChance.wasRerollRequested(),
                 "a reroll should not be requested by default following prepare() call"
         );
     }
@@ -66,13 +66,13 @@ public class ContestRerollChanceTest {
     @Test
     @DisplayName("requestReroll sets reroll request to true and stores reroll mode")
     void requestReroll_setsRerollRequestedToTrueAndStoresRerollMode() {
-        ContestRerollChance contestRerollChance = new ContestRerollChance();
-        contestRerollChance.requestReroll(ContestRerollChance.USE_HIGHEST);
+        RollRerollChance rollRerollChance = new RollRerollChance();
+        rollRerollChance.requestReroll(RollRerollChance.USE_HIGHEST);
 
-        assertTrue(contestRerollChance.wasRerollRequested(),
+        assertTrue(rollRerollChance.wasRerollRequested(),
                 "a reroll should be requested following requestReroll() call"
         );
-        assertEquals(ContestRerollChance.USE_HIGHEST, contestRerollChance.getRerollMode(),
+        assertEquals(RollRerollChance.USE_HIGHEST, rollRerollChance.getRerollMode(),
                 "reroll mode should reflect the passed value"
         );
     }

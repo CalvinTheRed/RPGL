@@ -19,7 +19,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class SavingThrow extends ContestRoll {
+public class SavingThrow extends Roll {
 
     public SavingThrow() {
         super("saving_throw");

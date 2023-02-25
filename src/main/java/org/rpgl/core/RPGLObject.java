@@ -278,7 +278,7 @@ public class RPGLObject extends UUIDTableElement {
         getSavingThrowProficiency.prepare(context);
         getSavingThrowProficiency.setTarget(this);
         getSavingThrowProficiency.invoke(context);
-        return getSavingThrowProficiency.getIsProficient();
+        return getSavingThrowProficiency.isProficient();
     }
 
     /**
@@ -300,7 +300,7 @@ public class RPGLObject extends UUIDTableElement {
         getWeaponProficiency.prepare(context);
         getWeaponProficiency.setTarget(this);
         getWeaponProficiency.invoke(context);
-        return getWeaponProficiency.getIsProficient();
+        return getWeaponProficiency.isProficient();
     }
 
     /**
