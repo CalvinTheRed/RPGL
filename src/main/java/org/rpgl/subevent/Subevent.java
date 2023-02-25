@@ -108,8 +108,14 @@ public abstract class Subevent {
         this.subeventJson.join(subeventData);
     }
 
+    /**
+     * This method creates a deep clone of the Subevent. This method is meant to be used to clone a modified Subevent
+     * prior to distributing clones to the targets of an RPGLEvent.
+     *
+     * @return a deep clone of the Subevent
+     */
     @Override
-    public abstract Subevent clone(); // used to clone modified Subevents out to targets
+    public abstract Subevent clone();
 
     /**
      * This method creates a new and independent Subevent of the same type as the calling Subevent. The provided JSON
@@ -117,6 +123,7 @@ public abstract class Subevent {
      * retrieving a Subevent from the Subevent.SUBEVENTS map.
      *
      * @param jsonData the JSON data to be joined to the new Subevent after being cloned
+     * @return a new instance of the Subevent with the passed json data joined to it
      */
     public abstract Subevent clone(JsonObject jsonData);
 

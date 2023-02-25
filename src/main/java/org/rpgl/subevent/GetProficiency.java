@@ -55,16 +55,27 @@ public abstract class GetProficiency extends Subevent {
         this.subeventJson.putBoolean("has_expertise", true);
     }
 
+    /**
+     * This helper method revokes half proficiency, if it would normally be granted through this Subevent.
+     */
     void revokeHalfProficiency() {
         this.subeventJson.putBoolean("half_proficient_revoked", true);
     }
 
+    /**
+     * This helper method revokes proficiency and half proficiency, if either would normally be granted through this Subevent.
+     */
     void revokeProficiency() {
         this.revokeHalfProficiency();
         this.subeventJson.putBoolean("proficient_revoked", true);
     }
 
+    /**
+     * This helper method revokes expertise, proficiency, and half proficiency, if any would normally be granted through
+     * this Subevent.
+     */
     void revokeExpertise() {
+        this.revokeProficiency();
         this.subeventJson.putBoolean("expert_revoked", true);
     }
 
@@ -97,4 +108,5 @@ public abstract class GetProficiency extends Subevent {
     public boolean isExpert() {
         return this.subeventJson.getBoolean("has_expertise") && !this.subeventJson.getBoolean("expert_revoked");
     }
+
 }
