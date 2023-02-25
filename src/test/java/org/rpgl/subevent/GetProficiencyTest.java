@@ -69,8 +69,8 @@ public class GetProficiencyTest {
     }
 
     @Test
-    @DisplayName("comprehensive unit test")
-    void test() throws Exception {
+    @DisplayName("defaultBehavior returns all false")
+    void defaultBehavior_returnsAllFalse() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
@@ -79,12 +79,153 @@ public class GetProficiencyTest {
 
         getProficiency.setSource(source);
         getProficiency.prepare(context);
+
+        assertFalse(getProficiency.isHalfProficient(),
+                "GetProficiency should default to not granting half proficiency"
+        );
         assertFalse(getProficiency.isProficient(),
                 "GetProficiency should default to not granting proficiency"
         );
+        assertFalse(getProficiency.isExpert(),
+                "GetProficiency should default to not granting expertise"
+        );
+    }
+
+    @Test
+    @DisplayName("grantHalfProficiency grants half proficiency only")
+    void grantHalfProficiency_grantsHalfProficiencyOnly() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        getProficiency.setSource(source);
+        getProficiency.prepare(context);
+        getProficiency.grantHalfProficiency();
+
+        assertTrue(getProficiency.isHalfProficient(),
+                "GetProficiency should grant half proficiency after calling grantHalfProficiency()"
+        );
+        assertFalse(getProficiency.isProficient(),
+                "GetProficiency should not grant proficiency after calling grantHalfProficiency"
+        );
+        assertFalse(getProficiency.isExpert(),
+                "GetProficiency should not grant expertise after calling grantHalfProficiency"
+        );
+    }
+
+    @Test
+    @DisplayName("grant and revoke half proficiency does not grant half proficiency")
+    void grantAndRevokeHalfProficiency_doesNotGrantHalfProficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        getProficiency.setSource(source);
+        getProficiency.prepare(context);
+        getProficiency.grantHalfProficiency();
+        getProficiency.revokeHalfProficiency();
+
+        assertFalse(getProficiency.isHalfProficient(),
+                "GetProficiency should not grant half proficiency after having it revoked()"
+        );
+    }
+
+    @Test
+    @DisplayName("grant and revoke proficiency does not grant proficiency")
+    void grantAndRevokeProficiency_doesNotGrantProficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        getProficiency.setSource(source);
+        getProficiency.prepare(context);
         getProficiency.grantProficiency();
-        assertTrue(getProficiency.isProficient(),
-                "GrantProficiency should report proficiency has been granted after it was granted"
+        getProficiency.revokeProficiency();
+
+        assertFalse(getProficiency.isProficient(),
+                "GetProficiency should not grant proficiency after having it revoked()"
+        );
+    }
+
+    @Test
+    @DisplayName("grant and revoke expertise does not grant expertise")
+    void grantAndRevokeExpertise_doesNotGrantExpertise() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        getProficiency.setSource(source);
+        getProficiency.prepare(context);
+        getProficiency.grantExpertise();
+        getProficiency.revokeExpertise();
+
+        assertFalse(getProficiency.isExpert(),
+                "GetProficiency should not grant expertise after having it revoked()"
+        );
+    }
+
+    @Test
+    @DisplayName("grantProficiency revokes half proficiency")
+    void grantProficiency_revokesHalfProficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        getProficiency.setSource(source);
+        getProficiency.prepare(context);
+        getProficiency.grantHalfProficiency();
+        getProficiency.grantProficiency();
+
+        assertFalse(getProficiency.isHalfProficient(),
+                "GetProficiency should not grant half proficiency after being granted proficiency"
+        );
+    }
+
+    @Test
+    @DisplayName("grantExpertise revokes half proficiency")
+    void grantExpertise_revokesHalfProficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        getProficiency.setSource(source);
+        getProficiency.prepare(context);
+        getProficiency.grantHalfProficiency();
+        getProficiency.grantExpertise();
+
+        assertFalse(getProficiency.isHalfProficient(),
+                "GetProficiency should not grant half proficiency after being granted expertise"
+        );
+    }
+
+    @Test
+    @DisplayName("grantExpertise revokes proficiency")
+    void grantExpertise_revokesProficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        getProficiency.setSource(source);
+        getProficiency.prepare(context);
+        getProficiency.grantProficiency();
+        getProficiency.grantExpertise();
+
+        assertFalse(getProficiency.isProficient(),
+                "GetProficiency should not grant proficiency after being granted expertise"
         );
     }
 
