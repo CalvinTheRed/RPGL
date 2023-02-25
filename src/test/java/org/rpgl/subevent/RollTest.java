@@ -70,7 +70,16 @@ public class RollTest {
 
     @Test
     @DisplayName("default behavior should yield only a normal roll")
-    void default_yieldOnlyNormalRoll() {
+    void default_yieldOnlyNormalRoll() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        roll.setSource(source);
+        roll.prepare(context);
+
         assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
         );
@@ -84,7 +93,15 @@ public class RollTest {
 
     @Test
     @DisplayName("grantAdvantage should yield only an advantage roll")
-    void grantAdvantage_yieldOnlyAdvantageRoll() {
+    void grantAdvantage_yieldOnlyAdvantageRoll() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        roll.setSource(source);
+        roll.prepare(context);
         roll.grantAdvantage();
 
         assertTrue(roll.isAdvantageRoll(),
@@ -100,7 +117,15 @@ public class RollTest {
 
     @Test
     @DisplayName("grantDisadvantage should yield only a disadvantage roll")
-    void grantDisadvantage_yieldOnlyDisadvantageRoll() {
+    void grantDisadvantage_yieldOnlyDisadvantageRoll() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        roll.setSource(source);
+        roll.prepare(context);
         roll.grantDisadvantage();
 
         assertFalse(roll.isAdvantageRoll(),
@@ -133,7 +158,13 @@ public class RollTest {
 
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll higher)")
-    void roll_defaultBehavior_secondRollHigher() {
+    void roll_defaultBehavior_secondRollHigher() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
@@ -145,6 +176,9 @@ public class RollTest {
                 this.addInteger(15);
             }});
         }});
+
+        roll.setSource(source);
+        roll.prepare(context);
         roll.roll();
 
         assertEquals(5, roll.get(),
@@ -154,7 +188,13 @@ public class RollTest {
 
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll lower)")
-    void roll_defaultBehavior_secondRollLower() {
+    void roll_defaultBehavior_secondRollLower() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
@@ -166,7 +206,11 @@ public class RollTest {
                 this.addInteger(5);
             }});
         }});
+
+        roll.setSource(source);
+        roll.prepare(context);
         roll.roll();
+
         assertEquals(15, roll.get(),
                 "default roll behavior should return the first value (15)"
         );
@@ -174,7 +218,13 @@ public class RollTest {
 
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll higher)")
-    void roll_withAdvantage_secondRollHigher() {
+    void roll_withAdvantage_secondRollHigher() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
@@ -186,8 +236,12 @@ public class RollTest {
                 this.addInteger(15);
             }});
         }});
+
+        roll.setSource(source);
+        roll.prepare(context);
         roll.grantAdvantage();
         roll.roll();
+
         assertEquals(15, roll.get(),
                 "advantage roll behavior should return the higher value (15)"
         );
@@ -195,7 +249,13 @@ public class RollTest {
 
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll lower)")
-    void roll_withAdvantage_secondRollLower() {
+    void roll_withAdvantage_secondRollLower() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
@@ -207,8 +267,12 @@ public class RollTest {
                 this.addInteger(5);
             }});
         }});
+
+        roll.setSource(source);
+        roll.prepare(context);
         roll.grantAdvantage();
         roll.roll();
+
         assertEquals(15, roll.get(),
                 "advantage roll behavior should return the higher value (15)"
         );
@@ -216,7 +280,13 @@ public class RollTest {
 
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll higher)")
-    void roll_withDisadvantage_firstRollHigher() {
+    void roll_withDisadvantage_firstRollHigher() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
@@ -228,8 +298,11 @@ public class RollTest {
                 this.addInteger(5);
             }});
         }});
+        roll.setSource(source);
+        roll.prepare(context);
         roll.grantDisadvantage();
         roll.roll();
+
         assertEquals(5, roll.get(),
                 "disadvantage roll behavior should return the lower value (5)"
         );
@@ -237,7 +310,13 @@ public class RollTest {
 
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll lower)")
-    void roll_withDisadvantage_firstRollLower() {
+    void roll_withDisadvantage_firstRollLower() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
@@ -249,8 +328,12 @@ public class RollTest {
                 this.addInteger(15);
             }});
         }});
+
+        roll.setSource(source);
+        roll.prepare(context);
         roll.grantDisadvantage();
         roll.roll();
+
         assertEquals(5, roll.get(),
                 "disadvantage roll behavior should return the lower value (5)"
         );
@@ -303,10 +386,12 @@ public class RollTest {
     @Test
     @DisplayName("checkForReroll no reroll was requested")
     void checkForReroll_noRerollRequested() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        roll.setSource(source);
-        roll.setTarget(target);
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
@@ -318,6 +403,10 @@ public class RollTest {
                 this.addInteger(15);
             }});
         }});
+
+        roll.setSource(source);
+        roll.prepare(context);
+        roll.setTarget(target);
         roll.roll();
         roll.checkForReroll(new RPGLContext());
         assertEquals(5, roll.get(),

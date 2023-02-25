@@ -21,9 +21,9 @@ public abstract class GetProficiency extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.subeventJson.putBoolean("half_proficient", false);
-        this.subeventJson.putBoolean("proficient", false);
-        this.subeventJson.putBoolean("expert", false);
+        this.subeventJson.putBoolean("is_half_proficient", false);
+        this.subeventJson.putBoolean("is_proficient", false);
+        this.subeventJson.putBoolean("has_expertise", false);
         this.subeventJson.putBoolean("half_proficient_revoked", false);
         this.subeventJson.putBoolean("proficient_revoked", false);
         this.subeventJson.putBoolean("expert_revoked", false);
@@ -75,7 +75,7 @@ public abstract class GetProficiency extends Subevent {
      * @return true if <code>source</code> is half proficient with whatever it is attempting to use
      */
     public boolean isHalfProficient() {
-        return this.subeventJson.getBoolean("half_proficient") && !this.subeventJson.getBoolean("half_proficient_revoked");
+        return this.subeventJson.getBoolean("is_half_proficient") && !this.subeventJson.getBoolean("half_proficient_revoked");
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class GetProficiency extends Subevent {
      * @return true if <code>source</code> is proficient with whatever it is attempting to use
      */
     public boolean isProficient() {
-        return this.subeventJson.getBoolean("proficient") && !this.subeventJson.getBoolean("proficient_revoked");
+        return this.subeventJson.getBoolean("is_proficient") && !this.subeventJson.getBoolean("proficient_revoked");
     }
 
     /**
@@ -95,6 +95,6 @@ public abstract class GetProficiency extends Subevent {
      * @return true if <code>source</code> has expertise with whatever it is attempting to use
      */
     public boolean isExpert() {
-        return this.subeventJson.getBoolean("expert") && !this.subeventJson.getBoolean("expert_revoked");
+        return this.subeventJson.getBoolean("has_expertise") && !this.subeventJson.getBoolean("expert_revoked");
     }
 }
