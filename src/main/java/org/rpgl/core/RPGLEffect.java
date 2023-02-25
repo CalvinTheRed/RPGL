@@ -8,6 +8,7 @@ import org.rpgl.function.Function;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
+import org.rpgl.uuidtable.UUIDTable;
 import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.Map;
@@ -33,10 +34,10 @@ public class RPGLEffect extends UUIDTableElement {
     /**
      * Returns the source of the RPGLEffect.
      *
-     * @return a RPGLObject UUID
+     * @return a RPGLObject
      */
-    public String getSource() {
-        return this.getString(RPGLEffectTO.SOURCE_ALIAS);
+    public RPGLObject getSource() {
+        return UUIDTable.getObject(this.getString(RPGLEffectTO.SOURCE_ALIAS));
     }
 
     /**
@@ -51,10 +52,10 @@ public class RPGLEffect extends UUIDTableElement {
     /**
      * Returns the target of the RPGLEffect.
      *
-     * @return a RPGLObject UUID
+     * @return a RPGLObject
      */
-    public String getTarget() {
-        return this.getString(RPGLEffectTO.TARGET_ALIAS);
+    public RPGLObject getTarget() {
+        return UUIDTable.getObject(this.getString(RPGLEffectTO.TARGET_ALIAS));
     }
 
     /**
@@ -81,7 +82,7 @@ public class RPGLEffect extends UUIDTableElement {
      * @throws ConditionMismatchException if a Condition is passed the wrong Condition ID.
      * @throws FunctionMismatchException  if a Function is passed the wrong Function ID.
      */
-    public boolean processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
+    public boolean processSubevent(Subevent subevent) throws Exception {
         RPGLObject source = subevent.getSource();
         RPGLObject target = subevent.getTarget();
 
@@ -90,7 +91,7 @@ public class RPGLEffect extends UUIDTableElement {
             if (subevent.getSubeventId().equals(subeventFilterEntry.getKey())) {
                 JsonObject matchedFilter = subeventFilters.getJsonObject(subeventFilterEntry.getKey());
                 JsonArray conditions = matchedFilter.getJsonArray("conditions");
-                if (!subevent.hasModifyingEffect(this) && evaluateConditions(source, target, subevent, conditions)) {
+                if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions)) {
                     JsonArray functionJsonArray = matchedFilter.getJsonArray("functions");
                     executeFunctions(source, target, subevent, functionJsonArray);
                     subevent.addModifyingEffect(this);
@@ -105,21 +106,19 @@ public class RPGLEffect extends UUIDTableElement {
     /**
      * This method evaluates a given collection of Conditions on a given RPGLObject source and target.
      *
-     * @param source     the RPGLObject which invoked a Subevent
-     * @param target     the RPGLObject the Subevent is being directed at
      * @param subevent   the Subevent being invoked
      * @param conditions a collection of JSON data defining Conditions
      * @return true if any Conditions evaluated to true
      *
      * @throws ConditionMismatchException if a Condition is passed the wrong Condition ID.
      */
-    static boolean evaluateConditions(RPGLObject source, RPGLObject target, Subevent subevent, JsonArray conditions) throws ConditionMismatchException {
+    boolean evaluateConditions(Subevent subevent, JsonArray conditions) throws Exception {
         boolean conditionsMet = true;
         for (int i = 0; i < conditions.size(); i++) {
             JsonObject conditionJson = conditions.getJsonObject(i);
             conditionsMet &= Condition.CONDITIONS
                     .get(conditionJson.getString("condition"))
-                    .evaluate(source, target, subevent, conditionJson);
+                    .evaluate(this.getSource(), this.getTarget(), subevent, conditionJson);
         }
         return conditionsMet;
     }

@@ -25,6 +25,8 @@ public abstract class Condition {
      */
     public static final Map<String, Condition> CONDITIONS = new HashMap<>();
 
+    final String conditionId;
+
     /**
      * This method populates Condition.CONDITIONS.
      *
@@ -36,11 +38,17 @@ public abstract class Condition {
         Condition.CONDITIONS.put("all", new All());
         Condition.CONDITIONS.put("any", new Any());
         Condition.CONDITIONS.put("invert", new Invert());
+        Condition.CONDITIONS.put("objects_match", new ObjectsMatch());
+        Condition.CONDITIONS.put("subevent_has_tag", new SubeventHasTag());
 
         if (includeTestingConditions) {
             Condition.CONDITIONS.put("false", new False());
             Condition.CONDITIONS.put("true", new True());
         }
+    }
+
+    public Condition(String conditionId) {
+        this.conditionId = conditionId;
     }
 
     /**
@@ -63,14 +71,14 @@ public abstract class Condition {
     /**
      * Evaluates a Subevent or RPGLObject to determine if a defined condition is satisfied.
      *
-     * @param source        the RPGLObject which invoked a Subevent
-     * @param target        the RPGLObject the Subevent is being directed at
+     * @param source        the RPGLObject sourcing the RPGLEffect being considered
+     * @param target        the RPGLObject targeted by the RPGLEffect being considered
      * @param subevent      the Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      * @return the result of the evaluation
      *
      * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    public abstract boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws ConditionMismatchException;
+    public abstract boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws Exception;
 
 }

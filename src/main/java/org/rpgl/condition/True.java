@@ -1,7 +1,6 @@
 package org.rpgl.condition;
 
 import org.rpgl.core.RPGLObject;
-import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -16,9 +15,13 @@ public class True extends Condition {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(True.class);
 
+    public True() {
+        super("true");
+    }
+
     @Override
-    public boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws ConditionMismatchException {
-        super.verifyCondition("true", conditionJson);
+    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson) throws Exception {
+        this.verifyCondition(super.conditionId, conditionJson);
         LOGGER.debug("true");
         return true;
     }

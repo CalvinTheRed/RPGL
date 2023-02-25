@@ -42,8 +42,8 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     public RPGLEffectTO(RPGLEffect rpglEffect) {
         super(rpglEffect);
         this.subeventFilters = rpglEffect.getSubeventFilters().asMap();
-        this.source = rpglEffect.getSource();
-        this.target = rpglEffect.getTarget();
+        this.source = rpglEffect.getSource().getUuid();
+        this.target = rpglEffect.getTarget().getUuid();
     }
 
     /**

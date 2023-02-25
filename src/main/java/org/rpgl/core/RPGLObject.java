@@ -173,7 +173,7 @@ public class RPGLObject extends UUIDTableElement {
      * @throws FunctionMismatchException if one of the Functions in an RPGLEffect belonging to the RPGLObject is
      *         presented with the wrong Function ID.
      */
-    public boolean processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
+    public boolean processSubevent(Subevent subevent) throws Exception {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffectObjects()) {
             wasSubeventProcessed |= effect.processSubevent(subevent);
