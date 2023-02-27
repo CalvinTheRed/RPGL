@@ -43,7 +43,7 @@ public class AnyTest {
 
     @Test
     @DisplayName("evaluate for no sub-conditions")
-    void evaluate_default_true() throws ConditionMismatchException {
+    void evaluate_default_true() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -61,7 +61,7 @@ public class AnyTest {
 
     @Test
     @DisplayName("evaluate for true, true")
-    void evaluate_trueTrue_true() throws ConditionMismatchException {
+    void evaluate_trueTrue_true() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -89,7 +89,7 @@ public class AnyTest {
 
     @Test
     @DisplayName("evaluate for true, false")
-    void evaluate_trueFalse_true() throws ConditionMismatchException {
+    void evaluate_trueFalse_true() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -117,7 +117,7 @@ public class AnyTest {
 
     @Test
     @DisplayName("evaluate for false, false")
-    void evaluate_falseFalse_false() throws ConditionMismatchException {
+    void evaluate_falseFalse_false() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{

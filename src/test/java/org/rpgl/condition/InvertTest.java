@@ -42,7 +42,7 @@ public class InvertTest {
 
     @Test
     @DisplayName("evaluate inverting true condition")
-    void evaluate_true_false() throws ConditionMismatchException {
+    void evaluate_true_false() throws Exception {
         Condition condition = new Invert();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -64,7 +64,7 @@ public class InvertTest {
 
     @Test
     @DisplayName("evaluate inverting false condition")
-    void evaluate_false_true() throws ConditionMismatchException {
+    void evaluate_false_true() throws Exception {
         Condition condition = new Invert();
         JsonObject conditionJson = new JsonObject() {{
             /*{

@@ -41,7 +41,7 @@ public class FalseTest {
 
     @Test
     @DisplayName("evaluate default behavior")
-    void evaluate_default_false() throws ConditionMismatchException {
+    void evaluate_default_false() throws Exception {
         Condition condition = new False();
         JsonObject conditionJson = new JsonObject() {{
             /*{
