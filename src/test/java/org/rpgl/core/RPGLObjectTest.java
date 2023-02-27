@@ -158,13 +158,13 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getAbilityModifierFromAbilityScore returns correct modifier")
     void getAbilityModifierFromAbilityScore_returnsCorrectModifier() {
-        assertEquals(-2, RPGLObject.getAbilityModifierFromAbilityName( 7));
-        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityName( 8));
-        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityName( 9));
-        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityName(10));
-        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityName(11));
-        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityName(12));
-        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityName(13));
+        assertEquals(-2, RPGLObject.getAbilityModifierFromAbilityScore( 7));
+        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityScore( 8));
+        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityScore( 9));
+        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityScore(10));
+        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityScore(11));
+        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityScore(12));
+        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityScore(13));
     }
 
     @Test

@@ -61,13 +61,13 @@ public class RPGLContext {
      * @throws ConditionMismatchException if a Condition was presented incorrectly formatted JSON data
      * @throws FunctionMismatchException  if a Function was presented incorrectly formatted JSON data.
      */
-    public void processSubevent(Subevent subevent) throws Exception {
+    public void processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         LOGGER.debug("processing Subevent " + subevent.getSubeventId() + " with source (" + subevent.getSource().getUuid() + ") and target (" + subevent.getTarget().getUuid() + ")");
         boolean wasProcessed;
         do {
             wasProcessed = false;
             for (Map.Entry<String, RPGLObject> contextObjectsEntry : this.contextObjects.entrySet()) {
-                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent);
+                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent, context);
             }
         } while (wasProcessed);
     }

@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonArray;
@@ -35,8 +36,10 @@ public class AnyTest {
             this.putString("condition", "not_a_condition");
         }};
 
+        RPGLContext context = new RPGLContext();
+
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson),
+                () -> condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -54,7 +57,9 @@ public class AnyTest {
             this.putJsonArray("conditions", new JsonArray());
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate true for no sub-conditions"
         );
     }
@@ -82,7 +87,9 @@ public class AnyTest {
             }});
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate true for 2 true conditions"
         );
     }
@@ -110,7 +117,9 @@ public class AnyTest {
             }});
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate true for 1 true and 1 false condition"
         );
     }
@@ -138,7 +147,9 @@ public class AnyTest {
             }});
         }};
 
-        assertFalse(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertFalse(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate false for 2 false conditions"
         );
     }

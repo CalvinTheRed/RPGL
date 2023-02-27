@@ -1,5 +1,6 @@
 package org.rpgl.condition;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -16,7 +17,7 @@ public class SubeventHasTag extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson) throws Exception {
+    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         this.verifyCondition(super.conditionId, conditionJson);
         return subevent.hasTag(conditionJson.getString("tag"));
     }

@@ -173,10 +173,10 @@ public class RPGLObject extends UUIDTableElement {
      * @throws FunctionMismatchException if one of the Functions in an RPGLEffect belonging to the RPGLObject is
      *         presented with the wrong Function ID.
      */
-    public boolean processSubevent(Subevent subevent) throws Exception {
+    public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffectObjects()) {
-            wasSubeventProcessed |= effect.processSubevent(subevent);
+            wasSubeventProcessed |= effect.processSubevent(subevent, context);
         }
         return wasSubeventProcessed;
     }
@@ -222,6 +222,19 @@ public class RPGLObject extends UUIDTableElement {
         return calculateProficiencyBonus.get();
     }
 
+    public int getAbilityScoreFromAbilityName(RPGLContext context, String ability) throws Exception {
+        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
+        calculateAbilityScore.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_ability_score");
+            this.putString("ability", ability);
+        }});
+        calculateAbilityScore.setSource(this);
+        calculateAbilityScore.prepare(context);
+        calculateAbilityScore.setTarget(this);
+        calculateAbilityScore.invoke(context);
+        return calculateAbilityScore.get();
+    }
+
     /**
      * This method determines the RPGLObject's ability score modifier for a specified ability score.
      *
@@ -232,16 +245,7 @@ public class RPGLObject extends UUIDTableElement {
      * @throws Exception if an exception occurs.
      */
     public int getAbilityModifierFromAbilityName(RPGLContext context, String ability) throws Exception {
-        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
-        calculateAbilityScore.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_ability_score");
-            this.putString("ability", ability);
-        }});
-        calculateAbilityScore.setSource(this);
-        calculateAbilityScore.prepare(context);
-        calculateAbilityScore.setTarget(this);
-        calculateAbilityScore.invoke(context);
-        return getAbilityModifierFromAbilityName(calculateAbilityScore.get());
+        return getAbilityModifierFromAbilityScore(this.getAbilityScoreFromAbilityName(context, ability));
     }
 
     /**
@@ -250,7 +254,7 @@ public class RPGLObject extends UUIDTableElement {
      * @param abilityScore an ability score number
      * @return the modifier for the passed score
      */
-    static int getAbilityModifierFromAbilityName(int abilityScore) {
+    static int getAbilityModifierFromAbilityScore(int abilityScore) {
         if (abilityScore < 10) {
             // integer division rounds toward zero, so abilityScore must be
             // adjusted to calculate the correct values for negative modifiers

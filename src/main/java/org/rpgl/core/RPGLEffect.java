@@ -82,7 +82,7 @@ public class RPGLEffect extends UUIDTableElement {
      * @throws ConditionMismatchException if a Condition is passed the wrong Condition ID.
      * @throws FunctionMismatchException  if a Function is passed the wrong Function ID.
      */
-    public boolean processSubevent(Subevent subevent) throws Exception {
+    public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         RPGLObject source = subevent.getSource();
         RPGLObject target = subevent.getTarget();
 
@@ -91,7 +91,7 @@ public class RPGLEffect extends UUIDTableElement {
             if (subevent.getSubeventId().equals(subeventFilterEntry.getKey())) {
                 JsonObject matchedFilter = subeventFilters.getJsonObject(subeventFilterEntry.getKey());
                 JsonArray conditions = matchedFilter.getJsonArray("conditions");
-                if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions)) {
+                if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
                     JsonArray functionJsonArray = matchedFilter.getJsonArray("functions");
                     executeFunctions(source, target, subevent, functionJsonArray);
                     subevent.addModifyingEffect(this);
@@ -112,13 +112,13 @@ public class RPGLEffect extends UUIDTableElement {
      *
      * @throws ConditionMismatchException if a Condition is passed the wrong Condition ID.
      */
-    boolean evaluateConditions(Subevent subevent, JsonArray conditions) throws Exception {
+    boolean evaluateConditions(Subevent subevent, JsonArray conditions, RPGLContext context) throws Exception {
         boolean conditionsMet = true;
         for (int i = 0; i < conditions.size(); i++) {
             JsonObject conditionJson = conditions.getJsonObject(i);
             conditionsMet &= Condition.CONDITIONS
                     .get(conditionJson.getString("condition"))
-                    .evaluate(this.getSource(), this.getTarget(), subevent, conditionJson);
+                    .evaluate(this.getSource(), this.getTarget(), subevent, conditionJson, context);
         }
         return conditionsMet;
     }

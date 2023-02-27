@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
@@ -34,8 +35,10 @@ public class InvertTest {
             this.putString("condition", "not_a_condition");
         }};
 
+        RPGLContext context = new RPGLContext();
+
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson),
+                () -> condition.evaluate(null, null, null, conditionJson, context),
                 "Invert condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -57,7 +60,9 @@ public class InvertTest {
             }});
         }};
 
-        assertFalse(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertFalse(condition.evaluate(null, null, null, conditionJson, context),
                 "Invert condition should evaluate false when provided a true sub-condition"
         );
     }
@@ -79,7 +84,9 @@ public class InvertTest {
             }});
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "Invert condition should evaluate true when provided a false sub-condition"
         );
     }

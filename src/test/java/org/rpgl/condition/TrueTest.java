@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
@@ -33,8 +34,10 @@ public class TrueTest {
             this.putString("condition", "not_a_condition");
         }};
 
+        RPGLContext context = new RPGLContext();
+
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson),
+                () -> condition.evaluate(null, null, null, conditionJson, context),
                 "True condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -50,7 +53,9 @@ public class TrueTest {
             this.putString("condition", "true");
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "True condition should always evaluate true"
         );
     }

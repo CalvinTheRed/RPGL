@@ -153,7 +153,7 @@ public abstract class Subevent {
      */
     public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);
-        context.processSubevent(this);
+        context.processSubevent(this, context);
     }
 
     /**

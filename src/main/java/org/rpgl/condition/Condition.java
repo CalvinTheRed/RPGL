@@ -1,5 +1,6 @@
 package org.rpgl.condition;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
@@ -71,14 +72,58 @@ public abstract class Condition {
     /**
      * Evaluates a Subevent or RPGLObject to determine if a defined condition is satisfied.
      *
-     * @param source        the RPGLObject sourcing the RPGLEffect being considered
-     * @param target        the RPGLObject targeted by the RPGLEffect being considered
+     * @param effectSource  the RPGLObject sourcing the RPGLEffect being considered
+     * @param effectTarget  the RPGLObject targeted by the RPGLEffect being considered
      * @param subevent      the Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      * @return the result of the evaluation
      *
      * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    public abstract boolean evaluate(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject conditionJson) throws Exception;
+    public abstract boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception;
+
+    // =================================================================================================================
+    // Condition helper methods
+    // =================================================================================================================
+
+    RPGLObject getObject(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject instructions) throws Exception {
+        String from = instructions.getString("from");
+        String object = instructions.getString("object");
+        if ("subevent".equals(from)) {
+            if ("source".equals(object)) {
+                return subevent.getSource();
+            } else if ("target".equals(object)) {
+                return subevent.getTarget();
+            }
+        } else if ("effect".equals(from)) {
+            if ("source".equals(object)) {
+                return effectSource;
+            } else if ("target".equals(object)) {
+                return effectTarget;
+            }
+        }
+
+        Exception e = new Exception("could not isolate an RPGLObject: " + instructions);
+        LOGGER.error(e.getMessage());
+        throw e;
+    }
+
+    boolean compare(int value, int target, String comparison) throws Exception {
+        if ("=".equals(comparison)) {
+            return value == target;
+        } else if ("<".equals(comparison)) {
+            return value < target;
+        } else if (">".equals(comparison)) {
+            return value > target;
+        } else if ("<=".equals(comparison)) {
+            return value <= target;
+        } else if (">=".equals(comparison)) {
+            return value >= target;
+        }
+
+        Exception e = new Exception("Illegal comparison value: " + comparison);
+        LOGGER.error(e.getMessage());
+        throw e;
+    }
 
 }

@@ -1,5 +1,6 @@
 package org.rpgl.condition;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -20,11 +21,11 @@ public class Invert extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson) throws Exception {
+    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         this.verifyCondition(super.conditionId, conditionJson);
         JsonObject nestedConditionJson = conditionJson.getJsonObject("invert");
         Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
-        boolean result = !nestedCondition.evaluate(effectSource, effectTarget, subevent, nestedConditionJson);
+        boolean result = !nestedCondition.evaluate(effectSource, effectTarget, subevent, nestedConditionJson, context);
         LOGGER.debug(Boolean.toString(result));
         return result;
     }

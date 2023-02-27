@@ -65,7 +65,7 @@ public class SavingThrow extends Roll {
             this.addBonus(target.getEffectiveProficiencyBonus(context));
         }
 
-        context.processSubevent(this);
+        context.processSubevent(this, context);
 
         /*
          * Resume normal invoke() logic here
