@@ -1,5 +1,6 @@
 package org.rpgl.function;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
@@ -64,6 +65,6 @@ public abstract class Function {
      *
      * @throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
-    public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson) throws FunctionMismatchException;
+    public abstract void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson, RPGLContext context) throws FunctionMismatchException;
 
 }

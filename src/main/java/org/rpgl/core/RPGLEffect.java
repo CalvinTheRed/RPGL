@@ -93,7 +93,7 @@ public class RPGLEffect extends UUIDTableElement {
                 JsonArray conditions = matchedFilter.getJsonArray("conditions");
                 if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
                     JsonArray functionJsonArray = matchedFilter.getJsonArray("functions");
-                    executeFunctions(source, target, subevent, functionJsonArray);
+                    executeFunctions(source, target, subevent, functionJsonArray, context);
                     subevent.addModifyingEffect(this);
                     return true;
                 }
@@ -133,12 +133,12 @@ public class RPGLEffect extends UUIDTableElement {
      *
      * @throws FunctionMismatchException if a Function is passed the wrong Function ID.
      */
-    static void executeFunctions(RPGLObject source, RPGLObject target, Subevent subevent, JsonArray functions) throws FunctionMismatchException {
+    static void executeFunctions(RPGLObject source, RPGLObject target, Subevent subevent, JsonArray functions, RPGLContext context) throws FunctionMismatchException {
         for (int i = 0; i < functions.size(); i++) {
             JsonObject functionJson = functions.getJsonObject(i);
             Function.FUNCTIONS
                     .get(functionJson.getString("function"))
-                    .execute(source, target, subevent, functionJson);
+                    .execute(source, target, subevent, functionJson, context);
         }
     }
 

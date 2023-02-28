@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
@@ -40,8 +41,10 @@ public class DummyFunctionTest {
             this.putString("function", "not_a_function");
         }};
 
+        RPGLContext context = new RPGLContext();
+
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson),
+                () -> function.execute(null, null, null, functionJson, context),
                 "DummyFunction function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -57,7 +60,9 @@ public class DummyFunctionTest {
            this.putString("function", "dummy_function");
         }};
 
-        function.execute(null, null, null, functionJson);
+        RPGLContext context = new RPGLContext();
+
+        function.execute(null, null, null, functionJson, context);
         assertEquals(1, DummyFunction.counter,
                 "DummyFunction function should increment static counter variable upon execution"
         );
