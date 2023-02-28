@@ -29,7 +29,8 @@ public abstract class Subevent {
      */
     public static final Map<String, Subevent> SUBEVENTS = new HashMap<>();
 
-    JsonObject subeventJson = new JsonObject();
+    public JsonObject json = new JsonObject();
+
     List<RPGLEffect> modifyingEffects = new LinkedList<>();
 
     final String subeventId;
@@ -71,7 +72,7 @@ public abstract class Subevent {
      * @return true if the tag is present, false otherwise
      */
     public boolean hasTag(String tag) {
-        return this.subeventJson.getJsonArray("tags").asList().contains(tag);
+        return this.json.getJsonArray("tags").asList().contains(tag);
     }
 
     /**
@@ -80,7 +81,7 @@ public abstract class Subevent {
      * @param tag a subevent tag
      */
     public void addTag(String tag) {
-        this.subeventJson.getJsonArray("tags").addString(tag);
+        this.json.getJsonArray("tags").addString(tag);
     }
     /**
      * Verifies that the additional information provided to <code>invoke(...)</code> is intended for the Subevent type
@@ -91,8 +92,8 @@ public abstract class Subevent {
      * @throws SubeventMismatchException if functionJson is for a different function than the one being executed
      */
     void verifySubevent(String expected) throws SubeventMismatchException {
-        if (!expected.equals(this.subeventJson.getString("subevent"))) {
-            SubeventMismatchException e = new SubeventMismatchException(expected, this.subeventJson.getString("subevent"));
+        if (!expected.equals(this.json.getString("subevent"))) {
+            SubeventMismatchException e = new SubeventMismatchException(expected, this.json.getString("subevent"));
             LOGGER.error(e.getMessage());
             throw e;
         }
@@ -105,7 +106,7 @@ public abstract class Subevent {
      * @param subeventData the JSON data to be joined to the current Subevent JSON
      */
     public void joinSubeventData(JsonObject subeventData) {
-        this.subeventJson.join(subeventData);
+        this.json.join(subeventData);
     }
 
     /**
@@ -137,8 +138,8 @@ public abstract class Subevent {
      * @throws Exception if an exception occurs (any type of error may occur from calling this method)
      */
     public void prepare(RPGLContext context) throws Exception {
-        if (this.subeventJson.getJsonArray("tags") == null) {
-            this.subeventJson.putJsonArray("tags", new JsonArray());
+        if (this.json.getJsonArray("tags") == null) {
+            this.json.putJsonArray("tags", new JsonArray());
         }
     }
 
@@ -190,9 +191,9 @@ public abstract class Subevent {
      */
     public void setSource(RPGLObject source) {
         if (source == null) {
-            this.subeventJson.putString("source", null);
+            this.json.putString("source", null);
         } else {
-            this.subeventJson.putString("source", source.getUuid());
+            this.json.putString("source", source.getUuid());
         }
     }
 
@@ -203,9 +204,9 @@ public abstract class Subevent {
      */
     public void setTarget(RPGLObject target) {
         if (target == null) {
-            this.subeventJson.putString("target", null);
+            this.json.putString("target", null);
         } else {
-            this.subeventJson.putString("target", target.getUuid());
+            this.json.putString("target", target.getUuid());
         }
     }
 
@@ -215,7 +216,7 @@ public abstract class Subevent {
      * @return the RPGLObject which initiated this Subevent
      */
     public RPGLObject getSource() {
-        return UUIDTable.getObject(this.subeventJson.getString("source"));
+        return UUIDTable.getObject(this.json.getString("source"));
     }
 
     /**
@@ -224,7 +225,7 @@ public abstract class Subevent {
      * @return the RPGLObject towards which this Subevent is directed
      */
     public RPGLObject getTarget() {
-        return UUIDTable.getObject(this.subeventJson.getString("target"));
+        return UUIDTable.getObject(this.json.getString("target"));
     }
 
     /**
@@ -238,7 +239,7 @@ public abstract class Subevent {
 
     @Override
     public String toString() {
-        return this.subeventJson.toString();
+        return this.json.toString();
     }
 
 }

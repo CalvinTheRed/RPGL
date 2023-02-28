@@ -31,7 +31,7 @@ public class CalculateBaseArmorClass extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateBaseArmorClass();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

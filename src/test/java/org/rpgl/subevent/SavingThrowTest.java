@@ -428,7 +428,7 @@ public class SavingThrowTest {
 
         String expected = """
                 {"cold":10}""";
-        assertEquals(expected, savingThrow.subeventJson.getJsonObject("damage").toString(),
+        assertEquals(expected, savingThrow.json.getJsonObject("damage").toString(),
                 "getBaseDamage should store 10 cold damage"
         );
     }
@@ -450,7 +450,7 @@ public class SavingThrowTest {
         savingThrow.setSource(source);
         savingThrow.calculateDifficultyClass(context);
 
-        assertEquals(17, savingThrow.subeventJson.getInteger("save_difficulty_class"),
+        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
                 "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
         );
     }
@@ -505,12 +505,12 @@ public class SavingThrowTest {
         savingThrow.setSource(source);
         savingThrow.prepare(context);
 
-        assertEquals(17, savingThrow.subeventJson.getInteger("save_difficulty_class"),
+        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
                 "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
         );
         String expected = """
                 {"cold":10}""";
-        assertEquals(expected, savingThrow.subeventJson.getJsonObject("damage").toString(),
+        assertEquals(expected, savingThrow.json.getJsonObject("damage").toString(),
                 "prepare should store 10 cold damage"
         );
     }

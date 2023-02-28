@@ -175,7 +175,7 @@ public class DealDamageTest {
 
         String expected = """
                 {"force":3}""";
-        assertEquals(expected, dealDamage.subeventJson.getJsonObject("damage").toString(),
+        assertEquals(expected, dealDamage.json.getJsonObject("damage").toString(),
                 "base damage should be 3 force damage"
         );
     }

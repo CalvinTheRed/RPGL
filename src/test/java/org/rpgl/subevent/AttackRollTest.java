@@ -620,10 +620,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable"
         );
         // TODO assertion for attack bonus accounting for proficiency...
@@ -649,10 +649,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareNaturalWeaponAttack() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
         );
         assertEquals(10, attackRoll.getBonus(),
@@ -708,7 +708,7 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
         );
         assertEquals(6, attackRoll.getBonus(),
@@ -736,10 +736,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable"
         );
         // TODO assertion for attack bonus accounting for proficiency...
@@ -765,10 +765,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
         );
         assertEquals(10, attackRoll.getBonus(),
@@ -823,7 +823,7 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
         assertEquals(6, attackRoll.getBonus(),
@@ -939,7 +939,7 @@ public class AttackRollTest {
         attackRoll.setSource(source);
         attackRoll.prepare(context);
         attackRoll.setTarget(target);
-        String itemUuid = attackRoll.subeventJson.getString("weapon");
+        String itemUuid = attackRoll.json.getString("weapon");
         attackRoll.invoke(context);
 
         assertNull(UUIDTable.getItem(itemUuid),

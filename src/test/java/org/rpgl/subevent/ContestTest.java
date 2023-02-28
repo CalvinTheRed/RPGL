@@ -367,7 +367,7 @@ public class ContestTest {
         contest.setSource(source);
         contest.prepare(context);
 
-        assertFalse(contest.subeventJson.getBoolean("must_exceed_target"),
+        assertFalse(contest.json.getBoolean("must_exceed_target"),
                 "must_exceed_target should be false for static value targets"
         );
     }
@@ -398,7 +398,7 @@ public class ContestTest {
         contest.setSource(source);
         contest.prepare(context);
 
-        assertFalse(contest.subeventJson.getBoolean("must_exceed_target"),
+        assertFalse(contest.json.getBoolean("must_exceed_target"),
                 "must_exceed_target should be false for save difficulty class targets"
         );
     }
@@ -429,7 +429,7 @@ public class ContestTest {
         contest.setSource(source);
         contest.prepare(context);
 
-        assertTrue(contest.subeventJson.getBoolean("must_exceed_target"),
+        assertTrue(contest.json.getBoolean("must_exceed_target"),
                 "must_exceed_target should be true for ability check targets"
         );
     }

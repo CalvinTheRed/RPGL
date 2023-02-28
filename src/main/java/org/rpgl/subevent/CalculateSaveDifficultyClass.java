@@ -23,7 +23,7 @@ public class CalculateSaveDifficultyClass extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateSaveDifficultyClass();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -42,7 +42,7 @@ public class CalculateSaveDifficultyClass extends Calculation {
         super.setBase(8);
         RPGLObject source = this.getSource();
         this.addBonus(source.getEffectiveProficiencyBonus(context));
-        this.addBonus(source.getAbilityModifierFromAbilityName(context, this.subeventJson.getString("difficulty_class_ability")));
+        this.addBonus(source.getAbilityModifierFromAbilityName(context, this.json.getString("difficulty_class_ability")));
     }
 
 }

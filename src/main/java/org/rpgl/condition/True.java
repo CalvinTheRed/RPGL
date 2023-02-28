@@ -22,7 +22,7 @@ public class True extends Condition {
 
     @Override
     public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        this.verifyCondition(super.conditionId, conditionJson);
+        this.verifyCondition(conditionJson);
         LOGGER.debug("true");
         return true;
     }

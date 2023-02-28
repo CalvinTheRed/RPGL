@@ -28,7 +28,7 @@ public class SavingThrow extends Roll {
     @Override
     public Subevent clone() {
         Subevent clone = new SavingThrow();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -46,7 +46,7 @@ public class SavingThrow extends Roll {
         super.prepare(context);
         this.addTag("saving_throw");
         this.calculateDifficultyClass(context);
-        if (this.subeventJson.getJsonArray("damage") != null) {
+        if (this.json.getJsonArray("damage") != null) {
             this.getBaseDamage(context);
         }
     }
@@ -59,7 +59,7 @@ public class SavingThrow extends Roll {
         this.verifySubevent(this.subeventId);
 
         RPGLObject target = this.getTarget();
-        String saveAbility = this.subeventJson.getString("save_ability");
+        String saveAbility = this.getAbility(context);
         this.addBonus(target.getAbilityModifierFromAbilityName(context, saveAbility));
         if (target.isProficientInSavingThrow(context, saveAbility)) {
             this.addBonus(target.getEffectiveProficiencyBonus(context));
@@ -72,11 +72,16 @@ public class SavingThrow extends Roll {
          */
         this.roll();
         this.checkForReroll(context); // TODO eventually have this in a while loop? Add this to AttackRoll?
-        if (this.get() < this.subeventJson.getInteger("save_difficulty_class")) {
+        if (this.get() < this.json.getInteger("save_difficulty_class")) {
             this.resolveSaveFail(context);
         } else {
             this.resolveSavePass(context);
         }
+    }
+
+    @Override
+    public String getAbility(RPGLContext context) {
+        return this.json.getString("save_ability");
     }
 
     /**
@@ -88,7 +93,7 @@ public class SavingThrow extends Roll {
      */
     void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
-        String difficultyClassAbility = this.subeventJson.getString("difficulty_class_ability");
+        String difficultyClassAbility = this.json.getString("difficulty_class_ability");
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_save_difficulty_class");
             this.putString("difficulty_class_ability", difficultyClassAbility);
@@ -98,7 +103,7 @@ public class SavingThrow extends Roll {
         calculateSaveDifficultyClass.prepare(context);
         calculateSaveDifficultyClass.setTarget(source);
         calculateSaveDifficultyClass.invoke(context);
-        this.subeventJson.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
+        this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
 
     /**
@@ -114,12 +119,12 @@ public class SavingThrow extends Roll {
          * Collect base typed damage dice and bonuses
          */
         DamageCollection baseDamageCollection = new DamageCollection();
-        JsonArray damage = this.subeventJson.getJsonArray("damage");
+        JsonArray damage = this.json.getJsonArray("damage");
         baseDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_collection");
             this.putJsonArray("damage", damage.deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_damage_collection");
             }});
         }});
@@ -136,7 +141,7 @@ public class SavingThrow extends Roll {
             this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_damage_roll");
             }});
         }});
@@ -148,7 +153,7 @@ public class SavingThrow extends Roll {
         /*
          * Replace damage key with base damage calculation
          */
-        this.subeventJson.putJsonObject("damage", baseDamageRoll.getDamage());
+        this.json.putJsonObject("damage", baseDamageRoll.getDamage());
     }
 
     /**
@@ -191,7 +196,7 @@ public class SavingThrow extends Roll {
         targetDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_collection");
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_collection");
             }});
         }});
@@ -208,7 +213,7 @@ public class SavingThrow extends Roll {
             this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", targetDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_roll");
             }});
         }});
@@ -229,8 +234,8 @@ public class SavingThrow extends Roll {
      * @throws Exception if an exception occurs.
      */
     void resolvePassDamage(RPGLContext context) throws Exception {
-        JsonObject baseDamage = Objects.requireNonNullElse(this.subeventJson.getJsonObject("damage"), new JsonObject());
-        String damageOnPass = this.subeventJson.getString("damage_on_pass");
+        JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
+        String damageOnPass = this.json.getString("damage_on_pass");
         if (!"none".equals(damageOnPass)) {
             /*
              * Add base and target damage into final damage quantities
@@ -273,7 +278,7 @@ public class SavingThrow extends Roll {
      * @throws Exception if an exception occurs.
      */
     void resolveFailDamage(RPGLContext context) throws Exception {
-        JsonObject baseDamage = Objects.requireNonNullElse(this.subeventJson.getJsonObject("damage"), new JsonObject());
+        JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
         JsonObject targetDamage = this.getTargetDamage(context);
         for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
             String damageType = targetDamageEntry.getKey();
@@ -297,7 +302,7 @@ public class SavingThrow extends Roll {
      * @throws Exception if an exception occurs.
      */
     void resolveNestedSubevents(RPGLContext context, String passOrFail) throws Exception {
-        JsonArray subeventJsonArray = this.subeventJson.getJsonArray(passOrFail);
+        JsonArray subeventJsonArray = this.json.getJsonArray(passOrFail);
         if (subeventJsonArray != null) {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
@@ -319,7 +324,7 @@ public class SavingThrow extends Roll {
      */
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
-        JsonObject damage = this.subeventJson.getJsonObject("damage");
+        JsonObject damage = this.json.getJsonObject("damage");
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
             this.putJsonObject("damage", damage.deepClone());

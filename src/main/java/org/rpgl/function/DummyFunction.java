@@ -16,9 +16,13 @@ public class DummyFunction extends Function {
 
     public static int counter = 0;
 
+    public DummyFunction() {
+        super("dummy_function");
+    }
+
     @Override
     public void execute(RPGLObject source, RPGLObject target, Subevent subevent, JsonObject functionJson, RPGLContext context) throws FunctionMismatchException {
-        super.verifyFunction("dummy_function", functionJson);
+        super.verifyFunction(functionJson);
         DummyFunction.counter++;
     }
 

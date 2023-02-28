@@ -21,7 +21,7 @@ public class GetAbilityCheckProficiency extends GetProficiency {
     @Override
     public Subevent clone() {
         Subevent clone = new GetAbilityCheckProficiency();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

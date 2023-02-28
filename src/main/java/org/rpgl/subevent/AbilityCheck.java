@@ -25,7 +25,7 @@ public class AbilityCheck extends Roll {
     @Override
     public Subevent clone() {
         Subevent clone = new AbilityCheck();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -48,12 +48,12 @@ public class AbilityCheck extends Roll {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         this.roll();
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, this.subeventJson.getString("ability")));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, this.json.getString("ability")));
 
         GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
         getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "get_ability_check_proficiency");
-            this.putString("skill", Objects.requireNonNullElse(subeventJson.getString("skill"), "")); // TODO accommodate tools in naming convention here?
+            this.putString("skill", Objects.requireNonNullElse(json.getString("skill"), "")); // TODO accommodate tools in naming convention here?
         }});
         getAbilityCheckProficiency.setSource(this.getSource());
         getAbilityCheckProficiency.prepare(context);
@@ -67,6 +67,11 @@ public class AbilityCheck extends Roll {
         } else if (getAbilityCheckProficiency.isExpert()) {
             this.addBonus(this.getSource().getProficiencyBonus() * 2);
         }
+    }
+
+    @Override
+    public String getAbility(RPGLContext context) {
+        return super.json.getString("ability");
     }
 
 }

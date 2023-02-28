@@ -25,7 +25,7 @@ public class GiveEffect extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new GiveEffect();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -42,7 +42,7 @@ public class GiveEffect extends Subevent {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (!this.isCancelled()) {
-            this.getTarget().addEffect(RPGLFactory.newEffect(this.subeventJson.getString("effect")));
+            this.getTarget().addEffect(RPGLFactory.newEffect(this.json.getString("effect")));
         }
     }
 
@@ -51,7 +51,7 @@ public class GiveEffect extends Subevent {
      * meant to be used in cases where <code>target</code> is immune to select status effects.
      */
     public void cancel() {
-        this.subeventJson.putBoolean("cancel", true);
+        this.json.putBoolean("cancel", true);
     }
 
     /**
@@ -60,7 +60,7 @@ public class GiveEffect extends Subevent {
      * @return true if the Subevent was cancelled.
      */
     boolean isCancelled() {
-        return Objects.requireNonNullElse(this.subeventJson.getBoolean("cancel"), false);
+        return Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
     }
 
 }

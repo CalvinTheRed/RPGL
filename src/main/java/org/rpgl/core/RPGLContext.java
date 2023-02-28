@@ -3,8 +3,6 @@ package org.rpgl.core;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.Subevent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +17,6 @@ import java.util.Map;
  * @author Calvin Withun
  */
 public class RPGLContext {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RPGLContext.class);
 
     private final Map<String, RPGLObject> contextObjects;
 
@@ -39,7 +35,6 @@ public class RPGLContext {
     public void add(RPGLObject object) {
         String objectUuid = object.getUuid();
         this.contextObjects.put(objectUuid, object);
-        LOGGER.debug("added object to context (" + objectUuid + ")");
     }
 
     /**
@@ -62,7 +57,6 @@ public class RPGLContext {
      * @throws FunctionMismatchException  if a Function was presented incorrectly formatted JSON data.
      */
     public void processSubevent(Subevent subevent, RPGLContext context) throws Exception {
-        LOGGER.debug("processing Subevent " + subevent.getSubeventId() + " with source (" + subevent.getSource().getUuid() + ") and target (" + subevent.getTarget().getUuid() + ")");
         boolean wasProcessed;
         do {
             wasProcessed = false;

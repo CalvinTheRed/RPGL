@@ -26,7 +26,7 @@ public class DamageRoll extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new DamageRoll();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -49,7 +49,7 @@ public class DamageRoll extends Subevent {
      * This method rolls all dice associated with the Subevent.
      */
     public void roll() {
-        JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
+        JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamageArray.getJsonObject(i).getJsonArray("dice"), new JsonArray());
             for (int j = 0; j < typedDamageDieArray.size(); j++) {
@@ -65,7 +65,7 @@ public class DamageRoll extends Subevent {
      * This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given threshold.
      */
     public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType) {
-        JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
+        JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
             if (damageType == null || damageType.equals(typedDamage.getString("type"))) {
@@ -87,7 +87,7 @@ public class DamageRoll extends Subevent {
      * equal to a given threshold.
      */
     public void setTypedDiceLessThanOrEqualTo(int threshold, int faceValue, String damageType) {
-        JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
+        JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
             if (damageType == null || damageType.equals(typedDamage.getString("type"))) {
@@ -109,7 +109,7 @@ public class DamageRoll extends Subevent {
      */
     public JsonObject getDamage() {
         JsonObject baseDamage = new JsonObject();
-        JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
+        JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
             JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());

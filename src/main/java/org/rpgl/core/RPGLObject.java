@@ -327,7 +327,7 @@ public class RPGLObject extends UUIDTableElement {
                 this.putString("subevent", "damage_affinity");
                 this.putString("type", damageType);
             }});
-            damageAffinity.setSource(this);
+            damageAffinity.setSource(damageDelivery.getSource());
             damageAffinity.prepare(context);
             damageAffinity.setTarget(this);
             damageAffinity.invoke(context);

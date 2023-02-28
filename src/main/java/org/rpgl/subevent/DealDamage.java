@@ -22,7 +22,7 @@ public class DealDamage extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new DealDamage();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -45,7 +45,7 @@ public class DealDamage extends Subevent {
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        JsonObject baseDamage = Objects.requireNonNullElse(this.subeventJson.getJsonObject("damage"), new JsonObject());
+        JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
         JsonObject targetDamage = this.getTargetDamage(context);
         for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
             String damageType = targetDamageEntry.getKey();
@@ -73,12 +73,12 @@ public class DealDamage extends Subevent {
          * Collect base typed damage dice and bonuses
          */
         DamageCollection baseDamageCollection = new DamageCollection();
-        JsonArray damage = this.subeventJson.getJsonArray("damage");
+        JsonArray damage = this.json.getJsonArray("damage");
         baseDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_collection");
             this.putJsonArray("damage", damage.deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_damage_collection");
             }});
         }});
@@ -95,7 +95,7 @@ public class DealDamage extends Subevent {
             this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_damage_roll");
             }});
         }});
@@ -107,7 +107,7 @@ public class DealDamage extends Subevent {
         /*
          * Replace damage key with base damage calculation
          */
-        this.subeventJson.putJsonObject("damage", baseDamageRoll.getDamage());
+        this.json.putJsonObject("damage", baseDamageRoll.getDamage());
     }
 
     /**
@@ -126,7 +126,7 @@ public class DealDamage extends Subevent {
         targetDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_collection");
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_collection");
             }});
         }});
@@ -143,7 +143,7 @@ public class DealDamage extends Subevent {
             this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", targetDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_roll");
             }});
         }});
@@ -164,7 +164,7 @@ public class DealDamage extends Subevent {
      */
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
-        JsonObject damage = this.subeventJson.getJsonObject("damage");
+        JsonObject damage = this.json.getJsonObject("damage");
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
             this.putJsonObject("damage", damage.deepClone());

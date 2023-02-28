@@ -132,7 +132,7 @@ public class DamageRollTest {
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be re-rolled to a 4"
         );
     }
@@ -144,7 +144,7 @@ public class DamageRollTest {
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be set to a 2"
         );
     }
@@ -166,7 +166,7 @@ public class DamageRollTest {
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should roll to 4"
         );
     }
@@ -178,7 +178,7 @@ public class DamageRollTest {
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should roll to 4"
         );
     }

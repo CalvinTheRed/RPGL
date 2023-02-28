@@ -29,22 +29,24 @@ public abstract class Roll extends Calculation {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.subeventJson.putBoolean("has_advantage", false);
-        this.subeventJson.putBoolean("has_disadvantage", false);
+        this.json.putBoolean("has_advantage", false);
+        this.json.putBoolean("has_disadvantage", false);
     }
+
+    public abstract String getAbility(RPGLContext context);
 
     /**
      * This method informs the subevent that advantage has been granted to the contest roll.
      */
     public void grantAdvantage() {
-        this.subeventJson.putBoolean("has_advantage", true);
+        this.json.putBoolean("has_advantage", true);
     }
 
     /**
      * This method informs the subevent that disadvantage has been granted to the contest roll.
      */
     public void grantDisadvantage() {
-        this.subeventJson.putBoolean("has_disadvantage", true);
+        this.json.putBoolean("has_disadvantage", true);
     }
 
     /**
@@ -54,7 +56,7 @@ public abstract class Roll extends Calculation {
      * @return true if the contest roll is being made with advantage
      */
     public boolean isAdvantageRoll() {
-        return this.subeventJson.getBoolean("has_advantage") && !this.subeventJson.getBoolean("has_disadvantage");
+        return this.json.getBoolean("has_advantage") && !this.json.getBoolean("has_disadvantage");
     }
 
     /**
@@ -64,7 +66,7 @@ public abstract class Roll extends Calculation {
      * @return true if the contest roll is being made with disadvantage
      */
     public boolean isDisadvantageRoll() {
-        return this.subeventJson.getBoolean("has_disadvantage") && !this.subeventJson.getBoolean("has_advantage");
+        return this.json.getBoolean("has_disadvantage") && !this.json.getBoolean("has_advantage");
     }
 
     /**
@@ -75,7 +77,7 @@ public abstract class Roll extends Calculation {
      * @return true if the contest roll is being made with neither advantage nor disadvantage
      */
     public boolean isNormalRoll() {
-        return this.subeventJson.getBoolean("has_advantage") == this.subeventJson.getBoolean("has_disadvantage");
+        return this.json.getBoolean("has_advantage") == this.json.getBoolean("has_disadvantage");
     }
 
     /**
@@ -83,7 +85,7 @@ public abstract class Roll extends Calculation {
      * Subevent json data, and it accounts for advantage and disadvantage.
      */
     public void roll() {
-        JsonArray determined = this.subeventJson.getJsonArray("determined");
+        JsonArray determined = this.json.getJsonArray("determined");
         int baseDieRoll = Die.roll(20, determined.asList());
         if (this.isAdvantageRoll()) {
             int advantageRoll = Die.roll(20, determined.asList());
@@ -119,7 +121,7 @@ public abstract class Roll extends Calculation {
         rollRerollChance.invoke(context);
 
         if (rollRerollChance.wasRerollRequested()) {
-            int rerollDieValue = Die.roll(20, this.subeventJson.getJsonArray("determined_reroll").asList());
+            int rerollDieValue = Die.roll(20, this.json.getJsonArray("determined_reroll").asList());
             String rerollMode = rollRerollChance.getRerollMode();
             switch (rerollMode) {
                 case RollRerollChance.USE_NEW:

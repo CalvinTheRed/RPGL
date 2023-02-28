@@ -20,10 +20,12 @@ public class CalculateEffectiveArmorClass extends Calculation {
         super("calculate_effective_armor_class");
     }
 
+    // TODO can this class just be a special tag version of CalculateArmorClass?
+
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateEffectiveArmorClass();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

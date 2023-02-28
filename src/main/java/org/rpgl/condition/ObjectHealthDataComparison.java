@@ -5,6 +5,11 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
+/**
+ * This Condition is dedicated to comparing one of an RPGLObject's health data fields against a particular value.
+ *
+ * @author Calvin Withun
+ */
 public class ObjectHealthDataComparison extends Condition {
 
     public ObjectHealthDataComparison() {
@@ -13,7 +18,7 @@ public class ObjectHealthDataComparison extends Condition {
 
     @Override
     public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        super.verifyCondition(this.conditionId, conditionJson);
+        super.verifyCondition(conditionJson);
         RPGLObject object = super.getObject(effectSource, effectTarget, subevent, conditionJson.getJsonObject("object"));
         return super.compare(
                 object.getHealthData().getInteger(conditionJson.getString("data")),

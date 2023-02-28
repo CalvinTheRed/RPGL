@@ -68,7 +68,7 @@ public class RPGLFactoryTest {
         );
 
         expected = """
-                {"damage_affinity":{"conditions":[],"functions":[]}}""";
+                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"},{"condition":"check_damage_type","type":"fire"}],"functions":[{"function":"grant_immunity"}]}}""";
         assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );

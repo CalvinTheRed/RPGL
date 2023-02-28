@@ -21,12 +21,12 @@ public abstract class GetProficiency extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.subeventJson.putBoolean("is_half_proficient", false);
-        this.subeventJson.putBoolean("is_proficient", false);
-        this.subeventJson.putBoolean("has_expertise", false);
-        this.subeventJson.putBoolean("half_proficient_revoked", false);
-        this.subeventJson.putBoolean("proficient_revoked", false);
-        this.subeventJson.putBoolean("expert_revoked", false);
+        this.json.putBoolean("is_half_proficient", false);
+        this.json.putBoolean("is_proficient", false);
+        this.json.putBoolean("has_expertise", false);
+        this.json.putBoolean("half_proficient_revoked", false);
+        this.json.putBoolean("proficient_revoked", false);
+        this.json.putBoolean("expert_revoked", false);
     }
 
     /**
@@ -34,7 +34,7 @@ public abstract class GetProficiency extends Subevent {
      * use.
      */
     public void grantHalfProficiency() {
-        this.subeventJson.putBoolean("is_half_proficient", true);
+        this.json.putBoolean("is_half_proficient", true);
     }
 
     /**
@@ -43,7 +43,7 @@ public abstract class GetProficiency extends Subevent {
      */
     public void grantProficiency() {
         this.revokeHalfProficiency();
-        this.subeventJson.putBoolean("is_proficient", true);
+        this.json.putBoolean("is_proficient", true);
     }
 
     /**
@@ -52,14 +52,14 @@ public abstract class GetProficiency extends Subevent {
      */
     public void grantExpertise() {
         this.revokeProficiency();
-        this.subeventJson.putBoolean("has_expertise", true);
+        this.json.putBoolean("has_expertise", true);
     }
 
     /**
      * This helper method revokes half proficiency, if it would normally be granted through this Subevent.
      */
     void revokeHalfProficiency() {
-        this.subeventJson.putBoolean("half_proficient_revoked", true);
+        this.json.putBoolean("half_proficient_revoked", true);
     }
 
     /**
@@ -67,7 +67,7 @@ public abstract class GetProficiency extends Subevent {
      */
     void revokeProficiency() {
         this.revokeHalfProficiency();
-        this.subeventJson.putBoolean("proficient_revoked", true);
+        this.json.putBoolean("proficient_revoked", true);
     }
 
     /**
@@ -76,7 +76,7 @@ public abstract class GetProficiency extends Subevent {
      */
     void revokeExpertise() {
         this.revokeProficiency();
-        this.subeventJson.putBoolean("expert_revoked", true);
+        this.json.putBoolean("expert_revoked", true);
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class GetProficiency extends Subevent {
      * @return true if <code>source</code> is half proficient with whatever it is attempting to use
      */
     public boolean isHalfProficient() {
-        return this.subeventJson.getBoolean("is_half_proficient") && !this.subeventJson.getBoolean("half_proficient_revoked");
+        return this.json.getBoolean("is_half_proficient") && !this.json.getBoolean("half_proficient_revoked");
     }
 
     /**
@@ -96,7 +96,7 @@ public abstract class GetProficiency extends Subevent {
      * @return true if <code>source</code> is proficient with whatever it is attempting to use
      */
     public boolean isProficient() {
-        return this.subeventJson.getBoolean("is_proficient") && !this.subeventJson.getBoolean("proficient_revoked");
+        return this.json.getBoolean("is_proficient") && !this.json.getBoolean("proficient_revoked");
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class GetProficiency extends Subevent {
      * @return true if <code>source</code> has expertise with whatever it is attempting to use
      */
     public boolean isExpert() {
-        return this.subeventJson.getBoolean("has_expertise") && !this.subeventJson.getBoolean("expert_revoked");
+        return this.json.getBoolean("has_expertise") && !this.json.getBoolean("expert_revoked");
     }
 
 }

@@ -25,7 +25,7 @@ public abstract class Calculation extends Subevent {
      * @param bonus a bonus to be added to the calculation
      */
     public void addBonus(int bonus) {
-        this.subeventJson.putInteger("bonus", this.getBonus() + bonus);
+        this.json.putInteger("bonus", this.getBonus() + bonus);
     }
 
     /**
@@ -34,7 +34,7 @@ public abstract class Calculation extends Subevent {
      * @return the bonus granted to the calculation
      */
     public int getBonus() {
-        return Objects.requireNonNullElse(this.subeventJson.getInteger("bonus"), 0);
+        return Objects.requireNonNullElse(this.json.getInteger("bonus"), 0);
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class Calculation extends Subevent {
      * @param value the new set value of the calculation
      */
     public void setSet(int value) {
-        this.subeventJson.putInteger("set", value);
+        this.json.putInteger("set", value);
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class Calculation extends Subevent {
      * @return the set value of the calculation
      */
     public Integer getSet() {
-        return this.subeventJson.getInteger("set");
+        return this.json.getInteger("set");
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class Calculation extends Subevent {
      * @param value the new base value of the calculation
      */
     public void setBase(int value) {
-        this.subeventJson.putInteger("base", value);
+        this.json.putInteger("base", value);
     }
 
     /**
@@ -71,7 +71,7 @@ public abstract class Calculation extends Subevent {
      * @return the base value of the calculation
      */
     public Integer getBase() {
-        return this.subeventJson.getInteger("base");
+        return this.json.getInteger("base");
     }
 
     /**
@@ -86,5 +86,7 @@ public abstract class Calculation extends Subevent {
         }
         return Objects.requireNonNullElse(this.getBase(), 0) + this.getBonus();
     }
+
+    // TODO include minimum and maximum fields in this class
 
 }

@@ -34,7 +34,7 @@ public class AttackRoll extends Roll {
     @Override
     public Subevent clone() {
         Subevent clone = new AttackRoll();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -52,7 +52,7 @@ public class AttackRoll extends Roll {
         super.prepare(context);
         this.addTag("attack_roll");
 
-        String weapon = this.subeventJson.getString("weapon");
+        String weapon = this.json.getString("weapon");
         if (weapon == null) {
             this.prepareAttackWithoutWeapon(context);
         } else {
@@ -81,9 +81,29 @@ public class AttackRoll extends Roll {
         }
 
         // Delete natural weapon if one was created at the end of invoke()
-        if (this.subeventJson.getBoolean("natural_weapon_attack")) {
-            String naturalWeaponUuid = this.subeventJson.getString("weapon");
+        if (this.json.getBoolean("natural_weapon_attack")) {
+            String naturalWeaponUuid = this.json.getString("weapon");
             UUIDTable.unregister(naturalWeaponUuid);
+        }
+    }
+
+    @Override
+    public String getAbility(RPGLContext context) {
+        String weapon = this.json.getString("weapon");
+        if (weapon == null) {
+            return this.json.getString("attack_ability");
+        } else {
+            if (weapon.matches(ITEM_NAMESPACE_REGEX)) {
+                RPGLItem weaponItem = RPGLFactory.newItem(weapon);
+                String attackType = this.json.getString("attack_type");
+                String ability = weaponItem.getAttackAbility(attackType);
+                UUIDTable.unregister(weaponItem.getUuid());
+                return ability;
+            } else {
+                RPGLItem weaponItem = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(weapon));
+                String attackType = this.json.getString("attack_type");
+                return weaponItem.getAttackAbility(attackType);
+            }
         }
     }
 
@@ -98,17 +118,17 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs.
      */
     void prepareAttackWithoutWeapon(RPGLContext context) throws Exception {
-        this.subeventJson.putBoolean("natural_weapon_attack", false);
+        this.json.putBoolean("natural_weapon_attack", false);
 
         // Add attack ability score modifier (defined by the Subevent JSON) as a bonus to the roll.
-        String attackAbility = this.subeventJson.getString("attack_ability");
+        String attackAbility = this.json.getString("attack_ability");
         this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, attackAbility));
 
         // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
         this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
 
         // The damage field should already be populated for this type of attack. But in case it is not, set it to empty.
-        this.subeventJson.asMap().computeIfAbsent("damage", k -> new ArrayList<>());
+        this.json.asMap().computeIfAbsent("damage", k -> new ArrayList<>());
     }
 
     /**
@@ -122,11 +142,11 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs.
      */
     void prepareNaturalWeaponAttack(String weaponId, RPGLContext context) throws Exception {
-        this.subeventJson.putBoolean("natural_weapon_attack", true);
+        this.json.putBoolean("natural_weapon_attack", true);
 
         // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
-        String attackType = this.subeventJson.getString("attack_type");
+        String attackType = this.json.getString("attack_type");
         this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, weapon.getAttackAbility(attackType)));
         this.applyWeaponAttackBonus(weapon);
 
@@ -134,10 +154,10 @@ public class AttackRoll extends Roll {
         this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
 
         // Copy damage of natural weapon to Subevent JSON.
-        this.subeventJson.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
+        this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
 
         // Record natural weapon UUID
-        this.subeventJson.putString("weapon", weapon.getUuid());
+        this.json.putString("weapon", weapon.getUuid());
     }
 
     /**
@@ -151,11 +171,11 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs.
      */
     void prepareItemWeaponAttack(String equipmentSlot, RPGLContext context) throws Exception {
-        this.subeventJson.putBoolean("natural_weapon_attack", false);
+        this.json.putBoolean("natural_weapon_attack", false);
 
         //Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(equipmentSlot));
-        String attackType = this.subeventJson.getString("attack_type");
+        String attackType = this.json.getString("attack_type");
         this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, weapon.getAttackAbility(attackType)));
         this.applyWeaponAttackBonus(weapon);
 
@@ -165,10 +185,10 @@ public class AttackRoll extends Roll {
         }
 
         // Copy damage of natural weapon to Subevent JSON.
-        this.subeventJson.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
+        this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
 
         // Record natural weapon UUID
-        this.subeventJson.putString("weapon", weapon.getUuid());
+        this.json.putString("weapon", weapon.getUuid());
     }
 
     /**
@@ -207,7 +227,7 @@ public class AttackRoll extends Roll {
         DamageCollection targetDamageCollection = this.getTargetDamageCollection(context);
 
         baseDamageCollection.addTypedDamage(targetDamageCollection.getDamageCollection());
-        this.subeventJson.putJsonObject("damage", this.getAttackDamage(baseDamageCollection.getDamageCollection(), context));
+        this.json.putJsonObject("damage", this.getAttackDamage(baseDamageCollection.getDamageCollection(), context));
         this.deliverDamage(context);
     }
 
@@ -227,7 +247,7 @@ public class AttackRoll extends Roll {
                 context
         );
 
-        this.subeventJson.putJsonObject("damage", this.getAttackDamage(criticalHitDamageCollection.getDamageCollection(), context));
+        this.json.putJsonObject("damage", this.getAttackDamage(criticalHitDamageCollection.getDamageCollection(), context));
         this.deliverDamage(context);
     }
 
@@ -243,9 +263,9 @@ public class AttackRoll extends Roll {
         DamageCollection baseDamageCollection = new DamageCollection();
         baseDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_collection");
-            this.putJsonArray("damage", subeventJson.getJsonArray("damage").deepClone());
+            this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_damage_collection");
             }});
         }});
@@ -253,11 +273,11 @@ public class AttackRoll extends Roll {
         baseDamageCollection.prepare(context);
 
         // If the attack is made with an item, add attack ability modifier to damage roll
-        if (this.subeventJson.getString("weapon") != null) {
-            RPGLItem weapon = UUIDTable.getItem(this.subeventJson.getString("weapon"));
-            String attackAbility = weapon.getAttackAbility(this.subeventJson.getString("attack_type"));
+        if (this.json.getString("weapon") != null) {
+            RPGLItem weapon = UUIDTable.getItem(this.json.getString("weapon"));
+            String attackAbility = weapon.getAttackAbility(this.json.getString("attack_type"));
             int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(context, attackAbility);
-            String damageType = this.subeventJson.getJsonArray("damage").getJsonObject(0).getString("type");
+            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("type");
             baseDamageCollection.addTypedDamage(new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("type", damageType);
@@ -284,7 +304,7 @@ public class AttackRoll extends Roll {
         targetDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_collection");
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_collection");
             }});
         }});
@@ -344,7 +364,7 @@ public class AttackRoll extends Roll {
             this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", damageCollection.deepClone());
             this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(subeventJson.getJsonArray("tags").asList());
+                this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("attack_damage_roll");
             }});
         }});
@@ -364,7 +384,7 @@ public class AttackRoll extends Roll {
      */
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
-        JsonObject damage = this.subeventJson.getJsonObject("damage");
+        JsonObject damage = this.json.getJsonObject("damage");
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
             this.putJsonObject("damage", damage.deepClone());
@@ -386,7 +406,7 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs.
      */
     void resolveNestedSubevents(String hitOrMiss, RPGLContext context) throws Exception {
-        JsonArray subeventJsonArray = Objects.requireNonNullElse(this.subeventJson.getJsonArray(hitOrMiss), new JsonArray());
+        JsonArray subeventJsonArray = Objects.requireNonNullElse(this.json.getJsonArray(hitOrMiss), new JsonArray());
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject nestedSubeventJson = subeventJsonArray.getJsonObject(i);
             Subevent subevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);

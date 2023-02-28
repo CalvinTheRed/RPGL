@@ -38,7 +38,11 @@ public abstract class Condition {
 
         Condition.CONDITIONS.put("all", new All());
         Condition.CONDITIONS.put("any", new Any());
+        Condition.CONDITIONS.put("check_ability", new CheckAbility());
+        Condition.CONDITIONS.put("check_damage_type", new CheckDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
+        Condition.CONDITIONS.put("object_ability_score_comparison", new ObjectAbilityScoreComparison());
+        Condition.CONDITIONS.put("object_health_data_comparison", new ObjectHealthDataComparison());
         Condition.CONDITIONS.put("objects_match", new ObjectsMatch());
         Condition.CONDITIONS.put("subevent_has_tag", new SubeventHasTag());
 
@@ -56,14 +60,13 @@ public abstract class Condition {
      * Verifies that the additional information provided to <code>evaluate(...)</code> is intended for the Condition
      * 	type being evaluated.
      *
-     * @param expected      the expected conditionId
      * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      *
      * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
-    void verifyCondition(String expected, JsonObject conditionJson) throws ConditionMismatchException {
-        if (!expected.equals(conditionJson.getString("condition"))) {
-            ConditionMismatchException e = new ConditionMismatchException(expected, conditionJson.getString("condition"));
+    void verifyCondition(JsonObject conditionJson) throws ConditionMismatchException {
+        if (!this.conditionId.equals(conditionJson.getString("condition"))) {
+            ConditionMismatchException e = new ConditionMismatchException(this.conditionId, conditionJson.getString("condition"));
             LOGGER.error(e.getMessage());
             throw e;
         }

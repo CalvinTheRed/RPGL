@@ -220,8 +220,8 @@ public class RPGLItem extends UUIDTableElement {
         for (int i = 0; i < whileEquippedEffects.size(); i++) {
             String effectUuid = whileEquippedEffects.getString(i);
             RPGLEffect effect = UUIDTable.getEffect(effectUuid);
-            effect.setSource(wielder.getUuid());
-            effect.setTarget(wielder.getUuid());
+            effect.setSource(wielder);
+            effect.setTarget(wielder);
         }
     }
 

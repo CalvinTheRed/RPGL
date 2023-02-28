@@ -23,7 +23,7 @@ public class CalculateCriticalHitThreshold extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateCriticalHitThreshold();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

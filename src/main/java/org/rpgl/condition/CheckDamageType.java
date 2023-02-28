@@ -6,20 +6,20 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
 /**
- * This Condition always evaluates false.
+ * This Condition is dedicated to checking the damage type indicated by a DamageAffinity Subevent.
  *
  * @author Calvin Withun
  */
-public class False extends Condition {
+public class CheckDamageType extends Condition {
 
-    public False() {
-        super("false");
+    public CheckDamageType() {
+        super("check_damage_type");
     }
 
     @Override
     public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        this.verifyCondition(conditionJson);
-        return false;
+        super.verifyCondition(conditionJson);
+        return conditionJson.getString("type").equals(subevent.json.getString("type"));
     }
 
 }

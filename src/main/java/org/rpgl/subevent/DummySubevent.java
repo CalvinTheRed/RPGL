@@ -24,7 +24,7 @@ public class DummySubevent extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new DummySubevent();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
