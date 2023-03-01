@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Calvin Withun
  */
-public abstract class Roll extends Calculation {
+public abstract class Roll extends Calculation implements AbilitySubevent {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Roll.class);
 
@@ -32,8 +32,6 @@ public abstract class Roll extends Calculation {
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
     }
-
-    public abstract String getAbility(RPGLContext context);
 
     /**
      * This method informs the subevent that advantage has been granted to the contest roll.

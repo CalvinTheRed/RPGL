@@ -56,7 +56,7 @@ public class AbilityCheckTest {
         context.add(source);
         context.add(target);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
+        AbilityCheckSubevent abilityCheck = new AbilityCheckSubevent();
         abilityCheck.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "ability_check",
@@ -83,7 +83,7 @@ public class AbilityCheckTest {
         context.add(source);
         context.add(target);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
+        AbilityCheckSubevent abilityCheck = new AbilityCheckSubevent();
         abilityCheck.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "ability_check",

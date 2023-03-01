@@ -16,15 +16,15 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class AbilityCheck extends Roll {
+public class AbilityCheckSubevent extends Roll {
 
-    public AbilityCheck() {
+    public AbilityCheckSubevent() {
         super("ability_check");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new AbilityCheck();
+        Subevent clone = new AbilityCheckSubevent();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -32,7 +32,7 @@ public class AbilityCheck extends Roll {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new AbilityCheck();
+        Subevent clone = new AbilityCheckSubevent();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;

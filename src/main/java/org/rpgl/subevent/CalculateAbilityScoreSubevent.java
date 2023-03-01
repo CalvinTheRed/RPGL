@@ -15,15 +15,15 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class CalculateAbilityScore extends Calculation {
+public class CalculateAbilityScoreSubevent extends Calculation implements AbilitySubevent {
 
-    public CalculateAbilityScore() {
+    public CalculateAbilityScoreSubevent() {
         super("calculate_ability_score");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new CalculateAbilityScore();
+        Subevent clone = new CalculateAbilityScoreSubevent();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -31,7 +31,7 @@ public class CalculateAbilityScore extends Calculation {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new CalculateAbilityScore();
+        Subevent clone = new CalculateAbilityScoreSubevent();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -40,15 +40,11 @@ public class CalculateAbilityScore extends Calculation {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        super.setBase(this.getSource().getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).getInteger(this.getAbility()));
+        super.setBase(this.getSource().getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS).getInteger(this.getAbility(context)));
     }
 
-    /**
-     * Returns the name of the ability score being calculated.
-     *
-     * @return the name of the ability score being calculated
-     */
-    public String getAbility() {
+    @Override
+    public String getAbility(RPGLContext context) {
         return this.json.getString("ability");
     }
 

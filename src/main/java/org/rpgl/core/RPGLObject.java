@@ -5,7 +5,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.CalculateAbilityScore;
+import org.rpgl.subevent.CalculateAbilityScoreSubevent;
 import org.rpgl.subevent.CalculateBaseArmorClass;
 import org.rpgl.subevent.CalculateProficiencyBonus;
 import org.rpgl.subevent.DamageAffinity;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class represents anythig which might appear on a battle map. Examples of this include buildings, Goblins, and
+ * This class represents anything which might appear on a battle map. Examples of this include buildings, Goblins, and
  * discarded items.
  *
  * @author Calvin Withun
@@ -223,7 +223,7 @@ public class RPGLObject extends UUIDTableElement {
     }
 
     public int getAbilityScoreFromAbilityName(RPGLContext context, String ability) throws Exception {
-        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
+        CalculateAbilityScoreSubevent calculateAbilityScore = new CalculateAbilityScoreSubevent();
         calculateAbilityScore.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_ability_score");
             this.putString("ability", ability);

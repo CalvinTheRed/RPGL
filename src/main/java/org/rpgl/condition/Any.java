@@ -18,7 +18,8 @@ public class Any extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
+                            JsonObject conditionJson, RPGLContext context) throws Exception {
         this.verifyCondition(conditionJson);
         JsonArray nestedConditionArray = conditionJson.getJsonArray("conditions");
         if (nestedConditionArray.size() == 0) {

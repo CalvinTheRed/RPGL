@@ -10,6 +10,8 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 import org.rpgl.uuidtable.UUIDTableElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -21,6 +23,8 @@ import java.util.Map;
  * @author Calvin Withun
  */
 public class RPGLEffect extends UUIDTableElement {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RPGLEffect.class);
 
     /**
      * Returns the RPGLEffect Subevent filters.
@@ -128,13 +132,34 @@ public class RPGLEffect extends UUIDTableElement {
      *
      * @throws FunctionMismatchException if a Function is passed the wrong Function ID.
      */
-    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context) throws FunctionMismatchException {
+    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context) throws Exception {
         for (int i = 0; i < functions.size(); i++) {
             JsonObject functionJson = functions.getJsonObject(i);
             Function.FUNCTIONS
                     .get(functionJson.getString("function"))
                     .execute(this.getSource(), this.getTarget(), subevent, functionJson, context);
         }
+    }
+
+    public static RPGLObject getObject(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject instructions) throws Exception {
+        String from = instructions.getString("from");
+        String object = instructions.getString("object");
+        if ("subevent".equals(from)) {
+            if ("source".equals(object)) {
+                return subevent.getSource();
+            } else if ("target".equals(object)) {
+                return subevent.getTarget();
+            }
+        } else if ("effect".equals(from)) {
+            if ("source".equals(object)) {
+                return effectSource;
+            } else if ("target".equals(object)) {
+                return effectTarget;
+            }
+        }
+        Exception e = new Exception("could not isolate an RPGLObject: " + instructions);
+        LOGGER.error(e.getMessage());
+        throw e;
     }
 
 }

@@ -16,7 +16,8 @@ public class ObjectsMatch extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
+                            JsonObject conditionJson, RPGLContext context) throws Exception {
         super.verifyCondition(conditionJson);
         RPGLObject effectObject, subeventObject;
         String effectObjectAlias = conditionJson.getString("effect");

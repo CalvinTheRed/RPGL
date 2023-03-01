@@ -1,6 +1,7 @@
 package org.rpgl.condition;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -17,10 +18,11 @@ public class ObjectHealthDataComparison extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
+                            JsonObject conditionJson, RPGLContext context) throws Exception {
         super.verifyCondition(conditionJson);
-        RPGLObject object = super.getObject(effectSource, effectTarget, subevent, conditionJson.getJsonObject("object"));
-        return super.compare(
+        RPGLObject object = RPGLEffect.getObject(effectSource, effectTarget, subevent, conditionJson.getJsonObject("object"));
+        return super.compareValues(
                 object.getHealthData().getInteger(conditionJson.getString("data")),
                 conditionJson.getInteger("compare_to"),
                 conditionJson.getString("comparison")

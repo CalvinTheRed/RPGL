@@ -51,7 +51,7 @@ public class DummyFunctionTest {
 
     @Test
     @DisplayName("execute default behavior")
-    void execute_default_increasesStaticCounter() throws FunctionMismatchException {
+    void execute_default_increasesStaticCounter() throws Exception {
         Function function = new DummyFunction();
         JsonObject functionJson = new JsonObject() {{
             /*{

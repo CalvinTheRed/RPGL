@@ -25,7 +25,7 @@ public abstract class Function {
      */
     public static final Map<String, Function> FUNCTIONS = new HashMap<>();
 
-    final String functionId;
+    public final String functionId;
 
     /**
      * This method populates Function.FUNCTIONS.
@@ -35,6 +35,7 @@ public abstract class Function {
     public static void initialize(boolean includeTestingFunctions) {
         Function.FUNCTIONS.clear();
 
+        Function.FUNCTIONS.put("add_bonus", new AddBonus());
         Function.FUNCTIONS.put("add_damage", new AddDamage());
         Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
         Function.FUNCTIONS.put("grant_advantage", new GrantAdvantage());
@@ -42,9 +43,12 @@ public abstract class Function {
         Function.FUNCTIONS.put("grant_immunity", new GrantImmunity());
         Function.FUNCTIONS.put("grant_resistance", new GrantResistance());
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
+        Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());
         Function.FUNCTIONS.put("revoke_immunity", new RevokeImmunity());
         Function.FUNCTIONS.put("revoke_resistance", new RevokeResistance());
         Function.FUNCTIONS.put("revoke_vulnerability", new RevokeVulnerability());
+        Function.FUNCTIONS.put("set_base", new SetBase());
+        Function.FUNCTIONS.put("set_set", new SetSet());
 
         if (includeTestingFunctions) {
             Function.FUNCTIONS.put("dummy_function", new DummyFunction());
@@ -78,9 +82,11 @@ public abstract class Function {
      * @param effectTarget the RPGLObject targeted by the RPGLEffect being considered
      * @param subevent     the Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the function to be executed
+     * @param context      the context in which the FUnction is invoked
      *
      * @throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
-    public abstract void execute(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject functionJson, RPGLContext context) throws FunctionMismatchException;
+    public abstract void execute(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
+                                 JsonObject functionJson, RPGLContext context) throws Exception;
 
 }
