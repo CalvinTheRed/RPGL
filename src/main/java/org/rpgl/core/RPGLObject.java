@@ -289,16 +289,16 @@ public class RPGLObject extends UUIDTableElement {
      * This method determines whether the RPGLObject is proficient in attacks made using a specified weapon.
      *
      * @param context  the RPGLContext in which the RPGLObject's weapon proficiency is determined
-     * @param itemUuid the UUID of a RPGLItem object
+     * @param item     an RPGLItem
      * @return true if the RPGLObject is proficient with the item corresponding to the passed UUID
      *
      * @throws Exception if an exception occurs.
      */
-    public boolean isProficientWithWeapon(RPGLContext context, String itemUuid) throws Exception {
+    public boolean isProficientWithWeapon(RPGLContext context, RPGLItem item) throws Exception {
         GetWeaponProficiency getWeaponProficiency = new GetWeaponProficiency();
         getWeaponProficiency.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "get_weapon_proficiency");
-            this.putString("item", itemUuid);
+            this.putJsonArray("tags", item.getProficiencyTags().deepClone());
         }});
         getWeaponProficiency.setSource(this);
         getWeaponProficiency.prepare(context);

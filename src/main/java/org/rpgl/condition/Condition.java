@@ -45,6 +45,7 @@ public abstract class Condition {
         Condition.CONDITIONS.put("object_health_data_comparison", new ObjectHealthDataComparison());
         Condition.CONDITIONS.put("objects_match", new ObjectsMatch());
         Condition.CONDITIONS.put("subevent_has_tag", new SubeventHasTag());
+        Condition.CONDITIONS.put("uses_skill", new UsesSkill());
 
         if (includeTestingConditions) {
             Condition.CONDITIONS.put("false", new False());

@@ -40,7 +40,10 @@ public abstract class Function {
         Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
         Function.FUNCTIONS.put("grant_advantage", new GrantAdvantage());
         Function.FUNCTIONS.put("grant_disadvantage", new GrantDisadvantage());
+        Function.FUNCTIONS.put("grant_expertise", new GrantExpertise());
+        Function.FUNCTIONS.put("grant_half_proficiency", new GrantHalfProficiency());
         Function.FUNCTIONS.put("grant_immunity", new GrantImmunity());
+        Function.FUNCTIONS.put("grant_proficiency", new GrantProficiency());
         Function.FUNCTIONS.put("grant_resistance", new GrantResistance());
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
         Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());

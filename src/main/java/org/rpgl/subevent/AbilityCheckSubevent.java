@@ -74,4 +74,13 @@ public class AbilityCheckSubevent extends Roll {
         return super.json.getString("ability");
     }
 
+    /**
+     * Returns the skill used in the ability check, or an empty string if no skill was used.
+     *
+     * @return a String indicating a skill, or an empty string
+     */
+    public String getSkill() {
+        return Objects.requireNonNullElse(this.json.getString("skill"), "");
+    }
+
 }

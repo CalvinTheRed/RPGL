@@ -127,6 +127,8 @@ public class AttackRoll extends Roll {
         // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
         this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
 
+        // Attacks made without weapons should already be defined in the event template so no changes are needed here
+
         // The damage field should already be populated for this type of attack. But in case it is not, set it to empty.
         this.json.asMap().computeIfAbsent("damage", k -> new ArrayList<>());
     }
@@ -156,6 +158,12 @@ public class AttackRoll extends Roll {
         // Copy damage of natural weapon to Subevent JSON.
         this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
 
+        // Add natural weapon tags to attack roll
+        JsonArray naturalWeaponTags = weapon.getTags();
+        for (int i = 0; i < naturalWeaponTags.size(); i++) {
+            this.addTag(naturalWeaponTags.getString(i));
+        }
+
         // Record natural weapon UUID
         this.json.putString("weapon", weapon.getUuid());
     }
@@ -180,12 +188,18 @@ public class AttackRoll extends Roll {
         this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll if source is proficient with weapon.
-        if (getSource().isProficientWithWeapon(context, weapon.getUuid())) {
+        if (getSource().isProficientWithWeapon(context, weapon)) {
             this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
         }
 
         // Copy damage of natural weapon to Subevent JSON.
         this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
+
+        // Add item weapon tags to attack roll
+        JsonArray itemWeaponTags = weapon.getTags();
+        for (int i = 0; i < itemWeaponTags.size(); i++) {
+            this.addTag(itemWeaponTags.getString(i));
+        }
 
         // Record natural weapon UUID
         this.json.putString("weapon", weapon.getUuid());
