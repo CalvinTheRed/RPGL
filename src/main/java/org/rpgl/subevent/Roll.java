@@ -31,6 +31,7 @@ public abstract class Roll extends Calculation implements AbilitySubevent {
         super.prepare(context);
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
+        this.json.getJsonArray("tags").asList().addAll(this.getSource().getAllTags(context));
     }
 
     /**

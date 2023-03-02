@@ -97,6 +97,7 @@ public class SavingThrow extends Roll {
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_save_difficulty_class");
             this.putString("difficulty_class_ability", difficultyClassAbility);
+            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         RPGLObject source = this.getSource();
         calculateSaveDifficultyClass.setSource(source);
@@ -328,6 +329,7 @@ public class SavingThrow extends Roll {
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
             this.putJsonObject("damage", damage.deepClone());
+            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         damageDelivery.setSource(this.getSource());
         damageDelivery.prepare(context);

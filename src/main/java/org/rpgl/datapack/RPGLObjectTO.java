@@ -14,7 +14,7 @@ import java.util.HashMap;
  *
  * @author Calvin Withun
  */
-public class RPGLObjectTO extends UUIDTableElementTO {
+public class RPGLObjectTO extends RPGLTaggableTO {
 
     // JSON property aliases
     public static final String ABILITY_SCORES_ALIAS    = "ability_scores";

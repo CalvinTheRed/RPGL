@@ -10,11 +10,11 @@ import org.rpgl.subevent.CalculateBaseArmorClass;
 import org.rpgl.subevent.CalculateProficiencyBonus;
 import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
+import org.rpgl.subevent.GetObjectTags;
 import org.rpgl.subevent.GetSavingThrowProficiency;
 import org.rpgl.subevent.GetWeaponProficiency;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
-import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author Calvin Withun
  */
-public class RPGLObject extends UUIDTableElement {
+public class RPGLObject extends RPGLTaggable {
 
     /**
      * Returns the RPGLObject's ability scores.
@@ -418,5 +418,28 @@ public class RPGLObject extends UUIDTableElement {
             item.defaultAttackAbilities();
             // TODO account for 2-handed items...
         }
+    }
+
+    public ArrayList<String> getAllTags(RPGLContext context) throws Exception {
+        JsonArray templateTags = this.getTags();
+        ArrayList<String> tags = new ArrayList<>();
+        for (int i = 0; i < templateTags.size(); i++) {
+            tags.add(templateTags.getString(i));
+        }
+
+        GetObjectTags getObjectTags = new GetObjectTags();
+        getObjectTags.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "get_object_tags");
+        }});
+        getObjectTags.setSource(this);
+        getObjectTags.prepare(context);
+        getObjectTags.setTarget(this);
+        getObjectTags.invoke(context);
+        JsonArray extraTags = getObjectTags.getTags();
+        for (int i = 0; i < extraTags.size(); i++) {
+            tags.add(extraTags.getString(i));
+        }
+
+        return tags;
     }
 }

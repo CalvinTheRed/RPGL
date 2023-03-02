@@ -948,8 +948,8 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("prepareItemWeaponAttack adds item tags to attack roll")
-    void prepareItemWeaponAttack_addsItemTagsToAttackRoll() throws Exception {
+    @DisplayName("prepare adds correct tags to attack roll (item weapon attack)")
+    void prepare_addsCorrectTagsToAttackRoll_itemWeaponAttack() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
@@ -959,25 +959,28 @@ public class AttackRollTest {
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
+                "subevent": "attack_roll",
+                "weapon": "mainhand",
                 "attack_type": "melee",
             }*/
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "mainhand");
             this.putString("attack_type", "melee");
         }});
 
         attackRoll.setSource(source);
-
-        attackRoll.prepareItemWeaponAttack("mainhand", context);
+        attackRoll.prepare(context);
 
         String expected = """
-                ["metal","weapon"]""";
+                ["humanoid","attack_roll","metal","weapon"]""";
         assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
-                "longsword tags metal and weapon should be passed on to attack roll"
+                "object tag (humanoid), subevent tag (attack_roll), and item weapon tags (metal, weapon) should all be present"
         );
     }
 
     @Test
-    @DisplayName("prepareNaturalWeaponAttack adds natural weapon tags to attack roll")
-    void prepareNaturalWeaponAttack_addsNaturalWeaponTagsToAttackRoll() throws Exception {
+    @DisplayName("prepare adds correct tags to attack roll (natural weapon attack)")
+    void prepare_addsCorrectTagsToAttackRoll_naturalWeaponAttack() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
@@ -987,19 +990,22 @@ public class AttackRollTest {
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
+                "subevent": "attack_roll",
+                "weapon": "demo:young_red_dragon_claw",
                 "attack_type": "melee",
             }*/
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "demo:young_red_dragon_claw");
             this.putString("attack_type", "melee");
         }});
 
         attackRoll.setSource(source);
-
-        attackRoll.prepareNaturalWeaponAttack("demo:young_red_dragon_claw", context);
+        attackRoll.prepare(context);
 
         String expected = """
-                ["dragon"]""";
+                ["dragon","attack_roll","claw"]""";
         assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
-                "dragon claw tag dragon should be passed on to attack roll"
+                "object tag (dragon), subevent tag (attack_roll), and natural weapon tag (claw) should all be present"
         );
     }
 

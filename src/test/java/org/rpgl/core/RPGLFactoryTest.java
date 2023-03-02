@@ -12,6 +12,7 @@ import org.rpgl.datapack.RPGLEffectTO;
 import org.rpgl.datapack.RPGLEventTO;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -127,8 +128,9 @@ public class RPGLFactoryTest {
         );
 
         assertEquals("[]", item.getTags().toString(),
-                "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
+
         assertEquals(0, item.getWeight(),
                 "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
@@ -194,6 +196,12 @@ public class RPGLFactoryTest {
         );
         assertEquals("demo:young_red_dragon", object.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
+
+        expected = """
+                ["dragon"]""";
+        assertEquals(expected, object.getTags().toString(),
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
 
         expected = """

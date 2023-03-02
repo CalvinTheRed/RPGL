@@ -4,7 +4,6 @@ import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
-import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class RPGLItem extends UUIDTableElement {
+public class RPGLItem extends RPGLTaggable {
 
     /**
      * Returns the tags of the RPGLObject.

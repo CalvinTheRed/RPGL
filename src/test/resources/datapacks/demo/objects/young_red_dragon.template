@@ -4,6 +4,9 @@
   },
   "name": "Young Red Dragon",
   "description": "A young red dragon.",
+  "tags": [
+    "dragon"
+  ],
   "ability_scores": {
     "str": 23,
     "dex": 10,

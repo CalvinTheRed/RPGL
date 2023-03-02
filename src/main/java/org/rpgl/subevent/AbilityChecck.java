@@ -16,15 +16,15 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class AbilityCheckSubevent extends Roll {
+public class AbilityChecck extends Roll {
 
-    public AbilityCheckSubevent() {
+    public AbilityChecck() {
         super("ability_check");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new AbilityCheckSubevent();
+        Subevent clone = new AbilityChecck();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -32,7 +32,7 @@ public class AbilityCheckSubevent extends Roll {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new AbilityCheckSubevent();
+        Subevent clone = new AbilityChecck();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -53,7 +53,8 @@ public class AbilityCheckSubevent extends Roll {
         GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
         getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "get_ability_check_proficiency");
-            this.putString("skill", Objects.requireNonNullElse(json.getString("skill"), "")); // TODO accommodate tools in naming convention here?
+            this.putString("skill", Objects.requireNonNullElse(json.getString("skill"), "")); // TODO accommodate tools?
+            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         getAbilityCheckProficiency.setSource(this.getSource());
         getAbilityCheckProficiency.prepare(context);

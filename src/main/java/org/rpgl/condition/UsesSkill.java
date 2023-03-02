@@ -3,7 +3,7 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.AbilityCheckSubevent;
+import org.rpgl.subevent.AbilityChecck;
 import org.rpgl.subevent.Subevent;
 
 /**
@@ -20,8 +20,8 @@ public class UsesSkill extends Condition {
     @Override
     public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         super.verifyCondition(conditionJson);
-        if (subevent instanceof AbilityCheckSubevent abilityCheckSubevent) {
-            return abilityCheckSubevent.getSkill().equals(conditionJson.getString("skill"));
+        if (subevent instanceof AbilityChecck abilityChecck) {
+            return abilityChecck.getSkill().equals(conditionJson.getString("skill"));
         }
         return false;
     }

@@ -14,10 +14,9 @@ import java.util.HashMap;
  *
  * @author Calvin Withun
  */
-public class RPGLItemTO extends UUIDTableElementTO {
+public class RPGLItemTO extends RPGLTaggableTO {
 
     // universal item property aliases
-    public static final String TAGS_ALIAS = "tags";
     public static final String WEIGHT_ALIAS = "weight";
     public static final String COST_ALIAS = "cost";
 
@@ -41,8 +40,6 @@ public class RPGLItemTO extends UUIDTableElementTO {
     // shield property aliases
     public static final String ARMOR_CLASS_BONUS_ALIAS = "armor_class_bonus";
 
-    @JsonProperty(TAGS_ALIAS)
-    ArrayList<Object> tags;
     @JsonProperty(WEIGHT_ALIAS)
     Integer weight;
     @JsonProperty(COST_ALIAS)
@@ -88,7 +85,6 @@ public class RPGLItemTO extends UUIDTableElementTO {
      */
     public RPGLItemTO(RPGLItem rpglItem) {
         super(rpglItem);
-        this.tags = rpglItem.getTags().asList();
         this.weight = rpglItem.getWeight();
         this.cost = rpglItem.getCost();
         this.proficiencyTags = rpglItem.getProficiencyTags().asList();
@@ -110,7 +106,6 @@ public class RPGLItemTO extends UUIDTableElementTO {
      */
     public RPGLItemTemplate toRPGLItemTemplate() {
         RPGLItemTemplate rpglItemTemplate = new RPGLItemTemplate() {{
-            this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
             this.putInteger(WEIGHT_ALIAS, weight);
             this.putInteger(COST_ALIAS, cost);
             this.putJsonArray(PROFICIENCY_TAGS_ALIAS, new JsonArray(proficiencyTags));

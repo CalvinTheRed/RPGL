@@ -19,6 +19,9 @@ import java.util.Map;
  */
 public abstract class Condition {
 
+    // TODO consider adding checks in each Condition if it has a risk of creating circular calls to itself?
+    //  ex an effect watches for CalculateAbilityScore, and has a CheckAbility Condition for the same ability
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Condition.class);
 
     /**
@@ -42,6 +45,7 @@ public abstract class Condition {
         Condition.CONDITIONS.put("check_damage_type", new CheckDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
         Condition.CONDITIONS.put("object_ability_score_comparison", new ObjectAbilityScoreComparison());
+        Condition.CONDITIONS.put("object_has_tag", new ObjectHasTag());
         Condition.CONDITIONS.put("object_health_data_comparison", new ObjectHealthDataComparison());
         Condition.CONDITIONS.put("objects_match", new ObjectsMatch());
         Condition.CONDITIONS.put("subevent_has_tag", new SubeventHasTag());
