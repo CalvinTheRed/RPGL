@@ -63,6 +63,9 @@ public abstract class Subevent {
      */
     public Subevent(String subeventId) {
         this.subeventId = subeventId;
+        if (this.json.getJsonArray("tags") == null) {
+            this.json.putJsonArray("tags", new JsonArray());
+        }
     }
 
     /**

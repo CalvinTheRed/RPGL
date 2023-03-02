@@ -947,4 +947,60 @@ public class AttackRollTest {
         );
     }
 
+    @Test
+    @DisplayName("prepareItemWeaponAttack adds item tags to attack roll")
+    void prepareItemWeaponAttack_addsItemTagsToAttackRoll() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+            }*/
+            this.putString("attack_type", "melee");
+        }});
+
+        attackRoll.setSource(source);
+
+        attackRoll.prepareItemWeaponAttack("mainhand", context);
+
+        String expected = """
+                ["metal","weapon"]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
+                "longsword tags metal and weapon should be passed on to attack roll"
+        );
+    }
+
+    @Test
+    @DisplayName("prepareNaturalWeaponAttack adds natural weapon tags to attack roll")
+    void prepareNaturalWeaponAttack_addsNaturalWeaponTagsToAttackRoll() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+            }*/
+            this.putString("attack_type", "melee");
+        }});
+
+        attackRoll.setSource(source);
+
+        attackRoll.prepareNaturalWeaponAttack("demo:young_red_dragon_claw", context);
+
+        String expected = """
+                ["dragon"]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
+                "dragon claw tag dragon should be passed on to attack roll"
+        );
+    }
+
 }
