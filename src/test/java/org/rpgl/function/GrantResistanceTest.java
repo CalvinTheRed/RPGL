@@ -3,7 +3,6 @@ package org.rpgl.function;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
@@ -14,8 +13,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.GetProficiency;
-import org.rpgl.subevent.Subevent;
+import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -25,13 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.function.GrantHalfProficiency class.
+ * Testing class for the org.rpgl.function.GrantResistance class.
  *
  * @author Calvin Withun
  */
-public class GrantHalfProficiencyTest {
-
-    private GetProficiency getProficiency;
+public class GrantResistanceTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -46,21 +42,6 @@ public class GrantHalfProficiencyTest {
         DatapackLoader.DATAPACKS.clear();
     }
 
-    @BeforeEach
-    void beforeEach() {
-        getProficiency = new GetProficiency("get_proficiency") {
-            @Override
-            public Subevent clone() {
-                return null;
-            }
-
-            @Override
-            public Subevent clone(JsonObject jsonData) {
-                return null;
-            }
-        };
-    }
-
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
@@ -69,7 +50,7 @@ public class GrantHalfProficiencyTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new GrantHalfProficiency();
+        Function function = new GrantResistance();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -86,30 +67,31 @@ public class GrantHalfProficiencyTest {
     }
 
     @Test
-    @DisplayName("execute grants proficiency")
-    void execute_grantsExpertise() throws Exception {
+    @DisplayName("execute grants immunity")
+    void execute_grantsImmunity() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
         context.add(source);
         context.add(target);
 
-        getProficiency.setSource(source);
-        getProficiency.prepare(context);
-        getProficiency.setTarget(target);
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.setSource(source);
+        damageAffinity.prepare(context);
+        damageAffinity.setTarget(target);
 
-        GrantHalfProficiency grantHalfProficiency = new GrantHalfProficiency();
+        GrantResistance grantResistance = new GrantResistance();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "grant_half_proficiency"
+                "function": "grant_resistance"
             }*/
-            this.putString("function", "grant_half_proficiency");
+            this.putString("function", "grant_resistance");
         }};
 
-        grantHalfProficiency.execute(source, target, getProficiency, functionJson, context);
+        grantResistance.execute(source, target, damageAffinity, functionJson, context);
 
-        assertTrue(getProficiency.isHalfProficient(),
-                "execute should grant half proficiency"
+        assertTrue(damageAffinity.isResistant(),
+                "execute should grant resistance"
         );
     }
 

@@ -24,6 +24,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the org.rpgl.function.GrantExpertise class.
+ *
+ * @author Calvin Withun
+ */
 public class GrantExpertiseTest {
 
     private GetProficiency getProficiency;
