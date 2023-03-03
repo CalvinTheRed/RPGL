@@ -24,7 +24,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GrantExpertiseTest {
+public class GrantProficiencyTest {
 
     private GetProficiency getProficiency;
 
@@ -64,7 +64,7 @@ public class GrantExpertiseTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new GrantExpertise();
+        Function function = new GrantProficiency();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -81,7 +81,7 @@ public class GrantExpertiseTest {
     }
 
     @Test
-    @DisplayName("execute grants expertise")
+    @DisplayName("execute grants proficiency")
     void execute_grantsExpertise() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
@@ -93,18 +93,18 @@ public class GrantExpertiseTest {
         getProficiency.prepare(context);
         getProficiency.setTarget(target);
 
-        GrantExpertise grantExpertise = new GrantExpertise();
+        GrantProficiency grantProficiency = new GrantProficiency();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "grant_expertise"
             }*/
-            this.putString("function", "grant_expertise");
+            this.putString("function", "grant_proficiency");
         }};
 
-        grantExpertise.execute(source, target, getProficiency, functionJson, context);
+        grantProficiency.execute(source, target, getProficiency, functionJson, context);
 
-        assertTrue(getProficiency.isExpert(),
-                "execute should grant expertise"
+        assertTrue(getProficiency.isProficient(),
+                "execute should grant proficiency"
         );
     }
 
