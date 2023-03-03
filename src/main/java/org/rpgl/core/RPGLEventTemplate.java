@@ -72,26 +72,23 @@ public class RPGLEventTemplate extends JsonObject {
         JsonArray subevents = event.getSubevents();
         for (int i = 0; i < subevents.size(); i++) {
             JsonObject subeventJson = subevents.getJsonObject(i);
-            JsonArray healingArray = subeventJson.getJsonArray("heal");
-            if (healingArray != null) {
-                for (int j = 0; j < healingArray.size(); j++) {
-                    JsonObject healingJson = healingArray.getJsonObject(j);
-                    healingJson.asMap().putIfAbsent("dice", new ArrayList<>());
-                    healingJson.asMap().putIfAbsent("bonus", 0);
-                    JsonArray templateHealingDiceArray = healingJson.removeJsonArray("dice");
-                    JsonArray healingDiceArray = new JsonArray();
-                    for (int k = 0; k < templateHealingDiceArray.size(); k++) {
-                        JsonObject templateHealingDiceDefinition = templateHealingDiceArray.getJsonObject(k);
-                        JsonObject healingDie = new JsonObject() {{
-                            this.putInteger("size", templateHealingDiceDefinition.getInteger("size"));
-                            this.putJsonArray("determined", templateHealingDiceDefinition.getJsonArray("determined"));
-                        }};
-                        for (int l = 0; l < templateHealingDiceDefinition.getInteger("count"); l++) {
-                            healingDiceArray.addJsonObject(healingDie.deepClone());
-                        }
+            JsonObject healing = subeventJson.getJsonObject("healing");
+            if (healing != null) {
+                healing.asMap().putIfAbsent("dice", new ArrayList<>());
+                healing.asMap().putIfAbsent("bonus", 0);
+                JsonArray templateHealingDiceArray = healing.removeJsonArray("dice");
+                JsonArray healingDiceArray = new JsonArray();
+                for (int k = 0; k < templateHealingDiceArray.size(); k++) {
+                    JsonObject templateHealingDiceDefinition = templateHealingDiceArray.getJsonObject(k);
+                    JsonObject healingDie = new JsonObject() {{
+                        this.putInteger("size", templateHealingDiceDefinition.getInteger("size"));
+                        this.putJsonArray("determined", templateHealingDiceDefinition.getJsonArray("determined"));
+                    }};
+                    for (int l = 0; l < templateHealingDiceDefinition.getInteger("count"); l++) {
+                        healingDiceArray.addJsonObject(healingDie.deepClone());
                     }
-                    healingJson.putJsonArray("dice", healingDiceArray);
                 }
+                healing.putJsonArray("dice", healingDiceArray);
             }
         }
     }
