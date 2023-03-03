@@ -28,13 +28,13 @@ public class AddDamage extends Function {
                         JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof DamageCollection damageCollection) {
-            damageCollection.addTypedDamage(this.unpackCompactedDamageDice(functionJson.getJsonArray("damage")));
+            damageCollection.addTypedDamage(this.unpackDamage(functionJson.getJsonArray("damage")));
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 
-    JsonArray unpackCompactedDamageDice(JsonArray damageArray) {
+    JsonArray unpackDamage(JsonArray damageArray) {
         JsonArray unpackedDamageArray = damageArray.deepClone();
         for (int i = 0; i < unpackedDamageArray.size(); i++) {
             JsonObject damage = unpackedDamageArray.getJsonObject(i);

@@ -68,8 +68,8 @@ public class AddDamageTest {
     }
 
     @Test
-    @DisplayName("unpackCompactedDamageDice returns damage with unpacked damage dice")
-    void unpackCompactedDamageDice_returnsDamageWithUnpackedDamageDice() {
+    @DisplayName("unpackDamage returns damage with unpacked damage dice")
+    void unpackDamage_returnsDamageWithUnpackedDamageDice() {
         AddDamage addDamage = new AddDamage();
         JsonArray damage = new JsonArray() {{
             /*[
@@ -121,7 +121,7 @@ public class AddDamageTest {
 
         String expected = """
                 [{"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[2],"size":4},{"determined":[2],"size":4}],"type":"fire"},{"dice":[{"determined":[5],"size":10}],"type":"cold"}]""";
-        assertEquals(expected, addDamage.unpackCompactedDamageDice(damage).toString(),
+        assertEquals(expected, addDamage.unpackDamage(damage).toString(),
                 "calling unpackCompactedDamageDice should unpack the compacted damage dice passed to it"
         );
     }
