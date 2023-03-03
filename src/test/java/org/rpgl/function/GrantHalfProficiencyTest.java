@@ -24,7 +24,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GrantProficiencyTest {
+public class GrantHalfProficiencyTest {
 
     private GetProficiency getProficiency;
 
@@ -64,7 +64,7 @@ public class GrantProficiencyTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new GrantProficiency();
+        Function function = new GrantHalfProficiency();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -93,18 +93,18 @@ public class GrantProficiencyTest {
         getProficiency.prepare(context);
         getProficiency.setTarget(target);
 
-        GrantProficiency grantProficiency = new GrantProficiency();
+        GrantHalfProficiency grantHalfProficiency = new GrantHalfProficiency();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "grant_proficiency"
+                "function": "grant_half_proficiency"
             }*/
-            this.putString("function", "grant_proficiency");
+            this.putString("function", "grant_half_proficiency");
         }};
 
-        grantProficiency.execute(source, target, getProficiency, functionJson, context);
+        grantHalfProficiency.execute(source, target, getProficiency, functionJson, context);
 
-        assertTrue(getProficiency.isProficient(),
-                "execute should grant proficiency"
+        assertTrue(getProficiency.isHalfProficient(),
+                "execute should grant half proficiency"
         );
     }
 
