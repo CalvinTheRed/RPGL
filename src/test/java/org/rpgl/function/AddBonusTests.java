@@ -86,8 +86,8 @@ public class AddBonusTests {
     }
 
     @Test
-    @DisplayName("")
-    void test() throws Exception {
+    @DisplayName("execute adds correct bonus to calculation")
+    void execute_addsCorrectBonusToCalculation() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
