@@ -10,10 +10,10 @@ import org.rpgl.subevent.Subevent;
  *
  * @author Calvin Withun
  */
-public class AddTag extends Function {
+public class AddSubeventTag extends Function {
 
-    public AddTag() {
-        super("add_tag");
+    public AddSubeventTag() {
+        super("add_subevent_tag");
     }
 
     @Override

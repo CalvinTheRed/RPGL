@@ -37,7 +37,7 @@ public abstract class Function {
 
         Function.FUNCTIONS.put("add_bonus", new AddBonus());
         Function.FUNCTIONS.put("add_damage", new AddDamage());
-        Function.FUNCTIONS.put("add_subevent_tag", new AddTag());
+        Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
         Function.FUNCTIONS.put("grant_advantage", new GrantAdvantage());
         Function.FUNCTIONS.put("grant_disadvantage", new GrantDisadvantage());
         Function.FUNCTIONS.put("grant_expertise", new GrantExpertise());
