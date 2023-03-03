@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.subevent.DamageDelivery class.
+ * Testing class for the org.rpgl.subevent.HealingDelivery class.
  *
  * @author Calvin Withun
  */
-public class DamageDeliveryTest {
+public class HealingDeliveryTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -45,8 +45,8 @@ public class DamageDeliveryTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        DamageDelivery damageDelivery = new DamageDelivery();
-        damageDelivery.joinSubeventData(new JsonObject() {{
+        HealingDelivery healingDelivery = new HealingDelivery();
+        healingDelivery.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -54,26 +54,21 @@ public class DamageDeliveryTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> damageDelivery.invoke(new RPGLContext()),
+                () -> healingDelivery.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
 
     @Test
-    @DisplayName("getDamage returns stored damage values")
-    void getDamage_returnsStoredDamageValues() {
-        DamageDelivery damageDelivery = new DamageDelivery();
-        damageDelivery.joinSubeventData(new JsonObject() {{
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("fire", 10);
-                this.putInteger("cold", 10);
-            }});
+    @DisplayName("getHealing returns stored healing amount")
+    void getHealing_returnsStoredDamageValues() {
+        HealingDelivery healingDelivery = new HealingDelivery();
+        healingDelivery.joinSubeventData(new JsonObject() {{
+            this.putInteger("healing", 10);
         }});
 
-        String expected = """
-                {"cold":10,"fire":10}""";
-        assertEquals(expected, damageDelivery.getDamage().toString(),
-                "getDamage should report final damage quantities of each damage type being dealt at once"
+        assertEquals(10, healingDelivery.getHealing(),
+                "getHealing should return the healing being conveyed by the subevent"
         );
     }
 

@@ -23,6 +23,8 @@ import java.util.Objects;
  */
 public class Contest extends Subevent {
 
+    // TODO how can an ObjectHasTag Condition be evaluated against the target of a Contest?
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Contest.class);
 
     public Contest() {

@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -291,6 +293,72 @@ public class RPGLObjectTest {
 
         assertEquals(4, knight.getHealthData().getInteger("current"),
                 "demo:knight should have 4 health left after failing a save against demo:young_red_dragon's breath attack"
+        );
+    }
+
+    @Test
+    @DisplayName("receiveHealing missing hit points are restored")
+    void receiveHealing_missingHitPointsAreRestored() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        HealingDelivery healingDelivery = new HealingDelivery();
+        healingDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "healing_delivery",
+                "healing": 10
+            }*/
+            this.putString("subevent", "healing_delivery");
+            this.putInteger("healing", 10);
+        }});
+
+        healingDelivery.setSource(source);
+        healingDelivery.prepare(context);
+        healingDelivery.setTarget(target);
+        healingDelivery.invoke(context);
+
+        target.receiveHealing(healingDelivery);
+
+        assertEquals(20, target.getHealthData().getInteger("current"),
+                "target should recover 10 hit points (10+10=20)"
+        );
+    }
+
+    @Test
+    @DisplayName("receiveHealing hit point maximum is not exceeded")
+    void receiveHealing_mitPointMaximumIsNotExceeded() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 177);
+
+        HealingDelivery healingDelivery = new HealingDelivery();
+        healingDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "healing_delivery",
+                "healing": 10
+            }*/
+            this.putString("subevent", "healing_delivery");
+            this.putInteger("healing", 10);
+        }});
+
+        healingDelivery.setSource(source);
+        healingDelivery.prepare(context);
+        healingDelivery.setTarget(target);
+        healingDelivery.invoke(context);
+
+        target.receiveHealing(healingDelivery);
+
+        assertEquals(178, target.getHealthData().getInteger("current"),
+                "target should only recover its one missing hit point when healed for 10 (177+10=187, max 178: 187 -> 178)"
         );
     }
 

@@ -13,6 +13,7 @@ import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.GetObjectTags;
 import org.rpgl.subevent.GetSavingThrowProficiency;
 import org.rpgl.subevent.GetWeaponProficiency;
+import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -344,6 +345,15 @@ public class RPGLObject extends RPGLTaggable {
         }
         if (damage > 0) {
             this.reduceHitPoints(damage);
+        }
+    }
+
+    public void receiveHealing(HealingDelivery healingDelivery) {
+        JsonObject healthData = this.getHealthData();
+        healthData.putInteger("current", healthData.getInteger("current") + healingDelivery.getHealing());
+        if (healthData.getInteger("current") > healthData.getInteger("maximum")) {
+            // TODO subevent for determining maximum health goes above...
+            healthData.putInteger("current", healthData.getInteger("maximum"));
         }
     }
 

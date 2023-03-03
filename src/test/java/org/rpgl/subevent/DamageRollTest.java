@@ -183,4 +183,28 @@ public class DamageRollTest {
         );
     }
 
+    @Test
+    @DisplayName("maximizeDamageDice maximizes damage correctly (fire only)")
+    void maximizeTypedDamageDice_maximizesDamageCorrectly_fireOnly() {
+        damageRoll.maximizeTypedDamageDice("fire");
+
+        String expected = """
+                [{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
+                "all fire dice should maximize to 4, while cold dice are unchanged"
+        );
+    }
+
+    @Test
+    @DisplayName("maximizeDamageDice maximizes damage correctly (all damage)")
+    void maximizeTypedDamageDice_maximizesDamageCorrectly_allDamage() {
+        damageRoll.maximizeTypedDamageDice(null);
+
+        String expected = """
+                [{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
+                "all dice should maximize to 4"
+        );
+    }
+
 }

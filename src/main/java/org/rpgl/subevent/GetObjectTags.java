@@ -21,12 +21,18 @@ public class GetObjectTags extends Subevent {
 
     @Override
     public Subevent clone() {
-        return null;
+        Subevent clone = new GetObjectTags();
+        clone.joinSubeventData(this.json);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        return null;
+        Subevent clone = new GetObjectTags();
+        clone.joinSubeventData(jsonData);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     /**

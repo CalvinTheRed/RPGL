@@ -54,15 +54,14 @@ public class DamageRoll extends Subevent {
             JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamageArray.getJsonObject(i).getJsonArray("dice"), new JsonArray());
             for (int j = 0; j < typedDamageDieArray.size(); j++) {
                 JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
-                int size = typedDamageDie.getInteger("size");
-                int roll = Die.roll(size, typedDamageDie.getJsonArray("determined").asList());
-                typedDamageDie.putInteger("roll", roll);
+                typedDamageDie.putInteger("roll", Die.roll(typedDamageDie.getInteger("size"), typedDamageDie.getJsonArray("determined").asList()));
             }
         }
     }
 
     /**
-     * This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given threshold.
+     * This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given
+     * threshold. Passing a null damage type counts as a wild card and applies the changes to all damage types.
      */
     public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
@@ -73,9 +72,7 @@ public class DamageRoll extends Subevent {
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
                     if (typedDamageDie.getInteger("roll") <= threshold) {
-                        int size = typedDamageDie.getInteger("size");
-                        int roll = Die.roll(size, typedDamageDie.getJsonArray("determined").asList());
-                        typedDamageDie.putInteger("roll", roll);
+                        typedDamageDie.putInteger("roll", Die.roll(typedDamageDie.getInteger("size"), typedDamageDie.getJsonArray("determined").asList()));
                     }
                 }
             }
@@ -84,9 +81,10 @@ public class DamageRoll extends Subevent {
 
     /**
      * This method overrides the face value of all dice of a given damage type whose rolled values are less than or
-     * equal to a given threshold.
+     * equal to a given threshold. Passing a null damage type counts as a wild card and applies the changes to all
+     * damage types.
      */
-    public void setTypedDiceLessThanOrEqualTo(int threshold, int faceValue, String damageType) {
+    public void setTypedDiceLessThanOrEqualTo(int threshold, int set, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
@@ -95,8 +93,22 @@ public class DamageRoll extends Subevent {
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
                     if (typedDamageDie.getInteger("roll") <= threshold) {
-                        typedDamageDie.putInteger("roll", faceValue);
+                        typedDamageDie.putInteger("roll", set);
                     }
+                }
+            }
+        }
+    }
+
+    public void maximizeTypedDamageDice(String damageType) {
+        JsonArray typedDamageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < typedDamageArray.size(); i++) {
+            JsonObject typedDamage = typedDamageArray.getJsonObject(i);
+            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("type"))) {
+                JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
+                for (int j = 0; j < typedDamageDieArray.size(); j++) {
+                    JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
+                    typedDamageDie.putInteger("roll", typedDamageDie.getInteger("size"));
                 }
             }
         }
