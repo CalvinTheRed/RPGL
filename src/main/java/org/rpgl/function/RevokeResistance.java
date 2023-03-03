@@ -28,7 +28,7 @@ public class RevokeResistance extends Function {
         if (subevent instanceof DamageAffinity damageAffinity) {
             damageAffinity.revokeResistance();
         } else {
-            LOGGER.warn("Can not execute RevokeResistance function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

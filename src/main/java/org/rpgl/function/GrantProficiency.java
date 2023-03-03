@@ -27,7 +27,7 @@ public class GrantProficiency extends Function {
         if (subevent instanceof GetProficiency getProficiency) {
             getProficiency.grantProficiency();
         } else {
-            LOGGER.warn("Can not execute GrantProficiency function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

@@ -28,7 +28,7 @@ public class GrantResistance extends Function {
         if (subevent instanceof DamageAffinity damageAffinity) {
             damageAffinity.grantResistance();
         } else {
-            LOGGER.warn("Can not execute GrantResistance function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

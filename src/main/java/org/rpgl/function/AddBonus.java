@@ -26,9 +26,9 @@ public class AddBonus extends Function {
                         JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof Calculation calculation) {
-            calculation.setSet(functionJson.getInteger("bonus"));
+            calculation.addBonus(functionJson.getInteger("bonus"));
         } else {
-            LOGGER.warn("Can not execute AddBonus function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

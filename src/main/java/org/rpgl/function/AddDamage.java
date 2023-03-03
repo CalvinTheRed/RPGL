@@ -30,7 +30,7 @@ public class AddDamage extends Function {
         if (subevent instanceof DamageCollection damageCollection) {
             damageCollection.addTypedDamage(this.unpackCompactedDamageDice(functionJson.getJsonArray("damage")));
         } else {
-            LOGGER.warn("Can not execute AddDamage function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

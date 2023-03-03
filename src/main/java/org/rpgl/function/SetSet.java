@@ -28,7 +28,7 @@ public class SetSet extends Function {
         if (subevent instanceof Calculation calculation) {
             calculation.setSet(functionJson.getInteger("set"));
         } else {
-            LOGGER.warn("Can not execute SetSet function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

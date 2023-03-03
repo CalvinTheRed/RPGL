@@ -27,7 +27,7 @@ public class AddHealing extends Function {
         if (subevent instanceof HealingCollection healingCollection) {
             healingCollection.addHealing(functionJson.getJsonObject("healing"));
         } else {
-            LOGGER.warn("Can not execute AddHealing function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

@@ -28,7 +28,7 @@ public class GrantAdvantage extends Function {
         if (subevent instanceof Roll roll) {
             roll.grantAdvantage();
         } else {
-            LOGGER.warn("Can not execute GrantAdvantage function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 

@@ -28,7 +28,7 @@ public class SetBase extends Function {
         if (subevent instanceof Calculation calculation) {
             calculation.setBase(functionJson.getInteger("base"));
         } else {
-            LOGGER.warn("Can not execute SetBase function on " + subevent.getClass());
+            LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 
