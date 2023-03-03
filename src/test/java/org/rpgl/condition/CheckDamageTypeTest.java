@@ -23,6 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the org.rpgl.condition.CheckDamageType class.
+ *
+ * @author Calvin Withun
+ */
 public class CheckDamageTypeTest {
 
     @BeforeAll

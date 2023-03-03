@@ -14,6 +14,11 @@ import org.rpgl.subevent.DummySubevent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for the org.rpgl.function.AddDamage class.
+ *
+ * @author Calvin Withun
+ */
 public class AddDamageTest {
 
     @BeforeAll
