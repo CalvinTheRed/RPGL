@@ -26,8 +26,8 @@ public class CalculateCriticalHitThresholdTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
-        calculateCriticalHitThreshold.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new CalculateCriticalHitThreshold();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -35,7 +35,7 @@ public class CalculateCriticalHitThresholdTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> calculateCriticalHitThreshold.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

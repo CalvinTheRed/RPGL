@@ -13,7 +13,7 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class DummySubevent extends Subevent {
+public class DummySubevent extends Subevent implements AbilitySubevent {
 
     public static int counter = 0;
 
@@ -50,4 +50,8 @@ public class DummySubevent extends Subevent {
         DummySubevent.counter = 0;
     }
 
+    @Override
+    public String getAbility(RPGLContext context) {
+        return "str";
+    }
 }

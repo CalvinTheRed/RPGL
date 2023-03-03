@@ -85,7 +85,7 @@ public class Contest extends Subevent {
      * @throws Exception if an exception occurs
      */
     int getSourceResult(RPGLContext context) throws Exception {
-        AbilityChecck abilityCheck = new AbilityChecck();
+        AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(this.json.getJsonObject("source_contest"));
         abilityCheck.setSource(this.getSource());
         abilityCheck.prepare(context);
@@ -146,7 +146,7 @@ public class Contest extends Subevent {
      * @throws Exception if an exception occurs
      */
     int getTargetResultAsAbilityCheck(JsonObject targetJson, RPGLContext context) throws Exception {
-        AbilityChecck abilityCheck = new AbilityChecck();
+        AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(targetJson);
         abilityCheck.setSource(this.getTarget());
         abilityCheck.prepare(context);

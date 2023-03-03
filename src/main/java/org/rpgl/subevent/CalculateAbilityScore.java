@@ -15,15 +15,15 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class CalculateAbilityScoreSubevent extends Calculation implements AbilitySubevent {
+public class CalculateAbilityScore extends Calculation implements AbilitySubevent {
 
-    public CalculateAbilityScoreSubevent() {
+    public CalculateAbilityScore() {
         super("calculate_ability_score");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new CalculateAbilityScoreSubevent();
+        Subevent clone = new CalculateAbilityScore();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -31,7 +31,7 @@ public class CalculateAbilityScoreSubevent extends Calculation implements Abilit
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new CalculateAbilityScoreSubevent();
+        Subevent clone = new CalculateAbilityScore();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;

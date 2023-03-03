@@ -11,6 +11,7 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
+import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -48,6 +50,23 @@ public class AbilityCheckTest {
     }
 
     @Test
+    @DisplayName("invoke wrong subevent")
+    void invoke_wrongSubevent_throwsException() {
+        Subevent subevent = new AbilityCheck();
+        subevent.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "not_a_subevent"
+            }*/
+            this.putString("subevent", "not_a_subevent");
+        }});
+
+        assertThrows(SubeventMismatchException.class,
+                () -> subevent.invoke(new RPGLContext()),
+                "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
+        );
+    }
+
+    @Test
     @DisplayName("prepare adds ability_check tag")
     void prepare_addsAbilityCheckTag() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
@@ -56,7 +75,7 @@ public class AbilityCheckTest {
         context.add(source);
         context.add(target);
 
-        AbilityChecck abilityCheck = new AbilityChecck();
+        AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "ability_check",
@@ -83,7 +102,7 @@ public class AbilityCheckTest {
         context.add(source);
         context.add(target);
 
-        AbilityChecck abilityCheck = new AbilityChecck();
+        AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "ability_check",

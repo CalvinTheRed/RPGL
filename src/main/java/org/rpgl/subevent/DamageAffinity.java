@@ -121,4 +121,13 @@ public class DamageAffinity extends Subevent {
                 && !Objects.requireNonNullElse(this.json.getBoolean("vulnerability_revoked"), false);
     }
 
+    /**
+     * Returns the damage type whose affinity is being determined.
+     *
+     * @return a String representing a damage type
+     */
+    public String getDamageType() {
+        return this.json.getString("type");
+    }
+
 }

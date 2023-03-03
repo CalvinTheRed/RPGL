@@ -47,8 +47,8 @@ public class CalculateProficiencyBonusTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
-        calculateProficiencyBonus.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new CalculateProficiencyBonus();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -56,7 +56,7 @@ public class CalculateProficiencyBonusTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> calculateProficiencyBonus.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

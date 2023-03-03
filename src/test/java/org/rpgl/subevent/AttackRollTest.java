@@ -57,8 +57,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new AttackRoll();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -66,7 +66,7 @@ public class AttackRollTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> attackRoll.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

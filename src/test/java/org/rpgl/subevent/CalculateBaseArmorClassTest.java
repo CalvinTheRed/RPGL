@@ -48,8 +48,8 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new CalculateBaseArmorClass();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -57,7 +57,7 @@ public class CalculateBaseArmorClassTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> calculateBaseArmorClass.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

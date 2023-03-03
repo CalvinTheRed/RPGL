@@ -51,8 +51,8 @@ public class GiveEffectTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        GiveEffect giveEffect = new GiveEffect();
-        giveEffect.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new GiveEffect();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -60,7 +60,7 @@ public class GiveEffectTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> giveEffect.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

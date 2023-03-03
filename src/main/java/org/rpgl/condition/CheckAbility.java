@@ -28,7 +28,7 @@ public class CheckAbility extends Condition {
         if (subevent instanceof AbilitySubevent abilitySubevent) {
             return abilitySubevent.getAbility(context).equals(conditionJson.getString("ability"));
         }
-        LOGGER.warn("Can not evaluate CheckAbility condition on " + subevent.getClass());
+        LOGGER.warn("Can not evaluate condition for " + subevent.getClass());
         return false;
     }
 

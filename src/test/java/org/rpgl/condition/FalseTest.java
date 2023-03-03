@@ -38,7 +38,7 @@ public class FalseTest {
 
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, null, conditionJson, context),
-                "False condition should throw a ConditionMismatchException if the specified condition doesn't match"
+                "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 

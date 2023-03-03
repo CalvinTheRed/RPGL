@@ -48,8 +48,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Contest contest = new Contest();
-        contest.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new Contest();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -57,7 +57,7 @@ public class ContestTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> contest.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

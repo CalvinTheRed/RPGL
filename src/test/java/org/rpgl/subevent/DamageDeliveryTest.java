@@ -45,8 +45,8 @@ public class DamageDeliveryTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        DamageDelivery damageDelivery = new DamageDelivery();
-        damageDelivery.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new DamageDelivery();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -54,7 +54,7 @@ public class DamageDeliveryTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> damageDelivery.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

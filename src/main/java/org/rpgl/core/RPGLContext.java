@@ -34,7 +34,7 @@ public class RPGLContext {
      */
     public void add(RPGLObject object) {
         String objectUuid = object.getUuid();
-        this.contextObjects.put(objectUuid, object);
+        this.contextObjects.putIfAbsent(objectUuid, object);
     }
 
     /**

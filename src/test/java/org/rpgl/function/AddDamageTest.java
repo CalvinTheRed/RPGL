@@ -41,7 +41,7 @@ public class AddDamageTest {
 
         assertThrows(FunctionMismatchException.class,
                 () -> function.execute(null, null, null, functionJson, context),
-                "AddDamage function should throw a FunctionMismatchException if the specified function doesn't match"
+                "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 

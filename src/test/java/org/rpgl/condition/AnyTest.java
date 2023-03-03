@@ -40,7 +40,7 @@ public class AnyTest {
 
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, null, conditionJson, context),
-                "Any condition should throw a ConditionMismatchException if the specified condition doesn't match"
+                "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 

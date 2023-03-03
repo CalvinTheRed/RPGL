@@ -50,8 +50,8 @@ public class HealTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Heal heal = new Heal();
-        heal.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new Heal();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -59,7 +59,7 @@ public class HealTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> heal.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

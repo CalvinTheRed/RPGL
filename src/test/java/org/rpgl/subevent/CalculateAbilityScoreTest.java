@@ -47,8 +47,8 @@ public class CalculateAbilityScoreTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        CalculateAbilityScoreSubevent calculateAbilityScore = new CalculateAbilityScoreSubevent();
-        calculateAbilityScore.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new CalculateAbilityScore();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -56,7 +56,7 @@ public class CalculateAbilityScoreTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> calculateAbilityScore.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -68,7 +68,7 @@ public class CalculateAbilityScoreTest {
         RPGLContext context = new RPGLContext();
         context.add(source);
 
-        CalculateAbilityScoreSubevent calculateAbilityScore = new CalculateAbilityScoreSubevent();
+        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         calculateAbilityScore.joinSubeventData(new JsonObject() {{
             this.putString("ability", "str");
         }});

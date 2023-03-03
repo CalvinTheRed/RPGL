@@ -18,8 +18,8 @@ public class GetSavingThrowProficiencyTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        GetSavingThrowProficiency getSavingThrowProficiency = new GetSavingThrowProficiency();
-        getSavingThrowProficiency.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new GetSavingThrowProficiency();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -27,7 +27,7 @@ public class GetSavingThrowProficiencyTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> getSavingThrowProficiency.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

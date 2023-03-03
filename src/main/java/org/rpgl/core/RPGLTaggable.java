@@ -10,4 +10,8 @@ public abstract class RPGLTaggable extends UUIDTableElement {
         return this.getJsonArray(RPGLTaggableTO.TAGS_ALIAS);
     }
 
+    public void addTag(String tag) {
+        this.getTags().addString(tag);
+    }
+
 }

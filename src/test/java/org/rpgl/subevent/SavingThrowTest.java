@@ -51,8 +51,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new SavingThrow();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -60,7 +60,7 @@ public class SavingThrowTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> savingThrow.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
