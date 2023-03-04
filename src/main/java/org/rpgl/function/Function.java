@@ -47,6 +47,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("grant_resistance", new GrantResistance());
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
         Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());
+        Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
         Function.FUNCTIONS.put("revoke_immunity", new RevokeImmunity());
         Function.FUNCTIONS.put("revoke_resistance", new RevokeResistance());
         Function.FUNCTIONS.put("revoke_vulnerability", new RevokeVulnerability());
