@@ -19,8 +19,7 @@
     "hit_dice": [
       { "count": 8, "size": 8, "determined": [ 4 ] }
     ],
-    "base": 52,
-    "maximum": 52,
+    "base": 36,
     "current": 52,
     "temporary": 0
   },

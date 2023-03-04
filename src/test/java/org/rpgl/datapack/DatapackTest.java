@@ -715,7 +715,7 @@ public class DatapackTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":178,"current":178,"hit_dice":[{"count":17,"determined":[5],"size":10}],"maximum":178,"temporary":0}""";
+                {"base":93,"current":178,"hit_dice":[{"count":17,"determined":[5],"size":10}],"temporary":0}""";
         assertEquals(expected, objectTemplate.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );

@@ -322,7 +322,7 @@ public class RPGLObjectTest {
         healingDelivery.setTarget(target);
         healingDelivery.invoke(context);
 
-        target.receiveHealing(healingDelivery);
+        target.receiveHealing(context, healingDelivery);
 
         assertEquals(20, target.getHealthData().getInteger("current"),
                 "target should recover 10 hit points (10+10=20)"
@@ -355,7 +355,7 @@ public class RPGLObjectTest {
         healingDelivery.setTarget(target);
         healingDelivery.invoke(context);
 
-        target.receiveHealing(healingDelivery);
+        target.receiveHealing(context, healingDelivery);
 
         assertEquals(178, target.getHealthData().getInteger("current"),
                 "target should only recover its one missing hit point when healed for 10 (177+10=187, max 178: 187 -> 178)"

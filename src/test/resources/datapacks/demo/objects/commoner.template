@@ -17,7 +17,6 @@
       { "count": 1, "size": 4, "determined": [ 2 ] }
     ],
     "base": 2,
-    "maximum": 2,
     "current": 2,
     "temporary": 0
   },

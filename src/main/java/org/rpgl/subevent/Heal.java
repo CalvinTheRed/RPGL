@@ -159,7 +159,7 @@ public class Heal extends Subevent {
         healingDelivery.prepare(context);
         healingDelivery.setTarget(this.getTarget());
         healingDelivery.invoke(context);
-        this.getTarget().receiveHealing(healingDelivery);
+        this.getTarget().receiveHealing(context, healingDelivery);
     }
 
 }

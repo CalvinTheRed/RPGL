@@ -7,6 +7,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateBaseArmorClass;
+import org.rpgl.subevent.CalculateMaximumHitPoints;
 import org.rpgl.subevent.CalculateProficiencyBonus;
 import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
@@ -348,13 +349,25 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
-    public void receiveHealing(HealingDelivery healingDelivery) {
+    public void receiveHealing(RPGLContext context, HealingDelivery healingDelivery) throws Exception {
         JsonObject healthData = this.getHealthData();
         healthData.putInteger("current", healthData.getInteger("current") + healingDelivery.getHealing());
-        if (healthData.getInteger("current") > healthData.getInteger("maximum")) {
-            // TODO subevent for determining maximum health goes above...
-            healthData.putInteger("current", healthData.getInteger("maximum"));
+        int maximumHitPoints = this.getMaximumHitPoints(context);
+        if (healthData.getInteger("current") > maximumHitPoints) {
+            healthData.putInteger("current", maximumHitPoints);
         }
+    }
+
+    public int getMaximumHitPoints(RPGLContext context) throws Exception {
+        CalculateMaximumHitPoints calculateMaximumHitPoints = new CalculateMaximumHitPoints();
+        calculateMaximumHitPoints.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_maximum_hit_points");
+        }});
+        calculateMaximumHitPoints.setSource(this);
+        calculateMaximumHitPoints.prepare(context);
+        calculateMaximumHitPoints.setTarget(this);
+        calculateMaximumHitPoints.invoke(context);
+        return calculateMaximumHitPoints.get();
     }
 
     /**
