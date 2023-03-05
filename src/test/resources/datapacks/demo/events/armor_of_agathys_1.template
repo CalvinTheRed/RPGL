@@ -9,7 +9,10 @@
     {
       "subevent": "give_temporary_hit_points",
       "tags": [ "spell" ],
-      "temporary_hit_points": 5,
+      "temporary_hit_points": {
+        "dice": [ ],
+        "bonus": 5
+      },
       "rider_effects": [
         "demo:armor_of_agathys_1"
       ]
