@@ -145,9 +145,9 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("rerollTypedDiceLessThanOrEqualTo re-roll all ones (fire damage)")
-    void rerollTypedDiceLessThanOrEqualTo_rerollAllOnes_fireDamage() {
-        damageRoll.rerollTypedDiceLessThanOrEqualTo(1, "fire");
+    @DisplayName("rerollTypedDiceMatchingOrBelow re-roll all ones (fire damage)")
+    void rerollTypedDiceMatchingOrBelow_rerollAllOnes_fireDamage() {
+        damageRoll.rerollTypedDiceMatchingOrBelow(1, "fire");
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
@@ -157,9 +157,9 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("setTypedDiceLessThanOrEqualTo set all ones to twos (fire damage)")
-    void setTypedDiceLessThanOrEqualTo_setAllOnesToTwos_fireDamage() {
-        damageRoll.setTypedDiceLessThanOrEqualTo(1, 2, "fire");
+    @DisplayName("setTypedDiceMatchingOrBelow set all ones to twos (fire damage)")
+    void setTypedDiceMatchingOrBelow_setAllOnesToTwos_fireDamage() {
+        damageRoll.setTypedDiceMatchingOrBelow(1, 2, "fire");
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";

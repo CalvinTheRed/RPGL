@@ -121,8 +121,8 @@ public class HealingRollTest {
     }
 
     @Test
-    @DisplayName("setHealingDiceLessThanOrEqualTo correct healing dice are set to new value")
-    void setHealingDiceLessThanOrEqualTo_correctHealingDiceAreSetToNewValue() {
+    @DisplayName("setHealingDiceMatchingOrBelow correct healing dice are set to new value")
+    void setHealingDiceMatchingOrBelow_correctHealingDiceAreSetToNewValue() {
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -159,7 +159,7 @@ public class HealingRollTest {
             this.putInteger("bonus", 2);
         }});
 
-        healingRoll.setHealingDiceLessThanOrEqualTo(2, 6);
+        healingRoll.setHealingDiceMatchingOrBelow(2, 6);
 
         String expected = """
                 {"bonus":2,"dice":[{"determined":[6],"roll":6,"size":6},{"determined":[6],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6}]}""";
@@ -169,8 +169,8 @@ public class HealingRollTest {
     }
 
     @Test
-    @DisplayName("rerollHealingDiceLessThanOrEqualTo correct healing dice are re-rolled")
-    void rerollHealingDiceLessThanOrEqualTo_correctHealingDiceAreRerolled() {
+    @DisplayName("rerollHealingDiceMatchingOrBelow correct healing dice are re-rolled")
+    void rerollHealingDiceMatchingOrBelow_correctHealingDiceAreRerolled() {
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -207,7 +207,7 @@ public class HealingRollTest {
             this.putInteger("bonus", 2);
         }});
 
-        healingRoll.rerollHealingDiceLessThanOrEqualTo(2);
+        healingRoll.rerollHealingDiceMatchingOrBelow(2);
 
         String expected = """
                 {"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6}]}""";

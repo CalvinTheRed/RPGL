@@ -60,13 +60,13 @@ public class DamageRoll extends Subevent {
     }
 
     /**
-     * This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given
-     * threshold. Passing a null damage type or "" counts as a wild card and applies the changes to all damage types.
+     * This method re-rolls any dice of a given damage type whose rolled values are matching or below a given threshold.
+     * Passing a null damage type or "" counts as a wild card and applies the changes to all damage types.
      *
-     * @param threshold  the value a die must exceed to be changed by this method
+     * @param threshold  the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
-    public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType) {
+    public void rerollTypedDiceMatchingOrBelow(int threshold, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
@@ -83,14 +83,14 @@ public class DamageRoll extends Subevent {
     }
 
     /**
-     * This method overrides the face value of all dice of a given damage type whose rolled values are less than or
-     * equal to a given threshold. Passing a null damage type or "" counts as a wild card and applies the changes to all
+     * This method overrides the face value of all dice of a given damage type whose rolled values are matching or below
+     * a given threshold. Passing a null damage type or "" counts as a wild card and applies the changes to all
      * damage types.
      *
-     * @param threshold  the value a die must exceed to be changed by this method
+     * @param threshold  the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
-    public void setTypedDiceLessThanOrEqualTo(int threshold, int set, String damageType) {
+    public void setTypedDiceMatchingOrBelow(int threshold, int set, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);

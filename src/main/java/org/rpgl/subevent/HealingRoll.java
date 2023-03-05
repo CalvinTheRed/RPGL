@@ -61,11 +61,11 @@ public class HealingRoll extends Subevent {
     }
 
     /**
-     * Re-rolls all healing dice which rolled below or at the passed threshold.
+     * Re-rolls all healing dice which rolled matching or below the passed threshold.
      *
      * @param threshold the value which a die must roll at or below to be changed by this method
      */
-    public void rerollHealingDiceLessThanOrEqualTo(int threshold) {
+    public void rerollHealingDiceMatchingOrBelow(int threshold) {
         JsonArray healingDice = this.json.getJsonArray("dice");
         for (int i = 0; i < healingDice.size(); i++) {
             JsonObject healingDie = healingDice.getJsonObject(i);
@@ -81,7 +81,7 @@ public class HealingRoll extends Subevent {
      * @param threshold the value which a die must roll at or below to be changed by this method
      * @param set       the value to set for each die changed by this method
      */
-    public void setHealingDiceLessThanOrEqualTo(int threshold, int set) {
+    public void setHealingDiceMatchingOrBelow(int threshold, int set) {
         JsonArray healingDice = this.json.getJsonArray("dice");
         for (int i = 0; i < healingDice.size(); i++) {
             JsonObject healingDie = healingDice.getJsonObject(i);
