@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -35,6 +36,7 @@ public class GiveTemporaryHitPointsTest {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
+        RPGLCore.initializeTesting();
     }
 
     @AfterAll
@@ -79,13 +81,19 @@ public class GiveTemporaryHitPointsTest {
         giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "give_temporary_hit_points",
-                "temporary_hit_points": 10,
+                "temporary_hit_points": {
+                    "dice": [ ],
+                    "bonus": 10
+                },
                 "rider_effects": [
                     "demo:fire_immunity"
                 ]
             }*/
             this.putString("subevent", "give_temporary_hit_points");
-            this.putInteger("temporary_hit_points", 10);
+            this.putJsonObject("temporary_hit_points", new JsonObject() {{
+                this.putJsonArray("dice", new JsonArray());
+                this.putInteger("bonus", 10);
+            }});
             this.putJsonArray("rider_effects", new JsonArray() {{
                 this.addString("demo:fire_immunity");
             }});
@@ -122,13 +130,19 @@ public class GiveTemporaryHitPointsTest {
         giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "give_temporary_hit_points",
-                "temporary_hit_points": 10,
+                "temporary_hit_points": {
+                    "dice": [ ],
+                    "bonus": 10
+                },
                 "rider_effects": [
                     "demo:fire_immunity"
                 ]
             }*/
             this.putString("subevent", "give_temporary_hit_points");
-            this.putInteger("temporary_hit_points", 10);
+            this.putJsonObject("temporary_hit_points", new JsonObject() {{
+                this.putJsonArray("dice", new JsonArray());
+                this.putInteger("bonus", 10);
+            }});
             this.putJsonArray("rider_effects", new JsonArray() {{
                 this.addString("demo:fire_immunity");
             }});
@@ -165,13 +179,19 @@ public class GiveTemporaryHitPointsTest {
         giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "give_temporary_hit_points",
-                "temporary_hit_points": 10,
+                "temporary_hit_points": {
+                    "dice": [ ],
+                    "bonus": 10
+                },
                 "rider_effects": [
                     "demo:fire_immunity"
                 ]
             }*/
             this.putString("subevent", "give_temporary_hit_points");
-            this.putInteger("temporary_hit_points", 10);
+            this.putJsonObject("temporary_hit_points", new JsonObject() {{
+                this.putJsonArray("dice", new JsonArray());
+                this.putInteger("bonus", 10);
+            }});
             this.putJsonArray("rider_effects", new JsonArray() {{
                 this.addString("demo:fire_immunity");
             }});
@@ -186,6 +206,78 @@ public class GiveTemporaryHitPointsTest {
         );
         assertEquals(0, target.getEffectObjects().size(),
                 "commoner should have 0 effects after the subevent is invoked"
+        );
+    }
+
+    @Test
+    @DisplayName("unpackTemporaryHitPointsData unpacks all passed dice")
+    void unpackTemporaryHitPointsData_unpacksAllPassedDice() {
+        GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
+        JsonObject temporaryHitPointsData = new JsonObject() {{
+            /*{
+                "dice": [
+                    { "count": 2, "size": 6, "determined": [ 3 ] },
+                    { "count": 2, "size": 10, "determined": [ 5 ] }
+                ],
+                "bonus": 2
+            }*/
+            this.putJsonArray("dice", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("count", 2);
+                    this.putInteger("size", 6);
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(3);
+                    }});
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("count", 2);
+                    this.putInteger("size", 10);
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(5);
+                    }});
+                }});
+            }});
+            this.putInteger("bonus", 2);
+        }};
+
+        String expected = """
+                {"bonus":2,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[5],"size":10},{"determined":[5],"size":10}]}""";
+        assertEquals(expected, giveTemporaryHitPoints.unpackTemporaryHitPointsData(temporaryHitPointsData).toString(),
+                "returned data should contain an unpacked representation of the passed dice"
+        );
+    }
+
+    @Test
+    @DisplayName("getTemporaryHitPoints returns correct temporary hit points value")
+    void getTemporaryHitPoints_returnsCorrectTemporaryHitPointsValue() {
+        GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
+        JsonObject temporaryHitPointsData = new JsonObject() {{
+            /*{
+                "dice": [
+                    { "size": 6, "determined": [ 3 ] },
+                    { "size": 6, "determined": [ 3 ] }
+                ],
+                "bonus": 2
+            }*/
+            this.putJsonArray("dice", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("size", 6);
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(3);
+                    }});
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("size", 6);
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(3);
+                    }});
+                }});
+            }});
+            this.putInteger("bonus", 2);
+        }};
+
+        assertEquals(8, giveTemporaryHitPoints.getTemporaryHitPoints(temporaryHitPointsData),
+                "getTemporaryHitPoints should roll all dice and add them to the bonus (3+3+2=8)"
         );
     }
 
