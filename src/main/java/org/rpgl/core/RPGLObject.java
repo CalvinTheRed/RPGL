@@ -168,6 +168,7 @@ public class RPGLObject extends RPGLTaggable {
      * This method presents a Subevent to the RPGLObject's RPGLEffects in order to influence the result of the Subevent.
      *
      * @param subevent a Subevent being invoked
+     * @param context the context in which the Subevent is being processed
      * @return true if one of the RPGLObject's RPGLEffects modified the passed Subevent
      *
      * @throws ConditionMismatchException if one of the Conditions in an RPGLEffect belonging to the RPGLObject is
@@ -224,7 +225,16 @@ public class RPGLObject extends RPGLTaggable {
         return calculateProficiencyBonus.get();
     }
 
-    public int getAbilityScoreFromAbilityName(RPGLContext context, String ability) throws Exception {
+    /**
+     * This method returns the RPGLObject's ability score matching the ability name provided.
+     *
+     * @param ability the name of an ability score
+     * @param context the context in which this ability score is being calculated
+     * @return a numerical ability score
+     *
+     * @throws Exception if an exception occurs
+     */
+    public int getAbilityScoreFromAbilityName(String ability, RPGLContext context) throws Exception {
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         calculateAbilityScore.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_ability_score");
@@ -240,14 +250,14 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method determines the RPGLObject's ability score modifier for a specified ability score.
      *
-     * @param context the RPGLContext in which the RPGLObject's proficiency bonus is determined
      * @param ability the ability score whose modifier will be determined
+     * @param context the RPGLContext in which the RPGLObject's proficiency bonus is determined
      * @return the modifier of the target ability
      *
      * @throws Exception if an exception occurs.
      */
-    public int getAbilityModifierFromAbilityName(RPGLContext context, String ability) throws Exception {
-        return getAbilityModifierFromAbilityScore(this.getAbilityScoreFromAbilityName(context, ability));
+    public int getAbilityModifierFromAbilityName(String ability, RPGLContext context) throws Exception {
+        return getAbilityModifierFromAbilityScore(this.getAbilityScoreFromAbilityName(ability, context));
     }
 
     /**
@@ -268,13 +278,13 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method determines whether the RPGLObject is proficient in saving throws for a specified ability.
      *
-     * @param context     the RPGLContext in which the RPGLObject's save proficiency is determined
      * @param saveAbility the ability score used by the saving throw
+     * @param context     the RPGLContext in which the RPGLObject's save proficiency is determined
      * @return true if the RPGLObject is proficient in saving throws with the specified ability
      *
      * @throws Exception if an exception occurs.
      */
-    public boolean isProficientInSavingThrow(RPGLContext context, String saveAbility) throws Exception {
+    public boolean isProficientInSavingThrow(String saveAbility, RPGLContext context) throws Exception {
         GetSavingThrowProficiency getSavingThrowProficiency = new GetSavingThrowProficiency();
         getSavingThrowProficiency.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "get_saving_throw_proficiency");
@@ -290,13 +300,13 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method determines whether the RPGLObject is proficient in attacks made using a specified weapon.
      *
-     * @param context  the RPGLContext in which the RPGLObject's weapon proficiency is determined
      * @param item     an RPGLItem
+     * @param context  the RPGLContext in which the RPGLObject's weapon proficiency is determined
      * @return true if the RPGLObject is proficient with the item corresponding to the passed UUID
      *
      * @throws Exception if an exception occurs.
      */
-    public boolean isProficientWithWeapon(RPGLContext context, RPGLItem item) throws Exception {
+    public boolean isProficientWithWeapon(RPGLItem item, RPGLContext context) throws Exception {
         GetWeaponProficiency getWeaponProficiency = new GetWeaponProficiency();
         getWeaponProficiency.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "get_weapon_proficiency");
@@ -312,12 +322,12 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method is how a RPGLObject is intended to take damage.
      *
-     * @param context        the RPGLContext in which the RPGLObject takes damage
      * @param damageDelivery a DamageDelivery object containing damage data
+     * @param context        the RPGLContext in which the RPGLObject takes damage
      *
      * @throws Exception if an exception occurs.
      */
-    public void receiveDamage(RPGLContext context, DamageDelivery damageDelivery) throws Exception {
+    public void receiveDamage(DamageDelivery damageDelivery, RPGLContext context) throws Exception {
         JsonObject damageJson = damageDelivery.getDamage();
         Integer damage = 0;
         for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
@@ -349,7 +359,16 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
-    public void receiveHealing(RPGLContext context, HealingDelivery healingDelivery) throws Exception {
+    /**
+     * This method accepts a HealingDelivery Subevent to provide healing to the RPGLObject. This method cannot be used
+     * to heal the object beyond its hit point maximum.
+     *
+     * @param healingDelivery a HealingDelivery Subevent containing a quantity of healing to apply to the RPGLObject
+     * @param context         the context in which the RPGLObject is receiving healing.
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void receiveHealing(HealingDelivery healingDelivery, RPGLContext context) throws Exception {
         JsonObject healthData = this.getHealthData();
         healthData.putInteger("current", healthData.getInteger("current") + healingDelivery.getHealing());
         int maximumHitPoints = this.getMaximumHitPoints(context);
@@ -358,6 +377,14 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
+    /**
+     * This method calculates the RPGLObject's maximum hit points.
+     *
+     * @param context the context in which the RPGLObject's maximum hit points are being calculated
+     * @return the RPGLObject's maximum hit points
+     *
+     * @throws Exception if an exception occurs
+     */
     public int getMaximumHitPoints(RPGLContext context) throws Exception {
         CalculateMaximumHitPoints calculateMaximumHitPoints = new CalculateMaximumHitPoints();
         calculateMaximumHitPoints.joinSubeventData(new JsonObject() {{
@@ -443,6 +470,15 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
+    /**
+     * This method returns all tags which are currently applied to the RPGLObject. This includes any tags granted
+     * through RPGLEffects which are not supplied by the RPGLObject itself.
+     *
+     * @param context the context in which the RPGLObject's tags are being listed
+     * @return a list of tags applied to the RPGLObject
+     *
+     * @throws Exception if an exception occurs
+     */
     public ArrayList<String> getAllTags(RPGLContext context) throws Exception {
         JsonArray templateTags = this.getTags();
         ArrayList<String> tags = new ArrayList<>();

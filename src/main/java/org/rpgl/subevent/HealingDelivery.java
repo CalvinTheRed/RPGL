@@ -2,6 +2,16 @@ package org.rpgl.subevent;
 
 import org.rpgl.json.JsonObject;
 
+/**
+ * This Subevent is dedicated to delivering a quantity of healing to an RPGLObject.
+ * <br>
+ * <br>
+ * Source: an RPGLObject performing healing
+ * <br>
+ * Target: an RPGLObject receiving healing
+ *
+ * @author Calvin Withun
+ */
 public class HealingDelivery extends Subevent {
 
     public HealingDelivery() {

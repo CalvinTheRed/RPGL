@@ -35,6 +35,12 @@ public class AddHealing extends Function {
         }
     }
 
+    /**
+     * This helper method unpacks and returns the healing stored by the functionJson provided to this Function.
+     *
+     * @param healing a JsonObject containing compacted healing data
+     * @return a deep clone of healing in an unpacked format
+     */
     JsonObject unpackHealing(JsonObject healing) {
         JsonObject unpackedHealing = new JsonObject();
         unpackedHealing.putInteger("bonus", Objects.requireNonNullElse(healing.getInteger("bonus"), 0));
@@ -49,7 +55,8 @@ public class AddHealing extends Function {
             for (int k = 0; k < healingDie.getInteger("count"); k++) {
                 unpackedHealingDice.addJsonObject(unpackedHealingDie.deepClone());
             }
-        }unpackedHealing.putJsonArray("dice", unpackedHealingDice);
+        }
+        unpackedHealing.putJsonArray("dice", unpackedHealingDice);
         return unpackedHealing;
     }
 

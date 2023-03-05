@@ -61,13 +61,16 @@ public class DamageRoll extends Subevent {
 
     /**
      * This method re-rolls any dice of a given damage type whose rolled values are less than or equal to a given
-     * threshold. Passing a null damage type counts as a wild card and applies the changes to all damage types.
+     * threshold. Passing a null damage type or "" counts as a wild card and applies the changes to all damage types.
+     *
+     * @param threshold  the value a die must exceed to be changed by this method
+     * @param damageType the damage type of dice to be changed by this method
      */
     public void rerollTypedDiceLessThanOrEqualTo(int threshold, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || damageType.equals(typedDamage.getString("type"))) {
+            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
@@ -81,14 +84,17 @@ public class DamageRoll extends Subevent {
 
     /**
      * This method overrides the face value of all dice of a given damage type whose rolled values are less than or
-     * equal to a given threshold. Passing a null damage type counts as a wild card and applies the changes to all
+     * equal to a given threshold. Passing a null damage type or "" counts as a wild card and applies the changes to all
      * damage types.
+     *
+     * @param threshold  the value a die must exceed to be changed by this method
+     * @param damageType the damage type of dice to be changed by this method
      */
     public void setTypedDiceLessThanOrEqualTo(int threshold, int set, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || damageType.equals(typedDamage.getString("type"))) {
+            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
@@ -100,6 +106,12 @@ public class DamageRoll extends Subevent {
         }
     }
 
+    /**
+     * This method sets all damage dice of the indicated type to their maximum face values. Passing a null damage type
+     * or "" counts as a wild card and applies the changes to all damage types.
+     *
+     * @param damageType the damage type of dice to be changed by this method
+     */
     public void maximizeTypedDamageDice(String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {

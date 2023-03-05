@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This Function is dedicated to adding to a DamageCollection Subevent. Note that while this Function can add negative
- * static bonuses, it can not add "negative dice."
+ * bonuses, it can not add "negative dice."
  *
  * @author Calvin Withun
  */
@@ -34,6 +34,12 @@ public class AddDamage extends Function {
         }
     }
 
+    /**
+     * This helper method unpacks and returns the damage stored by the functionJson provided to this Function.
+     *
+     * @param damageArray a JsonArray containing compacted damage information
+     * @return a deep clone of damageArray in an unpacked format
+     */
     JsonArray unpackDamage(JsonArray damageArray) {
         JsonArray unpackedDamageArray = damageArray.deepClone();
         for (int i = 0; i < unpackedDamageArray.size(); i++) {

@@ -121,7 +121,7 @@ public class CalculateBaseArmorClassTest {
 
         calculateBaseArmorClass.setSource(source);
 
-        assertEquals(18, calculateBaseArmorClass.prepareArmored(context, UUIDTable.getItem(source.getEquippedItems().getString("armor"))),
+        assertEquals(18, calculateBaseArmorClass.prepareArmored(UUIDTable.getItem(source.getEquippedItems().getString("armor")), context),
                 "prepareUnarmored should return 18 for a knight wearing plate armor"
         );
     }
@@ -140,7 +140,7 @@ public class CalculateBaseArmorClassTest {
         source.equipItem(breastplateArmor.getUuid(), "armor");
         calculateBaseArmorClass.setSource(source);
 
-        assertEquals(14, calculateBaseArmorClass.prepareArmored(context, UUIDTable.getItem(source.getEquippedItems().getString("armor"))),
+        assertEquals(14, calculateBaseArmorClass.prepareArmored(UUIDTable.getItem(source.getEquippedItems().getString("armor")), context),
                 "prepareUnarmored should return 18 for a knight wearing breastplate armor"
         );
     }
@@ -159,7 +159,7 @@ public class CalculateBaseArmorClassTest {
         source.equipItem(leatherArmor.getUuid(), "armor");
         calculateBaseArmorClass.setSource(source);
 
-        assertEquals(11, calculateBaseArmorClass.prepareArmored(context, UUIDTable.getItem(source.getEquippedItems().getString("armor"))),
+        assertEquals(11, calculateBaseArmorClass.prepareArmored(UUIDTable.getItem(source.getEquippedItems().getString("armor")), context),
                 "prepareUnarmored should return 11 for a knight wearing leather armor"
         );
     }

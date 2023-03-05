@@ -7,7 +7,7 @@ import org.rpgl.json.JsonObject;
 import java.util.Objects;
 
 /**
- * This abstract Subevent is dedicated to collecting unrolled damage dice and bonuses.
+ * This Subevent is dedicated to collecting unrolled damage dice and bonuses.
  * <br>
  * <br>
  * Source: an RPGLObject preparing to deal damage
@@ -123,7 +123,7 @@ public class DamageCollection extends Subevent {
     }
 
     /**
-     * This method returns the damage dice collection being gathered by this Subevent.
+     * This method returns the damage collection being gathered by this Subevent.
      *
      * @return an array of typed damage dice and bonuses
      */

@@ -6,6 +6,16 @@ import org.rpgl.json.JsonObject;
 
 import java.util.Objects;
 
+/**
+ * This Subevent is dedicated to performing healing on an RPGLObject.
+ * <br>
+ * <br>
+ * Source: an RPGLObject performing healing
+ * <br>
+ * Target: an RPGLObject being targeted by the healing
+ *
+ * @author Calvin Withun
+ */
 public class Heal extends Subevent {
 
     public Heal() {
@@ -148,6 +158,14 @@ public class Heal extends Subevent {
         return targetHealingRoll.getHealing();
     }
 
+    /**
+     * This helper method delivers the final quantity of healing determined by this Subevent to the target RPGLObject.
+     *
+     * @param context the context in which this Subevent was invoked
+     * @param healing the final quantity of healing determined by this Subevent
+     *
+     * @throws Exception if an exception occurs
+     */
     void deliverHealing(RPGLContext context, int healing) throws Exception {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
@@ -159,7 +177,7 @@ public class Heal extends Subevent {
         healingDelivery.prepare(context);
         healingDelivery.setTarget(this.getTarget());
         healingDelivery.invoke(context);
-        this.getTarget().receiveHealing(context, healingDelivery);
+        this.getTarget().receiveHealing(healingDelivery, context);
     }
 
 }

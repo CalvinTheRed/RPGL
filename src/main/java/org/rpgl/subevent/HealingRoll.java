@@ -5,6 +5,16 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 
+/**
+ * This abstract Subevent is dedicated to rolling healing dice.
+ * <br>
+ * <br>
+ * Source: an RPGLObject rolling healing
+ * <br>
+ * Target: an RPGLObject which will later receive the rolled healing
+ *
+ * @author Calvin Withun
+ */
 public class HealingRoll extends Subevent {
 
     public HealingRoll() {
@@ -50,6 +60,11 @@ public class HealingRoll extends Subevent {
         }
     }
 
+    /**
+     * Re-rolls all healing dice which rolled below or at the passed threshold.
+     *
+     * @param threshold the value which a die must roll at or below to be changed by this method
+     */
     public void rerollHealingDiceLessThanOrEqualTo(int threshold) {
         JsonArray healingDice = this.json.getJsonArray("dice");
         for (int i = 0; i < healingDice.size(); i++) {
@@ -60,6 +75,12 @@ public class HealingRoll extends Subevent {
         }
     }
 
+    /**
+     * Sets the face value of all dice which rolled below or at the passed threshold.
+     *
+     * @param threshold the value which a die must roll at or below to be changed by this method
+     * @param set       the value to set for each die changed by this method
+     */
     public void setHealingDiceLessThanOrEqualTo(int threshold, int set) {
         JsonArray healingDice = this.json.getJsonArray("dice");
         for (int i = 0; i < healingDice.size(); i++) {
@@ -70,6 +91,9 @@ public class HealingRoll extends Subevent {
         }
     }
 
+    /**
+     * Sets all healing dice to their maximum face value.
+     */
     public void maximizeHealingDice() {
         JsonArray healingDice = this.json.getJsonArray("dice");
         for (int i = 0; i < healingDice.size(); i++) {
@@ -78,6 +102,11 @@ public class HealingRoll extends Subevent {
         }
     }
 
+    /**
+     * Returns the healing data provided to this Subevent after being rolled.
+     *
+     * @return a JsonObject storing rolled healing dice and a bonus
+     */
     public JsonObject getHealing() {
         return new JsonObject() {{
             this.putJsonArray("dice", json.getJsonArray("dice").deepClone());

@@ -48,7 +48,7 @@ public class AbilityCheck extends Roll {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         this.roll();
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, this.json.getString("ability")));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(this.json.getString("ability"), context));
 
         GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
         getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{

@@ -41,7 +41,7 @@ public class CalculateMaximumHitPoints extends Calculation {
         super.prepare(context);
         RPGLObject source = this.getSource();
         JsonObject sourceHealthData = source.getHealthData();
-        int sourceConModifier = source.getAbilityModifierFromAbilityName(context, "con");
+        int sourceConModifier = source.getAbilityModifierFromAbilityName("con", context);
         int sourceHitDiceCount = sourceHealthData.getJsonArray("hit_dice").size();
         this.setBase(sourceHealthData.getInteger("base"));
         this.addBonus(sourceConModifier * sourceHitDiceCount);

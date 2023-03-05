@@ -122,7 +122,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents(context, "pass");
+        savingThrow.resolveNestedSubevents("pass", context);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested pass subevent"
@@ -156,7 +156,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents(context, "fail");
+        savingThrow.resolveNestedSubevents("fail", context);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested fail subevent"

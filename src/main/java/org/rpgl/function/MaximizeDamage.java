@@ -8,6 +8,12 @@ import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This Function is dedicated to maximizing the damage dice of DamageRoll Subevents. If a damage type is specified, only
+ * damage dice of that type will be maximized.
+ *
+ * @author Calvin Withun
+ */
 public class MaximizeDamage extends Function {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaximizeDamage.class);

@@ -58,7 +58,7 @@ public class CalculateBaseArmorClass extends Calculation {
             JsonArray armorTags = armor.getJsonArray("tags");
             if (armorTags.asList().contains("armor")) {
                 // equipment slot holds armor
-                baseArmorClass = this.prepareArmored(context, armor);
+                baseArmorClass = this.prepareArmored(armor, context);
             } else {
                 // equipment slot holds non-armor (you are unarmored) (this is not intended to happen)
                 baseArmorClass = this.prepareUnarmored(context);
@@ -72,24 +72,24 @@ public class CalculateBaseArmorClass extends Calculation {
     /**
      * This helper method prepares the subevent if <code>source</code> is wearing armor.
      *
-     * @param context the context this Subevent takes place in
      * @param armor   the armor worn by <code>source</code>
+     * @param context the context this Subevent takes place in
      * @return the base armor class of the armored <code>source</code>
      *
      * @throws Exception if an exception occurs.
      */
-    int prepareArmored(RPGLContext context, RPGLItem armor) throws Exception {
+    int prepareArmored(RPGLItem armor, RPGLContext context) throws Exception {
         Integer baseArmorClass = armor.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS);
 
         // Add dexterity bonus, if not 0 (or lower)
         Integer dexterityBonusMaximum = armor.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS);
         if (dexterityBonusMaximum == null) {
             // no limit to dexterity bonus
-            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName(context, "dex");
+            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName("dex", context);
             baseArmorClass += dexterityBonus;
         } else if (dexterityBonusMaximum > 0) {
             // non-zero, positive limit to dexterity bonus
-            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName(context, "dex");
+            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName("dex", context);
             baseArmorClass += Math.min(dexterityBonus, dexterityBonusMaximum);
         }
 
@@ -105,7 +105,7 @@ public class CalculateBaseArmorClass extends Calculation {
      * @throws Exception if an exception occurs.
      */
     int prepareUnarmored(RPGLContext context) throws Exception {
-        return 10 + this.getSource().getAbilityModifierFromAbilityName(context, "dex");
+        return 10 + this.getSource().getAbilityModifierFromAbilityName("dex", context);
     }
 
     /**

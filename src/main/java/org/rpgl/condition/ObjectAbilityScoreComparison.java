@@ -23,7 +23,7 @@ public class ObjectAbilityScoreComparison extends Condition {
         super.verifyCondition(conditionJson);
         RPGLObject object = RPGLEffect.getObject(effectSource, effectTarget, subevent, conditionJson.getJsonObject("object"));
         return super.compareValues(
-                object.getAbilityScoreFromAbilityName(context, conditionJson.getString("ability")),
+                object.getAbilityScoreFromAbilityName(conditionJson.getString("ability"), context),
                 conditionJson.getInteger("compare_to"),
                 conditionJson.getString("comparison")
         );

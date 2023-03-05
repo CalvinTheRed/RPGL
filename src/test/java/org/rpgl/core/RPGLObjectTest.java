@@ -176,22 +176,22 @@ public class RPGLObjectTest {
         RPGLContext context = new RPGLContext();
         context.add(knight);
 
-        assertEquals(3, knight.getAbilityModifierFromAbilityName(context, "str"),
+        assertEquals(3, knight.getAbilityModifierFromAbilityName("str", context),
                 "demo:knight str of 16 should have modifier of +3"
         );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "dex"),
+        assertEquals(0, knight.getAbilityModifierFromAbilityName("dex", context),
                 "demo:knight dex of 11 should have modifier of +0"
         );
-        assertEquals(2, knight.getAbilityModifierFromAbilityName(context, "con"),
+        assertEquals(2, knight.getAbilityModifierFromAbilityName("con", context),
                 "demo:knight con of 14 should have modifier of +2"
         );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "int"),
+        assertEquals(0, knight.getAbilityModifierFromAbilityName("int", context),
                 "demo:knight int of 11 should have modifier of +0"
         );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "wis"),
+        assertEquals(0, knight.getAbilityModifierFromAbilityName("wis", context),
                 "demo:knight wis of 11 should have modifier of +0"
         );
-        assertEquals(2, knight.getAbilityModifierFromAbilityName(context, "cha"),
+        assertEquals(2, knight.getAbilityModifierFromAbilityName("cha", context),
                 "demo:knight cha of 15 should have modifier of +2"
         );
     }
@@ -322,7 +322,7 @@ public class RPGLObjectTest {
         healingDelivery.setTarget(target);
         healingDelivery.invoke(context);
 
-        target.receiveHealing(context, healingDelivery);
+        target.receiveHealing(healingDelivery, context);
 
         assertEquals(20, target.getHealthData().getInteger("current"),
                 "target should recover 10 hit points (10+10=20)"
@@ -355,7 +355,7 @@ public class RPGLObjectTest {
         healingDelivery.setTarget(target);
         healingDelivery.invoke(context);
 
-        target.receiveHealing(context, healingDelivery);
+        target.receiveHealing(healingDelivery, context);
 
         assertEquals(178, target.getHealthData().getInteger("current"),
                 "target should only recover its one missing hit point when healed for 10 (177+10=187, max 178: 187 -> 178)"

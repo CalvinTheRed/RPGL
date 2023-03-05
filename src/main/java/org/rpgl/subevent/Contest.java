@@ -82,6 +82,7 @@ public class Contest extends Subevent {
      *
      * @param context the context in which the subevent is invoked
      * @return the source's result
+     *
      * @throws Exception if an exception occurs
      */
     int getSourceResult(RPGLContext context) throws Exception {
@@ -124,7 +125,8 @@ public class Contest extends Subevent {
     /**
      * This helper method returns the result of the target when it is a save difficulty class calculation.
      *
-     * @param context the context in which the subevent is invoked
+     * @param targetJson the JSON data defining the target's contribution to the Contest
+     * @param context    the context in which the subevent is invoked
      * @return the target's result
      * @throws Exception if an exception occurs
      */
@@ -141,6 +143,7 @@ public class Contest extends Subevent {
     /**
      * This helper method returns the result of the target when it is an ability check.
      *
+     * @param targetJson the JSON data defining the target's contribution to the Contest
      * @param context the context in which the subevent is invoked
      * @return the target's result
      * @throws Exception if an exception occurs

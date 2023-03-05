@@ -60,8 +60,8 @@ public class SavingThrow extends Roll {
 
         RPGLObject target = this.getTarget();
         String saveAbility = this.getAbility(context);
-        this.addBonus(target.getAbilityModifierFromAbilityName(context, saveAbility));
-        if (target.isProficientInSavingThrow(context, saveAbility)) {
+        this.addBonus(target.getAbilityModifierFromAbilityName(saveAbility, context));
+        if (target.isProficientInSavingThrow(saveAbility, context)) {
             this.addBonus(target.getEffectiveProficiencyBonus(context));
         }
 
@@ -166,7 +166,7 @@ public class SavingThrow extends Roll {
      */
     void resolveSavePass(RPGLContext context) throws Exception {
         this.resolvePassDamage(context);
-        this.resolveNestedSubevents(context, "pass");
+        this.resolveNestedSubevents("pass", context);
     }
 
     /**
@@ -178,7 +178,7 @@ public class SavingThrow extends Roll {
      */
     void resolveSaveFail(RPGLContext context) throws Exception {
         this.resolveFailDamage(context);
-        this.resolveNestedSubevents(context, "fail");
+        this.resolveNestedSubevents("fail", context);
     }
 
     /**
@@ -298,11 +298,12 @@ public class SavingThrow extends Roll {
      * This helper method resolves any nested Subevents within this Subevent in accordance to whether <code>target</code>
      * passed or fails its saving throw.
      *
+     * @param passOrFail a String indicating whether the saving throw was passed or failed
      * @param context the context this Subevent takes place in
      *
      * @throws Exception if an exception occurs.
      */
-    void resolveNestedSubevents(RPGLContext context, String passOrFail) throws Exception {
+    void resolveNestedSubevents(String passOrFail, RPGLContext context) throws Exception {
         JsonArray subeventJsonArray = this.json.getJsonArray(passOrFail);
         if (subeventJsonArray != null) {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
@@ -335,7 +336,7 @@ public class SavingThrow extends Roll {
         damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());
         damageDelivery.invoke(context);
-        this.getTarget().receiveDamage(context, damageDelivery);
+        this.getTarget().receiveDamage(damageDelivery, context);
     }
 
 }

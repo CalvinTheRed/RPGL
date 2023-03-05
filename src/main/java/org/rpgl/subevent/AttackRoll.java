@@ -122,7 +122,7 @@ public class AttackRoll extends Roll {
 
         // Add attack ability score modifier (defined by the Subevent JSON) as a bonus to the roll.
         String attackAbility = this.json.getString("attack_ability");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, attackAbility));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(attackAbility, context));
 
         // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
         this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
@@ -149,7 +149,7 @@ public class AttackRoll extends Roll {
         // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
         String attackType = this.json.getString("attack_type");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, weapon.getAttackAbility(attackType)));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
         this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll (all natural weapon attacks are made with proficiency).
@@ -184,11 +184,11 @@ public class AttackRoll extends Roll {
         //Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(equipmentSlot));
         String attackType = this.json.getString("attack_type");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, weapon.getAttackAbility(attackType)));
+        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
         this.applyWeaponAttackBonus(weapon);
 
         // Add proficiency bonus to the roll if source is proficient with weapon.
-        if (getSource().isProficientWithWeapon(context, weapon)) {
+        if (getSource().isProficientWithWeapon(weapon, context)) {
             this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
         }
 
@@ -290,7 +290,7 @@ public class AttackRoll extends Roll {
         if (this.json.getString("weapon") != null) {
             RPGLItem weapon = UUIDTable.getItem(this.json.getString("weapon"));
             String attackAbility = weapon.getAttackAbility(this.json.getString("attack_type"));
-            int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(context, attackAbility);
+            int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(attackAbility, context);
             String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("type");
             baseDamageCollection.addTypedDamage(new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -341,14 +341,10 @@ public class AttackRoll extends Roll {
      *
      * @throws Exception if an exception occurs.
      */
-    CriticalHitDamageCollection getCriticalHitDamageCollection(
-            DamageCollection baseDamageCollection,
-            DamageCollection targetDamageCollection,
-            RPGLContext context
-    ) throws Exception {
-
+    CriticalHitDamageCollection getCriticalHitDamageCollection(DamageCollection baseDamageCollection,
+                                                               DamageCollection targetDamageCollection,
+                                                               RPGLContext context) throws Exception {
         baseDamageCollection.addTypedDamage(targetDamageCollection.getDamageCollection());
-
         CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
         criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "critical_hit_damage_collection");
@@ -407,7 +403,7 @@ public class AttackRoll extends Roll {
         damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());
         damageDelivery.invoke(context);
-        this.getTarget().receiveDamage(context, damageDelivery);
+        this.getTarget().receiveDamage(damageDelivery, context);
     }
 
     /**

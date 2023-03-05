@@ -173,7 +173,7 @@ public class DealDamage extends Subevent {
         damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());
         damageDelivery.invoke(context);
-        this.getTarget().receiveDamage(context, damageDelivery);
+        this.getTarget().receiveDamage(damageDelivery, context);
     }
 
 }

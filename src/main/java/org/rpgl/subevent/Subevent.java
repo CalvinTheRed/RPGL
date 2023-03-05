@@ -139,7 +139,7 @@ public abstract class Subevent {
      *
      * @param context the context in which the Subevent is being prepared\
      *
-     * @throws Exception if an exception occurs (any type of error may occur from calling this method)
+     * @throws Exception if an exception occurs
      */
     public void prepare(RPGLContext context) throws Exception {
         if (this.json.getJsonArray("tags") == null) {
@@ -154,7 +154,7 @@ public abstract class Subevent {
      *
      * @param context the context in which the Subevent is being invoked
      *
-     * @throws Exception if an exception occurs (any type of error may occur from calling this method)
+     * @throws Exception if an exception occurs
      */
     public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);

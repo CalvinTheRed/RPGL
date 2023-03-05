@@ -8,6 +8,9 @@ import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This Function is dedicated to maximizing the healing dice of HealingRoll Subevents.
+ */
 public class MaximizeHealing extends Function {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MaximizeHealing.class);
