@@ -47,27 +47,30 @@ public class AbilityCheck extends Roll {
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        this.roll();
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(this.json.getString("ability"), context));
+        if (this.isNotCanceled()) {
+            this.roll();
+            this.addBonus(this.getSource().getAbilityModifierFromAbilityName(this.json.getString("ability"), context));
 
-        GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
-        getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_ability_check_proficiency");
-            this.putString("skill", Objects.requireNonNullElse(json.getString("skill"), "")); // TODO accommodate tools?
-            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
-        }});
-        getAbilityCheckProficiency.setSource(this.getSource());
-        getAbilityCheckProficiency.prepare(context);
-        getAbilityCheckProficiency.setTarget(this.getSource());
-        getAbilityCheckProficiency.invoke(context);
+            GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
+            getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
+                this.putString("subevent", "get_ability_check_proficiency");
+                this.putString("skill", Objects.requireNonNullElse(json.getString("skill"), "")); // TODO accommodate tools?
+                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            }});
+            getAbilityCheckProficiency.setSource(this.getSource());
+            getAbilityCheckProficiency.prepare(context);
+            getAbilityCheckProficiency.setTarget(this.getSource());
+            getAbilityCheckProficiency.invoke(context);
 
-        if (getAbilityCheckProficiency.isHalfProficient()) {
-            this.addBonus(this.getSource().getProficiencyBonus() / 2);
-        } else if (getAbilityCheckProficiency.isProficient()) {
-            this.addBonus(this.getSource().getProficiencyBonus());
-        } else if (getAbilityCheckProficiency.isExpert()) {
-            this.addBonus(this.getSource().getProficiencyBonus() * 2);
+            if (getAbilityCheckProficiency.isHalfProficient()) {
+                this.addBonus(this.getSource().getProficiencyBonus() / 2);
+            } else if (getAbilityCheckProficiency.isProficient()) {
+                this.addBonus(this.getSource().getProficiencyBonus());
+            } else if (getAbilityCheckProficiency.isExpert()) {
+                this.addBonus(this.getSource().getProficiencyBonus() * 2);
+            }
         }
+
     }
 
     @Override

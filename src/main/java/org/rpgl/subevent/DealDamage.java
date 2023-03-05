@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class DealDamage extends Subevent {
+public class DealDamage extends Subevent implements CancelableSubevent {
 
     public DealDamage() {
         super("deal_damage");
@@ -45,19 +45,32 @@ public class DealDamage extends Subevent {
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
-        JsonObject targetDamage = this.getTargetDamage(context);
-        for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
-            String damageType = targetDamageEntry.getKey();
-            if (baseDamage.asMap().containsKey(damageType)) {
-                Integer baseTypedDamage = baseDamage.getInteger(damageType);
-                baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
-                baseDamage.putInteger(damageType, baseTypedDamage);
-            } else {
-                baseDamage.asMap().entrySet().add(targetDamageEntry);
+        if (this.isNotCanceled()) {
+            JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
+            JsonObject targetDamage = this.getTargetDamage(context);
+            for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
+                String damageType = targetDamageEntry.getKey();
+                if (baseDamage.asMap().containsKey(damageType)) {
+                    Integer baseTypedDamage = baseDamage.getInteger(damageType);
+                    baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
+                    baseDamage.putInteger(damageType, baseTypedDamage);
+                } else {
+                    baseDamage.asMap().entrySet().add(targetDamageEntry);
+                }
             }
+            this.deliverDamage(context);
         }
-        this.deliverDamage(context);
+
+    }
+
+    @Override
+    public void cancel() {
+        this.json.putBoolean("cancel", true);
+    }
+
+    @Override
+    public boolean isNotCanceled() {
+        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
     }
 
     /**

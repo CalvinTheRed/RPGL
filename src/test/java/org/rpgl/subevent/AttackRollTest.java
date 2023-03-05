@@ -972,7 +972,7 @@ public class AttackRollTest {
         attackRoll.prepare(context);
 
         String expected = """
-                ["humanoid","attack_roll","metal","weapon"]""";
+                ["humanoid","attack_roll","melee","metal","weapon"]""";
         assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
                 "object tag (humanoid), subevent tag (attack_roll), and item weapon tags (metal, weapon) should all be present"
         );
@@ -1003,7 +1003,7 @@ public class AttackRollTest {
         attackRoll.prepare(context);
 
         String expected = """
-                ["dragon","attack_roll","claw"]""";
+                ["dragon","attack_roll","melee","claw"]""";
         assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
                 "object tag (dragon), subevent tag (attack_roll), and natural weapon tag (claw) should all be present"
         );

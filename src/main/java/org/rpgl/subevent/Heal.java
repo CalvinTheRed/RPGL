@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class Heal extends Subevent {
+public class Heal extends Subevent implements CancelableSubevent {
 
     public Heal() {
         super("heal");
@@ -50,16 +50,29 @@ public class Heal extends Subevent {
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        JsonObject baseHealing = Objects.requireNonNullElse(this.json.getJsonObject("healing"), new JsonObject());
-        JsonObject targetHealing = this.getTargetHealing(context);
-        baseHealing.putInteger("bonus", baseHealing.getInteger("bonus") + targetHealing.getInteger("bonus"));
-        baseHealing.getJsonArray("dice").asList().addAll(targetHealing.getJsonArray("dice").asList());
-        int healing = baseHealing.getInteger("bonus");
-        JsonArray healingDice = baseHealing.getJsonArray("dice");
-        for (int i = 0; i < healingDice.size(); i++) {
-            healing += healingDice.getJsonObject(i).getInteger("roll");
+        if (this.isNotCanceled()) {
+            JsonObject baseHealing = Objects.requireNonNullElse(this.json.getJsonObject("healing"), new JsonObject());
+            JsonObject targetHealing = this.getTargetHealing(context);
+            baseHealing.putInteger("bonus", baseHealing.getInteger("bonus") + targetHealing.getInteger("bonus"));
+            baseHealing.getJsonArray("dice").asList().addAll(targetHealing.getJsonArray("dice").asList());
+            int healing = baseHealing.getInteger("bonus");
+            JsonArray healingDice = baseHealing.getJsonArray("dice");
+            for (int i = 0; i < healingDice.size(); i++) {
+                healing += healingDice.getJsonObject(i).getInteger("roll");
+            }
+            this.deliverHealing(context, healing);
         }
-        this.deliverHealing(context, healing);
+
+    }
+
+    @Override
+    public void cancel() {
+        this.json.putBoolean("cancel", true);
+    }
+
+    @Override
+    public boolean isNotCanceled() {
+        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
     }
 
     /**

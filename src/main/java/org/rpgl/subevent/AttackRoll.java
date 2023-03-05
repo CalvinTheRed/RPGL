@@ -51,6 +51,7 @@ public class AttackRoll extends Roll {
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
         this.addTag("attack_roll");
+        this.addTag(this.json.getString("attack_type"));
 
         String weapon = this.json.getString("weapon");
         if (weapon == null) {
@@ -67,23 +68,25 @@ public class AttackRoll extends Roll {
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        this.roll();
-        int armorClass = this.getTargetArmorClass(context);
+        if (this.isNotCanceled()) {
+            this.roll();
+            int armorClass = this.getTargetArmorClass(context);
 
-        if (this.isCriticalHit(context)) {
-            this.resolveCriticalHitDamage(context);
-            this.resolveNestedSubevents("hit", context);
-        } else if (this.isCriticalMiss() || this.get() < armorClass) {
-            this.resolveNestedSubevents("miss", context);
-        } else {
-            this.resolveDamage(context);
-            this.resolveNestedSubevents("hit", context);
-        }
+            if (this.isCriticalHit(context)) {
+                this.resolveCriticalHitDamage(context);
+                this.resolveNestedSubevents("hit", context);
+            } else if (this.isCriticalMiss() || this.get() < armorClass) {
+                this.resolveNestedSubevents("miss", context);
+            } else {
+                this.resolveDamage(context);
+                this.resolveNestedSubevents("hit", context);
+            }
 
-        // Delete natural weapon if one was created at the end of invoke()
-        if (this.json.getBoolean("natural_weapon_attack")) {
-            String naturalWeaponUuid = this.json.getString("weapon");
-            UUIDTable.unregister(naturalWeaponUuid);
+            // Delete natural weapon if one was created at the end of invoke()
+            if (this.json.getBoolean("natural_weapon_attack")) {
+                String naturalWeaponUuid = this.json.getString("weapon");
+                UUIDTable.unregister(naturalWeaponUuid);
+            }
         }
     }
 
@@ -398,6 +401,9 @@ public class AttackRoll extends Roll {
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
             this.putJsonObject("damage", damage.deepClone());
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(json.getJsonArray("tags").asList());
+            }});
         }});
         damageDelivery.setSource(this.getSource());
         damageDelivery.prepare(context);

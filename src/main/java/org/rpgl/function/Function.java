@@ -46,7 +46,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("grant_proficiency", new GrantProficiency());
         Function.FUNCTIONS.put("grant_resistance", new GrantResistance());
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
-        Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());
+        Function.FUNCTIONS.put("invoke_event", new InvokeEvent());
         Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
         Function.FUNCTIONS.put("reroll_damage_dice_matching_or_below", new RerollDamageDiceMatchingOrBelow());
         Function.FUNCTIONS.put("reroll_healing_dice_matching_or_below", new RerollHealingDiceMatchingOrBelow());
@@ -92,7 +92,7 @@ public abstract class Function {
      * @param functionJson a JsonObject containing additional information necessary for the function to be executed
      * @param context      the context in which the FUnction is invoked
      *
-     * @throws FunctionMismatchException if functionJson is for a different function than the one being executed
+     * @throws Exception if an exception occurs
      */
     public abstract void execute(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
                                  JsonObject functionJson, RPGLContext context) throws Exception;

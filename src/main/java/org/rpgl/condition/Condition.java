@@ -85,7 +85,7 @@ public abstract class Condition {
      * @param context       the context in which the Condition is being evaluated
      * @return the result of the evaluation
      *
-     * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
+     * @throws Exception if an exception occurs
      */
     public abstract boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
                                      JsonObject conditionJson, RPGLContext context) throws Exception;

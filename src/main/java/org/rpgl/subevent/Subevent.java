@@ -235,7 +235,7 @@ public abstract class Subevent {
     /**
      * This method returns the ID for this Subevent.
      *
-     * @return the ID of this SUbevent
+     * @return the ID of this Subevent
      */
     public String getSubeventId() {
         return this.subeventId;

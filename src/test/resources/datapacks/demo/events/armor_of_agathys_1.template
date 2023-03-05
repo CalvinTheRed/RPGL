@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Armor of Agathys",
+  "description": "A low-level abjuration spell.",
+  "area_of_effect": { },
+  "subevents": [
+    {
+      "subevent": "give_temporary_hit_points",
+      "tags": [ "spell" ],
+      "temporary_hit_points": 5,
+      "rider_effects": [
+        "demo:armor_of_agathys_1"
+      ]
+    }
+  ]
+}

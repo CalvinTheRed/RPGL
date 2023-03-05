@@ -24,6 +24,7 @@ import java.util.Objects;
 public class Contest extends Subevent {
 
     // TODO how can an ObjectHasTag Condition be evaluated against the target of a Contest?
+    // TODO how can this fit in with the CancelableSubevent interface?
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Contest.class);
 

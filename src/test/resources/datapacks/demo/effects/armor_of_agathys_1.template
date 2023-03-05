@@ -1,0 +1,41 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Armor of Agathys (level 1)",
+  "description": "You deal 5 cold damage to any creature which hits you with a melee attack.",
+  "subevent_filters": {
+    "damage_delivery": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "target"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "melee"
+        }
+      ],
+      "functions": [
+        {
+          "function": "invoke_subevent",
+          "target": {
+            "from": "subevent",
+            "object": "source"
+          },
+          "subevent": {
+            "subevent": "deal_damage",
+            "damage": [
+              {
+                "type": "cold",
+                "dice": [ ],
+                "bonus": 5
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

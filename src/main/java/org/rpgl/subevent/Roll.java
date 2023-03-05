@@ -7,6 +7,8 @@ import org.rpgl.math.Die;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 /**
  * This abstract Subevent is dedicated to performing rolls. This includes ability checks, attack rolls, and saving throws.
  * //TODO create a "fail" method to cause the contest roll to automatically fail (Dex saves while asleep for example)
@@ -18,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Calvin Withun
  */
-public abstract class Roll extends Calculation implements AbilitySubevent {
+public abstract class Roll extends Calculation implements AbilitySubevent, CancelableSubevent {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Roll.class);
 
@@ -32,6 +34,16 @@ public abstract class Roll extends Calculation implements AbilitySubevent {
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
         this.json.getJsonArray("tags").asList().addAll(this.getSource().getAllTags(context));
+    }
+
+    @Override
+    public void cancel() {
+        this.json.putBoolean("cancel", true);
+    }
+
+    @Override
+    public boolean isNotCanceled() {
+        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
     }
 
     /**

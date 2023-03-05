@@ -70,13 +70,16 @@ public class SavingThrow extends Roll {
         /*
          * Resume normal invoke() logic here
          */
-        this.roll();
-        this.checkForReroll(context); // TODO eventually have this in a while loop? Add this to AttackRoll?
-        if (this.get() < this.json.getInteger("save_difficulty_class")) {
-            this.resolveSaveFail(context);
-        } else {
-            this.resolveSavePass(context);
+        if (this.isNotCanceled()) {
+            this.roll();
+            this.checkForReroll(context); // TODO eventually have this in a while loop? Add this to AttackRoll?
+            if (this.get() < this.json.getInteger("save_difficulty_class")) {
+                this.resolveSaveFail(context);
+            } else {
+                this.resolveSavePass(context);
+            }
         }
+
     }
 
     @Override
