@@ -48,10 +48,14 @@ public abstract class Function {
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
         Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());
         Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
+        Function.FUNCTIONS.put("reroll_damage_dice_matching_or_below", new RerollDamageDiceMatchingOrBelow());
+        Function.FUNCTIONS.put("reroll_healing_dice_matching_or_below", new RerollHealingDiceMatchingOrBelow());
         Function.FUNCTIONS.put("revoke_immunity", new RevokeImmunity());
         Function.FUNCTIONS.put("revoke_resistance", new RevokeResistance());
         Function.FUNCTIONS.put("revoke_vulnerability", new RevokeVulnerability());
         Function.FUNCTIONS.put("set_base", new SetBase());
+        Function.FUNCTIONS.put("set_damage_dice_matching_or_below", new SetDamageDiceMatchingOrBelow());
+        Function.FUNCTIONS.put("set_healing_dice_matching_or_below", new SetHealingDiceMatchingOrBelow());
         Function.FUNCTIONS.put("set_set", new SetSet());
 
         if (includeTestingFunctions) {
