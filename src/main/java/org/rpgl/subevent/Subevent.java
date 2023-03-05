@@ -47,6 +47,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("contest", new Contest());
         Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
+        Subevent.SUBEVENTS.put("give_temporary_hit_points", new GiveTemporaryHitPoints());
         Subevent.SUBEVENTS.put("heal", new Heal());
         //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
