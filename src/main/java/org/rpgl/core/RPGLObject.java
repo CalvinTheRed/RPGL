@@ -41,6 +41,15 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
+     * Setter for ability scores.
+     *
+     * @param abilityScores a new ability scores JsonObject
+     */
+    public void setAbilityScores(JsonObject abilityScores) {
+        this.putJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS, abilityScores);
+    }
+
+    /**
      * Returns the RPGLObject's health data. This includes hit dice, base health, max health, current health, and
      * temporary health.
      *
@@ -48,6 +57,15 @@ public class RPGLObject extends RPGLTaggable {
      */
     public JsonObject getHealthData() {
         return this.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS);
+    }
+
+    /**
+     * Setter for health data.
+     *
+     * @param healthData a new health data JsonObject
+     */
+    public void setHealthData(JsonObject healthData) {
+        this.putJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS, healthData);
     }
 
     /**
@@ -60,12 +78,30 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
+     * Setter for equipped items.
+     *
+     * @param equippedItems a new equipped items JsonObject
+     */
+    public void setEquippedItems(JsonObject equippedItems) {
+        this.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItems);
+    }
+
+    /**
      * Returns the UUIDs of all items held by the RPGLObject.
      *
      * @return a JsonArray of RPGLItem UUIDs
      */
     public JsonArray getInventory() {
         return this.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+    }
+
+    /**
+     * Setter for inventory.
+     *
+     * @param inventory a new inventory JsonArray
+     */
+    public void setInventory(JsonArray inventory) {
+        this.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventory);
     }
 
     /**
@@ -78,6 +114,15 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
+     * Setter for events.
+     *
+     * @param events a new events JsonArray
+     */
+    public void setEvents(JsonArray events) {
+        this.putJsonArray(RPGLObjectTO.EVENTS_ALIAS, events);
+    }
+
+    /**
      * Returns the UUIDs of all RPGLEffects applied to the RPGLObject, not including any provided through equipped items.
      *
      * @return a JsonArray of RPGLItem UUIDs
@@ -87,12 +132,30 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
+     * Setter for effects.
+     *
+     * @param effects a new effects JsonArray
+     */
+    public void setEffects(JsonArray effects) {
+        this.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effects);
+    }
+
+    /**
      * Returns the base proficiency bonus of the RPGLObject, not modified by any effects.
      *
      * @return the RPGLObject's base proficiency bonus
      */
     public Integer getProficiencyBonus() {
         return this.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS);
+    }
+
+    /**
+     * Setter for proficiency bonus.
+     *
+     * @param proficiencyBonus a new proficiency bonus int
+     */
+    public void setProficiencyBonus(int proficiencyBonus) {
+        this.putInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
     }
 
     // =================================================================================================================

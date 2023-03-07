@@ -36,6 +36,15 @@ public class RPGLEffect extends UUIDTableElement {
     }
 
     /**
+     * Setter for subevent filters.
+     *
+     * @param subeventFilters a new subevent filters JsonObject
+     */
+    public void setSubeventFilters(JsonObject subeventFilters) {
+        this.putJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS, subeventFilters);
+    }
+
+    /**
      * Returns the source of the RPGLEffect.
      *
      * @return a RPGLObject

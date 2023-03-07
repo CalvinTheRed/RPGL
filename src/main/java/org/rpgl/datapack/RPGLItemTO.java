@@ -129,19 +129,19 @@ public class RPGLItemTO extends RPGLTaggableTO {
      */
     public RPGLItem toRPGLItem() {
         RPGLItem rpglItem = new RPGLItem() {{
-            this.putJsonArray(TAGS_ALIAS, new JsonArray(tags));
-            this.putInteger(WEIGHT_ALIAS, weight);
-            this.putInteger(COST_ALIAS, cost);
-            this.putJsonArray(PROFICIENCY_TAGS_ALIAS, new JsonArray(proficiencyTags));
-            this.putJsonArray(WHILE_EQUIPPED_ALIAS, new JsonArray(whileEquipped));
-            this.putJsonArray(WEAPON_PROPERTIES_ALIAS, new JsonArray(weaponProperties));
-            this.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
-            this.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
-            this.putJsonObject(ATTACK_ABILITIES_ALIAS, new JsonObject(attackAbilities));
-            this.putJsonObject(RANGE_ALIAS, new JsonObject(range));
-            this.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
-            this.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
-            this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
+            this.setTags(new JsonArray(tags));
+            this.setWeight(weight);
+            this.setCost(cost);
+            this.setProficiencyTags(new JsonArray(proficiencyTags));
+            this.setWhileEquippedEffects(new JsonArray(whileEquipped));
+            this.setWeaponProperties(new JsonArray(weaponProperties));
+            this.setDamage(new JsonObject(damage));
+            this.setAttackBonus(attackBonus);
+            this.setAttackAbilities(new JsonObject(attackAbilities));
+            this.setRange(new JsonObject(range));
+            this.setArmorClassBase(armorClassBase);
+            this.setArmorClassDexLimit(armorClassDexLimit);
+            this.setArmorClassBonus(armorClassBonus);
         }};
         rpglItem.join(super.getTemplateData());
         rpglItem.join(super.getUUIDTableElementData());
