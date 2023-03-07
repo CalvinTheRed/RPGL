@@ -15,6 +15,7 @@ import org.rpgl.subevent.GetObjectTags;
 import org.rpgl.subevent.GetSavingThrowProficiency;
 import org.rpgl.subevent.GetWeaponProficiency;
 import org.rpgl.subevent.HealingDelivery;
+import org.rpgl.subevent.InfoSubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -329,7 +330,7 @@ public class RPGLObject extends RPGLTaggable {
      */
     public void receiveDamage(DamageDelivery damageDelivery, RPGLContext context) throws Exception {
         JsonObject damageJson = damageDelivery.getDamage();
-        Integer damage = 0;
+        int damage = 0;
         for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
             String damageType = damageJsonEntry.getKey();
             Integer typedDamage = damageJson.getInteger(damageJsonEntry.getKey());
@@ -351,11 +352,13 @@ public class RPGLObject extends RPGLTaggable {
                 if (damageAffinity.isVulnerable()) {
                     typedDamage *= 2;
                 }
-                damage += typedDamage;
+                if (typedDamage > 0) {
+                    damage += typedDamage;
+                }
             }
         }
         if (damage > 0) {
-            this.reduceHitPoints(damage);
+            this.reduceHitPoints(damage, context);
         }
     }
 
@@ -402,20 +405,77 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param amount a quantity of damage
      */
-    void reduceHitPoints(int amount) {
+    void reduceHitPoints(int amount, RPGLContext context) throws Exception {
         Map<String, Object> healthData = this.getHealthData().asMap();
         Integer temporaryHitPoints = (Integer) healthData.get("temporary");
         Integer currentHitPoints = (Integer) healthData.get("current");
-        if (amount > temporaryHitPoints) {
+        if (amount >= temporaryHitPoints) {
             amount -= temporaryHitPoints;
             temporaryHitPoints = 0;
             currentHitPoints -= amount;
+            healthData.put("temporary", temporaryHitPoints);
+            healthData.put("current", currentHitPoints);
+            this.invokeInfoSubevent(new String[] { "reduced_to_zero_temporary_hit_points" }, context);
         } else {
             temporaryHitPoints -= amount;
+            healthData.put("temporary", temporaryHitPoints);
         }
-        healthData.put("temporary", temporaryHitPoints);
-        healthData.put("current", currentHitPoints);
-        // TODO deal with 0 or negative hit points after this...
+        if (currentHitPoints <= -this.getMaximumHitPoints(context)) {
+            healthData.put("current", 0);
+            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points", "killed" }, context); // TODO is there a more elegant way to do this?
+        } else if (currentHitPoints < 0) {
+            healthData.put("current", 0);
+            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points" }, context);
+        }
+    }
+
+    /**
+     * This helper method causes the RPGLObject to invoke an InfoSubevent using the passed tags.
+     *
+     * @param tags    the tags to be stored in the InfoSubevent
+     * @param context the context in which the InfoSubevent is invoked
+     *
+     * @throws Exception if nan exception occurs
+     */
+    void invokeInfoSubevent(String[] tags, RPGLContext context) throws Exception {
+        InfoSubevent infoSubevent = new InfoSubevent();
+        infoSubevent.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "info_subevent",
+                "tags": [ <tags> ]
+            }*/
+            this.putString("subevent", "info_subevent");
+            JsonArray subeventTags = infoSubevent.json.getJsonArray("tags");
+            for (String tag : tags) {
+                subeventTags.addString(tag);
+            }
+        }});
+        infoSubevent.setSource(this);
+        infoSubevent.prepare(context);
+        infoSubevent.setTarget(this);
+        infoSubevent.invoke(context);
+    }
+
+    /**
+     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has started.
+     *
+     * @param context the context in which the RPGLObject starts its turn
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void startTurn(RPGLContext context) throws Exception {
+        this.invokeInfoSubevent(new String[] { "starting_turn" }, context);
+    }
+
+    /**
+     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has ended.
+     *
+     * @param context the context in which the RPGLObject ends its turn
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void endTurn(RPGLContext context) throws Exception {
+        this.invokeInfoSubevent(new String[] { "ending_turn" }, context);
     }
 
     /**

@@ -115,9 +115,11 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (no temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() {
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        youngRedDragon.reduceHitPoints(10);
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
+        youngRedDragon.reduceHitPoints(10, context);
 
         assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
                 "demo:young_red_dragon should lose 10 hit points (178-10=168)"
@@ -126,10 +128,12 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (few temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() {
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 10);
-        youngRedDragon.reduceHitPoints(20);
+        youngRedDragon.reduceHitPoints(20, context);
 
         assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
                 "demo:young_red_dragon should net lose 10 hit points (178+10-20=168)"
@@ -138,10 +142,12 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (many temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() {
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 20);
-        youngRedDragon.reduceHitPoints(10);
+        youngRedDragon.reduceHitPoints(10, context);
 
         assertEquals(178, youngRedDragon.getHealthData().getInteger("current"),
                 "demo:young_red_dragon should lose no hit points (178)"

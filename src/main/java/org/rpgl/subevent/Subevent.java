@@ -36,7 +36,7 @@ public abstract class Subevent {
     final String subeventId;
 
     /**
-     * This method populates Condition.CONDITIONS.
+     * This method populates Subevent.SUBEVENTS.
      *
      * @param includeTestingSubevents whether testing-only Subevents should be loaded into RPGL
      */
@@ -49,6 +49,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
         Subevent.SUBEVENTS.put("give_temporary_hit_points", new GiveTemporaryHitPoints());
         Subevent.SUBEVENTS.put("heal", new Heal());
+        Subevent.SUBEVENTS.put("info_subevent", new InfoSubevent());
         //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
 
