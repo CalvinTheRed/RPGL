@@ -216,12 +216,12 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("getEvents returns an array of the correct events")
-    void getEvents_returnsArrayOfCorrectEvents() {
+    void getEvents_returnsArrayOfCorrectEvents() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
         context.add(youngRedDragon);
 
-        List<RPGLEvent> events = youngRedDragon.getEventObjects();
+        List<RPGLEvent> events = youngRedDragon.getEventObjects(context);
 
         assertEquals(3, events.size(),
                 "demo:young_red_dragon should have 3 RPGLEvents"

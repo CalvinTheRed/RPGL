@@ -37,6 +37,9 @@ public abstract class Function {
 
         Function.FUNCTIONS.put("add_bonus", new AddBonus());
         Function.FUNCTIONS.put("add_damage", new AddDamage());
+        Function.FUNCTIONS.put("add_event", new AddEvent());
+        Function.FUNCTIONS.put("add_healing", new AddHealing());
+        Function.FUNCTIONS.put("add_object_tag", new AddObjectTag());
         Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
         Function.FUNCTIONS.put("grant_advantage", new GrantAdvantage());
         Function.FUNCTIONS.put("grant_disadvantage", new GrantDisadvantage());
@@ -48,6 +51,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
         Function.FUNCTIONS.put("invoke_event", new InvokeEvent());
         Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
+        Function.FUNCTIONS.put("maximize_healing", new MaximizeHealing());
         Function.FUNCTIONS.put("reroll_damage_dice_matching_or_below", new RerollDamageDiceMatchingOrBelow());
         Function.FUNCTIONS.put("reroll_healing_dice_matching_or_below", new RerollHealingDiceMatchingOrBelow());
         Function.FUNCTIONS.put("revoke_immunity", new RevokeImmunity());

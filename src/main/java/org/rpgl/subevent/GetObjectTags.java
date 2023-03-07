@@ -1,5 +1,6 @@
 package org.rpgl.subevent;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -35,13 +36,19 @@ public class GetObjectTags extends Subevent {
         return clone;
     }
 
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        this.json.putJsonArray("object_tags", new JsonArray());
+    }
+
     /**
      * Adds a tag to the Subevent, to be applied to a RPGLObject later.
      *
      * @param tag a tag to be applied to a RPGLObject
      */
-    public void addTag(String tag) {
-        this.json.getJsonArray("tags").addString(tag);
+    public void addObjectTag(String tag) {
+        this.json.getJsonArray("object_tags").addString(tag);
     }
 
     /**
@@ -49,8 +56,8 @@ public class GetObjectTags extends Subevent {
      *
      * @return a JsonArray of tags
      */
-    public JsonArray getTags() {
-        return this.json.getJsonArray("tags");
+    public JsonArray getObjectTags() {
+        return this.json.getJsonArray("object_tags");
     }
 
 }

@@ -2,6 +2,8 @@ package org.rpgl.subevent;
 
 import org.rpgl.json.JsonObject;
 
+import java.util.Objects;
+
 /**
  * This Subevent is dedicated to communicating the occurrence of some non-functional but informative change, such as
  * starting a turn, ending a turn, running out of temporary hit points, etc. This type of Subevent allows for a more
@@ -14,7 +16,7 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class InfoSubevent extends Subevent {
+public class InfoSubevent extends Subevent implements CancelableSubevent {
 
     public InfoSubevent() {
         super("info_subevent");
@@ -34,6 +36,16 @@ public class InfoSubevent extends Subevent {
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
+    }
+
+    @Override
+    public void cancel() {
+        this.json.putBoolean("canceled", true);
+    }
+
+    @Override
+    public boolean isNotCanceled() {
+        return !Objects.requireNonNullElse(this.json.getBoolean("canceled"), false);
     }
 
 }

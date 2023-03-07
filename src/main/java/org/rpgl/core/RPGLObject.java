@@ -11,6 +11,7 @@ import org.rpgl.subevent.CalculateMaximumHitPoints;
 import org.rpgl.subevent.CalculateProficiencyBonus;
 import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
+import org.rpgl.subevent.GetEvents;
 import org.rpgl.subevent.GetObjectTags;
 import org.rpgl.subevent.GetSavingThrowProficiency;
 import org.rpgl.subevent.GetWeaponProficiency;
@@ -168,13 +169,29 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @return a List of RPGLEvent objects
      */
-    public List<RPGLEvent> getEventObjects() {
-        // TODO make a Subevent for collecting additional RPGLEvent ID's
-        JsonArray eventsArray = this.getEvents();
+    public List<RPGLEvent> getEventObjects(RPGLContext context) throws Exception {
         List<RPGLEvent> events = new ArrayList<>();
+        JsonArray eventsArray;
+
+        eventsArray = this.getEvents();
         for (int i = 0; i < eventsArray.size(); i++) {
             events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
         }
+
+        GetEvents getEvents = new GetEvents();
+        getEvents.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "get_events");
+        }});
+        getEvents.setSource(this);
+        getEvents.prepare(context);
+        getEvents.setTarget(this);
+        getEvents.invoke(context);
+
+        eventsArray = getEvents.getEvents();
+        for (int i = 0; i < eventsArray.size(); i++) {
+            events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
+        }
+
         return events;
     }
 
@@ -500,7 +517,7 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @throws Exception if nan exception occurs
      */
-    void invokeInfoSubevent(String[] tags, RPGLContext context) throws Exception {
+    InfoSubevent invokeInfoSubevent(String[] tags, RPGLContext context) throws Exception {
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -517,6 +534,7 @@ public class RPGLObject extends RPGLTaggable {
         infoSubevent.prepare(context);
         infoSubevent.setTarget(this);
         infoSubevent.invoke(context);
+        return infoSubevent;
     }
 
     /**
@@ -581,7 +599,6 @@ public class RPGLObject extends RPGLTaggable {
      * @param equipmentSlot an equipment slot name (can be anything other than <code>"inventory"</code>)
      */
     public void equipItem(String itemUuid, String equipmentSlot) {
-        // TODO make a subevent for equipping an item
         JsonArray inventory = this.getInventory();
         if (inventory.asList().contains(itemUuid)) {
             JsonObject equippedItems = this.getEquippedItems();
@@ -590,6 +607,29 @@ public class RPGLObject extends RPGLTaggable {
             item.updateEquippedEffects(this);
             item.defaultAttackAbilities();
             // TODO account for 2-handed items...
+        }
+    }
+
+    /**
+     * Un-equips an RPGLItem from an inventory slot, unless an InfoSubevent created to announce this is canceled.
+     *
+     * @param equipmentSlot an equipment slot String
+     * @param force         if true, the RPGLItem will be removed regardless of whether the associated InfoSubevent is
+     *                      canceled
+     * @param context       the context in which the RPGLItem is being un-equipped
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void unequipItem(String equipmentSlot, boolean force, RPGLContext context) throws Exception {
+        JsonObject equippedItems = this.getEquippedItems();
+        JsonArray itemTags = UUIDTable.getItem(equippedItems.getString(equipmentSlot)).getTags();
+        String[] infoSubeventTags = new String[itemTags.size() + 1];
+        infoSubeventTags[0] = "unequip_item";
+        for (int i = 0; i < itemTags.size() ; i++) {
+            infoSubeventTags[i + 1] = itemTags.getString(i);
+        }
+        if (force || this.invokeInfoSubevent(infoSubeventTags, context).isNotCanceled()) {
+            this.getEquippedItems().removeString(equipmentSlot);
         }
     }
 
@@ -603,10 +643,12 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public ArrayList<String> getAllTags(RPGLContext context) throws Exception {
-        JsonArray templateTags = this.getTags();
-        ArrayList<String> tags = new ArrayList<>();
-        for (int i = 0; i < templateTags.size(); i++) {
-            tags.add(templateTags.getString(i));
+        ArrayList<String> tagsList = new ArrayList<>();
+        JsonArray tags;
+
+        tags = this.getTags();
+        for (int i = 0; i < tags.size(); i++) {
+            tagsList.add(tags.getString(i));
         }
 
         GetObjectTags getObjectTags = new GetObjectTags();
@@ -617,11 +659,12 @@ public class RPGLObject extends RPGLTaggable {
         getObjectTags.prepare(context);
         getObjectTags.setTarget(this);
         getObjectTags.invoke(context);
-        JsonArray extraTags = getObjectTags.getTags();
-        for (int i = 0; i < extraTags.size(); i++) {
-            tags.add(extraTags.getString(i));
+
+        tags = getObjectTags.getObjectTags();
+        for (int i = 0; i < tags.size(); i++) {
+            tagsList.add(tags.getString(i));
         }
 
-        return tags;
+        return tagsList;
     }
 }
