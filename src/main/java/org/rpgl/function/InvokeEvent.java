@@ -6,6 +6,12 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
+/**
+ * This Function is dedicated to precipitating a new RPGLEvent.
+ * TODO this Function needs further development
+ *
+ * @author Calvin Withun
+ */
 public class InvokeEvent extends Function {
 
     public InvokeEvent() {

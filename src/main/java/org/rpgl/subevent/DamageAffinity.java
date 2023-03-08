@@ -10,9 +10,9 @@ import java.util.Objects;
  * "immunity", "resistance", "vulnerability"</code>).
  * <br>
  * <br>
- * Source: an RPGLObject being targeted by typed damage
+ * Source: an RPGLObject attempting to deal the indicated damage type
  * <br>
- * Target: an RPGLObject attempting to deal the indicated damage type
+ * Target: an RPGLObject being targeted by typed damage
  *
  * @author Calvin Withun
  */

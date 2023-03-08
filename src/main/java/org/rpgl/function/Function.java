@@ -49,7 +49,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("grant_proficiency", new GrantProficiency());
         Function.FUNCTIONS.put("grant_resistance", new GrantResistance());
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
-        Function.FUNCTIONS.put("invoke_event", new InvokeEvent());
+//        Function.FUNCTIONS.put("invoke_event", new InvokeEvent());
         Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
         Function.FUNCTIONS.put("maximize_healing", new MaximizeHealing());
         Function.FUNCTIONS.put("reroll_damage_dice_matching_or_below", new RerollDamageDiceMatchingOrBelow());

@@ -94,6 +94,16 @@ public abstract class Condition {
     // Condition helper methods
     // =================================================================================================================
 
+    /**
+     * This helper method compares two integer values in accordance with a specified comparison operator.
+     *
+     * @param value      the int being compared to another value
+     * @param target     the int being compared against
+     * @param comparison the operator being used for the comparison (<code>"=", "<", "<=", ">", ">="</code>)
+     * @return true if the comparison is satisfied
+     *
+     * @throws Exception if an invalid comparison operator is provided
+     */
     boolean compareValues(int value, int target, String comparison) throws Exception {
         switch(comparison) {
             case "=":

@@ -10,6 +10,15 @@ import org.rpgl.math.Die;
 
 import java.util.Objects;
 
+/**
+ * This Subevent is dedicated to giving temporary hit points to an RPGLObject. This Subevent also supports granting
+ * RPGLEffects to the Subevent's target if the temporary hit points are successfully assigned to the target.
+ * <br>
+ * <br>
+ * Source: an RPGLObject granting temporary hit points
+ * <br>
+ * Target: an RPGLObject being granted temporary hit points
+ */
 public class GiveTemporaryHitPoints extends Subevent implements CancelableSubevent {
 
     public GiveTemporaryHitPoints() {

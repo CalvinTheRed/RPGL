@@ -2,8 +2,6 @@ package org.rpgl.core;
 
 import org.rpgl.condition.Condition;
 import org.rpgl.datapack.RPGLEffectTO;
-import org.rpgl.exception.ConditionMismatchException;
-import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.function.Function;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -89,11 +87,11 @@ public class RPGLEffect extends UUIDTableElement {
      * RPGLEffect executes its functions.
      *
      * @param subevent a Subevent
+     * @param context  the context in which the subevent is being processed
      * @return true if the Subevent was present in this object's subevent filter and if the Conditions in that filter
      *         were satisfied
      *
-     * @throws ConditionMismatchException if a Condition is passed the wrong Condition ID.
-     * @throws FunctionMismatchException  if a Function is passed the wrong Function ID.
+     * @throws Exception if an exception occurs
      */
     public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         JsonObject subeventFilters = this.getSubeventFilters();
@@ -114,13 +112,14 @@ public class RPGLEffect extends UUIDTableElement {
     }
 
     /**
-     * This method evaluates a given collection of Conditions on a given RPGLObject source and target.
+     * This helper method evaluates a given collection of Conditions on a given RPGLObject source and target.
      *
      * @param subevent   the Subevent being invoked
      * @param conditions a collection of JSON data defining Conditions
+     * @param context    the context in which the Conditions are being evaluated
      * @return true if any Conditions evaluated to true
      *
-     * @throws ConditionMismatchException if a Condition is passed the wrong Condition ID.
+     * @throws Exception if an exception occurs
      */
     boolean evaluateConditions(Subevent subevent, JsonArray conditions, RPGLContext context) throws Exception {
         boolean conditionsMet = true;
@@ -134,12 +133,13 @@ public class RPGLEffect extends UUIDTableElement {
     }
 
     /**
-     * This method executes a given collection of Functions on given RPGLObjects and Subevents.
+     * This helper method executes a given collection of Functions on given RPGLObjects and Subevents.
      *
      * @param subevent  the Subevent being invoked
      * @param functions a collection of JSON data defining Functions
+     * @param context   the context in which the Functions are being executed
      *
-     * @throws FunctionMismatchException if a Function is passed the wrong Function ID.
+     * @throws Exception if an exception occurs
      */
     void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context) throws Exception {
         for (int i = 0; i < functions.size(); i++) {
@@ -150,6 +150,18 @@ public class RPGLEffect extends UUIDTableElement {
         }
     }
 
+    /**
+     * This helper method retrieves the source or the target RPGLObject of either an RPGLEffect or a Subevent being
+     * processed.
+     *
+     * @param effectSource the RPGLObject source of the RPGLEffect being processed
+     * @param effectTarget the RPGLObject target of the RPGLEffect being processed
+     * @param subevent     the Subevent being processed
+     * @param instructions the JSON data instructing which RPGLObject should be returned
+     * @return a RPGLObject
+     *
+     * @throws Exception if an exception occurs
+     */
     public static RPGLObject getObject(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject instructions) throws Exception {
         String from = instructions.getString("from");
         String object = instructions.getString("object");

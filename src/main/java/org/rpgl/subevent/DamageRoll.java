@@ -8,7 +8,7 @@ import org.rpgl.math.Die;
 import java.util.Objects;
 
 /**
- * This abstract Subevent is dedicated to rolling damage dice.
+ * This Subevent is dedicated to rolling damage dice.
  * <br>
  * <br>
  * Source: an RPGLObject rolling damage

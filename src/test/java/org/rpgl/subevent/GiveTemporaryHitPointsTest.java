@@ -66,8 +66,6 @@ public class GiveTemporaryHitPointsTest {
         );
     }
 
-
-
     @Test
     @DisplayName("invoke gives temporary hit points and applies rider effect (no prior temporary hit points)")
     void invoke_givesTemporaryHitPointsAndAppliesRiderEffect_noPriorTemporaryHitPoints() throws Exception {

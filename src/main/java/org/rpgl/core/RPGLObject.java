@@ -1,8 +1,6 @@
 package org.rpgl.core;
 
 import org.rpgl.datapack.RPGLObjectTO;
-import org.rpgl.exception.ConditionMismatchException;
-import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.CalculateAbilityScore;
@@ -167,7 +165,10 @@ public class RPGLObject extends RPGLTaggable {
      * Returns a List of all RPGLEvent objects associated with the RPGLObject. This includes RPGLEvents granted by
      * effects.
      *
+     * @param context the context in which the RPGLEvents are being collected
      * @return a List of RPGLEvent objects
+     *
+     * @throws Exception if an exception occurs
      */
     public List<RPGLEvent> getEventObjects(RPGLContext context) throws Exception {
         List<RPGLEvent> events = new ArrayList<>();
@@ -252,10 +253,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param context the context in which the Subevent is being processed
      * @return true if one of the RPGLObject's RPGLEffects modified the passed Subevent
      *
-     * @throws ConditionMismatchException if one of the Conditions in an RPGLEffect belonging to the RPGLObject is
-     *         presented with the wrong Condition ID.
-     * @throws FunctionMismatchException if one of the Functions in an RPGLEffect belonging to the RPGLObject is
-     *         presented with the wrong Function ID.
+     * @throws Exception if an exception occurs
      */
     public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         boolean wasSubeventProcessed = false;
@@ -483,7 +481,10 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This helper method directly reduces the hit points of the RPGLObject. This is not intended to be called directly.
      *
-     * @param amount a quantity of damage
+     * @param amount  a quantity of damage
+     * @param context the context in which the RPGLObject's hit points are reduced
+     *
+     * @throws Exception if an exception occurs
      */
     void reduceHitPoints(int amount, RPGLContext context) throws Exception {
         Map<String, Object> healthData = this.getHealthData().asMap();
@@ -514,6 +515,7 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param tags    the tags to be stored in the InfoSubevent
      * @param context the context in which the InfoSubevent is invoked
+     * @return the InfoSubevent which was invoked
      *
      * @throws Exception if nan exception occurs
      */
@@ -667,4 +669,5 @@ public class RPGLObject extends RPGLTaggable {
 
         return tagsList;
     }
+
 }

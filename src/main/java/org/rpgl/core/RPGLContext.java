@@ -1,7 +1,5 @@
 package org.rpgl.core;
 
-import org.rpgl.exception.ConditionMismatchException;
-import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.Subevent;
 
 import java.util.HashMap;
@@ -53,8 +51,7 @@ public class RPGLContext {
      *
      * @param subevent a Subevent
      *
-     * @throws ConditionMismatchException if a Condition was presented incorrectly formatted JSON data
-     * @throws FunctionMismatchException  if a Function was presented incorrectly formatted JSON data.
+     * @throws Exception if an exception occurs
      */
     public void processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         boolean wasProcessed;

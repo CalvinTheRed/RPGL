@@ -24,6 +24,11 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Testing class for the org.rpgl.function.RerollDamageDiceMatchingOrBelow class.
+ *
+ * @author Calvin Withun
+ */
 public class RerollDamageDiceMatchingOrBelowTest {
 
     private DamageRoll damageRoll;

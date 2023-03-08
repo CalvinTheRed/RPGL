@@ -7,6 +7,11 @@ import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This Condition is dedicated to comparing two RPGLObjects to see if they are the same.
+ *
+ * @author Calvin Withun
+ */
 public class ObjectsMatch extends Condition {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ObjectsMatch.class);
