@@ -14,7 +14,7 @@ import java.util.HashMap;
  *
  * @author Calvin Withun
  */
-public class RPGLObjectTO extends UUIDTableElementTO {
+public class RPGLObjectTO extends RPGLTaggableTO {
 
     // JSON property aliases
     public static final String ABILITY_SCORES_ALIAS    = "ability_scores";
@@ -90,13 +90,13 @@ public class RPGLObjectTO extends UUIDTableElementTO {
      */
     public RPGLObject toRPGLObject() {
         RPGLObject rpglObject = new RPGLObject() {{
-            this.putJsonObject(ABILITY_SCORES_ALIAS, new JsonObject(abilityScores));
-            this.putJsonObject(HEALTH_DATA_ALIAS, new JsonObject(healthData));
-            this.putJsonObject(EQUIPPED_ITEMS_ALIAS, new JsonObject(equippedItems));
-            this.putJsonArray(INVENTORY_ALIAS, new JsonArray(inventory));
-            this.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
-            this.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
-            this.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+            this.setAbilityScores(new JsonObject(abilityScores));
+            this.setHealthData(new JsonObject(healthData));
+            this.setEquippedItems(new JsonObject(equippedItems));
+            this.setInventory(new JsonArray(inventory));
+            this.setEvents(new JsonArray(events));
+            this.setEffects(new JsonArray(effects));
+            this.setProficiencyBonus(proficiencyBonus);
         }};
         rpglObject.join(super.getTemplateData());
         rpglObject.join(super.getUUIDTableElementData());

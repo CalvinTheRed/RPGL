@@ -12,6 +12,7 @@ import org.rpgl.datapack.RPGLEffectTO;
 import org.rpgl.datapack.RPGLEventTO;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -68,7 +69,7 @@ public class RPGLFactoryTest {
         );
 
         expected = """
-                {"damage_affinity":{"conditions":[],"functions":[]}}""";
+                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"},{"condition":"check_damage_type","type":"fire"}],"functions":[{"function":"grant_immunity"}]}}""";
         assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );
@@ -127,8 +128,9 @@ public class RPGLFactoryTest {
         );
 
         assertEquals("[]", item.getTags().toString(),
-                "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
+
         assertEquals(0, item.getWeight(),
                 "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
@@ -197,12 +199,18 @@ public class RPGLFactoryTest {
         );
 
         expected = """
+                ["dragon"]""";
+        assertEquals(expected, object.getTags().toString(),
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
+        );
+
+        expected = """
                 {"cha":19,"con":21,"dex":10,"int":14,"str":23,"wis":11}""";
         assertEquals(expected, object.getAbilityScores().toString(),
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":178,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"maximum":178,"temporary":0}""";
+                {"base":93,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"temporary":0}""";
         assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );

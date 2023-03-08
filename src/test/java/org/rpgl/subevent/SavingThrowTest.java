@@ -51,8 +51,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new SavingThrow();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -60,7 +60,7 @@ public class SavingThrowTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> savingThrow.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -122,7 +122,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents(context, "pass");
+        savingThrow.resolveNestedSubevents("pass", context);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested pass subevent"
@@ -156,7 +156,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents(context, "fail");
+        savingThrow.resolveNestedSubevents("fail", context);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested fail subevent"
@@ -428,7 +428,7 @@ public class SavingThrowTest {
 
         String expected = """
                 {"cold":10}""";
-        assertEquals(expected, savingThrow.subeventJson.getJsonObject("damage").toString(),
+        assertEquals(expected, savingThrow.json.getJsonObject("damage").toString(),
                 "getBaseDamage should store 10 cold damage"
         );
     }
@@ -450,7 +450,7 @@ public class SavingThrowTest {
         savingThrow.setSource(source);
         savingThrow.calculateDifficultyClass(context);
 
-        assertEquals(17, savingThrow.subeventJson.getInteger("save_difficulty_class"),
+        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
                 "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
         );
     }
@@ -505,12 +505,12 @@ public class SavingThrowTest {
         savingThrow.setSource(source);
         savingThrow.prepare(context);
 
-        assertEquals(17, savingThrow.subeventJson.getInteger("save_difficulty_class"),
+        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
                 "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
         );
         String expected = """
                 {"cold":10}""";
-        assertEquals(expected, savingThrow.subeventJson.getJsonObject("damage").toString(),
+        assertEquals(expected, savingThrow.json.getJsonObject("damage").toString(),
                 "prepare should store 10 cold damage"
         );
     }

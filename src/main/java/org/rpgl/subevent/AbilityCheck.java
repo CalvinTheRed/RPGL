@@ -25,7 +25,7 @@ public class AbilityCheck extends Roll {
     @Override
     public Subevent clone() {
         Subevent clone = new AbilityCheck();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -47,26 +47,44 @@ public class AbilityCheck extends Roll {
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        this.roll();
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(context, this.subeventJson.getString("ability")));
+        if (this.isNotCanceled()) {
+            this.roll();
+            this.addBonus(this.getSource().getAbilityModifierFromAbilityName(this.json.getString("ability"), context));
 
-        GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
-        getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_ability_check_proficiency");
-            this.putString("skill", Objects.requireNonNullElse(subeventJson.getString("skill"), "")); // TODO accommodate tools in naming convention here?
-        }});
-        getAbilityCheckProficiency.setSource(this.getSource());
-        getAbilityCheckProficiency.prepare(context);
-        getAbilityCheckProficiency.setTarget(this.getSource());
-        getAbilityCheckProficiency.invoke(context);
+            GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
+            getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
+                this.putString("subevent", "get_ability_check_proficiency");
+                this.putString("skill", Objects.requireNonNullElse(json.getString("skill"), "")); // TODO accommodate tools?
+                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            }});
+            getAbilityCheckProficiency.setSource(this.getSource());
+            getAbilityCheckProficiency.prepare(context);
+            getAbilityCheckProficiency.setTarget(this.getSource());
+            getAbilityCheckProficiency.invoke(context);
 
-        if (getAbilityCheckProficiency.isHalfProficient()) {
-            this.addBonus(this.getSource().getProficiencyBonus() / 2);
-        } else if (getAbilityCheckProficiency.isProficient()) {
-            this.addBonus(this.getSource().getProficiencyBonus());
-        } else if (getAbilityCheckProficiency.isExpert()) {
-            this.addBonus(this.getSource().getProficiencyBonus() * 2);
+            if (getAbilityCheckProficiency.isHalfProficient()) {
+                this.addBonus(this.getSource().getProficiencyBonus() / 2);
+            } else if (getAbilityCheckProficiency.isProficient()) {
+                this.addBonus(this.getSource().getProficiencyBonus());
+            } else if (getAbilityCheckProficiency.isExpert()) {
+                this.addBonus(this.getSource().getProficiencyBonus() * 2);
+            }
         }
+
+    }
+
+    @Override
+    public String getAbility(RPGLContext context) {
+        return super.json.getString("ability");
+    }
+
+    /**
+     * Returns the skill used in the ability check, or an empty string if no skill was used.
+     *
+     * @return a String indicating a skill, or an empty string
+     */
+    public String getSkill() {
+        return Objects.requireNonNullElse(this.json.getString("skill"), "");
     }
 
 }

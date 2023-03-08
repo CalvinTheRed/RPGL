@@ -60,6 +60,11 @@ public class RollTest {
                 return this;
             }
 
+            @Override
+            public String getAbility(RPGLContext context) {
+                return null;
+            }
+
         };
     }
 

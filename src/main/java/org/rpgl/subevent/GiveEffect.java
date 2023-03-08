@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class GiveEffect extends Subevent {
+public class GiveEffect extends Subevent implements CancelableSubevent {
 
     public GiveEffect() {
         super("give_effect");
@@ -25,7 +25,7 @@ public class GiveEffect extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new GiveEffect();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -41,26 +41,19 @@ public class GiveEffect extends Subevent {
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        if (!this.isCancelled()) {
-            this.getTarget().addEffect(RPGLFactory.newEffect(this.subeventJson.getString("effect")));
+        if (this.isNotCanceled()) {
+            this.getTarget().addEffect(RPGLFactory.newEffect(this.json.getString("effect")));
         }
     }
 
-    /**
-     * This method "cancels" this Subevent, causing the RPGLEffect to not be applied to <code>target</code>. This is
-     * meant to be used in cases where <code>target</code> is immune to select status effects.
-     */
+    @Override
     public void cancel() {
-        this.subeventJson.putBoolean("cancel", true);
+        this.json.putBoolean("cancel", true);
     }
 
-    /**
-     * This helper method returns whether the Subevent was cancelled.
-     *
-     * @return true if the Subevent was cancelled.
-     */
-    boolean isCancelled() {
-        return Objects.requireNonNullElse(this.subeventJson.getBoolean("cancel"), false);
+    @Override
+    public boolean isNotCanceled() {
+        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
     }
 
 }

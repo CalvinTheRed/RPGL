@@ -42,8 +42,8 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     public RPGLEffectTO(RPGLEffect rpglEffect) {
         super(rpglEffect);
         this.subeventFilters = rpglEffect.getSubeventFilters().asMap();
-        this.source = rpglEffect.getSource();
-        this.target = rpglEffect.getTarget();
+        this.source = rpglEffect.getSource().getUuid();
+        this.target = rpglEffect.getTarget().getUuid();
     }
 
     /**
@@ -68,9 +68,9 @@ public class RPGLEffectTO extends UUIDTableElementTO {
      */
     public RPGLEffect toRPGLEffect() {
         RPGLEffect rpglEffect = new RPGLEffect() {{
-            this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
-            this.setSource(source);
-            this.setTarget(target);
+            this.setSubeventFilters(new JsonObject(subeventFilters));
+            this.putString(SOURCE_ALIAS, source);
+            this.putString(TARGET_ALIAS, target);
         }};
         rpglEffect.join(super.getTemplateData());
         rpglEffect.join(super.getUUIDTableElementData());

@@ -101,10 +101,10 @@ public class RPGLItemTest {
 
         frostbrand.updateEquippedEffects(knight);
 
-        assertEquals(knight.getUuid(), frostbrand.getWhileEquippedEffectObjects().get(0).getSource(),
+        assertEquals(knight, frostbrand.getWhileEquippedEffectObjects().get(0).getSource(),
                 "demo:frostbrand effects should have demo:knight as a source after updating"
         );
-        assertEquals(knight.getUuid(), frostbrand.getWhileEquippedEffectObjects().get(0).getTarget(),
+        assertEquals(knight, frostbrand.getWhileEquippedEffectObjects().get(0).getTarget(),
                 "demo:frostbrand effects should have demo:knight as a target after updating"
         );
     }

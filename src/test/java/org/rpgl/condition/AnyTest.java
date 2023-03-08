@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonArray;
@@ -35,15 +36,17 @@ public class AnyTest {
             this.putString("condition", "not_a_condition");
         }};
 
+        RPGLContext context = new RPGLContext();
+
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson),
-                "Any condition should throw a ConditionMismatchException if the specified condition doesn't match"
+                () -> condition.evaluate(null, null, null, conditionJson, context),
+                "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
     @DisplayName("evaluate for no sub-conditions")
-    void evaluate_default_true() throws ConditionMismatchException {
+    void evaluate_default_true() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -54,14 +57,16 @@ public class AnyTest {
             this.putJsonArray("conditions", new JsonArray());
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate true for no sub-conditions"
         );
     }
 
     @Test
     @DisplayName("evaluate for true, true")
-    void evaluate_trueTrue_true() throws ConditionMismatchException {
+    void evaluate_trueTrue_true() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -82,14 +87,16 @@ public class AnyTest {
             }});
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate true for 2 true conditions"
         );
     }
 
     @Test
     @DisplayName("evaluate for true, false")
-    void evaluate_trueFalse_true() throws ConditionMismatchException {
+    void evaluate_trueFalse_true() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -110,14 +117,16 @@ public class AnyTest {
             }});
         }};
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate true for 1 true and 1 false condition"
         );
     }
 
     @Test
     @DisplayName("evaluate for false, false")
-    void evaluate_falseFalse_false() throws ConditionMismatchException {
+    void evaluate_falseFalse_false() throws Exception {
         Condition condition = new Any();
         JsonObject conditionJson = new JsonObject() {{
             /*{
@@ -138,7 +147,9 @@ public class AnyTest {
             }});
         }};
 
-        assertFalse(condition.evaluate(null, null, null, conditionJson),
+        RPGLContext context = new RPGLContext();
+
+        assertFalse(condition.evaluate(null, null, null, conditionJson, context),
                 "Any condition should evaluate false for 2 false conditions"
         );
     }

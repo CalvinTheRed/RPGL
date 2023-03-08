@@ -7,10 +7,20 @@
   "subevent_filters": {
     "damage_affinity": {
       "conditions": [
-
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "target"
+        },
+        {
+          "condition": "check_damage_type",
+          "type": "fire"
+        }
       ],
       "functions": [
-
+        {
+          "function": "grant_immunity"
+        }
       ]
     }
   }

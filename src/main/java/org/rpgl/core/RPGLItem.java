@@ -4,7 +4,6 @@ import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
-import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,24 +16,24 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class RPGLItem extends UUIDTableElement {
-
-    /**
-     * Returns the tags of the RPGLObject.
-     *
-     * @return a JsonArray containing tags
-     */
-    public JsonArray getTags() {
-        return this.getJsonArray(RPGLItemTO.TAGS_ALIAS);
-    }
+public class RPGLItem extends RPGLTaggable {
 
     /**
      * Returns the weight of the RPGLItem.
      *
      * @return a Integer representing the RPGLItem's weight
      */
-    public Integer getWeight() {
-        return this.getInteger(RPGLItemTO.WEIGHT_ALIAS);
+    public int getWeight() {
+        return Objects.requireNonNullElse(this.getInteger(RPGLItemTO.WEIGHT_ALIAS), 0);
+    }
+
+    /**
+     * Setter for weight.
+     *
+     * @param weight a new weight int
+     */
+    public void setWeight(int weight) {
+        this.putInteger(RPGLItemTO.WEIGHT_ALIAS, weight);
     }
 
     /**
@@ -42,8 +41,17 @@ public class RPGLItem extends UUIDTableElement {
      *
      * @return a Integer representing the RPGLItem's cost
      */
-    public Integer getCost() {
-        return this.getInteger(RPGLItemTO.COST_ALIAS);
+    public int getCost() {
+        return Objects.requireNonNullElse(this.getInteger(RPGLItemTO.COST_ALIAS), 0);
+    }
+
+    /**
+     * Setter for cost.
+     *
+     * @param cost a new cost int
+     */
+    public void setCost(int cost) {
+        this.putInteger(RPGLItemTO.COST_ALIAS, cost);
     }
 
     /**
@@ -56,12 +64,30 @@ public class RPGLItem extends UUIDTableElement {
     }
 
     /**
+     * Setter for proficiency tags.
+     *
+     * @param proficiencyTags a new proficiency tags JsonArray
+     */
+    public void setProficiencyTags(JsonArray proficiencyTags) {
+        this.putJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS, proficiencyTags);
+    }
+
+    /**
      * Returns a list of UUIDs for RPGLEffects which are to be applied to any RPGLObject wielding the RPGLItem.
      *
      * @return a JsonArray containing RPGLEffect UUIDs
      */
     public JsonArray getWhileEquippedEffects() {
         return this.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS);
+    }
+
+    /**
+     * Setter for while equipped.
+     *
+     * @param whileEquippedEffects a new while equipped JsonArray
+     */
+    public void setWhileEquippedEffects(JsonArray whileEquippedEffects) {
+        this.putJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS, whileEquippedEffects);
     }
 
     /**
@@ -74,6 +100,15 @@ public class RPGLItem extends UUIDTableElement {
     }
 
     /**
+     * Setter for weapon properties.
+     *
+     * @param weaponProperties a new weapon properties JsonArray
+     */
+    public void setWeaponProperties(JsonArray weaponProperties) {
+        this.putJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS, weaponProperties);
+    }
+
+    /**
      * Returns the damage values of the RPGLObject.
      *
      * @return a JsonObject containing damage values
@@ -83,12 +118,30 @@ public class RPGLItem extends UUIDTableElement {
     }
 
     /**
+     * Setter for damage.
+     *
+     * @param damage a new damage JsonObject
+     */
+    public void setDamage(JsonObject damage) {
+        this.putJsonObject(RPGLItemTO.DAMAGE_ALIAS, damage);
+    }
+
+    /**
      * Returns the item's attack bonus (typically reflective of a magic weapon's bonus to attack rolls).
      *
      * @return the item's attack bonus
      */
     public int getAttackBonus() {
         return Objects.requireNonNullElse(this.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS), 0);
+    }
+
+    /**
+     * Setter for attack bonus.
+     *
+     * @param attackBonus a new attack bonus int
+     */
+    public void setAttackBonus(int attackBonus) {
+        this.putInteger(RPGLItemTO.ATTACK_BONUS_ALIAS, attackBonus);
     }
 
     /**
@@ -102,6 +155,15 @@ public class RPGLItem extends UUIDTableElement {
     }
 
     /**
+     * Setter for attack abilities.
+     *
+     * @param attackAbilities a new attack abilities JsonObject
+     */
+    public void setAttackAbilities(JsonObject attackAbilities) {
+        this.putJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS, attackAbilities);
+    }
+
+    /**
      * Returns the range of the RPGLItem when used for a thrown or ranged attack.
      *
      * @return a JsonObject containing range data for thrown and ranged attacks made using the RPGLItem
@@ -111,12 +173,30 @@ public class RPGLItem extends UUIDTableElement {
     }
 
     /**
+     * Setter for range.
+     *
+     * @param range a new range JsonObject
+     */
+    public void setRange(JsonObject range) {
+        this.putJsonObject(RPGLItemTO.RANGE_ALIAS, range);
+    }
+
+    /**
      * Returns the base armor class value of the RPGLItem. This does not include any dexterity bonuses which are allowed.
      *
      * @return the base armor class of the RPGLItem
      */
     public Integer getArmorClassBase() {
         return this.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS);
+    }
+
+    /**
+     * Setter for armor class base.
+     *
+     * @param armorClassBase a new armor class base int
+     */
+    public void setArmorClassBase(int armorClassBase) {
+        this.putInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS, armorClassBase);
     }
 
     /**
@@ -130,12 +210,30 @@ public class RPGLItem extends UUIDTableElement {
     }
 
     /**
+     * Setter for armor class dex limit.
+     *
+     * @param armorClassDexLimit a new armor class dex limit int
+     */
+    public void setArmorClassDexLimit(int armorClassDexLimit) {
+        this.putInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
+    }
+
+    /**
      * Returns the bonus to an RPGLObject's armor class when wielding the RPGLItem as a shield.
      *
      * @return an integer bonus to armor class
      */
     public Integer getArmorClassBonus() {
         return this.getInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS);
+    }
+
+    /**
+     * Setter for armor class bonus.
+     *
+     * @param armorClassBonus a new armor class bonus int
+     */
+    public void setArmorClassBonus(int armorClassBonus) {
+        this.putInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
     }
 
     // =================================================================================================================
@@ -220,8 +318,8 @@ public class RPGLItem extends UUIDTableElement {
         for (int i = 0; i < whileEquippedEffects.size(); i++) {
             String effectUuid = whileEquippedEffects.getString(i);
             RPGLEffect effect = UUIDTable.getEffect(effectUuid);
-            effect.setSource(wielder.getUuid());
-            effect.setTarget(wielder.getUuid());
+            effect.setSource(wielder);
+            effect.setTarget(wielder);
         }
     }
 

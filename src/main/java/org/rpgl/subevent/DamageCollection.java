@@ -1,12 +1,13 @@
 package org.rpgl.subevent;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.Objects;
 
 /**
- * This abstract Subevent is dedicated to collecting unrolled damage dice and bonuses.
+ * This Subevent is dedicated to collecting unrolled damage dice and bonuses.
  * <br>
  * <br>
  * Source: an RPGLObject preparing to deal damage
@@ -28,7 +29,7 @@ public class DamageCollection extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new DamageCollection();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -41,6 +42,14 @@ public class DamageCollection extends Subevent {
         return clone;
     }
 
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        if (this.json.getJsonArray("damage") == null) {
+            this.json.putJsonArray("damage", new JsonArray());
+        }
+    }
+
     /**
      * This method returns whether a given damage type is present in the damage dice collection.
      *
@@ -48,7 +57,7 @@ public class DamageCollection extends Subevent {
      * @return true if the passed damage type is present in the damage dice collection
      */
     public boolean includesDamageType(String damageType) {
-        JsonArray damageDiceArray = this.subeventJson.getJsonArray("damage");
+        JsonArray damageDiceArray = this.json.getJsonArray("damage");
         if (damageDiceArray != null) {
             for (int i = 0; i < damageDiceArray.size(); i++) {
                 JsonObject damageDice = damageDiceArray.getJsonObject(i);
@@ -83,7 +92,7 @@ public class DamageCollection extends Subevent {
      */
     void addExistingTypedDamage(JsonObject typedDamageToBeAdded) {
         String damageTypeToBeAdded = typedDamageToBeAdded.getString("type");
-        JsonObject typedDamage = this.subeventJson.getJsonArray("damage").getJsonObjectMatching("type", damageTypeToBeAdded);
+        JsonObject typedDamage = this.json.getJsonArray("damage").getJsonObjectMatching("type", damageTypeToBeAdded);
 
         /*
          * Add new damage dice, if any exist
@@ -109,17 +118,17 @@ public class DamageCollection extends Subevent {
      * @param typedDamage the typed damage to be added to the damage dice collection
      */
     void addNewTypedDamage(JsonObject typedDamage) {
-        JsonArray typedDamageArray = this.subeventJson.getJsonArray("damage");
+        JsonArray typedDamageArray = this.json.getJsonArray("damage");
         typedDamageArray.addJsonObject(typedDamage);
     }
 
     /**
-     * This method returns the damage dice collection being gathered by this Subevent.
+     * This method returns the damage collection being gathered by this Subevent.
      *
      * @return an array of typed damage dice and bonuses
      */
     public JsonArray getDamageCollection() {
-        return Objects.requireNonNullElse(this.subeventJson.getJsonArray("damage"), new JsonArray());
+        return Objects.requireNonNullElse(this.json.getJsonArray("damage"), new JsonArray());
     }
 
 }

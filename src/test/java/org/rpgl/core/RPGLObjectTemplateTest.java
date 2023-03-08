@@ -167,7 +167,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":52,"current":52,"hit_dice":[{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false}],"maximum":52,"temporary":0}""";
+                {"base":36,"current":52,"hit_dice":[{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false}],"temporary":0}""";
         assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
@@ -223,7 +223,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":178,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"maximum":178,"temporary":0}""";
+                {"base":93,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"temporary":0}""";
         assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );

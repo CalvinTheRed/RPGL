@@ -18,8 +18,8 @@ public class GetAbilityCheckProficiencyTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
-        getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new GetAbilityCheckProficiency();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -27,7 +27,7 @@ public class GetAbilityCheckProficiencyTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> getAbilityCheckProficiency.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

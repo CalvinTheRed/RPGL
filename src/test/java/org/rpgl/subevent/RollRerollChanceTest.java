@@ -28,8 +28,8 @@ public class RollRerollChanceTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        RollRerollChance rollRerollChance = new RollRerollChance();
-        rollRerollChance.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new RollRerollChance();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -37,7 +37,7 @@ public class RollRerollChanceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> rollRerollChance.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

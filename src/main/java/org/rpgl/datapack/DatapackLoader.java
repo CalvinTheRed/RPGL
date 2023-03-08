@@ -46,7 +46,7 @@ public final class DatapackLoader {
      */
     static void checkPackInfo(File directory) {
         try {
-            DatapackInfo datapackInfo = JsonObject.MAPPER.readValue(new File(directory.getAbsolutePath() + "\\pack.info"), DatapackInfo.class);
+            DatapackInfo datapackInfo = JsonObject.MAPPER.readValue(new File(directory.getAbsolutePath() + File.separator + "pack.info"), DatapackInfo.class);
             assert datapackInfo.version != null; // TODO this needs a better check...
         } catch (IOException e) {
             LOGGER.error(e.getMessage());

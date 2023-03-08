@@ -21,7 +21,7 @@ public class GetSavingThrowProficiency extends GetProficiency {
     @Override
     public Subevent clone() {
         Subevent clone = new GetSavingThrowProficiency();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

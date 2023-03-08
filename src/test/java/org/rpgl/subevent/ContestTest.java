@@ -48,8 +48,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Contest contest = new Contest();
-        contest.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new Contest();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -57,7 +57,7 @@ public class ContestTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> contest.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -367,7 +367,7 @@ public class ContestTest {
         contest.setSource(source);
         contest.prepare(context);
 
-        assertFalse(contest.subeventJson.getBoolean("must_exceed_target"),
+        assertFalse(contest.json.getBoolean("must_exceed_target"),
                 "must_exceed_target should be false for static value targets"
         );
     }
@@ -398,7 +398,7 @@ public class ContestTest {
         contest.setSource(source);
         contest.prepare(context);
 
-        assertFalse(contest.subeventJson.getBoolean("must_exceed_target"),
+        assertFalse(contest.json.getBoolean("must_exceed_target"),
                 "must_exceed_target should be false for save difficulty class targets"
         );
     }
@@ -429,7 +429,7 @@ public class ContestTest {
         contest.setSource(source);
         contest.prepare(context);
 
-        assertTrue(contest.subeventJson.getBoolean("must_exceed_target"),
+        assertTrue(contest.json.getBoolean("must_exceed_target"),
                 "must_exceed_target should be true for ability check targets"
         );
     }

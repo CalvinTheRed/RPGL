@@ -21,7 +21,7 @@ public class DamageDelivery extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new DamageDelivery();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -40,7 +40,7 @@ public class DamageDelivery extends Subevent {
      * @return an object of damage types and values
      */
     public JsonObject getDamage() {
-        return this.subeventJson.getJsonObject("damage");
+        return this.json.getJsonObject("damage");
     }
 
 }

@@ -3,12 +3,15 @@ package org.rpgl.subevent;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -21,6 +24,23 @@ public class DamageCollectionTest {
     @BeforeAll
     static void beforeAll() {
         RPGLCore.initializeTesting();
+    }
+
+    @Test
+    @DisplayName("invoke wrong subevent")
+    void invoke_wrongSubevent_throwsException() {
+        Subevent subevent = new DamageCollection();
+        subevent.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "not_a_subevent"
+            }*/
+            this.putString("subevent", "not_a_subevent");
+        }});
+
+        assertThrows(SubeventMismatchException.class,
+                () -> subevent.invoke(new RPGLContext()),
+                "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
+        );
     }
 
     @Test

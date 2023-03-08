@@ -28,7 +28,7 @@ public class RollRerollChance extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new RollRerollChance();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -44,7 +44,7 @@ public class RollRerollChance extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.subeventJson.putBoolean("reroll_requested", false);
+        this.json.putBoolean("reroll_requested", false);
     }
 
     /**
@@ -53,9 +53,9 @@ public class RollRerollChance extends Subevent {
      * @param rerollMode the type of reroll which was requested (<code>"use_new", "use_highest", "use_lowest"</code>).
      */
     public void requestReroll(String rerollMode) {
-        if (!Objects.requireNonNullElse(this.subeventJson.getBoolean("reroll_requested"), false)) {
-            this.subeventJson.putBoolean("reroll_requested", true);
-            this.subeventJson.putString("reroll_mode", rerollMode);
+        if (!Objects.requireNonNullElse(this.json.getBoolean("reroll_requested"), false)) {
+            this.json.putBoolean("reroll_requested", true);
+            this.json.putString("reroll_mode", rerollMode);
         }
     }
 
@@ -65,7 +65,7 @@ public class RollRerollChance extends Subevent {
      * @return true if a re-roll has been requested
      */
     public boolean wasRerollRequested() {
-        return Objects.requireNonNullElse(this.subeventJson.getBoolean("reroll_requested"), false);
+        return Objects.requireNonNullElse(this.json.getBoolean("reroll_requested"), false);
     }
 
     /**
@@ -74,7 +74,7 @@ public class RollRerollChance extends Subevent {
      * @return the requested re-roll mode (<code>"use_new", "use_highest", "use_lowest"</code>)
      */
     public String getRerollMode() {
-        return this.subeventJson.getString("reroll_mode");
+        return this.json.getString("reroll_mode");
     }
 
 }

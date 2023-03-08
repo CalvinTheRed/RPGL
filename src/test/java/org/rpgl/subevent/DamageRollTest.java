@@ -6,10 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Testing class for the org.rpgl.subevent.DamageRoll class.
@@ -126,25 +128,42 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("rerollTypedDiceLessThanOrEqualTo re-roll all ones (fire damage)")
-    void rerollTypedDiceLessThanOrEqualTo_rerollAllOnes_fireDamage() {
-        damageRoll.rerollTypedDiceLessThanOrEqualTo(1, "fire");
+    @DisplayName("invoke wrong subevent")
+    void invoke_wrongSubevent_throwsException() {
+        Subevent subevent = new DamageRoll();
+        subevent.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "not_a_subevent"
+            }*/
+            this.putString("subevent", "not_a_subevent");
+        }});
+
+        assertThrows(SubeventMismatchException.class,
+                () -> subevent.invoke(new RPGLContext()),
+                "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
+        );
+    }
+
+    @Test
+    @DisplayName("rerollTypedDiceMatchingOrBelow re-roll all ones (fire damage)")
+    void rerollTypedDiceMatchingOrBelow_rerollAllOnes_fireDamage() {
+        damageRoll.rerollTypedDiceMatchingOrBelow(1, "fire");
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be re-rolled to a 4"
         );
     }
 
     @Test
-    @DisplayName("setTypedDiceLessThanOrEqualTo set all ones to twos (fire damage)")
-    void setTypedDiceLessThanOrEqualTo_setAllOnesToTwos_fireDamage() {
-        damageRoll.setTypedDiceLessThanOrEqualTo(1, 2, "fire");
+    @DisplayName("setTypedDiceMatchingOrBelow set all ones to twos (fire damage)")
+    void setTypedDiceMatchingOrBelow_setAllOnesToTwos_fireDamage() {
+        damageRoll.setTypedDiceMatchingOrBelow(1, 2, "fire");
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be set to a 2"
         );
     }
@@ -166,7 +185,7 @@ public class DamageRollTest {
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should roll to 4"
         );
     }
@@ -178,8 +197,32 @@ public class DamageRollTest {
 
         String expected = """
                 [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
-        assertEquals(expected, damageRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should roll to 4"
+        );
+    }
+
+    @Test
+    @DisplayName("maximizeDamageDice maximizes damage correctly (fire only)")
+    void maximizeTypedDamageDice_maximizesDamageCorrectly_fireOnly() {
+        damageRoll.maximizeTypedDamageDice("fire");
+
+        String expected = """
+                [{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
+                "all fire dice should maximize to 4, while cold dice are unchanged"
+        );
+    }
+
+    @Test
+    @DisplayName("maximizeDamageDice maximizes damage correctly (all damage)")
+    void maximizeTypedDamageDice_maximizesDamageCorrectly_allDamage() {
+        damageRoll.maximizeTypedDamageDice(null);
+
+        String expected = """
+                [{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
+                "all dice should maximize to 4"
         );
     }
 

@@ -13,18 +13,19 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class DummySubevent extends Subevent {
+public class DummySubevent extends Subevent implements AbilitySubevent {
 
     public static int counter = 0;
 
     public DummySubevent() {
         super("dummy_subevent");
+        this.addTag("dummy_subevent");
     }
 
     @Override
     public Subevent clone() {
         Subevent clone = new DummySubevent();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -50,4 +51,8 @@ public class DummySubevent extends Subevent {
         DummySubevent.counter = 0;
     }
 
+    @Override
+    public String getAbility(RPGLContext context) {
+        return "str";
+    }
 }

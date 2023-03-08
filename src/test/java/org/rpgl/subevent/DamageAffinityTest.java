@@ -27,8 +27,8 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new DamageAffinity();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -36,7 +36,7 @@ public class DamageAffinityTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> damageAffinity.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }

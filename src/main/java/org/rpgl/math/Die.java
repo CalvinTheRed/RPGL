@@ -40,7 +40,6 @@ public final class Die {
             LOGGER.error(e.getMessage());
             throw e;
         }
-        logRoll(upperBound, roll);
         return roll;
     }
 

@@ -30,11 +30,11 @@ public class RPGLObjectTemplate extends JsonObject {
         this.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.EVENTS_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());
+        UUIDTable.register(object);
         processEffects(object);
         processInventory(object);
         processEquippedItems(object);
         processHealthData(object);
-        UUIDTable.register(object);
         return object;
     }
 
@@ -51,6 +51,8 @@ public class RPGLObjectTemplate extends JsonObject {
             String effectId = effectIdArray.getString(i);
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
             if (effect != null) {
+                effect.setSource(object);
+                effect.setTarget(object);
                 effectUuidArray.addString(effect.getUuid());
             }
         }

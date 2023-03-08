@@ -57,8 +57,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
+        Subevent subevent = new AttackRoll();
+        subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
             }*/
@@ -66,7 +66,7 @@ public class AttackRollTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> attackRoll.invoke(new RPGLContext()),
+                () -> subevent.invoke(new RPGLContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -620,10 +620,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable"
         );
         // TODO assertion for attack bonus accounting for proficiency...
@@ -649,10 +649,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareNaturalWeaponAttack() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
         );
         assertEquals(10, attackRoll.getBonus(),
@@ -708,7 +708,7 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
         );
         assertEquals(6, attackRoll.getBonus(),
@@ -736,10 +736,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable"
         );
         // TODO assertion for attack bonus accounting for proficiency...
@@ -765,10 +765,10 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
-        assertNotNull(UUIDTable.getItem(attackRoll.subeventJson.getString("weapon")),
+        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
         );
         assertEquals(10, attackRoll.getBonus(),
@@ -823,7 +823,7 @@ public class AttackRollTest {
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
-        assertEquals(expected, attackRoll.subeventJson.getJsonArray("damage").toString(),
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
         assertEquals(6, attackRoll.getBonus(),
@@ -939,11 +939,73 @@ public class AttackRollTest {
         attackRoll.setSource(source);
         attackRoll.prepare(context);
         attackRoll.setTarget(target);
-        String itemUuid = attackRoll.subeventJson.getString("weapon");
+        String itemUuid = attackRoll.json.getString("weapon");
         attackRoll.invoke(context);
 
         assertNull(UUIDTable.getItem(itemUuid),
                 "natural weapon should not persist in UUIDTable after the subevent is invoked"
+        );
+    }
+
+    @Test
+    @DisplayName("prepare adds correct tags to attack roll (item weapon attack)")
+    void prepare_addsCorrectTagsToAttackRoll_itemWeaponAttack() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "attack_roll",
+                "weapon": "mainhand",
+                "attack_type": "melee",
+            }*/
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "mainhand");
+            this.putString("attack_type", "melee");
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.prepare(context);
+
+        String expected = """
+                ["humanoid","attack_roll","melee","metal","weapon"]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
+                "object tag (humanoid), subevent tag (attack_roll), and item weapon tags (metal, weapon) should all be present"
+        );
+    }
+
+    @Test
+    @DisplayName("prepare adds correct tags to attack roll (natural weapon attack)")
+    void prepare_addsCorrectTagsToAttackRoll_naturalWeaponAttack() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "attack_roll",
+                "weapon": "demo:young_red_dragon_claw",
+                "attack_type": "melee",
+            }*/
+            this.putString("subevent", "attack_roll");
+            this.putString("weapon", "demo:young_red_dragon_claw");
+            this.putString("attack_type", "melee");
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.prepare(context);
+
+        String expected = """
+                ["dragon","attack_roll","melee","claw"]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
+                "object tag (dragon), subevent tag (attack_roll), and natural weapon tag (claw) should all be present"
         );
     }
 

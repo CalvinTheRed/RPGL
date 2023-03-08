@@ -3,6 +3,9 @@
     "author": "Calvin Withun"
   },
   "name": "Claw",
+  "tags": [
+    "claw"
+  ],
   "weapon_properties": [
     "natural"
   ],

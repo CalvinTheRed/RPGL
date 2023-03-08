@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -113,9 +115,11 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (no temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() {
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        youngRedDragon.reduceHitPoints(10);
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
+        youngRedDragon.reduceHitPoints(10, context);
 
         assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
                 "demo:young_red_dragon should lose 10 hit points (178-10=168)"
@@ -124,10 +128,12 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (few temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() {
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 10);
-        youngRedDragon.reduceHitPoints(20);
+        youngRedDragon.reduceHitPoints(20, context);
 
         assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
                 "demo:young_red_dragon should net lose 10 hit points (178+10-20=168)"
@@ -136,10 +142,12 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (many temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() {
+    void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 20);
-        youngRedDragon.reduceHitPoints(10);
+        youngRedDragon.reduceHitPoints(10, context);
 
         assertEquals(178, youngRedDragon.getHealthData().getInteger("current"),
                 "demo:young_red_dragon should lose no hit points (178)"
@@ -158,13 +166,13 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getAbilityModifierFromAbilityScore returns correct modifier")
     void getAbilityModifierFromAbilityScore_returnsCorrectModifier() {
-        assertEquals(-2, RPGLObject.getAbilityModifierFromAbilityName( 7));
-        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityName( 8));
-        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityName( 9));
-        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityName(10));
-        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityName(11));
-        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityName(12));
-        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityName(13));
+        assertEquals(-2, RPGLObject.getAbilityModifierFromAbilityScore( 7));
+        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityScore( 8));
+        assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityScore( 9));
+        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityScore(10));
+        assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityScore(11));
+        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityScore(12));
+        assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityScore(13));
     }
 
     @Test
@@ -174,22 +182,22 @@ public class RPGLObjectTest {
         RPGLContext context = new RPGLContext();
         context.add(knight);
 
-        assertEquals(3, knight.getAbilityModifierFromAbilityName(context, "str"),
+        assertEquals(3, knight.getAbilityModifierFromAbilityName("str", context),
                 "demo:knight str of 16 should have modifier of +3"
         );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "dex"),
+        assertEquals(0, knight.getAbilityModifierFromAbilityName("dex", context),
                 "demo:knight dex of 11 should have modifier of +0"
         );
-        assertEquals(2, knight.getAbilityModifierFromAbilityName(context, "con"),
+        assertEquals(2, knight.getAbilityModifierFromAbilityName("con", context),
                 "demo:knight con of 14 should have modifier of +2"
         );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "int"),
+        assertEquals(0, knight.getAbilityModifierFromAbilityName("int", context),
                 "demo:knight int of 11 should have modifier of +0"
         );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName(context, "wis"),
+        assertEquals(0, knight.getAbilityModifierFromAbilityName("wis", context),
                 "demo:knight wis of 11 should have modifier of +0"
         );
-        assertEquals(2, knight.getAbilityModifierFromAbilityName(context, "cha"),
+        assertEquals(2, knight.getAbilityModifierFromAbilityName("cha", context),
                 "demo:knight cha of 15 should have modifier of +2"
         );
     }
@@ -208,12 +216,12 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("getEvents returns an array of the correct events")
-    void getEvents_returnsArrayOfCorrectEvents() {
+    void getEvents_returnsArrayOfCorrectEvents() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
         context.add(youngRedDragon);
 
-        List<RPGLEvent> events = youngRedDragon.getEventObjects();
+        List<RPGLEvent> events = youngRedDragon.getEventObjects(context);
 
         assertEquals(3, events.size(),
                 "demo:young_red_dragon should have 3 RPGLEvents"
@@ -291,6 +299,72 @@ public class RPGLObjectTest {
 
         assertEquals(4, knight.getHealthData().getInteger("current"),
                 "demo:knight should have 4 health left after failing a save against demo:young_red_dragon's breath attack"
+        );
+    }
+
+    @Test
+    @DisplayName("receiveHealing missing hit points are restored")
+    void receiveHealing_missingHitPointsAreRestored() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        HealingDelivery healingDelivery = new HealingDelivery();
+        healingDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "healing_delivery",
+                "healing": 10
+            }*/
+            this.putString("subevent", "healing_delivery");
+            this.putInteger("healing", 10);
+        }});
+
+        healingDelivery.setSource(source);
+        healingDelivery.prepare(context);
+        healingDelivery.setTarget(target);
+        healingDelivery.invoke(context);
+
+        target.receiveHealing(healingDelivery, context);
+
+        assertEquals(20, target.getHealthData().getInteger("current"),
+                "target should recover 10 hit points (10+10=20)"
+        );
+    }
+
+    @Test
+    @DisplayName("receiveHealing hit point maximum is not exceeded")
+    void receiveHealing_mitPointMaximumIsNotExceeded() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 177);
+
+        HealingDelivery healingDelivery = new HealingDelivery();
+        healingDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "healing_delivery",
+                "healing": 10
+            }*/
+            this.putString("subevent", "healing_delivery");
+            this.putInteger("healing", 10);
+        }});
+
+        healingDelivery.setSource(source);
+        healingDelivery.prepare(context);
+        healingDelivery.setTarget(target);
+        healingDelivery.invoke(context);
+
+        target.receiveHealing(healingDelivery, context);
+
+        assertEquals(178, target.getHealthData().getInteger("current"),
+                "target should only recover its one missing hit point when healed for 10 (177+10=187, max 178: 187 -> 178)"
         );
     }
 

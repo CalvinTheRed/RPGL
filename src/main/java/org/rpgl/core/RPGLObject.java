@@ -1,32 +1,34 @@
 package org.rpgl.core;
 
 import org.rpgl.datapack.RPGLObjectTO;
-import org.rpgl.exception.ConditionMismatchException;
-import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateBaseArmorClass;
+import org.rpgl.subevent.CalculateMaximumHitPoints;
 import org.rpgl.subevent.CalculateProficiencyBonus;
 import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
+import org.rpgl.subevent.GetEvents;
+import org.rpgl.subevent.GetObjectTags;
 import org.rpgl.subevent.GetSavingThrowProficiency;
 import org.rpgl.subevent.GetWeaponProficiency;
+import org.rpgl.subevent.HealingDelivery;
+import org.rpgl.subevent.InfoSubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
-import org.rpgl.uuidtable.UUIDTableElement;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This class represents anythig which might appear on a battle map. Examples of this include buildings, Goblins, and
+ * This class represents anything which might appear on a battle map. Examples of this include buildings, Goblins, and
  * discarded items.
  *
  * @author Calvin Withun
  */
-public class RPGLObject extends UUIDTableElement {
+public class RPGLObject extends RPGLTaggable {
 
     /**
      * Returns the RPGLObject's ability scores.
@@ -35,6 +37,15 @@ public class RPGLObject extends UUIDTableElement {
      */
     public JsonObject getAbilityScores() {
         return this.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS);
+    }
+
+    /**
+     * Setter for ability scores.
+     *
+     * @param abilityScores a new ability scores JsonObject
+     */
+    public void setAbilityScores(JsonObject abilityScores) {
+        this.putJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS, abilityScores);
     }
 
     /**
@@ -48,12 +59,30 @@ public class RPGLObject extends UUIDTableElement {
     }
 
     /**
+     * Setter for health data.
+     *
+     * @param healthData a new health data JsonObject
+     */
+    public void setHealthData(JsonObject healthData) {
+        this.putJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS, healthData);
+    }
+
+    /**
      * Returns all items currently equipped to the RPGLObject, mapped to their corresponding equipment slots.
      *
      * @return a JsonObject containing RPGLItems and their equipment slots
      */
     public JsonObject getEquippedItems() {
         return this.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+    }
+
+    /**
+     * Setter for equipped items.
+     *
+     * @param equippedItems a new equipped items JsonObject
+     */
+    public void setEquippedItems(JsonObject equippedItems) {
+        this.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItems);
     }
 
     /**
@@ -66,12 +95,30 @@ public class RPGLObject extends UUIDTableElement {
     }
 
     /**
+     * Setter for inventory.
+     *
+     * @param inventory a new inventory JsonArray
+     */
+    public void setInventory(JsonArray inventory) {
+        this.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventory);
+    }
+
+    /**
      * Returns the IDs (not UUIDs) of all RPGLEvents innately provided to the RPGLObject.
      *
      * @return a JsonArray of RPGLEffect IDs
      */
     public JsonArray getEvents() {
         return this.getJsonArray(RPGLObjectTO.EVENTS_ALIAS);
+    }
+
+    /**
+     * Setter for events.
+     *
+     * @param events a new events JsonArray
+     */
+    public void setEvents(JsonArray events) {
+        this.putJsonArray(RPGLObjectTO.EVENTS_ALIAS, events);
     }
 
     /**
@@ -84,12 +131,30 @@ public class RPGLObject extends UUIDTableElement {
     }
 
     /**
+     * Setter for effects.
+     *
+     * @param effects a new effects JsonArray
+     */
+    public void setEffects(JsonArray effects) {
+        this.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effects);
+    }
+
+    /**
      * Returns the base proficiency bonus of the RPGLObject, not modified by any effects.
      *
      * @return the RPGLObject's base proficiency bonus
      */
     public Integer getProficiencyBonus() {
         return this.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS);
+    }
+
+    /**
+     * Setter for proficiency bonus.
+     *
+     * @param proficiencyBonus a new proficiency bonus int
+     */
+    public void setProficiencyBonus(int proficiencyBonus) {
+        this.putInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
     }
 
     // =================================================================================================================
@@ -100,15 +165,34 @@ public class RPGLObject extends UUIDTableElement {
      * Returns a List of all RPGLEvent objects associated with the RPGLObject. This includes RPGLEvents granted by
      * effects.
      *
+     * @param context the context in which the RPGLEvents are being collected
      * @return a List of RPGLEvent objects
+     *
+     * @throws Exception if an exception occurs
      */
-    public List<RPGLEvent> getEventObjects() {
-        // TODO make a Subevent for collecting additional RPGLEvent ID's
-        JsonArray eventsArray = this.getEvents();
+    public List<RPGLEvent> getEventObjects(RPGLContext context) throws Exception {
         List<RPGLEvent> events = new ArrayList<>();
+        JsonArray eventsArray;
+
+        eventsArray = this.getEvents();
         for (int i = 0; i < eventsArray.size(); i++) {
             events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
         }
+
+        GetEvents getEvents = new GetEvents();
+        getEvents.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "get_events");
+        }});
+        getEvents.setSource(this);
+        getEvents.prepare(context);
+        getEvents.setTarget(this);
+        getEvents.invoke(context);
+
+        eventsArray = getEvents.getEvents();
+        for (int i = 0; i < eventsArray.size(); i++) {
+            events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
+        }
+
         return events;
     }
 
@@ -166,17 +250,15 @@ public class RPGLObject extends UUIDTableElement {
      * This method presents a Subevent to the RPGLObject's RPGLEffects in order to influence the result of the Subevent.
      *
      * @param subevent a Subevent being invoked
+     * @param context the context in which the Subevent is being processed
      * @return true if one of the RPGLObject's RPGLEffects modified the passed Subevent
      *
-     * @throws ConditionMismatchException if one of the Conditions in an RPGLEffect belonging to the RPGLObject is
-     *         presented with the wrong Condition ID.
-     * @throws FunctionMismatchException if one of the Functions in an RPGLEffect belonging to the RPGLObject is
-     *         presented with the wrong Function ID.
+     * @throws Exception if an exception occurs
      */
-    public boolean processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
+    public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffectObjects()) {
-            wasSubeventProcessed |= effect.processSubevent(subevent);
+            wasSubeventProcessed |= effect.processSubevent(subevent, context);
         }
         return wasSubeventProcessed;
     }
@@ -223,15 +305,15 @@ public class RPGLObject extends UUIDTableElement {
     }
 
     /**
-     * This method determines the RPGLObject's ability score modifier for a specified ability score.
+     * This method returns the RPGLObject's ability score matching the ability name provided.
      *
-     * @param context the RPGLContext in which the RPGLObject's proficiency bonus is determined
-     * @param ability the ability score whose modifier will be determined
-     * @return the modifier of the target ability
+     * @param ability the name of an ability score
+     * @param context the context in which this ability score is being calculated
+     * @return a numerical ability score
      *
-     * @throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs
      */
-    public int getAbilityModifierFromAbilityName(RPGLContext context, String ability) throws Exception {
+    public int getAbilityScoreFromAbilityName(String ability, RPGLContext context) throws Exception {
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         calculateAbilityScore.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_ability_score");
@@ -241,7 +323,20 @@ public class RPGLObject extends UUIDTableElement {
         calculateAbilityScore.prepare(context);
         calculateAbilityScore.setTarget(this);
         calculateAbilityScore.invoke(context);
-        return getAbilityModifierFromAbilityName(calculateAbilityScore.get());
+        return calculateAbilityScore.get();
+    }
+
+    /**
+     * This method determines the RPGLObject's ability score modifier for a specified ability score.
+     *
+     * @param ability the ability score whose modifier will be determined
+     * @param context the RPGLContext in which the RPGLObject's proficiency bonus is determined
+     * @return the modifier of the target ability
+     *
+     * @throws Exception if an exception occurs.
+     */
+    public int getAbilityModifierFromAbilityName(String ability, RPGLContext context) throws Exception {
+        return getAbilityModifierFromAbilityScore(this.getAbilityScoreFromAbilityName(ability, context));
     }
 
     /**
@@ -250,7 +345,7 @@ public class RPGLObject extends UUIDTableElement {
      * @param abilityScore an ability score number
      * @return the modifier for the passed score
      */
-    static int getAbilityModifierFromAbilityName(int abilityScore) {
+    static int getAbilityModifierFromAbilityScore(int abilityScore) {
         if (abilityScore < 10) {
             // integer division rounds toward zero, so abilityScore must be
             // adjusted to calculate the correct values for negative modifiers
@@ -262,13 +357,13 @@ public class RPGLObject extends UUIDTableElement {
     /**
      * This method determines whether the RPGLObject is proficient in saving throws for a specified ability.
      *
-     * @param context     the RPGLContext in which the RPGLObject's save proficiency is determined
      * @param saveAbility the ability score used by the saving throw
+     * @param context     the RPGLContext in which the RPGLObject's save proficiency is determined
      * @return true if the RPGLObject is proficient in saving throws with the specified ability
      *
      * @throws Exception if an exception occurs.
      */
-    public boolean isProficientInSavingThrow(RPGLContext context, String saveAbility) throws Exception {
+    public boolean isProficientInSavingThrow(String saveAbility, RPGLContext context) throws Exception {
         GetSavingThrowProficiency getSavingThrowProficiency = new GetSavingThrowProficiency();
         getSavingThrowProficiency.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "get_saving_throw_proficiency");
@@ -284,17 +379,17 @@ public class RPGLObject extends UUIDTableElement {
     /**
      * This method determines whether the RPGLObject is proficient in attacks made using a specified weapon.
      *
+     * @param item     an RPGLItem
      * @param context  the RPGLContext in which the RPGLObject's weapon proficiency is determined
-     * @param itemUuid the UUID of a RPGLItem object
      * @return true if the RPGLObject is proficient with the item corresponding to the passed UUID
      *
      * @throws Exception if an exception occurs.
      */
-    public boolean isProficientWithWeapon(RPGLContext context, String itemUuid) throws Exception {
+    public boolean isProficientWithWeapon(RPGLItem item, RPGLContext context) throws Exception {
         GetWeaponProficiency getWeaponProficiency = new GetWeaponProficiency();
         getWeaponProficiency.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "get_weapon_proficiency");
-            this.putString("item", itemUuid);
+            this.putJsonArray("tags", item.getProficiencyTags().deepClone());
         }});
         getWeaponProficiency.setSource(this);
         getWeaponProficiency.prepare(context);
@@ -306,14 +401,14 @@ public class RPGLObject extends UUIDTableElement {
     /**
      * This method is how a RPGLObject is intended to take damage.
      *
-     * @param context        the RPGLContext in which the RPGLObject takes damage
      * @param damageDelivery a DamageDelivery object containing damage data
+     * @param context        the RPGLContext in which the RPGLObject takes damage
      *
      * @throws Exception if an exception occurs.
      */
-    public void receiveDamage(RPGLContext context, DamageDelivery damageDelivery) throws Exception {
+    public void receiveDamage(DamageDelivery damageDelivery, RPGLContext context) throws Exception {
         JsonObject damageJson = damageDelivery.getDamage();
-        Integer damage = 0;
+        int damage = 0;
         for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
             String damageType = damageJsonEntry.getKey();
             Integer typedDamage = damageJson.getInteger(damageJsonEntry.getKey());
@@ -323,7 +418,7 @@ public class RPGLObject extends UUIDTableElement {
                 this.putString("subevent", "damage_affinity");
                 this.putString("type", damageType);
             }});
-            damageAffinity.setSource(this);
+            damageAffinity.setSource(damageDelivery.getSource());
             damageAffinity.prepare(context);
             damageAffinity.setTarget(this);
             damageAffinity.invoke(context);
@@ -335,33 +430,135 @@ public class RPGLObject extends UUIDTableElement {
                 if (damageAffinity.isVulnerable()) {
                     typedDamage *= 2;
                 }
-                damage += typedDamage;
+                if (typedDamage > 0) {
+                    damage += typedDamage;
+                }
             }
         }
         if (damage > 0) {
-            this.reduceHitPoints(damage);
+            this.reduceHitPoints(damage, context);
         }
+    }
+
+    /**
+     * This method accepts a HealingDelivery Subevent to provide healing to the RPGLObject. This method cannot be used
+     * to heal the object beyond its hit point maximum.
+     *
+     * @param healingDelivery a HealingDelivery Subevent containing a quantity of healing to apply to the RPGLObject
+     * @param context         the context in which the RPGLObject is receiving healing.
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void receiveHealing(HealingDelivery healingDelivery, RPGLContext context) throws Exception {
+        JsonObject healthData = this.getHealthData();
+        healthData.putInteger("current", healthData.getInteger("current") + healingDelivery.getHealing());
+        int maximumHitPoints = this.getMaximumHitPoints(context);
+        if (healthData.getInteger("current") > maximumHitPoints) {
+            healthData.putInteger("current", maximumHitPoints);
+        }
+    }
+
+    /**
+     * This method calculates the RPGLObject's maximum hit points.
+     *
+     * @param context the context in which the RPGLObject's maximum hit points are being calculated
+     * @return the RPGLObject's maximum hit points
+     *
+     * @throws Exception if an exception occurs
+     */
+    public int getMaximumHitPoints(RPGLContext context) throws Exception {
+        CalculateMaximumHitPoints calculateMaximumHitPoints = new CalculateMaximumHitPoints();
+        calculateMaximumHitPoints.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_maximum_hit_points");
+        }});
+        calculateMaximumHitPoints.setSource(this);
+        calculateMaximumHitPoints.prepare(context);
+        calculateMaximumHitPoints.setTarget(this);
+        calculateMaximumHitPoints.invoke(context);
+        return calculateMaximumHitPoints.get();
     }
 
     /**
      * This helper method directly reduces the hit points of the RPGLObject. This is not intended to be called directly.
      *
-     * @param amount a quantity of damage
+     * @param amount  a quantity of damage
+     * @param context the context in which the RPGLObject's hit points are reduced
+     *
+     * @throws Exception if an exception occurs
      */
-    void reduceHitPoints(int amount) {
+    void reduceHitPoints(int amount, RPGLContext context) throws Exception {
         Map<String, Object> healthData = this.getHealthData().asMap();
         Integer temporaryHitPoints = (Integer) healthData.get("temporary");
         Integer currentHitPoints = (Integer) healthData.get("current");
-        if (amount > temporaryHitPoints) {
+        if (amount >= temporaryHitPoints) {
             amount -= temporaryHitPoints;
             temporaryHitPoints = 0;
             currentHitPoints -= amount;
+            healthData.put("temporary", temporaryHitPoints);
+            healthData.put("current", currentHitPoints);
+            this.invokeInfoSubevent(new String[] { "reduced_to_zero_temporary_hit_points" }, context);
         } else {
             temporaryHitPoints -= amount;
+            healthData.put("temporary", temporaryHitPoints);
         }
-        healthData.put("temporary", temporaryHitPoints);
-        healthData.put("current", currentHitPoints);
-        // TODO deal with 0 or negative hit points after this...
+        if (currentHitPoints <= -this.getMaximumHitPoints(context)) {
+            healthData.put("current", 0);
+            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points", "killed" }, context); // TODO is there a more elegant way to do this?
+        } else if (currentHitPoints < 0) {
+            healthData.put("current", 0);
+            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points" }, context);
+        }
+    }
+
+    /**
+     * This helper method causes the RPGLObject to invoke an InfoSubevent using the passed tags.
+     *
+     * @param tags    the tags to be stored in the InfoSubevent
+     * @param context the context in which the InfoSubevent is invoked
+     * @return the InfoSubevent which was invoked
+     *
+     * @throws Exception if nan exception occurs
+     */
+    InfoSubevent invokeInfoSubevent(String[] tags, RPGLContext context) throws Exception {
+        InfoSubevent infoSubevent = new InfoSubevent();
+        infoSubevent.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "info_subevent",
+                "tags": [ <tags> ]
+            }*/
+            this.putString("subevent", "info_subevent");
+            JsonArray subeventTags = infoSubevent.json.getJsonArray("tags");
+            for (String tag : tags) {
+                subeventTags.addString(tag);
+            }
+        }});
+        infoSubevent.setSource(this);
+        infoSubevent.prepare(context);
+        infoSubevent.setTarget(this);
+        infoSubevent.invoke(context);
+        return infoSubevent;
+    }
+
+    /**
+     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has started.
+     *
+     * @param context the context in which the RPGLObject starts its turn
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void startTurn(RPGLContext context) throws Exception {
+        this.invokeInfoSubevent(new String[] { "starting_turn" }, context);
+    }
+
+    /**
+     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has ended.
+     *
+     * @param context the context in which the RPGLObject ends its turn
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void endTurn(RPGLContext context) throws Exception {
+        this.invokeInfoSubevent(new String[] { "ending_turn" }, context);
     }
 
     /**
@@ -404,7 +601,6 @@ public class RPGLObject extends UUIDTableElement {
      * @param equipmentSlot an equipment slot name (can be anything other than <code>"inventory"</code>)
      */
     public void equipItem(String itemUuid, String equipmentSlot) {
-        // TODO make a subevent for equipping an item
         JsonArray inventory = this.getInventory();
         if (inventory.asList().contains(itemUuid)) {
             JsonObject equippedItems = this.getEquippedItems();
@@ -415,4 +611,63 @@ public class RPGLObject extends UUIDTableElement {
             // TODO account for 2-handed items...
         }
     }
+
+    /**
+     * Un-equips an RPGLItem from an inventory slot, unless an InfoSubevent created to announce this is canceled.
+     *
+     * @param equipmentSlot an equipment slot String
+     * @param force         if true, the RPGLItem will be removed regardless of whether the associated InfoSubevent is
+     *                      canceled
+     * @param context       the context in which the RPGLItem is being un-equipped
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void unequipItem(String equipmentSlot, boolean force, RPGLContext context) throws Exception {
+        JsonObject equippedItems = this.getEquippedItems();
+        JsonArray itemTags = UUIDTable.getItem(equippedItems.getString(equipmentSlot)).getTags();
+        String[] infoSubeventTags = new String[itemTags.size() + 1];
+        infoSubeventTags[0] = "unequip_item";
+        for (int i = 0; i < itemTags.size() ; i++) {
+            infoSubeventTags[i + 1] = itemTags.getString(i);
+        }
+        if (force || this.invokeInfoSubevent(infoSubeventTags, context).isNotCanceled()) {
+            this.getEquippedItems().removeString(equipmentSlot);
+        }
+    }
+
+    /**
+     * This method returns all tags which are currently applied to the RPGLObject. This includes any tags granted
+     * through RPGLEffects which are not supplied by the RPGLObject itself.
+     *
+     * @param context the context in which the RPGLObject's tags are being listed
+     * @return a list of tags applied to the RPGLObject
+     *
+     * @throws Exception if an exception occurs
+     */
+    public ArrayList<String> getAllTags(RPGLContext context) throws Exception {
+        ArrayList<String> tagsList = new ArrayList<>();
+        JsonArray tags;
+
+        tags = this.getTags();
+        for (int i = 0; i < tags.size(); i++) {
+            tagsList.add(tags.getString(i));
+        }
+
+        GetObjectTags getObjectTags = new GetObjectTags();
+        getObjectTags.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "get_object_tags");
+        }});
+        getObjectTags.setSource(this);
+        getObjectTags.prepare(context);
+        getObjectTags.setTarget(this);
+        getObjectTags.invoke(context);
+
+        tags = getObjectTags.getObjectTags();
+        for (int i = 0; i < tags.size(); i++) {
+            tagsList.add(tags.getString(i));
+        }
+
+        return tagsList;
+    }
+
 }

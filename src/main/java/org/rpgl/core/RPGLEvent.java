@@ -23,12 +23,30 @@ public class RPGLEvent extends DatapackContent {
     }
 
     /**
+     * Setter for area of effect.
+     *
+     * @param areaOfEffect a new area of effect JsonObject
+     */
+    public void setAreaOfEffect(JsonObject areaOfEffect) {
+        this.putJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS, areaOfEffect);
+    }
+
+    /**
      * Returns the Subevents composing the RPGLEvent.
      *
      * @return a JsonArray containing Subevent instructions
      */
     public JsonArray getSubevents() {
         return this.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
+    }
+
+    /**
+     * Setter for subevents.
+     *
+     * @param subevents a new subevents JsonArray
+     */
+    public void setSubevents(JsonArray subevents) {
+        this.putJsonArray(RPGLEventTO.SUBEVENTS_ALIAS, subevents);
     }
 
     // =================================================================================================================

@@ -1,0 +1,59 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Hex (str)",
+  "description": "You take 1d6 extra necrotic damage when the creature which cursed you hits you with an attack, and you have disadvantage on all Strength checks.",
+  "subevent_filters": {
+    "damage_collection": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "source",
+          "subevent": "source"
+        },
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "target"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "target_damage_collection"
+        }
+      ],
+      "functions": [
+        {
+          "function": "add_damage",
+          "damage": [
+            {
+              "type": "necrotic",
+              "dice": [
+                { "count":  1, "size": 6, "determined":  [ 3 ] }
+              ],
+              "bonus": 0
+            }
+          ]
+        }
+      ]
+    },
+    "ability_check": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "source"
+        },
+        {
+          "condition": "check_roll_ability",
+          "ability": "str"
+        }
+      ],
+      "functions": [
+        {
+          "function": "grant_disadvantage"
+        }
+      ]
+    }
+  }
+}

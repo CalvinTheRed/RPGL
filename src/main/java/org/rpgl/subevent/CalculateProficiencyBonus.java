@@ -22,7 +22,7 @@ public class CalculateProficiencyBonus extends Calculation {
     @Override
     public Subevent clone() {
         Subevent clone = new CalculateProficiencyBonus();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }

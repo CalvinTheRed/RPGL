@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Cure Wounds (level 2)",
+  "description": "A low-level healing spell.",
+  "area_of_effect": { },
+  "subevents": [
+    {
+      "subevent": "heal",
+      "tags": [ "spell" ],
+      "healing": {
+        "dice": [
+          { "count": 2, "size": 8, "determined": [ 4 ] }
+        ],
+        "bonus": 0
+      }
+    }
+  ]
+}

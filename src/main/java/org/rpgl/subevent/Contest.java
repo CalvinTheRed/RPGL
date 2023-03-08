@@ -23,6 +23,9 @@ import java.util.Objects;
  */
 public class Contest extends Subevent {
 
+    // TODO how can an ObjectHasTag Condition be evaluated against the target of a Contest?
+    // TODO how can this fit in with the CancelableSubevent interface?
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Contest.class);
 
     public Contest() {
@@ -32,7 +35,7 @@ public class Contest extends Subevent {
     @Override
     public Subevent clone() {
         Subevent clone = new Contest();
-        clone.joinSubeventData(this.subeventJson);
+        clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -52,11 +55,11 @@ public class Contest extends Subevent {
         // when target is an ability check, source wins only by exceeding target.
         boolean mustExceedTarget;
         try {
-          mustExceedTarget = this.subeventJson.getJsonObject("target_contest").getString("subevent").equals("ability_check");
+          mustExceedTarget = this.json.getJsonObject("target_contest").getString("subevent").equals("ability_check");
         } catch (NullPointerException e) {
             mustExceedTarget = false;
         }
-        this.subeventJson.putBoolean("must_exceed_target", mustExceedTarget);
+        this.json.putBoolean("must_exceed_target", mustExceedTarget);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class Contest extends Subevent {
         super.invoke(context);
         int sourceResult = this.getSourceResult(context);
         int targetResult = this.getTargetResult(context);
-        if (this.subeventJson.getBoolean("must_exceed_target")) {
+        if (this.json.getBoolean("must_exceed_target")) {
             targetResult++;
         }
 
@@ -80,14 +83,15 @@ public class Contest extends Subevent {
      *
      * @param context the context in which the subevent is invoked
      * @return the source's result
+     *
      * @throws Exception if an exception occurs
      */
     int getSourceResult(RPGLContext context) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.joinSubeventData(this.subeventJson.getJsonObject("source_contest"));
+        abilityCheck.joinSubeventData(this.json.getJsonObject("source_contest"));
         abilityCheck.setSource(this.getSource());
         abilityCheck.prepare(context);
-        abilityCheck.subeventJson.getJsonArray("tags").asList().addAll(this.subeventJson.getJsonArray("tags").asList());
+        abilityCheck.json.getJsonArray("tags").asList().addAll(this.json.getJsonArray("tags").asList());
         abilityCheck.setTarget(this.getSource());
         abilityCheck.invoke(context);
         return abilityCheck.get();
@@ -101,12 +105,12 @@ public class Contest extends Subevent {
      * @throws Exception if an exception occurs
      */
     int getTargetResult(RPGLContext context) throws Exception {
-        Integer targetResult = this.subeventJson.getInteger("target_contest");
+        Integer targetResult = this.json.getInteger("target_contest");
         if (targetResult != null) {
             return targetResult;
         }
 
-        JsonObject targetContestJson = this.subeventJson.getJsonObject("target_contest");
+        JsonObject targetContestJson = this.json.getJsonObject("target_contest");
         String subeventId = targetContestJson.getString("subevent");
         if (subeventId.equals("calculate_save_difficulty_class")) {
             return this.getTargetResultAsSaveDifficultyClass(targetContestJson, context);
@@ -122,7 +126,8 @@ public class Contest extends Subevent {
     /**
      * This helper method returns the result of the target when it is a save difficulty class calculation.
      *
-     * @param context the context in which the subevent is invoked
+     * @param targetJson the JSON data defining the target's contribution to the Contest
+     * @param context    the context in which the subevent is invoked
      * @return the target's result
      * @throws Exception if an exception occurs
      */
@@ -139,6 +144,7 @@ public class Contest extends Subevent {
     /**
      * This helper method returns the result of the target when it is an ability check.
      *
+     * @param targetJson the JSON data defining the target's contribution to the Contest
      * @param context the context in which the subevent is invoked
      * @return the target's result
      * @throws Exception if an exception occurs
@@ -148,7 +154,7 @@ public class Contest extends Subevent {
         abilityCheck.joinSubeventData(targetJson);
         abilityCheck.setSource(this.getTarget());
         abilityCheck.prepare(context);
-        abilityCheck.subeventJson.getJsonArray("tags").asList().addAll(this.subeventJson.getJsonArray("tags").asList());
+        abilityCheck.json.getJsonArray("tags").asList().addAll(this.json.getJsonArray("tags").asList());
         abilityCheck.setTarget(this.getTarget());
         abilityCheck.invoke(context);
         return abilityCheck.get();
@@ -162,7 +168,7 @@ public class Contest extends Subevent {
      * @throws Exception if an exception occurs
      */
     void resolveNestedSubevents(String whoWins, RPGLContext context) throws Exception {
-        JsonArray subeventJsonArray = Objects.requireNonNullElse(this.subeventJson.getJsonArray(whoWins), new JsonArray());
+        JsonArray subeventJsonArray = Objects.requireNonNullElse(this.json.getJsonArray(whoWins), new JsonArray());
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject nestedSubeventJson = subeventJsonArray.getJsonObject(i);
             Subevent subevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);

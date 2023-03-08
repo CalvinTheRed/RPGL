@@ -1,10 +1,6 @@
 package org.rpgl.core;
 
-import org.rpgl.exception.ConditionMismatchException;
-import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.subevent.Subevent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +15,6 @@ import java.util.Map;
  * @author Calvin Withun
  */
 public class RPGLContext {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RPGLContext.class);
 
     private final Map<String, RPGLObject> contextObjects;
 
@@ -38,8 +32,7 @@ public class RPGLContext {
      */
     public void add(RPGLObject object) {
         String objectUuid = object.getUuid();
-        this.contextObjects.put(objectUuid, object);
-        LOGGER.debug("added object to context (" + objectUuid + ")");
+        this.contextObjects.putIfAbsent(objectUuid, object);
     }
 
     /**
@@ -58,16 +51,14 @@ public class RPGLContext {
      *
      * @param subevent a Subevent
      *
-     * @throws ConditionMismatchException if a Condition was presented incorrectly formatted JSON data
-     * @throws FunctionMismatchException  if a Function was presented incorrectly formatted JSON data.
+     * @throws Exception if an exception occurs
      */
-    public void processSubevent(Subevent subevent) throws ConditionMismatchException, FunctionMismatchException {
-        LOGGER.debug("processing Subevent " + subevent.getSubeventId() + " with source (" + subevent.getSource().getUuid() + ") and target (" + subevent.getTarget().getUuid() + ")");
+    public void processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         boolean wasProcessed;
         do {
             wasProcessed = false;
             for (Map.Entry<String, RPGLObject> contextObjectsEntry : this.contextObjects.entrySet()) {
-                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent);
+                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent, context);
             }
         } while (wasProcessed);
     }
