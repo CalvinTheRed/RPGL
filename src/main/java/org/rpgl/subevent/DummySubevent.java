@@ -19,6 +19,7 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
 
     public DummySubevent() {
         super("dummy_subevent");
+        this.addTag("dummy_subevent");
     }
 
     @Override
