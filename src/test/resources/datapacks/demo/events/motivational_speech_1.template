@@ -2,8 +2,8 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Armor of Agathys",
-  "description": "A low-level abjuration spell.",
+  "name": "Motivational Speech",
+  "description": "You inspire confidence in your allies.",
   "area_of_effect": { },
   "subevents": [
     {
@@ -14,7 +14,7 @@
         "bonus": 5
       },
       "rider_effects": [
-        "demo:armor_of_agathys_1"
+        "demo:motivational_speech_effect_passive"
       ]
     }
   ]

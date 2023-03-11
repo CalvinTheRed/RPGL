@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "author": "Calvin Withun",
+    "notes": [
+      "This effect is not yet supported. InvokeEvent Function is not yet implemented."
+    ]
+  },
+  "name": "Motivational Speech",
+  "description": "The creature has advantage on the next attack roll it hits.",
+  "subevent_filters": {
+    "attack_roll": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "target"
+        }
+      ],
+      "functions": [ ]
+    }
+  }
+}
