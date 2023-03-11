@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "author": "Calvin Withun",
+    "notes": [
+      "This effect is not yet supported. InvokeEvent Function is not yet implemented."
+    ]
+  },
+  "name": "Motivational Speech",
+  "description": "Creatures with this effect gain advantage on their next attack roll when they are hit by an attack.",
+  "subevent_filters": {
+    "damage_delivery": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "target"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "attack_roll"
+        }
+      ],
+      "functions": [ ]
+    },
+    "info_subevent": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "target"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "reduced_to_zero_temporary_hit_points"
+        }
+      ],
+      "functions": [ ]
+    }
+  }
+}

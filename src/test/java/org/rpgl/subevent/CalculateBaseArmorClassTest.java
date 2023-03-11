@@ -64,7 +64,7 @@ public class CalculateBaseArmorClassTest {
 
     @Test
     @DisplayName("getShieldBonus returns 0 (commoner not wielding a shield)")
-    void getShieldBonus_returnsZero_commoner() {
+    void getShieldBonus_returnsZero_commoner() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
         context.add(source);
@@ -80,7 +80,7 @@ public class CalculateBaseArmorClassTest {
 
     @Test
     @DisplayName("getShieldBonus returns 2 (knight wielding a shield)")
-    void getShieldBonus_returnsTwo_knight() {
+    void getShieldBonus_returnsTwo_knight() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
         context.add(source);

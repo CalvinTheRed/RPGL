@@ -2,8 +2,8 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Knight",
-  "description": "A knight.",
+  "name": "Commoner",
+  "description": "A Commoner.",
   "ability_scores": {
     "str": 10,
     "dex": 10,
