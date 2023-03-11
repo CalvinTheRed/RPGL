@@ -49,9 +49,8 @@ public class RPGLContext {
     }
 
     /**
-     * This method adds a RPGLObject to the context, using a pre-determined initiative value. This method should only be
-     * used during testing, as it risks overriding existing initiative scores if the same initiative is passed more than
-     * once.
+     * This method adds a RPGLObject to the context, using a pre-determined initiative value, plus random digits to help
+     * prevent risk of overriding existing turns in the turn order.
      *
      * @param object     an RPGLObject to be added into the context
      * @param initiative an initiative score
@@ -59,7 +58,7 @@ public class RPGLContext {
     public void add(RPGLObject object, double initiative) throws Exception {
         String objectUuid = object.getUuid();
         this.contextObjects.putIfAbsent(objectUuid, object);
-        turnOrder.put(initiative, object);
+        turnOrder.put(initiative + Math.random() / 10000.0, object);
     }
 
     /**
@@ -134,8 +133,8 @@ public class RPGLContext {
         abilityCheck.invoke(this);
 
         return abilityCheck.get()
-                + ( (double) object.getAbilityScoreFromAbilityName("dex", this) / 100)
-                + (Math.random() / 10000);
+                + ( (double) object.getAbilityScoreFromAbilityName("dex", this) / 100.0)
+                + (Math.random() / 10000.0);
     }
 
     /**
