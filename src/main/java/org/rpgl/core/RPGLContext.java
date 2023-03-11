@@ -41,6 +41,8 @@ public class RPGLContext {
      * would otherwise result in a tie.
      *
      * @param object an RPGLObject to be added into the context
+     *
+     * @throws Exception if an exception occurs
      */
     public void add(RPGLObject object) throws Exception {
         String objectUuid = object.getUuid();
@@ -54,6 +56,8 @@ public class RPGLContext {
      *
      * @param object     an RPGLObject to be added into the context
      * @param initiative an initiative score
+     *
+     * @throws Exception if an exception occurs
      */
     public void add(RPGLObject object, double initiative) throws Exception {
         String objectUuid = object.getUuid();
@@ -141,6 +145,8 @@ public class RPGLContext {
      * Returns the RPGLObject which is active in the current turn.
      *
      * @return an RPGLObject
+     *
+     * @throws Exception if an exception occurs
      */
     public RPGLObject currentObject() throws Exception {
         return Objects.requireNonNullElse(turnOrder.get(this.currentInitiative), this.nextObject());
@@ -154,6 +160,8 @@ public class RPGLContext {
      * cycle over again. This method returns the RPGLObject which is active in the new turn.
      *
      * @return an RPGLObject
+     *
+     * @throws Exception if an exception occurs
      */
     public RPGLObject nextObject() throws Exception {
         if (!this.turnOrder.isEmpty()) {
