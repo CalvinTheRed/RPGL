@@ -6,11 +6,11 @@ import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.subevent.Subevent;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents the context in which actions take place in this library. Typically, there will exist one
@@ -36,24 +36,6 @@ public class RPGLContext {
     }
 
     /**
-     * Inline constructor for RPGLContext class. This constructor is meant to be used when a temporary RPGLContext is
-     * being created. This temporary RPGLContext should not be used to track turn order, and only exists in order to
-     * facilitate a RPGLEvent which spans an area which is much larger than an existing RPGLContext would account for.
-     * For example, this constructor may be used to include all RPGLObjects in a 1-mile radius of the center of a large
-     * area-of-effect spell, even though the spell was cast from within a much smaller RPGLContext.
-     *
-     * @param objects a collection of RPGLObjects to be included in this context
-     */
-    public RPGLContext(Collection<RPGLObject> objects) {
-        this.contextObjects = new HashMap<>();
-        this.turnOrder = new HashMap<>();
-        this.currentInitiative = null;
-        objects.forEach(object -> {
-            contextObjects.put(object.getUuid(), object);
-        });
-    }
-
-    /**
      * This method adds a RPGLObject to the context. The passed object will be assigned an initiative score and added to
      * the turn order. This initiative accounts for dexterity scores, and assigns random bonuses to differentiate what
      * would otherwise result in a tie.
@@ -63,8 +45,7 @@ public class RPGLContext {
     public void add(RPGLObject object) throws Exception {
         String objectUuid = object.getUuid();
         this.contextObjects.putIfAbsent(objectUuid, object);
-        Double initiative = this.rollObjectInitiative(object);
-        turnOrder.put(initiative, object);
+        turnOrder.put(this.rollObjectInitiative(object), object);
     }
 
     /**
@@ -85,18 +66,16 @@ public class RPGLContext {
      * This method removes a RPGLObject from the context. This includes removing it from context as well as forgetting
      * its place in the initiative order.
      *
-     * @param objectUuid the UUID of an RPGLObject to be removed from context
-     * @return the RPGLObject removed from context
+     * @param object the RPGLObject to be removed from context
      */
-    public RPGLObject remove(String objectUuid) {
-        RPGLObject object = this.contextObjects.remove(objectUuid);
+    public void remove(RPGLObject object) {
+        this.contextObjects.remove(object.getUuid());
         for (Map.Entry<Double, RPGLObject> entry : this.turnOrder.entrySet()) {
             if (entry.getValue() == object) {
                 this.turnOrder.remove(entry.getKey());
                 break;
             }
         }
-        return object;
     }
 
     /**
@@ -164,8 +143,8 @@ public class RPGLContext {
      *
      * @return an RPGLObject
      */
-    public RPGLObject currentObject() {
-        return turnOrder.get(this.currentInitiative);
+    public RPGLObject currentObject() throws Exception {
+        return Objects.requireNonNullElse(turnOrder.get(this.currentInitiative), this.nextObject());
     }
 
     /**
@@ -178,38 +157,34 @@ public class RPGLContext {
      * @return an RPGLObject
      */
     public RPGLObject nextObject() throws Exception {
-        List<Double> initiativeScores = new ArrayList<>(this.turnOrder.keySet().stream().sorted().toList());
-        Collections.reverse(initiativeScores);
-        RPGLObject lastObject = this.turnOrder.get(this.currentInitiative);
-        int initiativeIndex = initiativeScores.indexOf(this.currentInitiative);
-        if (initiativeIndex == initiativeScores.size() - 1) {
-            // loop back around to the highest initiative in context
-            initiativeIndex = 0;
-        } else {
-            initiativeIndex++;
-        }
-        this.currentInitiative = initiativeScores.get(initiativeIndex);
-        RPGLObject nextObject = this.turnOrder.get(this.currentInitiative);
-        if (lastObject != null) {
-            // end turn of last object, unless this is the first turn
-            lastObject.endTurn(this);
-        }
-        // start turn of next object
-        nextObject.startTurn(this);
-        return nextObject;
-    }
+        if (!this.turnOrder.isEmpty()) {
+            List<Double> initiativeScores = new ArrayList<>(this.turnOrder.keySet().stream().sorted().toList());
+            Collections.reverse(initiativeScores);
+            RPGLObject lastObject = this.turnOrder.get(this.currentInitiative);
+            int initiativeIndex = initiativeScores.indexOf(this.currentInitiative);
+            if (initiativeIndex == initiativeScores.size() - 1) {
+                // loop back around to the highest initiative in context
+                initiativeIndex = 0;
+            } else {
+                initiativeIndex++;
+            }
+            this.currentInitiative = initiativeScores.get(initiativeIndex);
+            RPGLObject nextObject = this.turnOrder.get(this.currentInitiative);
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append('[');
-        for (Map.Entry<String, RPGLObject> contextObjectEntry : this.contextObjects.entrySet()) {
-            stringBuilder.append(contextObjectEntry.getValue().getUuid());
-            stringBuilder.append(',');
+            if (lastObject != null) {
+                // end turn of last object, unless this is the first turn
+                lastObject.endTurn(this);
+            }
+            // start turn of next object
+            nextObject.startTurn(this);
+
+            // check to see if nextObject died immediately after starting its turn
+            if (!contextObjects.containsKey(nextObject.getUuid())) {
+                nextObject = this.nextObject();
+            }
+            return nextObject;
         }
-        stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
-        stringBuilder.append(']');
-        return stringBuilder.toString();
+        return null;
     }
 
 }

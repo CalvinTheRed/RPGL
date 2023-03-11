@@ -239,7 +239,7 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("getEffects returns an array of the correct effects")
-    void getEffects_returnsArrayOfCorrectEffects() {
+    void getEffects_returnsArrayOfCorrectEffects() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLContext context = new RPGLContext();
         context.add(youngRedDragon);
@@ -256,7 +256,7 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("addRemoveEffect effects can be added and removed")
-    void addRemoveEffect_effectsCanBeAddedAndRemoved() {
+    void addRemoveEffect_effectsCanBeAddedAndRemoved() throws Exception {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
         context.add(knight);
