@@ -61,7 +61,7 @@ public class GrantResistanceTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -88,7 +88,7 @@ public class GrantResistanceTest {
             this.putString("function", "grant_resistance");
         }};
 
-        grantResistance.execute(source, target, damageAffinity, functionJson, context);
+        grantResistance.execute(null, damageAffinity, functionJson, context);
 
         assertTrue(damageAffinity.isResistant(),
                 "execute should grant resistance"

@@ -61,7 +61,7 @@ public class AddEventTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -90,7 +90,7 @@ public class AddEventTest {
             this.putString("event", "demo:test");
         }};
 
-        addEvent.execute(object, object, getEvents, functionJson, context);
+        addEvent.execute(null, getEvents, functionJson, context);
 
         String expected = """
                 ["demo:test"]""";

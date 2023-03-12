@@ -61,7 +61,7 @@ public class AddSubeventTagTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -89,7 +89,7 @@ public class AddSubeventTagTest {
             this.putString("tag", "test_tag");
         }};
 
-        addSubeventTag.execute(source, target, dummySubevent, functionJson, context);
+        addSubeventTag.execute(null, dummySubevent, functionJson, context);
 
         assertTrue(dummySubevent.hasTag("test_tag"),
                 "execute should add tag to subevent"

@@ -37,7 +37,7 @@ public class FalseTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -55,7 +55,7 @@ public class FalseTest {
 
         RPGLContext context = new RPGLContext();
 
-        assertFalse(condition.evaluate(null, null, null, conditionJson, context),
+        assertFalse(condition.evaluate(null, null, conditionJson, context),
                 "False condition should always evaluate false"
         );
     }

@@ -62,7 +62,7 @@ public class IsObjectsTurnTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -98,7 +98,7 @@ public class IsObjectsTurnTest {
 
         context.currentObject();
 
-        assertTrue(isObjectsTurn.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(isObjectsTurn.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true when it is object's turn"
         );
     }
@@ -135,7 +135,7 @@ public class IsObjectsTurnTest {
         context.currentObject();
         context.nextObject();
 
-        assertFalse(isObjectsTurn.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(isObjectsTurn.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false when it is not object's turn"
         );
     }

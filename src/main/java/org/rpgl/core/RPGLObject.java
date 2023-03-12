@@ -491,12 +491,17 @@ public class RPGLObject extends RPGLTaggable {
         Integer temporaryHitPoints = (Integer) healthData.get("temporary");
         Integer currentHitPoints = (Integer) healthData.get("current");
         if (amount >= temporaryHitPoints) {
-            amount -= temporaryHitPoints;
-            temporaryHitPoints = 0;
-            currentHitPoints -= amount;
-            healthData.put("temporary", temporaryHitPoints);
-            healthData.put("current", currentHitPoints);
-            this.invokeInfoSubevent(new String[] { "reduced_to_zero_temporary_hit_points" }, context);
+            if (temporaryHitPoints > 0) {
+                amount -= temporaryHitPoints;
+                temporaryHitPoints = 0;
+                currentHitPoints -= amount;
+                healthData.put("temporary", temporaryHitPoints);
+                healthData.put("current", currentHitPoints);
+                this.invokeInfoSubevent(new String[] { "reduced_to_zero_temporary_hit_points" }, context);
+            } else {
+                currentHitPoints -= amount;
+                healthData.put("current", currentHitPoints);
+            }
         } else {
             temporaryHitPoints -= amount;
             healthData.put("temporary", temporaryHitPoints);

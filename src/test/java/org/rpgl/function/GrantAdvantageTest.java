@@ -85,7 +85,7 @@ public class GrantAdvantageTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -111,7 +111,7 @@ public class GrantAdvantageTest {
             this.putString("function", "grant_advantage");
         }};
 
-        grantAdvantage.execute(source, target, roll, functionJson, context);
+        grantAdvantage.execute(null, roll, functionJson, context);
 
         assertTrue(roll.isAdvantageRoll(),
                 "execute should grant advantage to roll"

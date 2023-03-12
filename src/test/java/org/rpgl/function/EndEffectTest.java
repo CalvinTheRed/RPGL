@@ -3,35 +3,34 @@ package org.rpgl.function;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.GetProficiency;
+import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.function.GrantHalfProficiency class.
+ * Testing class for the org.rpgl.function.EndEffect class.
  *
  * @author Calvin Withun
  */
-public class GrantHalfProficiencyTest {
-
-    private GetProficiency getProficiency;
+public class EndEffectTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -46,21 +45,6 @@ public class GrantHalfProficiencyTest {
         DatapackLoader.DATAPACKS.clear();
     }
 
-    @BeforeEach
-    void beforeEach() {
-        getProficiency = new GetProficiency("get_proficiency") {
-            @Override
-            public Subevent clone() {
-                return null;
-            }
-
-            @Override
-            public Subevent clone(JsonObject jsonData) {
-                return null;
-            }
-        };
-    }
-
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
@@ -69,7 +53,7 @@ public class GrantHalfProficiencyTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new GrantHalfProficiency();
+        Function function = new EndEffect();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -86,30 +70,35 @@ public class GrantHalfProficiencyTest {
     }
 
     @Test
-    @DisplayName("execute grants proficiency")
-    void execute_grantsExpertise() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+    @DisplayName("")
+    void test() throws Exception {
+        RPGLObject commoner = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
-        context.add(source);
-        context.add(target);
+        context.add(commoner);
 
-        getProficiency.setSource(source);
-        getProficiency.prepare(context);
-        getProficiency.setTarget(target);
+        RPGLEffect fireImmunity = RPGLFactory.newEffect("demo:fire_immunity");
+        fireImmunity.setSource(commoner);
+        fireImmunity.setTarget(commoner);
 
-        GrantHalfProficiency grantHalfProficiency = new GrantHalfProficiency();
+        commoner.addEffect(fireImmunity);
+        assertTrue(commoner.getEffects().asList().contains(fireImmunity.getUuid()),
+                "condition should be successfully assigned to commoner before it is ended"
+        );
+
+        Subevent subevent = new DummySubevent();
+
+        EndEffect endEffect = new EndEffect();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "grant_half_proficiency"
+                "function": "end_effect"
             }*/
-            this.putString("function", "grant_half_proficiency");
+            this.putString("function", "end_effect");
         }};
 
-        grantHalfProficiency.execute(null, getProficiency, functionJson, context);
+        endEffect.execute(fireImmunity, subevent, functionJson, context);
 
-        assertTrue(getProficiency.isHalfProficient(),
-                "execute should grant half proficiency"
+        assertFalse(commoner.getEffects().asList().contains(fireImmunity.getUuid()),
+                "commoner should no longer have effect after it is ended"
         );
     }
 

@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * This class is a high-level controller for RPGL, intended to make it easier for a client program to interface wit
+ * This class is a high-level controller for RPGL, intended to make it easier for a client program to interface with
  * necessary methods used to prepare RPGL for use.
  *
  * @author Calvin Withun

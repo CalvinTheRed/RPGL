@@ -1,7 +1,7 @@
 package org.rpgl.condition;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -18,8 +18,7 @@ public class Any extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
-                            JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         this.verifyCondition(conditionJson);
         JsonArray nestedConditionArray = conditionJson.getJsonArray("conditions");
         if (nestedConditionArray.size() == 0) {
@@ -29,7 +28,7 @@ public class Any extends Condition {
             JsonObject nestedConditionJson = nestedConditionArray.getJsonObject(i);
             Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
             // once a single element returns true, iteration can short-circuit
-            if (nestedCondition.evaluate(effectSource, effectTarget, subevent, nestedConditionJson, context)) {
+            if (nestedCondition.evaluate(effect, subevent, nestedConditionJson, context)) {
                 return true;
             }
         }

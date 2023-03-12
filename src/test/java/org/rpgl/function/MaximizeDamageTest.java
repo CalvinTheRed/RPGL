@@ -131,7 +131,7 @@ public class MaximizeDamageTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -159,7 +159,7 @@ public class MaximizeDamageTest {
             this.putString("type", "fire");
         }};
 
-        maximizeDamage.execute(source, target, damageRoll, functionJson, context);
+        maximizeDamage.execute(null, damageRoll, functionJson, context);
 
         String expected = """
                 {"cold":4,"fire":14}""";
@@ -191,7 +191,7 @@ public class MaximizeDamageTest {
             this.putString("type", "");
         }};
 
-        maximizeDamage.execute(source, target, damageRoll, functionJson, context);
+        maximizeDamage.execute(null, damageRoll, functionJson, context);
 
         String expected = """
                 {"cold":14,"fire":14}""";

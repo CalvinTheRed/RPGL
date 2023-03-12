@@ -1,7 +1,7 @@
 package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -41,6 +41,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("add_healing", new AddHealing());
         Function.FUNCTIONS.put("add_object_tag", new AddObjectTag());
         Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
+        Function.FUNCTIONS.put("end_effect", new EndEffect());
         Function.FUNCTIONS.put("grant_advantage", new GrantAdvantage());
         Function.FUNCTIONS.put("grant_disadvantage", new GrantDisadvantage());
         Function.FUNCTIONS.put("grant_expertise", new GrantExpertise());
@@ -49,7 +50,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("grant_proficiency", new GrantProficiency());
         Function.FUNCTIONS.put("grant_resistance", new GrantResistance());
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
-//        Function.FUNCTIONS.put("invoke_event", new InvokeEvent());
+        Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());
         Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
         Function.FUNCTIONS.put("maximize_healing", new MaximizeHealing());
         Function.FUNCTIONS.put("reroll_damage_dice_matching_or_below", new RerollDamageDiceMatchingOrBelow());
@@ -90,15 +91,13 @@ public abstract class Function {
     /**
      * Modifies given Subevents or RPGLObjects according to given parameters.
      *
-     * @param effectSource the RPGLObject sourcing the RPGLEffect being considered
-     * @param effectTarget the RPGLObject targeted by the RPGLEffect being considered
+     * @param effect       the RPGLEffect containing this Function
      * @param subevent     the Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the function to be executed
      * @param context      the context in which the FUnction is invoked
      *
      * @throws Exception if an exception occurs
      */
-    public abstract void execute(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
-                                 JsonObject functionJson, RPGLContext context) throws Exception;
+    public abstract void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception;
 
 }

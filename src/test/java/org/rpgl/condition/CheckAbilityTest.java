@@ -62,7 +62,7 @@ public class CheckAbilityTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -90,7 +90,7 @@ public class CheckAbilityTest {
             this.putString("ability", "str");
         }};
 
-        assertTrue(checkAbility.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(checkAbility.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true when subevent uses indicated ability"
         );
     }
@@ -118,7 +118,7 @@ public class CheckAbilityTest {
             this.putString("ability", "not_str");
         }};
 
-        assertFalse(checkAbility.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(checkAbility.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false when subevent uses indicated ability"
         );
     }

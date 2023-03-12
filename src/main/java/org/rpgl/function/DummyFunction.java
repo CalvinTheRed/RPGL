@@ -1,7 +1,7 @@
 package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
@@ -20,8 +20,7 @@ public class DummyFunction extends Function {
     }
 
     @Override
-    public void execute(RPGLObject source, RPGLObject target, Subevent subevent,
-                        JsonObject functionJson, RPGLContext context) throws Exception {
+    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         DummyFunction.counter++;
     }

@@ -1,7 +1,7 @@
 package org.rpgl.condition;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
@@ -17,8 +17,7 @@ public class False extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
-                            JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         this.verifyCondition(conditionJson);
         return false;
     }

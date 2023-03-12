@@ -62,7 +62,7 @@ public class AddDamageTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -171,7 +171,7 @@ public class AddDamageTest {
             }});
         }};
 
-        addDamage.execute(source, target, damageCollection, functionJson, context);
+        addDamage.execute(null, damageCollection, functionJson, context);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";

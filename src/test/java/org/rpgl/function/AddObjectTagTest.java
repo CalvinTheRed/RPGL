@@ -61,7 +61,7 @@ public class AddObjectTagTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -90,7 +90,7 @@ public class AddObjectTagTest {
             this.putString("tag", "test_tag");
         }};
 
-        addObjectTag.execute(object, object, getObjectTags, functionJson, context);
+        addObjectTag.execute(null, getObjectTags, functionJson, context);
 
         String expected = """
                 ["test_tag"]""";

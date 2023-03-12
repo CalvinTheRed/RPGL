@@ -44,8 +44,8 @@ public class DummyFunctionTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
-                "DummyFunction function should throw a FunctionMismatchException if the specified function doesn't match"
+                () -> function.execute(null, null, functionJson, context),
+                "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
@@ -62,7 +62,7 @@ public class DummyFunctionTest {
 
         RPGLContext context = new RPGLContext();
 
-        function.execute(null, null, null, functionJson, context);
+        function.execute(null, null, functionJson, context);
         assertEquals(1, DummyFunction.counter,
                 "DummyFunction function should increment static counter variable upon execution"
         );

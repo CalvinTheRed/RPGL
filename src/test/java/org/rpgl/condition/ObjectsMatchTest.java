@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -62,7 +63,7 @@ public class ObjectsMatchTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -80,6 +81,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -96,7 +101,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "source");
         }};
 
-        assertTrue(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return true when objects match"
         );
     }
@@ -114,6 +119,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -130,7 +139,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "source");
         }};
 
-        assertFalse(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return false when objects don't match"
         );
     }
@@ -148,6 +157,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -164,7 +177,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "target");
         }};
 
-        assertTrue(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return true when objects match"
         );
     }
@@ -182,6 +195,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -198,7 +215,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "target");
         }};
 
-        assertFalse(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return false when objects don't match"
         );
     }
@@ -216,6 +233,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -232,7 +253,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "source");
         }};
 
-        assertTrue(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return true when objects match"
         );
     }
@@ -250,6 +271,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -266,7 +291,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "source");
         }};
 
-        assertFalse(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return false when objects don't match"
         );
     }
@@ -284,6 +309,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -300,7 +329,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "target");
         }};
 
-        assertTrue(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return true when objects match"
         );
     }
@@ -318,6 +347,10 @@ public class ObjectsMatchTest {
         context.add(subeventSource);
         context.add(subeventTarget);
 
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(effectSource);
+        effect.setTarget(effectTarget);
+
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
         dummySubevent.setTarget(subeventTarget);
@@ -334,7 +367,7 @@ public class ObjectsMatchTest {
             this.putString("subevent", "target");
         }};
 
-        assertFalse(objectsMatch.evaluate(effectSource, effectTarget, dummySubevent, conditionJson, context),
+        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
                 "evaluate should return false when objects don't match"
         );
     }

@@ -80,7 +80,7 @@ public class AddBonusTests {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -108,7 +108,7 @@ public class AddBonusTests {
         calculation.prepare(context);
         calculation.setTarget(target);
 
-        addBonus.execute(source, target, calculation, functionJson, context);
+        addBonus.execute(null, calculation, functionJson, context);
 
         assertEquals(2, calculation.getBonus(),
                 "bonus of 2 should be applied to the calculation following execution"

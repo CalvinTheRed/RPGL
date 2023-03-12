@@ -61,7 +61,7 @@ public class RevokeResistanceTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -89,7 +89,7 @@ public class RevokeResistanceTest {
             this.putString("function", "revoke_resistance");
         }};
 
-        revokeResistance.execute(source, target, damageAffinity, functionJson, context);
+        revokeResistance.execute(null, damageAffinity, functionJson, context);
 
         assertFalse(damageAffinity.isResistant(),
                 "execute should revoke resistance to counter the granted resistance"

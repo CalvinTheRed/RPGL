@@ -96,7 +96,7 @@ public class MaximizeHealingTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -122,7 +122,7 @@ public class MaximizeHealingTest {
             this.putString("function", "maximize_healing");
         }};
 
-        maximizeHealing.execute(source, target, healingRoll, functionJson, context);
+        maximizeHealing.execute(null, healingRoll, functionJson, context);
 
         String expected = """
                 {"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}""";
