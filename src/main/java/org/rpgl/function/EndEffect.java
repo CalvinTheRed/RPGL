@@ -6,20 +6,20 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
 /**
- * This Function is dedicated to adding tags to Subevents.
+ * This Function is dedicated to ending the RPGLEffect containing it.
  *
  * @author Calvin Withun
  */
-public class AddSubeventTag extends Function {
+public class EndEffect extends Function {
 
-    public AddSubeventTag() {
-        super("add_subevent_tag");
+    public EndEffect() {
+        super("end_effect");
     }
 
     @Override
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
-        subevent.addTag(functionJson.getString("tag"));
+        effect.getTarget().removeEffect(effect.getUuid());
     }
 
 }

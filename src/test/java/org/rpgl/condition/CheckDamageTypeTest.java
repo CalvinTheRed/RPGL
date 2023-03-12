@@ -62,7 +62,7 @@ public class CheckDamageTypeTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -92,7 +92,7 @@ public class CheckDamageTypeTest {
             this.putString("type", "fire");
         }};
 
-        assertTrue(checkDamageType.evaluate(source, target, damageAffinity, conditionJson, context),
+        assertTrue(checkDamageType.evaluate(null, damageAffinity, conditionJson, context),
                 "evaluate should return true when damage affinity is for the desired damage type"
         );
     }
@@ -122,7 +122,7 @@ public class CheckDamageTypeTest {
             this.putString("type", "cold");
         }};
 
-        assertFalse(checkDamageType.evaluate(source, target, damageAffinity, conditionJson, context),
+        assertFalse(checkDamageType.evaluate(null, damageAffinity, conditionJson, context),
                 "evaluate should return false when damage affinity is for an undesired damage type"
         );
     }

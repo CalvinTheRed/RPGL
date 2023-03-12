@@ -62,7 +62,7 @@ public class ObjectAbilityScoreComparisonTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -105,7 +105,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 15);
         }};
 
-        assertTrue(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true for equal comparison when score equals value"
         );
     }
@@ -148,7 +148,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 10);
         }};
 
-        assertFalse(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false for equal comparison when score does not equal value"
         );
     }
@@ -191,7 +191,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 20);
         }};
 
-        assertTrue(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true for less-than comparison when score is less than value"
         );
     }
@@ -234,7 +234,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 10);
         }};
 
-        assertFalse(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false for less-than comparison when score is not less than value"
         );
     }
@@ -277,7 +277,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 10);
         }};
 
-        assertTrue(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true for more-than comparison when score is more than value"
         );
     }
@@ -320,7 +320,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 20);
         }};
 
-        assertFalse(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false for more-than comparison when score is not more than value"
         );
     }
@@ -363,7 +363,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 20);
         }};
 
-        assertTrue(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true for less-than-or-equal-to comparison when score is less than value"
         );
     }
@@ -406,7 +406,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 15);
         }};
 
-        assertTrue(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true for less-than-or-equal-to comparison when score is equal to value"
         );
     }
@@ -449,7 +449,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 10);
         }};
 
-        assertFalse(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false for less-than-or-equal-to comparison when score is more than value"
         );
     }
@@ -492,7 +492,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 10);
         }};
 
-        assertTrue(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true for more-than-or-equal-to comparison when score is more than value"
         );
     }
@@ -535,7 +535,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 15);
         }};
 
-        assertTrue(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true for more-than-or-equal-to comparison when score is equal to value"
         );
     }
@@ -578,7 +578,7 @@ public class ObjectAbilityScoreComparisonTest {
             this.putInteger("compare_to", 20);
         }};
 
-        assertFalse(objectAbilityScoreComparison.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false for more-than-or-equal-to comparison when score is less than value"
         );
     }

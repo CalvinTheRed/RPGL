@@ -127,7 +127,7 @@ public class RPGLEffect extends UUIDTableElement {
             JsonObject conditionJson = conditions.getJsonObject(i);
             conditionsMet &= Condition.CONDITIONS
                     .get(conditionJson.getString("condition"))
-                    .evaluate(this.getSource(), this.getTarget(), subevent, conditionJson, context);
+                    .evaluate(this, subevent, conditionJson, context);
         }
         return conditionsMet;
     }
@@ -146,7 +146,7 @@ public class RPGLEffect extends UUIDTableElement {
             JsonObject functionJson = functions.getJsonObject(i);
             Function.FUNCTIONS
                     .get(functionJson.getString("function"))
-                    .execute(this.getSource(), this.getTarget(), subevent, functionJson, context);
+                    .execute(this, subevent, functionJson, context);
         }
     }
 
@@ -154,15 +154,14 @@ public class RPGLEffect extends UUIDTableElement {
      * This helper method retrieves the source or the target RPGLObject of either an RPGLEffect or a Subevent being
      * processed.
      *
-     * @param effectSource the RPGLObject source of the RPGLEffect being processed
-     * @param effectTarget the RPGLObject target of the RPGLEffect being processed
+     * @param effect       the RPGLEffect processing subevent
      * @param subevent     the Subevent being processed
      * @param instructions the JSON data instructing which RPGLObject should be returned
      * @return a RPGLObject
      *
      * @throws Exception if an exception occurs
      */
-    public static RPGLObject getObject(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent, JsonObject instructions) throws Exception {
+    public static RPGLObject getObject(RPGLEffect effect, Subevent subevent, JsonObject instructions) throws Exception {
         String from = instructions.getString("from");
         String object = instructions.getString("object");
         if ("subevent".equals(from)) {
@@ -173,9 +172,9 @@ public class RPGLEffect extends UUIDTableElement {
             }
         } else if ("effect".equals(from)) {
             if ("source".equals(object)) {
-                return effectSource;
+                return effect.getSource();
             } else if ("target".equals(object)) {
-                return effectTarget;
+                return effect.getTarget();
             }
         }
         Exception e = new Exception("could not isolate an RPGLObject: " + instructions);

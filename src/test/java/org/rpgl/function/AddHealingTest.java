@@ -62,7 +62,7 @@ public class AddHealingTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -144,7 +144,7 @@ public class AddHealingTest {
             }});
         }};
 
-        addHealing.execute(source, target, healingCollection, functionJson, context);
+        addHealing.execute(null, healingCollection, functionJson, context);
 
         String expected = """
                 {"bonus":2,"dice":[{"determined":[3],"size":6}]}""";

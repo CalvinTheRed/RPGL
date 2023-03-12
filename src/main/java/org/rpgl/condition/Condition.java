@@ -1,7 +1,7 @@
 package org.rpgl.condition;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -78,8 +78,7 @@ public abstract class Condition {
     /**
      * Evaluates a Subevent or RPGLObject to determine if a defined condition is satisfied.
      *
-     * @param effectSource  the RPGLObject sourcing the RPGLEffect being considered
-     * @param effectTarget  the RPGLObject targeted by the RPGLEffect being considered
+     * @param effect        the RPGLEffect containing this Condition
      * @param subevent      the Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      * @param context       the context in which the Condition is being evaluated
@@ -87,8 +86,7 @@ public abstract class Condition {
      *
      * @throws Exception if an exception occurs
      */
-    public abstract boolean evaluate(RPGLObject effectSource, RPGLObject effectTarget, Subevent subevent,
-                                     JsonObject conditionJson, RPGLContext context) throws Exception;
+    public abstract boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception;
 
     // =================================================================================================================
     // Condition helper methods

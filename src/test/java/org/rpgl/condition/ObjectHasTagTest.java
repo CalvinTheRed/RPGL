@@ -62,7 +62,7 @@ public class ObjectHasTagTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -100,7 +100,7 @@ public class ObjectHasTagTest {
             this.putString("tag", "test_tag");
         }};
 
-        assertTrue(objectHasTag.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertTrue(objectHasTag.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true when object has desired tag"
         );
     }
@@ -138,7 +138,7 @@ public class ObjectHasTagTest {
             this.putString("tag", "wrong_tag");
         }};
 
-        assertFalse(objectHasTag.evaluate(source, target, dummySubevent, conditionJson, context),
+        assertFalse(objectHasTag.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false when object does not have desired tag"
         );
     }

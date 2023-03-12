@@ -80,7 +80,7 @@ public class SetBaseTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -108,7 +108,7 @@ public class SetBaseTest {
             this.putInteger("base", 13);
         }};
 
-        setBase.execute(source, target, calculation, functionJson, context);
+        setBase.execute(null, calculation, functionJson, context);
 
         assertEquals(13, calculation.getBase(),
                 "execute should set calculation base to 13"

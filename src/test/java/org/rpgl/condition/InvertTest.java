@@ -38,7 +38,7 @@ public class InvertTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, null, conditionJson, context),
+                () -> condition.evaluate(null, null, conditionJson, context),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -62,7 +62,7 @@ public class InvertTest {
 
         RPGLContext context = new RPGLContext();
 
-        assertFalse(condition.evaluate(null, null, null, conditionJson, context),
+        assertFalse(condition.evaluate(null, null, conditionJson, context),
                 "Invert condition should evaluate false when provided a true sub-condition"
         );
     }
@@ -86,7 +86,7 @@ public class InvertTest {
 
         RPGLContext context = new RPGLContext();
 
-        assertTrue(condition.evaluate(null, null, null, conditionJson, context),
+        assertTrue(condition.evaluate(null, null, conditionJson, context),
                 "Invert condition should evaluate true when provided a false sub-condition"
         );
     }

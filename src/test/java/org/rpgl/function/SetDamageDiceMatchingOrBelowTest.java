@@ -157,7 +157,7 @@ public class SetDamageDiceMatchingOrBelowTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -189,7 +189,7 @@ public class SetDamageDiceMatchingOrBelowTest {
             this.putString("type", "fire");
         }};
 
-        setDamageDiceMatchingOrBelow.execute(source, target, damageRoll, functionJson, context);
+        setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
                 {"cold":10,"fire":13}""";
@@ -225,7 +225,7 @@ public class SetDamageDiceMatchingOrBelowTest {
             this.putString("type", "");
         }};
 
-        setDamageDiceMatchingOrBelow.execute(source, target, damageRoll, functionJson, context);
+        setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
                 {"cold":13,"fire":13}""";

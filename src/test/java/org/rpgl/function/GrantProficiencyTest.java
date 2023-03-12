@@ -80,7 +80,7 @@ public class GrantProficiencyTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -106,7 +106,7 @@ public class GrantProficiencyTest {
             this.putString("function", "grant_proficiency");
         }};
 
-        grantProficiency.execute(source, target, getProficiency, functionJson, context);
+        grantProficiency.execute(null, getProficiency, functionJson, context);
 
         assertTrue(getProficiency.isProficient(),
                 "execute should grant proficiency"

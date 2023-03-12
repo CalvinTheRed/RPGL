@@ -3,35 +3,31 @@ package org.rpgl.function;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.GetProficiency;
-import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.function.GrantHalfProficiency class.
+ * Testing class for the org.rpgl.function.InvokeSubevent class.
  *
  * @author Calvin Withun
  */
-public class GrantHalfProficiencyTest {
-
-    private GetProficiency getProficiency;
+public class InvokeSubeventTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -46,21 +42,6 @@ public class GrantHalfProficiencyTest {
         DatapackLoader.DATAPACKS.clear();
     }
 
-    @BeforeEach
-    void beforeEach() {
-        getProficiency = new GetProficiency("get_proficiency") {
-            @Override
-            public Subevent clone() {
-                return null;
-            }
-
-            @Override
-            public Subevent clone(JsonObject jsonData) {
-                return null;
-            }
-        };
-    }
-
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
@@ -69,7 +50,7 @@ public class GrantHalfProficiencyTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new GrantHalfProficiency();
+        Function function = new InvokeSubevent();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -86,30 +67,33 @@ public class GrantHalfProficiencyTest {
     }
 
     @Test
-    @DisplayName("execute grants proficiency")
-    void execute_grantsExpertise() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+    @DisplayName("InvokeSubevent works using example effect (motivational speech effect passive and active)")
+    void invokeSubeventWorksUsingExampleEffect_motivationalSpeechEffectPassiveAndActive() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:knight");
+        RPGLObject target = RPGLFactory.newObject("demo:knight");
         RPGLContext context = new RPGLContext();
         context.add(source);
         context.add(target);
 
-        getProficiency.setSource(source);
-        getProficiency.prepare(context);
-        getProficiency.setTarget(target);
+        RPGLEffect motivationalSpeechEffectPassive = RPGLFactory.newEffect("demo:motivational_speech_effect_passive");
+        motivationalSpeechEffectPassive.setSource(target);
+        motivationalSpeechEffectPassive.setTarget(target);
+        target.addEffect(motivationalSpeechEffectPassive);
 
-        GrantHalfProficiency grantHalfProficiency = new GrantHalfProficiency();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "grant_half_proficiency"
-            }*/
-            this.putString("function", "grant_half_proficiency");
-        }};
+        assertEquals(1, target.getEffects().size(),
+                "verify target has 1 effect (motivational speech passive) applied before InvokeSubevent is precipitated"
+        );
 
-        grantHalfProficiency.execute(null, getProficiency, functionJson, context);
+        source.invokeEvent(
+                new RPGLObject[] { target },
+                RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
+                context
+        );
 
-        assertTrue(getProficiency.isHalfProficient(),
-                "execute should grant half proficiency"
+        System.out.println(UUIDTable.getEffect(target.getEffects().getString(0)));
+
+        assertEquals(2, target.getEffects().size(),
+                "verify target has a second effect following the invocation of InvokeSubevent"
         );
     }
 

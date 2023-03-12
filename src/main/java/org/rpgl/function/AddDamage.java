@@ -1,7 +1,7 @@
 package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageCollection;
@@ -24,8 +24,7 @@ public class AddDamage extends Function {
     }
 
     @Override
-    public void execute(RPGLObject source, RPGLObject target, Subevent subevent,
-                        JsonObject functionJson, RPGLContext context) throws Exception {
+    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof DamageCollection damageCollection) {
             damageCollection.addTypedDamage(this.unpackDamage(functionJson.getJsonArray("damage")));

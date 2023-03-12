@@ -62,7 +62,7 @@ public class SetHealingDiceMatchingOrBelowTest {
         RPGLContext context = new RPGLContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -131,7 +131,7 @@ public class SetHealingDiceMatchingOrBelowTest {
             this.putInteger("set", 3);
         }};
 
-        setHealingDiceMatchingOrBelow.execute(source, target, healingRoll, functionJson, context);
+        setHealingDiceMatchingOrBelow.execute(null, healingRoll, functionJson, context);
 
         String expected = """
                 {"bonus":2,"dice":[{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]}""";

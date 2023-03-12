@@ -1,13 +1,28 @@
 {
   "metadata": {
-    "author": "Calvin Withun",
-    "notes": [
-      "This effect is not yet supported. InvokeEvent Function is not yet implemented."
-    ]
+    "author": "Calvin Withun"
   },
   "name": "Motivational Speech",
-  "description": "Creatures with this effect gain advantage on their next attack roll when they are hit by an attack.",
+  "description": "Creatures with this effect have advantage on wis saving throws and gain advantage on the next attack roll they make when they are hit by an attack.",
   "subevent_filters": {
+    "saving_throw": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "target"
+        },
+        {
+          "condition": "check_roll_ability",
+          "ability": "wis"
+        }
+      ],
+      "functions": [
+        {
+          "function": "grant_advantage"
+        }
+      ]
+    },
     "damage_delivery": {
       "conditions": [
         {
@@ -20,7 +35,25 @@
           "tag": "attack_roll"
         }
       ],
-      "functions": [ ]
+      "functions": [
+        {
+          "function": "invoke_subevent",
+          "subevent": {
+            "subevent": "give_effect",
+            "effect": "demo:motivational_speech_effect_active"
+          },
+          "source": {
+            "from": "effect",
+            "object": "source"
+          },
+          "targets": [
+            {
+              "from": "effect",
+              "object": "target"
+            }
+          ]
+        }
+      ]
     },
     "info_subevent": {
       "conditions": [
@@ -34,7 +67,11 @@
           "tag": "reduced_to_zero_temporary_hit_points"
         }
       ],
-      "functions": [ ]
+      "functions": [
+        {
+          "function": "end_effect"
+        }
+      ]
     }
   }
 }
