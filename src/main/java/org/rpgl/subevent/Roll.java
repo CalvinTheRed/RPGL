@@ -2,10 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
-import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
@@ -22,8 +19,6 @@ import java.util.Objects;
  */
 public abstract class Roll extends Calculation implements AbilitySubevent, CancelableSubevent {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Roll.class);
-
     public Roll(String subeventId) {
         super(subeventId);
     }
@@ -34,6 +29,7 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
         this.json.getJsonArray("tags").asList().addAll(this.getSource().getAllTags(context));
+        this.json.putJsonArray("bonuses", new JsonArray());
     }
 
     @Override
@@ -110,50 +106,6 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
             }
         }
         super.setBase(baseDieRoll);
-    }
-
-    /**
-     * This method checks if the contest needs to be re-rolled for any reason, and performs the re-roll if it does.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    public void checkForReroll(RPGLContext context) throws Exception {
-        RollRerollChance rollRerollChance = new RollRerollChance();
-        Integer base = super.getBase();
-        rollRerollChance.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "contest_reroll_chance");
-            this.putInteger("base_die_roll", base);
-        }});
-        rollRerollChance.setSource(this.getSource());
-        rollRerollChance.prepare(context);
-        rollRerollChance.setTarget(this.getTarget());
-        rollRerollChance.invoke(context);
-
-        if (rollRerollChance.wasRerollRequested()) {
-            int rerollDieValue = Die.roll(20, this.json.getJsonArray("determined_reroll").asList());
-            String rerollMode = rollRerollChance.getRerollMode();
-            switch (rerollMode) {
-                case RollRerollChance.USE_NEW:
-                    super.setBase(rerollDieValue);
-                    break;
-                case RollRerollChance.USE_HIGHEST:
-                    if (rerollDieValue > super.getBase()) {
-                        super.setBase(rerollDieValue);
-                    }
-                    break;
-                case RollRerollChance.USE_LOWEST:
-                    if (rerollDieValue < super.getBase()) {
-                        super.setBase(rerollDieValue);
-                    }
-                    break;
-                default:
-                    Exception e = new Exception("ContestRerollChance reroll_mode invalid: " + rerollMode);
-                    LOGGER.error(e.getMessage());
-                    throw e;
-            }
-        }
     }
 
 }

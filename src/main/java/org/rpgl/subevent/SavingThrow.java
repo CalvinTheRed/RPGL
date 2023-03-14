@@ -72,7 +72,6 @@ public class SavingThrow extends Roll {
          */
         if (this.isNotCanceled()) {
             this.roll();
-            this.checkForReroll(context); // TODO eventually have this in a while loop? Add this to AttackRoll?
             if (this.get() < this.json.getInteger("save_difficulty_class")) {
                 this.resolveSaveFail(context);
             } else {
