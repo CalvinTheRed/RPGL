@@ -34,7 +34,7 @@ public class DamageRollTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 4, "roll": 1, "determined": [ 4 ] },
                             { "size": 4, "roll": 2, "determined": [ 4 ] },
@@ -43,7 +43,7 @@ public class DamageRollTest {
                         ],
                         "bonus": 1
                     },{
-                        "type": "cold",
+                        "damage_type": "cold",
                         "dice": [
                             { "size": 4, "roll": 1, "determined": [ 4 ] },
                             { "size": 4, "roll": 2, "determined": [ 4 ] },
@@ -56,7 +56,7 @@ public class DamageRollTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putJsonArray("determined", new JsonArray() {{
@@ -90,7 +90,7 @@ public class DamageRollTest {
                     this.putInteger("bonus", 1);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putJsonArray("determined", new JsonArray() {{
@@ -150,7 +150,7 @@ public class DamageRollTest {
         damageRoll.rerollTypedDiceMatchingOrBelow(1, "fire");
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be re-rolled to a 4"
         );
@@ -162,7 +162,7 @@ public class DamageRollTest {
         damageRoll.setTypedDiceMatchingOrBelow(1, 2, "fire");
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "the fire die which had a roll of 1 should be set to a 2"
         );
@@ -184,7 +184,7 @@ public class DamageRollTest {
         damageRoll.roll();
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should roll to 4"
         );
@@ -196,7 +196,7 @@ public class DamageRollTest {
         damageRoll.prepare(new RPGLContext());
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should roll to 4"
         );
@@ -208,7 +208,7 @@ public class DamageRollTest {
         damageRoll.maximizeTypedDamageDice("fire");
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all fire dice should maximize to 4, while cold dice are unchanged"
         );
@@ -220,7 +220,7 @@ public class DamageRollTest {
         damageRoll.maximizeTypedDamageDice(null);
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"fire"},{"bonus":1,"dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}],"type":"cold"}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should maximize to 4"
         );

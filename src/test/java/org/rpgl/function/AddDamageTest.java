@@ -74,20 +74,20 @@ public class AddDamageTest {
         JsonArray damage = new JsonArray() {{
             /*[
                 {
-                    "type": "fire",
+                    "damage_type": "fire",
                     "dice": [
                         { "count": 2, "size": 6, "determined": [ 3 ] },
                         { "count": 2, "size": 4, "determined": [ 2 ] },
                     ]
                 },{
-                    "type": "cold",
+                    "damage_type": "cold",
                     "dice": [
                         { "count": 1, "size": 10, "determined": [ 5 ] }
                     ]
                 }
             ]*/
             this.addJsonObject(new JsonObject() {{
-                this.putString("type", "fire");
+                this.putString("damage_type", "fire");
                 this.putJsonArray("dice", new JsonArray() {{
                     this.addJsonObject(new JsonObject() {{
                         this.putInteger("count", 2);
@@ -106,7 +106,7 @@ public class AddDamageTest {
                 }});
             }});
             this.addJsonObject(new JsonObject() {{
-                this.putString("type", "cold");
+                this.putString("damage_type", "cold");
                 this.putJsonArray("dice", new JsonArray() {{
                     this.addJsonObject(new JsonObject() {{
                         this.putInteger("count", 1);
@@ -120,7 +120,7 @@ public class AddDamageTest {
         }};
 
         String expected = """
-                [{"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[2],"size":4},{"determined":[2],"size":4}],"type":"fire"},{"dice":[{"determined":[5],"size":10}],"type":"cold"}]""";
+                [{"damage_type":"fire","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[2],"size":4},{"determined":[2],"size":4}]},{"damage_type":"cold","dice":[{"determined":[5],"size":10}]}]""";
         assertEquals(expected, addDamage.unpackDamage(damage).toString(),
                 "calling unpackCompactedDamageDice should unpack the compacted damage dice passed to it"
         );
@@ -145,7 +145,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "count": 1, "size": 6, "determined": [ 3 ] }
                         ],
@@ -156,7 +156,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 1);
@@ -174,7 +174,7 @@ public class AddDamageTest {
         addDamage.execute(null, damageCollection, functionJson, context);
 
         String expected = """
-                [{"bonus":2,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add damage to DamageCollection subevent"
         );

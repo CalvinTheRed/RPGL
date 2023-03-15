@@ -294,10 +294,10 @@ public class AttackRoll extends Roll {
             RPGLItem weapon = UUIDTable.getItem(this.json.getString("weapon"));
             String attackAbility = weapon.getAttackAbility(this.json.getString("attack_type"));
             int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(attackAbility, context);
-            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("type");
+            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
             baseDamageCollection.addTypedDamage(new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", damageType);
+                    this.putString("damage_type", damageType);
                     this.putInteger("bonus", attackAbilityModifier);
                 }});
             }});

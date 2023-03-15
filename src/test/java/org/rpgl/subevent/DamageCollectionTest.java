@@ -53,14 +53,14 @@ public class DamageCollectionTest {
 
         damageCollection.addNewTypedDamage(new JsonObject() {{
             /*{
-                "type": "fire",
+                "damage_type": "fire",
                 "dice": [
                     { "size": 4, "determined": [ 2 ] },
                     { "size": 4, "determined": [ 2 ] }
                 ],
                 "bonus": 5
             }*/
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
             this.putJsonArray("dice", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("size", 4);
@@ -79,7 +79,7 @@ public class DamageCollectionTest {
         }});
 
         String expected = """
-                [{"bonus":5,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}],"type":"fire"}]""";
+                [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "new damage values should be added"
         );
@@ -93,7 +93,7 @@ public class DamageCollectionTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [ ],
                         "bonus": 0
                     }
@@ -101,7 +101,7 @@ public class DamageCollectionTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 0);
                 }});
@@ -110,14 +110,14 @@ public class DamageCollectionTest {
 
         damageCollection.addExistingTypedDamage(new JsonObject() {{
             /*{
-                "type": "fire",
+                "damage_type": "fire",
                 "dice": [
                     { "size": 4, "determined": [ 2 ] },
                     { "size": 4, "determined": [ 2 ] }
                 ],
                 "bonus": 5
             }*/
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
             this.putJsonArray("dice", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("size", 4);
@@ -136,7 +136,7 @@ public class DamageCollectionTest {
         }});
 
         String expected = """
-                [{"bonus":5,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}],"type":"fire"}]""";
+                [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "additional damage values should be added"
         );
@@ -152,7 +152,7 @@ public class DamageCollectionTest {
 
         damageCollection.addTypedDamage(new JsonArray() {{
             /*{
-                "type": "fire",
+                "damage_type": "fire",
                 "dice": [
                     { "size": 4, "determined": [ 2 ] },
                     { "size": 4, "determined": [ 2 ] }
@@ -160,7 +160,7 @@ public class DamageCollectionTest {
                 "bonus": 5
             }*/
             this.addJsonObject(new JsonObject() {{
-                this.putString("type", "fire");
+                this.putString("damage_type", "fire");
                 this.putJsonArray("dice", new JsonArray() {{
                     this.addJsonObject(new JsonObject() {{
                         this.putInteger("size", 4);
@@ -180,7 +180,7 @@ public class DamageCollectionTest {
         }});
 
         String expected = """
-                [{"bonus":5,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}],"type":"fire"}]""";
+                [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "additional damage values should be added"
         );
@@ -194,7 +194,7 @@ public class DamageCollectionTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [ ],
                         "bonus": 0
                     }
@@ -202,7 +202,7 @@ public class DamageCollectionTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 0);
                 }});
@@ -211,7 +211,7 @@ public class DamageCollectionTest {
 
         damageCollection.addTypedDamage(new JsonArray() {{
             /*{
-                "type": "fire",
+                "damage_type": "fire",
                 "dice": [
                     { "size": 4, "determined": [ 2 ] },
                     { "size": 4, "determined": [ 2 ] }
@@ -219,7 +219,7 @@ public class DamageCollectionTest {
                 "bonus": 5
             }*/
             this.addJsonObject(new JsonObject() {{
-                this.putString("type", "fire");
+                this.putString("damage_type", "fire");
                 this.putJsonArray("dice", new JsonArray() {{
                     this.addJsonObject(new JsonObject() {{
                         this.putInteger("size", 4);
@@ -239,7 +239,7 @@ public class DamageCollectionTest {
         }});
 
         String expected = """
-                [{"bonus":5,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}],"type":"fire"}]""";
+                [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "additional damage values should be added"
         );
@@ -253,7 +253,7 @@ public class DamageCollectionTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [ ],
                         "bonus": 0
                     }
@@ -261,7 +261,7 @@ public class DamageCollectionTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 0);
                 }});

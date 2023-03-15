@@ -25,7 +25,7 @@ public class CheckDamageType extends Condition {
     public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         super.verifyCondition(conditionJson);
         if (subevent instanceof DamageAffinity damageAffinity) {
-            return conditionJson.getString("type").equals(damageAffinity.getDamageType());
+            return conditionJson.getString("damage_type").equals(damageAffinity.getDamageType());
         }
         LOGGER.warn("Can not evaluate condition for " + subevent.getClass());
         return false;

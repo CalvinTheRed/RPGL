@@ -61,7 +61,7 @@ public class DamageCollection extends Subevent {
         if (damageDiceArray != null) {
             for (int i = 0; i < damageDiceArray.size(); i++) {
                 JsonObject damageDice = damageDiceArray.getJsonObject(i);
-                if (damageDice.getString("type").equals(damageType)) {
+                if (damageDice.getString("damage_type").equals(damageType)) {
                     return true;
                 }
             }
@@ -77,7 +77,7 @@ public class DamageCollection extends Subevent {
     public void addTypedDamage(JsonArray typedDamageArray) {
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (this.includesDamageType(typedDamage.getString("type"))) {
+            if (this.includesDamageType(typedDamage.getString("damage_type"))) {
                 this.addExistingTypedDamage(typedDamage);
             } else {
                 this.addNewTypedDamage(typedDamage);
@@ -91,8 +91,8 @@ public class DamageCollection extends Subevent {
      * @param typedDamageToBeAdded the typed damage to be added to the damage dice collection
      */
     void addExistingTypedDamage(JsonObject typedDamageToBeAdded) {
-        String damageTypeToBeAdded = typedDamageToBeAdded.getString("type");
-        JsonObject typedDamage = this.json.getJsonArray("damage").getJsonObjectMatching("type", damageTypeToBeAdded);
+        String damageTypeToBeAdded = typedDamageToBeAdded.getString("damage_type");
+        JsonObject typedDamage = this.json.getJsonArray("damage").getJsonObjectMatching("damage_type", damageTypeToBeAdded);
 
         /*
          * Add new damage dice, if any exist

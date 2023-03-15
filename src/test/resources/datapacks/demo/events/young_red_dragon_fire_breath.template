@@ -14,7 +14,7 @@
       "save_ability": "dex",
       "damage": [
         {
-          "type": "fire",
+          "damage_type": "fire",
           "dice": [
             { "count": 16, "size": 6, "determined": [ 3 ] }
           ],

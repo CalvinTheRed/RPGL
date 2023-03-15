@@ -416,7 +416,7 @@ public class RPGLObject extends RPGLTaggable {
             DamageAffinity damageAffinity = new DamageAffinity();
             damageAffinity.joinSubeventData(new JsonObject() {{
                 this.putString("subevent", "damage_affinity");
-                this.putString("type", damageType);
+                this.putString("damage_type", damageType);
             }});
             damageAffinity.setSource(damageDelivery.getSource());
             damageAffinity.prepare(context);

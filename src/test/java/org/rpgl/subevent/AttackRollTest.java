@@ -262,7 +262,7 @@ public class AttackRollTest {
         JsonObject attackDamage = attackRoll.getAttackDamage(new JsonArray() {{
             /*[
                 {
-                    "type": "fire",
+                    "damage_type": "fire",
                     "dice": [
                         { "size": 6, "determined": [ 3 ] },
                         { "size": 6, "determined": [ 3 ] },
@@ -270,7 +270,7 @@ public class AttackRollTest {
                     ],
                     "bonus": 1
                 },{
-                    "type": "cold",
+                    "damage_type": "cold",
                     "dice": [
                         { "size": 6, "determined": [ 3 ] },
                         { "size": 6, "determined": [ 3 ] },
@@ -280,7 +280,7 @@ public class AttackRollTest {
                 }
             ]*/
             this.addJsonObject(new JsonObject() {{
-                this.putString("type", "fire");
+                this.putString("damage_type", "fire");
                 this.putJsonArray("dice", new JsonArray() {{
                     this.addJsonObject(new JsonObject() {{
                         this.putInteger("size", 6);
@@ -304,7 +304,7 @@ public class AttackRollTest {
                 this.putInteger("bonus", 1);
             }});
             this.addJsonObject(new JsonObject() {{
-                this.putString("type", "cold");
+                this.putString("damage_type", "cold");
                 this.putJsonArray("dice", new JsonArray() {{
                     this.addJsonObject(new JsonObject() {{
                         this.putInteger("size", 6);
@@ -352,7 +352,7 @@ public class AttackRollTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 3 ] }
                         ],
@@ -362,7 +362,7 @@ public class AttackRollTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -385,7 +385,7 @@ public class AttackRollTest {
         );
 
         String expected = """
-                [{"bonus":1,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"fire"}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]}]""";
         assertEquals(expected, criticalHitDamageCollection.getDamageCollection().toString(),
                 "the number of dice should be doubled after calling getCriticalHitDamageCollection"
         );
@@ -432,7 +432,7 @@ public class AttackRollTest {
                 "attack_type": "melee",
                 "damage": [
                     {
-                        "type": "slashing",
+                        "damage_type": "slashing",
                         "dice": [
                             { "size": 8, "determined": [ 4 ] }
                         ],
@@ -445,7 +445,7 @@ public class AttackRollTest {
             this.putString("attack_type", "melee");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "slashing");
+                    this.putString("damage_type", "slashing");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 8);
@@ -465,7 +465,7 @@ public class AttackRollTest {
         DamageCollection baseDamageCollection = attackRoll.getBaseDamageCollection(context);
 
         String expected = """
-                [{"bonus":3,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
+                [{"bonus":3,"damage_type":"slashing","dice":[{"determined":[4],"size":8}]}]""";
         assertEquals(expected, baseDamageCollection.getDamageCollection().toString(),
                 "base damage should be collected properly including ability score modifier damage bonus"
         );
@@ -489,7 +489,7 @@ public class AttackRollTest {
                 "attack_type": "melee",
                 "damage": [
                     {
-                        "type": "slashing",
+                        "damage_type": "slashing",
                         "dice": [
                             { "size": 8, "determined": [ 4 ] }
                         ],
@@ -502,7 +502,7 @@ public class AttackRollTest {
             this.putString("attack_type", "melee");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "slashing");
+                    this.putString("damage_type", "slashing");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 8);
@@ -544,7 +544,7 @@ public class AttackRollTest {
                 "attack_type": "melee",
                 "damage": [
                     {
-                        "type": "slashing",
+                        "damage_type": "slashing",
                         "dice": [
                             { "size": 8, "determined": [ 4 ] }
                         ],
@@ -557,7 +557,7 @@ public class AttackRollTest {
             this.putString("attack_type", "melee");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "slashing");
+                    this.putString("damage_type", "slashing");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 8);
@@ -619,7 +619,7 @@ public class AttackRollTest {
         attackRoll.prepareItemWeaponAttack("mainhand", context);
 
         String expected = """
-                [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[4],"size":8}]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
         );
@@ -648,7 +648,7 @@ public class AttackRollTest {
         attackRoll.prepareNaturalWeaponAttack("demo:young_red_dragon_bite", context);
 
         String expected = """
-                [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
+                [{"bonus":0,"damage_type":"piercing","dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}]},{"bonus":0,"damage_type":"fire","dice":[{"determined":[3],"size":6}]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareNaturalWeaponAttack() call"
         );
@@ -676,7 +676,7 @@ public class AttackRollTest {
                 "attack_ability": "int",
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 10, "determined": [ 5 ] }
                         ],
@@ -688,7 +688,7 @@ public class AttackRollTest {
             this.putString("attack_ability","int");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 10);
@@ -707,7 +707,7 @@ public class AttackRollTest {
         attackRoll.prepareAttackWithoutWeapon(context);
 
         String expected = """
-                [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[5],"size":10}]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
         );
@@ -735,7 +735,7 @@ public class AttackRollTest {
         attackRoll.prepare(context);
 
         String expected = """
-                [{"bonus":0,"dice":[{"determined":[4],"size":8}],"type":"slashing"}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[4],"size":8}]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
@@ -764,7 +764,7 @@ public class AttackRollTest {
         attackRoll.prepare(context);
 
         String expected = """
-                [{"bonus":0,"dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"type":"piercing"},{"bonus":0,"dice":[{"determined":[3],"size":6}],"type":"fire"}]""";
+                [{"bonus":0,"damage_type":"piercing","dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}]},{"bonus":0,"damage_type":"fire","dice":[{"determined":[3],"size":6}]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
@@ -792,7 +792,7 @@ public class AttackRollTest {
                 "attack_ability": "int",
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 10, "determined": [ 5 ] }
                         ],
@@ -804,7 +804,7 @@ public class AttackRollTest {
             this.putString("attack_ability","int");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 10);
@@ -822,7 +822,7 @@ public class AttackRollTest {
         attackRoll.prepare(context);
 
         String expected = """
-                [{"bonus":0,"dice":[{"determined":[5],"size":10}],"type":"fire"}]""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[5],"size":10}]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );

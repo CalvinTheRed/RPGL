@@ -13,7 +13,7 @@
       "tags": [ "spell" ],
       "damage": [
         {
-          "type": "fire",
+          "damage_type": "fire",
           "dice": [
             { "size": 10, "determined": [ 5 ] }
           ],

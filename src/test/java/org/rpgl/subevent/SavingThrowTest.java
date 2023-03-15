@@ -390,7 +390,7 @@ public class SavingThrowTest {
             /*{
                 "damage": [
                     {
-                        "type": "cold",
+                        "damage_type": "cold",
                         "dice": [
                             { "size": 10, "determined": [ 5 ] },
                             { "size": 10, "determined": [ 5 ] }
@@ -402,7 +402,7 @@ public class SavingThrowTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 10);
@@ -470,7 +470,7 @@ public class SavingThrowTest {
                 "difficulty_class_ability": "con",
                 "damage": [
                     {
-                        "type": "cold",
+                        "damage_type": "cold",
                         "dice": [
                             { "size": 10, "determined": [ 5 ] },
                             { "size": 10, "determined": [ 5 ] }
@@ -482,7 +482,7 @@ public class SavingThrowTest {
             this.putString("difficulty_class_ability", "con");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 10);
@@ -532,7 +532,7 @@ public class SavingThrowTest {
                 "save_ability": "dex",
                 "damage": [
                     {
-                      "type": "cold",
+                      "damage_type": "cold",
                       "dice": [
                         { "size": 10, "determined": [ 5 ] },
                         { "size": 10, "determined": [ 5 ] }
@@ -548,7 +548,7 @@ public class SavingThrowTest {
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 10);
@@ -599,7 +599,7 @@ public class SavingThrowTest {
                 "save_ability": "dex",
                 "damage": [
                     {
-                      "type": "cold",
+                      "damage_type": "cold",
                       "dice": [
                         { "size": 10, "determined": [ 5 ] },
                         { "size": 10, "determined": [ 5 ] }
@@ -615,7 +615,7 @@ public class SavingThrowTest {
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 10);

@@ -24,7 +24,7 @@
   "damage": {
     "melee": [
       {
-        "type": "piercing",
+        "damage_type": "piercing",
         "dice": [
           { "count": 1, "size": 8, "determined": [ 4 ] }
         ],

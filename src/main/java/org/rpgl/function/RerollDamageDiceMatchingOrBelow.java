@@ -28,7 +28,7 @@ public class RerollDamageDiceMatchingOrBelow extends Function {
         if (subevent instanceof DamageRoll damageRoll) {
             damageRoll.rerollTypedDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),
-                    functionJson.getString("type")
+                    functionJson.getString("damage_type")
             );
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());

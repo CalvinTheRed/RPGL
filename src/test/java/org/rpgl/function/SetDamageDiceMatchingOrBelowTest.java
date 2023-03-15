@@ -53,7 +53,7 @@ public class SetDamageDiceMatchingOrBelowTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 2 ] },
@@ -62,7 +62,7 @@ public class SetDamageDiceMatchingOrBelowTest {
                         ],
                         "bonus": 0
                     },{
-                        "type": "cold",
+                        "damage_type": "cold",
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 2 ] },
@@ -75,7 +75,7 @@ public class SetDamageDiceMatchingOrBelowTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -105,7 +105,7 @@ public class SetDamageDiceMatchingOrBelowTest {
                     this.putInteger("bonus", 0);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -181,12 +181,12 @@ public class SetDamageDiceMatchingOrBelowTest {
                 "function": "set_damage_dice_matching_or_below",
                 "threshold": 2,
                 "set": 3,
-                "type": "fire"
+                "damage_type": "fire"
             }*/
             this.putString("function", "set_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
         }};
 
         setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
@@ -217,12 +217,12 @@ public class SetDamageDiceMatchingOrBelowTest {
                 "function": "set_damage_dice_matching_or_below",
                 "threshold": 2,
                 "set": 3,
-                "type": ""
+                "damage_type": ""
             }*/
             this.putString("function", "set_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-            this.putString("type", "");
+            this.putString("damage_type", "");
         }};
 
         setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);

@@ -142,7 +142,7 @@ public class DealDamageTest {
                 "tags": [ ],
                 "damage": [
                     {
-                        "type": "force",
+                        "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
                         ],
@@ -154,7 +154,7 @@ public class DealDamageTest {
             this.putJsonArray("tags", new JsonArray());
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "force");
+                    this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 1);
@@ -195,7 +195,7 @@ public class DealDamageTest {
                 "subevent": "deal_damage",
                 "damage": [
                     {
-                        "type": "force",
+                        "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
                         ],
@@ -206,7 +206,7 @@ public class DealDamageTest {
             this.putString("subevent", "deal_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "force");
+                    this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 1);

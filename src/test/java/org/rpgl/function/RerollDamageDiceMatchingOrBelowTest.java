@@ -53,7 +53,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 1, 6 ] },
                             { "size": 6, "determined": [ 2, 6 ] },
@@ -62,7 +62,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
                         ],
                         "bonus": 0
                     },{
-                        "type": "cold",
+                        "damage_type": "cold",
                         "dice": [
                             { "size": 6, "determined": [ 1, 6 ] },
                             { "size": 6, "determined": [ 2, 6 ] },
@@ -75,7 +75,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -109,7 +109,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
                     this.putInteger("bonus", 0);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -188,11 +188,11 @@ public class RerollDamageDiceMatchingOrBelowTest {
             /*{
                 "function": "reroll_damage_dice_matching_or_below",
                 "threshold": 2,
-                "type": "fire"
+                "damage_type": "fire"
             }*/
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
         }};
 
         rerollDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
@@ -222,11 +222,11 @@ public class RerollDamageDiceMatchingOrBelowTest {
             /*{
                 "function": "reroll_damage_dice_matching_or_below",
                 "threshold": 2,
-                "type": ""
+                "damage_type": ""
             }*/
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
-            this.putString("type", "");
+            this.putString("damage_type", "");
         }};
 
         rerollDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);

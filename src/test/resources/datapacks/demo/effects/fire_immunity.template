@@ -14,7 +14,7 @@
         },
         {
           "condition": "check_damage_type",
-          "type": "fire"
+          "damage_type": "fire"
         }
       ],
       "functions": [

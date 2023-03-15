@@ -21,7 +21,7 @@ public class RPGLItemTemplate extends JsonObject {
      */
     private static final JsonArray DEFAULT_TEMPLATE_ITEM_DAMAGE = new JsonArray() {{
         this.addJsonObject(new JsonObject() {{
-            this.putString("type", "bludgeoning");
+            this.putString("damage_type", "bludgeoning");
             this.putJsonArray("dice", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("count", 1);
