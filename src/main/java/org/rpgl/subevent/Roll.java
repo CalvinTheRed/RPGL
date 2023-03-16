@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 
 import java.util.Objects;
@@ -29,7 +30,6 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
         this.json.getJsonArray("tags").asList().addAll(this.getSource().getAllTags(context));
-        this.json.putJsonArray("bonuses", new JsonArray());
     }
 
     @Override
@@ -105,7 +105,12 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
                 baseDieRoll = disadvantageRoll;
             }
         }
-        super.setBase(baseDieRoll);
+        final int finalBaseDieRoll = baseDieRoll;
+        super.setBase(new JsonObject() {{
+            this.putString("name", "Roll");
+            this.putString("effect", null);
+            this.putInteger("value", finalBaseDieRoll);
+        }});
     }
 
 }

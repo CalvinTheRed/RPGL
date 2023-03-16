@@ -3,6 +3,7 @@ package org.rpgl.subevent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
@@ -35,6 +36,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class AttackRollTest {
 
+    private AttackRoll attackRoll;
+
     @BeforeAll
     static void beforeAll() throws Exception {
         DatapackLoader.loadDatapacks(
@@ -46,6 +49,27 @@ public class AttackRollTest {
     @AfterAll
     static void afterAll() {
         DatapackLoader.DATAPACKS.clear();
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "bonuses": [ ],
+                "minimum": {
+                    "name": "TEST",
+                    "effect": null,
+                    "value": Integer.MIN_VALUE
+                }
+            }*/
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("name", "TEST");
+                this.putString("effect", null);
+                this.putInteger("value", Integer.MIN_VALUE);
+            }});
+        }});
     }
 
     @AfterEach
@@ -74,7 +98,6 @@ public class AttackRollTest {
     @Test
     @DisplayName("applyWeaponAttackBonus adds bonus to roll (longsword +1)")
     void applyWeaponAttackBonus_addsBonusToRoll_longswordPlusOne() {
-        AttackRoll attackRoll = new AttackRoll();
         RPGLItem item = RPGLFactory.newItem("demo:longsword_plus_one");
         attackRoll.applyWeaponAttackBonus(item);
 
@@ -86,8 +109,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalMiss returns true (base roll of 1)")
     void isCriticalMiss_returnsTrue_baseRollOne() {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.setBase(1);
+        attackRoll.setBase(new JsonObject() {{
+            this.putString("name", "TEST");
+            this.putString("effect", null);
+            this.putInteger("value", 1);
+        }});
 
         assertTrue(attackRoll.isCriticalMiss(),
                 "attack roll with base of 1 should register as a critical miss"
@@ -97,8 +123,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalMiss returns false (base roll exceeding 1)")
     void isCriticalMiss_returnsFalse_baseRollExceedingOne() {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.setBase(10);
+        attackRoll.setBase(new JsonObject() {{
+            this.putString("name", "TEST");
+            this.putString("effect", null);
+            this.putInteger("value", 10);
+        }});
 
         assertFalse(attackRoll.isCriticalMiss(),
                 "attack roll with base exceeding 1 should not register as a critical miss"
@@ -114,11 +143,13 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
-
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.setBase(20);
+        attackRoll.setBase(new JsonObject() {{
+            this.putString("name", "TEST");
+            this.putString("effect", null);
+            this.putInteger("value", 20);
+        }});
 
         assertTrue(attackRoll.isCriticalHit(context),
                 "attack roll with base of 20 should register as a critical hit"
@@ -134,11 +165,13 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
-
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.setBase(10);
+        attackRoll.setBase(new JsonObject() {{
+            this.putString("name", "TEST");
+            this.putString("effect", null);
+            this.putInteger("value", 10);
+        }});
 
         assertFalse(attackRoll.isCriticalHit(context),
                 "attack roll with base below 20 should not register as a critical hit"
@@ -154,7 +187,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "hit": [
@@ -188,7 +220,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "miss": [
@@ -222,7 +253,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": {
@@ -252,7 +282,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray());
         }});
@@ -345,8 +374,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
-
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             /*{
@@ -400,7 +427,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray());
         }});
@@ -422,8 +448,6 @@ public class AttackRollTest {
         RPGLContext context = new RPGLContext();
         context.add(source);
         context.add(target);
-
-        AttackRoll attackRoll = new AttackRoll();
 
         RPGLItem item = UUIDTable.getItem(source.getEquippedItems().getString("mainhand"));
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -480,8 +504,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
-
         RPGLItem item = UUIDTable.getItem(source.getEquippedItems().getString("mainhand"));
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -534,8 +556,6 @@ public class AttackRollTest {
         RPGLContext context = new RPGLContext();
         context.add(source);
         context.add(target);
-
-        AttackRoll attackRoll = new AttackRoll();
 
         RPGLItem item = UUIDTable.getItem(source.getEquippedItems().getString("mainhand"));
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -590,8 +610,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
-
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
 
@@ -609,7 +627,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("attack_type", "melee");
         }});
@@ -638,7 +655,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("attack_type", "melee");
         }});
@@ -655,8 +671,8 @@ public class AttackRollTest {
         assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
         );
-        assertEquals(10, attackRoll.getBonus(),
-                "attack roll should have a bonus of 10 (proficiency bonus of 4 + str modifier of 6)"
+        assertEquals(6, attackRoll.getBonus(),
+                "attack roll should have a bonus of 6 (str modifier of 6)"
         );
     }
 
@@ -669,7 +685,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "attack_type": "ranged",
@@ -711,8 +726,8 @@ public class AttackRollTest {
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepareItemWeaponAttack() call"
         );
-        assertEquals(6, attackRoll.getBonus(),
-                "attack roll should have a bonus of 6 (proficiency of 4 + int modifier of 2)"
+        assertEquals(2, attackRoll.getBonus(),
+                "attack roll should have a bonus of 2 (int modifier of 2)"
         );
     }
 
@@ -725,7 +740,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("weapon", "mainhand");
             this.putString("attack_type", "melee");
@@ -754,7 +768,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("weapon", "demo:young_red_dragon_bite");
             this.putString("attack_type", "melee");
@@ -771,8 +784,8 @@ public class AttackRollTest {
         assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
                 "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
         );
-        assertEquals(10, attackRoll.getBonus(),
-                "attack roll should have a bonus of 10 (proficiency bonus of 4 + str modifier of 6)"
+        assertEquals(6, attackRoll.getBonus(),
+                "attack roll should have a bonus of 6 (str modifier of 6)"
         );
     }
 
@@ -785,7 +798,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "attack_type": "ranged",
@@ -826,8 +838,8 @@ public class AttackRollTest {
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "weapon damage should be stored in the subevent following prepare() call"
         );
-        assertEquals(6, attackRoll.getBonus(),
-                "attack roll should have a bonus of 6 (proficiency of 4 + int modifier of 2)"
+        assertEquals(2, attackRoll.getBonus(),
+                "attack roll should have a bonus of 2 (int modifier of 2)"
         );
     }
 
@@ -840,7 +852,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "attack_roll");
             this.putString("weapon", "mainhand");
@@ -869,7 +880,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "attack_roll");
             this.putString("weapon", "mainhand");
@@ -897,7 +907,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "attack_roll");
             this.putString("weapon", "mainhand");
@@ -926,7 +935,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "attack_roll");
             this.putString("weapon", "demo:young_red_dragon_bite");
@@ -956,7 +964,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "attack_roll",
@@ -987,7 +994,6 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "attack_roll",

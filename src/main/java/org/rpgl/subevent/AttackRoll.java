@@ -125,12 +125,15 @@ public class AttackRoll extends Roll {
 
         // Add attack ability score modifier (defined by the Subevent JSON) as a bonus to the roll.
         String attackAbility = this.json.getString("attack_ability");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+        this.addBonus(new JsonObject() {{
+            this.putString("name", "Ability Modifier");
+            this.putString("effect", null);
+            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+            this.putJsonArray("dice", new JsonArray());
+            this.putBoolean("optional", false);
+        }});
 
-        // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
-        this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
-
-        // Attacks made without weapons should already be defined in the event template so no changes are needed here
+        // Attacks made without weapons should already have their damage defined in the event template so no changes are needed here
 
         // The damage field should already be populated for this type of attack. But in case it is not, set it to empty.
         this.json.asMap().computeIfAbsent("damage", k -> new ArrayList<>());
@@ -152,11 +155,14 @@ public class AttackRoll extends Roll {
         // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
         String attackType = this.json.getString("attack_type");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
+        this.addBonus(new JsonObject() {{
+            this.putString("name", "Ability Modifier");
+            this.putString("effect", null);
+            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
+            this.putJsonArray("dice", new JsonArray());
+            this.putBoolean("optional", false);
+        }});
         this.applyWeaponAttackBonus(weapon);
-
-        // Add proficiency bonus to the roll (all natural weapon attacks are made with proficiency).
-        this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
 
         // Copy damage of natural weapon to Subevent JSON.
         this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
@@ -187,13 +193,14 @@ public class AttackRoll extends Roll {
         //Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(equipmentSlot));
         String attackType = this.json.getString("attack_type");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
+        this.addBonus(new JsonObject() {{
+            this.putString("name", "Ability Modifier");
+            this.putString("effect", null);
+            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
+            this.putJsonArray("dice", new JsonArray());
+            this.putBoolean("optional", false);
+        }});
         this.applyWeaponAttackBonus(weapon);
-
-        // Add proficiency bonus to the roll if source is proficient with weapon.
-        if (getSource().isProficientWithWeapon(weapon, context)) {
-            this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
-        }
 
         // Copy damage of natural weapon to Subevent JSON.
         this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
@@ -219,11 +226,14 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs.
      */
     int getTargetArmorClass(RPGLContext context) throws Exception {
-        int baseArmorClass = this.getTarget().getBaseArmorClass(context);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = new CalculateEffectiveArmorClass();
         calculateEffectiveArmorClass.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_effective_armor_class");
-            this.putInteger("base", baseArmorClass);
+            this.putJsonObject("base", new JsonObject() {{
+                this.putString("name", "Base Armor Class");
+                this.putString("effect", null);
+                this.putInteger("value", getTarget().getBaseArmorClass(context));
+            }});
         }});
         calculateEffectiveArmorClass.setSource(this.getSource());
         calculateEffectiveArmorClass.prepare(context);
@@ -460,7 +470,7 @@ public class AttackRoll extends Roll {
      * @return true if the attack is a critical miss
      */
     public boolean isCriticalMiss() {
-        return this.getBase() == 1;
+        return this.getBase().getInteger("value") == 1;
     }
 
     /**
@@ -470,7 +480,12 @@ public class AttackRoll extends Roll {
      * @param weapon the RPGLItem being used to deliver the attack
      */
     void applyWeaponAttackBonus(RPGLItem weapon) {
-        this.addBonus(weapon.getAttackBonus());
+        this.addBonus(new JsonObject() {{
+            this.putString("name", weapon.getName());
+            this.putString("effect", null);
+            this.putInteger("bonus", weapon.getAttackBonus());
+            this.putJsonArray("dice", new JsonArray()); // TODO should this be made accessible?
+        }});
     }
 
 }

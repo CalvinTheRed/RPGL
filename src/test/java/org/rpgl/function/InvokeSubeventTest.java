@@ -90,8 +90,6 @@ public class InvokeSubeventTest {
                 context
         );
 
-        System.out.println(UUIDTable.getEffect(target.getEffects().getString(0)));
-
         assertEquals(2, target.getEffects().size(),
                 "verify target has a second effect following the invocation of InvokeSubevent"
         );

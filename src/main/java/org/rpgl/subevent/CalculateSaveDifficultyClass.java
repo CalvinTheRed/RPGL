@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -39,10 +40,26 @@ public class CalculateSaveDifficultyClass extends Calculation {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        super.setBase(8);
+        super.setBase(new JsonObject() {{
+            this.putString("name", "Save DC Base");
+            this.putString("effect", null);
+            this.putInteger("value", 8);
+        }});
         RPGLObject source = this.getSource();
-        this.addBonus(source.getEffectiveProficiencyBonus(context));
-        this.addBonus(source.getAbilityModifierFromAbilityName(this.json.getString("difficulty_class_ability"), context));
+        super.addBonus(new JsonObject() {{
+            this.putString("name", "Proficiency Bonus");
+            this.putString("effect", null);
+            this.putInteger("bonus", source.getEffectiveProficiencyBonus(context));
+            this.putJsonArray("dice", new JsonArray());
+            this.putBoolean("optional", false);
+        }});
+        super.addBonus(new JsonObject() {{
+            this.putString("name", "Ability Modifier");
+            this.putString("effect", null);
+            this.putInteger("bonus", source.getAbilityModifierFromAbilityName(json.getString("difficulty_class_ability"), context));
+            this.putJsonArray("dice", new JsonArray());
+            this.putBoolean("optional", false);
+        }});
     }
 
 }

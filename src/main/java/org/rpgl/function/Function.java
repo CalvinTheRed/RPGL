@@ -44,10 +44,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("end_effect", new EndEffect());
         Function.FUNCTIONS.put("grant_advantage", new GrantAdvantage());
         Function.FUNCTIONS.put("grant_disadvantage", new GrantDisadvantage());
-        Function.FUNCTIONS.put("grant_expertise", new GrantExpertise());
-        Function.FUNCTIONS.put("grant_half_proficiency", new GrantHalfProficiency());
         Function.FUNCTIONS.put("grant_immunity", new GrantImmunity());
-        Function.FUNCTIONS.put("grant_proficiency", new GrantProficiency());
         Function.FUNCTIONS.put("grant_resistance", new GrantResistance());
         Function.FUNCTIONS.put("grant_vulnerability", new GrantVulnerability());
         Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());
@@ -61,7 +58,6 @@ public abstract class Function {
         Function.FUNCTIONS.put("set_base", new SetBase());
         Function.FUNCTIONS.put("set_damage_dice_matching_or_below", new SetDamageDiceMatchingOrBelow());
         Function.FUNCTIONS.put("set_healing_dice_matching_or_below", new SetHealingDiceMatchingOrBelow());
-        Function.FUNCTIONS.put("set_set", new SetSet());
 
         if (includeTestingFunctions) {
             Function.FUNCTIONS.put("dummy_function", new DummyFunction());

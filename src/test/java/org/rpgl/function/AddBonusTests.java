@@ -8,11 +8,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
@@ -98,17 +100,28 @@ public class AddBonusTests {
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "add_bonus",
-                "bonus": 2
+                "bonus": {
+                    "bonus_type": "range",
+                    "bonus": 2,
+                    "dice": [ ]
+                }
             }*/
             this.putString("function", "add_bonus");
-            this.putInteger("bonus", 2);
+            this.putJsonObject("bonus", new JsonObject() {{
+                this.putString("bonus_type", "range");
+                this.putInteger("bonus", 2);
+                this.putJsonArray("dice", new JsonArray());
+            }});
         }};
 
         calculation.setSource(source);
         calculation.prepare(context);
         calculation.setTarget(target);
 
-        addBonus.execute(null, calculation, functionJson, context);
+        RPGLEffect effect = new RPGLEffect();
+        effect.setName("TEST");
+
+        addBonus.execute(effect, calculation, functionJson, context);
 
         assertEquals(2, calculation.getBonus(),
                 "bonus of 2 should be applied to the calculation following execution"

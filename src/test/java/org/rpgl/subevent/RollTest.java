@@ -350,12 +350,24 @@ public class RollTest {
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
-                "determined": [ 15, 5 ]
+                "determined": [ 15, 5 ],
+                "bonuses": [ ],
+                "minimum": {
+                    "name": "TEST",
+                    "effect": null,
+                    "value": Integer.MIN_VALUE
+                }
             }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(15);
                 this.addInteger(5);
+            }});
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("name", "TEST");
+                this.putString("effect", null);
+                this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});
         roll.grantAdvantage();
@@ -372,12 +384,24 @@ public class RollTest {
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
-                "determined": [ 5, 15 ]
+                "determined": [ 5, 15 ],
+                "bonuses": [ ],
+                "minimum": {
+                    "name": "TEST",
+                    "effect": null,
+                    "value": Integer.MIN_VALUE
+                }
             }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(5);
                 this.addInteger(15);
+            }});
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("name", "TEST");
+                this.putString("effect", null);
+                this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});
         roll.grantAdvantage();

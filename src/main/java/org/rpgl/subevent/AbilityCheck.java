@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.Objects;
@@ -49,26 +50,13 @@ public class AbilityCheck extends Roll {
         super.invoke(context);
         if (this.isNotCanceled()) {
             this.roll();
-            this.addBonus(this.getSource().getAbilityModifierFromAbilityName(this.json.getString("ability"), context));
-
-            GetAbilityCheckProficiency getAbilityCheckProficiency = new GetAbilityCheckProficiency();
-            getAbilityCheckProficiency.joinSubeventData(new JsonObject() {{
-                this.putString("subevent", "get_ability_check_proficiency");
-                this.putString("skill", Objects.requireNonNullElse(json.getString("skill"), "")); // TODO accommodate tools?
-                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            this.addBonus(new JsonObject() {{
+                this.putString("name", "Ability Modifier");
+                this.putString("effect", null);
+                this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(getAbility(context), context));
+                this.putJsonArray("dice", new JsonArray());
+                this.putBoolean("optional", false);
             }});
-            getAbilityCheckProficiency.setSource(this.getSource());
-            getAbilityCheckProficiency.prepare(context);
-            getAbilityCheckProficiency.setTarget(this.getSource());
-            getAbilityCheckProficiency.invoke(context);
-
-            if (getAbilityCheckProficiency.isHalfProficient()) {
-                this.addBonus(this.getSource().getProficiencyBonus() / 2);
-            } else if (getAbilityCheckProficiency.isProficient()) {
-                this.addBonus(this.getSource().getProficiencyBonus());
-            } else if (getAbilityCheckProficiency.isExpert()) {
-                this.addBonus(this.getSource().getProficiencyBonus() * 2);
-            }
         }
 
     }

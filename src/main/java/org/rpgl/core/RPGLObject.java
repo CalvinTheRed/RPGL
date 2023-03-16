@@ -11,8 +11,6 @@ import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.GetEvents;
 import org.rpgl.subevent.GetObjectTags;
-import org.rpgl.subevent.GetSavingThrowProficiency;
-import org.rpgl.subevent.GetWeaponProficiency;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.subevent.InfoSubevent;
 import org.rpgl.subevent.Subevent;
@@ -352,50 +350,6 @@ public class RPGLObject extends RPGLTaggable {
             abilityScore--;
         }
         return (abilityScore - 10) / 2;
-    }
-
-    /**
-     * This method determines whether the RPGLObject is proficient in saving throws for a specified ability.
-     *
-     * @param saveAbility the ability score used by the saving throw
-     * @param context     the RPGLContext in which the RPGLObject's save proficiency is determined
-     * @return true if the RPGLObject is proficient in saving throws with the specified ability
-     *
-     * @throws Exception if an exception occurs.
-     */
-    public boolean isProficientInSavingThrow(String saveAbility, RPGLContext context) throws Exception {
-        GetSavingThrowProficiency getSavingThrowProficiency = new GetSavingThrowProficiency();
-        getSavingThrowProficiency.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_saving_throw_proficiency");
-            this.putString("save_ability", saveAbility);
-        }});
-        getSavingThrowProficiency.setSource(this);
-        getSavingThrowProficiency.prepare(context);
-        getSavingThrowProficiency.setTarget(this);
-        getSavingThrowProficiency.invoke(context);
-        return getSavingThrowProficiency.isProficient();
-    }
-
-    /**
-     * This method determines whether the RPGLObject is proficient in attacks made using a specified weapon.
-     *
-     * @param item     an RPGLItem
-     * @param context  the RPGLContext in which the RPGLObject's weapon proficiency is determined
-     * @return true if the RPGLObject is proficient with the item corresponding to the passed UUID
-     *
-     * @throws Exception if an exception occurs.
-     */
-    public boolean isProficientWithWeapon(RPGLItem item, RPGLContext context) throws Exception {
-        GetWeaponProficiency getWeaponProficiency = new GetWeaponProficiency();
-        getWeaponProficiency.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_weapon_proficiency");
-            this.putJsonArray("tags", item.getProficiencyTags().deepClone());
-        }});
-        getWeaponProficiency.setSource(this);
-        getWeaponProficiency.prepare(context);
-        getWeaponProficiency.setTarget(this);
-        getWeaponProficiency.invoke(context);
-        return getWeaponProficiency.isProficient();
     }
 
     /**
