@@ -1,6 +1,8 @@
 package org.rpgl.math;
 
 import org.rpgl.exception.DieSizeException;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +68,19 @@ public final class Die {
      */
     public static void setTesting(boolean isTesting) {
         Die.testing = isTesting;
+    }
+
+    public static JsonArray unpack(JsonArray dice) {
+        JsonArray processedDice = new JsonArray();
+        for (int i = 0; i < dice.size(); i++) {
+            JsonObject die = dice.getJsonObject(i);
+            JsonObject processedDie = die.deepClone();
+            int count = processedDie.removeInteger("count");
+            for (int j = 0; j < count; j++) {
+                processedDice.addJsonObject(processedDie.deepClone());
+            }
+        }
+        return processedDice;
     }
 
 }

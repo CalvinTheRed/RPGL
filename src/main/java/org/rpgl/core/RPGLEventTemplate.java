@@ -2,6 +2,7 @@ package org.rpgl.core;
 
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
 
 import java.util.ArrayList;
 
@@ -44,19 +45,7 @@ public class RPGLEventTemplate extends JsonObject {
                     JsonObject damageJson = damageArray.getJsonObject(j);
                     damageJson.asMap().putIfAbsent("dice", new ArrayList<>());
                     damageJson.asMap().putIfAbsent("bonus", 0);
-                    JsonArray templateDamageDiceArray = damageJson.removeJsonArray("dice");
-                    JsonArray damageDiceArray = new JsonArray();
-                    for (int k = 0; k < templateDamageDiceArray.size(); k++) {
-                        JsonObject templateDamageDiceDefinition = templateDamageDiceArray.getJsonObject(k);
-                        JsonObject damageDie = new JsonObject() {{
-                            this.putInteger("size", templateDamageDiceDefinition.getInteger("size"));
-                            this.putJsonArray("determined", templateDamageDiceDefinition.getJsonArray("determined"));
-                        }};
-                        for (int l = 0; l < templateDamageDiceDefinition.getInteger("count"); l++) {
-                            damageDiceArray.addJsonObject(damageDie.deepClone());
-                        }
-                    }
-                    damageJson.putJsonArray("dice", damageDiceArray);
+                    damageJson.putJsonArray("dice", Die.unpack(damageJson.removeJsonArray("dice")));
                 }
             }
         }
@@ -76,19 +65,7 @@ public class RPGLEventTemplate extends JsonObject {
             if (healing != null) {
                 healing.asMap().putIfAbsent("dice", new ArrayList<>());
                 healing.asMap().putIfAbsent("bonus", 0);
-                JsonArray templateHealingDiceArray = healing.removeJsonArray("dice");
-                JsonArray healingDiceArray = new JsonArray();
-                for (int k = 0; k < templateHealingDiceArray.size(); k++) {
-                    JsonObject templateHealingDiceDefinition = templateHealingDiceArray.getJsonObject(k);
-                    JsonObject healingDie = new JsonObject() {{
-                        this.putInteger("size", templateHealingDiceDefinition.getInteger("size"));
-                        this.putJsonArray("determined", templateHealingDiceDefinition.getJsonArray("determined"));
-                    }};
-                    for (int l = 0; l < templateHealingDiceDefinition.getInteger("count"); l++) {
-                        healingDiceArray.addJsonObject(healingDie.deepClone());
-                    }
-                }
-                healing.putJsonArray("dice", healingDiceArray);
+                healing.putJsonArray("dice", Die.unpack(healing.removeJsonArray("dice")));
             }
         }
     }

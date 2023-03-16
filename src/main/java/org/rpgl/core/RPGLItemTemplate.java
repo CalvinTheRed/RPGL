@@ -3,6 +3,7 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.Map;
@@ -138,19 +139,7 @@ public class RPGLItemTemplate extends JsonObject {
             JsonArray attackTypeDamageArray = damage.getJsonArray(attackType);
             for (int i = 0; i < attackTypeDamageArray.size(); i++) {
                 JsonObject attackTypeDamageObject = attackTypeDamageArray.getJsonObject(i);
-                JsonArray templateDamageDiceArray = attackTypeDamageObject.removeJsonArray("dice");
-                JsonArray damageDiceArray = new JsonArray();
-                for (int k = 0; k < templateDamageDiceArray.size(); k++) {
-                    JsonObject templateDamageDiceDefinition = templateDamageDiceArray.getJsonObject(k);
-                    JsonObject damageDie = new JsonObject() {{
-                        this.putInteger("size", templateDamageDiceDefinition.getInteger("size"));
-                        this.putJsonArray("determined", templateDamageDiceDefinition.getJsonArray("determined"));
-                    }};
-                    for (int l = 0; l < templateDamageDiceDefinition.getInteger("count"); l++) {
-                        damageDiceArray.addJsonObject(damageDie.deepClone());
-                    }
-                }
-                attackTypeDamageObject.putJsonArray("dice", damageDiceArray);
+                attackTypeDamageObject.putJsonArray("dice", Die.unpack(attackTypeDamageObject.removeJsonArray("dice")));
             }
         }
     }

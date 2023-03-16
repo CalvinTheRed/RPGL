@@ -5,6 +5,7 @@ import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class AddBonus extends Function {
 
     // TODO should the two below methods be here or elsewhere? Maybe a shared abstract base class?
 
-    public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject bonusJson, RPGLContext context) throws Exception {
+    JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject bonusJson, RPGLContext context) throws Exception {
         /*[
             {
                 "name": "...",
@@ -79,7 +80,7 @@ public class AddBonus extends Function {
                 this.putString("name", effect.getName());
                 this.putString("effect", effect.getUuid());
                 this.putInteger("bonus", Objects.requireNonNullElse(bonusJson.getInteger("bonus"), 0));
-                this.putJsonArray("dice", Objects.requireNonNullElse(unpackDice(bonusJson.getJsonArray("dice")), new JsonArray()));
+                this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(bonusJson.getJsonArray("dice")), new JsonArray()));
                 this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
             }};
             case "modifier" -> new JsonObject() {{
@@ -119,21 +120,6 @@ public class AddBonus extends Function {
                 this.putBoolean("optional", false);
             }};
         };
-    }
-
-    public static JsonArray unpackDice(JsonArray bonusDice) {
-        JsonArray processedDice = new JsonArray();
-        for (int i = 0; i < bonusDice.size(); i++) {
-            JsonObject bonusDie = bonusDice.getJsonObject(i);
-            JsonObject processedDie = new JsonObject() {{
-                this.putInteger("size", bonusDie.getInteger("size"));
-                this.putJsonArray("determined", bonusDie.getJsonArray("determined"));
-            }};
-            for (int j = 0; j < bonusDie.getInteger("count"); j++) {
-                processedDice.addJsonObject(processedDie.deepClone());
-            }
-        }
-        return processedDice;
     }
 
 }
