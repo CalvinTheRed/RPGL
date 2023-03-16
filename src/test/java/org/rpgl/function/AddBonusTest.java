@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Calvin Withun
  */
-public class AddBonusTests {
+public class AddBonusTest {
 
     private Calculation calculation;
 

@@ -45,18 +45,7 @@ public final class Die {
     }
 
     public static int roll(JsonObject die) {
-        int upperBound = die.getInteger("size");
-        JsonArray determinedList = die.getJsonArray("determined");
-        int roll;
-        if (testing && determinedList != null && !determinedList.asList().isEmpty()) {
-            roll = (int) determinedList.asList().remove(0);
-        } else if (upperBound > 0) {
-            roll = R.nextInt(upperBound) + 1;
-        } else {
-            DieSizeException e = new DieSizeException(upperBound);
-            LOGGER.error(e.getMessage());
-            throw e;
-        }
+        int roll = roll(die.getInteger("size"), die.getJsonArray("determined"));
         die.putInteger("roll", roll);
         return roll;
     }

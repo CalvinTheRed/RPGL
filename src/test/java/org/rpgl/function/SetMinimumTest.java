@@ -26,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.function.SetBase class.
+ * Testing class for the org.rpgl.function.SetMinimum class.
  *
  * @author Calvin Withun
  */
-public class SetBaseTest {
+public class SetMinimumTest {
 
     private Calculation calculation;
 
@@ -70,7 +70,7 @@ public class SetBaseTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new SetBase();
+        Function function = new SetMinimum();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -87,8 +87,8 @@ public class SetBaseTest {
     }
 
     @Test
-    @DisplayName("execute sets calculation base to new value (number)")
-    void execute_setsCalculationBaseToNewValue_number() throws Exception {
+    @DisplayName("execute sets calculation minimum to new value (number)")
+    void execute_setsCalculationMinimumToNewValue_number() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
@@ -99,18 +99,18 @@ public class SetBaseTest {
         calculation.prepare(context);
         calculation.setTarget(target);
 
-        SetBase setBase = new SetBase();
+        SetMinimum setMinimum = new SetMinimum();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "set_base",
-                "base": {
-                    "base_type": "number",
+                "function": "set_minimum",
+                "minimum": {
+                    "minimum_type": "number",
                     "value": 13
                 }
             }*/
-            this.putString("function", "set_base");
-            this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "number");
+            this.putString("function", "set_minimum");
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("minimum_type", "number");
                 this.putInteger("value", 13);
             }});
         }};
@@ -118,16 +118,16 @@ public class SetBaseTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(13, calculation.getBase().getInteger("value"),
-                "execute should set calculation base to 13"
+        assertEquals(13, calculation.getMinimum().getInteger("value"),
+                "execute should set calculation minimum to 13"
         );
     }
 
     @Test
-    @DisplayName("execute sets calculation base to new value (modifier)")
-    void execute_setsCalculationBaseToNewValue_modifier() throws Exception {
+    @DisplayName("execute sets calculation minimum to new value (modifier)")
+    void execute_setsCalculationMinimumToNewValue_modifier() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
@@ -140,12 +140,12 @@ public class SetBaseTest {
         calculation.prepare(context);
         calculation.setTarget(target);
 
-        SetBase setBase = new SetBase();
+        SetMinimum setMinimum = new SetMinimum();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "set_base",
-                "base": {
-                    "base_type": "modifier",
+                "function": "set_minimum",
+                "minimum": {
+                    "minimum_type": "modifier",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -153,9 +153,9 @@ public class SetBaseTest {
                     }
                 }
             }*/
-            this.putString("function", "set_base");
-            this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "modifier");
+            this.putString("function", "set_minimum");
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("minimum_type", "modifier");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -169,16 +169,16 @@ public class SetBaseTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(5, calculation.getBase().getInteger("value"),
-                "execute should set calculation base to source's dex modifier (+5)"
+        assertEquals(5, calculation.getMinimum().getInteger("value"),
+                "execute should set calculation minimum to source's dex modifier (+5)"
         );
     }
 
     @Test
-    @DisplayName("execute sets calculation base to new value (ability)")
-    void execute_setsCalculationBaseToNewValue_ability() throws Exception {
+    @DisplayName("execute sets calculation minimum to new value (ability)")
+    void execute_setsCalculationMinimumToNewValue_ability() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
@@ -191,12 +191,12 @@ public class SetBaseTest {
         calculation.prepare(context);
         calculation.setTarget(target);
 
-        SetBase setBase = new SetBase();
+        SetMinimum setMinimum = new SetMinimum();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "set_base",
-                "base": {
-                    "base_type": "ability",
+                "function": "set_minimum",
+                "minimum": {
+                    "minimum_type": "ability",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -204,9 +204,9 @@ public class SetBaseTest {
                     }
                 }
             }*/
-            this.putString("function", "set_base");
-            this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "ability");
+            this.putString("function", "set_minimum");
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("minimum_type", "ability");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -220,16 +220,16 @@ public class SetBaseTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(20, calculation.getBase().getInteger("value"),
-                "execute should set calculation base to source's dex score (20)"
+        assertEquals(20, calculation.getMinimum().getInteger("value"),
+                "execute should set calculation minimum to source's dex score (20)"
         );
     }
 
     @Test
-    @DisplayName("execute sets calculation base to new value (proficiency)")
-    void execute_setsCalculationBaseToNewValue_proficiency() throws Exception {
+    @DisplayName("execute sets calculation minimum to new value (proficiency)")
+    void execute_setsCalculationMinimumToNewValue_proficiency() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
@@ -240,21 +240,21 @@ public class SetBaseTest {
         calculation.prepare(context);
         calculation.setTarget(target);
 
-        SetBase setBase = new SetBase();
+        SetMinimum setMinimum = new SetMinimum();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "set_base",
-                "base": {
-                    "base_type": "proficiency",
+                "function": "set_minimum",
+                "minimum": {
+                    "minimum_type": "proficiency",
                     "object": {
                         "from": "effect",
                         "object": "source"
                     }
                 }
             }*/
-            this.putString("function", "set_base");
-            this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "proficiency");
+            this.putString("function", "set_minimum");
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("minimum_type", "proficiency");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
                     this.putString("object", "source");
@@ -267,10 +267,99 @@ public class SetBaseTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(2, calculation.getBase().getInteger("value"),
-                "execute should set calculation base to source's proficiency bonus (+2)"
+        assertEquals(2, calculation.getMinimum().getInteger("value"),
+                "execute should set calculation minimum to source's proficiency bonus (+2)"
+        );
+    }
+
+    @Test
+    @DisplayName("execute sets calculation minimum to new value only if new minimum is larger")
+    void execute_setsCalculationMinimumToNewValueOnlyIfNewMinimumIsLarger() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        calculation.setSource(source);
+        calculation.prepare(context);
+        calculation.setTarget(target);
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setName("TEST");
+
+        SetMinimum setMinimum = new SetMinimum();
+        JsonObject functionJson;
+
+        // first set minimum to 10
+
+        functionJson = new JsonObject() {{
+            /*{
+                "function": "set_minimum",
+                "minimum": {
+                    "minimum_type": "number",
+                    "value": 10
+                }
+            }*/
+            this.putString("function", "set_minimum");
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("minimum_type", "number");
+                this.putInteger("value", 10);
+            }});
+        }};
+
+        setMinimum.execute(effect, calculation, functionJson, context);
+
+        assertEquals(10, calculation.getMinimum().getInteger("value"),
+                "execute should set calculation minimum to 10"
+        );
+
+        // second set the minimum to 15
+
+        functionJson = new JsonObject() {{
+            /*{
+                "function": "set_minimum",
+                "minimum": {
+                    "minimum_type": "number",
+                    "value": 15
+                }
+            }*/
+            this.putString("function", "set_minimum");
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("minimum_type", "number");
+                this.putInteger("value", 15);
+            }});
+        }};
+
+        setMinimum.execute(effect, calculation, functionJson, context);
+
+        assertEquals(15, calculation.getMinimum().getInteger("value"),
+                "execute should set calculation minimum to 15 (15 > 10)"
+        );
+
+        // third set the minimum to 5 (should not work)
+
+        functionJson = new JsonObject() {{
+            /*{
+                "function": "set_minimum",
+                "minimum": {
+                    "minimum_type": "number",
+                    "value": 5
+                }
+            }*/
+            this.putString("function", "set_minimum");
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putString("minimum_type", "number");
+                this.putInteger("value", 5);
+            }});
+        }};
+
+        setMinimum.execute(effect, calculation, functionJson, context);
+
+        assertEquals(15, calculation.getMinimum().getInteger("value"),
+                "execute should not change calculation minimum (5 < 15>)"
         );
     }
 

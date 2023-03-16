@@ -3,9 +3,7 @@ package org.rpgl.function;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.math.Die;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -40,82 +38,63 @@ public class SetBase extends Function {
         /*[
             {
                 "name": "...",
-                "base_type": "range",
-                "bonus": #,
-                "dice": [
-                    { "count": #, "size": #, "determined": [ # ] },
-                    ...
-                ],
-                "optional": boolean
+                "base_type": "number",
+                "value": #
             },{
                 "name": "...",
                 "base_type": "modifier",
                 "ability": "dex",
-                "object": "...",
-                "optional": boolean
+                "object": "..."
             },{
                 "name": "...",
                 "base_type": "ability",
                 "ability": "dex",
-                "object": "...",
-                "optional": boolean
+                "object": "..."
             },{
                 "name": "...",
                 "base_type": "proficiency",
                 "half": boolean,
-                "object": "...",
-                "optional": boolean
+                "object": "..."
             },{
                 "name": "...",
                 "base_type": "level", // TODO this feature not yet supported
                 "class": "...",
-                "object": "...",
-                "optional": boolean
+                "object": "..."
             }
         ]*/
         return switch (baseJson.getString("base_type")) {
-            case "range" -> new JsonObject() {{
+            case "number" -> new JsonObject() {{
                 this.putString("name", effect.getName());
                 this.putString("effect", effect.getUuid());
-                this.putInteger("bonus", Objects.requireNonNullElse(baseJson.getInteger("bonus"), 0));
-                this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(baseJson.getJsonArray("dice")), new JsonArray()));
-                this.putBoolean("optional", Objects.requireNonNullElse(baseJson.getBoolean("optional"), false));
+                this.putInteger("value", Objects.requireNonNullElse(baseJson.getInteger("value"), 0));
             }};
             case "modifier" -> new JsonObject() {{
                 this.putString("name", effect.getName());
                 this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
-                this.putInteger("bonus", object.getAbilityModifierFromAbilityName(baseJson.getString("ability"), context));
-                this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", Objects.requireNonNullElse(baseJson.getBoolean("optional"), false));
+                this.putInteger("value", object.getAbilityModifierFromAbilityName(baseJson.getString("ability"), context));
             }};
             case "ability" -> new JsonObject() {{
                 this.putString("name", effect.getName());
                 this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
-                this.putInteger("bonus", object.getAbilityScoreFromAbilityName(baseJson.getString("ability"), context));
-                this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", Objects.requireNonNullElse(baseJson.getBoolean("optional"), false));
+                this.putInteger("value", object.getAbilityScoreFromAbilityName(baseJson.getString("ability"), context));
             }};
             case "proficiency" -> new JsonObject() {{
                 this.putString("name", effect.getName());
                 this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
                 if (Objects.requireNonNullElse(baseJson.getBoolean("half"), false)) {
-                    this.putInteger("bonus", object.getEffectiveProficiencyBonus(context) / 2);
+                    this.putInteger("value", object.getEffectiveProficiencyBonus(context) / 2);
                 } else {
-                    this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                    this.putInteger("value", object.getEffectiveProficiencyBonus(context));
                 }
-                this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", Objects.requireNonNullElse(baseJson.getBoolean("optional"), false));
             }};
             default -> new JsonObject() {{
                 // TODO log a warning here concerning an unexpected bonus_type value
                 this.putString("name", "DEFAULT");
                 this.putString("effect", null);
-                this.putInteger("bonus", 0);
-                this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", false);
+                this.putInteger("value", 0);
             }};
         };
     }
