@@ -103,8 +103,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         int sum = Objects.requireNonNullElse(temporaryHitPointsData.getInteger("bonus"), 0);
         JsonArray diceArray = Objects.requireNonNullElse(temporaryHitPointsData.getJsonArray("dice"), new JsonArray());
         for (int i = 0; i < diceArray.size(); i++) {
-            JsonObject die = diceArray.getJsonObject(i);
-            sum += Die.roll(die.getInteger("size"), die.getJsonArray("determined").asList());
+            sum += Die.roll(diceArray.getJsonObject(i));
         }
         return sum;
     }

@@ -53,8 +53,7 @@ public class DamageRoll extends Subevent {
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamageArray.getJsonObject(i).getJsonArray("dice"), new JsonArray());
             for (int j = 0; j < typedDamageDieArray.size(); j++) {
-                JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
-                typedDamageDie.putInteger("roll", Die.roll(typedDamageDie.getInteger("size"), typedDamageDie.getJsonArray("determined").asList()));
+                Die.roll(typedDamageDieArray.getJsonObject(j));
             }
         }
     }
@@ -75,7 +74,7 @@ public class DamageRoll extends Subevent {
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
                     if (typedDamageDie.getInteger("roll") <= threshold) {
-                        typedDamageDie.putInteger("roll", Die.roll(typedDamageDie.getInteger("size"), typedDamageDie.getJsonArray("determined").asList()));
+                        Die.roll(typedDamageDie);
                     }
                 }
             }

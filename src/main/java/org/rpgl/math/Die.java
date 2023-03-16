@@ -6,7 +6,6 @@ import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,14 +26,14 @@ public final class Die {
      * determined value to be rolled, the rolled number will be a random number from 1 to the die's maximum face value.
      *
      * @param upperBound     the maximum face value of the die to be simulated.
-     * @param determinedList a list of upcoming values the simulated die should roll (if null or empty, the simulated
-     *                       die will roll randomly). This parameter is only used if Die is in testing mode.
+     * @param determinedList a JsonArray of upcoming values the simulated die should roll (if null or empty, the
+     *                       simulated die will roll randomly). This parameter is only used if Die is in testing mode.
      * @return the value rolled by the simulated die.
      */
-    public static int roll(int upperBound, List<Object> determinedList) {
+    public static int roll(int upperBound, JsonArray determinedList) {
         int roll;
-        if (testing && determinedList != null && !determinedList.isEmpty()) {
-            roll = (int) determinedList.remove(0);
+        if (testing && determinedList != null && !determinedList.asList().isEmpty()) {
+            roll = (int) determinedList.asList().remove(0);
         } else if (upperBound > 0) {
             roll = R.nextInt(upperBound) + 1;
         } else {
@@ -42,6 +41,23 @@ public final class Die {
             LOGGER.error(e.getMessage());
             throw e;
         }
+        return roll;
+    }
+
+    public static int roll(JsonObject die) {
+        int upperBound = die.getInteger("size");
+        JsonArray determinedList = die.getJsonArray("determined");
+        int roll;
+        if (testing && determinedList != null && !determinedList.asList().isEmpty()) {
+            roll = (int) determinedList.asList().remove(0);
+        } else if (upperBound > 0) {
+            roll = R.nextInt(upperBound) + 1;
+        } else {
+            DieSizeException e = new DieSizeException(upperBound);
+            LOGGER.error(e.getMessage());
+            throw e;
+        }
+        die.putInteger("roll", roll);
         return roll;
     }
 
@@ -71,16 +87,16 @@ public final class Die {
     }
 
     public static JsonArray unpack(JsonArray dice) {
-        JsonArray processedDice = new JsonArray();
+        JsonArray unpackedDice = new JsonArray();
         for (int i = 0; i < dice.size(); i++) {
             JsonObject die = dice.getJsonObject(i);
-            JsonObject processedDie = die.deepClone();
-            int count = processedDie.removeInteger("count");
+            JsonObject unpackedDie = die.deepClone();
+            int count = unpackedDie.removeInteger("count");
             for (int j = 0; j < count; j++) {
-                processedDice.addJsonObject(processedDie.deepClone());
+                unpackedDice.addJsonObject(unpackedDie.deepClone());
             }
         }
-        return processedDice;
+        return unpackedDice;
     }
 
 }

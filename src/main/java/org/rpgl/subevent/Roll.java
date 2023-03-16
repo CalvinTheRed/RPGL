@@ -93,14 +93,14 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
      */
     public void roll() {
         JsonArray determined = this.json.getJsonArray("determined");
-        int baseDieRoll = Die.roll(20, determined.asList());
+        int baseDieRoll = Die.roll(20, determined);
         if (this.isAdvantageRoll()) {
-            int advantageRoll = Die.roll(20, determined.asList());
+            int advantageRoll = Die.roll(20, determined);
             if (advantageRoll > baseDieRoll) {
                 baseDieRoll = advantageRoll;
             }
         } else if (this.isDisadvantageRoll()) {
-            int disadvantageRoll = Die.roll(20, determined.asList());
+            int disadvantageRoll = Die.roll(20, determined);
             if (disadvantageRoll < baseDieRoll) {
                 baseDieRoll = disadvantageRoll;
             }

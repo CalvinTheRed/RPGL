@@ -56,7 +56,7 @@ public class HealingRoll extends Subevent {
         JsonArray healingDice = this.json.getJsonArray("dice");
         for (int i = 0; i < healingDice.size(); i++) {
             JsonObject healingDie = healingDice.getJsonObject(i);
-            healingDie.putInteger("roll", Die.roll(healingDie.getInteger("size"), healingDie.getJsonArray("determined").asList()));
+            Die.roll(healingDie);
         }
     }
 
@@ -70,7 +70,7 @@ public class HealingRoll extends Subevent {
         for (int i = 0; i < healingDice.size(); i++) {
             JsonObject healingDie = healingDice.getJsonObject(i);
             if (healingDie.getInteger("roll") <= threshold) {
-                healingDie.putInteger("roll", Die.roll(healingDie.getInteger("size"), healingDie.getJsonArray("determined").asList()));
+                Die.roll(healingDie);
             }
         }
     }

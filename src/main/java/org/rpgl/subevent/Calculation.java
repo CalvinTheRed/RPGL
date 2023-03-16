@@ -110,8 +110,7 @@ public abstract class Calculation extends Subevent {
             JsonObject bonus = bonuses.getJsonObject(i);
             JsonArray dice = bonus.getJsonArray("dice");
             for (int j = 0; j < dice.size(); j++) {
-                JsonObject die = dice.getJsonObject(j);
-                die.putInteger("roll", Die.roll(die.getInteger("size"), die.getJsonArray("determined").asList()));
+                Die.roll(dice.getJsonObject(j));
             }
         }
     }
