@@ -97,22 +97,11 @@ public abstract class Calculation extends Subevent {
             bonus += bonusJson.getInteger("bonus");
             JsonArray dice = bonusJson.getJsonArray("dice");
             for (int j = 0; j < dice.size(); j++) {
-                // if dice have not been rolled, treat them as having rolled 0
-                bonus += Objects.requireNonNullElse(dice.getJsonObject(i).getInteger("roll"), 0);
+                JsonObject die = dice.getJsonObject(i);
+                bonus += Objects.requireNonNullElseGet(die.getInteger("roll"), () -> Die.roll(die));
             }
         }
         return bonus;
-    }
-
-    void rollBonusDice() {
-        JsonArray bonuses = this.getBonuses();
-        for (int i = 0; i < bonuses.size(); i++) {
-            JsonObject bonus = bonuses.getJsonObject(i);
-            JsonArray dice = bonus.getJsonArray("dice");
-            for (int j = 0; j < dice.size(); j++) {
-                Die.roll(dice.getJsonObject(j));
-            }
-        }
     }
 
 }

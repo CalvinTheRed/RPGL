@@ -70,8 +70,8 @@ public class EndEffectTest {
     }
 
     @Test
-    @DisplayName("")
-    void test() throws Exception {
+    @DisplayName("execute removes effect from object")
+    void execute_removesEffectFromObject() throws Exception {
         RPGLObject commoner = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
         context.add(commoner);
