@@ -41,7 +41,7 @@ public class CalculateProficiencyBonus extends Calculation {
         super.setBase(new JsonObject() {{
             this.putString("name", "Base Proficiency");
             this.putString("effect", null);
-            this.putInteger("value", getSource().getInteger("proficiency_bonus"));
+            this.putInteger("value", getSource().getProficiencyBonus());
         }});
     }
 

@@ -54,7 +54,7 @@ public class CalculateMaximumHitPoints extends Calculation {
             this.putString("effect", null);
             this.putInteger("bonus", sourceConModifier * sourceHitDiceCount);
             this.putJsonArray("dice", new JsonArray());
-            this.putBoolean("optional", false);
+            //this.putBoolean("optional", false);
         }});
     }
 

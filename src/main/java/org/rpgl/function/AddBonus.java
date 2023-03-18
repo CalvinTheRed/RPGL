@@ -81,7 +81,7 @@ public class AddBonus extends Function {
                 this.putString("effect", effect.getUuid());
                 this.putInteger("bonus", Objects.requireNonNullElse(bonusJson.getInteger("bonus"), 0));
                 this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(bonusJson.getJsonArray("dice")), new JsonArray()));
-                this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
+                //this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
             }};
             case "modifier" -> new JsonObject() {{
                 this.putString("name", effect.getName());
@@ -89,7 +89,7 @@ public class AddBonus extends Function {
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, bonusJson.getJsonObject("object"));
                 this.putInteger("bonus", object.getAbilityModifierFromAbilityName(bonusJson.getString("ability"), context));
                 this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
+                //this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
             }};
             case "ability" -> new JsonObject() {{
                 this.putString("name", effect.getName());
@@ -97,7 +97,7 @@ public class AddBonus extends Function {
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, bonusJson.getJsonObject("object"));
                 this.putInteger("bonus", object.getAbilityScoreFromAbilityName(bonusJson.getString("ability"), context));
                 this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
+                //this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
             }};
             case "proficiency" -> new JsonObject() {{
                 this.putString("name", effect.getName());
@@ -109,7 +109,7 @@ public class AddBonus extends Function {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
                 }
                 this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
+                //this.putBoolean("optional", Objects.requireNonNullElse(bonusJson.getBoolean("optional"), false));
             }};
             default -> new JsonObject() {{
                 // TODO log a warning here concerning an unexpected bonus_type value
@@ -117,7 +117,7 @@ public class AddBonus extends Function {
                 this.putString("effect", null);
                 this.putInteger("bonus", 0);
                 this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", false);
+                //this.putBoolean("optional", false);
             }};
         };
     }

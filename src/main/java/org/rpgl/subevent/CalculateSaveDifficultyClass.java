@@ -51,14 +51,14 @@ public class CalculateSaveDifficultyClass extends Calculation {
             this.putString("effect", null);
             this.putInteger("bonus", source.getEffectiveProficiencyBonus(context));
             this.putJsonArray("dice", new JsonArray());
-            this.putBoolean("optional", false);
+            //this.putBoolean("optional", false);
         }});
         super.addBonus(new JsonObject() {{
             this.putString("name", "Ability Modifier");
             this.putString("effect", null);
             this.putInteger("bonus", source.getAbilityModifierFromAbilityName(json.getString("difficulty_class_ability"), context));
             this.putJsonArray("dice", new JsonArray());
-            this.putBoolean("optional", false);
+            //this.putBoolean("optional", false);
         }});
     }
 

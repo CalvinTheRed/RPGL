@@ -367,6 +367,8 @@ public class RPGLObject extends RPGLTaggable {
             String damageType = damageJsonEntry.getKey();
             Integer typedDamage = damageJson.getInteger(damageJsonEntry.getKey());
 
+            // TODO make DamageAffinity contain a list of all present damage types...
+
             DamageAffinity damageAffinity = new DamageAffinity();
             damageAffinity.joinSubeventData(new JsonObject() {{
                 this.putString("subevent", "damage_affinity");
