@@ -2,8 +2,10 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
 import org.rpgl.subevent.HealingCollection;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -28,35 +30,74 @@ public class AddHealing extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof HealingCollection healingCollection) {
-            healingCollection.addHealing(this.unpackHealing(functionJson.getJsonObject("healing")));
+            healingCollection.addHealing(processJson(effect, subevent, functionJson.getJsonObject("healing"), context));
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 
-    /**
-     * This helper method unpacks and returns the healing stored by the functionJson provided to this Function.
-     *
-     * @param healing a JsonObject containing compacted healing data
-     * @return a deep clone of healing in an unpacked format
-     */
-    JsonObject unpackHealing(JsonObject healing) {
-        JsonObject unpackedHealing = new JsonObject();
-        unpackedHealing.putInteger("bonus", Objects.requireNonNullElse(healing.getInteger("bonus"), 0));
-        JsonArray healingDice = healing.getJsonArray("dice");
-        JsonArray unpackedHealingDice = new JsonArray();
-        for (int i = 0; i < healingDice.size(); i++) {
-            JsonObject healingDie = healingDice.getJsonObject(i);
-            JsonObject unpackedHealingDie = new JsonObject() {{
-                this.putInteger("size", healingDie.getInteger("size"));
-                this.putJsonArray("determined", healingDie.getJsonArray("determined"));
-            }};
-            for (int k = 0; k < healingDie.getInteger("count"); k++) {
-                unpackedHealingDice.addJsonObject(unpackedHealingDie.deepClone());
+    public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject healingJson, RPGLContext context) throws Exception {
+        /*[
+            {
+                "name": "...",
+                "healing_type": "range",
+                "bonus": #,
+                "dice": [
+                    { "count": #, "size": #, "determined": [ # ] },
+                    ...
+                ]
+            },{
+                "name": "...",
+                "healing_type": "modifier",
+                "ability": "dex",
+                "object": "..."
+            },{
+                "name": "...",
+                "healing_type": "ability",
+                "ability": "dex",
+                "object": "..."
+            },{
+                "name": "...",
+                "healing_type": "proficiency",
+                "half": boolean,
+                "object": "..."
+            },{
+                "name": "...",
+                "healing_type": "level", // TODO this feature not yet supported
+                "class": "...",
+                "object": "..."
             }
-        }
-        unpackedHealing.putJsonArray("dice", unpackedHealingDice);
-        return unpackedHealing;
+        ]*/
+        return switch (healingJson.getString("healing_type")) {
+            case "range" -> new JsonObject() {{
+                this.putInteger("bonus", Objects.requireNonNullElse(healingJson.getInteger("bonus"), 0));
+                this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(healingJson.getJsonArray("dice")), new JsonArray()));
+            }};
+            case "modifier" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, healingJson.getJsonObject("object"));
+                this.putInteger("bonus", object.getAbilityModifierFromAbilityName(healingJson.getString("ability"), context));
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            case "ability" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, healingJson.getJsonObject("object"));
+                this.putInteger("bonus", object.getAbilityScoreFromAbilityName(healingJson.getString("ability"), context));
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            case "proficiency" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, healingJson.getJsonObject("object"));
+                if (Objects.requireNonNullElse(healingJson.getBoolean("half"), false)) {
+                    this.putInteger("bonus", object.getEffectiveProficiencyBonus(context) / 2);
+                } else {
+                    this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                }
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            default -> new JsonObject() {{
+                // TODO log a warning here concerning an unexpected healing_type value
+                this.putInteger("bonus", 0);
+                this.putJsonArray("dice", new JsonArray());
+            }};
+        };
     }
 
 }

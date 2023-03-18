@@ -63,7 +63,6 @@ public class SetMinimum extends Function {
                 "object": "..."
             }
         ]*/
-        System.out.println(minimumJson);
         return switch (minimumJson.getString("minimum_type")) {
             case "number" -> new JsonObject() {{
                 this.putInteger("value", Objects.requireNonNullElse(minimumJson.getInteger("value"), 0));

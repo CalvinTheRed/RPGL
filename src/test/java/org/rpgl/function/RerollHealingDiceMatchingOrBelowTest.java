@@ -79,45 +79,83 @@ public class RerollHealingDiceMatchingOrBelowTest {
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "dice": [
-                    { "size": 6, "determined": [ 1, 6 ] },
-                    { "size": 6, "determined": [ 2, 6 ] },
-                    { "size": 6, "determined": [ 3, 6 ] },
-                    { "size": 6, "determined": [ 4, 6 ] }
-                ],
-                "bonus": 2
+                "healing": [
+                    {
+                        "dice": [
+                            { "size": 6, "determined": [ 1, 6 ] }
+                        ],
+                        "bonus": 0
+                    },
+                    {
+                        "dice": [
+                            { "size": 6, "determined": [ 2, 6 ] }
+                        ],
+                        "bonus": 0
+                    },
+                    {
+                        "dice": [
+                            { "size": 6, "determined": [ 3, 6 ] }
+                        ],
+                        "bonus": 0
+                    },
+                    {
+                        "dice": [
+                            { "size": 6, "determined": [ 4, 6 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
             }*/
-            this.putJsonArray("dice", new JsonArray() {{
+            this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 6);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(1);
-                        this.addInteger(6);
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(1);
+                                this.addInteger(6);
+                            }});
+                        }});
                     }});
+                    this.putInteger("bonus", 0);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 6);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(2);
-                        this.addInteger(6);
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(2);
+                                this.addInteger(6);
+                            }});
+                        }});
                     }});
+                    this.putInteger("bonus", 0);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 6);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(3);
-                        this.addInteger(6);
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                                this.addInteger(6);
+                            }});
+                        }});
                     }});
+                    this.putInteger("bonus", 0);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 6);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(4);
-                        this.addInteger(6);
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(4);
+                                this.addInteger(6);
+                            }});
+                        }});
                     }});
+                    this.putInteger("bonus", 0);
                 }});
             }});
-            this.putInteger("bonus", 2);
         }});
         healingRoll.setSource(source);
         healingRoll.prepare(context);
@@ -135,10 +173,8 @@ public class RerollHealingDiceMatchingOrBelowTest {
 
         rerollHealingDiceMatchingOrBelow.execute(null, healingRoll, functionJson, context);
 
-        String expected = """
-                {"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}""";
-        assertEquals(expected, healingRoll.getHealing().toString(),
-                "execute should re-roll all dice which rolled 2 or lower to 3"
+        assertEquals(19, healingRoll.getHealing(),
+                "execute should re-roll all dice which rolled 2 or lower to 3 (6+6+3+4=19)"
         );
     }
 

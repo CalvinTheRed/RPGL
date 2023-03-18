@@ -67,28 +67,36 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("getHealingCollection returns object storing bonus and dice")
     void getHealingCollection_returnsObjectStoringBonusAndDice(){
-         HealingCollection healingCollection = new HealingCollection();
+        HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "dice": [
-                    { "roll": 1 },
-                    { "roll": 6 }
-                ],
-                "bonus": 2
+                "healing": [
+                    {
+                        "dice": [
+                            { "roll": 1 },
+                            { "roll": 6 }
+                        ],
+                        "bonus": 2
+                    }
+                ]
             }*/
-            this.putJsonArray("dice", new JsonArray() {{
+            this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putInteger("roll", 1);
-                }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("roll", 6);
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 6);
+                        }});
+                    }});
+                    this.putInteger("bonus", 2);
                 }});
             }});
-            this.putInteger("bonus", 2);
         }});
 
         String expected = """
-                {"bonus":2,"dice":[{"roll":1},{"roll":6}]}""";
+                [{"bonus":2,"dice":[{"roll":1},{"roll":6}]}]""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
                 "getHealingCollection should return an object with the subevent's bonus and dice stored inside"
         );
@@ -100,11 +108,19 @@ public class HealingCollectionTest {
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "dice": [ ],
-                "bonus": 0
+                "healing": [
+                    {
+                        "dice": [ ],
+                        "bonus": 0
+                    }
+                ]
             }*/
-            this.putJsonArray("dice", new JsonArray());
-            this.putInteger("bonus", 0);
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putInteger("bonus", 0);
+                }});
+            }});
         }});
 
         JsonObject extraHealing = new JsonObject() {{
@@ -125,14 +141,14 @@ public class HealingCollectionTest {
 
         healingCollection.addHealing(extraHealing);
         expected = """
-                {"bonus":2,"dice":[{"size":6}]}""";
+                [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]}]""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
                 "extra healing dice and bonus should be applied properly"
         );
 
         healingCollection.addHealing(extraHealing);
         expected = """
-                {"bonus":4,"dice":[{"size":6},{"size":6}]}""";
+                [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]},{"bonus":2,"dice":[{"size":6}]}]""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
                 "extra healing dice and bonus should not delete or override any old data"
         );
@@ -157,9 +173,9 @@ public class HealingCollectionTest {
         healingCollection.prepare(context);
 
         String expected = """
-                {"bonus":0,"dice":[]}""";
+                []""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should default dice to [ ] and bonus to 0 if they are not defined"
+                "prepare should default to [ ] if no healing is defined"
         );
     }
 

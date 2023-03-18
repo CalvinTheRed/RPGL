@@ -406,6 +406,7 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public void receiveHealing(HealingDelivery healingDelivery, RPGLContext context) throws Exception {
+        System.out.println(healingDelivery);
         JsonObject healthData = this.getHealthData();
         healthData.putInteger("current", healthData.getInteger("current") + healingDelivery.getHealing());
         int maximumHitPoints = this.getMaximumHitPoints(context);

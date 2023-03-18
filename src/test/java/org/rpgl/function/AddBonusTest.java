@@ -239,8 +239,6 @@ public class AddBonusTest {
         context.add(source);
         context.add(target);
 
-        source.getAbilityScores().putInteger("dex", 20);
-
         calculation.setSource(source);
         calculation.prepare(context);
         calculation.setTarget(target);
