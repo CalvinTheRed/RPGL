@@ -126,11 +126,8 @@ public class AttackRoll extends Roll {
         // Add attack ability score modifier (defined by the Subevent JSON) as a bonus to the roll.
         String attackAbility = this.json.getString("attack_ability");
         this.addBonus(new JsonObject() {{
-            this.putString("name", "Ability Modifier");
-            this.putString("effect", null);
             this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
             this.putJsonArray("dice", new JsonArray());
-            this.putBoolean("optional", false);
         }});
 
         // Attacks made without weapons should already have their damage defined in the event template so no changes are needed here
@@ -156,11 +153,8 @@ public class AttackRoll extends Roll {
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
         String attackType = this.json.getString("attack_type");
         this.addBonus(new JsonObject() {{
-            this.putString("name", "Ability Modifier");
-            this.putString("effect", null);
             this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
             this.putJsonArray("dice", new JsonArray());
-            this.putBoolean("optional", false);
         }});
         this.applyWeaponAttackBonus(weapon);
 
@@ -194,11 +188,8 @@ public class AttackRoll extends Roll {
         RPGLItem weapon = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(equipmentSlot));
         String attackType = this.json.getString("attack_type");
         this.addBonus(new JsonObject() {{
-            this.putString("name", "Ability Modifier");
-            this.putString("effect", null);
             this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
             this.putJsonArray("dice", new JsonArray());
-            this.putBoolean("optional", false);
         }});
         this.applyWeaponAttackBonus(weapon);
 
@@ -230,8 +221,7 @@ public class AttackRoll extends Roll {
         calculateEffectiveArmorClass.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_effective_armor_class");
             this.putJsonObject("base", new JsonObject() {{
-                this.putString("name", "Base Armor Class");
-                this.putString("effect", null);
+                this.putString("base_type", "number");
                 this.putInteger("value", getTarget().getBaseArmorClass(context));
             }});
         }});
@@ -481,8 +471,6 @@ public class AttackRoll extends Roll {
      */
     void applyWeaponAttackBonus(RPGLItem weapon) {
         this.addBonus(new JsonObject() {{
-            this.putString("name", weapon.getName());
-            this.putString("effect", null);
             this.putInteger("bonus", weapon.getAttackBonus());
             this.putJsonArray("dice", new JsonArray()); // TODO should this be made accessible?
         }});

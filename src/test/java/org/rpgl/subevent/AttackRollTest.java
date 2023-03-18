@@ -58,15 +58,13 @@ public class AttackRollTest {
             /*{
                 "bonuses": [ ],
                 "minimum": {
-                    "name": "TEST",
-                    "effect": null,
+                    "minimum_type": "number",
                     "value": Integer.MIN_VALUE
                 }
             }*/
             this.putJsonArray("bonuses", new JsonArray());
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("name", "TEST");
-                this.putString("effect", null);
+                this.putString("minimum_type", "number");
                 this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});
@@ -110,8 +108,6 @@ public class AttackRollTest {
     @DisplayName("isCriticalMiss returns true (base roll of 1)")
     void isCriticalMiss_returnsTrue_baseRollOne() {
         attackRoll.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", 1);
         }});
 
@@ -124,8 +120,6 @@ public class AttackRollTest {
     @DisplayName("isCriticalMiss returns false (base roll exceeding 1)")
     void isCriticalMiss_returnsFalse_baseRollExceedingOne() {
         attackRoll.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", 10);
         }});
 
@@ -146,8 +140,6 @@ public class AttackRollTest {
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
         attackRoll.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", 20);
         }});
 
@@ -168,8 +160,6 @@ public class AttackRollTest {
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
         attackRoll.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", 10);
         }});
 

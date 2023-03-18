@@ -41,24 +41,16 @@ public class CalculateSaveDifficultyClass extends Calculation {
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
         super.setBase(new JsonObject() {{
-            this.putString("name", "Save DC Base");
-            this.putString("effect", null);
             this.putInteger("value", 8);
         }});
         RPGLObject source = this.getSource();
         super.addBonus(new JsonObject() {{
-            this.putString("name", "Proficiency Bonus");
-            this.putString("effect", null);
             this.putInteger("bonus", source.getEffectiveProficiencyBonus(context));
             this.putJsonArray("dice", new JsonArray());
-            //this.putBoolean("optional", false);
         }});
         super.addBonus(new JsonObject() {{
-            this.putString("name", "Ability Modifier");
-            this.putString("effect", null);
             this.putInteger("bonus", source.getAbilityModifierFromAbilityName(json.getString("difficulty_class_ability"), context));
             this.putJsonArray("dice", new JsonArray());
-            //this.putBoolean("optional", false);
         }});
     }
 

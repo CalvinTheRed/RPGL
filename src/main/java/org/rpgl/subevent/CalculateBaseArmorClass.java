@@ -67,8 +67,6 @@ public class CalculateBaseArmorClass extends Calculation {
 
         // Set base armor class value in json
         this.setBase(new JsonObject() {{
-            this.putString("name", "Ability Score");
-            this.putString("effect", null);
             this.putInteger("value", baseArmorClass + getShieldBonus());
         }});
     }

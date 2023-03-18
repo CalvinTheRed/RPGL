@@ -45,16 +45,11 @@ public class CalculateMaximumHitPoints extends Calculation {
         int sourceConModifier = source.getAbilityModifierFromAbilityName("con", context);
         int sourceHitDiceCount = sourceHealthData.getJsonArray("hit_dice").size();
         super.setBase(new JsonObject() {{
-            this.putString("name", "Base Hit Point Maximum");
-            this.putString("effect", null);
             this.putInteger("value", sourceHealthData.getInteger("base"));
         }});
         super.addBonus(new JsonObject() {{
-            this.putString("name", "Constitution Bonus");
-            this.putString("effect", null);
             this.putInteger("bonus", sourceConModifier * sourceHitDiceCount);
             this.putJsonArray("dice", new JsonArray());
-            //this.putBoolean("optional", false);
         }});
     }
 

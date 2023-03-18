@@ -107,8 +107,6 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
         }
         final int finalBaseDieRoll = baseDieRoll;
         super.setBase(new JsonObject() {{
-            this.putString("name", "Roll");
-            this.putString("effect", null);
             this.putInteger("value", finalBaseDieRoll);
         }});
     }

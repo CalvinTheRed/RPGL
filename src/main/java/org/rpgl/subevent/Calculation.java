@@ -1,6 +1,10 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEffect;
+import org.rpgl.function.AddBonus;
+import org.rpgl.function.SetBase;
+import org.rpgl.function.SetMinimum;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -27,22 +31,51 @@ public abstract class Calculation extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        if (this.json.getJsonObject("base") == null) {
-            this.json.putJsonObject("base", new JsonObject() {{
-                this.putString("name", "DEFAULT");
-                this.putString("effect", null);
-                this.putInteger("value", 0);
-            }});
+        this.prepareBase();
+        this.prepareBonuses();
+        this.prepareMinimum();
+    }
+
+    void prepareBase() throws Exception {
+        JsonObject baseJson = this.json.removeJsonObject("base");
+        this.setBase(new JsonObject() {{
+            this.putInteger("value", 0);
+        }});
+        if (baseJson != null) {
+            RPGLEffect effect = new RPGLEffect();
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getSource());
+            effect.setName(this.getSubeventId()); // TODO what should this value be?
+            this.setBase(SetBase.processJson(effect, this, baseJson, new RPGLContext()));
         }
-        if (this.json.getJsonArray("bonuses") == null) {
-            this.json.putJsonArray("bonuses", new JsonArray());
+    }
+
+    void prepareBonuses() throws Exception {
+        JsonArray bonuses = this.json.removeJsonArray("bonuses");
+        this.json.putJsonArray("bonuses", new JsonArray());
+        if (bonuses != null) {
+            for (int i = 0; i < bonuses.size(); i++) {
+                JsonObject bonus = bonuses.getJsonObject(i);
+                RPGLEffect effect = new RPGLEffect();
+                effect.setSource(this.getSource());
+                effect.setTarget(this.getTarget());
+                effect.setName(this.getSubeventId()); // TODO what should this value be?
+                this.addBonus(AddBonus.processJson(effect, this, bonus, new RPGLContext()));
+            }
         }
-        if (this.json.getJsonObject("minimum") == null) {
-            this.json.putJsonObject("minimum", new JsonObject() {{
-                this.putString("name", "DEFAULT");
-                this.putString("effect", null);
-                this.putInteger("value", Integer.MIN_VALUE);
-            }});
+    }
+
+    void prepareMinimum() throws Exception {
+        JsonObject minimumJson = this.json.removeJsonObject("minimum");
+        this.setMinimum(new JsonObject() {{
+            this.putInteger("value", Integer.MIN_VALUE);
+        }});
+        if (minimumJson != null) {
+            RPGLEffect effect = new RPGLEffect();
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getSource());
+            effect.setName(this.getSubeventId()); // TODO what should this value be?
+            this.setMinimum(SetMinimum.processJson(effect, this, minimumJson, new RPGLContext()));
         }
     }
 
@@ -67,7 +100,8 @@ public abstract class Calculation extends Subevent {
     }
 
     public void setMinimum(JsonObject minimumJson) {
-        if (minimumJson.getInteger("value") > this.json.getJsonObject("minimum").getInteger("value")) {
+        JsonObject currentMinimum = this.getMinimum();
+        if (currentMinimum == null || minimumJson.getInteger("value") > currentMinimum.getInteger("value")) {
             this.json.putJsonObject("minimum", minimumJson);
         }
     }

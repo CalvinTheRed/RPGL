@@ -42,10 +42,14 @@ public class CalculationTest {
         };
 
         calculation.joinSubeventData(new JsonObject() {{
+            /*{
+                "bonuses": [ ]
+                "minimum": {
+                    "value": Integer.MIN_VALUE
+                }
+            }*/
             this.putJsonArray("bonuses", new JsonArray());
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("name", "TEST");
-                this.putString("effect", null);
                 this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});
@@ -55,8 +59,6 @@ public class CalculationTest {
     @DisplayName("addBonus should be able to go negative and should be additive")
     void addBonus_canGoNegativeAndIsAdditive() {
         calculation.addBonus(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("bonus", -5);
             this.putJsonArray("dice", new JsonArray());
         }});
@@ -64,8 +66,6 @@ public class CalculationTest {
                 "bonus should be able to no below 0"
         );
         calculation.addBonus(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("bonus", 10);
             this.putJsonArray("dice", new JsonArray());
         }});
@@ -78,24 +78,18 @@ public class CalculationTest {
     @DisplayName("setBase should be the most recent value")
     void setBase_mostRecentValue() {
         calculation.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", 1);
         }});
         assertEquals(1, calculation.getBase().getInteger("value"),
                 "base should be most recent value (1)"
         );
         calculation.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", -5);
         }});
         assertEquals(-5, calculation.getBase().getInteger("value"),
                 "base should be most recent value (-5)"
         );
         calculation.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", 5);
         }});
         assertEquals(5, calculation.getBase().getInteger("value"),
@@ -107,13 +101,9 @@ public class CalculationTest {
     @DisplayName("get returns base + bonus when set is null")
     void get_notSet() {
         calculation.setBase(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("value", 10);
         }});
         calculation.addBonus(new JsonObject() {{
-            this.putString("name", "TEST");
-            this.putString("effect", null);
             this.putInteger("bonus", 5);
             this.putJsonArray("dice", new JsonArray());
         }});

@@ -353,8 +353,6 @@ public class RollTest {
                 "determined": [ 15, 5 ],
                 "bonuses": [ ],
                 "minimum": {
-                    "name": "TEST",
-                    "effect": null,
                     "value": Integer.MIN_VALUE
                 }
             }*/
@@ -365,8 +363,6 @@ public class RollTest {
             }});
             this.putJsonArray("bonuses", new JsonArray());
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("name", "TEST");
-                this.putString("effect", null);
                 this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});
@@ -399,8 +395,6 @@ public class RollTest {
             }});
             this.putJsonArray("bonuses", new JsonArray());
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("name", "TEST");
-                this.putString("effect", null);
                 this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});

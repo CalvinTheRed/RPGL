@@ -28,13 +28,13 @@ public class SetBase extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof Calculation calculation) {
-            calculation.setBase(this.processJson(effect, subevent, functionJson.getJsonObject("base"), context));
+            calculation.setBase(processJson(effect, subevent, functionJson.getJsonObject("base"), context));
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 
-    JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject baseJson, RPGLContext context) throws Exception {
+    public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject baseJson, RPGLContext context) throws Exception {
         /*[
             {
                 "name": "...",
@@ -64,25 +64,17 @@ public class SetBase extends Function {
         ]*/
         return switch (baseJson.getString("base_type")) {
             case "number" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 this.putInteger("value", Objects.requireNonNullElse(baseJson.getInteger("value"), 0));
             }};
             case "modifier" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
                 this.putInteger("value", object.getAbilityModifierFromAbilityName(baseJson.getString("ability"), context));
             }};
             case "ability" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
                 this.putInteger("value", object.getAbilityScoreFromAbilityName(baseJson.getString("ability"), context));
             }};
             case "proficiency" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
                 if (Objects.requireNonNullElse(baseJson.getBoolean("half"), false)) {
                     this.putInteger("value", object.getEffectiveProficiencyBonus(context) / 2);
@@ -92,8 +84,6 @@ public class SetBase extends Function {
             }};
             default -> new JsonObject() {{
                 // TODO log a warning here concerning an unexpected bonus_type value
-                this.putString("name", "DEFAULT");
-                this.putString("effect", null);
                 this.putInteger("value", 0);
             }};
         };

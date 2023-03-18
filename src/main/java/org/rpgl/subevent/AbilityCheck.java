@@ -51,11 +51,8 @@ public class AbilityCheck extends Roll {
         if (this.isNotCanceled()) {
             this.roll();
             this.addBonus(new JsonObject() {{
-                this.putString("name", "Ability Modifier");
-                this.putString("effect", null);
                 this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(getAbility(context), context));
                 this.putJsonArray("dice", new JsonArray());
-                this.putBoolean("optional", false);
             }});
         }
 

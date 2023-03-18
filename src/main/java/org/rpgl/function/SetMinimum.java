@@ -29,13 +29,13 @@ public class SetMinimum extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof Calculation calculation) {
-            calculation.setMinimum(this.processJson(effect, subevent, functionJson.getJsonObject("minimum"), context));
+            calculation.setMinimum(processJson(effect, subevent, functionJson.getJsonObject("minimum"), context));
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
     }
 
-    JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject minimumJson, RPGLContext context) throws Exception {
+    public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject minimumJson, RPGLContext context) throws Exception {
         /*[
             {
                 "name": "...",
@@ -63,27 +63,20 @@ public class SetMinimum extends Function {
                 "object": "..."
             }
         ]*/
+        System.out.println(minimumJson);
         return switch (minimumJson.getString("minimum_type")) {
             case "number" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 this.putInteger("value", Objects.requireNonNullElse(minimumJson.getInteger("value"), 0));
             }};
             case "modifier" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, minimumJson.getJsonObject("object"));
                 this.putInteger("value", object.getAbilityModifierFromAbilityName(minimumJson.getString("ability"), context));
             }};
             case "ability" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, minimumJson.getJsonObject("object"));
                 this.putInteger("value", object.getAbilityScoreFromAbilityName(minimumJson.getString("ability"), context));
             }};
             case "proficiency" -> new JsonObject() {{
-                this.putString("name", effect.getName());
-                this.putString("effect", effect.getUuid());
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, minimumJson.getJsonObject("object"));
                 if (Objects.requireNonNullElse(minimumJson.getBoolean("half"), false)) {
                     this.putInteger("value", object.getEffectiveProficiencyBonus(context) / 2);
@@ -93,8 +86,6 @@ public class SetMinimum extends Function {
             }};
             default -> new JsonObject() {{
                 // TODO log a warning here concerning an unexpected bonus_type value
-                this.putString("name", "DEFAULT");
-                this.putString("effect", null);
                 this.putInteger("value", 0);
             }};
         };

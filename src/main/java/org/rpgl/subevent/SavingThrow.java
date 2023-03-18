@@ -61,11 +61,8 @@ public class SavingThrow extends Roll {
         RPGLObject target = this.getTarget();
         String saveAbility = this.getAbility(context);
         super.addBonus(new JsonObject() {{
-            this.putString("name", "Ability Modifier");
-            this.putString("effect", null);
             this.putInteger("bonus", target.getAbilityModifierFromAbilityName(saveAbility, context));
             this.putJsonArray("dice", new JsonArray());
-            this.putBoolean("optional", false);
         }});
 
         context.processSubevent(this, context);
