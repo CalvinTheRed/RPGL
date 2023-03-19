@@ -41,20 +41,17 @@ public class Heal extends Subevent implements CancelableSubevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.addTag("heal");
         this.getBaseHealing(context);
     }
 
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
-        System.out.println(this.json);
         if (this.isNotCanceled()) {
             int baseHealing = Objects.requireNonNullElse(this.json.getInteger("healing"), 0);
             int targetHealing = this.getTargetHealing(context);
-            this.deliverHealing(context, baseHealing + targetHealing);
+            this.deliverHealing(baseHealing + targetHealing, context);
         }
-
     }
 
     @Override
@@ -92,8 +89,6 @@ public class Heal extends Subevent implements CancelableSubevent {
         baseHealingCollection.prepare(context);
         baseHealingCollection.setTarget(this.getSource());
         baseHealingCollection.invoke(context);
-        System.out.println("Base Healing Collection:");
-        System.out.println(baseHealingCollection);
 
         /*
          * Roll base healing dice
@@ -101,7 +96,7 @@ public class Heal extends Subevent implements CancelableSubevent {
         HealingRoll baseHealingRoll = new HealingRoll();
         baseHealingRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "healing_roll");
-            this.putJsonArray("healing", baseHealingCollection.getHealingCollection());
+            this.putJsonArray("healing", baseHealingCollection.getHealingCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_healing_roll");
@@ -166,12 +161,12 @@ public class Heal extends Subevent implements CancelableSubevent {
     /**
      * This helper method delivers the final quantity of healing determined by this Subevent to the target RPGLObject.
      *
-     * @param context the context in which this Subevent was invoked
      * @param healing the final quantity of healing determined by this Subevent
+     * @param context the context in which this Subevent was invoked
      *
      * @throws Exception if an exception occurs
      */
-    void deliverHealing(RPGLContext context, int healing) throws Exception {
+    void deliverHealing(int healing, RPGLContext context) throws Exception {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "healing_delivery");

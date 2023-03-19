@@ -23,11 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.subevent.HealingCollection class.
+ * Testing class for the org.rpgl.subevent.TemporaryHitPointCollection class.
  *
  * @author Calvin Withun
  */
-public class HealingCollectionTest {
+public class TemporaryHitPointCollectionTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -50,7 +50,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Subevent subevent = new HealingCollection();
+        Subevent subevent = new TemporaryHitPointCollection();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
@@ -65,12 +65,12 @@ public class HealingCollectionTest {
     }
 
     @Test
-    @DisplayName("getHealingCollection returns object storing bonus and dice")
-    void getHealingCollection_returnsObjectStoringBonusAndDice(){
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
+    @DisplayName("getTemporaryHitPointCollection returns object storing bonus and dice")
+    void getTemporaryHitPointCollection_returnsObjectStoringBonusAndDice(){
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": [
+                "temporary_hit_points": [
                     {
                         "dice": [
                             { "roll": 1 },
@@ -80,7 +80,7 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -97,25 +97,25 @@ public class HealingCollectionTest {
 
         String expected = """
                 [{"bonus":2,"dice":[{"roll":1},{"roll":6}]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
                 "getHealingCollection should return an object with the subevent's bonus and dice stored inside"
         );
     }
 
     @Test
-    @DisplayName("addHealing extra healing is added properly")
-    void addHealing_extraHealingIsAddedProperly() {
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
+    @DisplayName("addTemporaryHitPoints extra temporary hit points are added properly")
+    void addTemporaryHitPoints_extraTemporaryHitPointsAreAddedProperly() {
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": [
+                "temporary_hit_points": [
                     {
                         "dice": [ ],
                         "bonus": 0
                     }
                 ]
             }*/
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 0);
@@ -123,7 +123,7 @@ public class HealingCollectionTest {
             }});
         }});
 
-        JsonObject extraHealing = new JsonObject() {{
+        JsonObject extraTemporaryHitPoints = new JsonObject() {{
             /*{
                 "dice": [
                     { "size": 6 }
@@ -139,18 +139,18 @@ public class HealingCollectionTest {
         }};
         String expected;
 
-        healingCollection.addHealing(extraHealing);
+        temporaryHitPointCollection.addTemporaryHitPoints(extraTemporaryHitPoints);
         expected = """
                 [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "extra healing dice and bonus should be applied properly"
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "extra temporary hit point dice and bonus should be applied properly"
         );
 
-        healingCollection.addHealing(extraHealing);
+        temporaryHitPointCollection.addTemporaryHitPoints(extraTemporaryHitPoints);
         expected = """
                 [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]},{"bonus":2,"dice":[{"size":6}]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "extra healing dice and bonus should not delete or override any old data"
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "extra temporary hit point dice and bonus should not delete or override any old data"
         );
     }
 
@@ -161,79 +161,79 @@ public class HealingCollectionTest {
         RPGLContext context = new RPGLContext();
         context.add(source);
 
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection"
+                "subevent": "temporary_hit_point_collection"
             }*/
-            this.putString("subevent", "healing_collection");
+            this.putString("subevent", "temporary_hit_point_collection");
         }});
 
-        healingCollection.setSource(source);
-        healingCollection.prepare(context);
+        temporaryHitPointCollection.setSource(source);
+        temporaryHitPointCollection.prepare(context);
 
         String expected = """
                 []""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should default to [ ] if no healing is defined"
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "prepare should default to [ ] if no temporary hit points are defined"
         );
     }
 
     @Test
-    @DisplayName("prepareHealing interprets healing (range)")
-    void prepareHealing_interpretsHealing_range() throws Exception {
+    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (range)")
+    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_range() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
         context.add(source);
 
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
-                "healing": [
+                "subevent": "temporary_hit_point_collection",
+                "temporary_hit_points": [
                     {
-                        "healing_type": "range",
+                        "temporary_hit_point_type": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putString("subevent", "temporary_hit_point_collection");
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "range");
+                    this.putString("temporary_hit_point_type", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
             }});
         }});
 
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
+        temporaryHitPointCollection.setSource(source);
+        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
 
         String expected = """
                 [{"bonus":10,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "prepare should correctly interpret temporary hit points instructions"
         );
     }
 
     @Test
-    @DisplayName("prepareHealing interprets healing (modifier)")
-    void prepareHealing_interpretsHealing_modifier() throws Exception {
+    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (modifier)")
+    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_modifier() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
         context.add(source);
 
         source.getAbilityScores().putInteger("dex", 20);
 
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
-                "healing": [
+                "subevent": "temporary_hit_point_collection",
+                "temporary_hit_points": [
                     {
-                        "healing_type": "modifier",
+                        "temporary_hit_point_type": "modifier",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -242,10 +242,10 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putString("subevent", "temporary_hit_point_collection");
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "modifier");
+                    this.putString("temporary_hit_point_type", "modifier");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -255,32 +255,32 @@ public class HealingCollectionTest {
             }});
         }});
 
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
+        temporaryHitPointCollection.setSource(source);
+        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
 
         String expected = """
                 [{"bonus":5,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "prepare should correctly interpret temporary hit points instructions"
         );
     }
 
     @Test
-    @DisplayName("prepareHealing interprets healing (ability)")
-    void prepareHealing_interpretsHealing_ability() throws Exception {
+    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (ability)")
+    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_ability() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
         context.add(source);
 
         source.getAbilityScores().putInteger("dex", 20);
 
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
-                "healing": [
+                "subevent": "temporary_hit_point_collection",
+                "temporary_hit_points": [
                     {
-                        "healing_type": "ability",
+                        "temporary_hit_point_type": "ability",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -289,10 +289,10 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putString("subevent", "temporary_hit_point_collection");
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "ability");
+                    this.putString("temporary_hit_point_type", "ability");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -302,30 +302,30 @@ public class HealingCollectionTest {
             }});
         }});
 
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
+        temporaryHitPointCollection.setSource(source);
+        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
 
         String expected = """
                 [{"bonus":20,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "prepare should correctly interpret temporary hit points instructions"
         );
     }
 
     @Test
-    @DisplayName("prepareHealing interprets healing (proficiency)")
-    void prepareHealing_interpretsHealing_proficiency() throws Exception {
+    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (proficiency)")
+    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_proficiency() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
         context.add(source);
 
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
-                "healing": [
+                "subevent": "temporary_hit_point_collection",
+                "temporary_hit_points": [
                     {
-                        "healing_type": "proficiency",
+                        "temporary_hit_point_type": "proficiency",
                         "object": {
                             "from": "subevent",
                             "object": "source"
@@ -333,10 +333,10 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putString("subevent", "temporary_hit_point_collection");
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "proficiency");
+                    this.putString("temporary_hit_point_type", "proficiency");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
                         this.putString("object", "source");
@@ -345,13 +345,13 @@ public class HealingCollectionTest {
             }});
         }});
 
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
+        temporaryHitPointCollection.setSource(source);
+        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
 
         String expected = """
                 [{"bonus":2,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "prepare should correctly interpret temporary hit points instructions"
         );
     }
 

@@ -14,6 +14,7 @@ import org.rpgl.subevent.GetObjectTags;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.subevent.InfoSubevent;
 import org.rpgl.subevent.Subevent;
+import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
@@ -406,12 +407,33 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public void receiveHealing(HealingDelivery healingDelivery, RPGLContext context) throws Exception {
-        System.out.println(healingDelivery);
         JsonObject healthData = this.getHealthData();
         healthData.putInteger("current", healthData.getInteger("current") + healingDelivery.getHealing());
         int maximumHitPoints = this.getMaximumHitPoints(context);
         if (healthData.getInteger("current") > maximumHitPoints) {
             healthData.putInteger("current", maximumHitPoints);
+        }
+    }
+
+    /**
+     * This method accepts a HealingDelivery Subevent to provide healing to the RPGLObject. This method cannot be used
+     * to heal the object beyond its hit point maximum.
+     *
+     * @param temporaryHitPointsDelivery a TemporaryHitPointsDelivery Subevent containing a quantity of temporary hit
+     *                                   points to apply to the RPGLObject
+     * @param riderEffects               a list of effects to be applied if the temporary hit points from
+     *                                   temporaryHitPointsDelivery are applied
+     */
+    public void receiveTemporaryHitPoints(TemporaryHitPointsDelivery temporaryHitPointsDelivery, JsonArray riderEffects) {
+        JsonObject healthData = this.getHealthData();
+        if (healthData.getInteger("temporary") < temporaryHitPointsDelivery.getTemporaryHitPoints()) {
+            healthData.putInteger("temporary", temporaryHitPointsDelivery.getTemporaryHitPoints());
+            for (int i = 0; i < riderEffects.size(); i++) {
+                RPGLEffect effect = RPGLFactory.newEffect(riderEffects.getString(i));
+                effect.setSource(temporaryHitPointsDelivery.getSource());
+                effect.setTarget(temporaryHitPointsDelivery.getTarget());
+                this.addEffect(effect);
+            }
         }
     }
 

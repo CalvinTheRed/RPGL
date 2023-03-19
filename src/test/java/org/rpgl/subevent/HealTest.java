@@ -79,7 +79,7 @@ public class HealTest {
         heal.setSource(source);
         heal.setTarget(target);
 
-        heal.deliverHealing(context, 10);
+        heal.deliverHealing(10, context);
 
         assertEquals(20, target.getHealthData().getInteger("current"),
                 "target should recover 10 hit points (10+10=20)"

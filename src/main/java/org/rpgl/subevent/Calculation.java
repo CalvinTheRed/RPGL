@@ -53,11 +53,11 @@ public abstract class Calculation extends Subevent {
         JsonArray bonuses = this.json.removeJsonArray("bonuses");
         this.json.putJsonArray("bonuses", new JsonArray());
         if (bonuses != null) {
+            RPGLEffect effect = new RPGLEffect();
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getSource());
             for (int i = 0; i < bonuses.size(); i++) {
                 JsonObject bonus = bonuses.getJsonObject(i);
-                RPGLEffect effect = new RPGLEffect();
-                effect.setSource(this.getSource());
-                effect.setTarget(this.getTarget());
                 this.addBonus(AddBonus.processJson(effect, this, bonus, context));
             }
         }

@@ -24,7 +24,6 @@ public class RPGLEventTemplate extends JsonObject {
         RPGLEvent event = new RPGLEvent();
         event.join(this);
         processSubeventDamage(event);
-        processSubeventHealing(event);
         // TODO how to deal with life-stealing?
         return event ;
     }
@@ -47,25 +46,6 @@ public class RPGLEventTemplate extends JsonObject {
                     damageJson.asMap().putIfAbsent("bonus", 0);
                     damageJson.putJsonArray("dice", Die.unpack(damageJson.removeJsonArray("dice")));
                 }
-            }
-        }
-    }
-
-    /**
-     * This helper method unpacks the condensed representation of healing dice in a RPGLEventTemplate into multiple dice
-     * objects in accordance with the <code>count</code> field.
-     *
-     * @param event a RPGLEvent being created by this object
-     */
-    static void processSubeventHealing(RPGLEvent event) {
-        JsonArray subevents = event.getSubevents();
-        for (int i = 0; i < subevents.size(); i++) {
-            JsonObject subeventJson = subevents.getJsonObject(i);
-            JsonObject healing = subeventJson.getJsonObject("healing");
-            if (healing != null) {
-                healing.asMap().putIfAbsent("dice", new ArrayList<>());
-                healing.asMap().putIfAbsent("bonus", 0);
-                healing.putJsonArray("dice", Die.unpack(healing.removeJsonArray("dice")));
             }
         }
     }

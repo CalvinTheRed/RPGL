@@ -98,16 +98,4 @@ public class RPGLEventTemplateTest {
         );
     }
 
-    @Test
-    @DisplayName("processSubeventHealing healing dice are properly unpacked")
-    void processSubeventHealing_healingDiceAreProperlyUnpacked() {
-        RPGLEvent healingEvent = RPGLFactory.newEvent("demo:cure_wounds_2");
-
-        String expected = """
-                {"bonus":0,"dice":[{"determined":[4],"size":8},{"determined":[4],"size":8}]}""";
-        assertEquals(expected, healingEvent.getSubevents().getJsonObject(0).getJsonObject("healing").toString(),
-                "compact healing dice should be unpacked during newEvent call"
-        );
-    }
-
 }
