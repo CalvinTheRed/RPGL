@@ -11,14 +11,14 @@
       "tags": [ "spell" ],
       "healing": [
         {
-          "healing_type": "range",
+          "healing_formula": "range",
           "dice": [
             { "count": 2, "size": 8, "determined": [ 4 ] }
           ],
           "bonus": 0
         },
         {
-          "healing_type": "modifier",
+          "healing_formula": "modifier",
           "ability": "wis",
           "object": {
             "from": "subevent",

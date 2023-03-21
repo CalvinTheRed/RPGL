@@ -44,14 +44,14 @@ public class DamageCollectionTest {
     }
 
     @Test
-    @DisplayName("addNewTypedDamage new damage values are added")
-    void addNewTypedDamage_newDamageValuesAdded() {
+    @DisplayName("addDamage new damage values are added")
+    void addDamage_newDamageValuesAdded() {
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());
         }});
 
-        damageCollection.addNewTypedDamage(new JsonObject() {{
+        damageCollection.addDamage(new JsonObject() {{
             /*{
                 "damage_type": "fire",
                 "dice": [
@@ -82,166 +82,6 @@ public class DamageCollectionTest {
                 [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "new damage values should be added"
-        );
-    }
-
-    @Test
-    @DisplayName("addNewTypedDamage additional damage values are added")
-    void addExistingTypedDamage_additionalDamageValuesAdded() {
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire",
-                        "dice": [ ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-        }});
-
-        damageCollection.addExistingTypedDamage(new JsonObject() {{
-            /*{
-                "damage_type": "fire",
-                "dice": [
-                    { "size": 4, "determined": [ 2 ] },
-                    { "size": 4, "determined": [ 2 ] }
-                ],
-                "bonus": 5
-            }*/
-            this.putString("damage_type", "fire");
-            this.putJsonArray("dice", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 4);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(2);
-                    }});
-                }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 4);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(2);
-                    }});
-                }});
-            }});
-            this.putInteger("bonus", 5);
-        }});
-
-        String expected = """
-                [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "additional damage values should be added"
-        );
-    }
-
-    @Test
-    @DisplayName("addTypedDamage additional damage values are added (new damage type)")
-    void addTypedDamage_additionalDamageValuesAdded_newDamageType() {
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("damage", new JsonArray());
-        }});
-
-        damageCollection.addTypedDamage(new JsonArray() {{
-            /*{
-                "damage_type": "fire",
-                "dice": [
-                    { "size": 4, "determined": [ 2 ] },
-                    { "size": 4, "determined": [ 2 ] }
-                ],
-                "bonus": 5
-            }*/
-            this.addJsonObject(new JsonObject() {{
-                this.putString("damage_type", "fire");
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 4);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 4);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
-                }});
-                this.putInteger("bonus", 5);
-            }});
-        }});
-
-        String expected = """
-                [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "additional damage values should be added"
-        );
-    }
-
-    @Test
-    @DisplayName("addTypedDamage additional damage values are added (existing damage type)")
-    void addTypedDamage_additionalDamageValuesAdded_existingDamageType() {
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire",
-                        "dice": [ ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-        }});
-
-        damageCollection.addTypedDamage(new JsonArray() {{
-            /*{
-                "damage_type": "fire",
-                "dice": [
-                    { "size": 4, "determined": [ 2 ] },
-                    { "size": 4, "determined": [ 2 ] }
-                ],
-                "bonus": 5
-            }*/
-            this.addJsonObject(new JsonObject() {{
-                this.putString("damage_type", "fire");
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 4);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 4);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
-                }});
-                this.putInteger("bonus", 5);
-            }});
-        }});
-
-        String expected = """
-                [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "additional damage values should be added"
         );
     }
 

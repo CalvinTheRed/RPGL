@@ -105,14 +105,14 @@ public class AddBonusTest {
             /*{
                 "function": "add_bonus",
                 "bonus": {
-                    "bonus_type": "range",
+                    "bonus_formula": "range",
                     "bonus": 2,
                     "dice": [ ]
                 }
             }*/
             this.putString("function", "add_bonus");
             this.putJsonObject("bonus", new JsonObject() {{
-                this.putString("bonus_type", "range");
+                this.putString("bonus_formula", "range");
                 this.putInteger("bonus", 2);
                 this.putJsonArray("dice", new JsonArray());
             }});
@@ -148,7 +148,7 @@ public class AddBonusTest {
             /*{
                 "function": "add_bonus",
                 "bonus": {
-                    "bonus_type": "modifier",
+                    "bonus_formula": "modifier",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -158,7 +158,7 @@ public class AddBonusTest {
             }*/
             this.putString("function", "add_bonus");
             this.putJsonObject("bonus", new JsonObject() {{
-                this.putString("bonus_type", "modifier");
+                this.putString("bonus_formula", "modifier");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -199,7 +199,7 @@ public class AddBonusTest {
             /*{
                 "function": "add_bonus",
                 "bonus": {
-                    "bonus_type": "ability",
+                    "bonus_formula": "ability",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -209,7 +209,7 @@ public class AddBonusTest {
             }*/
             this.putString("function", "add_bonus");
             this.putJsonObject("bonus", new JsonObject() {{
-                this.putString("bonus_type", "ability");
+                this.putString("bonus_formula", "ability");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -248,7 +248,7 @@ public class AddBonusTest {
             /*{
                 "function": "add_bonus",
                 "bonus": {
-                    "bonus_type": "proficiency",
+                    "bonus_formula": "proficiency",
                     "object": {
                         "from": "effect",
                         "object": "source"
@@ -257,7 +257,7 @@ public class AddBonusTest {
             }*/
             this.putString("function", "add_bonus");
             this.putJsonObject("bonus", new JsonObject() {{
-                this.putString("bonus_type", "proficiency");
+                this.putString("bonus_formula", "proficiency");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
                     this.putString("object", "source");

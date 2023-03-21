@@ -192,7 +192,7 @@ public class TemporaryHitPointCollectionTest {
                 "subevent": "temporary_hit_point_collection",
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_type": "range",
+                        "temporary_hit_point_formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -201,7 +201,7 @@ public class TemporaryHitPointCollectionTest {
             this.putString("subevent", "temporary_hit_point_collection");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_type", "range");
+                    this.putString("temporary_hit_point_formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -233,7 +233,7 @@ public class TemporaryHitPointCollectionTest {
                 "subevent": "temporary_hit_point_collection",
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_type": "modifier",
+                        "temporary_hit_point_formula": "modifier",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -245,7 +245,7 @@ public class TemporaryHitPointCollectionTest {
             this.putString("subevent", "temporary_hit_point_collection");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_type", "modifier");
+                    this.putString("temporary_hit_point_formula", "modifier");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -280,7 +280,7 @@ public class TemporaryHitPointCollectionTest {
                 "subevent": "temporary_hit_point_collection",
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_type": "ability",
+                        "temporary_hit_point_formula": "ability",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -292,7 +292,7 @@ public class TemporaryHitPointCollectionTest {
             this.putString("subevent", "temporary_hit_point_collection");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_type", "ability");
+                    this.putString("temporary_hit_point_formula", "ability");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -325,7 +325,7 @@ public class TemporaryHitPointCollectionTest {
                 "subevent": "temporary_hit_point_collection",
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_type": "proficiency",
+                        "temporary_hit_point_formula": "proficiency",
                         "object": {
                             "from": "subevent",
                             "object": "source"
@@ -336,7 +336,7 @@ public class TemporaryHitPointCollectionTest {
             this.putString("subevent", "temporary_hit_point_collection");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_type", "proficiency");
+                    this.putString("temporary_hit_point_formula", "proficiency");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
                         this.putString("object", "source");

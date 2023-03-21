@@ -115,8 +115,8 @@ public abstract class Calculation extends Subevent {
 
     /**
      * Returns the final bonus to be applied to the Calculation. This method is intended to be used after any bonus dice
-     * have been rolled. If this method is called before the bonus dice have been rolled, the dice are not included in
-     * the bonus calculation.
+     * have been rolled. If this method is called before the bonus dice have been rolled, the dice are rolled during the
+     * calculation.
      *
      * @return the bonus to be applied to the Calculation.
      */

@@ -26,6 +26,7 @@
   "damage": {
     "melee": [
       {
+        "damage_formula": "range",
         "damage_type": "piercing",
         "dice": [
           { "count": 1, "size": 4, "determined": [ 2 ] }

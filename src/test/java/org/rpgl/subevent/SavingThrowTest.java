@@ -390,10 +390,10 @@ public class SavingThrowTest {
             /*{
                 "damage": [
                     {
+                        "damage_formula": "range",
                         "damage_type": "cold",
                         "dice": [
-                            { "size": 10, "determined": [ 5 ] },
-                            { "size": 10, "determined": [ 5 ] }
+                            { "count": 2, "size": 10, "determined": [ 5 ] }
                         ],
                         "bonus": 0
                     }
@@ -402,15 +402,11 @@ public class SavingThrowTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
                             this.putInteger("size", 10);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(5);
@@ -470,10 +466,10 @@ public class SavingThrowTest {
                 "difficulty_class_ability": "con",
                 "damage": [
                     {
+                        :damage_formula": "range",
                         "damage_type": "cold",
                         "dice": [
-                            { "size": 10, "determined": [ 5 ] },
-                            { "size": 10, "determined": [ 5 ] }
+                            { "count": 2, "size": 10, "determined": [ 5 ] }
                         ],
                         "bonus": 0
                     }
@@ -482,15 +478,11 @@ public class SavingThrowTest {
             this.putString("difficulty_class_ability", "con");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
                             this.putInteger("size", 10);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(5);
@@ -532,12 +524,12 @@ public class SavingThrowTest {
                 "save_ability": "dex",
                 "damage": [
                     {
-                      "damage_type": "cold",
-                      "dice": [
-                        { "size": 10, "determined": [ 5 ] },
-                        { "size": 10, "determined": [ 5 ] }
-                      ],
-                      "bonus": 0
+                        "damage_formula": "range",
+                        "damage_type": "cold",
+                        "dice": [
+                        { "count": 2, "size": 10, "determined": [ 5 ] }
+                        ],
+                        "bonus": 0
                     }
                 ],
                 "damage_on_pass": "half",
@@ -548,15 +540,11 @@ public class SavingThrowTest {
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
                             this.putInteger("size", 10);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(5);
@@ -599,12 +587,12 @@ public class SavingThrowTest {
                 "save_ability": "dex",
                 "damage": [
                     {
-                      "damage_type": "cold",
-                      "dice": [
-                        { "size": 10, "determined": [ 5 ] },
-                        { "size": 10, "determined": [ 5 ] }
-                      ],
-                      "bonus": 0
+                        "damage_formula": "range",
+                        "damage_type": "cold",
+                        "dice": [
+                        { "count": 2, "size": 10, "determined": [ 5 ] }
+                        ],
+                        "bonus": 0
                     }
                 ],
                 "damage_on_pass": "half",
@@ -615,15 +603,11 @@ public class SavingThrowTest {
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
                             this.putInteger("size", 10);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(5);

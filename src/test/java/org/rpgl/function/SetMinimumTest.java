@@ -104,13 +104,13 @@ public class SetMinimumTest {
             /*{
                 "function": "set_minimum",
                 "minimum": {
-                    "minimum_type": "number",
+                    "minimum_formula": "number",
                     "value": 13
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_type", "number");
+                this.putString("minimum_formula", "number");
                 this.putInteger("value", 13);
             }});
         }};
@@ -145,7 +145,7 @@ public class SetMinimumTest {
             /*{
                 "function": "set_minimum",
                 "minimum": {
-                    "minimum_type": "modifier",
+                    "minimum_formula": "modifier",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -155,7 +155,7 @@ public class SetMinimumTest {
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_type", "modifier");
+                this.putString("minimum_formula", "modifier");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -196,7 +196,7 @@ public class SetMinimumTest {
             /*{
                 "function": "set_minimum",
                 "minimum": {
-                    "minimum_type": "ability",
+                    "minimum_formula": "ability",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -206,7 +206,7 @@ public class SetMinimumTest {
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_type", "ability");
+                this.putString("minimum_formula", "ability");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -245,7 +245,7 @@ public class SetMinimumTest {
             /*{
                 "function": "set_minimum",
                 "minimum": {
-                    "minimum_type": "proficiency",
+                    "minimum_formula": "proficiency",
                     "object": {
                         "from": "effect",
                         "object": "source"
@@ -254,7 +254,7 @@ public class SetMinimumTest {
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_type", "proficiency");
+                this.putString("minimum_formula", "proficiency");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
                     this.putString("object", "source");
@@ -299,13 +299,13 @@ public class SetMinimumTest {
             /*{
                 "function": "set_minimum",
                 "minimum": {
-                    "minimum_type": "number",
+                    "minimum_formula": "number",
                     "value": 10
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_type", "number");
+                this.putString("minimum_formula", "number");
                 this.putInteger("value", 10);
             }});
         }};
@@ -322,13 +322,13 @@ public class SetMinimumTest {
             /*{
                 "function": "set_minimum",
                 "minimum": {
-                    "minimum_type": "number",
+                    "minimum_formula": "number",
                     "value": 15
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_type", "number");
+                this.putString("minimum_formula", "number");
                 this.putInteger("value", 15);
             }});
         }};
@@ -345,13 +345,13 @@ public class SetMinimumTest {
             /*{
                 "function": "set_minimum",
                 "minimum": {
-                    "minimum_type": "number",
+                    "minimum_formula": "number",
                     "value": 5
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_type", "number");
+                this.putString("minimum_formula", "number");
                 this.putInteger("value", 5);
             }});
         }};

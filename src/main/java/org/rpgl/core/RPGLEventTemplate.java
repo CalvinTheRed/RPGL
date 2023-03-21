@@ -1,10 +1,6 @@
 package org.rpgl.core;
 
-import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.math.Die;
-
-import java.util.ArrayList;
 
 /**
  * This class is used to contain a "template" to be used in the creation of new RPGLEvent objects. Data stored in this
@@ -23,31 +19,7 @@ public class RPGLEventTemplate extends JsonObject {
     public RPGLEvent newInstance() {
         RPGLEvent event = new RPGLEvent();
         event.join(this);
-        processSubeventDamage(event);
-        // TODO how to deal with life-stealing?
-        return event ;
-    }
-
-    /**
-     * This helper method unpacks the condensed representation of damage dice in a RPGLEventTemplate into multiple dice
-     * objects in accordance with the <code>count</code> field.
-     *
-     * @param event a RPGLEvent being created by this object
-     */
-    static void processSubeventDamage(RPGLEvent event) {
-        JsonArray subevents = event.getSubevents();
-        for (int i = 0; i < subevents.size(); i++) {
-            JsonObject subeventJson = subevents.getJsonObject(i);
-            JsonArray damageArray = subeventJson.getJsonArray("damage");
-            if (damageArray != null) {
-                for (int j = 0; j < damageArray.size(); j++) {
-                    JsonObject damageJson = damageArray.getJsonObject(j);
-                    damageJson.asMap().putIfAbsent("dice", new ArrayList<>());
-                    damageJson.asMap().putIfAbsent("bonus", 0);
-                    damageJson.putJsonArray("dice", Die.unpack(damageJson.removeJsonArray("dice")));
-                }
-            }
-        }
+        return event;
     }
 
 }

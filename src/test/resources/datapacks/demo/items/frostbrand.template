@@ -24,6 +24,7 @@
   "damage": {
     "melee": [
       {
+        "damage_formula": "range",
         "damage_type": "slashing",
         "dice": [
           { "count": 1, "size": 6, "determined": [ 3 ] }
@@ -31,6 +32,7 @@
         "bonus": 3
       },
       {
+        "damage_formula": "range",
         "damage_type": "cold",
         "dice": [
           { "count": 1, "size": 6, "determined": [ 3 ] }

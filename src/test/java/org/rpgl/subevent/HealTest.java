@@ -118,7 +118,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_type": "range",
+                        "healing_formula": "range",
                         "dice": [
                             { "count":2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -128,7 +128,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "range");
+                    this.putString("healing_formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -168,7 +168,7 @@ public class HealTest {
                 "subevent": "heal",
                 "healing": [
                     {
-                        "healing_type": "range",
+                        "healing_formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -179,7 +179,7 @@ public class HealTest {
             this.putString("subevent", "heal");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "range");
+                    this.putString("healing_formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -216,7 +216,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_type": "range",
+                        "healing_formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -226,7 +226,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "range");
+                    this.putString("healing_formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -266,7 +266,7 @@ public class HealTest {
                 "subevent": "heal",
                 "healing": [
                     {
-                        "healing_type": "range",
+                        "healing_formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -277,7 +277,7 @@ public class HealTest {
             this.putString("subevent", "heal");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "range");
+                    this.putString("healing_formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);

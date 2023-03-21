@@ -10,6 +10,7 @@
   "damage": {
     "melee": [
       {
+        "damage_formula": "range",
         "damage_type": "piercing",
         "dice": [
           { "count": 2, "size": 10, "determined": [ 5 ] }
@@ -17,6 +18,7 @@
         "bonus": 0
       },
       {
+        "damage_formula": "range",
         "damage_type": "fire",
         "dice": [
           { "count": 1, "size": 6, "determined": [ 3 ] }

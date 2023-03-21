@@ -131,19 +131,23 @@ public class DamageRoll extends Subevent {
      * @return a collection of damage dice and bonuses
      */
     public JsonObject getDamage() {
-        JsonObject baseDamage = new JsonObject();
-        JsonArray typedDamageArray = this.json.getJsonArray("damage");
-        for (int i = 0; i < typedDamageArray.size(); i++) {
-            JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
-            int bonus = Objects.requireNonNullElse(typedDamage.getInteger("bonus"), 0);
-            for (int j = 0; j < typedDamageDieArray.size(); j++) {
-                JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
-                bonus += typedDamageDie.getInteger("roll");
+        JsonObject damage = new JsonObject();
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            JsonObject damageJson = damageArray.getJsonObject(i);
+            String damageType = damageJson.getString("damage_type");
+            int damageMagnitude = damageJson.getInteger("bonus");
+            JsonArray dice = damageJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                damageMagnitude += dice.getJsonObject(j).getInteger("roll");
             }
-            baseDamage.putInteger(typedDamage.getString("damage_type"), bonus);
+            if (damage.asMap().containsKey(damageType)) {
+                damage.putInteger(damageType, damage.getInteger(damageType) + damageMagnitude);
+            } else {
+                damage.putInteger(damageType, damageMagnitude);
+            }
         }
-        return baseDamage;
+        return damage;
     }
 
 }

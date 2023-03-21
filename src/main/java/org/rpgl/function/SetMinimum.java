@@ -39,31 +39,31 @@ public class SetMinimum extends Function {
         /*[
             {
                 "name": "...",
-                "minimum_type": "number",
+                "minimum_formula": "number",
                 "value": #
             },{
                 "name": "...",
-                "minimum_type": "modifier",
+                "minimum_formula": "modifier",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "minimum_type": "ability",
+                "minimum_formula": "ability",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "minimum_type": "proficiency",
+                "minimum_formula": "proficiency",
                 "half": boolean,
                 "object": "..."
             },{
                 "name": "...",
-                "minimum_type": "level", // TODO this feature not yet supported
+                "minimum_formula": "level", // TODO this feature not yet supported
                 "class": "...",
                 "object": "..."
             }
         ]*/
-        return switch (minimumJson.getString("minimum_type")) {
+        return switch (minimumJson.getString("minimum_formula")) {
             case "number" -> new JsonObject() {{
                 this.putInteger("value", Objects.requireNonNullElse(minimumJson.getInteger("value"), 0));
             }};
@@ -84,7 +84,7 @@ public class SetMinimum extends Function {
                 }
             }};
             default -> new JsonObject() {{
-                // TODO log a warning here concerning an unexpected bonus_type value
+                // TODO log a warning here concerning an unexpected bonus_formula value
                 this.putInteger("value", 0);
             }};
         };

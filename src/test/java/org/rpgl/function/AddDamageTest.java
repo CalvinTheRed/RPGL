@@ -68,65 +68,6 @@ public class AddDamageTest {
     }
 
     @Test
-    @DisplayName("unpackDamage returns damage with unpacked damage dice")
-    void unpackDamage_returnsDamageWithUnpackedDamageDice() {
-        AddDamage addDamage = new AddDamage();
-        JsonArray damage = new JsonArray() {{
-            /*[
-                {
-                    "damage_type": "fire",
-                    "dice": [
-                        { "count": 2, "size": 6, "determined": [ 3 ] },
-                        { "count": 2, "size": 4, "determined": [ 2 ] },
-                    ]
-                },{
-                    "damage_type": "cold",
-                    "dice": [
-                        { "count": 1, "size": 10, "determined": [ 5 ] }
-                    ]
-                }
-            ]*/
-            this.addJsonObject(new JsonObject() {{
-                this.putString("damage_type", "fire");
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("count", 2);
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(3);
-                        }});
-                    }});
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("count", 2);
-                        this.putInteger("size", 4);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
-                }});
-            }});
-            this.addJsonObject(new JsonObject() {{
-                this.putString("damage_type", "cold");
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("count", 1);
-                        this.putInteger("size", 10);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(5);
-                        }});
-                    }});
-                }});
-            }});
-        }};
-
-        String expected = """
-                [{"damage_type":"fire","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[2],"size":4},{"determined":[2],"size":4}]},{"damage_type":"cold","dice":[{"determined":[5],"size":10}]}]""";
-        assertEquals(expected, addDamage.unpackDamage(damage).toString(),
-                "calling unpackCompactedDamageDice should unpack the compacted damage dice passed to it"
-        );
-    }
-
-    @Test
     @DisplayName("execute adds damage to subevent")
     void execute_addsDamageToSubevent() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
@@ -143,31 +84,29 @@ public class AddDamageTest {
         JsonObject functionJson = new JsonObject() {{
            /*{
                 "function": "add_damage",
-                "damage": [
-                    {
-                        "damage_type": "fire",
-                        "dice": [
-                            { "count": 1, "size": 6, "determined": [ 3 ] }
-                        ],
-                        "bonus": 2
-                    }
-                ]
+                "damage": {
+                    "damage_formula": "range",
+                    "damage_type": "fire",
+                    "dice": [
+                        { "count": 1, "size": 6, "determined": [ 3 ] }
+                    ],
+                    "bonus": 2
+                }
            }*/
             this.putString("function", "add_damage");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 1);
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
-                            }});
+            this.putJsonObject("damage", new JsonObject() {{
+                this.putString("damage_formula", "range");
+                this.putString("damage_type", "fire");
+                this.putJsonArray("dice", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putInteger("count", 1);
+                        this.putInteger("size", 6);
+                        this.putJsonArray("determined", new JsonArray() {{
+                            this.addInteger(3);
                         }});
                     }});
-                    this.putInteger("bonus", 2);
                 }});
+                this.putInteger("bonus", 2);
             }});
         }};
 

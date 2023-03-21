@@ -40,7 +40,7 @@ public class AddHealing extends Function {
         /*[
             {
                 "name": "...",
-                "healing_type": "range",
+                "healing_formula": "range",
                 "bonus": #,
                 "dice": [
                     { "count": #, "size": #, "determined": [ # ] },
@@ -48,27 +48,27 @@ public class AddHealing extends Function {
                 ]
             },{
                 "name": "...",
-                "healing_type": "modifier",
+                "healing_formula": "modifier",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "healing_type": "ability",
+                "healing_formula": "ability",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "healing_type": "proficiency",
+                "healing_formula": "proficiency",
                 "half": boolean,
                 "object": "..."
             },{
                 "name": "...",
-                "healing_type": "level", // TODO this feature not yet supported
+                "healing_formula": "level", // TODO this feature not yet supported
                 "class": "...",
                 "object": "..."
             }
         ]*/
-        return switch (healingJson.getString("healing_type")) {
+        return switch (healingJson.getString("healing_formula")) {
             case "range" -> new JsonObject() {{
                 this.putInteger("bonus", Objects.requireNonNullElse(healingJson.getInteger("bonus"), 0));
                 this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(healingJson.getJsonArray("dice")), new JsonArray()));
@@ -93,7 +93,7 @@ public class AddHealing extends Function {
                 this.putJsonArray("dice", new JsonArray());
             }};
             default -> new JsonObject() {{
-                // TODO log a warning here concerning an unexpected healing_type value
+                // TODO log a warning here concerning an unexpected healing_formula value
                 this.putInteger("bonus", 0);
                 this.putJsonArray("dice", new JsonArray());
             }};

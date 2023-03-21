@@ -13,6 +13,7 @@
   "damage": {
     "melee": [
       {
+        "damage_formula": "range",
         "damage_type": "slashing",
         "dice": [
           { "count": 2, "size": 6, "determined": [ 3 ] }

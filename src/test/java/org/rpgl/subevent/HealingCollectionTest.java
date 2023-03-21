@@ -192,7 +192,7 @@ public class HealingCollectionTest {
                 "subevent": "healing_collection",
                 "healing": [
                     {
-                        "healing_type": "range",
+                        "healing_formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -201,7 +201,7 @@ public class HealingCollectionTest {
             this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "range");
+                    this.putString("healing_formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -233,7 +233,7 @@ public class HealingCollectionTest {
                 "subevent": "healing_collection",
                 "healing": [
                     {
-                        "healing_type": "modifier",
+                        "healing_formula": "modifier",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -245,7 +245,7 @@ public class HealingCollectionTest {
             this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "modifier");
+                    this.putString("healing_formula", "modifier");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -280,7 +280,7 @@ public class HealingCollectionTest {
                 "subevent": "healing_collection",
                 "healing": [
                     {
-                        "healing_type": "ability",
+                        "healing_formula": "ability",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -292,7 +292,7 @@ public class HealingCollectionTest {
             this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "ability");
+                    this.putString("healing_formula", "ability");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -325,7 +325,7 @@ public class HealingCollectionTest {
                 "subevent": "healing_collection",
                 "healing": [
                     {
-                        "healing_type": "proficiency",
+                        "healing_formula": "proficiency",
                         "object": {
                             "from": "subevent",
                             "object": "source"
@@ -336,7 +336,7 @@ public class HealingCollectionTest {
             this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_type", "proficiency");
+                    this.putString("healing_formula", "proficiency");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
                         this.putString("object", "source");

@@ -36,13 +36,11 @@ public class AddBonus extends Function {
         }
     }
 
-    // TODO should the two below methods be here or elsewhere? Maybe a shared abstract base class?
-
     public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject bonusJson, RPGLContext context) throws Exception {
         /*[
             {
                 "name": "...",
-                "bonus_type": "range",
+                "bonus_formula": "range",
                 "bonus": #,
                 "dice": [
                     { "count": #, "size": #, "determined": [ # ] },
@@ -50,27 +48,27 @@ public class AddBonus extends Function {
                 ]
             },{
                 "name": "...",
-                "bonus_type": "modifier",
+                "bonus_formula": "modifier",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "bonus_type": "ability",
+                "bonus_formula": "ability",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "bonus_type": "proficiency",
+                "bonus_formula": "proficiency",
                 "half": boolean,
                 "object": "..."
             },{
                 "name": "...",
-                "bonus_type": "level", // TODO this feature not yet supported
+                "bonus_formula": "level", // TODO this feature not yet supported
                 "class": "...",
                 "object": "..."
             }
         ]*/
-        return switch (bonusJson.getString("bonus_type")) {
+        return switch (bonusJson.getString("bonus_formula")) {
             case "range" -> new JsonObject() {{
                 this.putInteger("bonus", Objects.requireNonNullElse(bonusJson.getInteger("bonus"), 0));
                 this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(bonusJson.getJsonArray("dice")), new JsonArray()));
@@ -95,7 +93,7 @@ public class AddBonus extends Function {
                 this.putJsonArray("dice", new JsonArray());
             }};
             default -> new JsonObject() {{
-                // TODO log a warning here concerning an unexpected bonus_type value
+                // TODO log a warning here concerning an unexpected bonus_formula value
                 this.putInteger("bonus", 0);
                 this.putJsonArray("dice", new JsonArray());
             }};

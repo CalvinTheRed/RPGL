@@ -40,7 +40,7 @@ public class AddTemporaryHitPoints extends Function {
         /*[
             {
                 "name": "...",
-                "temporary_hit_point_type": "range",
+                "temporary_hit_point_formula": "range",
                 "bonus": #,
                 "dice": [
                     { "count": #, "size": #, "determined": [ # ] },
@@ -48,27 +48,27 @@ public class AddTemporaryHitPoints extends Function {
                 ]
             },{
                 "name": "...",
-                "temporary_hit_point_type": "modifier",
+                "temporary_hit_point_formula": "modifier",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "temporary_hit_point_type": "ability",
+                "temporary_hit_point_formula": "ability",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "temporary_hit_point_type": "proficiency",
+                "temporary_hit_point_formula": "proficiency",
                 "half": boolean,
                 "object": "..."
             },{
                 "name": "...",
-                "temporary_hit_point_type": "level", // TODO this feature not yet supported
+                "temporary_hit_point_formula": "level", // TODO this feature not yet supported
                 "class": "...",
                 "object": "..."
             }
         ]*/
-        return switch (temporaryHitPointsJson.getString("temporary_hit_point_type")) {
+        return switch (temporaryHitPointsJson.getString("temporary_hit_point_formula")) {
             case "range" -> new JsonObject() {{
                 this.putInteger("bonus", Objects.requireNonNullElse(temporaryHitPointsJson.getInteger("bonus"), 0));
                 this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(temporaryHitPointsJson.getJsonArray("dice")), new JsonArray()));
@@ -93,7 +93,7 @@ public class AddTemporaryHitPoints extends Function {
                 this.putJsonArray("dice", new JsonArray());
             }};
             default -> new JsonObject() {{
-                // TODO log a warning here concerning an unexpected temporary_hit_point_type value
+                // TODO log a warning here concerning an unexpected temporary_hit_point_formula value
                 this.putInteger("bonus", 0);
                 this.putJsonArray("dice", new JsonArray());
             }};

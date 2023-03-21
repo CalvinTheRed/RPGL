@@ -38,31 +38,31 @@ public class SetBase extends Function {
         /*[
             {
                 "name": "...",
-                "base_type": "number",
+                "base_formula": "number",
                 "value": #
             },{
                 "name": "...",
-                "base_type": "modifier",
+                "base_formula": "modifier",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "base_type": "ability",
+                "base_formula": "ability",
                 "ability": "dex",
                 "object": "..."
             },{
                 "name": "...",
-                "base_type": "proficiency",
+                "base_formula": "proficiency",
                 "half": boolean,
                 "object": "..."
             },{
                 "name": "...",
-                "base_type": "level", // TODO this feature not yet supported
+                "base_formula": "level", // TODO this feature not yet supported
                 "class": "...",
                 "object": "..."
             }
         ]*/
-        return switch (baseJson.getString("base_type")) {
+        return switch (baseJson.getString("base_formula")) {
             case "number" -> new JsonObject() {{
                 this.putInteger("value", Objects.requireNonNullElse(baseJson.getInteger("value"), 0));
             }};
@@ -83,7 +83,7 @@ public class SetBase extends Function {
                 }
             }};
             default -> new JsonObject() {{
-                // TODO log a warning here concerning an unexpected bonus_type value
+                // TODO log a warning here concerning an unexpected bonus_formula value
                 this.putInteger("value", 0);
             }};
         };

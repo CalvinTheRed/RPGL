@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.subevent.HealingRoll class.
+ * Testing class for the org.rpgl.subevent.TemporaryHitPointRoll class.
  *
  * @author Calvin Withun
  */

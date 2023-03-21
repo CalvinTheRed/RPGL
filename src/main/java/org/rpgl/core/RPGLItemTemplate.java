@@ -3,10 +3,8 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.math.Die;
 import org.rpgl.uuidtable.UUIDTable;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -22,6 +20,7 @@ public class RPGLItemTemplate extends JsonObject {
      */
     private static final JsonArray DEFAULT_TEMPLATE_ITEM_DAMAGE = new JsonArray() {{
         this.addJsonObject(new JsonObject() {{
+            this.putString("damage_formula", "range");
             this.putString("damage_type", "bludgeoning");
             this.putJsonArray("dice", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -63,7 +62,6 @@ public class RPGLItemTemplate extends JsonObject {
         processImprovisedTags(item);
         processEquippedEffects(item);
         setDefaultItemDamage(item);
-        processItemDamage(item);
         UUIDTable.register(item);
         return item;
     }
@@ -124,24 +122,6 @@ public class RPGLItemTemplate extends JsonObject {
             }
         }
         item.putJsonObject(RPGLItemTO.DAMAGE_ALIAS, damage);
-    }
-
-    /**
-     * This helper method unpacks the condensed representation of damage dice in a RPGLItemTemplate into multiple dice
-     * objects in accordance with the <code>count</code> field.
-     *
-     * @param item a RPGLItem being created by this object
-     */
-    static void processItemDamage(RPGLItem item) {
-        JsonObject damage = item.getDamage();
-        for (Map.Entry<String, ?> damageObjectEntry : damage.asMap().entrySet()) {
-            String attackType = damageObjectEntry.getKey();
-            JsonArray attackTypeDamageArray = damage.getJsonArray(attackType);
-            for (int i = 0; i < attackTypeDamageArray.size(); i++) {
-                JsonObject attackTypeDamageObject = attackTypeDamageArray.getJsonObject(i);
-                attackTypeDamageObject.putJsonArray("dice", Die.unpack(attackTypeDamageObject.removeJsonArray("dice")));
-            }
-        }
     }
 
 }

@@ -55,7 +55,7 @@ public class RPGLItemTemplateTest {
         RPGLItemTemplate.setDefaultItemDamage(item);
 
         String expected = """
-                {"melee":[{"bonus":0,"damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
+                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
         assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
@@ -71,24 +71,7 @@ public class RPGLItemTemplateTest {
         RPGLItemTemplate.setDefaultItemDamage(item);
 
         String expected = """
-                {"melee":[{"bonus":0,"damage_type":"slashing","dice":[{"count":1,"determined":[4],"size":8}]}],"thrown":[{"bonus":0,"damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
-        assertEquals(expected, item.getDamage().toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
-        );
-    }
-
-    @Test
-    @DisplayName("processItemDamage unpacks damage dice")
-    void processItemDamage_unpacksDamageDice() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("greatsword");
-        RPGLItem item = new RPGLItem();
-        item.join(itemTemplate);
-
-        RPGLItemTemplate.setDefaultItemDamage(item);
-        RPGLItemTemplate.processItemDamage(item);
-
-        String expected = """
-                {"melee":[{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]}],"thrown":[{"bonus":0,"damage_type":"bludgeoning","dice":[{"determined":[2],"size":4}]}]}""";
+                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"slashing","dice":[{"count":1,"determined":[4],"size":8}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
         assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );
@@ -194,7 +177,7 @@ public class RPGLItemTemplateTest {
                 "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
         expected = """
-                {"melee":[{"bonus":0,"damage_type":"bludgeoning","dice":[{"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_type":"bludgeoning","dice":[{"determined":[2],"size":4}]}]}""";
+                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
         assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );

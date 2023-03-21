@@ -104,13 +104,13 @@ public class SetBaseTest {
             /*{
                 "function": "set_base",
                 "base": {
-                    "base_type": "number",
+                    "base_formula": "number",
                     "value": 13
                 }
             }*/
             this.putString("function", "set_base");
             this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "number");
+                this.putString("base_formula", "number");
                 this.putInteger("value", 13);
             }});
         }};
@@ -145,7 +145,7 @@ public class SetBaseTest {
             /*{
                 "function": "set_base",
                 "base": {
-                    "base_type": "modifier",
+                    "base_formula": "modifier",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -155,7 +155,7 @@ public class SetBaseTest {
             }*/
             this.putString("function", "set_base");
             this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "modifier");
+                this.putString("base_formula", "modifier");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -196,7 +196,7 @@ public class SetBaseTest {
             /*{
                 "function": "set_base",
                 "base": {
-                    "base_type": "ability",
+                    "base_formula": "ability",
                     "ability": "dex",
                     "object": {
                         "from": "effect",
@@ -206,7 +206,7 @@ public class SetBaseTest {
             }*/
             this.putString("function", "set_base");
             this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "ability");
+                this.putString("base_formula", "ability");
                 this.putString("ability", "dex");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
@@ -245,7 +245,7 @@ public class SetBaseTest {
             /*{
                 "function": "set_base",
                 "base": {
-                    "base_type": "proficiency",
+                    "base_formula": "proficiency",
                     "object": {
                         "from": "effect",
                         "object": "source"
@@ -254,7 +254,7 @@ public class SetBaseTest {
             }*/
             this.putString("function", "set_base");
             this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_type", "proficiency");
+                this.putString("base_formula", "proficiency");
                 this.putJsonObject("object", new JsonObject() {{
                     this.putString("from", "effect");
                     this.putString("object", "source");
