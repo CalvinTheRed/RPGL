@@ -110,6 +110,7 @@ public class Heal extends Subevent implements CancelableSubevent {
         /*
          * Replace healing key with base healing calculation
          */
+        // TODO promote base healing dice data further down the chain... consider Gift of the Ever Living Ones
         this.json.putInteger("healing", baseHealingRoll.getHealing());
     }
 

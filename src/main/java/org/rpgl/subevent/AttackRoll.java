@@ -105,9 +105,8 @@ public class AttackRoll extends Roll {
     void prepareNoWeapon(RPGLContext context) throws Exception {
         this.json.putBoolean("natural_weapon_attack", false);
         // Add attack ability score modifier (defined by the Subevent JSON) as a bonus to the roll.
-        String attackAbility = this.json.getString("attack_ability");
         this.addBonus(new JsonObject() {{
-            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(getAbility(context), context));
             this.putJsonArray("dice", new JsonArray());
         }});
 
@@ -380,7 +379,7 @@ public class AttackRoll extends Roll {
     }
 
     public boolean dealsDamage() {
-        return !this.json.getJsonArray("damage").asList().isEmpty();
+        return !Objects.requireNonNullElse(this.json.getJsonArray("damage"), new JsonArray()).asList().isEmpty();
     }
 
 }

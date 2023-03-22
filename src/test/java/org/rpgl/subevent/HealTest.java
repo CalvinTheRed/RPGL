@@ -302,4 +302,143 @@ public class HealTest {
         );
     }
 
+    @Test
+    @DisplayName("getBaseHealing calculates correct healing (modifier)")
+    void getBaseHealing_calculatesCorrectHealing_modifier() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "heal",
+                "healing": [
+                    {
+                        "healing_formula": "modifier",
+                        "ability": "str",
+                        "object": {
+                            "from": "subevent",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("subevent", "heal");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "modifier");
+                    this.putString("ability", "str");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }});
+
+        heal.setSource(source);
+        heal.getBaseHealing(context);
+
+        assertEquals(6, heal.json.getInteger("healing"),
+                "healing should equal str mod (+6)"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseHealing calculates correct healing (ability)")
+    void getBaseHealing_calculatesCorrectHealing_ability() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "heal",
+                "healing": [
+                    {
+                        "healing_formula": "ability",
+                        "ability": "str",
+                        "object": {
+                            "from": "subevent",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("subevent", "heal");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "ability");
+                    this.putString("ability", "str");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }});
+
+        heal.setSource(source);
+        heal.getBaseHealing(context);
+
+        assertEquals(23, heal.json.getInteger("healing"),
+                "healing should equal str score (23)"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseHealing calculates correct healing (proficiency)")
+    void getBaseHealing_calculatesCorrectHealing_proficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "heal",
+                "healing": [
+                    {
+                        "healing_formula": "proficiency",
+                        "object": {
+                            "from": "subevent",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("subevent", "heal");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "proficiency");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }});
+
+        heal.setSource(source);
+        heal.getBaseHealing(context);
+
+        assertEquals(4, heal.json.getInteger("healing"),
+                "healing should equal proficiency bonus (+4)"
+        );
+    }
+
 }
