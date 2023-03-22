@@ -77,18 +77,32 @@ public class SavingThrowTest {
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
-                "damage": {
-                    "cold": 10
-                }
+                "damage": [
+                    {
+                        "damage_type": "cold",
+                        "dice": [
+                            { "roll": 5 }
+                        ],
+                        "bonus": 5
+                    }
+                ]
             }*/
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("cold", 10);
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "cold");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 5);
+                        }});
+                    }});
+                    this.putInteger("bonus", 5);
+                }});
             }});
         }});
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.deliverDamage(context);
+        savingThrow.deliverDamage("all", context);
 
         assertEquals(42, target.getHealthData().getInteger("current"),
                 "target should take 10 cold damage (52-10=42)"
@@ -164,104 +178,6 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("resolveFailDamage target takes full damage")
-    void resolveFailDamage_targetTakesFullDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
-        context.add(source);
-        context.add(target);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": {
-                    "cold": 10
-                },
-                "tags": [ ]
-            }*/
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("cold", 10);
-            }});
-            this.putJsonArray("tags", new JsonArray());
-        }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.resolveFailDamage(context);
-
-        assertEquals(42, target.getHealthData().getInteger("current"),
-                "target should take 10 cold damage after resolving fail damage (52-10=42)"
-        );
-    }
-
-    @Test
-    @DisplayName("resolvePassDamage target takes no damage on pass")
-    void resolvePassDamage_targetTakesNoDamageOnPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
-        context.add(source);
-        context.add(target);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage_on_pass": "none",
-                "damage": {
-                    "cold": 10
-                }
-            }*/
-            this.putString("damage_on_pass", "none");
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("cold", 10);
-            }});
-        }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.resolvePassDamage(context);
-
-        assertEquals(52, target.getHealthData().getInteger("current"),
-                "target should take no damage after resolving pass damage (52-0=52)"
-        );
-    }
-
-    @Test
-    @DisplayName("resolvePassDamage target takes half damage on pass")
-    void resolvePassDamage_targetTakesHalfDamageOnPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
-        context.add(source);
-        context.add(target);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage_on_pass": "half",
-                "damage": {
-                    "cold": 10
-                },
-                "tags": [ ]
-            }*/
-            this.putString("damage_on_pass", "half");
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("cold", 10);
-            }});
-            this.putJsonArray("tags", new JsonArray());
-        }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.resolvePassDamage(context);
-
-        assertEquals(47, target.getHealthData().getInteger("current"),
-                "target should take half damage after resolving pass damage (52-5=47)"
-        );
-    }
-
-    @Test
     @DisplayName("getTargetDamage returns empty object (default)")
     void getTargetDamage_returnsEmptyObject_default() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
@@ -273,106 +189,15 @@ public class SavingThrowTest {
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray());
+            this.putJsonArray("damage", new JsonArray());
         }});
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        JsonObject targetDamage = savingThrow.getTargetDamage(context);
+        savingThrow.getTargetDamage(context);
 
-        assertEquals("{}", targetDamage.toString(),
+        assertEquals("[]", savingThrow.json.getJsonArray("damage").toString(),
                 "target damage should be empty by default"
-        );
-    }
-
-    @Test
-    @DisplayName("resolveSaveFail target takes full damage")
-    void resolveSaveFail_targetTakesFullDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
-        context.add(source);
-        context.add(target);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": {
-                    "cold": 10
-                },
-                "fail": [
-                    {
-                        "subevent": "dummy_subevent"
-                    }
-                ],
-                "tags": [ ]
-            }*/
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("cold", 10);
-            }});
-            this.putJsonArray("fail", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-            this.putJsonArray("tags", new JsonArray());
-        }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.resolveSaveFail(context);
-
-        assertEquals(42, target.getHealthData().getInteger("current"),
-                "target should take 10 cold damage after resolving fail damage (52-10=42)"
-        );
-        assertEquals(1, DummySubevent.counter,
-                "counter should increment by 1 from nested pass subevent"
-        );
-    }
-
-    @Test
-    @DisplayName("resolveSavePass target takes half damage")
-    void resolveSavePass_targetTakesHalfDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
-        context.add(source);
-        context.add(target);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage_on_pass": "half",
-                "damage": {
-                    "cold": 10
-                },
-                "pass": [
-                    {
-                        "subevent": "dummy_subevent"
-                    }
-                ],
-                "tags": [ ]
-            }*/
-            this.putString("damage_on_pass", "half");
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("cold", 10);
-            }});
-            this.putJsonArray("pass", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-            this.putJsonArray("tags", new JsonArray());
-        }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.resolveSavePass(context);
-
-        assertEquals(47, target.getHealthData().getInteger("current"),
-                "target should take half damage after resolving pass damage (52-5=47)"
-        );
-        assertEquals(1, DummySubevent.counter,
-                "counter should increment by 1 from nested pass subevent"
         );
     }
 
@@ -423,8 +248,8 @@ public class SavingThrowTest {
         savingThrow.getBaseDamage(context);
 
         String expected = """
-                {"cold":10}""";
-        assertEquals(expected, savingThrow.json.getJsonObject("damage").toString(),
+                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}]}]""";
+        assertEquals(expected, savingThrow.json.getJsonArray("damage").toString(),
                 "getBaseDamage should store 10 cold damage"
         );
     }
@@ -501,8 +326,8 @@ public class SavingThrowTest {
                 "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
         );
         String expected = """
-                {"cold":10}""";
-        assertEquals(expected, savingThrow.json.getJsonObject("damage").toString(),
+                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}]}]""";
+        assertEquals(expected, savingThrow.json.getJsonArray("damage").toString(),
                 "prepare should store 10 cold damage"
         );
     }

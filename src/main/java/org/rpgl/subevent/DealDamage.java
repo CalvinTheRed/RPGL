@@ -4,7 +4,6 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -46,21 +45,9 @@ public class DealDamage extends Subevent implements CancelableSubevent {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (this.isNotCanceled()) {
-            JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
-            JsonObject targetDamage = this.getTargetDamage(context);
-            for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
-                String damageType = targetDamageEntry.getKey();
-                if (baseDamage.asMap().containsKey(damageType)) {
-                    Integer baseTypedDamage = baseDamage.getInteger(damageType);
-                    baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
-                    baseDamage.putInteger(damageType, baseTypedDamage);
-                } else {
-                    baseDamage.asMap().entrySet().add(targetDamageEntry);
-                }
-            }
+            this.getTargetDamage(context);
             this.deliverDamage(context);
         }
-
     }
 
     @Override
@@ -74,8 +61,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
     }
 
     /**
-     * This helper method collects the base damage of the subevent. This includes all target-agnostic damage dice and
-     * bonuses involved in the subevent's damage roll.
+     * This helper method collects, rolls, and stores all target-agnostic damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
      *
@@ -120,18 +106,17 @@ public class DealDamage extends Subevent implements CancelableSubevent {
         /*
          * Replace damage key with base damage calculation
          */
-        this.json.putJsonObject("damage", baseDamageRoll.getDamage());
+        this.json.putJsonArray("damage", baseDamageRoll.getDamage());
     }
 
     /**
-     * This helper method returns all target-specific damage dice and bonuses involved in the DealDamage's damage roll.
+     * This helper method collects, rolls, and stores all target-specific damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
-     * @return a collection of rolled damage dice and bonuses
      *
      * @throws Exception if an exception occurs.
      */
-    JsonObject getTargetDamage(RPGLContext context) throws Exception {
+    void getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
          */
@@ -165,7 +150,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
         targetDamageRoll.setTarget(this.getTarget());
         targetDamageRoll.invoke(context);
 
-        return targetDamageRoll.getDamage();
+        this.json.getJsonArray("damage").asList().addAll(targetDamageRoll.getDamage().asList());
     }
 
     /**
@@ -176,8 +161,20 @@ public class DealDamage extends Subevent implements CancelableSubevent {
      * @throws Exception if an exception occurs.
      */
     void deliverDamage(RPGLContext context) throws Exception {
+        JsonObject damage = new JsonObject();
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            JsonObject damageJson = damageArray.getJsonObject(i);
+            int total = damageJson.getInteger("bonus");
+            JsonArray dice = damageJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                total += dice.getJsonObject(j).getInteger("roll");
+            }
+            String damageType = damageJson.getString("damage_type");
+            damage.putInteger(damageType, Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total);
+        }
+
         DamageDelivery damageDelivery = new DamageDelivery();
-        JsonObject damage = this.json.getJsonObject("damage");
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
             this.putJsonObject("damage", damage.deepClone());

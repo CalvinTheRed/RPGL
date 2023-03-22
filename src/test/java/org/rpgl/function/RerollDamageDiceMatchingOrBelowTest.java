@@ -198,7 +198,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
         rerollDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":10,"fire":19}""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[6],"roll":1,"size":6},{"determined":[6],"roll":2,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should re-roll all fire damage dice which rolled 2 or lower (cold=1+2+3+4=10, fire=6+6+3+4=19)"
         );
@@ -232,7 +232,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
         rerollDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":19,"fire":19}""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should set all damage dice which rolled 2 or lower to 3 (cold=6+6+3+4=19, fire=6+6+3+4=19)"
         );

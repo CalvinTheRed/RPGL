@@ -162,7 +162,7 @@ public class MaximizeDamageTest {
         maximizeDamage.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":4,"fire":14}""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should maximize fire damage (cold 1+1+2=4 fire 6+6+2=14)"
         );
@@ -194,7 +194,7 @@ public class MaximizeDamageTest {
         maximizeDamage.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":14,"fire":14}""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should maximize all damage (cold 6+6+2=14 fire 6+6+2=14)"
         );

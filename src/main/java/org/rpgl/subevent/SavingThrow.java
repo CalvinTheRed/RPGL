@@ -5,6 +5,7 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -46,9 +47,8 @@ public class SavingThrow extends Roll {
         super.prepare(context);
         this.addTag("saving_throw");
         this.calculateDifficultyClass(context);
-        if (this.json.getJsonArray("damage") != null) {
-            this.getBaseDamage(context);
-        }
+        this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+        this.getBaseDamage(context);
     }
 
     @Override
@@ -73,9 +73,13 @@ public class SavingThrow extends Roll {
         if (this.isNotCanceled()) {
             this.roll();
             if (this.get() < this.json.getInteger("save_difficulty_class")) {
-                this.resolveSaveFail(context);
+                this.getTargetDamage(context);
+                this.deliverDamage("all", context);
+                this.resolveNestedSubevents("fail", context);
             } else {
-                this.resolveSavePass(context);
+                this.getTargetDamage(context);
+                this.deliverDamage(this.json.getString("damage_on_pass"), context);
+                this.resolveNestedSubevents("pass", context);
             }
         }
 
@@ -109,23 +113,14 @@ public class SavingThrow extends Roll {
         this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
 
-    /**
-     * This helper method collects the base damage of the saving throw. This includes all target-agnostic damage dice and
-     * bonuses involved in the saving throw's damage roll.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
     void getBaseDamage(RPGLContext context) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
          */
         DamageCollection baseDamageCollection = new DamageCollection();
-        JsonArray damage = this.json.getJsonArray("damage");
         baseDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_collection");
-            this.putJsonArray("damage", damage.deepClone());
+            this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_damage_collection");
@@ -156,42 +151,10 @@ public class SavingThrow extends Roll {
         /*
          * Replace damage key with base damage calculation
          */
-        this.json.putJsonObject("damage", baseDamageRoll.getDamage());
+        this.json.putJsonArray("damage", baseDamageRoll.getDamage());
     }
 
-    /**
-     * This helper method resolves the Subevent in the case that <code>target</code> passes its saving throw.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    void resolveSavePass(RPGLContext context) throws Exception {
-        this.resolvePassDamage(context);
-        this.resolveNestedSubevents("pass", context);
-    }
-
-    /**
-     * This helper method resolves the Subevent in the case that <code>target</code> fails its saving throw.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    void resolveSaveFail(RPGLContext context) throws Exception {
-        this.resolveFailDamage(context);
-        this.resolveNestedSubevents("fail", context);
-    }
-
-    /**
-     * This helper method returns all target-specific damage dice and bonuses involved in the saving throw's damage roll.
-     *
-     * @param context the context this Subevent takes place in
-     * @return a collection of rolled damage dice and bonuses
-     *
-     * @throws Exception if an exception occurs.
-     */
-    JsonObject getTargetDamage(RPGLContext context) throws Exception {
+    void getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
          */
@@ -225,75 +188,7 @@ public class SavingThrow extends Roll {
         targetDamageRoll.setTarget(this.getTarget());
         targetDamageRoll.invoke(context);
 
-        return targetDamageRoll.getDamage();
-    }
-
-    /**
-     * This helper method determines and delivers the saving throw's damage roll in the case where <code>target</code>
-     * passed its saving throw. This may deal half damage or no damage, according to the saving throw JSON data.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    void resolvePassDamage(RPGLContext context) throws Exception {
-        JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
-        String damageOnPass = this.json.getString("damage_on_pass");
-        if (!"none".equals(damageOnPass)) {
-            /*
-             * Add base and target damage into final damage quantities
-             */
-            JsonObject targetDamage = getTargetDamage(context);
-            for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
-                String damageType = targetDamageEntry.getKey();
-                if (baseDamage.asMap().containsKey(damageType)) {
-                    Integer baseTypedDamage = baseDamage.getInteger(damageType);
-                    baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
-                    if (baseTypedDamage < 0) {
-                        baseTypedDamage = 0; // You can never deal less than 0 points of damage when you deal damage
-                    }
-                    baseDamage.putInteger(damageType, baseTypedDamage);
-                } else {
-                    baseDamage.asMap().entrySet().add(targetDamageEntry);
-                }
-            }
-
-            /*
-             * Account for half or no damage on pass (this should be a redundant check if this code is reached)
-             */
-            if ("half".equals(damageOnPass)) {
-                for (Map.Entry<String, ?> damageEntryElement : baseDamage.asMap().entrySet()) {
-                    Integer value = baseDamage.removeInteger(damageEntryElement.getKey());
-                    baseDamage.putInteger(damageEntryElement.getKey(), value / 2);
-                }
-            }
-
-            this.deliverDamage(context);
-        }
-    }
-
-    /**
-     * This helper method determines and delivers the saving throw's damage roll in the case where <code>target</code>
-     * failed its saving throw. This should only ever deal full damage.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    void resolveFailDamage(RPGLContext context) throws Exception {
-        JsonObject baseDamage = Objects.requireNonNullElse(this.json.getJsonObject("damage"), new JsonObject());
-        JsonObject targetDamage = this.getTargetDamage(context);
-        for (Map.Entry<String, Object> targetDamageEntry : targetDamage.asMap().entrySet()) {
-            String damageType = targetDamageEntry.getKey();
-            if (baseDamage.asMap().containsKey(damageType)) {
-                Integer baseTypedDamage = baseDamage.getInteger(damageType);
-                baseTypedDamage += targetDamage.getInteger(targetDamageEntry.getKey());
-                baseDamage.putInteger(damageType, baseTypedDamage);
-            } else {
-                baseDamage.asMap().entrySet().add(targetDamageEntry);
-            }
-        }
-        this.deliverDamage(context);
+        this.json.getJsonArray("damage").asList().addAll(targetDamageRoll.getDamage().asList());
     }
 
     /**
@@ -319,26 +214,41 @@ public class SavingThrow extends Roll {
         }
     }
 
-    /**
-     * This helper method delivers a final quantity of damage to <code>target</code> after the saving throw has been calculated.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    void deliverDamage(RPGLContext context) throws Exception {
-        DamageDelivery damageDelivery = new DamageDelivery();
-        JsonObject damage = this.json.getJsonObject("damage");
-        damageDelivery.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_delivery");
-            this.putJsonObject("damage", damage.deepClone());
-            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
-        }});
-        damageDelivery.setSource(this.getSource());
-        damageDelivery.prepare(context);
-        damageDelivery.setTarget(this.getTarget());
-        damageDelivery.invoke(context);
-        this.getTarget().receiveDamage(damageDelivery, context);
+    void deliverDamage(String damageProportion, RPGLContext context) throws Exception {
+        JsonObject damage = new JsonObject();
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            JsonObject damageJson = damageArray.getJsonObject(i);
+            int total = damageJson.getInteger("bonus");
+            JsonArray dice = damageJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                total += dice.getJsonObject(j).getInteger("roll");
+            }
+            String damageType = damageJson.getString("damage_type");
+            damage.putInteger(damageType, Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total);
+        }
+
+        if ("half".equals(damageProportion)) {
+            for (Map.Entry<String, ?> damageEntry : damage.asMap().entrySet()) {
+                String damageType = damageEntry.getKey();
+                int damageAmount = damage.getInteger(damageType);
+                damage.putInteger(damageType, damageAmount / 2);
+            }
+        }
+
+        if (!"none".equals(damageProportion)) {
+            DamageDelivery damageDelivery = new DamageDelivery();
+            damageDelivery.joinSubeventData(new JsonObject() {{
+                this.putString("subevent", "damage_delivery");
+                this.putJsonObject("damage", damage.deepClone());
+                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            }});
+            damageDelivery.setSource(this.getSource());
+            damageDelivery.prepare(context);
+            damageDelivery.setTarget(this.getTarget());
+            damageDelivery.invoke(context);
+            this.getTarget().receiveDamage(damageDelivery, context);
+        }
     }
 
 }

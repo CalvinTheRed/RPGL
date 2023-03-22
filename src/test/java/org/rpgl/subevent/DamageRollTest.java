@@ -172,7 +172,7 @@ public class DamageRollTest {
     @DisplayName("getDamage returns total typed damage values")
     void getDamage_returnsTotalTypedDamageValues() {
         String expected = """
-                {"cold":11,"fire":11}""";
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "cold and fire damage should both be 11 (4+3+2+1+1)"
         );

@@ -245,12 +245,26 @@ public class AttackRollTest {
 
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "damage": {
-                    "fire": 10
-                }
+                "damage": [
+                    {
+                        "damage_type": "fire",
+                        "dice": [
+                            { "roll": 5 }
+                        ],
+                        "bonus": 5
+                    }
+                ]
             }*/
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("fire", 10);
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 5);
+                        }});
+                    }});
+                    this.putInteger("bonus", 5);
+                }});
             }});
         }});
 

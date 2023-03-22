@@ -336,7 +336,7 @@ public class AttackRoll extends Roll {
         damageRoll.invoke(context);
 
         // Store final damage by type to damage key
-        this.json.putJsonObject("damage", damageRoll.getDamage());
+        this.json.putJsonArray("damage", damageRoll.getDamage());
 
         this.deliverDamage(context);
     }
@@ -363,10 +363,23 @@ public class AttackRoll extends Roll {
     }
 
     void deliverDamage(RPGLContext context) throws Exception {
+        JsonObject damage = new JsonObject();
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            JsonObject damageJson = damageArray.getJsonObject(i);
+            int total = damageJson.getInteger("bonus");
+            JsonArray dice = damageJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                total += dice.getJsonObject(j).getInteger("roll");
+            }
+            String damageType = damageJson.getString("damage_type");
+            damage.putInteger(damageType, Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total);
+        }
+
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
-            this.putJsonObject("damage", json.getJsonObject("damage"));
+            this.putJsonObject("damage", damage.deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});

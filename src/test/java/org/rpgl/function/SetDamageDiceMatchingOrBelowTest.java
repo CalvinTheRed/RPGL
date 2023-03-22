@@ -192,7 +192,7 @@ public class SetDamageDiceMatchingOrBelowTest {
         setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":10,"fire":13}""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should set all fire damage dice which rolled 2 or lower to 3 (cold=1+2+3+4=10, fire=3+3+3+4=13)"
         );
@@ -228,7 +228,7 @@ public class SetDamageDiceMatchingOrBelowTest {
         setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":13,"fire":13}""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should set all damage dice which rolled 2 or lower to 3 (cold=3+3+3+4=13, fire=3+3+3+4=13)"
         );

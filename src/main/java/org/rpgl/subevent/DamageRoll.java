@@ -126,28 +126,12 @@ public class DamageRoll extends Subevent {
     }
 
     /**
-     * This method returns the damage dice collection associated with the Subevent.
+     * This method returns the damage collection associated with the Subevent after all dice have been rolled.
      *
      * @return a collection of damage dice and bonuses
      */
-    public JsonObject getDamage() {
-        JsonObject damage = new JsonObject();
-        JsonArray damageArray = this.json.getJsonArray("damage");
-        for (int i = 0; i < damageArray.size(); i++) {
-            JsonObject damageJson = damageArray.getJsonObject(i);
-            String damageType = damageJson.getString("damage_type");
-            int damageMagnitude = damageJson.getInteger("bonus");
-            JsonArray dice = damageJson.getJsonArray("dice");
-            for (int j = 0; j < dice.size(); j++) {
-                damageMagnitude += dice.getJsonObject(j).getInteger("roll");
-            }
-            if (damage.asMap().containsKey(damageType)) {
-                damage.putInteger(damageType, damage.getInteger(damageType) + damageMagnitude);
-            } else {
-                damage.putInteger(damageType, damageMagnitude);
-            }
-        }
-        return damage;
+    public JsonArray getDamage() {
+        return this.json.getJsonArray("damage");
     }
 
 }
