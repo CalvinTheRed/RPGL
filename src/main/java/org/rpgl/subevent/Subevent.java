@@ -89,6 +89,7 @@ public abstract class Subevent {
     public void addTag(String tag) {
         this.json.getJsonArray("tags").addString(tag);
     }
+
     /**
      * Verifies that the additional information provided to <code>invoke(...)</code> is intended for the Subevent type
      * being invoked.

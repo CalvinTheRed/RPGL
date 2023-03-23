@@ -511,10 +511,11 @@ public class RPGLObject extends RPGLTaggable {
                 "tags": [ <tags> ]
             }*/
             this.putString("subevent", "info_subevent");
-            JsonArray subeventTags = infoSubevent.json.getJsonArray("tags");
+            JsonArray subeventTags = new JsonArray();
             for (String tag : tags) {
                 subeventTags.addString(tag);
             }
+            this.putJsonArray("tags", subeventTags);
         }});
         infoSubevent.setSource(this);
         infoSubevent.prepare(context);

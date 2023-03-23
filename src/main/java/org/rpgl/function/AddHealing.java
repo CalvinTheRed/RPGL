@@ -30,7 +30,10 @@ public class AddHealing extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof HealingCollection healingCollection) {
-            healingCollection.addHealing(processJson(effect, subevent, functionJson.getJsonObject("healing"), context));
+            JsonArray healingArray = functionJson.getJsonArray("healing");
+            for (int i = 0; i < healingArray.size(); i++) {
+                healingCollection.addHealing(processJson(effect, subevent, healingArray.getJsonObject(i), context));
+            }
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

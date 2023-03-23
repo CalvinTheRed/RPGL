@@ -30,7 +30,10 @@ public class AddTemporaryHitPoints extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof TemporaryHitPointCollection temporaryHitPointCollection) {
-            temporaryHitPointCollection.addTemporaryHitPoints(processJson(effect, subevent, functionJson.getJsonObject("temporary_hit_points"), context));
+            JsonArray temporaryHitPointsArray = functionJson.getJsonArray("temporary_hit_points");
+            for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
+                temporaryHitPointCollection.addTemporaryHitPoints(processJson(effect, subevent, temporaryHitPointsArray.getJsonObject(i), context));
+            }
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

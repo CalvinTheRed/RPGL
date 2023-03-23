@@ -50,7 +50,7 @@ public class GetEvents extends Subevent {
      * @param eventId an RPGLEvent datapack ID
      */
     public void addEvent(String eventId) {
-        this.json.getJsonArray("events").addString(eventId);
+        this.getEvents().addString(eventId);
     }
 
     /**

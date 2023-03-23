@@ -22,10 +22,6 @@ public class DamageCollection extends Subevent {
         super("damage_collection");
     }
 
-    public DamageCollection(String subeventId) {
-        super(subeventId);
-    }
-
     @Override
     public Subevent clone() {
         Subevent clone = new DamageCollection();
@@ -73,7 +69,7 @@ public class DamageCollection extends Subevent {
      * @return true if the passed damage type is present in the damage dice collection
      */
     public boolean includesDamageType(String damageType) {
-        JsonArray damageDiceArray = this.json.getJsonArray("damage");
+        JsonArray damageDiceArray = this.getDamageCollection();
         if (damageDiceArray != null) {
             for (int i = 0; i < damageDiceArray.size(); i++) {
                 JsonObject damageDice = damageDiceArray.getJsonObject(i);

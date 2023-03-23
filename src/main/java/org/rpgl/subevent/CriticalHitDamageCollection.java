@@ -20,7 +20,6 @@ public class CriticalHitDamageCollection extends Subevent {
     }
 
     @Override
-    @SuppressWarnings("all")
     public Subevent clone() {
         Subevent clone = new CriticalHitDamageCollection();
         clone.joinSubeventData(this.json);

@@ -84,29 +84,33 @@ public class AddDamageTest {
         JsonObject functionJson = new JsonObject() {{
            /*{
                 "function": "add_damage",
-                "damage": {
-                    "damage_formula": "range",
-                    "damage_type": "fire",
-                    "dice": [
-                        { "count": 1, "size": 6, "determined": [ 3 ] }
-                    ],
-                    "bonus": 2
-                }
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "fire",
+                        "dice": [
+                            { "count": 1, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 2
+                    }
+                ]
            }*/
             this.putString("function", "add_damage");
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putString("damage_formula", "range");
-                this.putString("damage_type", "fire");
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("count", 1);
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(3);
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 1);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
                         }});
                     }});
+                    this.putInteger("bonus", 2);
                 }});
-                this.putInteger("bonus", 2);
             }});
         }};
 

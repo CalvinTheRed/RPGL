@@ -30,7 +30,10 @@ public class AddBonus extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof Calculation calculation) {
-            calculation.addBonus(processJson(effect, subevent, functionJson.getJsonObject("bonus"), context));
+            JsonArray bonusArray = functionJson.getJsonArray("bonus");
+            for (int i = 0; i < bonusArray.size(); i++) {
+                calculation.addBonus(processJson(effect, subevent, bonusArray.getJsonObject(i), context));
+            }
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

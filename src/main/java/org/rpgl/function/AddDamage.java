@@ -32,7 +32,11 @@ public class AddDamage extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof DamageCollection damageCollection) {
-            damageCollection.addDamage(processJson(effect, subevent, functionJson.getJsonObject("damage"), context));
+            JsonArray damageArray = functionJson.getJsonArray("damage");
+            for (int i = 0; i < damageArray.size(); i++) {
+                damageCollection.addDamage(processJson(effect, subevent, damageArray.getJsonObject(i), context));
+                System.out.println(damageCollection);
+            }
         } else if (subevent instanceof CriticalHitDamageCollection criticalHitDamageCollection) {
             criticalHitDamageCollection.addDamage(processJson(effect, subevent, functionJson.getJsonObject("damage"), context));
         } else {
