@@ -60,13 +60,15 @@ public class CalculateBaseArmorClass extends Calculation {
                 // equipment slot holds armor
                 baseArmorClass = this.prepareArmored(armor, context);
             } else {
-                // equipment slot holds non-armor (you are unarmored) (this is not intended to happen)
+                // equipment slot holds non-armor (you are unarmored) (wearing common clothes, perhaps)
                 baseArmorClass = this.prepareUnarmored(context);
             }
         }
 
         // Set base armor class value in json
-        super.setBase(baseArmorClass + this.getShieldBonus());
+        this.setBase(new JsonObject() {{
+            this.putInteger("value", baseArmorClass + getShieldBonus());
+        }});
     }
 
     /**

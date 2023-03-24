@@ -3,6 +3,7 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
@@ -106,18 +107,9 @@ public class RPGLObjectTemplate extends JsonObject {
      */
     static void processHealthData(RPGLObject object) {
         JsonObject healthData = object.getHealthData();
-        JsonArray templateHitDice = healthData.removeJsonArray("hit_dice");
-        JsonArray hitDice = new JsonArray();
-        for (int i = 0; i < templateHitDice.size(); i++) {
-            JsonObject templateHitDieDefinition = templateHitDice.getJsonObject(i);
-            JsonObject hitDie = new JsonObject() {{
-                this.putInteger("size", templateHitDieDefinition.getInteger("size"));
-                this.putJsonArray("determined", templateHitDieDefinition.getJsonArray("determined"));
-                this.putBoolean("spent", false);
-            }};
-            for (int j = 0; j < templateHitDieDefinition.getInteger("count"); j++) {
-                hitDice.addJsonObject(hitDie.deepClone());
-            }
+        JsonArray hitDice = Die.unpack(healthData.removeJsonArray("hit_dice"));
+        for (int i = 0; i < hitDice.size(); i++) {
+            hitDice.getJsonObject(i).putBoolean("spent", false);
         }
         healthData.putJsonArray("hit_dice", hitDice);
     }

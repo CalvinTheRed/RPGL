@@ -3,7 +3,6 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
-import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -50,17 +49,20 @@ public class AttackRoll extends Roll {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
+
         this.addTag("attack_roll");
         this.addTag(this.json.getString("attack_type"));
 
+        this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+
         String weapon = this.json.getString("weapon");
         if (weapon == null) {
-            this.prepareAttackWithoutWeapon(context);
+            this.prepareNoWeapon(context);
         } else {
             if (weapon.matches(ITEM_NAMESPACE_REGEX)) {
-                this.prepareNaturalWeaponAttack(weapon, context);
+                this.prepareNaturalWeapon(weapon, context);
             } else {
-                this.prepareItemWeaponAttack(weapon, context);
+                this.prepareItemWeapon(weapon, context);
             }
         }
     }
@@ -73,11 +75,16 @@ public class AttackRoll extends Roll {
             int armorClass = this.getTargetArmorClass(context);
 
             if (this.isCriticalHit(context)) {
-                this.resolveCriticalHitDamage(context);
+                this.getBaseDamage(context);
+                this.getTargetDamage(context);
+                this.getCriticalHitDamage(context);
+                this.resolveDamage(context);
                 this.resolveNestedSubevents("hit", context);
             } else if (this.isCriticalMiss() || this.get() < armorClass) {
                 this.resolveNestedSubevents("miss", context);
             } else {
+                this.getBaseDamage(context);
+                this.getTargetDamage(context);
                 this.resolveDamage(context);
                 this.resolveNestedSubevents("hit", context);
             }
@@ -92,71 +99,45 @@ public class AttackRoll extends Roll {
 
     @Override
     public String getAbility(RPGLContext context) {
-        String weapon = this.json.getString("weapon");
-        if (weapon == null) {
-            return this.json.getString("attack_ability");
-        } else {
-            if (weapon.matches(ITEM_NAMESPACE_REGEX)) {
-                RPGLItem weaponItem = RPGLFactory.newItem(weapon);
-                String attackType = this.json.getString("attack_type");
-                String ability = weaponItem.getAttackAbility(attackType);
-                UUIDTable.unregister(weaponItem.getUuid());
-                return ability;
-            } else {
-                RPGLItem weaponItem = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(weapon));
-                String attackType = this.json.getString("attack_type");
-                return weaponItem.getAttackAbility(attackType);
-            }
-        }
+        return this.json.getString("attack_ability");
     }
 
     /**
-     * This helper method prepares the AttackRoll under the assumption that the attack is being made using no weapon.
-     * This typically is the case when the attack is a spell or other magical attack. Any damage dealt by the
-     * AttackRoll must be specified in the RPGLEvent template when this prepare method is used, since no weapon will be
-     * used to determine the damage.
+     * This helper method prepares the AttackRoll in the case that it is not using any weapon to make the attack.
      *
-     * @param context the context this Subevent takes place in
+     * @param context the context in which this Subevent is being prepared
      *
-     * @throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs
      */
-    void prepareAttackWithoutWeapon(RPGLContext context) throws Exception {
+    void prepareNoWeapon(RPGLContext context) throws Exception {
         this.json.putBoolean("natural_weapon_attack", false);
-
         // Add attack ability score modifier (defined by the Subevent JSON) as a bonus to the roll.
-        String attackAbility = this.json.getString("attack_ability");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+        this.addBonus(new JsonObject() {{
+            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(getAbility(context), context));
+            this.putJsonArray("dice", new JsonArray());
+        }});
 
-        // Add proficiency bonus to the roll (all non-weapon attacks are made with proficiency).
-        this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
-
-        // Attacks made without weapons should already be defined in the event template so no changes are needed here
-
-        // The damage field should already be populated for this type of attack. But in case it is not, set it to empty.
-        this.json.asMap().computeIfAbsent("damage", k -> new ArrayList<>());
+        // No-weapon attacks have their damage formulas built into their JSON already.
     }
 
     /**
-     * This helper method prepares the AttackRoll under the assumption that the attack is being made using a natural
-     * weapon such as a claw or fangs or a tail or a slam attack. The natural weapon will only exist during the attack,
-     * and will be destroyed once the attack is resolved. Natural weapons should never exist as actual items.
+     * This helper method prepares the AttackRoll in the case that it uses a natural weapon to make the attack.
      *
-     * @param weaponId a natural weapon ID <code>("datapack:name")</code>
-     * @param context  the context this Subevent takes place in
+     * @param context the context in which this Subevent is being prepared
      *
-     * @throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs
      */
-    void prepareNaturalWeaponAttack(String weaponId, RPGLContext context) throws Exception {
+    void prepareNaturalWeapon(String weaponId, RPGLContext context) throws Exception {
         this.json.putBoolean("natural_weapon_attack", true);
-
         // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
         RPGLItem weapon = RPGLFactory.newItem(weaponId);
         String attackType = this.json.getString("attack_type");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
+        String attackAbility = weapon.getAttackAbility(attackType);
+        this.addBonus(new JsonObject() {{
+            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+            this.putJsonArray("dice", new JsonArray());
+        }});
         this.applyWeaponAttackBonus(weapon);
-
-        // Add proficiency bonus to the roll (all natural weapon attacks are made with proficiency).
-        this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
 
         // Copy damage of natural weapon to Subevent JSON.
         this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
@@ -169,31 +150,29 @@ public class AttackRoll extends Roll {
 
         // Record natural weapon UUID
         this.json.putString("weapon", weapon.getUuid());
+
+        // Record attack ability
+        this.json.putString("attack_ability", attackAbility);
     }
 
     /**
-     * This helper method prepares the AttackRoll under the assumption that the attack is being made using a weapon
-     * such as a sword, shortbow, or even an improvised weapon such as a mug. The weapon being used is determined by
-     * the content of the equipment slot specified in the method call.
+     * This helper method prepares the AttackRoll in the case that it uses an item weapon to make the attack.
      *
-     * @param equipmentSlot an equipment slot (can be anything other than <code>"inventory"</code>)
-     * @param context       the context this Subevent takes place in
+     * @param context the context in which this Subevent is being prepared
      *
-     * @throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs
      */
-    void prepareItemWeaponAttack(String equipmentSlot, RPGLContext context) throws Exception {
+    void prepareItemWeapon(String equipmentSlot, RPGLContext context) throws Exception {
         this.json.putBoolean("natural_weapon_attack", false);
-
-        //Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
-        RPGLItem weapon = UUIDTable.getItem(this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString(equipmentSlot));
+        // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
+        RPGLItem weapon = UUIDTable.getItem(this.getSource().getEquippedItems().getString(equipmentSlot));
         String attackType = this.json.getString("attack_type");
-        this.addBonus(this.getSource().getAbilityModifierFromAbilityName(weapon.getAttackAbility(attackType), context));
+        String attackAbility = weapon.getAttackAbility(attackType);
+        this.addBonus(new JsonObject() {{
+            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+            this.putJsonArray("dice", new JsonArray());
+        }});
         this.applyWeaponAttackBonus(weapon);
-
-        // Add proficiency bonus to the roll if source is proficient with weapon.
-        if (getSource().isProficientWithWeapon(weapon, context)) {
-            this.addBonus(this.getSource().getEffectiveProficiencyBonus(context));
-        }
 
         // Copy damage of natural weapon to Subevent JSON.
         this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
@@ -204,8 +183,90 @@ public class AttackRoll extends Roll {
             this.addTag(itemWeaponTags.getString(i));
         }
 
-        // Record natural weapon UUID
+        // Record item weapon UUID
         this.json.putString("weapon", weapon.getUuid());
+
+        // Record attack ability
+        this.json.putString("attack_ability", attackAbility);
+    }
+
+    /**
+     * This helper method applies any attack roll bonuses granted by the weapon's json data (typically this bonus is granted
+     * by magical weapons).
+     *
+     * @param weapon the RPGLItem being used to deliver the attack
+     */
+    void applyWeaponAttackBonus(RPGLItem weapon) {
+        this.addBonus(new JsonObject() {{
+            this.putInteger("bonus", weapon.getAttackBonus());
+            this.putJsonArray("dice", new JsonArray()); // TODO should this be made accessible?
+        }});
+    }
+
+    /**
+     * This helper method collects and stores the base damage dice and bonuses in the AttackRoll.
+     *
+     * @param context the context in which the base damage is being determined
+     *
+     * @throws Exception if an exception occurs
+     */
+    void getBaseDamage(RPGLContext context) throws Exception {
+        // Collect base typed damage dice and bonuses
+        DamageCollection baseDamageCollection = new DamageCollection();
+        baseDamageCollection.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "damage_collection");
+            this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(json.getJsonArray("tags").asList());
+                this.addString("base_damage_collection");
+            }});
+        }});
+        baseDamageCollection.setSource(this.getSource());
+        baseDamageCollection.prepare(context);
+        baseDamageCollection.setTarget(this.getSource());
+        baseDamageCollection.invoke(context);
+
+        // If the attack is made with an item, add attack ability modifier to damage roll
+        if (this.json.getString("weapon") != null) {
+            RPGLItem weapon = UUIDTable.getItem(this.json.getString("weapon"));
+            String attackAbility = weapon.getAttackAbility(this.json.getString("attack_type"));
+            int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(attackAbility, context);
+            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
+            baseDamageCollection.addDamage(new JsonObject() {{
+                this.putString("damage_type", damageType);
+                this.putJsonArray("dice", new JsonArray());
+                this.putInteger("bonus", attackAbilityModifier);
+            }});
+        }
+
+        // Replace damage key with base damage collection
+        this.json.putJsonArray("damage", baseDamageCollection.getDamageCollection());
+    }
+
+    /**
+     * This helper method collects and stores the target damage dice and bonuses in the AttackRoll.
+     *
+     * @param context the context in which the target damage is being determined
+     *
+     * @throws Exception if an exception occurs
+     */
+    void getTargetDamage(RPGLContext context) throws Exception {
+        // Collect target typed damage dice and bonuses
+        DamageCollection targetDamageCollection = new DamageCollection();
+        targetDamageCollection.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "damage_collection");
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(json.getJsonArray("tags").asList());
+                this.addString("target_damage_collection");
+            }});
+        }});
+        targetDamageCollection.setSource(this.getSource());
+        targetDamageCollection.prepare(context);
+        targetDamageCollection.setTarget(this.getTarget());
+        targetDamageCollection.invoke(context);
+
+        // add target damage collection to base damage collection
+        this.json.getJsonArray("damage").asList().addAll(targetDamageCollection.getDamageCollection().asList());
     }
 
     /**
@@ -219,11 +280,13 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs.
      */
     int getTargetArmorClass(RPGLContext context) throws Exception {
-        int baseArmorClass = this.getTarget().getBaseArmorClass(context);
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = new CalculateEffectiveArmorClass();
         calculateEffectiveArmorClass.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "calculate_effective_armor_class");
-            this.putInteger("base", baseArmorClass);
+            this.putJsonObject("base", new JsonObject() {{
+                this.putString("base_formula", "number");
+                this.putInteger("value", getTarget().getBaseArmorClass(context));
+            }});
         }});
         calculateEffectiveArmorClass.setSource(this.getSource());
         calculateEffectiveArmorClass.prepare(context);
@@ -233,196 +296,112 @@ public class AttackRoll extends Roll {
     }
 
     /**
-     * This helper method determines and delivers the damage dealt by the attack roll on a hit.
+     * This method returns whether the attack roll is a critical hit.
      *
      * @param context the context this Subevent takes place in
+     * @return true if the attack is a critical hit
      *
      * @throws Exception if an exception occurs.
      */
-    void resolveDamage(RPGLContext context) throws Exception {
-        DamageCollection baseDamageCollection = this.getBaseDamageCollection(context);
-        DamageCollection targetDamageCollection = this.getTargetDamageCollection(context);
-
-        baseDamageCollection.addTypedDamage(targetDamageCollection.getDamageCollection());
-        this.json.putJsonObject("damage", this.getAttackDamage(baseDamageCollection.getDamageCollection(), context));
-        this.deliverDamage(context);
-    }
-
-    /**
-     * This helper method increases the damage of the attack roll if the attack scored a critical hit.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    void resolveCriticalHitDamage(RPGLContext context) throws Exception {
-        DamageCollection baseDamageCollection = this.getBaseDamageCollection(context);
-        DamageCollection targetDamageCollection = this.getTargetDamageCollection(context);
-        CriticalHitDamageCollection criticalHitDamageCollection = this.getCriticalHitDamageCollection(
-                baseDamageCollection,
-                targetDamageCollection,
-                context
-        );
-
-        this.json.putJsonObject("damage", this.getAttackDamage(criticalHitDamageCollection.getDamageCollection(), context));
-        this.deliverDamage(context);
-    }
-
-    /**
-     * This helper method determines the base damage dice and bonuses dealt by the attack roll on a hit.
-     *
-     * @param context the context this Subevent takes place in
-     * @return the base damage dice collection for the attack
-     *
-     * @throws Exception if an exception occurs.
-     */
-    DamageCollection getBaseDamageCollection(RPGLContext context) throws Exception {
-        DamageCollection baseDamageCollection = new DamageCollection();
-        baseDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
-            this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
+    public boolean isCriticalHit(RPGLContext context) throws Exception {
+        CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
+        calculateCriticalHitThreshold.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "calculate_critical_hit_threshold");
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("base_damage_collection");
             }});
         }});
-        baseDamageCollection.setSource(this.getSource());
-        baseDamageCollection.prepare(context);
+        calculateCriticalHitThreshold.setSource(this.getSource());
+        calculateCriticalHitThreshold.prepare(context);
+        calculateCriticalHitThreshold.setTarget(this.getTarget());
+        calculateCriticalHitThreshold.invoke(context);
 
-        // If the attack is made with an item, add attack ability modifier to damage roll
-        if (this.json.getString("weapon") != null) {
-            RPGLItem weapon = UUIDTable.getItem(this.json.getString("weapon"));
-            String attackAbility = weapon.getAttackAbility(this.json.getString("attack_type"));
-            int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(attackAbility, context);
-            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("type");
-            baseDamageCollection.addTypedDamage(new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("type", damageType);
-                    this.putInteger("bonus", attackAbilityModifier);
-                }});
-            }});
+        return this.getBase().getInteger("value") >= calculateCriticalHitThreshold.get();
+    }
+
+    /**
+     * This method returns whether the attack roll is a critical miss.
+     *
+     * @return true if the attack is a critical miss
+     */
+    public boolean isCriticalMiss() {
+        return this.getBase().getInteger("value") == 1;
+    }
+
+    /**
+     * This helper method collects and stores the critical hit damage dice and bonuses in the AttackRoll.
+     *
+     * @param context the context in which the critical hit damage is being determined
+     *
+     * @throws Exception if an exception occurs
+     */
+    void getCriticalHitDamage(RPGLContext context) throws Exception {
+        // Get a copy of the attack damage with twice the number of dice
+        JsonArray damageArray = this.json.getJsonArray("damage").deepClone();
+        for (int i = 0; i < damageArray.size(); i++) {
+            JsonObject damageJson = damageArray.getJsonObject(i);
+            JsonArray dice = damageJson.getJsonArray("dice");
+            dice.asList().addAll(dice.deepClone().asList());
         }
-        baseDamageCollection.setTarget(this.getSource());
-        baseDamageCollection.invoke(context);
-        return baseDamageCollection;
-    }
 
-    /**
-     * This helper method determines any additional damage dice or bonuses dealt to a target on a hit beyond the base
-     * damage.
-     *
-     * @param context the context this Subevent takes place in
-     * @return the target damage dice collection of the attack
-     *
-     * @throws Exception if an exception occurs.
-     */
-    DamageCollection getTargetDamageCollection(RPGLContext context) throws Exception {
-        DamageCollection targetDamageCollection = new DamageCollection();
-        targetDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("target_damage_collection");
-            }});
-        }});
-        targetDamageCollection.setSource(this.getSource());
-        targetDamageCollection.prepare(context);
-        targetDamageCollection.setTarget(this.getTarget());
-        targetDamageCollection.invoke(context);
-        return targetDamageCollection;
-    }
-
-    /**
-     * This helper method determines the damage dice and bonuses dealt by an attack roll on a critical hit. This
-     * doubles the number of dice involved with the base and target damage rolls, and allows for additional bonuses and
-     * dice to be applied.
-     *
-     * @param baseDamageCollection   the base damage dice collection of the attack
-     * @param targetDamageCollection the target damage dice collection of the attack
-     * @param context                the context this Subevent takes place in
-     * @return the critical hit damage dice collection for the attack
-     *
-     * @throws Exception if an exception occurs.
-     */
-    CriticalHitDamageCollection getCriticalHitDamageCollection(DamageCollection baseDamageCollection,
-                                                               DamageCollection targetDamageCollection,
-                                                               RPGLContext context) throws Exception {
-        baseDamageCollection.addTypedDamage(targetDamageCollection.getDamageCollection());
+        // Collect any extra damage bonuses which aren't doubled
         CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
         criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "critical_hit_damage_collection");
-            this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
+            this.putJsonArray("damage", damageArray);
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(json.getJsonArray("tags").asList());
+            }});
         }});
         criticalHitDamageCollection.setSource(this.getSource());
         criticalHitDamageCollection.prepare(context);
         criticalHitDamageCollection.setTarget(this.getTarget());
-        criticalHitDamageCollection.doubleDice();
         criticalHitDamageCollection.invoke(context);
-        return criticalHitDamageCollection;
+
+        // Set the attack damage to the critical hit damage collection
+        this.json.putJsonArray("damage", criticalHitDamageCollection.getDamageCollection());
     }
 
     /**
-     * This helper method rolls all dice involved in the damage roll of the attack on a hit and reports a collection of
-     * damage types and amounts (individual dice rolls are not preserved).
+     * This helper method rolls all damage dice for this attack and precipitates the delivery of that damage to the
+     * target.
      *
-     * @param damageCollection a collection of typed damage dice and bonuses
-     * @param context          the context this Subevent takes place in
-     * @return the attack's final damage values by type
+     * @param context the context in which the damage is being rolled.
      *
-     * @throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs
      */
-    JsonObject getAttackDamage(JsonArray damageCollection, RPGLContext context) throws Exception {
-        DamageRoll attackDamageRoll = new DamageRoll();
-        attackDamageRoll.joinSubeventData(new JsonObject() {{
+    void resolveDamage(RPGLContext context) throws Exception {
+        DamageRoll damageRoll = new DamageRoll();
+        damageRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_roll");
-            this.putJsonArray("damage", damageCollection.deepClone());
+            this.putJsonArray("damage", json.getJsonArray("damage"));
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("attack_damage_roll");
             }});
         }});
-        attackDamageRoll.setSource(this.getSource());
-        attackDamageRoll.prepare(context);
-        attackDamageRoll.setTarget(this.getTarget());
-        attackDamageRoll.invoke(context);
-        return attackDamageRoll.getDamage();
-    }
+        damageRoll.setSource(this.getSource());
+        damageRoll.prepare(context);
+        damageRoll.setTarget(this.getTarget());
+        damageRoll.invoke(context);
 
-    /**
-     * This helper method passes the final damage quantities of the attack to the attack's target.
-     *
-     * @param context the context this Subevent takes place in
-     *
-     * @throws Exception if an exception occurs.
-     */
-    void deliverDamage(RPGLContext context) throws Exception {
-        DamageDelivery damageDelivery = new DamageDelivery();
-        JsonObject damage = this.json.getJsonObject("damage");
-        damageDelivery.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_delivery");
-            this.putJsonObject("damage", damage.deepClone());
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-            }});
-        }});
-        damageDelivery.setSource(this.getSource());
-        damageDelivery.prepare(context);
-        damageDelivery.setTarget(this.getTarget());
-        damageDelivery.invoke(context);
-        this.getTarget().receiveDamage(damageDelivery, context);
+        // Store final damage by type to damage key
+        this.json.putJsonArray("damage", damageRoll.getDamage());
+
+        this.deliverDamage(context);
     }
 
     /**
      * This helper method resolves any additional subevents specified in the AttackRoll json according to whether the
      * attack hit or missed.
      *
-     * @param hitOrMiss a String indicating whether the attack hit <code>("hit")</code> or missed <code>("miss")</code>.
-     * @param context   the context this Subevent takes place in
+     * @param resolution a String indicating the resolution of the Subevent (<code>"hit"</code> or <code>"miss"</code>)
+     * @param context    the context this Subevent takes place in
      *
      * @throws Exception if an exception occurs.
      */
-    void resolveNestedSubevents(String hitOrMiss, RPGLContext context) throws Exception {
-        JsonArray subeventJsonArray = Objects.requireNonNullElse(this.json.getJsonArray(hitOrMiss), new JsonArray());
+    void resolveNestedSubevents(String resolution, RPGLContext context) throws Exception {
+        JsonArray subeventJsonArray = Objects.requireNonNullElse(this.json.getJsonArray(resolution), new JsonArray());
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject nestedSubeventJson = subeventJsonArray.getJsonObject(i);
             Subevent subevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);
@@ -434,43 +413,35 @@ public class AttackRoll extends Roll {
     }
 
     /**
-     * This helper method returns whether the attack roll is a critical hit.
+     * This helper method delivers the finalized damage of the attack to the target.
      *
-     * @param context the context this Subevent takes place in
-     * @return true if the attack is a critical hit
+     * @param context the context in which the damage is being delivered
      *
-     * @throws Exception if an exception occurs.
+     * @throws Exception if an exception occurs
      */
-    public boolean isCriticalHit(RPGLContext context) throws Exception {
-        CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
-        calculateCriticalHitThreshold.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_critical_hit_threshold");
+    void deliverDamage(RPGLContext context) throws Exception {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "damage_delivery");
+            this.putJsonArray("damage", json.getJsonArray("damage"));
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(json.getJsonArray("tags").asList());
+            }});
         }});
-        calculateCriticalHitThreshold.setSource(this.getSource());
-        calculateCriticalHitThreshold.prepare(context);
-        calculateCriticalHitThreshold.setTarget(this.getTarget());
-        calculateCriticalHitThreshold.invoke(context);
-
-        return (this.get() - this.getBonus()) >= calculateCriticalHitThreshold.get();
+        damageDelivery.setSource(this.getSource());
+        damageDelivery.prepare(context);
+        damageDelivery.setTarget(this.getTarget());
+        damageDelivery.invoke(context);
+        damageDelivery.getTarget().receiveDamage(damageDelivery, context);
     }
 
     /**
-     * This helper method returns whether the attack roll is a critical miss.
+     * Returns whether the AttackRoll deals any damage.
      *
-     * @return true if the attack is a critical miss
+     * @return true if the AttackRoll deals any damage
      */
-    public boolean isCriticalMiss() {
-        return this.getBase() == 1;
-    }
-
-    /**
-     * This helper method applies any attack roll bonuses granted by the weapon's json data (typically this bonus is granted
-     * by magical weapons).
-     *
-     * @param weapon the RPGLItem being used to deliver the attack
-     */
-    void applyWeaponAttackBonus(RPGLItem weapon) {
-        this.addBonus(weapon.getAttackBonus());
+    public boolean dealsDamage() {
+        return !Objects.requireNonNullElse(this.json.getJsonArray("damage"), new JsonArray()).asList().isEmpty();
     }
 
 }

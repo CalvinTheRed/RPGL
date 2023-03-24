@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -86,8 +87,8 @@ public class SetBaseTest {
     }
 
     @Test
-    @DisplayName("execute sets calculation base to new value")
-    void execute_setsCalculationBaseToNewValue() throws Exception {
+    @DisplayName("execute sets calculation base to new value (number)")
+    void execute_setsCalculationBaseToNewValue_number() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         RPGLContext context = new RPGLContext();
@@ -102,16 +103,174 @@ public class SetBaseTest {
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "set_base",
-                "base": 13
+                "base": {
+                    "base_formula": "number",
+                    "value": 13
+                }
             }*/
             this.putString("function", "set_base");
-            this.putInteger("base", 13);
+            this.putJsonObject("base", new JsonObject() {{
+                this.putString("base_formula", "number");
+                this.putInteger("value", 13);
+            }});
         }};
 
-        setBase.execute(null, calculation, functionJson, context);
+        RPGLEffect effect = new RPGLEffect();
+        effect.setName("TEST");
 
-        assertEquals(13, calculation.getBase(),
+        setBase.execute(effect, calculation, functionJson, context);
+
+        assertEquals(13, calculation.getBase().getInteger("value"),
                 "execute should set calculation base to 13"
+        );
+    }
+
+    @Test
+    @DisplayName("execute sets calculation base to new value (modifier)")
+    void execute_setsCalculationBaseToNewValue_modifier() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        source.getAbilityScores().putInteger("dex", 20);
+
+        calculation.setSource(source);
+        calculation.prepare(context);
+        calculation.setTarget(target);
+
+        SetBase setBase = new SetBase();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "set_base",
+                "base": {
+                    "base_formula": "modifier",
+                    "ability": "dex",
+                    "object": {
+                        "from": "effect",
+                        "object": "source"
+                    }
+                }
+            }*/
+            this.putString("function", "set_base");
+            this.putJsonObject("base", new JsonObject() {{
+                this.putString("base_formula", "modifier");
+                this.putString("ability", "dex");
+                this.putJsonObject("object", new JsonObject() {{
+                    this.putString("from", "effect");
+                    this.putString("object", "source");
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+        effect.setName("TEST");
+
+        setBase.execute(effect, calculation, functionJson, context);
+
+        assertEquals(5, calculation.getBase().getInteger("value"),
+                "execute should set calculation base to source's dex modifier (+5)"
+        );
+    }
+
+    @Test
+    @DisplayName("execute sets calculation base to new value (ability)")
+    void execute_setsCalculationBaseToNewValue_ability() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        source.getAbilityScores().putInteger("dex", 20);
+
+        calculation.setSource(source);
+        calculation.prepare(context);
+        calculation.setTarget(target);
+
+        SetBase setBase = new SetBase();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "set_base",
+                "base": {
+                    "base_formula": "ability",
+                    "ability": "dex",
+                    "object": {
+                        "from": "effect",
+                        "object": "source"
+                    }
+                }
+            }*/
+            this.putString("function", "set_base");
+            this.putJsonObject("base", new JsonObject() {{
+                this.putString("base_formula", "ability");
+                this.putString("ability", "dex");
+                this.putJsonObject("object", new JsonObject() {{
+                    this.putString("from", "effect");
+                    this.putString("object", "source");
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+        effect.setName("TEST");
+
+        setBase.execute(effect, calculation, functionJson, context);
+
+        assertEquals(20, calculation.getBase().getInteger("value"),
+                "execute should set calculation base to source's dex score (20)"
+        );
+    }
+
+    @Test
+    @DisplayName("execute sets calculation base to new value (proficiency)")
+    void execute_setsCalculationBaseToNewValue_proficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        calculation.setSource(source);
+        calculation.prepare(context);
+        calculation.setTarget(target);
+
+        SetBase setBase = new SetBase();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "set_base",
+                "base": {
+                    "base_formula": "proficiency",
+                    "object": {
+                        "from": "effect",
+                        "object": "source"
+                    }
+                }
+            }*/
+            this.putString("function", "set_base");
+            this.putJsonObject("base", new JsonObject() {{
+                this.putString("base_formula", "proficiency");
+                this.putJsonObject("object", new JsonObject() {{
+                    this.putString("from", "effect");
+                    this.putString("object", "source");
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+        effect.setName("TEST");
+
+        setBase.execute(effect, calculation, functionJson, context);
+
+        assertEquals(2, calculation.getBase().getInteger("value"),
+                "execute should set calculation base to source's proficiency bonus (+2)"
         );
     }
 

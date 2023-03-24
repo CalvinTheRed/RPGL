@@ -54,14 +54,14 @@ public class MaximizeDamageTest {
                 "subevent": "damage_roll",
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 1 ] }
                         ],
                         "bonus": 2
                     },{
-                        "type": "cold",
+                        "damage_type": "cold",
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 1 ] }
@@ -73,7 +73,7 @@ public class MaximizeDamageTest {
             this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -91,7 +91,7 @@ public class MaximizeDamageTest {
                     this.putInteger("bonus", 2);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -153,16 +153,16 @@ public class MaximizeDamageTest {
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "maximize_damage",
-                "type": "fire"
+                "damage_type": "fire"
             }*/
             this.putString("function", "maximize_damage");
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
         }};
 
         maximizeDamage.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":4,"fire":14}""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should maximize fire damage (cold 1+1+2=4 fire 6+6+2=14)"
         );
@@ -185,16 +185,16 @@ public class MaximizeDamageTest {
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "maximize_damage",
-                "type": ""
+                "damage_type": ""
             }*/
             this.putString("function", "maximize_damage");
-            this.putString("type", "");
+            this.putString("damage_type", "");
         }};
 
         maximizeDamage.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":14,"fire":14}""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should maximize all damage (cold 6+6+2=14 fire 6+6+2=14)"
         );

@@ -1,5 +1,14 @@
 package org.rpgl.subevent;
 
+import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEffect;
+import org.rpgl.function.AddBonus;
+import org.rpgl.function.SetBase;
+import org.rpgl.function.SetMinimum;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
+
 import java.util.Objects;
 
 /**
@@ -19,74 +28,174 @@ public abstract class Calculation extends Subevent {
         super(subeventId);
     }
 
-    /**
-     * This method adds a bonus to the value being calculated.
-     *
-     * @param bonus a bonus to be added to the calculation
-     */
-    public void addBonus(int bonus) {
-        this.json.putInteger("bonus", this.getBonus() + bonus);
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        this.prepareBase(context);
+        this.prepareBonuses(context);
+        this.prepareMinimum(context);
     }
 
     /**
-     * This method returns the bonus of the calculation.
+     * This helper method interprets the base formula provided in the Subevent JSON, if it exists, and stores it as the
+     * base of the Calculation.
      *
-     * @return the bonus granted to the calculation
+     * @param context the context in which the Calculation is being prepared
+     *
+     * @throws Exception if an exception occurs
      */
-    public int getBonus() {
-        return Objects.requireNonNullElse(this.json.getInteger("bonus"), 0);
+    void prepareBase(RPGLContext context) throws Exception {
+        JsonObject baseJson = this.json.removeJsonObject("base");
+        this.setBase(new JsonObject() {{
+            this.putInteger("value", 0);
+        }});
+        if (baseJson != null) {
+            RPGLEffect effect = new RPGLEffect();
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getSource());
+            this.setBase(SetBase.processJson(effect, this, baseJson, context));
+        }
     }
 
     /**
-     * This method sets the calculated value. Once the calculation is set, the returned value will not include any
-     * bonuses which have been applied to it.
+     * This helper method interprets the bonus formulas provided in the Subevent JSON, if they exist, and stores it as
+     * the bonuses of the Calculation.
      *
-     * @param value the new set value of the calculation
+     * @param context the context in which the Calculation is being prepared
+     *
+     * @throws Exception if an exception occurs
      */
-    public void setSet(int value) {
-        this.json.putInteger("set", value);
+    void prepareBonuses(RPGLContext context) throws Exception {
+        JsonArray bonuses = this.json.removeJsonArray("bonuses");
+        this.json.putJsonArray("bonuses", new JsonArray());
+        if (bonuses != null) {
+            RPGLEffect effect = new RPGLEffect();
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getSource());
+            for (int i = 0; i < bonuses.size(); i++) {
+                JsonObject bonus = bonuses.getJsonObject(i);
+                this.addBonus(AddBonus.processJson(effect, this, bonus, context));
+            }
+        }
     }
 
     /**
-     * This method returns the set value of the calculation.
+     * This helper method interprets the minimum formula provided in the Subevent JSON, if it exists, and stores it as
+     * the minimum of the Calculation.
      *
-     * @return the set value of the calculation
+     * @param context the context in which the Calculation is being prepared
+     *
+     * @throws Exception if an exception occurs
      */
-    public Integer getSet() {
-        return this.json.getInteger("set");
+    void prepareMinimum(RPGLContext context) throws Exception {
+        JsonObject minimumJson = this.json.removeJsonObject("minimum");
+        this.setMinimum(new JsonObject() {{
+            this.putInteger("value", Integer.MIN_VALUE);
+        }});
+        if (minimumJson != null) {
+            RPGLEffect effect = new RPGLEffect();
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getSource());
+            this.setMinimum(SetMinimum.processJson(effect, this, minimumJson, context));
+        }
     }
 
     /**
-     * This method sets the calculation's base value.
+     * Returns the base of the Calculation. Call getInteger("value") to get the base value.
+     * TODO should base be stored as an int after prepare()?
      *
-     * @param value the new base value of the calculation
+     * @return a JsonObject storing the base calculation value.
      */
-    public void setBase(int value) {
-        this.json.putInteger("base", value);
+    public JsonObject getBase() {
+        return this.json.getJsonObject("base");
     }
 
     /**
-     * This method returns the base value of the calculation.
+     * Sets the base of the Calculation. This always overrides the previous base value for the Calculation.
      *
-     * @return the base value of the calculation
+     * @param baseJson the JSON representation of a base value for the Calculation
      */
-    public Integer getBase() {
-        return this.json.getInteger("base");
+    public void setBase(JsonObject baseJson) {
+        this.json.putJsonObject("base", baseJson);
     }
 
     /**
-     * This method returns the result of the calculation.
+     * Returns the list of bonuses applied to the Calculation.
      *
-     * @return the result of the calculation
+     * @return a JsonArray of bonuses
+     */
+    public JsonArray getBonuses() {
+        return this.json.getJsonArray("bonuses");
+    }
+
+    /**
+     * Adds a bonus to the Calculation.
+     *
+     * @param bonusJson a bonus to be added to the Calculation
+     */
+    public void addBonus(JsonObject bonusJson) {
+        this.json.getJsonArray("bonuses").addJsonObject(bonusJson);
+    }
+
+    /**
+     * Returns the minimum of the Calculation. Call getInteger("value") to get the base value.
+     * TODO should minimum be stored as an int after prepare()?
+     *
+     * @return a JsonObject storing the minimum calculation value.
+     */
+    public JsonObject getMinimum() {
+        return this.json.getJsonObject("minimum");
+    }
+
+    /**
+     * Sets the minimum of the Calculation. If the provided minimum is lower than the current minimum, this method will
+     * not do anything to modify the SUbevent.
+     *
+     * @param minimumJson the JSON representation of a minimum value for the Calculation
+     */
+    public void setMinimum(JsonObject minimumJson) {
+        JsonObject currentMinimum = this.getMinimum();
+        if (currentMinimum == null || minimumJson.getInteger("value") > currentMinimum.getInteger("value")) {
+            this.json.putJsonObject("minimum", minimumJson);
+        }
+    }
+
+    /**
+     * Returns the final value of the Calculation. Any unrolled dice in the Calculation bonuses are rolled by calling
+     * this method.
+     *
+     * @return the final value of the Calculation
      */
     public int get() {
-        Integer set = this.getSet();
-        if (set != null) {
-            return set;
+        int total = this.getBase().getInteger("value");
+        total += this.getBonus();
+        int minimum = this.getMinimum().getInteger("value");
+        if (total < minimum) {
+            total = minimum;
         }
-        return Objects.requireNonNullElse(this.getBase(), 0) + this.getBonus();
+        return total;
     }
 
-    // TODO include minimum and maximum fields in this class
+    /**
+     * Returns the final bonus to be applied to the Calculation. This method is intended to be used after any bonus dice
+     * have been rolled. If this method is called before the bonus dice have been rolled, the dice are rolled during the
+     * calculation.
+     *
+     * @return the bonus to be applied to the Calculation.
+     */
+    public int getBonus() {
+        int bonus = 0;
+        JsonArray bonuses = this.getBonuses();
+        for (int i = 0; i < bonuses.size(); i++) {
+            JsonObject bonusJson = bonuses.getJsonObject(i);
+            bonus += bonusJson.getInteger("bonus");
+            JsonArray dice = bonusJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(i);
+                bonus += Objects.requireNonNullElseGet(die.getInteger("roll"), () -> Die.roll(die));
+            }
+        }
+        return bonus;
+    }
 
 }

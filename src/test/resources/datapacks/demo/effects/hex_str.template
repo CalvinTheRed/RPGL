@@ -27,9 +27,10 @@
           "function": "add_damage",
           "damage": [
             {
-              "type": "necrotic",
+              "damage_formula": "range",
+              "damage_type": "necrotic",
               "dice": [
-                { "count":  1, "size": 6, "determined":  [ 3 ] }
+                { "count": 1, "size": 6, "determined": [ 3 ] }
               ],
               "bonus": 0
             }

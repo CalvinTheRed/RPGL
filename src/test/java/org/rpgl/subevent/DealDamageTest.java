@@ -78,14 +78,28 @@ public class DealDamageTest {
             /*{
                 "subevent": "deal_damage",
                 "tags": [ ],
-                "damage": {
-                    "cold": 10
-                }
+                "damage": [
+                    {
+                        "damage_type": "cold",
+                        "dice": [
+                            { "roll": 5 }
+                        ],
+                        "bonus": 5
+                    }
+                ]
             }*/
             this.putString("subevent", "deal_damage");
             this.putJsonArray("tags", new JsonArray());
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("cold", 10);
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "cold");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 5);
+                        }});
+                    }});
+                    this.putInteger("bonus", 5);
+                }});
             }});
         }});
 
@@ -111,17 +125,19 @@ public class DealDamageTest {
         dealDamage.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "deal_damage",
-                "tags": [ ]
+                "tags": [ ],
+                "damage": [ ]
             }*/
             this.putString("subevent", "deal_damage");
             this.putJsonArray("tags", new JsonArray());
+            this.putJsonArray("damage", new JsonArray());
         }});
 
         dealDamage.setSource(source);
         dealDamage.setTarget(target);
-        JsonObject targetDamage = dealDamage.getTargetDamage(context);
+        dealDamage.getTargetDamage(context);
 
-        assertEquals("{}", targetDamage.toString(),
+        assertEquals("[]", dealDamage.json.getJsonArray("damage").toString(),
                 "target damage object should be empty by default"
         );
     }
@@ -142,7 +158,8 @@ public class DealDamageTest {
                 "tags": [ ],
                 "damage": [
                     {
-                        "type": "force",
+                        "damage_formula": "range",
+                        "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
                         ],
@@ -154,7 +171,8 @@ public class DealDamageTest {
             this.putJsonArray("tags", new JsonArray());
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "force");
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 1);
@@ -174,8 +192,8 @@ public class DealDamageTest {
         dealDamage.getBaseDamage(context);
 
         String expected = """
-                {"force":3}""";
-        assertEquals(expected, dealDamage.json.getJsonObject("damage").toString(),
+                [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}]}]""";
+        assertEquals(expected, dealDamage.json.getJsonArray("damage").toString(),
                 "base damage should be 3 force damage"
         );
     }
@@ -195,7 +213,8 @@ public class DealDamageTest {
                 "subevent": "deal_damage",
                 "damage": [
                     {
-                        "type": "force",
+                        "damage_formula": "range",
+                        "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
                         ],
@@ -206,7 +225,8 @@ public class DealDamageTest {
             this.putString("subevent", "deal_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "force");
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 1);

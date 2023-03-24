@@ -127,7 +127,7 @@ public class DamageAffinity extends Subevent {
      * @return a String representing a damage type
      */
     public String getDamageType() {
-        return this.json.getString("type");
+        return this.json.getString("damage_type");
     }
 
 }

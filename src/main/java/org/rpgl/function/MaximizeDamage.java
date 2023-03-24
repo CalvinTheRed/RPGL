@@ -26,7 +26,7 @@ public class MaximizeDamage extends Function {
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         super.verifyFunction(functionJson);
         if (subevent instanceof DamageRoll damageRoll) {
-            damageRoll.maximizeTypedDamageDice(functionJson.getString("type"));
+            damageRoll.maximizeTypedDamageDice(functionJson.getString("damage_type"));
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

@@ -69,7 +69,7 @@ public class RPGLFactoryTest {
         );
 
         expected = """
-                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"},{"condition":"check_damage_type","type":"fire"}],"functions":[{"function":"grant_immunity"}]}}""";
+                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"},{"condition":"check_damage_type","damage_type":"fire"}],"functions":[{"function":"grant_immunity"}]}}""";
         assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );
@@ -100,7 +100,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLEventTO.AREA_OF_EFFECT_ALIAS
         );
         expected = """
-                [{"damage":[{"bonus":0,"dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6}],"type":"fire"}],"damage_on_pass":"half","determined":[1],"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
+                [{"damage":[{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":16,"determined":[3],"size":6}]}],"damage_on_pass":"half","determined":[1],"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
         assertEquals(expected, event.getSubevents().toString(),
                 "incorrect field value: " + RPGLEventTO.SUBEVENTS_ALIAS
         );
@@ -149,7 +149,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
         );
         expected = """
-                {"melee":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}],"thrown":[{"bonus":0,"dice":[{"determined":[2],"size":4}],"type":"bludgeoning"}]}""";
+                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
         assertEquals(expected, item.getDamage().toString(),
                 "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
         );

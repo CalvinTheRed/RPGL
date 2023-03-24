@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -43,8 +44,13 @@ public class CalculateMaximumHitPoints extends Calculation {
         JsonObject sourceHealthData = source.getHealthData();
         int sourceConModifier = source.getAbilityModifierFromAbilityName("con", context);
         int sourceHitDiceCount = sourceHealthData.getJsonArray("hit_dice").size();
-        this.setBase(sourceHealthData.getInteger("base"));
-        this.addBonus(sourceConModifier * sourceHitDiceCount);
+        super.setBase(new JsonObject() {{
+            this.putInteger("value", sourceHealthData.getInteger("base"));
+        }});
+        super.addBonus(new JsonObject() {{
+            this.putInteger("bonus", sourceConModifier * sourceHitDiceCount);
+            this.putJsonArray("dice", new JsonArray());
+        }});
     }
 
 }

@@ -52,28 +52,36 @@ public class MaximizeHealingTest {
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "healing_roll",
-                "dice": [
-                    { "size": 6, "determined": [ 1 ] },
-                    { "size": 6, "determined": [ 1 ] }
-                ],
-                "bonus": 2
+                "healing": [
+                    {
+                        "dice": [
+                            { "size": 6, "determined": [ 1 ] },
+                            { "size": 6, "determined": [ 1 ] }
+                        ],
+                        "bonus": 2
+                    }
+                ]
             }*/
             this.putString("subevent", "healing_roll");
-            this.putJsonArray("dice", new JsonArray() {{
+            this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 6);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(1);
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(1);
+                            }});
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(1);
+                            }});
+                        }});
                     }});
-                }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 6);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(1);
-                    }});
+                    this.putInteger("bonus", 2);
                 }});
             }});
-            this.putInteger("bonus", 2);
         }});
     }
 
@@ -125,7 +133,7 @@ public class MaximizeHealingTest {
         maximizeHealing.execute(null, healingRoll, functionJson, context);
 
         String expected = """
-                {"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}""";
+                [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
         assertEquals(expected, healingRoll.getHealing().toString(),
                 "execute should set all healing dice to their maximum face value"
         );

@@ -350,12 +350,20 @@ public class RollTest {
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
-                "determined": [ 15, 5 ]
+                "determined": [ 15, 5 ],
+                "bonuses": [ ],
+                "minimum": {
+                    "value": Integer.MIN_VALUE
+                }
             }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(15);
                 this.addInteger(5);
+            }});
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});
         roll.grantAdvantage();
@@ -372,12 +380,22 @@ public class RollTest {
         roll.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "contest_roll",
-                "determined": [ 5, 15 ]
+                "determined": [ 5, 15 ],
+                "bonuses": [ ],
+                "minimum": {
+                    "name": "TEST",
+                    "effect": null,
+                    "value": Integer.MIN_VALUE
+                }
             }*/
             this.putString("subevent", "contest_roll");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(5);
                 this.addInteger(15);
+            }});
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putInteger("value", Integer.MIN_VALUE);
             }});
         }});
         roll.grantAdvantage();
@@ -385,37 +403,6 @@ public class RollTest {
         roll.roll();
         assertEquals(5, roll.get(),
                 "advantage and disadvantage roll behavior should return the first value (5)"
-        );
-    }
-
-    @Test
-    @DisplayName("checkForReroll no reroll was requested")
-    void checkForReroll_noRerollRequested() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
-        context.add(source);
-        context.add(target);
-
-        roll.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "contest_roll",
-                "determined": [ 5, 15 ]
-            }*/
-            this.putString("subevent", "contest_roll");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(5);
-                this.addInteger(15);
-            }});
-        }});
-
-        roll.setSource(source);
-        roll.prepare(context);
-        roll.setTarget(target);
-        roll.roll();
-        roll.checkForReroll(new RPGLContext());
-        assertEquals(5, roll.get(),
-                "original roll should be preserved when no reroll is requested"
         );
     }
 

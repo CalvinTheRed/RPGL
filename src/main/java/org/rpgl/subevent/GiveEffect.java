@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.json.JsonObject;
 
@@ -42,7 +43,10 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (this.isNotCanceled()) {
-            this.getTarget().addEffect(RPGLFactory.newEffect(this.json.getString("effect")));
+            RPGLEffect effect = RPGLFactory.newEffect(this.json.getString("effect"));
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getTarget());
+            this.getTarget().addEffect(effect);
         }
     }
 

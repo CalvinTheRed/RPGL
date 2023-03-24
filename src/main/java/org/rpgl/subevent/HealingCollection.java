@@ -1,10 +1,10 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEffect;
+import org.rpgl.function.AddHealing;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to collecting unrolled healing dice and bonuses.
@@ -41,11 +41,27 @@ public class HealingCollection extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        if (this.json.getJsonArray("dice") == null) {
-            this.json.putJsonArray("dice", new JsonArray());
-        }
-        if (this.json.getInteger("bonus") == null) {
-            this.json.putInteger("bonus", 0);
+        this.prepareHealing(context);
+    }
+
+    /**
+     * This helper method evaluates the healing formulas provided in the Subevent JSON data and stores the result.
+     *
+     * @param context the context in which the Subevent is being prepared
+     *
+     * @throws Exception if an exception occurs
+     */
+    void prepareHealing(RPGLContext context) throws Exception {
+        JsonArray healingArray = this.json.removeJsonArray("healing");
+        this.json.putJsonArray("healing", new JsonArray());
+        if (healingArray != null) {
+            RPGLEffect effect = new RPGLEffect();
+            effect.setSource(this.getSource());
+            effect.setTarget(this.getSource());
+            for (int i = 0; i < healingArray.size(); i++) {
+                JsonObject healingJson = healingArray.getJsonObject(i);
+                this.addHealing(AddHealing.processJson(effect, this, healingJson, context));
+            }
         }
     }
 
@@ -55,20 +71,16 @@ public class HealingCollection extends Subevent {
      * @param healingJson healing data to be added to the collection
      */
     public void addHealing(JsonObject healingJson) {
-        this.json.getJsonArray("dice").asList().addAll(healingJson.getJsonArray("dice").asList());
-        this.json.putInteger("bonus", this.json.getInteger("bonus") + Objects.requireNonNullElse(healingJson.getInteger("bonus"), 0));
+        this.getHealingCollection().addJsonObject(healingJson);
     }
 
     /**
      * Returns the collection of healing gathered by this Subevent.
      *
-     * @return an object storing healing dice and a healing bonus
+     * @return a JsonArray storing healing dice and a healing bonus
      */
-    public JsonObject getHealingCollection() {
-        return new JsonObject() {{
-           this.putJsonArray("dice", json.getJsonArray("dice"));
-           this.putInteger("bonus", json.getInteger("bonus"));
-        }};
+    public JsonArray getHealingCollection() {
+        return this.json.getJsonArray("healing");
     }
 
 }

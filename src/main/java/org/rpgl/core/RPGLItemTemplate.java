@@ -5,7 +5,6 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -21,7 +20,8 @@ public class RPGLItemTemplate extends JsonObject {
      */
     private static final JsonArray DEFAULT_TEMPLATE_ITEM_DAMAGE = new JsonArray() {{
         this.addJsonObject(new JsonObject() {{
-            this.putString("type", "bludgeoning");
+            this.putString("damage_formula", "range");
+            this.putString("damage_type", "bludgeoning");
             this.putJsonArray("dice", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("count", 1);
@@ -62,7 +62,6 @@ public class RPGLItemTemplate extends JsonObject {
         processImprovisedTags(item);
         processEquippedEffects(item);
         setDefaultItemDamage(item);
-        processItemDamage(item);
         UUIDTable.register(item);
         return item;
     }
@@ -123,36 +122,6 @@ public class RPGLItemTemplate extends JsonObject {
             }
         }
         item.putJsonObject(RPGLItemTO.DAMAGE_ALIAS, damage);
-    }
-
-    /**
-     * This helper method unpacks the condensed representation of damage dice in a RPGLItemTemplate into multiple dice
-     * objects in accordance with the <code>count</code> field.
-     *
-     * @param item a RPGLItem being created by this object
-     */
-    static void processItemDamage(RPGLItem item) {
-        JsonObject damage = item.getDamage();
-        for (Map.Entry<String, ?> damageObjectEntry : damage.asMap().entrySet()) {
-            String attackType = damageObjectEntry.getKey();
-            JsonArray attackTypeDamageArray = damage.getJsonArray(attackType);
-            for (int i = 0; i < attackTypeDamageArray.size(); i++) {
-                JsonObject attackTypeDamageObject = attackTypeDamageArray.getJsonObject(i);
-                JsonArray templateDamageDiceArray = attackTypeDamageObject.removeJsonArray("dice");
-                JsonArray damageDiceArray = new JsonArray();
-                for (int k = 0; k < templateDamageDiceArray.size(); k++) {
-                    JsonObject templateDamageDiceDefinition = templateDamageDiceArray.getJsonObject(k);
-                    JsonObject damageDie = new JsonObject() {{
-                        this.putInteger("size", templateDamageDiceDefinition.getInteger("size"));
-                        this.putJsonArray("determined", templateDamageDiceDefinition.getJsonArray("determined"));
-                    }};
-                    for (int l = 0; l < templateDamageDiceDefinition.getInteger("count"); l++) {
-                        damageDiceArray.addJsonObject(damageDie.deepClone());
-                    }
-                }
-                attackTypeDamageObject.putJsonArray("dice", damageDiceArray);
-            }
-        }
     }
 
 }

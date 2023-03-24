@@ -53,7 +53,7 @@ public class SetDamageDiceMatchingOrBelowTest {
             /*{
                 "damage": [
                     {
-                        "type": "fire",
+                        "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 2 ] },
@@ -62,7 +62,7 @@ public class SetDamageDiceMatchingOrBelowTest {
                         ],
                         "bonus": 0
                     },{
-                        "type": "cold",
+                        "damage_type": "cold",
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 2 ] },
@@ -75,7 +75,7 @@ public class SetDamageDiceMatchingOrBelowTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "fire");
+                    this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -105,7 +105,7 @@ public class SetDamageDiceMatchingOrBelowTest {
                     this.putInteger("bonus", 0);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("type", "cold");
+                    this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("size", 6);
@@ -181,18 +181,18 @@ public class SetDamageDiceMatchingOrBelowTest {
                 "function": "set_damage_dice_matching_or_below",
                 "threshold": 2,
                 "set": 3,
-                "type": "fire"
+                "damage_type": "fire"
             }*/
             this.putString("function", "set_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
         }};
 
         setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":10,"fire":13}""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should set all fire damage dice which rolled 2 or lower to 3 (cold=1+2+3+4=10, fire=3+3+3+4=13)"
         );
@@ -217,18 +217,18 @@ public class SetDamageDiceMatchingOrBelowTest {
                 "function": "set_damage_dice_matching_or_below",
                 "threshold": 2,
                 "set": 3,
-                "type": ""
+                "damage_type": ""
             }*/
             this.putString("function", "set_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-            this.putString("type", "");
+            this.putString("damage_type", "");
         }};
 
         setDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context);
 
         String expected = """
-                {"cold":13,"fire":13}""";
+                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":3,"size":6},{"determined":[],"roll":4,"size":6}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should set all damage dice which rolled 2 or lower to 3 (cold=3+3+3+4=13, fire=3+3+3+4=13)"
         );

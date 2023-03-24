@@ -76,10 +76,32 @@ public class HealTest {
         target.getHealthData().putInteger("current", 10);
 
         Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "healing": [
+                    {
+                        "dice": [
+                            { "roll": 5 }
+                        ],
+                        "bonus": 5
+                    }
+                ]
+            }*/
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 5);
+                        }});
+                    }});
+                    this.putInteger("bonus", 5);
+                }});
+            }});
+        }});
         heal.setSource(source);
         heal.setTarget(target);
 
-        heal.deliverHealing(context, 10);
+        heal.deliverHealing(context);
 
         assertEquals(20, target.getHealthData().getInteger("current"),
                 "target should recover 10 hit points (10+10=20)"
@@ -97,14 +119,14 @@ public class HealTest {
 
         Heal heal = new Heal();
         heal.setSource(source);
+        heal.prepare(context);
         heal.setTarget(target);
-
-        JsonObject targetHealingJson = heal.getTargetHealing(context);
+        heal.getTargetHealing(context);
 
         String expected = """
-                {"bonus":0,"dice":[]}""";
-        assertEquals(expected, targetHealingJson.toString(),
-                "default target healing should contain no dice and have no bonus"
+                []""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "default target healing should be 0"
         );
     }
 
@@ -120,30 +142,30 @@ public class HealTest {
         Heal heal = new Heal();
         heal.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": {
-                    "dice": [
-                        { "size": 6, "determined": [ 1 ] },
-                        { "size": 6, "determined": [ 2 ] }
-                    ],
-                    "bonus": 2
-                }
+                "healing": [
+                    {
+                        "healing_formula": "range",
+                        "dice": [
+                            { "count":2, "size": 6, "determined": [ 1 ] }
+                        ],
+                        "bonus": 2
+                    }
+                ]
             }*/
-            this.putJsonObject("healing", new JsonObject() {{
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(1);
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "range");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(1);
+                            }});
                         }});
                     }});
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
+                    this.putInteger("bonus", 2);
                 }});
-                this.putInteger("bonus", 2);
             }});
         }});
 
@@ -151,8 +173,8 @@ public class HealTest {
         heal.getBaseHealing(context);
 
         String expected = """
-                {"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6}]}""";
-        assertEquals(expected, heal.json.getJsonObject("healing").toString(),
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "base healing should be rolled and in accordance with subevent-specified healing"
         );
     }
@@ -172,36 +194,41 @@ public class HealTest {
         heal.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "heal",
-                "healing": {
-                    "dice": [
-                        { "size": 6, "roll": 1 },
-                        { "size": 6, "roll": 2 }
-                    ],
-                    "bonus": 2
-                }
+                "healing": [
+                    {
+                        "healing_formula": "range",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 1 ] }
+                        ],
+                        "bonus": 2
+                    }
+                ]
             }*/
             this.putString("subevent", "heal");
-            this.putJsonObject("healing", new JsonObject() {{
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putInteger("roll", 1);
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "range");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(1);
+                            }});
+                        }});
                     }});
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putInteger("roll", 2);
-                    }});
+                    this.putInteger("bonus", 2);
                 }});
-                this.putInteger("bonus", 2);
             }});
         }});
 
         heal.setSource(source);
+        heal.prepare(context);
         heal.setTarget(target);
         heal.invoke(context);
 
-        assertEquals(15, target.getHealthData().getInteger("current"),
-                "invoking heal should restore 5 hit points (10+5=15)"
+        assertEquals(14, target.getHealthData().getInteger("current"),
+                "invoking heal should restore 4 hit points (1+1+2=+4)"
         );
     }
 
@@ -215,30 +242,30 @@ public class HealTest {
         Heal heal = new Heal();
         heal.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": {
-                    "dice": [
-                        { "size": 6, "determined": [ 1 ] },
-                        { "size": 6, "determined": [ 2 ] }
-                    ],
-                    "bonus": 2
-                }
+                "healing": [
+                    {
+                        "healing_formula": "range",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 1 ] }
+                        ],
+                        "bonus": 2
+                    }
+                ]
             }*/
-            this.putJsonObject("healing", new JsonObject() {{
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(1);
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "range");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(1);
+                            }});
                         }});
                     }});
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
+                    this.putInteger("bonus", 2);
                 }});
-                this.putInteger("bonus", 2);
             }});
         }});
 
@@ -246,8 +273,8 @@ public class HealTest {
         heal.prepare(context);
 
         String expected = """
-                {"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6}]}""";
-        assertEquals(expected, heal.json.getJsonObject("healing").toString(),
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "base healing should be rolled and stored after calling prepare"
         );
     }
@@ -267,31 +294,31 @@ public class HealTest {
         heal.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "heal",
-                "healing": {
-                    "dice": [
-                        { "size": 6, "determined": [ 1 ] },
-                        { "size": 6, "determined": [ 2 ] }
-                    ],
-                    "bonus": 2
-                }
+                "healing": [
+                    {
+                        "healing_formula": "range",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 1 ] }
+                        ],
+                        "bonus": 2
+                    }
+                ]
             }*/
             this.putString("subevent", "heal");
-            this.putJsonObject("healing", new JsonObject() {{
-                this.putJsonArray("dice", new JsonArray() {{
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(1);
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "range");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(1);
+                            }});
                         }});
                     }});
-                    this.addJsonObject(new JsonObject() {{
-                        this.putInteger("size", 6);
-                        this.putJsonArray("determined", new JsonArray() {{
-                            this.addInteger(2);
-                        }});
-                    }});
+                    this.putInteger("bonus", 2);
                 }});
-                this.putInteger("bonus", 2);
             }});
         }});
 
@@ -300,8 +327,153 @@ public class HealTest {
         heal.setTarget(target);
         heal.invoke(context);
 
-        assertEquals(15, target.getHealthData().getInteger("current"),
-                "target should recover 5 hit points from Heal subevent"
+        assertEquals(14, target.getHealthData().getInteger("current"),
+                "target should recover 4 hit points from Heal subevent (1+1+2=+4)"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseHealing calculates correct healing (modifier)")
+    void getBaseHealing_calculatesCorrectHealing_modifier() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "heal",
+                "healing": [
+                    {
+                        "healing_formula": "modifier",
+                        "ability": "str",
+                        "object": {
+                            "from": "subevent",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("subevent", "heal");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "modifier");
+                    this.putString("ability", "str");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }});
+
+        heal.setSource(source);
+        heal.getBaseHealing(context);
+
+        String expected = """
+                [{"bonus":6,"dice":[]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "healing should equal str mod"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseHealing calculates correct healing (ability)")
+    void getBaseHealing_calculatesCorrectHealing_ability() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "heal",
+                "healing": [
+                    {
+                        "healing_formula": "ability",
+                        "ability": "str",
+                        "object": {
+                            "from": "subevent",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("subevent", "heal");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "ability");
+                    this.putString("ability", "str");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }});
+
+        heal.setSource(source);
+        heal.getBaseHealing(context);
+
+        String expected = """
+                [{"bonus":23,"dice":[]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "healing should equal str score (23)"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseHealing calculates correct healing (proficiency)")
+    void getBaseHealing_calculatesCorrectHealing_proficiency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLContext context = new RPGLContext();
+        context.add(source);
+        context.add(target);
+
+        target.getHealthData().putInteger("current", 10);
+
+        Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "heal",
+                "healing": [
+                    {
+                        "healing_formula": "proficiency",
+                        "object": {
+                            "from": "subevent",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("subevent", "heal");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "proficiency");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }});
+
+        heal.setSource(source);
+        heal.getBaseHealing(context);
+
+        String expected = """
+                [{"bonus":4,"dice":[]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "healing should equal proficiency bonus"
         );
     }
 

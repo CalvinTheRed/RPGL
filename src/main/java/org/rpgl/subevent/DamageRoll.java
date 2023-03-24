@@ -53,8 +53,7 @@ public class DamageRoll extends Subevent {
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamageArray.getJsonObject(i).getJsonArray("dice"), new JsonArray());
             for (int j = 0; j < typedDamageDieArray.size(); j++) {
-                JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
-                typedDamageDie.putInteger("roll", Die.roll(typedDamageDie.getInteger("size"), typedDamageDie.getJsonArray("determined").asList()));
+                Die.roll(typedDamageDieArray.getJsonObject(j));
             }
         }
     }
@@ -70,12 +69,12 @@ public class DamageRoll extends Subevent {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("type"))) {
+            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("damage_type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
                     if (typedDamageDie.getInteger("roll") <= threshold) {
-                        typedDamageDie.putInteger("roll", Die.roll(typedDamageDie.getInteger("size"), typedDamageDie.getJsonArray("determined").asList()));
+                        Die.roll(typedDamageDie);
                     }
                 }
             }
@@ -94,7 +93,7 @@ public class DamageRoll extends Subevent {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("type"))) {
+            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("damage_type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
@@ -116,7 +115,7 @@ public class DamageRoll extends Subevent {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("type"))) {
+            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("damage_type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
@@ -127,24 +126,12 @@ public class DamageRoll extends Subevent {
     }
 
     /**
-     * This method returns the damage dice collection associated with the Subevent.
+     * This method returns the damage collection associated with the Subevent after all dice have been rolled.
      *
      * @return a collection of damage dice and bonuses
      */
-    public JsonObject getDamage() {
-        JsonObject baseDamage = new JsonObject();
-        JsonArray typedDamageArray = this.json.getJsonArray("damage");
-        for (int i = 0; i < typedDamageArray.size(); i++) {
-            JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
-            int bonus = Objects.requireNonNullElse(typedDamage.getInteger("bonus"), 0);
-            for (int j = 0; j < typedDamageDieArray.size(); j++) {
-                JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
-                bonus += typedDamageDie.getInteger("roll");
-            }
-            baseDamage.putInteger(typedDamage.getString("type"), bonus);
-        }
-        return baseDamage;
+    public JsonArray getDamage() {
+        return this.json.getJsonArray("damage");
     }
 
 }

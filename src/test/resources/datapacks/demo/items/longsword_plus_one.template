@@ -6,7 +6,8 @@
   "description": "A lightly-enchanted longsword.",
   "tags": [
     "metal",
-    "weapon"
+    "weapon",
+    "magic"
   ],
   "weight": 3,
   "cost": 500,
@@ -24,7 +25,8 @@
   "damage": {
     "melee": [
       {
-        "type": "slashing",
+        "damage_formula": "range",
+        "damage_type": "slashing",
         "dice": [
           { "count": 1, "size": 8, "determined": [ 4 ] }
         ],

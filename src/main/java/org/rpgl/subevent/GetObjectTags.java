@@ -48,7 +48,7 @@ public class GetObjectTags extends Subevent {
      * @param tag a tag to be applied to a RPGLObject
      */
     public void addObjectTag(String tag) {
-        this.json.getJsonArray("object_tags").addString(tag);
+        this.getObjectTags().addString(tag);
     }
 
     /**

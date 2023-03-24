@@ -29,7 +29,7 @@ public class SetDamageDiceMatchingOrBelow extends Function {
             damageRoll.setTypedDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),
                     functionJson.getInteger("set"),
-                    functionJson.getString("type")
+                    functionJson.getString("damage_type")
             );
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());

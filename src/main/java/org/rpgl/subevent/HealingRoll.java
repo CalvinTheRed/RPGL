@@ -5,6 +5,8 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 
+import java.util.ArrayList;
+
 /**
  * This abstract Subevent is dedicated to rolling healing dice.
  * <br>
@@ -40,23 +42,22 @@ public class HealingRoll extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        if (this.json.getJsonArray("dice") == null) {
-            this.json.putJsonArray("dice", new JsonArray());
-        }
-        if (this.json.getInteger("bonus") == null) {
-            this.json.putInteger("bonus", 0);
-        }
+        this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.roll();
     }
 
     /**
-     * This method rolls all haling associated with the Subevent.
+     * This method rolls all healing dice associated with the Subevent.
      */
     public void roll() {
-        JsonArray healingDice = this.json.getJsonArray("dice");
-        for (int i = 0; i < healingDice.size(); i++) {
-            JsonObject healingDie = healingDice.getJsonObject(i);
-            healingDie.putInteger("roll", Die.roll(healingDie.getInteger("size"), healingDie.getJsonArray("determined").asList()));
+        JsonArray healingArray = this.json.getJsonArray("healing");
+        for (int i = 0; i < healingArray.size(); i++) {
+            JsonObject healingJson = healingArray.getJsonObject(i);
+            JsonArray dice = healingJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                Die.roll(die);
+            }
         }
     }
 
@@ -66,11 +67,15 @@ public class HealingRoll extends Subevent {
      * @param threshold the value which a die must roll at or below to be changed by this method
      */
     public void rerollHealingDiceMatchingOrBelow(int threshold) {
-        JsonArray healingDice = this.json.getJsonArray("dice");
-        for (int i = 0; i < healingDice.size(); i++) {
-            JsonObject healingDie = healingDice.getJsonObject(i);
-            if (healingDie.getInteger("roll") <= threshold) {
-                healingDie.putInteger("roll", Die.roll(healingDie.getInteger("size"), healingDie.getJsonArray("determined").asList()));
+        JsonArray healingArray = this.json.getJsonArray("healing");
+        for (int i = 0; i < healingArray.size(); i++) {
+            JsonObject healingJson = healingArray.getJsonObject(i);
+            JsonArray dice = healingJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                if (die.getInteger("roll") <= threshold) {
+                    Die.roll(die);
+                }
             }
         }
     }
@@ -82,11 +87,15 @@ public class HealingRoll extends Subevent {
      * @param set       the value to set for each die changed by this method
      */
     public void setHealingDiceMatchingOrBelow(int threshold, int set) {
-        JsonArray healingDice = this.json.getJsonArray("dice");
-        for (int i = 0; i < healingDice.size(); i++) {
-            JsonObject healingDie = healingDice.getJsonObject(i);
-            if (healingDie.getInteger("roll") <= threshold) {
-                healingDie.putInteger("roll", set);
+        JsonArray healingArray = this.json.getJsonArray("healing");
+        for (int i = 0; i < healingArray.size(); i++) {
+            JsonObject healingJson = healingArray.getJsonObject(i);
+            JsonArray dice = healingJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                if (die.getInteger("roll") <= threshold) {
+                    die.putInteger("roll", set);
+                }
             }
         }
     }
@@ -95,23 +104,24 @@ public class HealingRoll extends Subevent {
      * Sets all healing dice to their maximum face value.
      */
     public void maximizeHealingDice() {
-        JsonArray healingDice = this.json.getJsonArray("dice");
-        for (int i = 0; i < healingDice.size(); i++) {
-            JsonObject healingDie = healingDice.getJsonObject(i);
-            healingDie.putInteger("roll", healingDie.getInteger("size"));
+        JsonArray healingArray = this.json.getJsonArray("healing");
+        for (int i = 0; i < healingArray.size(); i++) {
+            JsonObject healingJson = healingArray.getJsonObject(i);
+            JsonArray dice = healingJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                die.putInteger("roll", die.getInteger("size"));
+            }
         }
     }
 
     /**
-     * Returns the healing data provided to this Subevent after being rolled.
+     * Returns the rolled healing collection associated with this Subevent.
      *
-     * @return a JsonObject storing rolled healing dice and a bonus
+     * @return a JsonArray storing rolled healing data
      */
-    public JsonObject getHealing() {
-        return new JsonObject() {{
-            this.putJsonArray("dice", json.getJsonArray("dice").deepClone());
-            this.putInteger("bonus", json.getInteger("bonus"));
-        }};
+    public JsonArray getHealing() {
+        return this.json.getJsonArray("healing");
     }
 
 }

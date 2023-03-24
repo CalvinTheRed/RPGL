@@ -13,14 +13,13 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class CriticalHitDamageCollection extends DamageCollection {
+public class CriticalHitDamageCollection extends Subevent {
 
     public CriticalHitDamageCollection() {
         super("critical_hit_damage_collection");
     }
 
     @Override
-    @SuppressWarnings("all")
     public Subevent clone() {
         Subevent clone = new CriticalHitDamageCollection();
         clone.joinSubeventData(this.json);
@@ -34,6 +33,43 @@ public class CriticalHitDamageCollection extends DamageCollection {
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
+    }
+
+    /**
+     * Adds extra damage to the Collection.
+     *
+     * @param damageJson the damage to be added to the Collection
+     */
+    public void addDamage(JsonObject damageJson) {
+        this.getDamageCollection().addJsonObject(damageJson);
+    }
+
+    /**
+     * This method returns whether a given damage type is present in the damage dice collection.
+     *
+     * @param damageType the damage type being searched for
+     * @return true if the passed damage type is present in the damage dice collection
+     */
+    public boolean includesDamageType(String damageType) {
+        JsonArray damageDiceArray = this.json.getJsonArray("damage");
+        if (damageDiceArray != null) {
+            for (int i = 0; i < damageDiceArray.size(); i++) {
+                JsonObject damageDice = damageDiceArray.getJsonObject(i);
+                if (damageDice.getString("damage_type").equals(damageType)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * This method returns the damage collection being gathered by this Subevent.
+     *
+     * @return an array of typed damage dice and bonuses
+     */
+    public JsonArray getDamageCollection() {
+        return this.json.getJsonArray("damage");
     }
 
     /**

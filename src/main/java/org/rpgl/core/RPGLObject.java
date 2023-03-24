@@ -11,11 +11,10 @@ import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.GetEvents;
 import org.rpgl.subevent.GetObjectTags;
-import org.rpgl.subevent.GetSavingThrowProficiency;
-import org.rpgl.subevent.GetWeaponProficiency;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.subevent.InfoSubevent;
 import org.rpgl.subevent.Subevent;
+import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
@@ -355,50 +354,6 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
-     * This method determines whether the RPGLObject is proficient in saving throws for a specified ability.
-     *
-     * @param saveAbility the ability score used by the saving throw
-     * @param context     the RPGLContext in which the RPGLObject's save proficiency is determined
-     * @return true if the RPGLObject is proficient in saving throws with the specified ability
-     *
-     * @throws Exception if an exception occurs.
-     */
-    public boolean isProficientInSavingThrow(String saveAbility, RPGLContext context) throws Exception {
-        GetSavingThrowProficiency getSavingThrowProficiency = new GetSavingThrowProficiency();
-        getSavingThrowProficiency.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_saving_throw_proficiency");
-            this.putString("save_ability", saveAbility);
-        }});
-        getSavingThrowProficiency.setSource(this);
-        getSavingThrowProficiency.prepare(context);
-        getSavingThrowProficiency.setTarget(this);
-        getSavingThrowProficiency.invoke(context);
-        return getSavingThrowProficiency.isProficient();
-    }
-
-    /**
-     * This method determines whether the RPGLObject is proficient in attacks made using a specified weapon.
-     *
-     * @param item     an RPGLItem
-     * @param context  the RPGLContext in which the RPGLObject's weapon proficiency is determined
-     * @return true if the RPGLObject is proficient with the item corresponding to the passed UUID
-     *
-     * @throws Exception if an exception occurs.
-     */
-    public boolean isProficientWithWeapon(RPGLItem item, RPGLContext context) throws Exception {
-        GetWeaponProficiency getWeaponProficiency = new GetWeaponProficiency();
-        getWeaponProficiency.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_weapon_proficiency");
-            this.putJsonArray("tags", item.getProficiencyTags().deepClone());
-        }});
-        getWeaponProficiency.setSource(this);
-        getWeaponProficiency.prepare(context);
-        getWeaponProficiency.setTarget(this);
-        getWeaponProficiency.invoke(context);
-        return getWeaponProficiency.isProficient();
-    }
-
-    /**
      * This method is how a RPGLObject is intended to take damage.
      *
      * @param damageDelivery a DamageDelivery object containing damage data
@@ -413,10 +368,12 @@ public class RPGLObject extends RPGLTaggable {
             String damageType = damageJsonEntry.getKey();
             Integer typedDamage = damageJson.getInteger(damageJsonEntry.getKey());
 
+            // TODO make DamageAffinity contain a list of all present damage types...
+
             DamageAffinity damageAffinity = new DamageAffinity();
             damageAffinity.joinSubeventData(new JsonObject() {{
                 this.putString("subevent", "damage_affinity");
-                this.putString("type", damageType);
+                this.putString("damage_type", damageType);
             }});
             damageAffinity.setSource(damageDelivery.getSource());
             damageAffinity.prepare(context);
@@ -455,6 +412,28 @@ public class RPGLObject extends RPGLTaggable {
         int maximumHitPoints = this.getMaximumHitPoints(context);
         if (healthData.getInteger("current") > maximumHitPoints) {
             healthData.putInteger("current", maximumHitPoints);
+        }
+    }
+
+    /**
+     * This method accepts a HealingDelivery Subevent to provide healing to the RPGLObject. This method cannot be used
+     * to heal the object beyond its hit point maximum.
+     *
+     * @param temporaryHitPointsDelivery a TemporaryHitPointsDelivery Subevent containing a quantity of temporary hit
+     *                                   points to apply to the RPGLObject
+     * @param riderEffects               a list of effects to be applied if the temporary hit points from
+     *                                   temporaryHitPointsDelivery are applied
+     */
+    public void receiveTemporaryHitPoints(TemporaryHitPointsDelivery temporaryHitPointsDelivery, JsonArray riderEffects) {
+        JsonObject healthData = this.getHealthData();
+        if (healthData.getInteger("temporary") < temporaryHitPointsDelivery.getTemporaryHitPoints()) {
+            healthData.putInteger("temporary", temporaryHitPointsDelivery.getTemporaryHitPoints());
+            for (int i = 0; i < riderEffects.size(); i++) {
+                RPGLEffect effect = RPGLFactory.newEffect(riderEffects.getString(i));
+                effect.setSource(temporaryHitPointsDelivery.getSource());
+                effect.setTarget(temporaryHitPointsDelivery.getTarget());
+                this.addEffect(effect);
+            }
         }
     }
 
@@ -532,10 +511,11 @@ public class RPGLObject extends RPGLTaggable {
                 "tags": [ <tags> ]
             }*/
             this.putString("subevent", "info_subevent");
-            JsonArray subeventTags = infoSubevent.json.getJsonArray("tags");
+            JsonArray subeventTags = new JsonArray();
             for (String tag : tags) {
                 subeventTags.addString(tag);
             }
+            this.putJsonArray("tags", subeventTags);
         }});
         infoSubevent.setSource(this);
         infoSubevent.prepare(context);

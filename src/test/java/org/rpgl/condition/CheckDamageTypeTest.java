@@ -78,7 +78,7 @@ public class CheckDamageTypeTest {
 
         DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.joinSubeventData(new JsonObject() {{
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
         }});
 
         CheckDamageType checkDamageType = new CheckDamageType();
@@ -86,10 +86,10 @@ public class CheckDamageTypeTest {
         JsonObject conditionJson = new JsonObject() {{
             /*{
                 "condition": "check_damage_type",
-                "type": "fire"
+                "damage_type": "fire"
             }*/
             this.putString("condition", "check_damage_type");
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
         }};
 
         assertTrue(checkDamageType.evaluate(null, damageAffinity, conditionJson, context),
@@ -108,7 +108,7 @@ public class CheckDamageTypeTest {
 
         DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.joinSubeventData(new JsonObject() {{
-            this.putString("type", "fire");
+            this.putString("damage_type", "fire");
         }});
 
         CheckDamageType checkDamageType = new CheckDamageType();
@@ -116,10 +116,10 @@ public class CheckDamageTypeTest {
         JsonObject conditionJson = new JsonObject() {{
             /*{
                 "condition": "check_damage_type",
-                "type": "cold"
+                "damage_type": "cold"
             }*/
             this.putString("condition", "check_damage_type");
-            this.putString("type", "cold");
+            this.putString("damage_type", "cold");
         }};
 
         assertFalse(checkDamageType.evaluate(null, damageAffinity, conditionJson, context),

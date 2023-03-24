@@ -4,6 +4,7 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -41,28 +42,17 @@ public class Heal extends Subevent implements CancelableSubevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.addTag("heal");
-        if (this.json.getJsonObject("healing") != null) {
-            this.getBaseHealing(context);
-        }
+        this.json.asMap().putIfAbsent("healing", new ArrayList<>());
+        this.getBaseHealing(context);
     }
 
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (this.isNotCanceled()) {
-            JsonObject baseHealing = Objects.requireNonNullElse(this.json.getJsonObject("healing"), new JsonObject());
-            JsonObject targetHealing = this.getTargetHealing(context);
-            baseHealing.putInteger("bonus", baseHealing.getInteger("bonus") + targetHealing.getInteger("bonus"));
-            baseHealing.getJsonArray("dice").asList().addAll(targetHealing.getJsonArray("dice").asList());
-            int healing = baseHealing.getInteger("bonus");
-            JsonArray healingDice = baseHealing.getJsonArray("dice");
-            for (int i = 0; i < healingDice.size(); i++) {
-                healing += healingDice.getJsonObject(i).getInteger("roll");
-            }
-            this.deliverHealing(context, healing);
+            this.getTargetHealing(context);
+            this.deliverHealing(context);
         }
-
     }
 
     @Override
@@ -88,11 +78,9 @@ public class Heal extends Subevent implements CancelableSubevent {
          * Collect base typed healing dice and bonuses
          */
         HealingCollection baseHealingCollection = new HealingCollection();
-        JsonObject healing = this.json.getJsonObject("healing");
         baseHealingCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "healing_collection");
-            this.putJsonArray("dice", healing.getJsonArray("dice").deepClone());
-            this.putInteger("bonus", healing.getInteger("bonus"));
+            this.putJsonArray("healing", json.removeJsonArray("healing"));
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_healing_collection");
@@ -109,7 +97,7 @@ public class Heal extends Subevent implements CancelableSubevent {
         HealingRoll baseHealingRoll = new HealingRoll();
         baseHealingRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "healing_roll");
-            this.join(baseHealingCollection.getHealingCollection());
+            this.putJsonArray("healing", baseHealingCollection.getHealingCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_healing_roll");
@@ -121,20 +109,12 @@ public class Heal extends Subevent implements CancelableSubevent {
         baseHealingRoll.invoke(context);
 
         /*
-         * Replace healing key with base healing calculation
+         * Replace healing key with base healing roll
          */
-        this.json.putJsonObject("healing", baseHealingRoll.getHealing());
+        this.json.putJsonArray("healing", baseHealingRoll.getHealing());
     }
 
-    /**
-     * This helper method returns all target-specific healing dice and bonuses involved in the heal's healing roll.
-     *
-     * @param context the context this Subevent takes place in
-     * @return a collection of rolled healing dice and bonuses
-     *
-     * @throws Exception if an exception occurs.
-     */
-    JsonObject getTargetHealing(RPGLContext context) throws Exception {
+    void getTargetHealing(RPGLContext context) throws Exception {
         /*
          * Collect target typed healing dice and bonuses
          */
@@ -157,7 +137,7 @@ public class Heal extends Subevent implements CancelableSubevent {
         HealingRoll targetHealingRoll = new HealingRoll();
         targetHealingRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "healing_roll");
-            this.putJsonObject("healing", targetHealingCollection.getHealingCollection().deepClone());
+            this.putJsonArray("healing", targetHealingCollection.getHealingCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_healing_roll");
@@ -168,22 +148,24 @@ public class Heal extends Subevent implements CancelableSubevent {
         targetHealingRoll.setTarget(this.getTarget());
         targetHealingRoll.invoke(context);
 
-        return targetHealingRoll.getHealing();
+        /*
+         * Add target healing roll to Subevent JSON
+         */
+        this.json.getJsonArray("healing").asList().addAll(targetHealingRoll.getHealing().asList());
     }
 
     /**
-     * This helper method delivers the final quantity of healing determined by this Subevent to the target RPGLObject.
+     * This helper method delivers the final collection of healing determined by this Subevent to the target RPGLObject.
      *
      * @param context the context in which this Subevent was invoked
-     * @param healing the final quantity of healing determined by this Subevent
      *
      * @throws Exception if an exception occurs
      */
-    void deliverHealing(RPGLContext context, int healing) throws Exception {
+    void deliverHealing(RPGLContext context) throws Exception {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "healing_delivery");
-            this.putInteger("healing", healing);
+            this.putJsonArray("healing", json.getJsonArray("healing"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         healingDelivery.setSource(this.getSource());

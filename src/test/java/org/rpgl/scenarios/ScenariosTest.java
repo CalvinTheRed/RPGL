@@ -12,7 +12,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
-import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -76,42 +75,99 @@ public class ScenariosTest {
         );
 
         // each target takes 48 damage
-        assertEquals(4, knight1.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
-        assertEquals(4, knight2.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
-        assertEquals(4, knight3.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
-        assertEquals(4, knight4.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
-        assertEquals(4, knight5.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
-        assertEquals(4, knight6.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
+        assertEquals(4, knight1.getHealthData().getInteger("current"));
+        assertEquals(4, knight2.getHealthData().getInteger("current"));
+        assertEquals(4, knight3.getHealthData().getInteger("current"));
+        assertEquals(4, knight4.getHealthData().getInteger("current"));
+        assertEquals(4, knight5.getHealthData().getInteger("current"));
+        assertEquals(4, knight6.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
         knight1.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
-        assertEquals(171, youngRedDragon.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
+        assertEquals(171, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
         knight2.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
-        assertEquals(164, youngRedDragon.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
+        assertEquals(164, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
         knight3.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
-        assertEquals(157, youngRedDragon.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
+        assertEquals(157, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
         knight4.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
-        assertEquals(150, youngRedDragon.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
+        assertEquals(150, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
         knight5.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
-        assertEquals(143, youngRedDragon.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
+        assertEquals(143, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
         knight6.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
-        assertEquals(136, youngRedDragon.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"));
+        assertEquals(136, youngRedDragon.getHealthData().getInteger("current"));
+    }
+
+    @Test
+    @DisplayName("wrathful smite test")
+    void wrathfulSmiteTest() throws Exception {
+        RPGLObject knight1 = RPGLFactory.newObject("demo:knight");
+        RPGLObject knight2 = RPGLFactory.newObject("demo:knight");
+
+        RPGLContext context = new RPGLContext();
+        context.add(knight1);
+        context.add(knight2);
+
+        // knight 1 uses wrathful smite
+
+        knight1.invokeEvent(
+                new RPGLObject[] { knight1 },
+                RPGLFactory.newEvent("demo:wrathful_smite"),
+                context
+        );
+
+        assertEquals("Wrathful Smite 1", knight1.getEffectObjects().get(0).getName(),
+                "knight 1` should have 1 effect (wrathful_smite_1)"
+        );
+
+        // cool! now he attacks
+
+        knight1.invokeEvent(
+                new RPGLObject[] { knight2 },
+                RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
+                context
+        );
+
+        assertEquals(52-4-3-3, knight2.getHealthData().getInteger("current"),
+                "knight should get hit and take some damage"
+        );
+
+        // check effects
+
+        assertEquals(0, knight1.getEffectObjects().size(),
+            "knight 1 should no longer be affected by wrathful_smite_1"
+        );
+
+        assertEquals("Frightened (Wrathful Smite)", knight2.getEffectObjects().get(0).getName(),
+                "knight 2 should be affected by wrathful_smite 2"
+        );
+
+        // knight 2 tries to counter-attack
+
+        knight2.invokeEvent(
+                new RPGLObject[] { knight1 },
+                RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
+                context
+        );
+
+        assertEquals(52, knight1.getHealthData().getInteger("current"),
+                "knight 2 should have missed from disadvantage and dealt no damage to knight 1"
+        );
     }
 
 }

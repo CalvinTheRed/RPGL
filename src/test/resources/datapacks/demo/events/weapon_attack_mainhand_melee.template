@@ -10,7 +10,7 @@
       "subevent": "attack_roll",
       "weapon": "mainhand",
       "attack_type": "melee",
-      "determined": [ 19 ]
+      "determined": [ 19, 1 ]
     }
   ]
 }

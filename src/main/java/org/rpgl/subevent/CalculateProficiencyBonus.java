@@ -38,7 +38,9 @@ public class CalculateProficiencyBonus extends Calculation {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        super.setBase(this.getSource().getInteger("proficiency_bonus"));
+        super.setBase(new JsonObject() {{
+            this.putInteger("value", getSource().getProficiencyBonus());
+        }});
     }
 
 }

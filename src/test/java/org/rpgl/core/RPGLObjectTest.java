@@ -317,10 +317,20 @@ public class RPGLObjectTest {
         healingDelivery.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "healing_delivery",
-                "healing": 10
+                "healing": [
+                    {
+                        "bonus": 10,
+                        "dice": [ ]
+                    }
+                ]
             }*/
             this.putString("subevent", "healing_delivery");
-            this.putInteger("healing", 10);
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("bonus", 10);
+                    this.putJsonArray("dice", new JsonArray());
+                }});
+            }});
         }});
 
         healingDelivery.setSource(source);
@@ -350,10 +360,20 @@ public class RPGLObjectTest {
         healingDelivery.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "healing_delivery",
-                "healing": 10
+                "healing": [
+                    {
+                        "bonus": 10,
+                        "dice": [ ]
+                    }
+                ]
             }*/
             this.putString("subevent", "healing_delivery");
-            this.putInteger("healing", 10);
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("bonus", 10);
+                    this.putJsonArray("dice", new JsonArray());
+                }});
+            }});
         }});
 
         healingDelivery.setSource(source);
