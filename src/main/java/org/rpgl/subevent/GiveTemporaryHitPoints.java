@@ -35,17 +35,17 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.getBaseTemporaryHitPoints(context);
+        this.json.asMap().putIfAbsent("temporary_hit_points", new ArrayList<>());
         this.json.asMap().putIfAbsent("rider_effects", new ArrayList<>());
+        this.getBaseTemporaryHitPoints(context);
     }
 
     @Override
     public void invoke(RPGLContext context) throws Exception {
         super.invoke(context);
         if (this.isNotCanceled()) {
-            int baseTemporaryHitPoints = Objects.requireNonNullElse(this.json.getInteger("temporary_hit_points"), 0);
-            int targetTemporaryHitPoints = this.getTargetTemporaryHitPoints(context);
-            this.deliverTemporaryHitPoints(baseTemporaryHitPoints + targetTemporaryHitPoints, this.json.getJsonArray("rider_effects"), context);
+            this.getTargetTemporaryHitPoints(context);
+            this.deliverTemporaryHitPoints(context);
         }
     }
 
@@ -74,7 +74,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         TemporaryHitPointCollection baseTemporaryHitPointCollection = new TemporaryHitPointCollection();
         baseTemporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "temporary_hit_point_collection");
-            this.putJsonArray("temporary_hit_points", json.getJsonArray("temporary_hit_points").deepClone());
+            this.putJsonArray("temporary_hit_points", json.removeJsonArray("temporary_hit_points"));
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_temporary_hit_point_collection");
@@ -91,7 +91,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         TemporaryHitPointRoll baseTemporaryHitPointRoll = new TemporaryHitPointRoll();
         baseTemporaryHitPointRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "temporary_hit_points_roll");
-            this.putJsonArray("temporary_hit_points", baseTemporaryHitPointCollection.getTemporaryHitPointsCollection().deepClone());
+            this.putJsonArray("temporary_hit_points", baseTemporaryHitPointCollection.getTemporaryHitPointsCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_temporary_hit_points_roll");
@@ -105,19 +105,18 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         /*
          * Replace temporary hit points key with base temporary hit points calculation
          */
-        this.json.putInteger("temporary_hit_points", baseTemporaryHitPointRoll.getTemporaryHitPoints());
+        this.json.putJsonArray("temporary_hit_points", baseTemporaryHitPointRoll.getTemporaryHitPoints());
     }
 
     /**
-     * This helper method returns all target-specific temporary hit points dice and bonuses involved in the Subevent's
-     * temporary hit points roll.
+     * This helper method collects the target temporary hit points of the Subevent. This includes all target-specific
+     * temporary hit point dice and bonuses involved in the Subevent's temporary hit point roll.
      *
      * @param context the context this Subevent takes place in
-     * @return a quantity of target-specific temporary hit points
      *
      * @throws Exception if an exception occurs.
      */
-    int getTargetTemporaryHitPoints(RPGLContext context) throws Exception {
+    void getTargetTemporaryHitPoints(RPGLContext context) throws Exception {
         /*
          * Collect target typed temporary hit points dice and bonuses
          */
@@ -140,7 +139,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         TemporaryHitPointRoll targetTemporaryHitPointRoll = new TemporaryHitPointRoll();
         targetTemporaryHitPointRoll.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "temporary_hit_points_roll");
-            this.putJsonArray("temporary_hit_points", targetTemporaryHitPointsCollection.getTemporaryHitPointsCollection().deepClone());
+            this.putJsonArray("temporary_hit_points", targetTemporaryHitPointsCollection.getTemporaryHitPointsCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_healing_roll");
@@ -149,34 +148,33 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         targetTemporaryHitPointRoll.setSource(this.getSource());
         targetTemporaryHitPointRoll.prepare(context);
         targetTemporaryHitPointRoll.setTarget(this.getTarget());
-        targetTemporaryHitPointsCollection.invoke(context);
+        targetTemporaryHitPointRoll.invoke(context);
 
-        return targetTemporaryHitPointRoll.getTemporaryHitPoints();
+        /*
+         * Add target temporary hit points to subevent temporary hit points
+         */
+        this.json.getJsonArray("temporary_hit_points").asList().addAll(targetTemporaryHitPointRoll.getTemporaryHitPoints().asList());
     }
 
     /**
-     * This helper method delivers the final quantity of temporary hit points determined by this Subevent to the target
-     * RPGLObject.
+     * This helper method provides the temporary hit points collected from this Subevent to the target.
      *
-     * @param temporaryHitPoints the final quantity of temporary hit points determined by this Subevent
-     * @param riderEffects       the list of rider effects to be applied if the temporary hit points from this Subevent
-     *                           are applied to <code>target</code>
-     * @param context            the context in which this Subevent was invoked
+     * @param context the context in which target is being given temporary hit points
      *
      * @throws Exception if an exception occurs
      */
-    void deliverTemporaryHitPoints(int temporaryHitPoints, JsonArray riderEffects, RPGLContext context) throws Exception {
+    void deliverTemporaryHitPoints(RPGLContext context) throws Exception {
         TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
         temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "temporary_hit_points_delivery");
-            this.putInteger("temporary_hit_points", temporaryHitPoints);
+            this.putJsonArray("temporary_hit_points", json.getJsonArray("temporary_hit_points"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         temporaryHitPointsDelivery.setSource(this.getSource());
         temporaryHitPointsDelivery.prepare(context);
         temporaryHitPointsDelivery.setTarget(this.getTarget());
         temporaryHitPointsDelivery.invoke(context);
-        this.getTarget().receiveTemporaryHitPoints(temporaryHitPointsDelivery, riderEffects);
+        this.getTarget().receiveTemporaryHitPoints(temporaryHitPointsDelivery, this.json.getJsonArray("rider_effects"));
     }
 
 }

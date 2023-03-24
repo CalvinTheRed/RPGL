@@ -92,8 +92,10 @@ public class HealingRollTest {
             }});
         }});
 
-        assertEquals(5, healingRoll.getHealing(),
-                "getHealing should return the correct healing from the subevent (3+2=5)"
+        String expected = """
+                [{"bonus":2,"dice":[{"roll":3,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "getHealing should return the correct healing from the subevent"
         );
     }
 
@@ -132,8 +134,10 @@ public class HealingRollTest {
 
         healingRoll.maximizeHealingDice();
 
-        assertEquals(18, healingRoll.getHealing(),
-                "maximizeHealing should set all healing dice to their maximum face value (6+10+2=18)"
+        String expected = """
+                [{"bonus":2,"dice":[{"roll":6,"size":6},{"roll":10,"size":10}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "maximizeHealing should set all healing dice to their maximum face value"
         );
     }
 
@@ -186,8 +190,10 @@ public class HealingRollTest {
 
         healingRoll.setHealingDiceMatchingOrBelow(2, 6);
 
-        assertEquals(17, healingRoll.getHealing(),
-                "healing dice of 1 and 2 should be set to 6 (6+6+3+2=17)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[6],"roll":6,"size":6},{"determined":[6],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "healing dice of 1 and 2 should be set to 6"
         );
     }
 
@@ -240,8 +246,10 @@ public class HealingRollTest {
 
         healingRoll.rerollHealingDiceMatchingOrBelow(2);
 
-        assertEquals(17, healingRoll.getHealing(),
-                "healing dice of 1 and 2 should be rerolled to their next determined values of 6 (6+6+3+2=17)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "healing dice of 1 and 2 should be rerolled to their next determined values of 6"
         );
     }
 
@@ -291,8 +299,10 @@ public class HealingRollTest {
 
         healingRoll.roll();
 
-        assertEquals(8, healingRoll.getHealing(),
-                "roll should set the roll field of all healing dice to determined values (1+2+3+2=8)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "roll should set the roll field of all healing dice to determined values"
         );
     }
 
@@ -346,8 +356,10 @@ public class HealingRollTest {
 
         healingRoll.prepare(context);
 
-        assertEquals(8, healingRoll.getHealing(),
-                "prepare should roll healing dice correctly (1+2+3+2=8)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "prepare should roll healing dice correctly"
         );
     }
 

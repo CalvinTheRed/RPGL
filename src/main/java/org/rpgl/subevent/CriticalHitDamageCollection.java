@@ -35,6 +35,11 @@ public class CriticalHitDamageCollection extends Subevent {
         return clone;
     }
 
+    /**
+     * Adds extra damage to the Collection.
+     *
+     * @param damageJson the damage to be added to the Collection
+     */
     public void addDamage(JsonObject damageJson) {
         this.getDamageCollection().addJsonObject(damageJson);
     }

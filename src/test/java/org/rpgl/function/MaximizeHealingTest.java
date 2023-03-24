@@ -132,8 +132,10 @@ public class MaximizeHealingTest {
 
         maximizeHealing.execute(null, healingRoll, functionJson, context);
 
-        assertEquals(14, healingRoll.getHealing(),
-                "execute should set all healing dice to their maximum face value (6+6+2=14)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "execute should set all healing dice to their maximum face value"
         );
     }
 

@@ -39,6 +39,17 @@ public class AddHealing extends Function {
         }
     }
 
+    /**
+     * This helper method processes healing JSON data and translates healing formula data to dice and bonus form.
+     *
+     * @param effect      the RPGLEffect applying this healing
+     * @param subevent    the HealingCollection receiving this healing
+     * @param healingJson the healing formula data
+     * @param context     the context in which this healing is being applied
+     * @return a JsonObject representing the evaluated form of the provided healing formula data
+     *
+     * @throws Exception if an exception occurs
+     */
     public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject healingJson, RPGLContext context) throws Exception {
         /*[
             {

@@ -6,7 +6,8 @@
   "description": "A lightly-enchanted longsword.",
   "tags": [
     "metal",
-    "weapon"
+    "weapon",
+    "magic"
   ],
   "weight": 3,
   "cost": 500,

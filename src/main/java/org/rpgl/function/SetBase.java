@@ -34,6 +34,17 @@ public class SetBase extends Function {
         }
     }
 
+    /**
+     * This helper method processes base JSON data and translates base formula data to numerical value form.
+     *
+     * @param effect   the RPGLEffect applying this base
+     * @param subevent the Calculation receiving this base
+     * @param baseJson the base formula data
+     * @param context  the context in which this base is being applied
+     * @return a JsonObject representing the evaluated form of the provided base formula data
+     *
+     * @throws Exception if an exception occurs
+     */
     public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject baseJson, RPGLContext context) throws Exception {
         /*[
             {

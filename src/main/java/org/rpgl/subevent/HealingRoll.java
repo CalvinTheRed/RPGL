@@ -116,22 +116,12 @@ public class HealingRoll extends Subevent {
     }
 
     /**
-     * Returns the healing data provided to this Subevent after being rolled.
+     * Returns the rolled healing collection associated with this Subevent.
      *
-     * @return the total healing determined by this Subevent after rolling all involved dice
+     * @return a JsonArray storing rolled healing data
      */
-    public int getHealing() {
-        int sum = 0;
-        JsonArray healingArray = this.json.getJsonArray("healing");
-        for (int i = 0; i < healingArray.size(); i++) {
-            JsonObject healingJson = healingArray.getJsonObject(i);
-            JsonArray dice = healingJson.getJsonArray("dice");
-            for (int j = 0; j < dice.size(); j++) {
-                sum += dice.getJsonObject(j).getInteger("roll");
-            }
-            sum += healingJson.getInteger("bonus");
-        }
-        return sum;
+    public JsonArray getHealing() {
+        return this.json.getJsonArray("healing");
     }
 
 }

@@ -6,8 +6,6 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to making a saving throw and resolving all fallout from making the save. This is a
@@ -215,32 +213,12 @@ public class SavingThrow extends Roll {
     }
 
     void deliverDamage(String damageProportion, RPGLContext context) throws Exception {
-        JsonObject damage = new JsonObject();
-        JsonArray damageArray = this.json.getJsonArray("damage");
-        for (int i = 0; i < damageArray.size(); i++) {
-            JsonObject damageJson = damageArray.getJsonObject(i);
-            int total = damageJson.getInteger("bonus");
-            JsonArray dice = damageJson.getJsonArray("dice");
-            for (int j = 0; j < dice.size(); j++) {
-                total += dice.getJsonObject(j).getInteger("roll");
-            }
-            String damageType = damageJson.getString("damage_type");
-            damage.putInteger(damageType, Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total);
-        }
-
-        if ("half".equals(damageProportion)) {
-            for (Map.Entry<String, ?> damageEntry : damage.asMap().entrySet()) {
-                String damageType = damageEntry.getKey();
-                int damageAmount = damage.getInteger(damageType);
-                damage.putInteger(damageType, damageAmount / 2);
-            }
-        }
-
         if (!"none".equals(damageProportion)) {
             DamageDelivery damageDelivery = new DamageDelivery();
             damageDelivery.joinSubeventData(new JsonObject() {{
                 this.putString("subevent", "damage_delivery");
-                this.putJsonObject("damage", damage.deepClone());
+                this.putJsonArray("damage", json.getJsonArray("damage"));
+                this.putString("damage_proportion", damageProportion);
                 this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
             }});
             damageDelivery.setSource(this.getSource());

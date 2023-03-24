@@ -9,6 +9,7 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -64,10 +65,30 @@ public class HealingDeliveryTest {
     void getHealing_returnsStoredDamageValues() {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
-            this.putInteger("healing", 10);
+            /*{
+                "healing": [
+                    {
+                        "bonus": 2,
+                        "dice": [
+                            { "roll": 3, "size": 6 }
+                        ]
+                    }
+                ]
+            }*/
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("bonus", 2);
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 3);
+                            this.putInteger("size", 6);
+                        }});
+                    }});
+                }});
+            }});
         }});
 
-        assertEquals(10, healingDelivery.getHealing(),
+        assertEquals(5, healingDelivery.getHealing(),
                 "getHealing should return the healing being conveyed by the subevent"
         );
     }

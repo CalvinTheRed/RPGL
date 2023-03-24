@@ -92,158 +92,12 @@ public class TemporaryHitPointRollTest {
             }});
         }});
 
-        assertEquals(5, temporaryHitPointRoll.getTemporaryHitPoints(),
-                "getTemporaryHitPoints should return the correct temporary hit points from the subevent (3+2=5)"
+        String expected = """
+                [{"bonus":2,"dice":[{"roll":3,"size":6}]}]""";
+        assertEquals(expected, temporaryHitPointRoll.getTemporaryHitPoints().toString(),
+                "getTemporaryHitPoints should return the correct temporary hit points from the subevent"
         );
     }
-
-//    @Test
-//    @DisplayName("maximizeHealing sets all healing dice to maximum value")
-//    void maximizeHealing_setsAllHealingDiceToMaximumValue() {
-//        HealingRoll healingRoll = new HealingRoll();
-//        healingRoll.joinSubeventData(new JsonObject() {{
-//            /*{
-//                "healing": [
-//                    {
-//                        "dice": [
-//                            { "size": 6, "roll": 3 },
-//                            { "size": 10, "roll": 5 }
-//                        ],
-//                        "bonus": 2
-//                    }
-//                ]
-//            }*/
-//            this.putJsonArray("healing", new JsonArray() {{
-//                this.addJsonObject(new JsonObject() {{
-//                    this.putJsonArray("dice", new JsonArray() {{
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 6);
-//                            this.putInteger("roll", 3);
-//                        }});
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 10);
-//                            this.putInteger("roll", 5);
-//                        }});
-//                    }});
-//                    this.putInteger("bonus", 2);
-//                }});
-//            }});
-//        }});
-//
-//        healingRoll.maximizeHealingDice();
-//
-//        assertEquals(18, healingRoll.getHealing(),
-//                "maximizeHealing should set all healing dice to their maximum face value (6+10+2=18)"
-//        );
-//    }
-//
-//    @Test
-//    @DisplayName("setHealingDiceMatchingOrBelow correct healing dice are set to new value")
-//    void setHealingDiceMatchingOrBelow_correctHealingDiceAreSetToNewValue() {
-//        HealingRoll healingRoll = new HealingRoll();
-//        healingRoll.joinSubeventData(new JsonObject() {{
-//            /*{
-//                "healing": [
-//                    {
-//                        "dice": [
-//                            { "size": 6, "roll": 1, "determined": [ 6 ] },
-//                            { "size": 6, "roll": 2, "determined": [ 6 ] },
-//                            { "size": 6, "roll": 3, "determined": [ 6 ] }
-//                        ],
-//                        "bonus": 2
-//                    }
-//                ]
-//            }*/
-//            this.putJsonArray("healing", new JsonArray() {{
-//                this.addJsonObject(new JsonObject() {{
-//                    this.putJsonArray("dice", new JsonArray() {{
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 6);
-//                            this.putInteger("roll", 1);
-//                            this.putJsonArray("determined", new JsonArray() {{
-//                                this.addInteger(6);
-//                            }});
-//                        }});
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 6);
-//                            this.putInteger("roll", 2);
-//                            this.putJsonArray("determined", new JsonArray() {{
-//                                this.addInteger(6);
-//                            }});
-//                        }});
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 6);
-//                            this.putInteger("roll", 3);
-//                            this.putJsonArray("determined", new JsonArray() {{
-//                                this.addInteger(6);
-//                            }});
-//                        }});
-//                    }});
-//                    this.putInteger("bonus", 2);
-//                }});
-//            }});
-//        }});
-//
-//        healingRoll.setHealingDiceMatchingOrBelow(2, 6);
-//
-//        assertEquals(17, healingRoll.getHealing(),
-//                "healing dice of 1 and 2 should be set to 6 (6+6+3+2=17)"
-//        );
-//    }
-//
-//    @Test
-//    @DisplayName("rerollHealingDiceMatchingOrBelow correct healing dice are re-rolled")
-//    void rerollHealingDiceMatchingOrBelow_correctHealingDiceAreRerolled() {
-//        HealingRoll healingRoll = new HealingRoll();
-//        healingRoll.joinSubeventData(new JsonObject() {{
-//            /*{
-//                "healing": [
-//                    {
-//                        "dice": [
-//                            { "size": 6, "roll": 1, "determined": [ 6 ] },
-//                            { "size": 6, "roll": 2, "determined": [ 6 ] },
-//                            { "size": 6, "roll": 3, "determined": [ 6 ] }
-//                        ],
-//                        "bonus": 2
-//                    }
-//                ]
-//            }*/
-//            this.putJsonArray("healing", new JsonArray() {{
-//                this.addJsonObject(new JsonObject() {{
-//                    this.putJsonArray("dice", new JsonArray() {{
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 6);
-//                            this.putInteger("roll", 1);
-//                            this.putJsonArray("determined", new JsonArray() {{
-//                                this.addInteger(6);
-//                            }});
-//                        }});
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 6);
-//                            this.putInteger("roll", 2);
-//                            this.putJsonArray("determined", new JsonArray() {{
-//                                this.addInteger(6);
-//                            }});
-//                        }});
-//                        this.addJsonObject(new JsonObject() {{
-//                            this.putInteger("size", 6);
-//                            this.putInteger("roll", 3);
-//                            this.putJsonArray("determined", new JsonArray() {{
-//                                this.addInteger(6);
-//                            }});
-//                        }});
-//                    }});
-//                    this.putInteger("bonus", 2);
-//                }});
-//            }});
-//        }});
-//
-//        healingRoll.rerollHealingDiceMatchingOrBelow(2);
-//
-//        assertEquals(17, healingRoll.getHealing(),
-//                "healing dice of 1 and 2 should be rerolled to their next determined values of 6 (6+6+3+2=17)"
-//        );
-//    }
 
     @Test
     @DisplayName("roll temporary hit point dice are rolled properly")
@@ -291,8 +145,10 @@ public class TemporaryHitPointRollTest {
 
         temporaryHitPointRoll.roll();
 
-        assertEquals(8, temporaryHitPointRoll.getTemporaryHitPoints(),
-                "roll should set the roll field of all temporary hit point dice to determined values (1+2+3+2=8)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6}]}]""";
+        assertEquals(expected, temporaryHitPointRoll.getTemporaryHitPoints().toString(),
+                "roll should set the roll field of all temporary hit point dice to determined values"
         );
     }
 
@@ -346,8 +202,10 @@ public class TemporaryHitPointRollTest {
 
         temporaryHitPointRoll.prepare(context);
 
-        assertEquals(8, temporaryHitPointRoll.getTemporaryHitPoints(),
-                "prepare should roll temporary hit point dice correctly (1+2+3+2=8)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6}]}]""";
+        assertEquals(expected, temporaryHitPointRoll.getTemporaryHitPoints().toString(),
+                "prepare should roll temporary hit point dice correctly"
         );
     }
 

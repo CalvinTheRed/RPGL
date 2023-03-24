@@ -120,18 +120,8 @@ public class TemporaryHitPointRoll extends Subevent {
      *
      * @return the total temporary hit points determined by this Subevent after rolling all involved dice
      */
-    public int getTemporaryHitPoints() {
-        int sum = 0;
-        JsonArray temporaryHitPointsArray = this.json.getJsonArray("temporary_hit_points");
-        for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
-            JsonObject temporaryHitPointsJson = temporaryHitPointsArray.getJsonObject(i);
-            JsonArray dice = temporaryHitPointsJson.getJsonArray("dice");
-            for (int j = 0; j < dice.size(); j++) {
-                sum += dice.getJsonObject(j).getInteger("roll");
-            }
-            sum += temporaryHitPointsJson.getInteger("bonus");
-        }
-        return sum;
+    public JsonArray getTemporaryHitPoints() {
+        return this.json.getJsonArray("temporary_hit_points");
     }
 
 }

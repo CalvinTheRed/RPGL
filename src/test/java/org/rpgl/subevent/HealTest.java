@@ -76,10 +76,32 @@ public class HealTest {
         target.getHealthData().putInteger("current", 10);
 
         Heal heal = new Heal();
+        heal.joinSubeventData(new JsonObject() {{
+            /*{
+                "healing": [
+                    {
+                        "dice": [
+                            { "roll": 5 }
+                        ],
+                        "bonus": 5
+                    }
+                ]
+            }*/
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 5);
+                        }});
+                    }});
+                    this.putInteger("bonus", 5);
+                }});
+            }});
+        }});
         heal.setSource(source);
         heal.setTarget(target);
 
-        heal.deliverHealing(10, context);
+        heal.deliverHealing(context);
 
         assertEquals(20, target.getHealthData().getInteger("current"),
                 "target should recover 10 hit points (10+10=20)"
@@ -97,9 +119,13 @@ public class HealTest {
 
         Heal heal = new Heal();
         heal.setSource(source);
+        heal.prepare(context);
         heal.setTarget(target);
+        heal.getTargetHealing(context);
 
-        assertEquals(0, heal.getTargetHealing(context),
+        String expected = """
+                []""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "default target healing should be 0"
         );
     }
@@ -146,8 +172,10 @@ public class HealTest {
         heal.setSource(source);
         heal.getBaseHealing(context);
 
-        assertEquals(4, heal.json.getInteger("healing"),
-                "base healing should be rolled and in accordance with subevent-specified healing (1+1+2=4)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "base healing should be rolled and in accordance with subevent-specified healing"
         );
     }
 
@@ -244,8 +272,10 @@ public class HealTest {
         heal.setSource(source);
         heal.prepare(context);
 
-        assertEquals(4, heal.json.getInteger("healing"),
-                "base healing should be rolled and stored after calling prepare (1+1+2=4)"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "base healing should be rolled and stored after calling prepare"
         );
     }
 
@@ -344,8 +374,10 @@ public class HealTest {
         heal.setSource(source);
         heal.getBaseHealing(context);
 
-        assertEquals(6, heal.json.getInteger("healing"),
-                "healing should equal str mod (+6)"
+        String expected = """
+                [{"bonus":6,"dice":[]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "healing should equal str mod"
         );
     }
 
@@ -391,7 +423,9 @@ public class HealTest {
         heal.setSource(source);
         heal.getBaseHealing(context);
 
-        assertEquals(23, heal.json.getInteger("healing"),
+        String expected = """
+                [{"bonus":23,"dice":[]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "healing should equal str score (23)"
         );
     }
@@ -436,8 +470,10 @@ public class HealTest {
         heal.setSource(source);
         heal.getBaseHealing(context);
 
-        assertEquals(4, heal.json.getInteger("healing"),
-                "healing should equal proficiency bonus (+4)"
+        String expected = """
+                [{"bonus":4,"dice":[]}]""";
+        assertEquals(expected, heal.json.getJsonArray("healing").toString(),
+                "healing should equal proficiency bonus"
         );
     }
 

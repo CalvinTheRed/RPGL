@@ -1,5 +1,6 @@
 package org.rpgl.subevent;
 
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -36,12 +37,23 @@ public class TemporaryHitPointsDelivery extends Subevent {
     }
 
     /**
-     * This method returns the temporary hit points delivered to <code>target</code>.
+     * This method returns the sum of all bonuses and dice being delivered to target as temporary hit points.
      *
      * @return an integer representing a quantity of temporary hit points
      */
     public int getTemporaryHitPoints() {
-        return this.json.getInteger("temporary_hit_points");
+        JsonArray temporaryHitPointsArray = this.json.getJsonArray("temporary_hit_points");
+        int temporaryHitPoints = 0;
+        for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
+            JsonObject temporaryHitPointsJson = temporaryHitPointsArray.getJsonObject(i);
+            temporaryHitPoints += temporaryHitPointsJson.getInteger("bonus");
+            JsonArray dice = temporaryHitPointsJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                temporaryHitPoints += die.getInteger("roll");
+            }
+        }
+        return temporaryHitPoints;
     }
 
 }

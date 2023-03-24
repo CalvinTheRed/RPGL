@@ -6,6 +6,7 @@ import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -44,6 +45,13 @@ public final class Die {
         return roll;
     }
 
+    /**
+     * Rolls a die defined by a provided JsonObject. The result is stored in the JsonObject die and is returned by the
+     * method.
+     *
+     * @param die the die to be rolled
+     * @return the result of the roll
+     */
     public static int roll(JsonObject die) {
         int roll = roll(die.getInteger("size"), die.getJsonArray("determined"));
         die.putInteger("roll", roll);
@@ -75,12 +83,19 @@ public final class Die {
         Die.testing = isTesting;
     }
 
+    /**
+     * This method unpacks a compacted representation of a collection of dice. It will create copies of any die which
+     * includes a <code>"count"</code> field, in accordance with the value stored in that field.
+     *
+     * @param dice a JsonArray storing compact dice
+     * @return a JsonArray storing unpacked dice
+     */
     public static JsonArray unpack(JsonArray dice) {
         JsonArray unpackedDice = new JsonArray();
         for (int i = 0; i < dice.size(); i++) {
             JsonObject die = dice.getJsonObject(i);
             JsonObject unpackedDie = die.deepClone();
-            int count = unpackedDie.removeInteger("count");
+            int count = Objects.requireNonNullElse(unpackedDie.removeInteger("count"), 1);
             for (int j = 0; j < count; j++) {
                 unpackedDice.addJsonObject(unpackedDie.deepClone());
             }

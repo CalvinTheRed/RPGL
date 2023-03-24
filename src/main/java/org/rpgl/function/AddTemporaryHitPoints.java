@@ -39,6 +39,18 @@ public class AddTemporaryHitPoints extends Function {
         }
     }
 
+    /**
+     * This helper method processes temporary hit point JSON data and translates temporary hit point formula data to
+     * dice and bonus form.
+     *
+     * @param effect                 the RPGLEffect applying this bonus
+     * @param subevent               the TemporaryHitPointCollection receiving these temporary hit points
+     * @param temporaryHitPointsJson the temporary hit point formula data
+     * @param context                the context in which these temporary hit points are being applied
+     * @return a JsonObject representing the evaluated form of the provided temporary hit point formula data
+     *
+     * @throws Exception if an exception occurs
+     */
     public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject temporaryHitPointsJson, RPGLContext context) throws Exception {
         /*[
             {

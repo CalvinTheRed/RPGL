@@ -161,23 +161,10 @@ public class DealDamage extends Subevent implements CancelableSubevent {
      * @throws Exception if an exception occurs.
      */
     void deliverDamage(RPGLContext context) throws Exception {
-        JsonObject damage = new JsonObject();
-        JsonArray damageArray = this.json.getJsonArray("damage");
-        for (int i = 0; i < damageArray.size(); i++) {
-            JsonObject damageJson = damageArray.getJsonObject(i);
-            int total = damageJson.getInteger("bonus");
-            JsonArray dice = damageJson.getJsonArray("dice");
-            for (int j = 0; j < dice.size(); j++) {
-                total += dice.getJsonObject(j).getInteger("roll");
-            }
-            String damageType = damageJson.getString("damage_type");
-            damage.putInteger(damageType, Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total);
-        }
-
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putString("subevent", "damage_delivery");
-            this.putJsonObject("damage", damage.deepClone());
+            this.putJsonArray("damage", json.getJsonArray("damage"));
         }});
         damageDelivery.setSource(this.getSource());
         damageDelivery.prepare(context);

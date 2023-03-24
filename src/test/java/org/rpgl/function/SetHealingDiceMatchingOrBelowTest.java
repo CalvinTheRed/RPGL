@@ -171,8 +171,10 @@ public class SetHealingDiceMatchingOrBelowTest {
 
         setHealingDiceMatchingOrBelow.execute(null, healingRoll, functionJson, context);
 
-        assertEquals(13, healingRoll.getHealing(),
-                "execute should set all dice which rolled 2 or lower to 3 (3+3+3+4=13)"
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":4,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "execute should set all dice which rolled 2 or lower to 3"
         );
     }
 

@@ -173,8 +173,10 @@ public class RerollHealingDiceMatchingOrBelowTest {
 
         rerollHealingDiceMatchingOrBelow.execute(null, healingRoll, functionJson, context);
 
-        assertEquals(19, healingRoll.getHealing(),
-                "execute should re-roll all dice which rolled 2 or lower to 3 (6+6+3+4=19)"
+        String expected = """
+                [{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":4,"size":6}]}]""";
+        assertEquals(expected, healingRoll.getHealing().toString(),
+                "execute should re-roll all dice which rolled 2 or lower to 3"
         );
     }
 

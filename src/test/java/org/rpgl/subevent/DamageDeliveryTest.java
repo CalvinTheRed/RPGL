@@ -9,6 +9,7 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -64,9 +65,31 @@ public class DamageDeliveryTest {
     void getDamage_returnsStoredDamageValues() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
-            this.putJsonObject("damage", new JsonObject() {{
-                this.putInteger("fire", 10);
-                this.putInteger("cold", 10);
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire",
+                        "bonus": 10,
+                        "dice": [ ]
+                    },
+                    {
+                        "damage_type": "cold",
+                        "bonus": 10,
+                        "dice": [ ]
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                    this.putInteger("bonus", 10);
+                    this.putJsonArray("dice", new JsonArray());
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "cold");
+                    this.putInteger("bonus", 10);
+                    this.putJsonArray("dice", new JsonArray());
+                }});
             }});
         }});
 

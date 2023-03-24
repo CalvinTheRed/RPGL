@@ -1,5 +1,6 @@
 package org.rpgl.subevent;
 
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -41,7 +42,18 @@ public class HealingDelivery extends Subevent {
      * @return an integer representing a quantity of healing
      */
     public int getHealing() {
-        return this.json.getInteger("healing");
+        JsonArray healingArray = this.json.getJsonArray("healing");
+        int healing = 0;
+        for (int i = 0; i < healingArray.size(); i++) {
+            JsonObject healingJson = healingArray.getJsonObject(i);
+            healing += healingJson.getInteger("bonus");
+            JsonArray dice = healingJson.getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                healing += die.getInteger("roll");
+            }
+        }
+        return healing;
     }
 
 }

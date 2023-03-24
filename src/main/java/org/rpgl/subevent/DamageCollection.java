@@ -44,6 +44,14 @@ public class DamageCollection extends Subevent {
         this.prepareDamage(context);
     }
 
+    /**
+     * This helper method interprets the damage formulas provided to the damage collection upon construction and stores
+     * the result in the Subevent.
+     *
+     * @param context the context in which the damage collection is being prepared
+     *
+     * @throws Exception if an exception occurs
+     */
     void prepareDamage(RPGLContext context) throws Exception {
         JsonArray damageArray = this.json.removeJsonArray("damage");
         this.json.putJsonArray("damage", new JsonArray());
@@ -58,6 +66,11 @@ public class DamageCollection extends Subevent {
         }
     }
 
+    /**
+     * Adds damage to the damage collection.
+     *
+     * @param damageJson the JSON data for the damage to be added to the damage collection
+     */
     public void addDamage(JsonObject damageJson) {
         this.getDamageCollection().addJsonObject(damageJson);
     }

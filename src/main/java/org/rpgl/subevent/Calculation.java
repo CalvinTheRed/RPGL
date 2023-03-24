@@ -36,6 +36,14 @@ public abstract class Calculation extends Subevent {
         this.prepareMinimum(context);
     }
 
+    /**
+     * This helper method interprets the base formula provided in the Subevent JSON, if it exists, and stores it as the
+     * base of the Calculation.
+     *
+     * @param context the context in which the Calculation is being prepared
+     *
+     * @throws Exception if an exception occurs
+     */
     void prepareBase(RPGLContext context) throws Exception {
         JsonObject baseJson = this.json.removeJsonObject("base");
         this.setBase(new JsonObject() {{
@@ -49,6 +57,14 @@ public abstract class Calculation extends Subevent {
         }
     }
 
+    /**
+     * This helper method interprets the bonus formulas provided in the Subevent JSON, if they exist, and stores it as
+     * the bonuses of the Calculation.
+     *
+     * @param context the context in which the Calculation is being prepared
+     *
+     * @throws Exception if an exception occurs
+     */
     void prepareBonuses(RPGLContext context) throws Exception {
         JsonArray bonuses = this.json.removeJsonArray("bonuses");
         this.json.putJsonArray("bonuses", new JsonArray());
@@ -63,6 +79,14 @@ public abstract class Calculation extends Subevent {
         }
     }
 
+    /**
+     * This helper method interprets the minimum formula provided in the Subevent JSON, if it exists, and stores it as
+     * the minimum of the Calculation.
+     *
+     * @param context the context in which the Calculation is being prepared
+     *
+     * @throws Exception if an exception occurs
+     */
     void prepareMinimum(RPGLContext context) throws Exception {
         JsonObject minimumJson = this.json.removeJsonObject("minimum");
         this.setMinimum(new JsonObject() {{
@@ -76,26 +100,59 @@ public abstract class Calculation extends Subevent {
         }
     }
 
+    /**
+     * Returns the base of the Calculation. Call getInteger("value") to get the base value.
+     * TODO should base be stored as an int after prepare()?
+     *
+     * @return a JsonObject storing the base calculation value.
+     */
     public JsonObject getBase() {
         return this.json.getJsonObject("base");
     }
 
+    /**
+     * Sets the base of the Calculation. This always overrides the previous base value for the Calculation.
+     *
+     * @param baseJson the JSON representation of a base value for the Calculation
+     */
     public void setBase(JsonObject baseJson) {
         this.json.putJsonObject("base", baseJson);
     }
 
+    /**
+     * Returns the list of bonuses applied to the Calculation.
+     *
+     * @return a JsonArray of bonuses
+     */
     public JsonArray getBonuses() {
         return this.json.getJsonArray("bonuses");
     }
 
+    /**
+     * Adds a bonus to the Calculation.
+     *
+     * @param bonusJson a bonus to be added to the Calculation
+     */
     public void addBonus(JsonObject bonusJson) {
         this.json.getJsonArray("bonuses").addJsonObject(bonusJson);
     }
 
+    /**
+     * Returns the minimum of the Calculation. Call getInteger("value") to get the base value.
+     * TODO should minimum be stored as an int after prepare()?
+     *
+     * @return a JsonObject storing the minimum calculation value.
+     */
     public JsonObject getMinimum() {
         return this.json.getJsonObject("minimum");
     }
 
+    /**
+     * Sets the minimum of the Calculation. If the provided minimum is lower than the current minimum, this method will
+     * not do anything to modify the SUbevent.
+     *
+     * @param minimumJson the JSON representation of a minimum value for the Calculation
+     */
     public void setMinimum(JsonObject minimumJson) {
         JsonObject currentMinimum = this.getMinimum();
         if (currentMinimum == null || minimumJson.getInteger("value") > currentMinimum.getInteger("value")) {
@@ -103,6 +160,12 @@ public abstract class Calculation extends Subevent {
         }
     }
 
+    /**
+     * Returns the final value of the Calculation. Any unrolled dice in the Calculation bonuses are rolled by calling
+     * this method.
+     *
+     * @return the final value of the Calculation
+     */
     public int get() {
         int total = this.getBase().getInteger("value");
         total += this.getBonus();
