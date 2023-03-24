@@ -44,6 +44,14 @@ public class TemporaryHitPointCollection extends Subevent {
         this.prepareTemporaryHitPoints(context);
     }
 
+    /**
+     * This helper method interprets the temporary hit point formulas provided in the Subevent JSON, and then stores
+     * those values in the Subevent.
+     *
+     * @param context the context in which the Subevent is being prepared
+     *
+     * @throws Exception if an exception occurs
+     */
     void prepareTemporaryHitPoints(RPGLContext context) throws Exception {
         JsonArray temporaryHitPointsArray = this.json.removeJsonArray("temporary_hit_points");
         this.json.putJsonArray("temporary_hit_points", new JsonArray());

@@ -44,6 +44,13 @@ public class HealingCollection extends Subevent {
         this.prepareHealing(context);
     }
 
+    /**
+     * This helper method evaluates the healing formulas provided in the Subevent JSON data and stores the result.
+     *
+     * @param context the context in which the Subevent is being prepared
+     *
+     * @throws Exception if an exception occurs
+     */
     void prepareHealing(RPGLContext context) throws Exception {
         JsonArray healingArray = this.json.removeJsonArray("healing");
         this.json.putJsonArray("healing", new JsonArray());

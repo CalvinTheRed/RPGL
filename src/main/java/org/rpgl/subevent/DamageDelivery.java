@@ -75,7 +75,6 @@ public class DamageDelivery extends Subevent {
         } else {
             return new JsonObject();
         }
-
     }
 
 }

@@ -111,6 +111,13 @@ public class SavingThrow extends Roll {
         this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
 
+    /**
+     * This helper method collects, rolls, and stores all target-agnostic damage for this Subevent.
+     *
+     * @param context the context in which the base damage for this Subevent is being calculated
+     *
+     * @throws Exception if an exception occurs
+     */
     void getBaseDamage(RPGLContext context) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
@@ -152,6 +159,13 @@ public class SavingThrow extends Roll {
         this.json.putJsonArray("damage", baseDamageRoll.getDamage());
     }
 
+    /**
+     * This helper method collects, rolls, and stores all target-specific damage for this Subevent.
+     *
+     * @param context the context in which the target damage for this Subevent is being calculated
+     *
+     * @throws Exception if an exception occurs
+     */
     void getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
@@ -212,6 +226,15 @@ public class SavingThrow extends Roll {
         }
     }
 
+    /**
+     * This helper method delivers the final damage collection to the Subevent target.
+     *
+     * @param damageProportion the proportion of the damage to be dealt (can be <code>"all"</code>, <code>"half"</code>,
+     *                         or <code>"none"</code>).
+     * @param context          the context in which the damage is being delivered to the target.
+     *
+     * @throws Exception if an exception occurs
+     */
     void deliverDamage(String damageProportion, RPGLContext context) throws Exception {
         if (!"none".equals(damageProportion)) {
             DamageDelivery damageDelivery = new DamageDelivery();
