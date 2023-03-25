@@ -35,7 +35,6 @@ public class AddDamage extends Function {
             JsonArray damageArray = functionJson.getJsonArray("damage");
             for (int i = 0; i < damageArray.size(); i++) {
                 damageCollection.addDamage(processJson(effect, subevent, damageArray.getJsonObject(i), context));
-                System.out.println(damageCollection);
             }
         } else if (subevent instanceof CriticalHitDamageCollection criticalHitDamageCollection) {
             criticalHitDamageCollection.addDamage(processJson(effect, subevent, functionJson.getJsonObject("damage"), context));
