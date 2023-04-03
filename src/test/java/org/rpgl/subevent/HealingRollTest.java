@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -14,6 +13,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -59,7 +59,7 @@ public class HealingRollTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new RPGLContext()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -310,7 +310,7 @@ public class HealingRollTest {
     @DisplayName("prepare healing dice are rolled")
     void prepare_healingDiceAreRolled() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
 
         HealingRoll healingRoll = new HealingRoll();

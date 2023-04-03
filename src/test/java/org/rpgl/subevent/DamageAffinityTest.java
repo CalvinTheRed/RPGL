@@ -3,10 +3,10 @@ package org.rpgl.subevent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,7 +36,7 @@ public class DamageAffinityTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new RPGLContext()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -61,7 +61,7 @@ public class DamageAffinityTest {
     @DisplayName("getAffinity reports not immune, not resistant, not vulnerable (after prepare())")
     void getAffinity_notImmuneNotResistantNotVulnerable_afterPrepare() throws Exception {
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.prepare(new RPGLContext());
+        damageAffinity.prepare(new DummyContext());
 
         assertFalse(damageAffinity.isImmune(),
                 "damageAffinity should not report immune after prepare()"

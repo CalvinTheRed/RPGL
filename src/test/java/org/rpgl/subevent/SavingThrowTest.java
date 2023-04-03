@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -14,6 +13,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -60,7 +60,7 @@ public class SavingThrowTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new RPGLContext()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -70,7 +70,7 @@ public class SavingThrowTest {
     void deliverDamage_deliversDamageToTarget() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -114,7 +114,7 @@ public class SavingThrowTest {
     void resolveNestedSubevents_incrementsCounterOnPass_dummySubevent() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -148,7 +148,7 @@ public class SavingThrowTest {
     void resolveNestedSubevents_incrementsCounterOnFail_dummySubevent() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -182,7 +182,7 @@ public class SavingThrowTest {
     void getTargetDamage_returnsEmptyObject_default() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -206,7 +206,7 @@ public class SavingThrowTest {
     void getBaseDamage_storesBaseDamageValue() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -259,7 +259,7 @@ public class SavingThrowTest {
     void calculateDifficultyClass_calculatesSeventeen_youngRedDragonUsingCon() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -281,7 +281,7 @@ public class SavingThrowTest {
     void prepare_calculatesSaveDifficultyClassAndStoresBaseDamage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -337,7 +337,7 @@ public class SavingThrowTest {
     void invoke_dealsProperDamageOnFail() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -400,7 +400,7 @@ public class SavingThrowTest {
     void invoke_dealsHalfDamageOnPass() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 

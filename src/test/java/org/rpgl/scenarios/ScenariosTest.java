@@ -5,13 +5,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -55,7 +55,7 @@ public class ScenariosTest {
         RPGLObject knight5 = RPGLFactory.newObject("demo:knight");
         RPGLObject knight6 = RPGLFactory.newObject("demo:knight");
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         context.add(knight1);
         context.add(knight2);
@@ -119,7 +119,7 @@ public class ScenariosTest {
         RPGLObject knight1 = RPGLFactory.newObject("demo:knight");
         RPGLObject knight2 = RPGLFactory.newObject("demo:knight");
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(knight1);
         context.add(knight2);
 

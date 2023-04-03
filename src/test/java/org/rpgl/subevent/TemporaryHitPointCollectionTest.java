@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -14,6 +13,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -59,7 +59,7 @@ public class TemporaryHitPointCollectionTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new RPGLContext()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -158,7 +158,7 @@ public class TemporaryHitPointCollectionTest {
     @DisplayName("prepare sets default values")
     void prepare_setsDefaultValues() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
@@ -183,7 +183,7 @@ public class TemporaryHitPointCollectionTest {
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (range)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_range() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
@@ -222,7 +222,7 @@ public class TemporaryHitPointCollectionTest {
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (modifier)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_modifier() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
 
         source.getAbilityScores().putInteger("dex", 20);
@@ -269,7 +269,7 @@ public class TemporaryHitPointCollectionTest {
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (ability)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_ability() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
 
         source.getAbilityScores().putInteger("dex", 20);
@@ -316,7 +316,7 @@ public class TemporaryHitPointCollectionTest {
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (proficiency)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_proficiency() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();

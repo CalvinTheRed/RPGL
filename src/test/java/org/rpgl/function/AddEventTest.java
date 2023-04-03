@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -14,6 +13,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.GetEvents;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -58,7 +58,7 @@ public class AddEventTest {
             this.putString("function", "not_a_function");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
                 () -> function.execute(null, null, functionJson, context),
@@ -70,7 +70,7 @@ public class AddEventTest {
     @DisplayName("execute adds event datapack ID to subevent")
     void execute_addsEventDatapackIdToSubevent() throws Exception {
         RPGLObject object = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(object);
 
         GetEvents getEvents = new GetEvents();

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
@@ -15,6 +14,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -60,7 +60,7 @@ public class ObjectsMatchTest {
             this.putString("condition", "not_a_condition");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson, context),
@@ -75,7 +75,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = effectSource;
         RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);
@@ -113,7 +113,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);
@@ -151,7 +151,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventTarget = effectSource;
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);
@@ -189,7 +189,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);
@@ -227,7 +227,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = effectTarget;
         RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);
@@ -265,7 +265,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);
@@ -303,7 +303,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventTarget = effectTarget;
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);
@@ -341,7 +341,7 @@ public class ObjectsMatchTest {
         RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
         RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
         context.add(subeventSource);

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -14,6 +13,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -59,7 +59,7 @@ public class ObjectHasTagTest {
             this.putString("condition", "not_a_condition");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson, context),
@@ -72,7 +72,7 @@ public class ObjectHasTagTest {
     void evaluate_returnsTrueWhenObjectHasDesiredTag() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -110,7 +110,7 @@ public class ObjectHasTagTest {
     void evaluate_returnsFalseWhenObjectDoesNotHaveDesiredTag() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 

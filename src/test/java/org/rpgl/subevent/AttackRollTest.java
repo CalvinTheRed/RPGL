@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
@@ -17,6 +16,7 @@ import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -88,7 +88,7 @@ public class AttackRollTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new RPGLContext()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -133,7 +133,7 @@ public class AttackRollTest {
     void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -153,7 +153,7 @@ public class AttackRollTest {
     void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -173,7 +173,7 @@ public class AttackRollTest {
     void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -194,7 +194,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.resolveNestedSubevents("hit", new RPGLContext());
+        attackRoll.resolveNestedSubevents("hit", new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "DummySubevent counter should increment by 1 from resolving nested subevents on hit"
@@ -206,7 +206,7 @@ public class AttackRollTest {
     void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -227,7 +227,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.resolveNestedSubevents("miss", new RPGLContext());
+        attackRoll.resolveNestedSubevents("miss", new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "DummySubevent counter should increment by 1 from resolving nested subevents on miss"
@@ -239,7 +239,7 @@ public class AttackRollTest {
     void deliverDamage_objectLosesHealth() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -282,7 +282,7 @@ public class AttackRollTest {
     void resolveDamage_dealsDamage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -313,7 +313,7 @@ public class AttackRollTest {
     void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -330,7 +330,7 @@ public class AttackRollTest {
     void prepareItemWeapon_storesWeaponDamageFormulaAndAppliesModifierBonusToAttackRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -356,7 +356,7 @@ public class AttackRollTest {
     void prepareNaturalWeapon_storesWeaponDamageFormulaAndWeaponUUIDAndAppliesModifierBonusToAttackRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -385,7 +385,7 @@ public class AttackRollTest {
     void prepareNoWeapon_storesDamageFormulaAndAppliesModifierBonusToAttackRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -442,7 +442,7 @@ public class AttackRollTest {
     void getBaseDamageCollection_collectsCorrectDamage_itemWeapon() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -467,7 +467,7 @@ public class AttackRollTest {
     void getBaseDamageCollection_collectsCorrectDamage_naturalWeapon() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -492,7 +492,7 @@ public class AttackRollTest {
     void getBaseDamageCollection_collectsCorrectDamage_noWeapon() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -547,7 +547,7 @@ public class AttackRollTest {
     void prepare_storesWeaponDamageAndStoresWeaponUUID_itemWeapon() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -574,7 +574,7 @@ public class AttackRollTest {
     void prepare_storesWeaponDamageAndStoresWeaponUUID_naturalWeapon() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -604,7 +604,7 @@ public class AttackRollTest {
     void prepare_storesDamage_noWeapon() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -661,7 +661,7 @@ public class AttackRollTest {
     void invoke_storesWeaponDamage_hit() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -689,7 +689,7 @@ public class AttackRollTest {
     void invoke_storesWeaponDamage_criticalHit() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -716,7 +716,7 @@ public class AttackRollTest {
     void invoke_storesWeaponDamage_miss() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -744,7 +744,7 @@ public class AttackRollTest {
     void invoke_naturalWeaponDoesNotPersist() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -773,7 +773,7 @@ public class AttackRollTest {
     void prepare_addsCorrectTagsToAttackRoll_itemWeaponAttack() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -803,7 +803,7 @@ public class AttackRollTest {
     void prepare_addsCorrectTagsToAttackRoll_naturalWeaponAttack() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -833,7 +833,7 @@ public class AttackRollTest {
     void getBaseDamage_calculatesCorrectDamage_modifier() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -887,7 +887,7 @@ public class AttackRollTest {
     void getBaseDamage_calculatesCorrectDamage_ability() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -941,7 +941,7 @@ public class AttackRollTest {
     void getBaseDamage_calculatesCorrectDamage_proficiency() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 

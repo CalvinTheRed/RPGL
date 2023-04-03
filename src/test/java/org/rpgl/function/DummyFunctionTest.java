@@ -4,11 +4,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
+import org.rpgl.testUtils.DummyContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +41,7 @@ public class DummyFunctionTest {
             this.putString("function", "not_a_function");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
                 () -> function.execute(null, null, functionJson, context),
@@ -60,7 +60,7 @@ public class DummyFunctionTest {
            this.putString("function", "dummy_function");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         function.execute(null, null, functionJson, context);
         assertEquals(1, DummyFunction.counter,

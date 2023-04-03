@@ -6,11 +6,9 @@ import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.subevent.Subevent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * This class represents the context in which actions take place in this library. Typically, there will exist one
@@ -21,65 +19,19 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class RPGLContext {
+public abstract class RPGLContext {
 
     private final Map<String, RPGLObject> contextObjects;
+    private final Map<Integer, List<RPGLObject>> initiativeTable;
 
-    private final Map<Double, RPGLObject> turnOrder;
-
-    private Double currentInitiative;
+    private boolean initiativeRolled = false;
 
     public RPGLContext() {
         this.contextObjects = new HashMap<>();
-        this.turnOrder = new HashMap<>();
-        this.currentInitiative = null;
+        this.initiativeTable = new HashMap<>();
     }
 
-    /**
-     * This method adds a RPGLObject to the context. The passed object will be assigned an initiative score and added to
-     * the turn order. This initiative accounts for dexterity scores, and assigns random bonuses to differentiate what
-     * would otherwise result in a tie.
-     *
-     * @param object an RPGLObject to be added into the context
-     *
-     * @throws Exception if an exception occurs
-     */
-    public void add(RPGLObject object) throws Exception {
-        String objectUuid = object.getUuid();
-        this.contextObjects.putIfAbsent(objectUuid, object);
-        turnOrder.put(this.rollObjectInitiative(object), object);
-    }
-
-    /**
-     * This method adds a RPGLObject to the context, using a pre-determined initiative value, plus random digits to help
-     * prevent risk of overriding existing turns in the turn order.
-     *
-     * @param object     an RPGLObject to be added into the context
-     * @param initiative an initiative score
-     *
-     * @throws Exception if an exception occurs
-     */
-    public void add(RPGLObject object, double initiative) throws Exception {
-        String objectUuid = object.getUuid();
-        this.contextObjects.putIfAbsent(objectUuid, object);
-        turnOrder.put(initiative + Math.random() / 10000.0, object);
-    }
-
-    /**
-     * This method removes a RPGLObject from the context. This includes removing it from context as well as forgetting
-     * its place in the initiative order.
-     *
-     * @param object the RPGLObject to be removed from context
-     */
-    public void remove(RPGLObject object) {
-        this.contextObjects.remove(object.getUuid());
-        for (Map.Entry<Double, RPGLObject> entry : this.turnOrder.entrySet()) {
-            if (entry.getValue() == object) {
-                this.turnOrder.remove(entry.getKey());
-                break;
-            }
-        }
-    }
+    public abstract boolean isObjectsTurn(RPGLObject object);
 
     /**
      * This method propagates a Subevent to each RPGLObject in context to allow their RPGLEffects to respond to it.
@@ -99,20 +51,39 @@ public class RPGLContext {
         } while (wasProcessed);
     }
 
-    /**
-     * This helper method is used to roll initiative for an RPGLObject being added to this RPGLContext. In testing mode,
-     * the first two d20 rolls entailed by this check will always be 10's. An initiative roll is determined by the
-     * following equation:
-     * <br>
-     * <br>
-     * <code>initiative = dex ability check + (dex score / 100) + (random bonus / 10,000)</code>
-     *
-     * @param object an RPGLObject whose initiative is being rolled
-     * @return an initiative score for object
-     *
-     * @throws Exception if an exception occurs
-     */
-    double rollObjectInitiative(RPGLObject object) throws Exception {
+    public void add(RPGLObject object) throws Exception {
+        this.contextObjects.putIfAbsent(object.getUuid(), object);
+        if (this.initiativeRolled) {
+            this.trackObjectInitiative(this.rollObjectInitiative(object), object);
+        }
+    }
+
+    public void remove(RPGLObject object) {
+        this.contextObjects.remove(object.getUuid());
+        if (this.initiativeRolled){
+            for (Map.Entry<Integer, List<RPGLObject>> entry : this.initiativeTable.entrySet()) {
+                if (entry.getValue() != null) {
+                    entry.getValue().remove(object);
+                }
+            }
+        }
+    }
+
+    public Map<Integer, List<RPGLObject>> getInitiativeTable() {
+        return this.initiativeTable;
+    }
+
+    public void rollForInitiative() throws Exception {
+        if (!this.initiativeRolled) {
+            for (Map.Entry<String, RPGLObject> entry : this.contextObjects.entrySet()) {
+                RPGLObject object = entry.getValue();
+                this.trackObjectInitiative(this.rollObjectInitiative(object), object);
+            }
+            this.initiativeRolled = true;
+        }
+    }
+
+    int rollObjectInitiative(RPGLObject object) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             /*{
@@ -136,62 +107,33 @@ public class RPGLContext {
         abilityCheck.setTarget(object);
         abilityCheck.invoke(this);
 
-        return abilityCheck.get()
-                + ( (double) object.getAbilityScoreFromAbilityName("dex", this) / 100.0)
-                + (Math.random() / 10000.0);
+        return abilityCheck.get();
     }
 
-    /**
-     * Returns the RPGLObject which is active in the current turn.
-     *
-     * @return an RPGLObject
-     *
-     * @throws Exception if an exception occurs
-     */
-    public RPGLObject currentObject() throws Exception {
-        return Objects.requireNonNullElse(turnOrder.get(this.currentInitiative), this.nextObject());
-    }
-
-    /**
-     * This method transitions to the turn of the next RPGLObject, in order of descending initiative. If this method has
-     * not been called on this RPGLContext yet, it returns the RPGLObject with the highest initiative score. This method
-     * also facilitates the ending of turns and the beginning of turns, as appropriate. If the current initiative score
-     * is the lowest initiative in context, this method will loop back to the highest initiative score and start the
-     * cycle over again. This method returns the RPGLObject which is active in the new turn.
-     *
-     * @return an RPGLObject
-     *
-     * @throws Exception if an exception occurs
-     */
-    public RPGLObject nextObject() throws Exception {
-        if (!this.turnOrder.isEmpty()) {
-            List<Double> initiativeScores = new ArrayList<>(this.turnOrder.keySet().stream().sorted().toList());
-            Collections.reverse(initiativeScores);
-            RPGLObject lastObject = this.turnOrder.get(this.currentInitiative);
-            int initiativeIndex = initiativeScores.indexOf(this.currentInitiative);
-            if (initiativeIndex == initiativeScores.size() - 1) {
-                // loop back around to the highest initiative in context
-                initiativeIndex = 0;
-            } else {
-                initiativeIndex++;
-            }
-            this.currentInitiative = initiativeScores.get(initiativeIndex);
-            RPGLObject nextObject = this.turnOrder.get(this.currentInitiative);
-
-            if (lastObject != null) {
-                // end turn of last object, unless this is the first turn
-                lastObject.endTurn(this);
-            }
-            // start turn of next object
-            nextObject.startTurn(this);
-
-            // check to see if nextObject died immediately after starting its turn
-            if (!contextObjects.containsKey(nextObject.getUuid())) {
-                nextObject = this.nextObject();
-            }
-            return nextObject;
+    void trackObjectInitiative(int initiative, RPGLObject object) {
+        List<RPGLObject> initiativeRow = this.initiativeTable.get(initiative);
+        if (initiativeRow == null) {
+            initiativeRow = new ArrayList<>();
+            initiativeRow.add(object);
+            this.initiativeTable.put(initiative, initiativeRow);
+        } else {
+            initiativeRow.add(object);
         }
-        return null;
+    }
+
+    public void merge(RPGLContext other) throws Exception {
+        this.contextObjects.putAll(other.contextObjects);
+        if (this.initiativeRolled || other.initiativeRolled) {
+            this.rollForInitiative();
+            other.rollForInitiative();
+            for (Map.Entry<Integer, List<RPGLObject>> otherEntry : other.initiativeTable.entrySet()) {
+                if (this.initiativeTable.get(otherEntry.getKey()) == null) {
+                    this.initiativeTable.put(otherEntry.getKey(), otherEntry.getValue());
+                } else {
+                    this.initiativeTable.get(otherEntry.getKey()).addAll(otherEntry.getValue());
+                }
+            }
+        }
     }
 
 }

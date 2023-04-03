@@ -3,10 +3,10 @@ package org.rpgl.condition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +34,7 @@ public class FalseTest {
             this.putString("condition", "not_a_condition");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson, context),
@@ -53,7 +53,7 @@ public class FalseTest {
             this.putString("condition", "false");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertFalse(condition.evaluate(null, null, conditionJson, context),
                 "False condition should always evaluate false"

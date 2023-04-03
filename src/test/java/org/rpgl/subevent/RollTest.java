@@ -14,6 +14,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -78,7 +79,7 @@ public class RollTest {
     void default_yieldOnlyNormalRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -101,7 +102,7 @@ public class RollTest {
     void grantAdvantage_yieldOnlyAdvantageRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -125,7 +126,7 @@ public class RollTest {
     void grantDisadvantage_yieldOnlyDisadvantageRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -166,7 +167,7 @@ public class RollTest {
     void roll_defaultBehavior_secondRollHigher() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -196,7 +197,7 @@ public class RollTest {
     void roll_defaultBehavior_secondRollLower() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -226,7 +227,7 @@ public class RollTest {
     void roll_withAdvantage_secondRollHigher() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -257,7 +258,7 @@ public class RollTest {
     void roll_withAdvantage_secondRollLower() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -288,7 +289,7 @@ public class RollTest {
     void roll_withDisadvantage_firstRollHigher() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -318,7 +319,7 @@ public class RollTest {
     void roll_withDisadvantage_firstRollLower() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:knight");
         RPGLObject target = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
