@@ -62,7 +62,7 @@ public abstract class Condition {
 
     /**
      * Verifies that the additional information provided to <code>evaluate(...)</code> is intended for the Condition
-     * 	type being evaluated.
+     * type being evaluated.
      *
      * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      *
