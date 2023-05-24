@@ -46,7 +46,7 @@ public class AbilityCheck extends Roll {
     }
 
     @Override
-    public void enactBehavior(RPGLContext context) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             this.addBonus(new JsonObject() {{

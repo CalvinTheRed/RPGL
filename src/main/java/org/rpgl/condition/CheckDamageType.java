@@ -22,8 +22,7 @@ public class CheckDamageType extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        super.verifyCondition(conditionJson);
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) {
         if (subevent instanceof DamageAffinity damageAffinity) {
             return conditionJson.getString("damage_type").equals(damageAffinity.getDamageType());
         }

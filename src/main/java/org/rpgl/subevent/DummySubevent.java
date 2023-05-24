@@ -39,7 +39,7 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
     }
 
     @Override
-    public void enactBehavior(RPGLContext context) {
+    public void run(RPGLContext context) {
         DummySubevent.counter++;
     }
 

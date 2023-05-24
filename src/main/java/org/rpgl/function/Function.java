@@ -86,16 +86,11 @@ public abstract class Function {
         }
     }
 
-    /**
-     * Modifies given Subevents or RPGLObjects according to given parameters.
-     *
-     * @param effect       the RPGLEffect containing this Function
-     * @param subevent     the Subevent being invoked
-     * @param functionJson a JsonObject containing additional information necessary for the function to be executed
-     * @param context      the context in which the FUnction is invoked
-     *
-     * @throws Exception if an exception occurs
-     */
-    public abstract void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception;
+    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+        this.verifyFunction(functionJson);
+        this.run(effect, subevent, functionJson, context);
+    }
+
+    public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception;
 
 }

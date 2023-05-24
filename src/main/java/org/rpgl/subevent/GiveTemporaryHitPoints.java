@@ -41,7 +41,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
     }
 
     @Override
-    public void enactBehavior(RPGLContext context) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.getTargetTemporaryHitPoints(context);
             this.deliverTemporaryHitPoints(context);

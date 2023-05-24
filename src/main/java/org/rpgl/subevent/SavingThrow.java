@@ -62,12 +62,12 @@ public class SavingThrow extends Roll {
         }});
 
         context.processSubevent(this, context);
-        this.enactBehavior(context);
+        this.run(context);
         context.viewCompletedSubevent(this);
     }
 
     @Override
-    public void enactBehavior(RPGLContext context) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             if (this.get() < this.json.getInteger("save_difficulty_class")) {

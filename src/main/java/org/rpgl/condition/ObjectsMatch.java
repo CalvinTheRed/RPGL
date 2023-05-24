@@ -18,8 +18,7 @@ public class ObjectsMatch extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        super.verifyCondition(conditionJson);
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         RPGLObject effectObject = RPGLEffect.getObject(effect, subevent, new JsonObject() {{
             this.putString("from", "effect");
             this.putString("object", conditionJson.getString("effect"));

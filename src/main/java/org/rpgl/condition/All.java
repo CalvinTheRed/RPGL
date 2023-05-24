@@ -18,8 +18,7 @@ public class All extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        this.verifyCondition(conditionJson);
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         JsonArray nestedConditionList = conditionJson.getJsonArray("conditions");
         for (int i = 0; i < nestedConditionList.size(); i++) {
             JsonObject nestedConditionJson = nestedConditionList.getJsonObject(i);

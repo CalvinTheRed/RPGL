@@ -29,8 +29,7 @@ public class AddDamage extends Function {
     }
 
     @Override
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
-        super.verifyFunction(functionJson);
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         if (subevent instanceof DamageCollection damageCollection) {
             JsonArray damageArray = functionJson.getJsonArray("damage");
             for (int i = 0; i < damageArray.size(); i++) {

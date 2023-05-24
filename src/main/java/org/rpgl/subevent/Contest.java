@@ -63,7 +63,7 @@ public class Contest extends Subevent {
     }
 
     @Override
-    public void enactBehavior(RPGLContext context) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         int sourceResult = this.getSourceResult(context);
         int targetResult = this.getTargetResult(context);
         if (this.json.getBoolean("must_exceed_target")) {

@@ -40,7 +40,7 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void enactBehavior(RPGLContext context) {
+    public void run(RPGLContext context) {
         if (this.isNotCanceled()) {
             RPGLEffect effect = RPGLFactory.newEffect(this.json.getString("effect"));
             effect.setSource(this.getSource());

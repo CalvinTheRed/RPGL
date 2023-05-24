@@ -18,8 +18,7 @@ public class ObjectAbilityScoreComparison extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        super.verifyCondition(conditionJson);
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         RPGLObject object = RPGLEffect.getObject(effect, subevent, conditionJson.getJsonObject("object"));
         return super.compareValues(
                 object.getAbilityScoreFromAbilityName(conditionJson.getString("ability"), context),

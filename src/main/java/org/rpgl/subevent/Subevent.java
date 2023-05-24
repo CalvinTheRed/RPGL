@@ -161,7 +161,7 @@ public abstract class Subevent {
     public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);
         context.processSubevent(this, context);
-        this.enactBehavior(context);
+        this.run(context);
         context.viewCompletedSubevent(this);
     }
 
@@ -173,7 +173,7 @@ public abstract class Subevent {
      *
      * @throws Exception if an exception occurs
      */
-    public void enactBehavior(RPGLContext context) throws Exception {
+    public void run(RPGLContext context) throws Exception {
     }
 
     /**

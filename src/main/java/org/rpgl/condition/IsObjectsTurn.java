@@ -17,8 +17,7 @@ public class IsObjectsTurn extends Condition {
     }
 
     @Override
-    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
-        super.verifyCondition(conditionJson);
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         return context.isObjectsTurn(RPGLEffect.getObject(effect, subevent, conditionJson.getJsonObject("object")));
     }
 

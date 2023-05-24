@@ -23,8 +23,7 @@ public class SetHealingDiceMatchingOrBelow extends Function {
     }
 
     @Override
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
-        super.verifyFunction(functionJson);
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof HealingRoll healingRoll) {
             healingRoll.setHealingDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),
