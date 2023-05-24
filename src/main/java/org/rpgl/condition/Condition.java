@@ -76,11 +76,31 @@ public abstract class Condition {
         }
     }
 
+    /**
+     * This method facilitates the evaluation of a Condition. It verifies the Condition and then runs it.
+     *
+     * @param effect        the RPGLEffect for which the Condition is being evaluated
+     * @param subevent      the Subevent for which the Condition is being evaluated
+     * @param conditionJson the json definition for the Condition
+     * @param context       the context in which the Condition is being invoked
+     *
+     * @throws Exception if an exception occurs
+     */
     public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         this.verifyCondition(conditionJson);
         return this.run(effect, subevent, conditionJson, context);
     }
 
+    /**
+     * This method contains the logic definitive of the Condition.
+     *
+     * @param effect        the RPGLEffect for which the Condition is being evaluated
+     * @param subevent      the Subevent for which the Condition is being evaluated
+     * @param conditionJson the json definition for the Condition
+     * @param context       the context in which the Condition is being invoked
+     *
+     * @throws Exception if an exception occurs
+     */
     public abstract boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception;
 
     // =================================================================================================================

@@ -86,11 +86,31 @@ public abstract class Function {
         }
     }
 
+    /**
+     * This method facilitates the execution of a Function. It verifies the Function and then runs it.
+     *
+     * @param effect       the RPGLEffect for which the Function is being executed
+     * @param subevent     the Subevent for which the Function is being executed
+     * @param functionJson the json definition for the Function
+     * @param context      the context in which the Function is being executed
+     *
+     * @throws Exception if an exception occurs
+     */
     public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         this.verifyFunction(functionJson);
         this.run(effect, subevent, functionJson, context);
     }
 
+    /**
+     * This method contains the logic definitive of the Function.
+     *
+     * @param effect       the RPGLEffect for which the Function is being executed
+     * @param subevent     the Subevent for which the Function is being executed
+     * @param functionJson the json definition for the Function
+     * @param context      the context in which the Function is being executed
+     *
+     * @throws Exception if an exception occurs
+     */
     public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception;
 
 }

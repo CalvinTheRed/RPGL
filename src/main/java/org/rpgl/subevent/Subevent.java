@@ -151,8 +151,8 @@ public abstract class Subevent {
     }
 
     /**
-     * This method facilitates the invocation of a Subevent. It verifies the Subevent, processes it, enacts its
-     * behavior, and passes the completed version of it to the RPGLContext for viewing.
+     * This method facilitates the invocation of a Subevent. It verifies the Subevent, processes it, runs it, and then
+     * passes the completed version of it to the RPGLContext for viewing.
      *
      * @param context the context in which the Subevent is being invoked
      *
@@ -166,8 +166,8 @@ public abstract class Subevent {
     }
 
     /**
-     * This method contains the behavior definitive of the Subevent. A Subevent should be prepared and processed before
-     * this method is called. Subevents have no behavior by default.
+     * This method contains the logic definitive of the Subevent. A Subevent should be prepared and processed before
+     * this method is called. This method does nothing by default.
      *
      * @param context the context in which the Subevent is exhibiting behavior
      *
