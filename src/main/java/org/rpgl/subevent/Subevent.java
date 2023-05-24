@@ -169,7 +169,7 @@ public abstract class Subevent {
      * This method contains the logic definitive of the Subevent. A Subevent should be prepared and processed before
      * this method is called. This method does nothing by default.
      *
-     * @param context the context in which the Subevent is exhibiting behavior
+     * @param context the context in which the Subevent is being invoked
      *
      * @throws Exception if an exception occurs
      */
