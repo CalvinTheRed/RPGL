@@ -47,8 +47,7 @@ public class Heal extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void invoke(RPGLContext context) throws Exception {
-        super.invoke(context);
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.getTargetHealing(context);
             this.deliverHealing(context);

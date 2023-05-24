@@ -3,11 +3,11 @@ package org.rpgl.condition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,7 +36,7 @@ public class AllTest {
             this.putString("condition", "not_a_condition");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson, context),
@@ -57,7 +57,7 @@ public class AllTest {
             this.putJsonArray("conditions", new JsonArray());
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertTrue(condition.evaluate(null, null, conditionJson, context),
                 "All condition should evaluate true when evaluated without sub-conditions"
@@ -87,7 +87,7 @@ public class AllTest {
             }});
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertTrue(condition.evaluate(null, null, conditionJson, context),
                 "All condition should evaluate true for 2 true conditions"
@@ -117,7 +117,7 @@ public class AllTest {
             }});
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertFalse(condition.evaluate(null, null, conditionJson, context),
                 "All condition should evaluate false for 1 true and 1 false condition"
@@ -147,7 +147,7 @@ public class AllTest {
             }});
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertFalse(condition.evaluate(null, null, conditionJson, context),
                 "All condition should evaluate false for 2 false conditions"

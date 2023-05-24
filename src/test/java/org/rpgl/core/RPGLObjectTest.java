@@ -10,6 +10,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingDelivery;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -105,7 +106,7 @@ public class RPGLObjectTest {
     @DisplayName("getBaseArmorClass calculates 20")
     void getBaseArmorClass_calculatesTwenty() throws Exception {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(knight);
 
         assertEquals(20, knight.getBaseArmorClass(context),
@@ -117,7 +118,7 @@ public class RPGLObjectTest {
     @DisplayName("reduceHitPoints deducts correct number of hit points (no temporary hit points)")
     void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         youngRedDragon.reduceHitPoints(10, context);
 
@@ -130,7 +131,7 @@ public class RPGLObjectTest {
     @DisplayName("reduceHitPoints deducts correct number of hit points (few temporary hit points)")
     void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 10);
         youngRedDragon.reduceHitPoints(20, context);
@@ -144,7 +145,7 @@ public class RPGLObjectTest {
     @DisplayName("reduceHitPoints deducts correct number of hit points (many temporary hit points)")
     void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 20);
         youngRedDragon.reduceHitPoints(10, context);
@@ -179,7 +180,7 @@ public class RPGLObjectTest {
     @DisplayName("getAbilityModifierFromAbilityName returns correct modifier")
     void getAbilityModifierFromAbilityName_returnsCorrectModifier() throws Exception {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(knight);
 
         assertEquals(3, knight.getAbilityModifierFromAbilityName("str", context),
@@ -206,7 +207,7 @@ public class RPGLObjectTest {
     @DisplayName("getProficiencyBonus returns correct bonus")
     void getProficiencyBonus_returnsCorrectValue() throws Exception {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(knight);
 
         assertEquals(2, knight.getEffectiveProficiencyBonus(context),
@@ -218,7 +219,7 @@ public class RPGLObjectTest {
     @DisplayName("getEvents returns an array of the correct events")
     void getEvents_returnsArrayOfCorrectEvents() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(youngRedDragon);
 
         List<RPGLEvent> events = youngRedDragon.getEventObjects(context);
@@ -241,7 +242,7 @@ public class RPGLObjectTest {
     @DisplayName("getEffects returns an array of the correct effects")
     void getEffects_returnsArrayOfCorrectEffects() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(youngRedDragon);
 
         List<RPGLEffect> effects = youngRedDragon.getEffectObjects();
@@ -258,7 +259,7 @@ public class RPGLObjectTest {
     @DisplayName("addRemoveEffect effects can be added and removed")
     void addRemoveEffect_effectsCanBeAddedAndRemoved() throws Exception {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(knight);
 
         RPGLEffect fireImmunity = RPGLFactory.newEffect("demo:fire_immunity");
@@ -287,7 +288,7 @@ public class RPGLObjectTest {
     void invokeEvent_eventBehavesProperly() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         context.add(knight);
 
@@ -307,7 +308,7 @@ public class RPGLObjectTest {
     void receiveHealing_missingHitPointsAreRestored() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
@@ -350,7 +351,7 @@ public class RPGLObjectTest {
     void receiveHealing_mitPointMaximumIsNotExceeded() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
         RPGLObject target = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 

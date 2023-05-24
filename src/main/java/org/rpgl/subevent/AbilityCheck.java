@@ -46,8 +46,7 @@ public class AbilityCheck extends Roll {
     }
 
     @Override
-    public void invoke(RPGLContext context) throws Exception {
-        super.invoke(context);
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             this.addBonus(new JsonObject() {{
@@ -55,7 +54,6 @@ public class AbilityCheck extends Roll {
                 this.putJsonArray("dice", new JsonArray());
             }});
         }
-
     }
 
     @Override

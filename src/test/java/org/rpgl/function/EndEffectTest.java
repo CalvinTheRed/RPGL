@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
@@ -16,6 +15,7 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class EndEffectTest {
             this.putString("function", "not_a_function");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
                 () -> function.execute(null, null, functionJson, context),
@@ -73,7 +73,7 @@ public class EndEffectTest {
     @DisplayName("execute removes effect from object")
     void execute_removesEffectFromObject() throws Exception {
         RPGLObject commoner = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(commoner);
 
         RPGLEffect fireImmunity = RPGLFactory.newEffect("demo:fire_immunity");

@@ -23,8 +23,7 @@ public class RerollDamageDiceMatchingOrBelow extends Function {
     }
 
     @Override
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
-        super.verifyFunction(functionJson);
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof DamageRoll damageRoll) {
             damageRoll.rerollTypedDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),

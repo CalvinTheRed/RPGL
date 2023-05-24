@@ -51,11 +51,9 @@ public class SavingThrow extends Roll {
 
     @Override
     public void invoke(RPGLContext context) throws Exception {
-        /*
-         * Override normal invoke() logic
-         */
         this.verifySubevent(this.subeventId);
 
+        // Override invoke() code to insert additional post-preparatory logic
         RPGLObject target = this.getTarget();
         String saveAbility = this.getAbility(context);
         super.addBonus(new JsonObject() {{
@@ -64,10 +62,12 @@ public class SavingThrow extends Roll {
         }});
 
         context.processSubevent(this, context);
+        this.run(context);
+        context.viewCompletedSubevent(this);
+    }
 
-        /*
-         * Resume normal invoke() logic here
-         */
+    @Override
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             if (this.get() < this.json.getInteger("save_difficulty_class")) {
@@ -80,7 +80,6 @@ public class SavingThrow extends Roll {
                 this.resolveNestedSubevents("pass", context);
             }
         }
-
     }
 
     @Override

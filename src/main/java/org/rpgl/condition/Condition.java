@@ -44,6 +44,7 @@ public abstract class Condition {
         Condition.CONDITIONS.put("check_ability", new CheckAbility());
         Condition.CONDITIONS.put("check_damage_type", new CheckDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
+        Condition.CONDITIONS.put("is_objects_turn", new IsObjectsTurn());
         Condition.CONDITIONS.put("object_ability_score_comparison", new ObjectAbilityScoreComparison());
         Condition.CONDITIONS.put("object_has_tag", new ObjectHasTag());
         Condition.CONDITIONS.put("objects_match", new ObjectsMatch());
@@ -61,7 +62,7 @@ public abstract class Condition {
 
     /**
      * Verifies that the additional information provided to <code>evaluate(...)</code> is intended for the Condition
-     * 	type being evaluated.
+     * type being evaluated.
      *
      * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
      *
@@ -76,17 +77,31 @@ public abstract class Condition {
     }
 
     /**
-     * Evaluates a Subevent or RPGLObject to determine if a defined condition is satisfied.
+     * This method facilitates the evaluation of a Condition. It verifies the Condition and then runs it.
      *
      * @param effect        the RPGLEffect containing this Condition
-     * @param subevent      the Subevent being invoked
-     * @param conditionJson a JsonObject containing additional information necessary for the condition to be evaluated
-     * @param context       the context in which the Condition is being evaluated
-     * @return the result of the evaluation
+     * @param subevent      a Subevent being invoked
+     * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
+     * @param context       the context in which the Condition is being invoked
      *
      * @throws Exception if an exception occurs
      */
-    public abstract boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception;
+    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+        this.verifyCondition(conditionJson);
+        return this.run(effect, subevent, conditionJson, context);
+    }
+
+    /**
+     * This method contains the logic definitive of the Condition.
+     *
+     * @param effect        the RPGLEffect containing this Condition
+     * @param subevent      a Subevent being invoked
+     * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
+     * @param context       the context in which the Condition is being invoked
+     *
+     * @throws Exception if an exception occurs
+     */
+    public abstract boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception;
 
     // =================================================================================================================
     // Condition helper methods

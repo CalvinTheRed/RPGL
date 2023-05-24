@@ -42,8 +42,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void invoke(RPGLContext context) throws Exception {
-        super.invoke(context);
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.getTargetDamage(context);
             this.deliverDamage(context);

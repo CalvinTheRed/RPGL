@@ -151,9 +151,8 @@ public abstract class Subevent {
     }
 
     /**
-     * This method causes the Subevent to be submitted to all RPGLEffects in scope of the RPGLContext provided and then
-     * execute its intended behavior. The <code>setTarget(...)</code> method must be used to assign a target RPGLObject
-     * to the Subevent for this method to work reliably.
+     * This method facilitates the invocation of a Subevent. It verifies the Subevent, processes it, runs it, and then
+     * passes the completed version of it to the RPGLContext for viewing.
      *
      * @param context the context in which the Subevent is being invoked
      *
@@ -162,6 +161,19 @@ public abstract class Subevent {
     public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);
         context.processSubevent(this, context);
+        this.run(context);
+        context.viewCompletedSubevent(this);
+    }
+
+    /**
+     * This method contains the logic definitive of the Subevent. A Subevent should be prepared and processed before
+     * this method is called. This method does nothing by default.
+     *
+     * @param context the context in which the Subevent is being invoked
+     *
+     * @throws Exception if an exception occurs
+     */
+    public void run(RPGLContext context) throws Exception {
     }
 
     /**

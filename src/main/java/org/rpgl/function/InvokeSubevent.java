@@ -20,8 +20,7 @@ public class InvokeSubevent extends Function {
     }
 
     @Override
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
-        super.verifyFunction(functionJson);
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         RPGLObject source = RPGLEffect.getObject(effect, subevent, functionJson.getJsonObject("source"));
         JsonArray targets = functionJson.getJsonArray("targets");
         JsonObject nestedSubeventJson = functionJson.getJsonObject("subevent");

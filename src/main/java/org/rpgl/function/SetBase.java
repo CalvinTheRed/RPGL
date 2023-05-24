@@ -25,8 +25,7 @@ public class SetBase extends Function {
     }
 
     @Override
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
-        super.verifyFunction(functionJson);
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         if (subevent instanceof Calculation calculation) {
             calculation.setBase(processJson(effect, subevent, functionJson.getJsonObject("base"), context));
         } else {

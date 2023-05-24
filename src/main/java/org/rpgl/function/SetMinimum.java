@@ -26,8 +26,7 @@ public class SetMinimum extends Function {
     }
 
     @Override
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
-        super.verifyFunction(functionJson);
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         if (subevent instanceof Calculation calculation) {
             calculation.setMinimum(processJson(effect, subevent, functionJson.getJsonObject("minimum"), context));
         } else {

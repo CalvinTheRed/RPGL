@@ -27,8 +27,7 @@ public class AddBonus extends Function {
     }
 
     @Override
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
-        super.verifyFunction(functionJson);
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         if (subevent instanceof Calculation calculation) {
             JsonArray bonusArray = functionJson.getJsonArray("bonus");
             for (int i = 0; i < bonusArray.size(); i++) {

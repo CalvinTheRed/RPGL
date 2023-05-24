@@ -16,6 +16,7 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Roll;
 import org.rpgl.subevent.Subevent;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -82,7 +83,7 @@ public class GrantDisadvantageTest {
             this.putString("function", "not_a_function");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
                 () -> function.execute(null, null, functionJson, context),
@@ -95,7 +96,7 @@ public class GrantDisadvantageTest {
     void execute_grantsDisadvantageToRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 

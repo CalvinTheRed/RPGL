@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -14,6 +13,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -59,7 +59,7 @@ public class IsObjectsTurnTest {
             this.putString("condition", "not_a_condition");
         }};
 
-        RPGLContext context = new RPGLContext();
+        DummyContext context = new DummyContext();
 
         assertThrows(ConditionMismatchException.class,
                 () -> condition.evaluate(null, null, conditionJson, context),
@@ -68,13 +68,13 @@ public class IsObjectsTurnTest {
     }
 
     @Test
-    @DisplayName("evaluate returns true when it is objects turn")
-    void evaluate_returnsTrueWhenItIsObjectsTurn() throws Exception {
+    @DisplayName("evaluate returns true when it is object's turn")
+    void evaluate_returnsTrueWhenObjectsTurn() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
-        context.add(source, 12);
-        context.add(target, 10);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
@@ -96,21 +96,20 @@ public class IsObjectsTurnTest {
             }});
         }};
 
-        context.currentObject();
-
+        context.setIsTurn(true);
         assertTrue(isObjectsTurn.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return true when it is object's turn"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false when it is not objects turn")
-    void evaluate_returnsFalseWhenItIsNotObjectsTurn() throws Exception {
+    @DisplayName("evaluate returns true when it is object's turn")
+    void evaluate_returnsFalseWhenNotObjectsTurn() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        RPGLContext context = new RPGLContext();
-        context.add(source, 12);
-        context.add(target, 10);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
@@ -132,9 +131,7 @@ public class IsObjectsTurnTest {
             }});
         }};
 
-        context.currentObject();
-        context.nextObject();
-
+        context.setIsTurn(false);
         assertFalse(isObjectsTurn.evaluate(null, dummySubevent, conditionJson, context),
                 "evaluate should return false when it is not object's turn"
         );
