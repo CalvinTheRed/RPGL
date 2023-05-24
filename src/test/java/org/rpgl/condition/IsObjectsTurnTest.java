@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.condition.SubeventHasTag class.
+ * Testing class for the org.rpgl.condition.IsObjectsTurn class.
  *
  * @author Calvin Withun
  */
