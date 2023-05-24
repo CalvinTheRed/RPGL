@@ -9,8 +9,14 @@ import org.rpgl.core.RPGLObject;
  * @author Calvin Withun
  */
 public class DummyContext extends RPGLContext {
+    private boolean isTurn = false;
+
     @Override
     public boolean isObjectsTurn(RPGLObject object) {
-        return false;
+        return this.isTurn;
+    }
+
+    public void setIsTurn(boolean isTurn) {
+        this.isTurn = isTurn;
     }
 }

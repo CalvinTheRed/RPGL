@@ -61,7 +61,7 @@ public abstract class RPGLContext {
      *
      * @param subevent a completed Subevent
      */
-    public void viewCompletedSubevent(Subevent subevent) {
+    public void viewCompletedSubevent(@SuppressWarnings("unused") Subevent subevent) {
     }
 
 }
