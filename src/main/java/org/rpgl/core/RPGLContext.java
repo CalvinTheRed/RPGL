@@ -54,4 +54,14 @@ public abstract class RPGLContext {
         this.contextObjects.putAll(other.contextObjects);
     }
 
+    /**
+     * This method is intended to give an RPGLContext object the ability to view Subevents after they are completed.
+     * This may be used to present results of rolls to the user. Note that doing anything to modify the Subevent at this
+     * point will not impact the results of the Subevent. By default, this method does nothing.
+     *
+     * @param subevent a completed Subevent
+     */
+    public void viewCompletedSubevent(Subevent subevent) {
+    }
+
 }

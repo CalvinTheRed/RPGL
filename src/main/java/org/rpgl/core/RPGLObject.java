@@ -238,9 +238,9 @@ public class RPGLObject extends RPGLTaggable {
             subevent.setSource(this);
             subevent.prepare(context);
             for (RPGLObject target : targets) {
-                Subevent targetClone = subevent.clone();
-                targetClone.setTarget(target);
-                targetClone.invoke(context);
+                Subevent subeventClone = subevent.clone();
+                subeventClone.setTarget(target);
+                subeventClone.invoke(context);
             }
         }
     }
