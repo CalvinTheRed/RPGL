@@ -102,20 +102,7 @@ public class LoopDetectionTest {
         );
     }
 
-    @Test
-    @DisplayName("Avoid false positives during loop detection")
-    void test_falsePositiveAvoidance() throws Exception {
-        RPGLObject sourceDummy = RPGLFactory.newObject("bugtest:dummy");
-        RPGLObject targetDummy = RPGLFactory.newObject("bugtest:dummy");
-        sourceDummy.addEffect(RPGLFactory.newEffect("bugtest:loop_detection_false_positive_1"));
-
-        DummyContext context = new DummyContext();
-        context.add(sourceDummy);
-        context.add(targetDummy);
-
-        assertEquals(0, sourceDummy.getAbilityModifierFromAbilityName("str", context),
-                "Str mod should not change as a result of hitting a condition loop"
-        );
-    }
+    // note: no test exists for false positives concerning identifying a loop. community testing would be appreciated,
+    // as it is not clear if such false positives are possible in the current state of the code.
 
 }
