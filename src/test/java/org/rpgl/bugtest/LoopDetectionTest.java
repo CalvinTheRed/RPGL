@@ -18,6 +18,13 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * This class is dedicated to testing RPGL's behavior when it encounters an infinite recursive loop while attempting to
+ * evaluate Conditions. Such loops should be safely exited, and the outermost participating Condition should evaluate to
+ * false.
+ *
+ * @author Calvin Withun
+ */
 public class LoopDetectionTest {
 
     @BeforeAll
