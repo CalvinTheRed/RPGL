@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Stack;
 
 /**
  * This class represents an abstract condition which must be met in order for an RPGLEffect to execute its Functions on
@@ -19,15 +21,15 @@ import java.util.Map;
  */
 public abstract class Condition {
 
-    // TODO consider adding checks in each Condition if it has a risk of creating circular calls to itself?
-    //  ex an effect watches for CalculateAbilityScore, and has a CheckAbility Condition for the same ability
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Condition.class);
-
     /**
      * A map of all Conditions which can be used in the JSON of an RPGLEffect.
      */
     public static final Map<String, Condition> CONDITIONS = new HashMap<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(Condition.class);
+    private static final Stack<JsonObject> ACTIVE_CONDITIONS = new Stack<>();
+
+    private static boolean exitingConditionLoop = false;
+    private static JsonObject loopedConditionJson = null;
 
     final String conditionId;
 
@@ -83,12 +85,35 @@ public abstract class Condition {
      * @param subevent      a Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
      * @param context       the context in which the Condition is being invoked
+     * @return true if the condition is satisfied. Note that if a subevent-condition loop is formed, this method will
+     * return false until that loop is exited.
      *
      * @throws Exception if an exception occurs
      */
     public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         this.verifyCondition(conditionJson);
-        return this.run(effect, subevent, conditionJson, context);
+        if (ACTIVE_CONDITIONS.contains(conditionJson)) {
+            // begin the back-out if you detect a loop
+            exitingConditionLoop = true;
+            loopedConditionJson = conditionJson;
+            return false;
+        } else {
+            // else proceed as usual
+            ACTIVE_CONDITIONS.push(conditionJson);
+            boolean result = this.run(effect, subevent, conditionJson, context);
+            ACTIVE_CONDITIONS.pop();
+
+            if (exitingConditionLoop) {
+                // back out and fail the condition if you are exiting a loop
+                if (Objects.equals(loopedConditionJson, conditionJson)) {
+                    // end the back-out if you have reached the start of the loop
+                    exitingConditionLoop = false;
+                    loopedConditionJson = null;
+                }
+                return false;
+            }
+            return result;
+        }
     }
 
     /**
