@@ -24,11 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.condition.CheckDamageType class.
+ * Testing class for the org.rpgl.condition.IncludesDamageType class.
  *
  * @author Calvin Withun
  */
-public class CheckDamageTypeTest {
+public class IncludesDamageTypeTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -51,7 +51,7 @@ public class CheckDamageTypeTest {
     @Test
     @DisplayName("evaluate wrong condition")
     void evaluate_wrongCondition_throwsException() {
-        Condition condition = new CheckDamageType();
+        Condition condition = new IncludesDamageType();
         JsonObject conditionJson = new JsonObject() {{
             /*{
                 "condition": "not_a_condition"
@@ -68,38 +68,38 @@ public class CheckDamageTypeTest {
     }
 
     @Test
-    @DisplayName("evaluate returns true for affinity if desired damage type")
-    void evaluate_returnsTrueForAffinityIfDesiredDamageType() throws Exception {
+    @DisplayName("evaluate returns true if damage type is present")
+    void evaluate_returnsTrueIfDamageTypeIsPresent() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.joinSubeventData(new JsonObject() {{
-            this.putString("damage_type", "fire");
-        }});
+        String damageTypeFire = "fire";
 
-        CheckDamageType checkDamageType = new CheckDamageType();
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType(damageTypeFire);
+
+        IncludesDamageType includesDamageType = new IncludesDamageType();
 
         JsonObject conditionJson = new JsonObject() {{
             /*{
                 "condition": "check_damage_type",
                 "damage_type": "fire"
             }*/
-            this.putString("condition", "check_damage_type");
-            this.putString("damage_type", "fire");
+            this.putString("condition", "includes_damage_type");
+            this.putString("damage_type", damageTypeFire);
         }};
 
-        assertTrue(checkDamageType.evaluate(null, damageAffinity, conditionJson, context),
-                "evaluate should return true when damage affinity is for the desired damage type"
+        assertTrue(includesDamageType.evaluate(null, damageAffinity, conditionJson, context),
+                "evaluate should return true when damage affinity includes the specified damage type"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false for affinity if undesired damage type")
-    void evaluate_returnsFalseForAffinityIfUndesiredDamageType() throws Exception {
+    @DisplayName("evaluate returns false if damage type is not present")
+    void evaluate_returnsFalseIfDamageTypeIsNotPresent() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         DummyContext context = new DummyContext();
@@ -107,23 +107,21 @@ public class CheckDamageTypeTest {
         context.add(target);
 
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.joinSubeventData(new JsonObject() {{
-            this.putString("damage_type", "fire");
-        }});
+        damageAffinity.addDamageType("cold");
 
-        CheckDamageType checkDamageType = new CheckDamageType();
+        IncludesDamageType includesDamageType = new IncludesDamageType();
 
         JsonObject conditionJson = new JsonObject() {{
             /*{
                 "condition": "check_damage_type",
-                "damage_type": "cold"
+                "damage_type": "fire"
             }*/
-            this.putString("condition", "check_damage_type");
-            this.putString("damage_type", "cold");
+            this.putString("condition", "includes_damage_type");
+            this.putString("damage_type", "fire");
         }};
 
-        assertFalse(checkDamageType.evaluate(null, damageAffinity, conditionJson, context),
-                "evaluate should return false when damage affinity is for an undesired damage type"
+        assertFalse(includesDamageType.evaluate(null, damageAffinity, conditionJson, context),
+                "evaluate should return false when damage affinity does not include the specified damage type"
         );
     }
 

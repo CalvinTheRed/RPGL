@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.function.RevokeResistance class.
@@ -67,19 +68,66 @@ public class RevokeResistanceTest {
     }
 
     @Test
-    @DisplayName("execute grants immunity")
-    void execute_grantsImmunity() throws Exception {
+    @DisplayName("execute grants resistance for single damage type")
+    void execute_revokesResistanceForSingleDamageType() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        String damageTypeFire = "fire";
+        String damageTypeCold = "cold";
+
         DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType(damageTypeFire);
+        damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
         damageAffinity.prepare(context);
         damageAffinity.setTarget(target);
-        damageAffinity.grantResistance();
+        damageAffinity.grantResistance(damageTypeFire);
+        damageAffinity.grantResistance(damageTypeCold);
+
+        RevokeResistance revokeResistance = new RevokeResistance();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "revoke_resistance",
+                "damage_type": "fire"
+            }*/
+            this.putString("function", "revoke_resistance");
+            this.putString("damage_type", damageTypeFire);
+        }};
+
+        revokeResistance.execute(null, damageAffinity, functionJson, context);
+
+        assertFalse(damageAffinity.isResistant(damageTypeFire),
+                "execute should revoke resistance to counter the granted fire resistance"
+        );
+        assertTrue(damageAffinity.isResistant(damageTypeCold),
+                "execute should not revoke resistance to counter the granted cold resistance"
+        );
+    }
+
+    @Test
+    @DisplayName("execute grants resistance for all damage types")
+    void execute_revokesResistanceForAllDamageTypes() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        String damageTypeFire = "fire";
+        String damageTypeCold = "cold";
+
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType(damageTypeFire);
+        damageAffinity.addDamageType(damageTypeCold);
+        damageAffinity.setSource(source);
+        damageAffinity.prepare(context);
+        damageAffinity.setTarget(target);
+        damageAffinity.grantResistance(damageTypeFire);
+        damageAffinity.grantResistance(damageTypeCold);
 
         RevokeResistance revokeResistance = new RevokeResistance();
         JsonObject functionJson = new JsonObject() {{
@@ -91,8 +139,11 @@ public class RevokeResistanceTest {
 
         revokeResistance.execute(null, damageAffinity, functionJson, context);
 
-        assertFalse(damageAffinity.isResistant(),
-                "execute should revoke resistance to counter the granted resistance"
+        assertFalse(damageAffinity.isResistant(damageTypeFire),
+                "execute should revoke resistance to counter the granted fire resistance"
+        );
+        assertFalse(damageAffinity.isResistant(damageTypeCold),
+                "execute should revoke resistance to counter the granted cold resistance"
         );
     }
 

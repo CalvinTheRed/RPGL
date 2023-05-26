@@ -9,22 +9,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This Condition is dedicated to checking the damage type indicated by a DamageAffinity Subevent.
+ * This Condition is dedicated to checking if a DamageAffinity Subevent includes a given damage type.
  *
  * @author Calvin Withun
  */
-public class CheckDamageType extends Condition {
+public class IncludesDamageType extends Condition {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckDamageType.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IncludesDamageType.class);
 
-    public CheckDamageType() {
-        super("check_damage_type");
+    public IncludesDamageType() {
+        super("includes_damage_type");
     }
 
     @Override
     public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) {
         if (subevent instanceof DamageAffinity damageAffinity) {
-            return conditionJson.getString("damage_type").equals(damageAffinity.getDamageType());
+            return damageAffinity.includesDamageType(conditionJson.getString("damage_type"));
         }
         LOGGER.warn("Can not evaluate condition for " + subevent.getClass());
         return false;

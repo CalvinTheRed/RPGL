@@ -170,4 +170,29 @@ public class ScenariosTest {
         );
     }
 
+    @Test
+    @DisplayName("dragons wrestling and biting")
+    void dragonsWrestlingAndBiting() throws Exception {
+        RPGLObject youngRedDragon1 = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject youngRedDragon2 = RPGLFactory.newObject("demo:young_red_dragon");
+
+        DummyContext context = new DummyContext();
+        context.add(youngRedDragon1);
+        context.add(youngRedDragon2);
+
+        RPGLEvent youngRedDragonBiteAttack;
+
+        youngRedDragonBiteAttack = RPGLFactory.newEvent("demo:young_red_dragon_bite_attack");
+        youngRedDragon1.invokeEvent(
+                new RPGLObject[] {youngRedDragon2},
+                youngRedDragonBiteAttack,
+                context
+        );
+
+        // dragon takes 16 damage
+        assertEquals(178-16, youngRedDragon2.getHealthData().getInteger("current"),
+                "dragon should take 16 piercing damage (5+5+6) and be immune to fire damage"
+        );
+    }
+
 }

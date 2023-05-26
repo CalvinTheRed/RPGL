@@ -24,7 +24,7 @@ public class RevokeResistance extends Function {
     @Override
     public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof DamageAffinity damageAffinity) {
-            damageAffinity.revokeResistance();
+            damageAffinity.revokeResistance(functionJson.getString("damage_type"));
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

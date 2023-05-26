@@ -363,28 +363,31 @@ public class RPGLObject extends RPGLTaggable {
      */
     public void receiveDamage(DamageDelivery damageDelivery, RPGLContext context) throws Exception {
         JsonObject damageJson = damageDelivery.getDamage();
+
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.joinSubeventData(new JsonObject() {{
+            this.putString("subevent", "damage_affinity");
+        }});
+
+        for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
+            damageAffinity.addDamageType(damageJsonEntry.getKey());
+        }
+
+        damageAffinity.setSource(damageDelivery.getSource());
+        damageAffinity.prepare(context);
+        damageAffinity.setTarget(this);
+        damageAffinity.invoke(context);
+
         int damage = 0;
         for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
             String damageType = damageJsonEntry.getKey();
             Integer typedDamage = damageJson.getInteger(damageJsonEntry.getKey());
 
-            // TODO make DamageAffinity contain a list of all present damage types...
-
-            DamageAffinity damageAffinity = new DamageAffinity();
-            damageAffinity.joinSubeventData(new JsonObject() {{
-                this.putString("subevent", "damage_affinity");
-                this.putString("damage_type", damageType);
-            }});
-            damageAffinity.setSource(damageDelivery.getSource());
-            damageAffinity.prepare(context);
-            damageAffinity.setTarget(this);
-            damageAffinity.invoke(context);
-
-            if (!damageAffinity.isImmune()) {
-                if (damageAffinity.isResistant()) {
+            if (!damageAffinity.isImmune(damageType)) {
+                if (damageAffinity.isResistant(damageType)) {
                     typedDamage /= 2;
                 }
-                if (damageAffinity.isVulnerable()) {
+                if (damageAffinity.isVulnerable(damageType)) {
                     typedDamage *= 2;
                 }
                 if (typedDamage > 0) {

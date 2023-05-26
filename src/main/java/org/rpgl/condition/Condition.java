@@ -44,7 +44,7 @@ public abstract class Condition {
         Condition.CONDITIONS.put("all", new All());
         Condition.CONDITIONS.put("any", new Any());
         Condition.CONDITIONS.put("check_ability", new CheckAbility());
-        Condition.CONDITIONS.put("check_damage_type", new CheckDamageType());
+        Condition.CONDITIONS.put("includes_damage_type", new IncludesDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
         Condition.CONDITIONS.put("is_objects_turn", new IsObjectsTurn());
         Condition.CONDITIONS.put("object_ability_score_comparison", new ObjectAbilityScoreComparison());

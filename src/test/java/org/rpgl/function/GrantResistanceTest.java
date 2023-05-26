@@ -19,6 +19,7 @@ import org.rpgl.uuidtable.UUIDTable;
 import java.io.File;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -67,15 +68,59 @@ public class GrantResistanceTest {
     }
 
     @Test
-    @DisplayName("execute grants immunity")
-    void execute_grantsImmunity() throws Exception {
+    @DisplayName("execute grants resistance to a specific damage type")
+    void execute_grantsResistance_specificDamageType() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        String damageTypeFire = "fire";
+        String damageTypeCold = "cold";
+
         DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType(damageTypeFire);
+        damageAffinity.addDamageType(damageTypeCold);
+        damageAffinity.setSource(source);
+        damageAffinity.prepare(context);
+        damageAffinity.setTarget(target);
+
+        GrantResistance grantResistance = new GrantResistance();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "grant_resistance",
+                "damage_type": "fire"
+            }*/
+            this.putString("function", "grant_resistance");
+            this.putString("damage_type", damageTypeFire);
+        }};
+
+        grantResistance.execute(null, damageAffinity, functionJson, context);
+
+        assertTrue(damageAffinity.isResistant(damageTypeFire),
+                "execute should grant resistance to fire damage"
+        );
+        assertFalse(damageAffinity.isResistant(damageTypeCold),
+                "execute should not grant resistance to other damage types"
+        );
+    }
+
+    @Test
+    @DisplayName("execute grants resistance to all damage types with unlisted damage type")
+    void execute_grantsResistanceToAllDamageTypes_unlistedDamageType() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        String damageTypeFire = "fire";
+        String damageTypeCold = "cold";
+
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType(damageTypeFire);
+        damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
         damageAffinity.prepare(context);
         damageAffinity.setTarget(target);
@@ -90,8 +135,11 @@ public class GrantResistanceTest {
 
         grantResistance.execute(null, damageAffinity, functionJson, context);
 
-        assertTrue(damageAffinity.isResistant(),
-                "execute should grant resistance"
+        assertTrue(damageAffinity.isResistant(damageTypeFire),
+                "execute should grant resistance to fire damage"
+        );
+        assertTrue(damageAffinity.isResistant(damageTypeCold),
+                "execute should grant resistance to cold damage"
         );
     }
 
