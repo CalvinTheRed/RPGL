@@ -46,6 +46,12 @@ public class DamageAffinity extends Subevent {
         this.json.asMap().putIfAbsent("affinities", new ArrayList<>());
     }
 
+    /**
+     * Adds a damage type to the DamageAffinity for evaluation. If the damage type is already present in the
+     * DamageAffinity, this method does nothing.
+     *
+     * @param damageType a damage type
+     */
     public void addDamageType(String damageType) {
         this.json.asMap().putIfAbsent("affinities", new ArrayList<>());
         JsonArray affinities = this.getAffinities();
@@ -69,7 +75,12 @@ public class DamageAffinity extends Subevent {
         }});
     }
 
-    public JsonArray getAffinities() {
+    /**
+     * This helper method returns the affinities of all involved damage types in the DamageAffinity.
+     *
+     * @return a JsonArray indicating the Subevent's current affinities
+     */
+    JsonArray getAffinities() {
         return this.json.getJsonArray("affinities");
     }
 
@@ -220,6 +231,12 @@ public class DamageAffinity extends Subevent {
         return false;
     }
 
+    /**
+     * Returns whether a given damage type is included in the DamageAffinity.
+     *
+     * @param damageType a damage type
+     * @return true if the given damage type is included in the DamageAffinity
+     */
     public boolean includesDamageType(String damageType) {
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
