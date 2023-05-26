@@ -98,7 +98,6 @@ public class SavingThrow extends Roll {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         String difficultyClassAbility = this.json.getString("difficulty_class_ability");
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_save_difficulty_class");
             this.putString("difficulty_class_ability", difficultyClassAbility);
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
@@ -123,7 +122,6 @@ public class SavingThrow extends Roll {
          */
         DamageCollection baseDamageCollection = new DamageCollection();
         baseDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
             this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -140,7 +138,6 @@ public class SavingThrow extends Roll {
          */
         DamageRoll baseDamageRoll = new DamageRoll();
         baseDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -171,7 +168,6 @@ public class SavingThrow extends Roll {
          */
         DamageCollection targetDamageCollection = new DamageCollection();
         targetDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_collection");
@@ -187,7 +183,6 @@ public class SavingThrow extends Roll {
          */
         DamageRoll targetDamageRoll = new DamageRoll();
         targetDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", targetDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -238,7 +233,6 @@ public class SavingThrow extends Roll {
         if (!"none".equals(damageProportion)) {
             DamageDelivery damageDelivery = new DamageDelivery();
             damageDelivery.joinSubeventData(new JsonObject() {{
-                this.putString("subevent", "damage_delivery");
                 this.putJsonArray("damage", json.getJsonArray("damage"));
                 this.putString("damage_proportion", damageProportion);
                 this.putJsonArray("tags", json.getJsonArray("tags").deepClone());

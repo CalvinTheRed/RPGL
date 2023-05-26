@@ -193,7 +193,6 @@ public class HealTest {
         Heal heal = new Heal();
         heal.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "heal",
                 "healing": [
                     {
                         "healing_formula": "range",
@@ -204,7 +203,6 @@ public class HealTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "heal");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "range");
@@ -293,7 +291,6 @@ public class HealTest {
         Heal heal = new Heal();
         heal.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "heal",
                 "healing": [
                     {
                         "healing_formula": "range",
@@ -304,7 +301,6 @@ public class HealTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "heal");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "range");
@@ -346,7 +342,6 @@ public class HealTest {
         Heal heal = new Heal();
         heal.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "heal",
                 "healing": [
                     {
                         "healing_formula": "modifier",
@@ -358,7 +353,6 @@ public class HealTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "heal");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "modifier");
@@ -395,7 +389,6 @@ public class HealTest {
         Heal heal = new Heal();
         heal.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "heal",
                 "healing": [
                     {
                         "healing_formula": "ability",
@@ -407,7 +400,6 @@ public class HealTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "heal");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "ability");
@@ -444,7 +436,6 @@ public class HealTest {
         Heal heal = new Heal();
         heal.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "heal",
                 "healing": [
                     {
                         "healing_formula": "proficiency",
@@ -455,7 +446,6 @@ public class HealTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "heal");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "proficiency");

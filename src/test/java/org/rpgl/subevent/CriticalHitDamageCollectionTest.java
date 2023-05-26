@@ -40,7 +40,6 @@ public class CriticalHitDamageCollectionTest {
         CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
         criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "critical_hit_damage_collection",
                 "damage": [
                     {
                         "damage_type": "fire",
@@ -58,7 +57,6 @@ public class CriticalHitDamageCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "critical_hit_damage_collection");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_type", "fire");

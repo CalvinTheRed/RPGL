@@ -10,6 +10,7 @@ import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,9 +68,8 @@ public abstract class Subevent {
      */
     public Subevent(String subeventId) {
         this.subeventId = subeventId;
-        if (this.json.getJsonArray("tags") == null) {
-            this.json.putJsonArray("tags", new JsonArray());
-        }
+        this.json.putString("subevent", subeventId);
+        this.json.asMap().putIfAbsent("tags", new ArrayList<>());
     }
 
     /**

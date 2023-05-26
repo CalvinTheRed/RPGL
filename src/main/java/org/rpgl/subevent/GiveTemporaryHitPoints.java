@@ -72,7 +72,6 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
          */
         TemporaryHitPointCollection baseTemporaryHitPointCollection = new TemporaryHitPointCollection();
         baseTemporaryHitPointCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "temporary_hit_point_collection");
             this.putJsonArray("temporary_hit_points", json.removeJsonArray("temporary_hit_points"));
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -89,7 +88,6 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
          */
         TemporaryHitPointRoll baseTemporaryHitPointRoll = new TemporaryHitPointRoll();
         baseTemporaryHitPointRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "temporary_hit_points_roll");
             this.putJsonArray("temporary_hit_points", baseTemporaryHitPointCollection.getTemporaryHitPointsCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -121,7 +119,6 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
          */
         TemporaryHitPointCollection targetTemporaryHitPointsCollection = new TemporaryHitPointCollection();
         targetTemporaryHitPointsCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "temporary_hit_point_collection");
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_temporary_hit_point_collection");
@@ -137,7 +134,6 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
          */
         TemporaryHitPointRoll targetTemporaryHitPointRoll = new TemporaryHitPointRoll();
         targetTemporaryHitPointRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "temporary_hit_points_roll");
             this.putJsonArray("temporary_hit_points", targetTemporaryHitPointsCollection.getTemporaryHitPointsCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -165,7 +161,6 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
     void deliverTemporaryHitPoints(RPGLContext context) throws Exception {
         TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
         temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "temporary_hit_points_delivery");
             this.putJsonArray("temporary_hit_points", json.getJsonArray("temporary_hit_points"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});

@@ -666,7 +666,6 @@ public class AttackRollTest {
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "attack_roll");
             this.putString("weapon", "mainhand");
             this.putString("attack_type", "melee");
             this.putJsonArray("determined", new JsonArray() {{
@@ -694,7 +693,6 @@ public class AttackRollTest {
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "attack_roll");
             this.putString("weapon", "mainhand");
             this.putString("attack_type", "melee");
             this.putJsonArray("determined", new JsonArray() {{
@@ -721,7 +719,6 @@ public class AttackRollTest {
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "attack_roll");
             this.putString("weapon", "mainhand");
             this.putString("attack_type", "melee");
             this.putJsonArray("determined", new JsonArray() {{
@@ -749,7 +746,6 @@ public class AttackRollTest {
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "attack_roll");
             this.putString("weapon", "demo:young_red_dragon_bite");
             this.putString("attack_type", "melee");
             this.putJsonArray("determined", new JsonArray() {{
@@ -779,11 +775,9 @@ public class AttackRollTest {
 
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "attack_roll",
                 "weapon": "mainhand",
                 "attack_type": "melee",
             }*/
-            this.putString("subevent", "attack_roll");
             this.putString("weapon", "mainhand");
             this.putString("attack_type", "melee");
         }});
@@ -809,11 +803,9 @@ public class AttackRollTest {
 
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "attack_roll",
                 "weapon": "demo:young_red_dragon_claw",
                 "attack_type": "melee",
             }*/
-            this.putString("subevent", "attack_roll");
             this.putString("weapon", "demo:young_red_dragon_claw");
             this.putString("attack_type", "melee");
         }});
@@ -839,7 +831,6 @@ public class AttackRollTest {
 
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "attack_roll",
                 "attack_type": "melee",
                 "attack_ability": "int",
                 "damage": [
@@ -854,7 +845,6 @@ public class AttackRollTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "attack_roll");
             this.putString("damage_type", "fire");
             this.putString("attack_type", "melee");
             this.putString("attack_ability", "str");
@@ -893,7 +883,6 @@ public class AttackRollTest {
 
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "attack_roll",
                 "attack_type": "melee",
                 "attack_ability": "int",
                 "damage": [
@@ -908,7 +897,6 @@ public class AttackRollTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "attack_roll");
             this.putString("damage_type", "fire");
             this.putString("attack_type", "melee");
             this.putString("attack_ability", "str");
@@ -947,7 +935,6 @@ public class AttackRollTest {
 
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "attack_roll",
                 "attack_type": "melee",
                 "attack_ability": "int",
                 "damage": [
@@ -961,7 +948,6 @@ public class AttackRollTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "attack_roll");
             this.putString("damage_type", "fire");
             this.putString("attack_type", "melee");
             this.putString("attack_ability", "str");

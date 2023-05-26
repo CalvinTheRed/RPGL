@@ -317,7 +317,6 @@ public class RPGLObjectTest {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_delivery",
                 "healing": [
                     {
                         "bonus": 10,
@@ -325,7 +324,6 @@ public class RPGLObjectTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_delivery");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("bonus", 10);
@@ -360,7 +358,6 @@ public class RPGLObjectTest {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_delivery",
                 "healing": [
                     {
                         "bonus": 10,
@@ -368,7 +365,6 @@ public class RPGLObjectTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_delivery");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("bonus", 10);

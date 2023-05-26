@@ -78,10 +78,8 @@ public class AbilityCheckTest {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "ability_check",
                 "ability": "str"
             }*/
-            this.putString("subevent", "ability_check");
             this.putString("ability", "str");
         }});
 
@@ -105,11 +103,9 @@ public class AbilityCheckTest {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "ability_check",
                 "ability": "str",
                 "determined": [ 10 ]
             }*/
-            this.putString("subevent", "ability_check");
             this.putString("ability", "str");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(10);

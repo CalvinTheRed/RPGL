@@ -76,7 +76,6 @@ public class DealDamageTest {
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "deal_damage",
                 "tags": [ ],
                 "damage": [
                     {
@@ -88,7 +87,6 @@ public class DealDamageTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "deal_damage");
             this.putJsonArray("tags", new JsonArray());
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -124,11 +122,9 @@ public class DealDamageTest {
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "deal_damage",
                 "tags": [ ],
                 "damage": [ ]
             }*/
-            this.putString("subevent", "deal_damage");
             this.putJsonArray("tags", new JsonArray());
             this.putJsonArray("damage", new JsonArray());
         }});
@@ -154,7 +150,6 @@ public class DealDamageTest {
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "deal_damage",
                 "tags": [ ],
                 "damage": [
                     {
@@ -167,7 +162,6 @@ public class DealDamageTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "deal_damage");
             this.putJsonArray("tags", new JsonArray());
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -210,7 +204,6 @@ public class DealDamageTest {
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "deal_damage",
                 "damage": [
                     {
                         "damage_formula": "range",
@@ -222,7 +215,6 @@ public class DealDamageTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "deal_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_formula", "range");
