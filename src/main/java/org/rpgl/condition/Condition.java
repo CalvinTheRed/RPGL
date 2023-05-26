@@ -71,7 +71,7 @@ public abstract class Condition {
      * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
     void verifyCondition(JsonObject conditionJson) throws ConditionMismatchException {
-        if (!this.conditionId.equals(conditionJson.getString("condition"))) {
+        if (!Objects.equals(this.conditionId, conditionJson.getString("condition"))) {
             ConditionMismatchException e = new ConditionMismatchException(this.conditionId, conditionJson.getString("condition"));
             LOGGER.error(e.getMessage());
             throw e;

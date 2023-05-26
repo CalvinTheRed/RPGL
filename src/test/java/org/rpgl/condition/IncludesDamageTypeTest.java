@@ -85,7 +85,7 @@ public class IncludesDamageTypeTest {
 
         JsonObject conditionJson = new JsonObject() {{
             /*{
-                "condition": "check_damage_type",
+                "condition": "includes_damage_type",
                 "damage_type": "fire"
             }*/
             this.putString("condition", "includes_damage_type");
@@ -113,7 +113,7 @@ public class IncludesDamageTypeTest {
 
         JsonObject conditionJson = new JsonObject() {{
             /*{
-                "condition": "check_damage_type",
+                "condition": "includes_damage_type",
                 "damage_type": "fire"
             }*/
             this.putString("condition", "includes_damage_type");

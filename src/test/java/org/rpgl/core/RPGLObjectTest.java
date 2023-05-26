@@ -93,7 +93,7 @@ public class RPGLObjectTest {
         int count = 0;
         for (int i = 0; i < inventory.size(); i++) {
             String itemUuid = inventory.getString(i);
-            if (alreadyHeldItemUuid.equals(itemUuid)) {
+            if (Objects.equals(alreadyHeldItemUuid, itemUuid)) {
                 count++;
             }
         }
@@ -240,7 +240,7 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("getEffects returns an array of the correct effects")
-    void getEffects_returnsArrayOfCorrectEffects() throws Exception {
+    void getEffects_returnsArrayOfCorrectEffects() {
         RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
         DummyContext context = new DummyContext();
         context.add(youngRedDragon);
@@ -257,7 +257,7 @@ public class RPGLObjectTest {
 
     @Test
     @DisplayName("addRemoveEffect effects can be added and removed")
-    void addRemoveEffect_effectsCanBeAddedAndRemoved() throws Exception {
+    void addRemoveEffect_effectsCanBeAddedAndRemoved() {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
         DummyContext context = new DummyContext();
         context.add(knight);

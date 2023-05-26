@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents anything which impacts how Subevents resolve. Conventional examples of this include status
@@ -96,7 +97,7 @@ public class RPGLEffect extends UUIDTableElement {
     public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         JsonObject subeventFilters = this.getSubeventFilters();
         for (Map.Entry<String, ?> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
-            if (subevent.getSubeventId().equals(subeventFilterEntry.getKey())) {
+            if (Objects.equals(subevent.getSubeventId(), subeventFilterEntry.getKey())) {
                 JsonObject matchedFilter = subeventFilters.getJsonObject(subeventFilterEntry.getKey());
                 JsonArray conditions = matchedFilter.getJsonArray("conditions");
                 if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {

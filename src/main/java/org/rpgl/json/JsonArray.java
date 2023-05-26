@@ -113,17 +113,17 @@ public class JsonArray {
                             comparisonFailed = true;
                             break;
                         } else if (listedObjectKeyValue instanceof HashMap map) {
-                            if (!new JsonObject(map).equals(value)) {
+                            if (!Objects.equals(new JsonObject(map), value)) {
                                 comparisonFailed = true;
                                 break;
                             }
                         } else if (listedObjectKeyValue instanceof ArrayList list) {
-                            if (!new JsonArray(list).equals(value)) {
+                            if (!Objects.equals(new JsonArray(list), value)) {
                                 comparisonFailed = true;
                                 break;
                             }
                         } else {
-                            if (!listedObjectKeyValue.equals(value)) {
+                            if (!Objects.equals(listedObjectKeyValue, value)) {
                                 comparisonFailed = true;
                                 break;
                             }
@@ -276,7 +276,7 @@ public class JsonArray {
     @Override
     public boolean equals(Object other) {
         if (other instanceof JsonArray otherJsonArray) {
-            return this.data.equals(otherJsonArray.data);
+            return Objects.equals(this.data, otherJsonArray.data);
         }
         return false;
     }
