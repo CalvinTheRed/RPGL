@@ -44,7 +44,7 @@ public abstract class Condition {
         Condition.CONDITIONS.put("all", new All());
         Condition.CONDITIONS.put("any", new Any());
         Condition.CONDITIONS.put("check_ability", new CheckAbility());
-        Condition.CONDITIONS.put("check_damage_type", new CheckDamageType());
+        Condition.CONDITIONS.put("includes_damage_type", new IncludesDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
         Condition.CONDITIONS.put("is_objects_turn", new IsObjectsTurn());
         Condition.CONDITIONS.put("object_ability_score_comparison", new ObjectAbilityScoreComparison());
@@ -71,7 +71,7 @@ public abstract class Condition {
      * @throws ConditionMismatchException if conditionJson is for a different condition than the one being evaluated
      */
     void verifyCondition(JsonObject conditionJson) throws ConditionMismatchException {
-        if (!this.conditionId.equals(conditionJson.getString("condition"))) {
+        if (!Objects.equals(this.conditionId, conditionJson.getString("condition"))) {
             ConditionMismatchException e = new ConditionMismatchException(this.conditionId, conditionJson.getString("condition"));
             LOGGER.error(e.getMessage());
             throw e;

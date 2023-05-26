@@ -55,7 +55,7 @@ public class Contest extends Subevent {
         // when target is an ability check, source wins only by exceeding target.
         boolean mustExceedTarget;
         try {
-          mustExceedTarget = this.json.getJsonObject("target_contest").getString("subevent").equals("ability_check");
+          mustExceedTarget = "ability_check".equals(this.json.getJsonObject("target_contest").getString("subevent"));
         } catch (NullPointerException e) {
             mustExceedTarget = false;
         }
@@ -111,9 +111,9 @@ public class Contest extends Subevent {
 
         JsonObject targetContestJson = this.json.getJsonObject("target_contest");
         String subeventId = targetContestJson.getString("subevent");
-        if (subeventId.equals("calculate_save_difficulty_class")) {
+        if ("calculate_save_difficulty_class".equals(subeventId)) {
             return this.getTargetResultAsSaveDifficultyClass(targetContestJson, context);
-        } else if (subeventId.equals("ability_check")) {
+        } else if ("ability_check".equals(subeventId)) {
             return this.getTargetResultAsAbilityCheck(targetContestJson, context);
         }
 

@@ -69,7 +69,7 @@ public class DamageRoll extends Subevent {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("damage_type"))) {
+            if (damageType == null || "".equals(damageType) || Objects.equals(damageType, typedDamage.getString("damage_type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
@@ -93,7 +93,7 @@ public class DamageRoll extends Subevent {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("damage_type"))) {
+            if (damageType == null || "".equals(damageType) || Objects.equals(damageType, typedDamage.getString("damage_type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
@@ -115,7 +115,7 @@ public class DamageRoll extends Subevent {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || "".equals(damageType) || damageType.equals(typedDamage.getString("damage_type"))) {
+            if (damageType == null || "".equals(damageType) || Objects.equals(damageType, typedDamage.getString("damage_type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);

@@ -69,9 +69,6 @@ public class GetObjectTagsTest {
         context.add(object);
 
         GetObjectTags getObjectTags = new GetObjectTags();
-        getObjectTags.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_object_tags");
-        }});
         getObjectTags.setSource(object);
         getObjectTags.prepare(context);
 
@@ -88,9 +85,6 @@ public class GetObjectTagsTest {
         context.add(object);
 
         GetObjectTags getObjectTags = new GetObjectTags();
-        getObjectTags.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_object_tags");
-        }});
         getObjectTags.setSource(object);
         getObjectTags.prepare(context);
 

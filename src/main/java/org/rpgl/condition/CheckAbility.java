@@ -8,6 +8,8 @@ import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 /**
  * This Condition is dedicated to checking the ability score being used for a AbilitySubevent.
  *
@@ -24,7 +26,7 @@ public class CheckAbility extends Condition {
     @Override
     public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) {
         if (subevent instanceof AbilitySubevent abilitySubevent) {
-            return abilitySubevent.getAbility(context).equals(conditionJson.getString("ability"));
+            return Objects.equals(abilitySubevent.getAbility(context), conditionJson.getString("ability"));
         }
         LOGGER.warn("Can not evaluate condition for " + subevent.getClass());
         return false;

@@ -400,7 +400,7 @@ public class JsonObject {
     @Override
     public boolean equals(Object other) {
         if (other instanceof JsonObject otherJsonObject) {
-            return this.data.equals(otherJsonObject.data);
+            return Objects.equals(this.data, otherJsonObject.data);
         }
         return false;
     }

@@ -3,6 +3,8 @@ package org.rpgl.subevent;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
+import java.util.Objects;
+
 /**
  * This Subevent is dedicated to representing a collection of damage dice to be rolled when a critical hit occurs.
  * <br>
@@ -55,7 +57,7 @@ public class CriticalHitDamageCollection extends Subevent {
         if (damageDiceArray != null) {
             for (int i = 0; i < damageDiceArray.size(); i++) {
                 JsonObject damageDice = damageDiceArray.getJsonObject(i);
-                if (damageDice.getString("damage_type").equals(damageType)) {
+                if (Objects.equals(damageDice.getString("damage_type"), damageType)) {
                     return true;
                 }
             }

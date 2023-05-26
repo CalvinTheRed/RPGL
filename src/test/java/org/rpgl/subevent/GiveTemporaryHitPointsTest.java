@@ -78,7 +78,6 @@ public class GiveTemporaryHitPointsTest {
         GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
         giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "give_temporary_hit_points",
                 "temporary_hit_points": [
                     {
                         "temporary_hit_point_formula": "range",
@@ -90,7 +89,6 @@ public class GiveTemporaryHitPointsTest {
                     "demo:fire_immunity"
                 ]
             }*/
-            this.putString("subevent", "give_temporary_hit_points");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("temporary_hit_point_formula", "range");
@@ -133,7 +131,6 @@ public class GiveTemporaryHitPointsTest {
         GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
         giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "give_temporary_hit_points",
                 "temporary_hit_points": [
                     {
                         "temporary_hit_point_formula": "range",
@@ -145,7 +142,6 @@ public class GiveTemporaryHitPointsTest {
                     "demo:fire_immunity"
                 ]
             }*/
-            this.putString("subevent", "give_temporary_hit_points");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("temporary_hit_point_formula", "range");
@@ -188,7 +184,6 @@ public class GiveTemporaryHitPointsTest {
         GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
         giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "give_temporary_hit_points",
                 "temporary_hit_points": [
                     {
                         "temporary_hit_point_formula": "range",
@@ -200,7 +195,6 @@ public class GiveTemporaryHitPointsTest {
                     "demo:fire_immunity"
                 ]
             }*/
-            this.putString("subevent", "give_temporary_hit_points");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("temporary_hit_point_formula", "range");

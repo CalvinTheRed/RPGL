@@ -51,7 +51,6 @@ public class MaximizeDamageTest {
         damageRoll = new DamageRoll();
         damageRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "damage_roll",
                 "damage": [
                     {
                         "damage_type": "fire",
@@ -70,7 +69,6 @@ public class MaximizeDamageTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_type", "fire");

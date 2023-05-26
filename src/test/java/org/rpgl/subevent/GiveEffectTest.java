@@ -74,7 +74,6 @@ public class GiveEffectTest {
 
         GiveEffect giveEffect = new GiveEffect();
         giveEffect.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "give_effect");
             this.putString("effect", "demo:fire_immunity");
         }});
         giveEffect.setSource(source);

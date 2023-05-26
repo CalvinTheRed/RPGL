@@ -162,13 +162,6 @@ public class HealingCollectionTest {
         context.add(source);
 
         HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "healing_collection"
-            }*/
-            this.putString("subevent", "healing_collection");
-        }});
-
         healingCollection.setSource(source);
         healingCollection.prepare(context);
 
@@ -189,7 +182,6 @@ public class HealingCollectionTest {
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
                 "healing": [
                     {
                         "healing_formula": "range",
@@ -198,7 +190,6 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "range");
@@ -230,7 +221,6 @@ public class HealingCollectionTest {
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
                 "healing": [
                     {
                         "healing_formula": "modifier",
@@ -242,7 +232,6 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "modifier");
@@ -277,7 +266,6 @@ public class HealingCollectionTest {
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
                 "healing": [
                     {
                         "healing_formula": "ability",
@@ -289,7 +277,6 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "ability");
@@ -322,7 +309,6 @@ public class HealingCollectionTest {
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_collection",
                 "healing": [
                     {
                         "healing_formula": "proficiency",
@@ -333,7 +319,6 @@ public class HealingCollectionTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_collection");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("healing_formula", "proficiency");

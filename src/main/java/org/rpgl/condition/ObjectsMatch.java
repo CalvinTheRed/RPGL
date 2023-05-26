@@ -6,6 +6,8 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
+import java.util.Objects;
+
 /**
  * This Condition is dedicated to comparing two RPGLObjects to see if they are the same.
  *
@@ -27,7 +29,7 @@ public class ObjectsMatch extends Condition {
             this.putString("from", "subevent");
             this.putString("object", conditionJson.getString("subevent"));
         }});
-        return effectObject.equals(subeventObject);
+        return Objects.equals(effectObject, subeventObject);
     }
 
 }

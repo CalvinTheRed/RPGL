@@ -93,7 +93,7 @@ public class DatapackTest {
         RPGLEffectTO field values
          */
         expected = """
-                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"},{"condition":"check_damage_type","damage_type":"fire"}],"functions":[{"function":"grant_immunity"}]}}""";
+                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}}""";
         assertEquals(expected, effectTemplate.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS).toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );

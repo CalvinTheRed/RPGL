@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is used by an RPGLEffect in order to change the fallout of a Subevent or to precipitate a new Subevent.
@@ -79,7 +80,7 @@ public abstract class Function {
      * @throws FunctionMismatchException if functionJson is for a different function than the one being executed
      */
     void verifyFunction(JsonObject functionJson) throws FunctionMismatchException {
-        if (!this.functionId.equals(functionJson.getString("function"))) {
+        if (!Objects.equals(this.functionId, functionJson.getString("function"))) {
             FunctionMismatchException e = new FunctionMismatchException(this.functionId, functionJson.getString("function"));
             LOGGER.error(e.getMessage());
             throw e;

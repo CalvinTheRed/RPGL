@@ -10,10 +10,12 @@ import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is used by an RPGLEvent in order to define what happens when it is invoked.
@@ -66,9 +68,8 @@ public abstract class Subevent {
      */
     public Subevent(String subeventId) {
         this.subeventId = subeventId;
-        if (this.json.getJsonArray("tags") == null) {
-            this.json.putJsonArray("tags", new JsonArray());
-        }
+        this.json.putString("subevent", subeventId);
+        this.json.asMap().putIfAbsent("tags", new ArrayList<>());
     }
 
     /**
@@ -99,7 +100,7 @@ public abstract class Subevent {
      * @throws SubeventMismatchException if functionJson is for a different function than the one being executed
      */
     void verifySubevent(String expected) throws SubeventMismatchException {
-        if (!expected.equals(this.json.getString("subevent"))) {
+        if (!Objects.equals(expected, this.json.getString("subevent"))) {
             SubeventMismatchException e = new SubeventMismatchException(expected, this.json.getString("subevent"));
             LOGGER.error(e.getMessage());
             throw e;
@@ -196,7 +197,7 @@ public abstract class Subevent {
     public boolean hasModifyingEffect(RPGLEffect effect) {
         String effectId = effect.getString("id");
         for (RPGLEffect modifyingEffect : modifyingEffects) {
-            if (effectId.equals(modifyingEffect.getString("id"))) {
+            if (Objects.equals(effectId, modifyingEffect.getString("id"))) {
                 return true;
             }
         }

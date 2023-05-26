@@ -179,9 +179,6 @@ public class RPGLObject extends RPGLTaggable {
         }
 
         GetEvents getEvents = new GetEvents();
-        getEvents.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_events");
-        }});
         getEvents.setSource(this);
         getEvents.prepare(context);
         getEvents.setTarget(this);
@@ -293,9 +290,6 @@ public class RPGLObject extends RPGLTaggable {
      */
     public int getEffectiveProficiencyBonus(RPGLContext context) throws Exception {
         CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
-        calculateProficiencyBonus.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_proficiency_bonus");
-        }});
         calculateProficiencyBonus.setSource(this);
         calculateProficiencyBonus.prepare(context);
         calculateProficiencyBonus.setTarget(this);
@@ -315,7 +309,6 @@ public class RPGLObject extends RPGLTaggable {
     public int getAbilityScoreFromAbilityName(String ability, RPGLContext context) throws Exception {
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         calculateAbilityScore.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_ability_score");
             this.putString("ability", ability);
         }});
         calculateAbilityScore.setSource(this);
@@ -363,28 +356,25 @@ public class RPGLObject extends RPGLTaggable {
      */
     public void receiveDamage(DamageDelivery damageDelivery, RPGLContext context) throws Exception {
         JsonObject damageJson = damageDelivery.getDamage();
+        DamageAffinity damageAffinity = new DamageAffinity();
+        for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
+            damageAffinity.addDamageType(damageJsonEntry.getKey());
+        }
+        damageAffinity.setSource(damageDelivery.getSource());
+        damageAffinity.prepare(context);
+        damageAffinity.setTarget(this);
+        damageAffinity.invoke(context);
+
         int damage = 0;
         for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
             String damageType = damageJsonEntry.getKey();
             Integer typedDamage = damageJson.getInteger(damageJsonEntry.getKey());
 
-            // TODO make DamageAffinity contain a list of all present damage types...
-
-            DamageAffinity damageAffinity = new DamageAffinity();
-            damageAffinity.joinSubeventData(new JsonObject() {{
-                this.putString("subevent", "damage_affinity");
-                this.putString("damage_type", damageType);
-            }});
-            damageAffinity.setSource(damageDelivery.getSource());
-            damageAffinity.prepare(context);
-            damageAffinity.setTarget(this);
-            damageAffinity.invoke(context);
-
-            if (!damageAffinity.isImmune()) {
-                if (damageAffinity.isResistant()) {
+            if (!damageAffinity.isImmune(damageType)) {
+                if (damageAffinity.isResistant(damageType)) {
                     typedDamage /= 2;
                 }
-                if (damageAffinity.isVulnerable()) {
+                if (damageAffinity.isVulnerable(damageType)) {
                     typedDamage *= 2;
                 }
                 if (typedDamage > 0) {
@@ -447,9 +437,6 @@ public class RPGLObject extends RPGLTaggable {
      */
     public int getMaximumHitPoints(RPGLContext context) throws Exception {
         CalculateMaximumHitPoints calculateMaximumHitPoints = new CalculateMaximumHitPoints();
-        calculateMaximumHitPoints.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_maximum_hit_points");
-        }});
         calculateMaximumHitPoints.setSource(this);
         calculateMaximumHitPoints.prepare(context);
         calculateMaximumHitPoints.setTarget(this);
@@ -507,10 +494,8 @@ public class RPGLObject extends RPGLTaggable {
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "info_subevent",
                 "tags": [ <tags> ]
             }*/
-            this.putString("subevent", "info_subevent");
             JsonArray subeventTags = new JsonArray();
             for (String tag : tags) {
                 subeventTags.addString(tag);
@@ -556,9 +541,6 @@ public class RPGLObject extends RPGLTaggable {
      */
     public int getBaseArmorClass(RPGLContext context) throws Exception {
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_base_armor_class");
-        }});
         calculateBaseArmorClass.setSource(this);
         calculateBaseArmorClass.prepare(context);
         calculateBaseArmorClass.setTarget(this);
@@ -639,9 +621,6 @@ public class RPGLObject extends RPGLTaggable {
         }
 
         GetObjectTags getObjectTags = new GetObjectTags();
-        getObjectTags.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_object_tags");
-        }});
         getObjectTags.setSource(this);
         getObjectTags.prepare(context);
         getObjectTags.setTarget(this);

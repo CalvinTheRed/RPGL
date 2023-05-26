@@ -344,7 +344,6 @@ public class SavingThrowTest {
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "saving_throw",
                 "difficulty_class_ability": "con",
                 "save_ability": "dex",
                 "damage": [
@@ -360,7 +359,6 @@ public class SavingThrowTest {
                 "damage_on_pass": "half",
                 "determined": [ 1 ]
             }*/
-            this.putString("subevent", "saving_throw");
             this.putString("difficulty_class_ability", "con");
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{
@@ -407,7 +405,6 @@ public class SavingThrowTest {
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "saving_throw",
                 "difficulty_class_ability": "con",
                 "save_ability": "dex",
                 "damage": [
@@ -423,7 +420,6 @@ public class SavingThrowTest {
                 "damage_on_pass": "half",
                 "determined": [ 20 ]
             }*/
-            this.putString("subevent", "saving_throw");
             this.putString("difficulty_class_ability", "con");
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{

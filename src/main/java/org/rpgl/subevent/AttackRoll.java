@@ -213,7 +213,6 @@ public class AttackRoll extends Roll {
         // Collect base typed damage dice and bonuses
         DamageCollection baseDamageCollection = new DamageCollection();
         baseDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
             this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -253,7 +252,6 @@ public class AttackRoll extends Roll {
         // Collect target typed damage dice and bonuses
         DamageCollection targetDamageCollection = new DamageCollection();
         targetDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_collection");
@@ -281,7 +279,6 @@ public class AttackRoll extends Roll {
     int getTargetArmorClass(RPGLContext context) throws Exception {
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = new CalculateEffectiveArmorClass();
         calculateEffectiveArmorClass.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_effective_armor_class");
             this.putJsonObject("base", new JsonObject() {{
                 this.putString("base_formula", "number");
                 this.putInteger("value", getTarget().getBaseArmorClass(context));
@@ -305,7 +302,6 @@ public class AttackRoll extends Roll {
     public boolean isCriticalHit(RPGLContext context) throws Exception {
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
         calculateCriticalHitThreshold.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "calculate_critical_hit_threshold");
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});
@@ -346,7 +342,6 @@ public class AttackRoll extends Roll {
         // Collect any extra damage bonuses which aren't doubled
         CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
         criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "critical_hit_damage_collection");
             this.putJsonArray("damage", damageArray);
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -372,7 +367,6 @@ public class AttackRoll extends Roll {
     void resolveDamage(RPGLContext context) throws Exception {
         DamageRoll damageRoll = new DamageRoll();
         damageRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", json.getJsonArray("damage"));
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -421,7 +415,6 @@ public class AttackRoll extends Roll {
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_delivery");
             this.putJsonArray("damage", json.getJsonArray("damage"));
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());

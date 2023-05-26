@@ -69,9 +69,6 @@ public class GetEventsTest {
         context.add(object);
 
         GetEvents getEvents = new GetEvents();
-        getEvents.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_events");
-        }});
         getEvents.setSource(object);
         getEvents.prepare(context);
 
@@ -88,9 +85,6 @@ public class GetEventsTest {
         context.add(object);
 
         GetEvents getEvents = new GetEvents();
-        getEvents.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "get_events");
-        }});
         getEvents.setSource(object);
         getEvents.prepare(context);
 

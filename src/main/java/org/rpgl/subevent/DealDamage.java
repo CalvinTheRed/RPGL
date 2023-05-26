@@ -73,7 +73,6 @@ public class DealDamage extends Subevent implements CancelableSubevent {
         DamageCollection baseDamageCollection = new DamageCollection();
         JsonArray damage = this.json.getJsonArray("damage");
         baseDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
             this.putJsonArray("damage", damage.deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -90,7 +89,6 @@ public class DealDamage extends Subevent implements CancelableSubevent {
          */
         DamageRoll baseDamageRoll = new DamageRoll();
         baseDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -121,7 +119,6 @@ public class DealDamage extends Subevent implements CancelableSubevent {
          */
         DamageCollection targetDamageCollection = new DamageCollection();
         targetDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_collection");
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_damage_collection");
@@ -137,7 +134,6 @@ public class DealDamage extends Subevent implements CancelableSubevent {
          */
         DamageRoll targetDamageRoll = new DamageRoll();
         targetDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_roll");
             this.putJsonArray("damage", targetDamageCollection.getDamageCollection().deepClone());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
@@ -162,7 +158,6 @@ public class DealDamage extends Subevent implements CancelableSubevent {
     void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
-            this.putString("subevent", "damage_delivery");
             this.putJsonArray("damage", json.getJsonArray("damage"));
         }});
         damageDelivery.setSource(this.getSource());

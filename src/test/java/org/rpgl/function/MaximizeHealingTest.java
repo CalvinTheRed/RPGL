@@ -51,7 +51,6 @@ public class MaximizeHealingTest {
         healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "subevent": "healing_roll",
                 "healing": [
                     {
                         "dice": [
@@ -62,7 +61,6 @@ public class MaximizeHealingTest {
                     }
                 ]
             }*/
-            this.putString("subevent", "healing_roll");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putJsonArray("dice", new JsonArray() {{
