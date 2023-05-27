@@ -9,6 +9,7 @@ import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -161,6 +162,12 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
+        expected= """
+                ["humanoid"]""";
+        assertEquals(expected, object.getTags().toString(),
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
+        );
+
         expected = """
                 {"cha":15,"con":14,"dex":11,"int":11,"str":16,"wis":11}""";
         assertEquals(expected, object.getAbilityScores().toString(),
@@ -215,6 +222,12 @@ public class RPGLObjectTemplateTest {
         );
         assertEquals("A young red dragon.", object.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+
+        expected= """
+                ["dragon"]""";
+        assertEquals(expected, object.getTags().toString(),
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
 
         expected = """

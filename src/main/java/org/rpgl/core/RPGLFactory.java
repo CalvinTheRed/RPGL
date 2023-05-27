@@ -90,4 +90,23 @@ public final class RPGLFactory {
         }
     }
 
+    /**
+     * This method creates a new RPGLResource instance according to template data stored at the given resource ID.
+     *
+     * @param resourceId a resource ID <code>(namespace:name)</code>
+     * @return a new RPGLResource object
+     */
+    public static RPGLResource newResource(String resourceId) {
+        String[] resourceIdSplit = resourceId.split(":");
+        try {
+            return DatapackLoader.DATAPACKS
+                    .get(resourceIdSplit[0])
+                    .getResourceTemplate(resourceIdSplit[1])
+                    .newInstance();
+        } catch (NullPointerException e) {
+            LOGGER.error("encountered an error creating RPGLResource: " + resourceId);
+            throw new RuntimeException("Encountered an error building a new RPGLResource", e);
+        }
+    }
+
 }
