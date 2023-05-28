@@ -49,6 +49,24 @@ public class RPGLEvent extends DatapackContent {
         this.putJsonArray(RPGLEventTO.SUBEVENTS_ALIAS, subevents);
     }
 
+    /**
+     * Returns the cost of the RPGLEvent.
+     *
+     * @return a JsonArray containing cost information
+     */
+    public JsonArray getCost() {
+        return this.getJsonArray(RPGLEventTO.COST_ALIAS);
+    }
+
+    /**
+     * Setter for cost.
+     *
+     * @param cost a new cost for the RPGLEvent
+     */
+    public void setCost(JsonArray cost) {
+        this.putJsonArray(RPGLEventTO.COST_ALIAS, cost);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================

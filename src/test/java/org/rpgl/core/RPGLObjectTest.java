@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -295,12 +296,16 @@ public class RPGLObjectTest {
         youngRedDragon.invokeEvent(
                 new RPGLObject[] { knight },
                 RPGLFactory.newEvent("demo:young_red_dragon_fire_breath"),
+                youngRedDragon.getResourceObjects(),
                 context
         );
 
         assertEquals(4, knight.getHealthData().getInteger("current"),
                 "demo:knight should have 4 health left after failing a save against demo:young_red_dragon's breath attack"
         );
+        for (RPGLResource resource : youngRedDragon.getResourceObjects()) {
+            assertTrue(resource.getExhausted());
+        }
     }
 
     @Test
@@ -382,6 +387,26 @@ public class RPGLObjectTest {
 
         assertEquals(178, target.getHealthData().getInteger("current"),
                 "target should only recover its one missing hit point when healed for 10 (177+10=187, max 178: 187 -> 178)"
+        );
+    }
+
+    @Test
+    @DisplayName("processSubevent handles resources appropriately")
+    void processSubevent_handlesResourcesAppropriately() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        RPGLResource resource = RPGLFactory.newResource("demo:action");
+        source.giveResource(resource);
+
+        resource.exhaust();
+        source.startTurn(context);
+
+        assertFalse(resource.getExhausted(),
+                "resource should not be exhausted after turn start"
         );
     }
 

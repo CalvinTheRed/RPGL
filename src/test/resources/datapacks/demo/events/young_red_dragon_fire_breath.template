@@ -7,6 +7,16 @@
   "area_of_effect": {
 
   },
+  "cost": [
+    {
+      "resource_tags": [ "action" ],
+      "count": 1
+    },
+    {
+      "resource_tags": [ "young_red_dragon_breath_charge" ],
+      "count": 1
+    }
+  ],
   "subevents": [
     {
       "subevent": "saving_throw",

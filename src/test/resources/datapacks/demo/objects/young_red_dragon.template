@@ -33,5 +33,9 @@
   "effects": [
     "demo:fire_immunity"
   ],
+  "resources": [
+    "demo:action",
+    "demo:young_red_dragon_breath_charge"
+  ],
   "proficiency_bonus": 4
 }

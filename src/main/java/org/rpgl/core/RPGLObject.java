@@ -242,14 +242,14 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method precipitates the process of invoking an RPGLEvent.
      *
-     * @param targets an array of RPGLObjects targeted by the RPGLEvent being invoked
-     * @param event   the RPGLEvent being invoked
-     * @param context the RPGLContext in which the RPGLEvent is invoked
+     * @param targets   an array of RPGLObjects targeted by the RPGLEvent being invoked
+     * @param event     the RPGLEvent being invoked
+     * @param resources a list of resources to be exhausted through the invocation of the passed event
+     * @param context   the RPGLContext in which the RPGLEvent is invoked
      *
      * @throws Exception if an exception occurs.
      */
-    public void invokeEvent(RPGLObject[] targets, RPGLEvent event, RPGLContext context) throws Exception {
-        // assume that any necessary resources have already been spent
+    public void invokeEvent(RPGLObject[] targets, RPGLEvent event, List<RPGLResource> resources, RPGLContext context) throws Exception {
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
@@ -262,6 +262,9 @@ public class RPGLObject extends RPGLTaggable {
                 subeventClone.setTarget(target);
                 subeventClone.invoke(context);
             }
+        }
+        for (RPGLResource resource : resources) {
+            resource.exhaust();
         }
     }
 
