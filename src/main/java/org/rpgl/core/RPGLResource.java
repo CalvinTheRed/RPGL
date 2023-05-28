@@ -2,6 +2,11 @@ package org.rpgl.core;
 
 import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
+import org.rpgl.subevent.Subevent;
+
+import java.util.Objects;
 
 public class RPGLResource extends RPGLTaggable {
 
@@ -34,6 +39,10 @@ public class RPGLResource extends RPGLTaggable {
 
     /**
      * Setter for exhausted.
+     * <br>
+     * <br>
+     * NOTE: this method should not be used to refresh or exhaust a RPGLResource - use the <code>refresh()</code> or
+     * <code>exhaust()</code> methods instead, respectively.
      *
      * @param exhausted a new exhausted
      */
@@ -57,6 +66,72 @@ public class RPGLResource extends RPGLTaggable {
      */
     public void setRefreshCriterion(JsonArray refreshCriterion) {
         this.putJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS, refreshCriterion);
+    }
+
+    // =================================================================================================================
+    // Methods not derived directly from transfer objects
+    // =================================================================================================================
+
+    public void processSubevent(Subevent subevent, RPGLObject owner) {
+        if (this.getExhausted()) {
+            JsonArray refreshCriterion = this.getRefreshCriterion();
+            for (int i = 0; i < refreshCriterion.size(); i++) {
+                if (this.checkCriterion(subevent, refreshCriterion.getJsonObject(i), owner)) {
+                    break;
+                }
+            }
+        }
+    }
+
+    boolean checkCriterion(Subevent subevent, JsonObject criterion, RPGLObject owner) {
+        String actorAlias = criterion.getString("actor");
+        RPGLObject actor = null;
+        if ("source".equals(actorAlias)) {
+            actor = subevent.getSource();
+        } else if ("target".equals(actorAlias)) {
+            actor = subevent.getTarget();
+        }
+        if (Objects.equals(subevent.getSubeventId(), criterion.getString("subevent"))
+                && subevent.getTags().asList().containsAll(criterion.getJsonArray("tags").asList())
+                && Math.random() * 100 <= criterion.getInteger("chance")
+                && Objects.equals(owner, actor)) {
+            int completed = criterion.getInteger("completed") + 1;
+            if (completed >= criterion.getInteger("required")) {
+                this.refresh();
+                return true;
+            }
+            criterion.putInteger("completed", completed);
+        }
+        return false;
+    }
+
+    public void exhaust() {
+        this.setExhausted(true);
+        JsonArray refreshCriterion = this.getRefreshCriterion();
+        for (int i = 0; i < refreshCriterion.size(); i++) {
+            JsonObject criterion = refreshCriterion.getJsonObject(i);
+            criterion.putInteger("completed", 0);
+            criterion.putInteger("required", generateRequired(criterion.getJsonObject("required_generator")));
+        }
+    }
+
+    public void refresh() {
+        this.setExhausted(false);
+        JsonArray refreshCriterion = this.getRefreshCriterion();
+        for (int i = 0; i < refreshCriterion.size(); i++) {
+            JsonObject criterion = refreshCriterion.getJsonObject(i);
+            criterion.putInteger("completed", 0);
+            criterion.putInteger("required", 0);
+        }
+    }
+
+    static int generateRequired(JsonObject requiredGenerator) {
+        int required = Objects.requireNonNullElse(requiredGenerator.getInteger("bonus"), 0);
+        JsonArray dice = requiredGenerator.getJsonArray("dice").deepClone();
+        for (int i = 0; i < dice.size(); i++) {
+            required += Die.roll(dice.getJsonObject(i));
+        }
+        return required;
     }
 
 }

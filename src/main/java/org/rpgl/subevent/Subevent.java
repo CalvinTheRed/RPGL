@@ -79,7 +79,8 @@ public abstract class Subevent {
      * @return true if the tag is present, false otherwise
      */
     public boolean hasTag(String tag) {
-        return this.json.getJsonArray("tags").asList().contains(tag);
+        // TODO does this method need to exist when getTags() exists?
+        return this.getTags().asList().contains(tag);
     }
 
     /**
@@ -88,7 +89,16 @@ public abstract class Subevent {
      * @param tag a subevent tag
      */
     public void addTag(String tag) {
-        this.json.getJsonArray("tags").addString(tag);
+        this.getTags().addString(tag);
+    }
+
+    /**
+     * Returns the Subevent's tage.
+     *
+     * @return a JsonArray of tags
+     */
+    public JsonArray getTags() {
+        return this.json.getJsonArray("tags");
     }
 
     /**

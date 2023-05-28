@@ -77,9 +77,43 @@ public class RPGLResourceTemplateTest {
                 "incorrect field value: " + RPGLResourceTO.EXHAUSTED_ALIAS
         );
         expected= """
-                [{"chance":100,"completed":0,"required":1,"required_generator":{"bonus":1,"dice":[]},"subevent":"info_subevent","tags":["starting_turn"]}]""";
+                [{"actor":"source","chance":100,"completed":0,"required":0,"required_generator":{"bonus":1,"dice":[]},"subevent":"info_subevent","tags":["start_turn"]}]""";
         assertEquals(expected, resource.getRefreshCriterion().toString(),
                 "incorrect field value: " + RPGLResourceTO.REFRESH_CRITERION_ALIAS
+        );
+    }
+
+    @Test
+    @DisplayName("processRefreshCriterionGenerators unpacks dice correctly")
+    void processRefreshCriterionGenerators_unpacksDiceCorrectly() {
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("demo").getResourceTemplate("necrotic_husk");
+        RPGLResource resource = new RPGLResource();
+        resource.join(resourceTemplate);
+
+        RPGLResourceTemplate.processRefreshCriterionGenerators(resource);
+
+        String expected;
+
+        expected = """
+                [{"required_generator":{"bonus":0,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]},"subevent":"info_subevent","tags":["long_rest"]}]""";
+        assertEquals(expected, resource.getRefreshCriterion().toString(),
+                "required generators should have unpacked all compact dice representations"
+        );
+    }
+
+    @Test
+    @DisplayName("processRefreshCriterion infers optional required generator values correctly")
+    void processRefreshCriterion_infersOptionalRequiredGeneratorValuesCorrectly() {
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("demo").getResourceTemplate("pact_spell_slot_1");
+        RPGLResource resource = new RPGLResource();
+        resource.join(resourceTemplate);
+
+        RPGLResourceTemplate.processRefreshCriterion(resource);
+
+        String expected = """
+                [{"actor":"source","chance":100,"completed":0,"required":0,"required_generator":{"bonus":1,"dice":[]},"subevent":"info_subevent","tags":["short_rest"]},{"actor":"source","chance":100,"completed":0,"required":0,"required_generator":{"bonus":1,"dice":[]},"subevent":"info_subevent","tags":["long_rest"]}]""";
+        assertEquals(expected, resource.getRefreshCriterion().toString(),
+                "required generators should contain inferred values for any unspecified optional values"
         );
     }
 

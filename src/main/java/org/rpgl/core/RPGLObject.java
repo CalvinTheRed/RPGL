@@ -156,6 +156,14 @@ public class RPGLObject extends RPGLTaggable {
         this.putInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
     }
 
+    public JsonArray getResources() {
+        return this.getJsonArray(RPGLObjectTO.RESOURCES_ALIAS);
+    }
+
+    public void setResources(JsonArray resources) {
+        this.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================
@@ -216,6 +224,21 @@ public class RPGLObject extends RPGLTaggable {
         return effects;
     }
 
+    public List<RPGLResource> getResourceObjects() {
+        List<RPGLResource> resources = new ArrayList<>();
+
+        JsonArray resourceUuids = this.getResources();
+        for (int i = 0; i < resourceUuids.size(); i++) {
+            resources.add(UUIDTable.getResource(resourceUuids.getString(i)));
+        }
+
+        return resources;
+    }
+
+    public void giveResource(RPGLResource resource) {
+        this.getResources().addString(resource.getUuid());
+    }
+
     /**
      * This method precipitates the process of invoking an RPGLEvent.
      *
@@ -255,6 +278,9 @@ public class RPGLObject extends RPGLTaggable {
         boolean wasSubeventProcessed = false;
         for (RPGLEffect effect : getEffectObjects()) {
             wasSubeventProcessed |= effect.processSubevent(subevent, context);
+        }
+        for (RPGLResource resource : getResourceObjects()) {
+            resource.processSubevent(subevent, this);
         }
         return wasSubeventProcessed;
     }
@@ -517,7 +543,7 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public void startTurn(RPGLContext context) throws Exception {
-        this.invokeInfoSubevent(new String[] { "starting_turn" }, context);
+        this.invokeInfoSubevent(new String[] { "start_turn" }, context);
     }
 
     /**
@@ -528,7 +554,7 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public void endTurn(RPGLContext context) throws Exception {
-        this.invokeInfoSubevent(new String[] { "ending_turn" }, context);
+        this.invokeInfoSubevent(new String[] { "end_turn" }, context);
     }
 
     /**

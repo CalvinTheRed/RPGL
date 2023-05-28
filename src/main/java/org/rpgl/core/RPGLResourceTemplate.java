@@ -3,6 +3,7 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.math.Die;
 import org.rpgl.uuidtable.UUIDTable;
 
 /**
@@ -22,7 +23,7 @@ public class RPGLResourceTemplate extends JsonObject {
        this.addJsonObject(new JsonObject() {{
            this.putString("subevent", "info_subevent");
            this.putJsonArray("tags", new JsonArray() {{
-               this.addString("starting_turn");
+               this.addString("start_turn");
            }});
        }});
     }};
@@ -43,17 +44,28 @@ public class RPGLResourceTemplate extends JsonObject {
         }
         UUIDTable.register(resource);
         processRefreshCriterion(resource);
+        processRefreshCriterionGenerators(resource);
         return resource;
     }
 
-    void processRefreshCriterion(RPGLResource resource) {
+    static void processRefreshCriterion(RPGLResource resource) {
         JsonArray refreshCriterion = resource.getRefreshCriterion();
         for (int i = 0; i < refreshCriterion.size(); i++) {
             JsonObject criterion = refreshCriterion.getJsonObject(i);
+            criterion.asMap().putIfAbsent("actor", "source");
             criterion.asMap().putIfAbsent("chance", 100);
-            criterion.asMap().putIfAbsent("required", 1);
-            criterion.asMap().putIfAbsent("required_generator", DEFAULT_REQUIRED_GENERATOR.deepClone());
+            criterion.asMap().putIfAbsent("required", 0);
+            criterion.asMap().putIfAbsent("required_generator", DEFAULT_REQUIRED_GENERATOR.deepClone().asMap());
             criterion.asMap().putIfAbsent("completed", 0);
+        }
+    }
+
+    static void processRefreshCriterionGenerators(RPGLResource resource) {
+        JsonArray refreshCriterion = resource.getRefreshCriterion();
+        for (int i = 0; i < refreshCriterion.size(); i++) {
+            JsonObject requiredGenerator = refreshCriterion.getJsonObject(i).getJsonObject("required_generator");
+            JsonArray dice = Die.unpack(requiredGenerator.removeJsonArray("dice"));
+            requiredGenerator.putJsonArray("dice", dice);
         }
     }
 

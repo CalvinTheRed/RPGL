@@ -3,6 +3,7 @@ package org.rpgl.uuidtable;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLResource;
 
 import java.util.Map;
 import java.util.UUID;
@@ -90,6 +91,20 @@ public final class UUIDTable {
     public static RPGLObject getObject(String uuid) {
         if (uuid != null) {
             return (RPGLObject) UUID_TABLE.get(uuid);
+        }
+        return null;
+    }
+
+    /**
+     * This method returns a RPGLResource object with the passed uuid, or null if no RPGLResource exists for that uuid or
+     * the uuid is null.
+     *
+     * @param uuid the UUID of a RPGLResource
+     * @return a RPGLResource or null
+     */
+    public static RPGLResource getResource(String uuid) {
+        if (uuid != null) {
+            return (RPGLResource) UUID_TABLE.get(uuid);
         }
         return null;
     }

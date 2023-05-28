@@ -36,6 +36,7 @@ public class RPGLObjectTemplate extends JsonObject {
         processInventory(object);
         processEquippedItems(object);
         processHealthData(object);
+        processResources(object);
         return object;
     }
 
@@ -112,6 +113,15 @@ public class RPGLObjectTemplate extends JsonObject {
             hitDice.getJsonObject(i).putBoolean("spent", false);
         }
         healthData.putJsonArray("hit_dice", hitDice);
+    }
+
+    static void processResources(RPGLObject object) {
+        JsonArray resources = object.removeJsonArray(RPGLObjectTO.RESOURCES_ALIAS);
+        JsonArray resourceUuids = new JsonArray();
+        for (int i = 0; i < resources.size(); i++) {
+            resourceUuids.addString(RPGLFactory.newResource(resources.getString(i)).getUuid());
+        }
+        object.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resourceUuids);
     }
 
 }
