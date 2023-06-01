@@ -239,6 +239,14 @@ public class RPGLObject extends RPGLTaggable {
         this.getResources().addString(resource.getUuid());
     }
 
+    public boolean removeResource(String resourceUuid) {
+        if (this.getResources().asList().remove(resourceUuid)) {
+            UUIDTable.unregister(resourceUuid);
+            return true;
+        }
+        return false;
+    }
+
     /**
      * This method precipitates the process of invoking an RPGLEvent.
      *

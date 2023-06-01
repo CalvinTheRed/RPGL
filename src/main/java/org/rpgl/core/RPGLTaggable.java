@@ -30,12 +30,24 @@ public abstract class RPGLTaggable extends UUIDTableElement {
     }
 
     /**
-     * Adds a single tag to the object.
+     * Adds a single tag to the object. This method cannot be used to add a redundant tag to the object.
      *
      * @param tag a tag to be added to the object
      */
     public void addTag(String tag) {
-        this.getTags().addString(tag);
+        if (!this.hasTag(tag)) {
+            this.getTags().addString(tag);
+        }
+    }
+
+    /**
+     * Returns whether the object has a specific tag.
+     *
+     * @param tag a tag
+     * @return true if the object has the tag, false otherwise
+     */
+    public boolean hasTag(String tag) {
+        return this.getTags().asList().contains(tag);
     }
 
 }

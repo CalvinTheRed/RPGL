@@ -24,12 +24,18 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
 
     @Override
     public Subevent clone() {
-        return null;
+        Subevent clone = new GiveTemporaryHitPoints();
+        clone.joinSubeventData(this.json);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        return null;
+        Subevent clone = new GiveTemporaryHitPoints();
+        clone.joinSubeventData(jsonData);
+        clone.modifyingEffects.addAll(this.modifyingEffects);
+        return clone;
     }
 
     @Override

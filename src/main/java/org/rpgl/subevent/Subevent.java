@@ -49,11 +49,13 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("contest", new Contest());
         Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
+        Subevent.SUBEVENTS.put("give_resource", new GiveResource());
         Subevent.SUBEVENTS.put("give_temporary_hit_points", new GiveTemporaryHitPoints());
         Subevent.SUBEVENTS.put("heal", new Heal());
         Subevent.SUBEVENTS.put("info_subevent", new InfoSubevent());
         //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
+        Subevent.SUBEVENTS.put("take_resource", new TakeResource());
 
         if (includeTestingSubevents) {
             Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
