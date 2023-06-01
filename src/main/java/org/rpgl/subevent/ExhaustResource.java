@@ -11,28 +11,28 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This Subevent is dedicated to refreshing a number of RPGLResources according to their Subevent ID and potency. This
+ * This Subevent is dedicated to exhausting a number of RPGLResources according to their Subevent ID and potency. This
  * Subevent allows for prioritization by high, low, or random potency, as well as bounding the potencies which can be
- * refreshed.
+ * exhausted.
  * <br>
  * <br>
- * source: a RPGLObject causing for resources to be refreshed
+ * source: a RPGLObject causing for resources to be exhausted
  * <br>
- * target: a RPGLObject whose resources are being refreshed
+ * target: a RPGLObject whose resources are being exhausted
  *
  * @author Calvin Withun
  */
-public class RefreshResource extends Subevent {
+public class ExhaustResource extends Subevent {
 
-    // TODO allow for this to refresh based on tags?
+    // TODO allow for this to exhaust based on tags?
 
-    public RefreshResource() {
-        super("refresh_resource");
+    public ExhaustResource() {
+        super("exhaust_resource");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new RefreshResource();
+        Subevent clone = new ExhaustResource();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -40,7 +40,7 @@ public class RefreshResource extends Subevent {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new RefreshResource();
+        Subevent clone = new ExhaustResource();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -63,11 +63,11 @@ public class RefreshResource extends Subevent {
 
         this.getTarget().getResourceObjects().stream().sorted(Comparator.comparing(RPGLResource::getPotency)).forEach(resource -> {
             if (count[0] > 0
-                    && resource.getExhausted()
+                    && !resource.getExhausted()
                     && Objects.equals(resourceId, resource.getId())
                     && resource.getPotency() >= minimumPotency
                     && resource.getPotency() <= maximumPotency) {
-                resource.refresh();
+                resource.exhaust();
                 count[0]--;
             }
         });
@@ -81,11 +81,11 @@ public class RefreshResource extends Subevent {
 
         this.getTarget().getResourceObjects().stream().sorted(Collections.reverseOrder(Comparator.comparing(RPGLResource::getPotency))).forEach(resource -> {
             if (count[0] > 0
-                    && resource.getExhausted()
+                    && !resource.getExhausted()
                     && Objects.equals(resourceId, resource.getId())
                     && resource.getPotency() >= minimumPotency
                     && resource.getPotency() <= maximumPotency) {
-                resource.refresh();
+                resource.exhaust();
                 count[0]--;
             }
         });
@@ -106,11 +106,11 @@ public class RefreshResource extends Subevent {
         for (Integer i : indices) {
             RPGLResource resource = resources.get(i);
             if (count > 0
-                    && resource.getExhausted()
+                    && !resource.getExhausted()
                     && Objects.equals(resourceId, resource.getId())
                     && resource.getPotency() >= minimumPotency
                     && resource.getPotency() <= maximumPotency) {
-                resource.refresh();
+                resource.exhaust();
                 count--;
             }
         }
