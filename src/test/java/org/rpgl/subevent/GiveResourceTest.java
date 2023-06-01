@@ -67,8 +67,8 @@ public class GiveResourceTest {
     }
 
     @Test
-    @DisplayName("invoke gives one resource when no count specified")
-    void invoke_givesOneResourceWhenNoCountSpecified() throws Exception {
+    @DisplayName("invoke gives one resource of potency one when no count or potency specified")
+    void invoke_givesOneResourceOfPotencyOneWhenNoCountOrPotencySpecified() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         DummyContext context = new DummyContext();
@@ -93,6 +93,9 @@ public class GiveResourceTest {
         assertEquals("demo:necrotic_husk", target.getResourceObjects().get(0).getId(),
                 "resource should be the correct type"
         );
+        assertEquals(1, target.getResourceObjects().get(0).getPotency(),
+                "resource should default to potency of 1"
+        );
         assertTrue(target.getResourceObjects().get(0).hasTag("temporary"),
                 "resource should be given the temporary tag"
         );
@@ -102,8 +105,8 @@ public class GiveResourceTest {
     }
 
     @Test
-    @DisplayName("invoke gives correct number of resources when specified")
-    void invoke_givesCorrectNumberOfResourcesWhenSpecified() throws Exception {
+    @DisplayName("invoke gives correct number of resources with correct potency when specified")
+    void invoke_givesCorrectNumberOfResourcesWithCorrectPotencyWhenSpecified() throws Exception {
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
         DummyContext context = new DummyContext();
@@ -114,10 +117,12 @@ public class GiveResourceTest {
         giveResource.joinSubeventData(new JsonObject() {{
             /*{
                 "resource":"demo:necrotic_husk",
-                "count": 2
+                "count": 2,
+                "potency": 5
             }*/
             this.putString("resource", "demo:necrotic_husk");
             this.putInteger("count", 2);
+            this.putInteger("potency", 5);
         }});
         giveResource.setSource(source);
         giveResource.setTarget(target);
@@ -128,6 +133,9 @@ public class GiveResourceTest {
                 "target should be given two resources"
         );
         for (RPGLResource resource : target.getResourceObjects()) {
+            assertEquals(5, resource.getPotency(),
+                    "resource should have potency of 5"
+            );
             assertEquals("demo:necrotic_husk", resource.getId(),
                     "resource should be the correct type"
             );

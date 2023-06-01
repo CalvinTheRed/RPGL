@@ -70,7 +70,7 @@ public class RPGLResourceTemplateTest {
                 "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
 
-        assertEquals(0, resource.getPotency(),
+        assertEquals(1, resource.getPotency(),
                 "incorrect field value: " + RPGLResourceTO.POTENCY_ALIAS
         );
         assertFalse(resource.getExhausted(),
@@ -104,7 +104,7 @@ public class RPGLResourceTemplateTest {
     @Test
     @DisplayName("processRefreshCriterion infers optional required generator values correctly")
     void processRefreshCriterion_infersOptionalRequiredGeneratorValuesCorrectly() {
-        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("demo").getResourceTemplate("pact_spell_slot_1");
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("demo").getResourceTemplate("pact_spell_slot");
         RPGLResource resource = new RPGLResource();
         resource.join(resourceTemplate);
 

@@ -37,7 +37,7 @@ public class RPGLResourceTemplate extends JsonObject {
     public RPGLResource newInstance() {
         RPGLResource resource = new RPGLResource();
         resource.join(this);
-        resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 0);
+        resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 1);
         resource.asMap().putIfAbsent(RPGLResourceTO.EXHAUSTED_ALIAS, false);
         if (resource.getRefreshCriterion().asList().isEmpty()) {
             resource.setRefreshCriterion(DEFAULT_REFRESH_CRITERION.deepClone());
