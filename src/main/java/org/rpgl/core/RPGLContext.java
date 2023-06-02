@@ -2,7 +2,9 @@ package org.rpgl.core;
 
 import org.rpgl.subevent.Subevent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,16 +44,44 @@ public abstract class RPGLContext {
         } while (wasProcessed);
     }
 
+    /**
+     * Adds a RPGLObject to the context
+     *
+     * @param object a RPGLObject
+     */
     public void add(RPGLObject object) {
         this.contextObjects.putIfAbsent(object.getUuid(), object);
     }
 
+    /**
+     * Removes a RPGLObject from the context
+     *
+     * @param object a RPGLObject
+     */
     public void remove(RPGLObject object) {
         this.contextObjects.remove(object.getUuid());
     }
 
+    /**
+     * Adds the RPGLObjects from another context to this context.
+     *
+     * @param other a RPGLContext
+     */
     public void merge(RPGLContext other) {
         this.contextObjects.putAll(other.contextObjects);
+    }
+
+    /**
+     * Returns a list of all RPGLObjects in context.
+     *
+     * @return a list of RPGLObjects
+     */
+    public List<RPGLObject> getContextObjects() {
+        ArrayList<RPGLObject> objects = new ArrayList<>();
+        for (Map.Entry<String, RPGLObject> entry : this.contextObjects.entrySet()) {
+            objects.add(entry.getValue());
+        }
+        return objects;
     }
 
     /**
