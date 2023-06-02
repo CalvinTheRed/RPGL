@@ -48,12 +48,16 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
         Subevent.SUBEVENTS.put("contest", new Contest());
         Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
+        Subevent.SUBEVENTS.put("exhaust_resource", new ExhaustResource());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
+        Subevent.SUBEVENTS.put("give_resource", new GiveResource());
         Subevent.SUBEVENTS.put("give_temporary_hit_points", new GiveTemporaryHitPoints());
         Subevent.SUBEVENTS.put("heal", new Heal());
         Subevent.SUBEVENTS.put("info_subevent", new InfoSubevent());
         //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
+        Subevent.SUBEVENTS.put("refresh_resource", new RefreshResource());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
+        Subevent.SUBEVENTS.put("take_resource", new TakeResource());
 
         if (includeTestingSubevents) {
             Subevent.SUBEVENTS.put("dummy_subevent", new DummySubevent());
@@ -79,7 +83,8 @@ public abstract class Subevent {
      * @return true if the tag is present, false otherwise
      */
     public boolean hasTag(String tag) {
-        return this.json.getJsonArray("tags").asList().contains(tag);
+        // TODO does this method need to exist when getTags() exists?
+        return this.getTags().asList().contains(tag);
     }
 
     /**
@@ -88,7 +93,16 @@ public abstract class Subevent {
      * @param tag a subevent tag
      */
     public void addTag(String tag) {
-        this.json.getJsonArray("tags").addString(tag);
+        this.getTags().addString(tag);
+    }
+
+    /**
+     * Returns the Subevent's tage.
+     *
+     * @return a JsonArray of tags
+     */
+    public JsonArray getTags() {
+        return this.json.getJsonArray("tags");
     }
 
     /**

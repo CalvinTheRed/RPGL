@@ -9,6 +9,7 @@ import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -140,6 +141,26 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
+    @DisplayName("processResources resources are constructed correctly")
+    void processResources_resourcesAreConstructedCorrectly() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("young_red_dragon");
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processResources(object);
+
+        assertEquals(2, object.getResourceObjects().size(),
+                "young red dragon should be given 2 resources"
+        );
+        assertEquals("demo:action", object.getResourceObjects().get(0).getId(),
+                "one resource should be demo:action"
+        );
+        assertEquals("demo:young_red_dragon_breath_charge", object.getResourceObjects().get(1).getId(),
+                "one resource should be demo:young_red_dragon_breath_charge"
+        );
+    }
+
+    @Test
     @DisplayName("newInstance comprehensive test using demo:knight template")
     void newInstance_knightTemplate() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("knight");
@@ -159,6 +180,12 @@ public class RPGLObjectTemplateTest {
         );
         assertEquals("demo:knight", object.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
+
+        expected= """
+                ["humanoid"]""";
+        assertEquals(expected, object.getTags().toString(),
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
 
         expected = """
@@ -215,6 +242,12 @@ public class RPGLObjectTemplateTest {
         );
         assertEquals("A young red dragon.", object.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+
+        expected= """
+                ["dragon"]""";
+        assertEquals(expected, object.getTags().toString(),
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
 
         expected = """

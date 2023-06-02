@@ -15,6 +15,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -71,6 +72,7 @@ public class ScenariosTest {
         youngRedDragon.invokeEvent(
                 new RPGLObject[] {knight1, knight2, knight3, knight4, knight5, knight6},
                 youngRedDragonFireBreath,
+                youngRedDragon.getResourceObjects(),
                 context
         );
 
@@ -84,32 +86,32 @@ public class ScenariosTest {
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight1.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
+        knight1.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(171, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight2.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
+        knight2.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(164, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight3.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
+        knight3.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(157, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight4.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
+        knight4.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(150, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight5.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
+        knight5.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(143, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
         mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight6.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, context);
+        knight6.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(136, youngRedDragon.getHealthData().getInteger("current"));
     }
 
@@ -128,6 +130,7 @@ public class ScenariosTest {
         knight1.invokeEvent(
                 new RPGLObject[] { knight1 },
                 RPGLFactory.newEvent("demo:wrathful_smite"),
+                new ArrayList<>(),
                 context
         );
 
@@ -140,6 +143,7 @@ public class ScenariosTest {
         knight1.invokeEvent(
                 new RPGLObject[] { knight2 },
                 RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
+                new ArrayList<>(),
                 context
         );
 
@@ -162,6 +166,7 @@ public class ScenariosTest {
         knight2.invokeEvent(
                 new RPGLObject[] { knight1 },
                 RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
+                new ArrayList<>(),
                 context
         );
 
@@ -186,6 +191,7 @@ public class ScenariosTest {
         youngRedDragon1.invokeEvent(
                 new RPGLObject[] {youngRedDragon2},
                 youngRedDragonBiteAttack,
+                new ArrayList<>(),
                 context
         );
 

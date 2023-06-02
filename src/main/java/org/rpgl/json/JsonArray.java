@@ -2,6 +2,7 @@ package org.rpgl.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -240,6 +241,25 @@ public class JsonArray {
      */
     public void addBoolean(Boolean b) {
         this.data.add(b);
+    }
+
+    // =================================================================================================================
+    //  utility methods
+    // =================================================================================================================
+
+    /**
+     * Returns true if the JsonArray contains any of the elements in the passed list.
+     *
+     * @param other a List
+     * @return true if the JsonArray contains any of the elements in the passed list, false otherwise
+     */
+    public boolean containsAny(List<Object> other) {
+        for (Object element : other) {
+            if (this.asList().contains(element)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // =================================================================================================================

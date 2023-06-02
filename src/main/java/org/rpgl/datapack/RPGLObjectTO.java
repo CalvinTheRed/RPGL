@@ -24,6 +24,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     public static final String EVENTS_ALIAS            = "events";
     public static final String EFFECTS_ALIAS           = "effects";
     public static final String PROFICIENCY_BONUS_ALIAS = "proficiency_bonus";
+    public static final String RESOURCES_ALIAS         = "resources";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
     HashMap<String, Object> abilityScores;
@@ -39,6 +40,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     ArrayList<Object> effects;
     @JsonProperty(PROFICIENCY_BONUS_ALIAS)
     Integer proficiencyBonus;
+    @JsonProperty(RESOURCES_ALIAS)
+    ArrayList<Object> resources;
 
     /**
      * Default constructor for RPGLObjectTO class.
@@ -62,6 +65,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
         this.events = rpglObject.getEvents().asList();
         this.effects = rpglObject.getEffects().asList();
         this.proficiencyBonus = rpglObject.getProficiencyBonus();
+        this.resources = rpglObject.getResources().asList();
     }
 
     /**
@@ -78,6 +82,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.putJsonArray(EVENTS_ALIAS, new JsonArray(events));
             this.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
             this.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+            this.putJsonArray(RESOURCES_ALIAS, new JsonArray(resources));
         }};
         rpglObjectTemplate.join(super.getTemplateData());
         return rpglObjectTemplate;
@@ -97,6 +102,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.setEvents(new JsonArray(events));
             this.setEffects(new JsonArray(effects));
             this.setProficiencyBonus(proficiencyBonus);
+            this.setResources(new JsonArray(resources));
         }};
         rpglObject.join(super.getTemplateData());
         rpglObject.join(super.getUUIDTableElementData());

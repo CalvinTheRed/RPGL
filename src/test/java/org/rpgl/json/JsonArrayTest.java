@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -263,6 +264,97 @@ public class JsonArrayTest {
         );
         assertTrue(clone.getJsonObject(0).asMap().isEmpty(),
                 "modifying values or the original should not impact the values in the clone"
+        );
+    }
+
+    @Test
+    @DisplayName("containsAny returns true (contains exactly one element)")
+    void containsAny_returnsTrue_containsExactlyOneElement() {
+        JsonArray base = new JsonArray() {{
+           this.addString("string 2");
+        }};
+        JsonArray other = new JsonArray() {{
+            this.addString("string 1");
+            this.addString("string 2");
+            this.addString("string 3");
+        }};
+
+        assertTrue(base.containsAny(other.asList()),
+                "method should return true since base contains 1 of the other list's elements"
+        );
+    }
+
+    @Test
+    @DisplayName("containsAny returns true (contains multiple elements)")
+    void containsAny_returnsTrue_containsMultipleElements() {
+        JsonArray base = new JsonArray() {{
+            this.addString("string 1");
+            this.addString("string 2");
+        }};
+        JsonArray other = new JsonArray() {{
+            this.addString("string 1");
+            this.addString("string 2");
+            this.addString("string 3");
+        }};
+
+        assertTrue(base.containsAny(other.asList()),
+                "method should return true since base contains multiple of the other list's elements"
+        );
+    }
+
+    @Test
+    @DisplayName("containsAny returns false (contains no matching elements)")
+    void containsAny_returnsFalse_containsNoMatchingElements() {
+        JsonArray base = new JsonArray() {{
+            this.addString("string 4");
+        }};
+        JsonArray other = new JsonArray() {{
+            this.addString("string 1");
+            this.addString("string 2");
+            this.addString("string 3");
+        }};
+
+        assertFalse(base.containsAny(other.asList()),
+                "method should return false since base contains none of the other list's elements"
+        );
+    }
+
+    @Test
+    @DisplayName("containsAny returns false (JsonArray is empty)")
+    void containsAny_returnsFalse_JsonArrayIsEmpty() {
+        JsonArray base = new JsonArray();
+        JsonArray other = new JsonArray() {{
+            this.addString("string 1");
+            this.addString("string 2");
+            this.addString("string 3");
+        }};
+
+        assertFalse(base.containsAny(other.asList()),
+                "method should return false since base is empty"
+        );
+    }
+
+    @Test
+    @DisplayName("containsAny returns false (JsonArray is empty)")
+    void containsAny_returnsFalse_otherIsEmpty() {
+        JsonArray base = new JsonArray() {{
+            this.addString("string 1");
+        }};
+        JsonArray other = new JsonArray();
+
+        assertFalse(base.containsAny(other.asList()),
+                "method should return false since other is empty"
+        );
+    }
+
+    @Test
+    @DisplayName("containsAny returns false (JsonArray and other are empty)")
+    void containsAny_returnsFalse_JsonArrayAndOtherAreEmpty() {
+        JsonArray base = new JsonArray();
+        JsonArray other = new JsonArray();
+
+        assertFalse(base.containsAny(other.asList()),
+                "method should return false since other is empty"
         );
     }
 

@@ -1,10 +1,11 @@
 package org.rpgl.datapack;
 
-import org.rpgl.json.JsonObject;
 import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
 import org.rpgl.core.RPGLItemTemplate;
 import org.rpgl.core.RPGLObjectTemplate;
+import org.rpgl.core.RPGLResourceTemplate;
+import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +26,10 @@ public class Datapack {
     private static final Logger LOGGER = LoggerFactory.getLogger(Datapack.class);
 
     private final Map<String, RPGLEffectTemplate> EFFECT_TEMPLATES = new HashMap<>();
-    private final Map<String, RPGLEventTemplate>  EVENT_TEMPLATES  = new HashMap<>();
-    private final Map<String, RPGLItemTemplate>   ITEM_TEMPLATES   = new HashMap<>();
+    private final Map<String, RPGLEventTemplate> EVENT_TEMPLATES = new HashMap<>();
+    private final Map<String, RPGLItemTemplate> ITEM_TEMPLATES = new HashMap<>();
     private final Map<String, RPGLObjectTemplate> OBJECT_TEMPLATES = new HashMap<>();
+    private final Map<String, RPGLResourceTemplate> RESOURCE_TEMPLATES = new HashMap<>();
 
     String datapackNamespace;
 
@@ -43,9 +45,10 @@ public class Datapack {
             if (subDirectory.isDirectory()) {
                 switch (subDirectory.getName()) {
                     case "effects" -> loadEffectTemplates(subDirectory);
-                    case "events"  -> loadEventTemplates(subDirectory);
-                    case "items"   -> loadItemTemplates(subDirectory);
+                    case "events" -> loadEventTemplates(subDirectory);
+                    case "items" -> loadItemTemplates(subDirectory);
                     case "objects" -> loadObjectTemplates(subDirectory);
+                    case "resources" -> loadResourceTemplates(subDirectory);
                 }
             }
         }
@@ -124,6 +127,24 @@ public class Datapack {
     }
 
     /**
+     * This method loads all resource templates stored in a single directory into the object.
+     *
+     * @param directory a File directory for the resources in a datapack
+     */
+    private void loadResourceTemplates(File directory) {
+        for (File resourceFile : Objects.requireNonNull(directory.listFiles())) {
+            String resourceId = resourceFile.getName().substring(0, resourceFile.getName().indexOf('.'));
+            try {
+                RPGLResourceTemplate rpglResourceTemplate = JsonObject.MAPPER.readValue(resourceFile, RPGLResourceTO.class).toRPGLResourceTemplate();
+                rpglResourceTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + resourceId);
+                this.RESOURCE_TEMPLATES.put(resourceId, rpglResourceTemplate);
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+            }
+        }
+    }
+
+    /**
      * This method returns a specified RPGLEffectTemplate object.
      *
      * @param effectName the name of an effect template stored in this datapack
@@ -157,6 +178,15 @@ public class Datapack {
      */
     public RPGLObjectTemplate getObjectTemplate(String objectName) {
         return this.OBJECT_TEMPLATES.get(objectName);
+    }
+
+    /**
+     * This method returns a specified RPGLResourceTemplate object.
+     *
+     * @param resourceName the name of a resource template stored in this datapack
+     */
+    public RPGLResourceTemplate getResourceTemplate(String resourceName) {
+        return this.RESOURCE_TEMPLATES.get(resourceName);
     }
 
 }

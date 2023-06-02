@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -87,6 +88,7 @@ public class InvokeSubeventTest {
         source.invokeEvent(
                 new RPGLObject[] { target },
                 RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
+                new ArrayList<>(),
                 context
         );
 
