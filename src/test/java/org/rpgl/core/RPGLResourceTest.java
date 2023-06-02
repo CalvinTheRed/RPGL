@@ -171,7 +171,7 @@ public class RPGLResourceTest {
 
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        source.giveResource(resource);
+        source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.addTag("start_turn");
@@ -196,7 +196,7 @@ public class RPGLResourceTest {
 
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        source.giveResource(resource);
+        source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.addTag("start_turn");
@@ -218,7 +218,7 @@ public class RPGLResourceTest {
 
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        source.giveResource(resource);
+        source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.addTag("long_rest");
@@ -240,7 +240,7 @@ public class RPGLResourceTest {
 
         RPGLObject source = RPGLFactory.newObject("demo:commoner");
         RPGLObject target = RPGLFactory.newObject("demo:commoner");
-        source.giveResource(resource);
+        source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.addTag("long_rest");

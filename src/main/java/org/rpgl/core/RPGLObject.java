@@ -156,10 +156,20 @@ public class RPGLObject extends RPGLTaggable {
         this.putInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
     }
 
+    /**
+     * Returns the resources UUID array of the RPGLObject. This will include any RPGLResource UUIDs granted temporarily.
+     *
+     * @return the RPGLObject's resources array
+     */
     public JsonArray getResources() {
         return this.getJsonArray(RPGLObjectTO.RESOURCES_ALIAS);
     }
 
+    /**
+     * Setter for resources.
+     *
+     * @param resources a new resources UUID array
+     */
     public void setResources(JsonArray resources) {
         this.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
     }
@@ -224,6 +234,12 @@ public class RPGLObject extends RPGLTaggable {
         return effects;
     }
 
+    /**
+     * Returns a List of all RPGLResource objects associated with the RPGLObject. This includes temporary RPGLResources
+     * granted by effects.
+     *
+     * @return a List of RPGLResource objects
+     */
     public List<RPGLResource> getResourceObjects() {
         List<RPGLResource> resources = new ArrayList<>();
 
@@ -235,20 +251,8 @@ public class RPGLObject extends RPGLTaggable {
         return resources;
     }
 
-    public void giveResource(RPGLResource resource) {
-        this.getResources().addString(resource.getUuid());
-    }
-
-    public boolean removeResource(String resourceUuid) {
-        if (this.getResources().asList().remove(resourceUuid)) {
-            UUIDTable.unregister(resourceUuid);
-            return true;
-        }
-        return false;
-    }
-
     /**
-     * This method precipitates the process of invoking an RPGLEvent.
+     * This method exhausts resources and then precipitates the process of invoking an RPGLEvent.
      *
      * @param targets   an array of RPGLObjects targeted by the RPGLEvent being invoked
      * @param event     the RPGLEvent being invoked
@@ -258,6 +262,9 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs.
      */
     public void invokeEvent(RPGLObject[] targets, RPGLEvent event, List<RPGLResource> resources, RPGLContext context) throws Exception {
+        for (RPGLResource resource : resources) {
+            resource.exhaust();
+        }
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
@@ -270,9 +277,6 @@ public class RPGLObject extends RPGLTaggable {
                 subeventClone.setTarget(target);
                 subeventClone.invoke(context);
             }
-        }
-        for (RPGLResource resource : resources) {
-            resource.exhaust();
         }
     }
 
@@ -297,24 +301,55 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
-     * This method adds an RPGLEffect to the RPGLObject.
+     * This method adds an RPGLEffect to the RPGLObject. This will do nothing if the object already possesses the passed
+     * RPGLEffect.
      * <br>
-     * TODO should effects be restricted if they are the same? double-dipping
+     * TODO should effects be restricted if they are of the same type? double-dipping
      *
-     * @param effect a RPGLEffect to be assigned to the RPGLObject
+     * @param effect a RPGLEffect
      */
     public void addEffect(RPGLEffect effect) {
-        this.getEffects().addString(effect.getUuid());
+        if (!this.getEffects().asList().contains(effect.getUuid())) {
+            this.getEffects().addString(effect.getUuid());
+        }
     }
 
     /**
-     * This method adds an RPGLEffect to the RPGLObject.
+     * Removes a RPGLEffect from the object. Note that this does NOT cause the RPGLResource to be unregistered from
+     * UUIDTable.
      *
-     * @param effectUuid the UUID for a RPGLEffect to be removed from the RPGLObject
-     * @return true if the RPGLObject's RPGLEffect collection contained the specified element
+     * @param effectUuid the UUID for a RPGLEffect
+     * @return true if the effect was removed, false otherwise
      */
     public boolean removeEffect(String effectUuid) {
         return this.getEffects().asList().remove(effectUuid);
+    }
+
+    /**
+     * Gives a new RPGLResource to the object. This will do nothing if the object already possesses the passed
+     * RPGLResource.
+     *
+     * @param resource a RPGLResource
+     */
+    public void addResource(RPGLResource resource) {
+        if (!this.getResources().asList().contains(resource.getUuid())) {
+            this.getResources().addString(resource.getUuid());
+        }
+    }
+
+    /**
+     * Removes a RPGLResource from the object. Note that this causes the RPGLResource to be unregistered from UUIDTable
+     * as well.
+     *
+     * @param resourceUuid the UUID for a RPGLResource
+     * @return true if the resource was removed, false otherwise
+     */
+    public boolean removeResource(String resourceUuid) {
+        if (this.getResources().asList().remove(resourceUuid)) {
+            UUIDTable.unregister(resourceUuid);
+            return true;
+        }
+        return false;
     }
 
     /**

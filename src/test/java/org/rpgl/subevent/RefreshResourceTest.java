@@ -76,7 +76,7 @@ public class RefreshResourceTest {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
             resource.exhaust();
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -126,7 +126,7 @@ public class RefreshResourceTest {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
             resource.exhaust();
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -180,7 +180,7 @@ public class RefreshResourceTest {
             if (i > 4) {
                 resource.exhaust();
             }
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -216,7 +216,7 @@ public class RefreshResourceTest {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
             resource.exhaust();
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -269,7 +269,7 @@ public class RefreshResourceTest {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
             resource.exhaust();
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -323,7 +323,7 @@ public class RefreshResourceTest {
             if (i < 6) {
                 resource.exhaust();
             }
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -362,7 +362,7 @@ public class RefreshResourceTest {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
             resource.exhaust();
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -415,7 +415,7 @@ public class RefreshResourceTest {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
             resource.exhaust();
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         RefreshResource refreshResource = new RefreshResource();
@@ -467,12 +467,12 @@ public class RefreshResourceTest {
         RPGLResource spellSlot = RPGLFactory.newResource("demo:spell_slot");
         spellSlot.exhaust();
         spellSlot.setPotency(1);
-        target.giveResource(spellSlot);
+        target.addResource(spellSlot);
 
         RPGLResource pactSpellSlot = RPGLFactory.newResource("demo:pact_spell_slot");
         pactSpellSlot.exhaust();
         pactSpellSlot.setPotency(1);
-        target.giveResource(pactSpellSlot);
+        target.addResource(pactSpellSlot);
 
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{

@@ -34,8 +34,16 @@
     "demo:fire_immunity"
   ],
   "resources": [
-    "demo:action",
-    "demo:young_red_dragon_breath_charge"
+    {
+      "resource": "demo:action",
+      "count": 1,
+      "potency": 1
+    },
+    {
+      "resource": "demo:young_red_dragon_breath_charge",
+      "count": 1,
+      "potency": 1
+    }
   ],
   "proficiency_bonus": 4
 }

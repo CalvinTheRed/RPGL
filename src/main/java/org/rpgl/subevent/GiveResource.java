@@ -49,7 +49,7 @@ public class GiveResource extends Subevent {
             RPGLResource resource = RPGLFactory.newResource(resourceId);
             resource.addTag("temporary");
             resource.setPotency(potency);
-            this.getTarget().giveResource(resource);
+            this.getTarget().addResource(resource);
         }
     }
 

@@ -74,7 +74,7 @@ public class TakeResourceTest {
         context.add(target);
 
         RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
-        target.giveResource(resource);
+        target.addResource(resource);
 
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
@@ -112,7 +112,7 @@ public class TakeResourceTest {
         for (int i = 0; i < 5; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
             resource.addTag("temporary");
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         TakeResource takeResource = new TakeResource();
@@ -144,7 +144,7 @@ public class TakeResourceTest {
         for (int i = 0; i < 5; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
             resource.addTag("temporary");
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         TakeResource takeResource = new TakeResource();

@@ -55,6 +55,10 @@ public class ExhaustResource extends Subevent {
         }
     }
 
+    /**
+     * This helper method is a version of the run method which prioritizes exhausting available resources from lowest
+     * potency to highest.
+     */
     void runLowFirst() {
         String resourceId = this.json.getString("resource");
         final int[] count = { Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE) };
@@ -73,6 +77,10 @@ public class ExhaustResource extends Subevent {
         });
     }
 
+    /**
+     * This helper method is a version of the run method which prioritizes exhausting available resources from highest
+     * potency to lowest.
+     */
     void runHighFirst() {
         String resourceId = this.json.getString("resource");
         final int[] count = { Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE) };
@@ -91,6 +99,10 @@ public class ExhaustResource extends Subevent {
         });
     }
 
+    /**
+     * This helper method is a version of the run method which prioritizes exhausting available resources in a random
+     * order.
+     */
     void runRandom() {
         String resourceId = this.json.getString("resource");
         int count = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);

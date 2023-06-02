@@ -47,14 +47,14 @@ public class TakeResource extends Subevent {
     @Override
     public void run(RPGLContext context) {
         String resourceId = this.json.getString("resource");
-        int resourcesRequired = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);
+        int count = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);
         RPGLObject target = this.getTarget();
 
         List<RPGLResource> resources = target.getResourceObjects();
         for (RPGLResource resource : resources) {
-            if (resourcesRequired > 0 && resource.hasTag("temporary") && Objects.equals(resource.getId(), resourceId)) {
+            if (count > 0 && resource.hasTag("temporary") && Objects.equals(resource.getId(), resourceId)) {
                 target.removeResource(resource.getUuid());
-                resourcesRequired--;
+                count--;
             }
         }
     }

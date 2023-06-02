@@ -48,6 +48,11 @@ public class RPGLResourceTemplate extends JsonObject {
         return resource;
     }
 
+    /**
+     * This helper method sets default values for a resource's refresh criteria.
+     *
+     * @param resource a RPGLResource
+     */
     static void processRefreshCriterion(RPGLResource resource) {
         JsonArray refreshCriterion = resource.getRefreshCriterion();
         for (int i = 0; i < refreshCriterion.size(); i++) {
@@ -60,6 +65,11 @@ public class RPGLResourceTemplate extends JsonObject {
         }
     }
 
+    /**
+     * This helper method unpacks all dice in the required generators for a resource's refresh criteria.
+     *
+     * @param resource a RPGLResource
+     */
     static void processRefreshCriterionGenerators(RPGLResource resource) {
         JsonArray refreshCriterion = resource.getRefreshCriterion();
         for (int i = 0; i < refreshCriterion.size(); i++) {

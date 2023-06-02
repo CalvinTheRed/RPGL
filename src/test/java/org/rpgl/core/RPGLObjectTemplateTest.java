@@ -141,6 +141,26 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
+    @DisplayName("processResources resources are constructed correctly")
+    void processResources_resourcesAreConstructedCorrectly() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("young_red_dragon");
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processResources(object);
+
+        assertEquals(2, object.getResourceObjects().size(),
+                "young red dragon should be given 2 resources"
+        );
+        assertEquals("demo:action", object.getResourceObjects().get(0).getId(),
+                "one resource should be demo:action"
+        );
+        assertEquals("demo:young_red_dragon_breath_charge", object.getResourceObjects().get(1).getId(),
+                "one resource should be demo:young_red_dragon_breath_charge"
+        );
+    }
+
+    @Test
     @DisplayName("newInstance comprehensive test using demo:knight template")
     void newInstance_knightTemplate() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("knight");

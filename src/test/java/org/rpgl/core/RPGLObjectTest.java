@@ -400,7 +400,7 @@ public class RPGLObjectTest {
         context.add(target);
 
         RPGLResource resource = RPGLFactory.newResource("demo:action");
-        source.giveResource(resource);
+        source.addResource(resource);
 
         resource.exhaust();
         source.startTurn(context);

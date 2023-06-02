@@ -9,6 +9,7 @@ import org.rpgl.uuidtable.UUIDTable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class is used to contain a "template" to be used in the creation of new RPGLObject objects. Data stored in this
@@ -115,11 +116,27 @@ public class RPGLObjectTemplate extends JsonObject {
         healthData.putJsonArray("hit_dice", hitDice);
     }
 
+    /**
+     * This helper method converts resource IDs in an RPGLObjectTemplate's effects array to RPGLResources. The UUID's of
+     * these new RPGLResources replace the original array contents.
+     *
+     * @param object an RPGLObject
+     */
     static void processResources(RPGLObject object) {
         JsonArray resources = object.removeJsonArray(RPGLObjectTO.RESOURCES_ALIAS);
         JsonArray resourceUuids = new JsonArray();
         for (int i = 0; i < resources.size(); i++) {
-            resourceUuids.addString(RPGLFactory.newResource(resources.getString(i)).getUuid());
+            JsonObject resourceInstructions = resources.getJsonObject(i);
+            String resourceId = resourceInstructions.getString("resource");
+            int count = Objects.requireNonNullElse(resourceInstructions.getInteger("count"), 1);
+            for (int j = 0; j < count; j++) {
+                RPGLResource resource = RPGLFactory.newResource(resourceId);
+                Integer potency = resourceInstructions.getInteger("potency");
+                if (potency != null) {
+                    resource.setPotency(potency);
+                }
+                resourceUuids.addString(resource.getUuid());
+            }
         }
         object.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resourceUuids);
     }

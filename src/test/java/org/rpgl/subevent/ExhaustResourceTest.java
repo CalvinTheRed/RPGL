@@ -75,7 +75,7 @@ public class ExhaustResourceTest {
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -124,7 +124,7 @@ public class ExhaustResourceTest {
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -178,7 +178,7 @@ public class ExhaustResourceTest {
             if (i < 5) {
                 resource.exhaust();
             }
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -211,7 +211,7 @@ public class ExhaustResourceTest {
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -263,7 +263,7 @@ public class ExhaustResourceTest {
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -317,7 +317,7 @@ public class ExhaustResourceTest {
             if (i > 5) {
                 resource.exhaust();
             }
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -355,7 +355,7 @@ public class ExhaustResourceTest {
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -407,7 +407,7 @@ public class ExhaustResourceTest {
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
             resource.setPotency(i);
-            target.giveResource(resource);
+            target.addResource(resource);
         }
 
         ExhaustResource exhaustResource = new ExhaustResource();
@@ -458,11 +458,11 @@ public class ExhaustResourceTest {
 
         RPGLResource spellSlot = RPGLFactory.newResource("demo:spell_slot");
         spellSlot.setPotency(1);
-        target.giveResource(spellSlot);
+        target.addResource(spellSlot);
 
         RPGLResource pactSpellSlot = RPGLFactory.newResource("demo:pact_spell_slot");
         pactSpellSlot.setPotency(1);
-        target.giveResource(pactSpellSlot);
+        target.addResource(pactSpellSlot);
 
         ExhaustResource exhaustResource = new ExhaustResource();
         exhaustResource.joinSubeventData(new JsonObject() {{
