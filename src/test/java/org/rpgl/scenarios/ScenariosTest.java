@@ -85,32 +85,32 @@ public class ScenariosTest {
         assertEquals(4, knight6.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
+        mainhandAttack = RPGLFactory.newEvent("std_items:longsword_melee");
         knight1.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(171, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
+        mainhandAttack = RPGLFactory.newEvent("std_items:longsword_melee");
         knight2.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(164, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
+        mainhandAttack = RPGLFactory.newEvent("std_items:longsword_melee");
         knight3.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(157, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
+        mainhandAttack = RPGLFactory.newEvent("std_items:longsword_melee");
         knight4.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(150, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
+        mainhandAttack = RPGLFactory.newEvent("std_items:longsword_melee");
         knight5.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(143, youngRedDragon.getHealthData().getInteger("current"));
 
         // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
+        mainhandAttack = RPGLFactory.newEvent("std_items:longsword_melee");
         knight6.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
         assertEquals(136, youngRedDragon.getHealthData().getInteger("current"));
     }

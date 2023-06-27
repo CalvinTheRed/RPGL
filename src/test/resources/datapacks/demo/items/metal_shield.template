@@ -10,11 +10,5 @@
   ],
   "weight": 6,
   "cost": 10,
-  "proficiency_tags": [
-    "shield"
-  ],
-  "while_equipped": [
-
-  ],
   "armor_class_bonus": 2
 }

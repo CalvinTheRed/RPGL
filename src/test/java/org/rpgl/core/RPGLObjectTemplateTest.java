@@ -212,9 +212,7 @@ public class RPGLObjectTemplateTest {
                     "item at inventory index " + i + " is missing from UUIDTable"
             );
         }
-        expected = """
-                ["demo:weapon_attack_mainhand_melee"]""";
-        assertEquals(expected, object.getEvents().toString(),
+        assertEquals("[]", object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
         assertEquals("[]", object.getEffects().toString(),

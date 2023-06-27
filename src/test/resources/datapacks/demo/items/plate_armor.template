@@ -6,14 +6,12 @@
   "description": "A suit of plate armor.",
   "tags": [
     "metal",
+    "heavy_armor",
     "armor"
   ],
   "weight": 65,
   "cost": 1500,
-  "proficiency_tags": [
-    "heavy_armor"
-  ],
-  "while_equipped": [
+  "equipped_effects": [
 
   ],
   "armor_class_base": 18,

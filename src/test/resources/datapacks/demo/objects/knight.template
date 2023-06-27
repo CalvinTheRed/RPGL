@@ -24,15 +24,15 @@
     "temporary": 0
   },
   "equipped_items": {
-    "mainhand": "demo:longsword",
+    "mainhand": "std_items:longsword",
     "offhand": "demo:metal_shield",
     "armor": "demo:plate_armor"
   },
   "inventory": [
-    "demo:heavy_crossbow"
+    "std_items:heavy_crossbow"
   ],
   "events": [
-    "demo:weapon_attack_mainhand_melee"
+
   ],
   "effects": [
 

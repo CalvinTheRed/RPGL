@@ -20,18 +20,11 @@ public class RPGLItemTO extends RPGLTaggableTO {
     public static final String WEIGHT_ALIAS = "weight";
     public static final String COST_ALIAS = "cost";
 
-    // equippable item property aliases
-    public static final String PROFICIENCY_TAGS_ALIAS = "proficiency_tags";
-    public static final String WHILE_EQUIPPED_ALIAS = "while_equipped";
-
     // weapon property aliases
-    public static final String WEAPON_PROPERTIES_ALIAS = "weapon_properties";
-    public static final String DAMAGE_ALIAS = "damage";
+    public static final String EVENTS_ALIAS = "events";
     public static final String ATTACK_BONUS_ALIAS = "attack_bonus";
-    public static final String ATTACK_ABILITIES_ALIAS = "attack_abilities";
-
-    // ranged weapon property aliases
-    public static final String RANGE_ALIAS = "range";
+    public static final String DAMAGE_BONUS_ALIAS = "damage_bonus";
+    public static final String EQUIPPED_EFFECTS_ALIAS = "equipped_effects";
 
     // armor property aliases
     public static final String ARMOR_CLASS_BASE_ALIAS = "armor_class_base";
@@ -45,22 +38,14 @@ public class RPGLItemTO extends RPGLTaggableTO {
     @JsonProperty(COST_ALIAS)
     Integer cost;
 
-    @JsonProperty(PROFICIENCY_TAGS_ALIAS)
-    ArrayList<Object> proficiencyTags;
-    @JsonProperty(WHILE_EQUIPPED_ALIAS)
-    ArrayList<Object> whileEquipped;
-
-    @JsonProperty(WEAPON_PROPERTIES_ALIAS)
-    ArrayList<Object> weaponProperties;
-    @JsonProperty(DAMAGE_ALIAS)
-    HashMap<String, Object> damage;
+    @JsonProperty(EVENTS_ALIAS)
+    HashMap<String, Object> events;
     @JsonProperty(ATTACK_BONUS_ALIAS)
     Integer attackBonus;
-    @JsonProperty(ATTACK_ABILITIES_ALIAS)
-    HashMap<String, Object> attackAbilities;
-
-    @JsonProperty(RANGE_ALIAS)
-    HashMap<String, Object> range;
+    @JsonProperty(DAMAGE_BONUS_ALIAS)
+    Integer damageBonus;
+    @JsonProperty(EQUIPPED_EFFECTS_ALIAS)
+    ArrayList<Object> equippedEffects;
 
     @JsonProperty(ARMOR_CLASS_BASE_ALIAS)
     Integer armorClassBase;
@@ -87,13 +72,10 @@ public class RPGLItemTO extends RPGLTaggableTO {
         super(rpglItem);
         this.weight = rpglItem.getWeight();
         this.cost = rpglItem.getCost();
-        this.proficiencyTags = rpglItem.getProficiencyTags().asList();
-        this.whileEquipped = rpglItem.getWhileEquippedEffects().asList();
-        this.weaponProperties = rpglItem.getWeaponProperties().asList();
-        this.damage = rpglItem.getDamage().asMap();
+        this.events = rpglItem.getEvents().asMap();
         this.attackBonus = rpglItem.getAttackBonus();
-        this.attackAbilities = rpglItem.getAttackAbilities().asMap();
-        this.range = rpglItem.getRange().asMap();
+        this.damageBonus = rpglItem.getDamageBonus();
+        this.equippedEffects = rpglItem.getEquippedEffects().asList();
         this.armorClassBase = rpglItem.getArmorClassBase();
         this.armorClassDexLimit = rpglItem.getArmorClassDexLimit();
         this.armorClassBonus = rpglItem.getArmorClassBonus();
@@ -108,12 +90,10 @@ public class RPGLItemTO extends RPGLTaggableTO {
         RPGLItemTemplate rpglItemTemplate = new RPGLItemTemplate() {{
             this.putInteger(WEIGHT_ALIAS, weight);
             this.putInteger(COST_ALIAS, cost);
-            this.putJsonArray(PROFICIENCY_TAGS_ALIAS, new JsonArray(proficiencyTags));
-            this.putJsonArray(WHILE_EQUIPPED_ALIAS, new JsonArray(whileEquipped));
-            this.putJsonArray(WEAPON_PROPERTIES_ALIAS, new JsonArray(weaponProperties));
-            this.putJsonObject(DAMAGE_ALIAS, new JsonObject(damage));
+            this.putJsonObject(EVENTS_ALIAS, new JsonObject(events));
             this.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
-            this.putJsonObject(RANGE_ALIAS, new JsonObject(range));
+            this.putInteger(DAMAGE_BONUS_ALIAS, damageBonus);
+            this.putJsonArray(EQUIPPED_EFFECTS_ALIAS, new JsonArray(equippedEffects));
             this.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
             this.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
             this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
@@ -132,13 +112,10 @@ public class RPGLItemTO extends RPGLTaggableTO {
             this.setTags(new JsonArray(tags));
             this.setWeight(weight);
             this.setCost(cost);
-            this.setProficiencyTags(new JsonArray(proficiencyTags));
-            this.setWhileEquippedEffects(new JsonArray(whileEquipped));
-            this.setWeaponProperties(new JsonArray(weaponProperties));
-            this.setDamage(new JsonObject(damage));
+            this.setEvents(new JsonObject(events));
             this.setAttackBonus(attackBonus);
-            this.setAttackAbilities(new JsonObject(attackAbilities));
-            this.setRange(new JsonObject(range));
+            this.setDamageBonus(damageBonus);
+            this.setEquippedEffects(new JsonArray(equippedEffects));
             this.setArmorClassBase(armorClassBase);
             this.setArmorClassDexLimit(armorClassDexLimit);
             this.setArmorClassBonus(armorClassBonus);

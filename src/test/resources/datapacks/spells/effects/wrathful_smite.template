@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Wrathful Smite 1",
+  "description": "Yada yada",
+  "subevent_filters": {
+    "damage_collection": {
+      "conditions": [
+        {
+          "condition": "objects_match",
+          "effect": "target",
+          "subevent": "source"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "target_damage_collection"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "attack_roll"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "weapon"
+        }
+      ],
+      "functions": [
+        {
+          "function": "invoke_subevent",
+          "subevent": {
+            "subevent": "saving_throw",
+            "difficulty_class_ability": "cha",
+            "save_ability": "wis",
+            "damage": [ ],
+            "pass": [ ],
+            "fail": [
+              {
+                "subevent": "give_effect",
+                "effect": "spells:wrathful_smite_fear"
+              }
+            ],
+            "damage_on_pass": "none",
+            "determined": [ 1 ]
+          },
+          "source": {
+            "from": "subevent",
+            "object": "source"
+          },
+          "targets": [
+            {
+              "from": "subevent",
+              "object": "target"
+            }
+          ]
+        },
+        {
+          "function": "add_damage",
+          "damage": [
+            {
+              "damage_formula": "range",
+              "damage_type": "psychic",
+              "dice": [
+                { "count": 1, "size": 6, "determined": [ 3 ] }
+              ],
+              "bonus": 0
+            }
+          ]
+        },
+        {
+          "function": "end_effect"
+        }
+      ]
+    }
+  }
+}

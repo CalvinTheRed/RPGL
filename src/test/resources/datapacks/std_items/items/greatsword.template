@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Greatsword",
+  "description": "A greatsword.",
+  "tags": [
+    "greatsword",
+    "heavy",
+    "metal",
+    "martial_melee",
+    "two_handed"
+  ],
+  "weight": 6,
+  "cost": 50,
+  "events": {
+    "multiple_hands": [
+      "std_items:greatsword_melee",
+      "std_items:improvised_thrown"
+    ],
+    "one_hand": [
+      "std_items:improvised_melee",
+      "std_items:improvised_thrown"
+    ],
+    "special": [ ]
+  },
+  "equipped_effects": [ ],
+  "attack_bonus": 0,
+  "damage_bonus": 0
+}

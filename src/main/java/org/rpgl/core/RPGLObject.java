@@ -228,7 +228,7 @@ public class RPGLObject extends RPGLTaggable {
         for (Map.Entry<String, ?> equippedItemEntry : equippedItems.asMap().entrySet()) {
             String equippedItemUuid = equippedItems.getString(equippedItemEntry.getKey());
             RPGLItem equippedItem = UUIDTable.getItem(equippedItemUuid);
-            effects.addAll(equippedItem.getWhileEquippedEffectObjects());
+            effects.addAll(equippedItem.getEquippedEffectsObjects());
         }
 
         return effects;
@@ -646,7 +646,6 @@ public class RPGLObject extends RPGLTaggable {
             equippedItems.putString(equipmentSlot, itemUuid);
             RPGLItem item = UUIDTable.getItem(itemUuid);
             item.updateEquippedEffects(this);
-            item.defaultAttackAbilities();
             // TODO account for 2-handed items...
         }
     }

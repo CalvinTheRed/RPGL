@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Wand of Fireballs",
+  "description": "Hey! Watch where you're pointing that thing!",
+  "tags": [
+    "wand_of_fireballs"
+  ],
+  "weight": 1,
+  "cost": 10000,
+  "events": {
+    "multiple_hands": [
+      "std_items:wand_of_fireballs",
+      "std_items:improvised_melee",
+      "std_items:improvised_thrown"
+    ],
+    "one_hand": [
+      "std_items:wand_of_fireballs",
+      "std_items:improvised_melee",
+      "std_items:improvised_thrown"
+    ],
+    "special": [ ]
+  }
+}

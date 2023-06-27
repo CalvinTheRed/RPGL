@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Robe of Stars",
+  "description": "A robe which can be used to hurl magical stars at your foes.",
+  "tags": [
+    "robe_of_stars"
+  ],
+  "weight": 1,
+  "cost": 10000,
+  "events": {
+    "multiple_hands": [
+      "std_items:improvised_melee",
+      "std_items:improvised_thrown"
+    ],
+    "one_hand": [
+      "std_items:improvised_melee",
+      "std_items:improvised_thrown"
+    ],
+    "special": [
+      "std_items:robe_of_stars"
+    ]
+  },
+  "equipped_effects": [
+    "std_items:robe_of_stars"
+  ]
+}

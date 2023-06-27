@@ -5,6 +5,8 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -14,34 +16,6 @@ import java.util.Objects;
  * @author Calvin Withun
  */
 public class RPGLItemTemplate extends JsonObject {
-
-    /**
-     * This object represents the damage dealt by an improvised weapon for an arbitrary attack type.
-     */
-    private static final JsonArray DEFAULT_TEMPLATE_ITEM_DAMAGE = new JsonArray() {{
-        this.addJsonObject(new JsonObject() {{
-            this.putString("damage_formula", "range");
-            this.putString("damage_type", "bludgeoning");
-            this.putJsonArray("dice", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("count", 1);
-                    this.putInteger("size", 4);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(2);
-                    }});
-                }});
-            }});
-            this.putInteger("bonus", 0);
-        }});
-    }};
-
-    /**
-     * This object represents the range of an improvised weapon when it is thrown.
-     */
-    private static final JsonObject DEFAULT_RANGE = new JsonObject() {{
-        this.putInteger("normal", 20);
-        this.putInteger("long", 60);
-    }};
 
     /**
      * Constructs a new RPGLItem object corresponding to the contents of the RPGLItemTemplate object. The new object is
@@ -54,32 +28,20 @@ public class RPGLItemTemplate extends JsonObject {
         item.join(this);
         item.asMap().putIfAbsent(RPGLItemTO.WEIGHT_ALIAS, 0);
         item.asMap().putIfAbsent(RPGLItemTO.ATTACK_BONUS_ALIAS, 0);
+        item.asMap().putIfAbsent(RPGLItemTO.DAMAGE_BONUS_ALIAS, 0);
         item.asMap().putIfAbsent(RPGLItemTO.COST_ALIAS, 0);
-        if (item.getJsonObject(RPGLItemTO.RANGE_ALIAS).asMap().isEmpty()) {
-            item.putJsonObject(RPGLItemTO.RANGE_ALIAS, DEFAULT_RANGE);
-        }
-        item.defaultAttackAbilities();
-        processImprovisedTags(item);
+        item.asMap().putIfAbsent(RPGLItemTO.EVENTS_ALIAS, new HashMap<String, Object>());
+        item.asMap().putIfAbsent(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, new ArrayList<>());
+        processEvents(item);
         processEquippedEffects(item);
-        setDefaultItemDamage(item);
         UUIDTable.register(item);
         return item;
     }
 
-    /**
-     * This helper method adds the <code>improvised_melee</code> and <code>improvised_thrown</code> weapon property
-     * tags to the item, as appropriate based on its other weapon property tags.
-     *
-     * @param item a RPGLItem being created by this object
-     */
-    static void processImprovisedTags(RPGLItem item) {
-        JsonArray weaponProperties = item.getWeaponProperties();
-        if (!weaponProperties.asList().contains("melee")) {
-            weaponProperties.addString("improvised_melee");
-        }
-        if (!weaponProperties.asList().contains("thrown")) {
-            weaponProperties.addString("improvised_thrown");
-        }
+    static void processEvents(RPGLItem item) {
+        item.getEvents().asMap().putIfAbsent("multiple_hands", new ArrayList<>());
+        item.getEvents().asMap().putIfAbsent("one_hand", new ArrayList<>());
+        item.getEvents().asMap().putIfAbsent("special", new ArrayList<>());
     }
 
     /**
@@ -89,39 +51,14 @@ public class RPGLItemTemplate extends JsonObject {
      * @param item a RPGLItem being created by this object
      */
     static void processEquippedEffects(RPGLItem item) {
-        JsonArray equippedEffectsIdArray = Objects.requireNonNullElse(item.removeJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS), new JsonArray());
+        JsonArray equippedEffectsIdArray = Objects.requireNonNullElse(item.removeJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS), new JsonArray());
         JsonArray equippedEffectsUuidArray = new JsonArray();
         for (int i = 0; i < equippedEffectsIdArray.size(); i++) {
             String effectId = equippedEffectsIdArray.getString(i);
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
             equippedEffectsUuidArray.addString(effect.getUuid());
         }
-        item.putJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS, equippedEffectsUuidArray);
-    }
-
-    /**
-     * This helper method sets the damage for an item in the cases where it would function as an improvised weapon.
-     *
-     * @param item a RPGLItem being created by this object
-     */
-    static void setDefaultItemDamage(RPGLItem item) {
-        JsonObject damage = new JsonObject();
-        damage.join(Objects.requireNonNullElse(item.removeJsonObject(RPGLItemTO.DAMAGE_ALIAS), new JsonObject()));
-
-        if (damage.asMap().isEmpty()) {
-            damage.putJsonArray("melee", DEFAULT_TEMPLATE_ITEM_DAMAGE.deepClone());
-            damage.putJsonArray("thrown", DEFAULT_TEMPLATE_ITEM_DAMAGE.deepClone());
-        } else {
-            JsonArray melee = damage.getJsonArray("melee");
-            if (melee == null || melee.asList().isEmpty()) {
-                damage.putJsonArray("melee", DEFAULT_TEMPLATE_ITEM_DAMAGE.deepClone());
-            }
-            JsonArray thrown = damage.getJsonArray("thrown");
-            if (thrown == null || thrown.asList().isEmpty()) {
-                damage.putJsonArray("thrown", DEFAULT_TEMPLATE_ITEM_DAMAGE.deepClone());
-            }
-        }
-        item.putJsonObject(RPGLItemTO.DAMAGE_ALIAS, damage);
+        item.putJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, equippedEffectsUuidArray);
     }
 
 }

@@ -1,7 +1,6 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -127,31 +126,31 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs
      */
     void prepareNaturalWeapon(String weaponId, RPGLContext context) throws Exception {
-        this.json.putBoolean("natural_weapon_attack", true);
-        // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
-        RPGLItem weapon = RPGLFactory.newItem(weaponId);
-        String attackType = this.json.getString("attack_type");
-        String attackAbility = weapon.getAttackAbility(attackType);
-        this.addBonus(new JsonObject() {{
-            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
-            this.putJsonArray("dice", new JsonArray());
-        }});
-        this.applyWeaponAttackBonus(weapon);
-
-        // Copy damage of natural weapon to Subevent JSON.
-        this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
-
-        // Add natural weapon tags to attack roll
-        JsonArray naturalWeaponTags = weapon.getTags();
-        for (int i = 0; i < naturalWeaponTags.size(); i++) {
-            this.addTag(naturalWeaponTags.getString(i));
-        }
-
-        // Record natural weapon UUID
-        this.json.putString("weapon", weapon.getUuid());
-
-        // Record attack ability
-        this.json.putString("attack_ability", attackAbility);
+//        this.json.putBoolean("natural_weapon_attack", true);
+//        // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
+//        RPGLItem weapon = RPGLFactory.newItem(weaponId);
+//        String attackType = this.json.getString("attack_type");
+//        String attackAbility = weapon.getAttackAbility(attackType);
+//        this.addBonus(new JsonObject() {{
+//            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+//            this.putJsonArray("dice", new JsonArray());
+//        }});
+//        this.applyWeaponAttackBonus(weapon);
+//
+//        // Copy damage of natural weapon to Subevent JSON.
+//        this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
+//
+//        // Add natural weapon tags to attack roll
+//        JsonArray naturalWeaponTags = weapon.getTags();
+//        for (int i = 0; i < naturalWeaponTags.size(); i++) {
+//            this.addTag(naturalWeaponTags.getString(i));
+//        }
+//
+//        // Record natural weapon UUID
+//        this.json.putString("weapon", weapon.getUuid());
+//
+//        // Record attack ability
+//        this.json.putString("attack_ability", attackAbility);
     }
 
     /**
@@ -162,31 +161,31 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs
      */
     void prepareItemWeapon(String equipmentSlot, RPGLContext context) throws Exception {
-        this.json.putBoolean("natural_weapon_attack", false);
-        // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
-        RPGLItem weapon = UUIDTable.getItem(this.getSource().getEquippedItems().getString(equipmentSlot));
-        String attackType = this.json.getString("attack_type");
-        String attackAbility = weapon.getAttackAbility(attackType);
-        this.addBonus(new JsonObject() {{
-            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
-            this.putJsonArray("dice", new JsonArray());
-        }});
-        this.applyWeaponAttackBonus(weapon);
-
-        // Copy damage of natural weapon to Subevent JSON.
-        this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
-
-        // Add item weapon tags to attack roll
-        JsonArray itemWeaponTags = weapon.getTags();
-        for (int i = 0; i < itemWeaponTags.size(); i++) {
-            this.addTag(itemWeaponTags.getString(i));
-        }
-
-        // Record item weapon UUID
-        this.json.putString("weapon", weapon.getUuid());
-
-        // Record attack ability
-        this.json.putString("attack_ability", attackAbility);
+//        this.json.putBoolean("natural_weapon_attack", false);
+//        // Add attack ability score modifier (defined by the Item JSON) as a bonus to the roll.
+//        RPGLItem weapon = UUIDTable.getItem(this.getSource().getEquippedItems().getString(equipmentSlot));
+//        String attackType = this.json.getString("attack_type");
+//        String attackAbility = weapon.getAttackAbility(attackType);
+//        this.addBonus(new JsonObject() {{
+//            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(attackAbility, context));
+//            this.putJsonArray("dice", new JsonArray());
+//        }});
+//        this.applyWeaponAttackBonus(weapon);
+//
+//        // Copy damage of natural weapon to Subevent JSON.
+//        this.json.putJsonArray("damage", weapon.getDamageForAttackType(attackType));
+//
+//        // Add item weapon tags to attack roll
+//        JsonArray itemWeaponTags = weapon.getTags();
+//        for (int i = 0; i < itemWeaponTags.size(); i++) {
+//            this.addTag(itemWeaponTags.getString(i));
+//        }
+//
+//        // Record item weapon UUID
+//        this.json.putString("weapon", weapon.getUuid());
+//
+//        // Record attack ability
+//        this.json.putString("attack_ability", attackAbility);
     }
 
     /**
@@ -210,35 +209,35 @@ public class AttackRoll extends Roll {
      * @throws Exception if an exception occurs
      */
     void getBaseDamage(RPGLContext context) throws Exception {
-        // Collect base typed damage dice and bonuses
-        DamageCollection baseDamageCollection = new DamageCollection();
-        baseDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("base_damage_collection");
-            }});
-        }});
-        baseDamageCollection.setSource(this.getSource());
-        baseDamageCollection.prepare(context);
-        baseDamageCollection.setTarget(this.getSource());
-        baseDamageCollection.invoke(context);
-
-        // If the attack is made with an item, add attack ability modifier to damage roll
-        if (this.json.getString("weapon") != null) {
-            RPGLItem weapon = UUIDTable.getItem(this.json.getString("weapon"));
-            String attackAbility = weapon.getAttackAbility(this.json.getString("attack_type"));
-            int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(attackAbility, context);
-            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
-            baseDamageCollection.addDamage(new JsonObject() {{
-                this.putString("damage_type", damageType);
-                this.putJsonArray("dice", new JsonArray());
-                this.putInteger("bonus", attackAbilityModifier);
-            }});
-        }
-
-        // Replace damage key with base damage collection
-        this.json.putJsonArray("damage", baseDamageCollection.getDamageCollection());
+//        // Collect base typed damage dice and bonuses
+//        DamageCollection baseDamageCollection = new DamageCollection();
+//        baseDamageCollection.joinSubeventData(new JsonObject() {{
+//            this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
+//            this.putJsonArray("tags", new JsonArray() {{
+//                this.asList().addAll(json.getJsonArray("tags").asList());
+//                this.addString("base_damage_collection");
+//            }});
+//        }});
+//        baseDamageCollection.setSource(this.getSource());
+//        baseDamageCollection.prepare(context);
+//        baseDamageCollection.setTarget(this.getSource());
+//        baseDamageCollection.invoke(context);
+//
+//        // If the attack is made with an item, add attack ability modifier to damage roll
+//        if (this.json.getString("weapon") != null) {
+//            RPGLItem weapon = UUIDTable.getItem(this.json.getString("weapon"));
+//            String attackAbility = weapon.getAttackAbility(this.json.getString("attack_type"));
+//            int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(attackAbility, context);
+//            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
+//            baseDamageCollection.addDamage(new JsonObject() {{
+//                this.putString("damage_type", damageType);
+//                this.putJsonArray("dice", new JsonArray());
+//                this.putInteger("bonus", attackAbilityModifier);
+//            }});
+//        }
+//
+//        // Replace damage key with base damage collection
+//        this.json.putJsonArray("damage", baseDamageCollection.getDamageCollection());
     }
 
     /**

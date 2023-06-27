@@ -40,72 +40,108 @@ public class RPGLItemTest {
     }
 
     @Test
-    @DisplayName("get and set attack ability (dex to str)")
-    void getSetAttackAbility_changesDexToStr() {
-        RPGLItem item = RPGLFactory.newItem("demo:rapier");
-        item.setAttackAbility("melee", "str");
+    @DisplayName("getEquippedEffectsObjects returns correct effects as objects")
+    void getEquippedEffectObjects_returnsCorrectEffectsAsObjects() {
+        RPGLItem item = RPGLFactory.newItem("std_items:frostbrand");
 
-        assertEquals("str", item.getAttackAbility("melee"));
-    }
-
-    @Test
-    @DisplayName("defaultAttackAbilities reset changes (melee)")
-    void defaultAttackAbilities_resetChanges_melee() {
-        RPGLItem item = RPGLFactory.newItem("demo:rapier");
-        item.setAttackAbility("melee", "str");
-        item.defaultAttackAbilities();
-
-        assertEquals("dex", item.getAttackAbility("melee"));
-    }
-
-    @Test
-    @DisplayName("defaultAttackAbilities reset changes (thrown)")
-    void defaultAttackAbilities_resetChanges_thrown() {
-        RPGLItem item = RPGLFactory.newItem("demo:dagger");
-        item.setAttackAbility("thrown", "str");
-        item.defaultAttackAbilities();
-
-        assertEquals("dex", item.getAttackAbility("thrown"));
-    }
-
-    @Test
-    @DisplayName("defaultAttackAbilities reset changes (ranged)")
-    void defaultAttackAbilities_resetChanges_ranged() {
-        RPGLItem item = RPGLFactory.newItem("demo:heavy_crossbow");
-        item.setAttackAbility("ranged", "cha");
-        item.defaultAttackAbilities();
-
-        assertEquals("dex", item.getAttackAbility("ranged"));
-    }
-
-    @Test
-    @DisplayName("getWhileEquippedEffectObjects returns correct effects")
-    void getWhileEquippedEffectObjects_returnsCorrectEffects() {
-        RPGLItem frostbrand = RPGLFactory.newItem("demo:frostbrand");
-
-        List<RPGLEffect> effects = frostbrand.getWhileEquippedEffectObjects();
-
-        assertEquals(1, effects.size(),
-                "demo:frostbrand should have 1 effect while equipped"
+        List<RPGLEffect> equippedEffects = item.getEquippedEffectsObjects();
+        assertEquals(2, equippedEffects.size(),
+                "2 effects should be present"
         );
-        assertEquals("demo:fire_immunity", effects.get(0).getId(),
-                "demo:frostbrand should have the demo:fire_immunity effect while equipped"
+        assertEquals("std_effects:cold_resistance", equippedEffects.get(0).getId(),
+                "First effect should be std:cold_resistance"
+        );
+        assertEquals("std_effects:fire_resistance", equippedEffects.get(1).getId(),
+                "Second effect should be std:fire_resistance"
         );
     }
 
     @Test
-    @DisplayName("updateEquippedEffects effects should store the passed object as its new source and target")
-    void updateEquippedEffects_effectsShouldStorePassedObjectAsNewSourceAndTarget() {
-        RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        RPGLItem frostbrand = RPGLFactory.newItem("demo:frostbrand");
+    @DisplayName("getOneHandedEventObjects returns correct event objects")
+    void getOneHandedEventObjects_returnsCorrectEventObjects() {
+        RPGLItem item = RPGLFactory.newItem("std_items:longsword");
+        String expected;
 
-        frostbrand.updateEquippedEffects(knight);
-
-        assertEquals(knight, frostbrand.getWhileEquippedEffectObjects().get(0).getSource(),
-                "demo:frostbrand effects should have demo:knight as a source after updating"
+        List<RPGLEvent> events = item.getOneHandedEventObjects();
+        RPGLEvent event;
+        assertEquals(2, events.size(),
+                "longswords should provide 2 one-handed events"
         );
-        assertEquals(knight, frostbrand.getWhileEquippedEffectObjects().get(0).getTarget(),
-                "demo:frostbrand effects should have demo:knight as a target after updating"
+
+        event = events.get(0);
+        assertEquals("std_items:longsword_melee", event.getId(),
+                "first event should be a melee longsword strike"
+        );
+        expected = """
+                ["melee","longsword","metal","martial_melee","versatile"]""";
+        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+                "subevent attack tags should include item tags when not improvised"
+        );
+
+        event = events.get(1);
+        assertEquals("std_items:improvised_thrown", event.getId(),
+                "first event should be an improvised thrown weapon attack"
+        );
+        expected = """
+                ["improvised"]""";
+        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+                "subevent attack tags should not include item tags when improvised"
+        );
+    }
+
+    @Test
+    @DisplayName("getMultiHandedEventObjects returns correct event objects")
+    void getMultiHandedEventObjects_returnsCorrectEventObjects() {
+        RPGLItem item = RPGLFactory.newItem("std_items:longsword");
+        String expected;
+
+        List<RPGLEvent> events = item.getMultiHandedEventObjects();
+        RPGLEvent event;
+        assertEquals(2, events.size(),
+                "longswords should provide 2 multiple-handed events"
+        );
+
+        event = events.get(0);
+        assertEquals("std_items:longsword_melee_versatile", event.getId(),
+                "first event should be a melee longsword strike (versatile)"
+        );
+        expected = """
+                ["melee","longsword","metal","martial_melee","versatile"]""";
+        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+                "subevent attack tags should include item tags when not improvised"
+        );
+
+        event = events.get(1);
+        assertEquals("std_items:improvised_thrown", event.getId(),
+                "first event should be an improvised thrown weapon attack"
+        );
+        expected = """
+                ["improvised"]""";
+        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+                "subevent attack tags should not include item tags when improvised"
+        );
+    }
+
+    @Test
+    @DisplayName("getSpecialEventObjects returns correct event objects")
+    void getSpecialEventObjects_returnsCorrectEventObjects() {
+        RPGLItem item = RPGLFactory.newItem("std_items:robe_of_stars");
+        String expected;
+
+        List<RPGLEvent> events = item.getSpecialEventObjects();
+        RPGLEvent event;
+        assertEquals(1, events.size(),
+                "robe of stars should provide 1 special event"
+        );
+
+        event = events.get(0);
+        assertEquals("std_items:robe_of_stars", event.getId(),
+                "first event should be a robe of stars attack"
+        );
+        expected = """
+                ["spell","magic_missile"]""";
+        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+                "subevent attack tags should match robe of stars event template tags"
         );
     }
 

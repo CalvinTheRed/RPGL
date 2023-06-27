@@ -63,7 +63,7 @@ public class RPGLObjectTest {
     @DisplayName("equipItem item not equipped (mainhand, item absent from inventory)")
     void equipItem_itemNotEquipped_mainhandItemAbsentFromInventory() {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        String daggerUuid = RPGLFactory.newItem("demo:dagger").getUuid();
+        String daggerUuid = RPGLFactory.newItem("std_items:dagger").getUuid();
         knight.equipItem(daggerUuid, "mainhand");
 
         assertNotEquals(daggerUuid, knight.getEquippedItems().getString("mainhand"),
@@ -75,7 +75,7 @@ public class RPGLObjectTest {
     @DisplayName("giveItem item added to inventory (item not already present)")
     void giveItem_itemAddedToInventory_itemNotAlreadyPresent() {
         RPGLObject knight = RPGLFactory.newObject("demo:knight");
-        String daggerUuid = RPGLFactory.newItem("demo:dagger").getUuid();
+        String daggerUuid = RPGLFactory.newItem("std_items:dagger").getUuid();
         knight.giveItem(daggerUuid);
 
         assertTrue(knight.getInventory().asList().contains(daggerUuid),
