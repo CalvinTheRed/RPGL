@@ -94,8 +94,8 @@ public class GrantDisadvantageTest {
     @Test
     @DisplayName("execute grants disadvantage to roll")
     void execute_grantsDisadvantageToRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

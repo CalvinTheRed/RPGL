@@ -92,8 +92,8 @@ public class RPGLEffectTest {
     @Test
     @DisplayName("executeFunctions executes correct functions")
     void executeFunctions_executesCorrectFunctions() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -120,8 +120,8 @@ public class RPGLEffectTest {
     @Test
     @DisplayName("evaluateConditions evaluates true as appropriate")
     void evaluateConditions_evaluatesTrueAsAppropriate() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -148,8 +148,8 @@ public class RPGLEffectTest {
     @Test
     @DisplayName("processSubevent executes functions")
     void processSubevent_executesFunctions() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

@@ -64,7 +64,7 @@ public class CalculateAbilityScoreTest {
     @Test
     @DisplayName("prepare sets base of calculation to template ability score")
     void prepare_setsBaseToTemplateAbilityScore() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -77,7 +77,7 @@ public class CalculateAbilityScoreTest {
         calculateAbilityScore.prepare(context);
 
         assertEquals(23, calculateAbilityScore.get(),
-                "base str score for std_objects:young_red_dragon should be 23 after prepare()"
+                "base str score for std:young_red_dragon should be 23 after prepare()"
         );
     }
 

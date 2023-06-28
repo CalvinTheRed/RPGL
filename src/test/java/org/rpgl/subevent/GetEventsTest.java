@@ -64,7 +64,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("getEvents is empty by default")
     void getEvents_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -80,7 +80,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("getTags returns all granted event IDs")
     void getEvents_returnsAllGrantedEventIds() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -88,11 +88,11 @@ public class GetEventsTest {
         getEvents.setSource(object);
         getEvents.prepare(context);
 
-        getEvents.addEvent("demo:test_1");
-        getEvents.addEvent("demo:test_2");
+        getEvents.addEvent("std:test_1");
+        getEvents.addEvent("std:test_2");
 
         String expected = """
-                ["demo:test_1","demo:test_2"]""";
+                ["std:test_1","std:test_2"]""";
         assertEquals(expected, getEvents.getEvents().toString(),
                 "getEvents should return all event IDs which were granted to the subevent"
         );

@@ -66,15 +66,15 @@ public class GiveEffectTest {
     @Test
     @DisplayName("invoke gives effect")
     void invoke_givesEffect() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         GiveEffect giveEffect = new GiveEffect();
         giveEffect.joinSubeventData(new JsonObject() {{
-            this.putString("effect", "std_effects:fire_immunity");
+            this.putString("effect", "std:fire_immunity");
         }});
         giveEffect.setSource(source);
         giveEffect.prepare(context);
@@ -85,7 +85,7 @@ public class GiveEffectTest {
         assertEquals(1, effects.size(),
                 "commoner should have 1 effect after the subevent is invoked"
         );
-        assertEquals("std_effects:fire_immunity", effects.get(0).getId(),
+        assertEquals("std:fire_immunity", effects.get(0).getId(),
                 "the commoner's subevent should match the effect specified in the subevent json"
         );
     }

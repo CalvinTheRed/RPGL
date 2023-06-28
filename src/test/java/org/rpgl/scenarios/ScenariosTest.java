@@ -49,9 +49,9 @@ public class ScenariosTest {
     @Test
     @DisplayName("flametongue test")
     void flametongueTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
         RPGLObject target = RPGLFactory.newObject("bugtest:dummy");
-        RPGLItem flametongue = RPGLFactory.newItem("std_items:flametongue_scimitar");
+        RPGLItem flametongue = RPGLFactory.newItem("std:flametongue_scimitar");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -59,7 +59,7 @@ public class ScenariosTest {
         source.giveItem(flametongue.getUuid());
         source.equipItem(flametongue.getUuid(), "mainhand");
 
-        RPGLEvent flametongueAttack = TestUtils.getEventById(source.getEventObjects(context), "std_items:scimitar_melee");
+        RPGLEvent flametongueAttack = TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee");
         assertNotNull(flametongueAttack);
 
 //        source.invokeEvent(
@@ -68,7 +68,7 @@ public class ScenariosTest {
 //                },
 //                flametongueAttack,
 //                new ArrayList<>() {{
-//                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std_resources:action"));
+//                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
 //                }},
 //                context
 //        );

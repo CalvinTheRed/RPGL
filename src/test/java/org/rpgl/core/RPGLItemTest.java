@@ -42,16 +42,16 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getEquippedEffectsObjects returns correct effects as objects")
     void getEquippedEffectObjects_returnsCorrectEffectsAsObjects() {
-        RPGLItem item = RPGLFactory.newItem("std_items:frostbrand");
+        RPGLItem item = RPGLFactory.newItem("std:frostbrand");
 
         List<RPGLEffect> equippedEffects = item.getEquippedEffectsObjects();
         assertEquals(2, equippedEffects.size(),
                 "2 effects should be present"
         );
-        assertEquals("std_effects:cold_resistance", equippedEffects.get(0).getId(),
+        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
                 "First effect should be std:cold_resistance"
         );
-        assertEquals("std_effects:fire_resistance", equippedEffects.get(1).getId(),
+        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
                 "Second effect should be std:fire_resistance"
         );
     }
@@ -59,7 +59,7 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getOneHandedEventObjects returns correct event objects")
     void getOneHandedEventObjects_returnsCorrectEventObjects() {
-        RPGLItem item = RPGLFactory.newItem("std_items:longsword");
+        RPGLItem item = RPGLFactory.newItem("std:longsword");
         String expected;
 
         List<RPGLEvent> events = item.getOneHandedEventObjects();
@@ -69,7 +69,7 @@ public class RPGLItemTest {
         );
 
         event = events.get(0);
-        assertEquals("std_items:longsword_melee", event.getId(),
+        assertEquals("std:longsword_melee", event.getId(),
                 "first event should be a melee longsword strike"
         );
         expected = """
@@ -79,7 +79,7 @@ public class RPGLItemTest {
         );
 
         event = events.get(1);
-        assertEquals("std_items:improvised_thrown", event.getId(),
+        assertEquals("std:improvised_thrown", event.getId(),
                 "first event should be an improvised thrown weapon attack"
         );
         expected = """
@@ -92,7 +92,7 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getMultiHandedEventObjects returns correct event objects")
     void getMultiHandedEventObjects_returnsCorrectEventObjects() {
-        RPGLItem item = RPGLFactory.newItem("std_items:longsword");
+        RPGLItem item = RPGLFactory.newItem("std:longsword");
         String expected;
 
         List<RPGLEvent> events = item.getMultiHandedEventObjects();
@@ -102,7 +102,7 @@ public class RPGLItemTest {
         );
 
         event = events.get(0);
-        assertEquals("std_items:longsword_melee_versatile", event.getId(),
+        assertEquals("std:longsword_melee_versatile", event.getId(),
                 "first event should be a melee longsword strike (versatile)"
         );
         expected = """
@@ -112,7 +112,7 @@ public class RPGLItemTest {
         );
 
         event = events.get(1);
-        assertEquals("std_items:improvised_thrown", event.getId(),
+        assertEquals("std:improvised_thrown", event.getId(),
                 "first event should be an improvised thrown weapon attack"
         );
         expected = """
@@ -125,7 +125,7 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getSpecialEventObjects returns correct event objects")
     void getSpecialEventObjects_returnsCorrectEventObjects() {
-        RPGLItem item = RPGLFactory.newItem("std_items:robe_of_stars");
+        RPGLItem item = RPGLFactory.newItem("std:robe_of_stars");
         String expected;
 
         List<RPGLEvent> events = item.getSpecialEventObjects();
@@ -135,7 +135,7 @@ public class RPGLItemTest {
         );
 
         event = events.get(0);
-        assertEquals("std_items:robe_of_stars", event.getId(),
+        assertEquals("std:robe_of_stars", event.getId(),
                 "first event should be a robe of stars attack"
         );
         expected = """

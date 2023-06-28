@@ -70,8 +70,8 @@ public class IsObjectsTurnTest {
     @Test
     @DisplayName("evaluate returns true when it is object's turn")
     void evaluate_returnsTrueWhenObjectsTurn() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -105,8 +105,8 @@ public class IsObjectsTurnTest {
     @Test
     @DisplayName("evaluate returns true when it is object's turn")
     void evaluate_returnsFalseWhenNotObjectsTurn() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

@@ -157,7 +157,7 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("prepare sets default values")
     void prepare_setsDefaultValues() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -175,7 +175,7 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (range)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -212,7 +212,7 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (modifier)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -257,7 +257,7 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (ability)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -302,7 +302,7 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (proficiency)")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 

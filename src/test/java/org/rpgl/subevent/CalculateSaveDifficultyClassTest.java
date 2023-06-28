@@ -64,7 +64,7 @@ public class CalculateSaveDifficultyClassTest {
     @Test
     @DisplayName("prepare calculates DC 17 (young red dragon, Constitution save DC)")
     void prepare_calculatesSeventeen_youngRedDragonConstitutionSaveDC() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
         DummyContext context = new DummyContext();
         context.add(source);
 

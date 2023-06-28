@@ -96,7 +96,7 @@ public class AttackRollTest {
     @Test
     @DisplayName("applyWeaponAttackBonus adds bonus to roll (longsword +1)")
     void applyWeaponAttackBonus_addsBonusToRoll_longswordPlusOne() {
-        RPGLItem item = RPGLFactory.newItem("demo:longsword_plus_one");
+        RPGLItem item = RPGLFactory.newItem("std:longsword_plus_one");
         attackRoll.applyWeaponAttackBonus(item);
 
         assertEquals(1, attackRoll.getBonus(),
@@ -131,8 +131,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns true (base roll of 20)")
     void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -151,8 +151,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns false (base roll below 20)")
     void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -171,8 +171,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on hit)")
     void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -204,8 +204,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on miss)")
     void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -237,8 +237,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("deliverDamage object loses health")
     void deliverDamage_objectLosesHealth() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -280,8 +280,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveDamage deals damage")
     void resolveDamage_dealsDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -311,8 +311,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getTargetArmorClass calculate 20 armor class")
     void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -328,8 +328,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepareItemWeaponAttack stores weapon damage and applies modifier bonus to attack roll")
     void prepareItemWeapon_storesWeaponDamageFormulaAndAppliesModifierBonusToAttackRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -354,8 +354,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepareNaturalWeaponAttack stores weapon damage formula and weapon UUID and applies modifier bonus to attack roll")
     void prepareNaturalWeapon_storesWeaponDamageFormulaAndWeaponUUIDAndAppliesModifierBonusToAttackRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -365,7 +365,7 @@ public class AttackRollTest {
         }});
 
         attackRoll.setSource(source);
-        attackRoll.prepareNaturalWeapon("std_objects:young_red_dragon_bite", context);
+        attackRoll.prepareNaturalWeapon("std:young_red_dragon_bite", context);
 
         String expected = """
                 [{"bonus":0,"damage_formula":"range","damage_type":"piercing","dice":[{"count":2,"determined":[5],"size":10}]},{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":1,"determined":[3],"size":6}]}]""";
@@ -383,8 +383,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepareAttackWithoutWeapon stores damage formula and applies modifier bonus to attack roll")
     void prepareNoWeapon_storesDamageFormulaAndAppliesModifierBonusToAttackRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -440,8 +440,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamageCollection collects correct damage (item weapon)")
     void getBaseDamageCollection_collectsCorrectDamage_itemWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -465,15 +465,15 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamageCollection collects correct damage (natural weapon)")
     void getBaseDamageCollection_collectsCorrectDamage_naturalWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
             this.putString("attack_type", "melee");
-            this.putString("weapon", "std_objects:young_red_dragon_bite");
+            this.putString("weapon", "std:young_red_dragon_bite");
         }});
 
         attackRoll.setSource(source);
@@ -490,8 +490,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamageCollection collects correct damage (no weapon)")
     void getBaseDamageCollection_collectsCorrectDamage_noWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -545,8 +545,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare stores weapon damage and stores weapon UUID (item weapon)")
     void prepare_storesWeaponDamageAndStoresWeaponUUID_itemWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -572,14 +572,14 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare stores weapon damage and stores weapon UUID (natural weapon)")
     void prepare_storesWeaponDamageAndStoresWeaponUUID_naturalWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "std_objects:young_red_dragon_bite");
+            this.putString("weapon", "std:young_red_dragon_bite");
             this.putString("attack_type", "melee");
         }});
 
@@ -602,8 +602,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare stores damage (no weapon)")
     void prepare_storesDamage_noWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -659,8 +659,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke stores weapon damage (hit)")
     void invoke_storesWeaponDamage_hit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -686,8 +686,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke stores weapon damage (critical hit)")
     void invoke_storesWeaponDamage_criticalHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -712,8 +712,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke stores weapon damage (miss)")
     void invoke_storesWeaponDamage_miss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -739,14 +739,14 @@ public class AttackRollTest {
     @Test
     @DisplayName("invoke natural weapons do not persist after subevent")
     void invoke_naturalWeaponDoesNotPersist() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "std_objects:young_red_dragon_bite");
+            this.putString("weapon", "std:young_red_dragon_bite");
             this.putString("attack_type", "melee");
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(10);
@@ -767,8 +767,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare adds correct tags to attack roll (item weapon attack)")
     void prepare_addsCorrectTagsToAttackRoll_itemWeaponAttack() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -795,18 +795,18 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare adds correct tags to attack roll (natural weapon attack)")
     void prepare_addsCorrectTagsToAttackRoll_naturalWeaponAttack() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "weapon": "std_objects:young_red_dragon_claw",
+                "weapon": "std:young_red_dragon_claw",
                 "attack_type": "melee",
             }*/
-            this.putString("weapon", "std_objects:young_red_dragon_claw");
+            this.putString("weapon", "std:young_red_dragon_claw");
             this.putString("attack_type", "melee");
         }});
 
@@ -823,8 +823,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (modifier)")
     void getBaseDamage_calculatesCorrectDamage_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -875,8 +875,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (ability)")
     void getBaseDamage_calculatesCorrectDamage_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -927,8 +927,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (proficiency)")
     void getBaseDamage_calculatesCorrectDamage_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

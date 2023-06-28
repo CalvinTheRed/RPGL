@@ -70,8 +70,8 @@ public class SetHealingDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute sets all dice at or below two to three")
     void execute_setsAllDiceAtOrBelowTwoToThree() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

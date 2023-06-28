@@ -69,8 +69,8 @@ public class GiveResourceTest {
     @Test
     @DisplayName("invoke gives one resource of potency one when no count or potency specified")
     void invoke_givesOneResourceOfPotencyOneWhenNoCountOrPotencySpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -78,9 +78,9 @@ public class GiveResourceTest {
         GiveResource giveResource = new GiveResource();
         giveResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"demo:necrotic_husk"
+                "resource":"std:necrotic_husk"
             }*/
-            this.putString("resource", "demo:necrotic_husk");
+            this.putString("resource", "std:necrotic_husk");
         }});
         giveResource.setSource(source);
         giveResource.setTarget(target);
@@ -90,7 +90,7 @@ public class GiveResourceTest {
         assertEquals(1, target.getResourceObjects().size(),
                 "target should be given one resource"
         );
-        assertEquals("demo:necrotic_husk", target.getResourceObjects().get(0).getId(),
+        assertEquals("std:necrotic_husk", target.getResourceObjects().get(0).getId(),
                 "resource should be the correct type"
         );
         assertEquals(1, target.getResourceObjects().get(0).getPotency(),
@@ -107,8 +107,8 @@ public class GiveResourceTest {
     @Test
     @DisplayName("invoke gives correct number of resources with correct potency when specified")
     void invoke_givesCorrectNumberOfResourcesWithCorrectPotencyWhenSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -116,11 +116,11 @@ public class GiveResourceTest {
         GiveResource giveResource = new GiveResource();
         giveResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"demo:necrotic_husk",
+                "resource":"std:necrotic_husk",
                 "count": 2,
                 "potency": 5
             }*/
-            this.putString("resource", "demo:necrotic_husk");
+            this.putString("resource", "std:necrotic_husk");
             this.putInteger("count", 2);
             this.putInteger("potency", 5);
         }});
@@ -136,7 +136,7 @@ public class GiveResourceTest {
             assertEquals(5, resource.getPotency(),
                     "resource should have potency of 5"
             );
-            assertEquals("demo:necrotic_husk", resource.getId(),
+            assertEquals("std:necrotic_husk", resource.getId(),
                     "resource should be the correct type"
             );
             assertTrue(resource.hasTag("temporary"),

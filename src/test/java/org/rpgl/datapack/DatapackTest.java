@@ -44,9 +44,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLEffect templates can be loaded")
     void rpglEffectTemplate_loadsDatapackContent() {
-        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std_effects").getEffectTemplate("fire_immunity");
+        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std").getEffectTemplate("fire_immunity");
         assertNotNull(effectTemplate,
-                "Effect template demo:fire_immunity failed to load."
+                "Effect template std:fire_immunity failed to load."
         );
 
         String expected;
@@ -99,9 +99,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLEvent templates can be loaded")
     void rpglEventTemplate_loadsDatapackContent() {
-        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std_objects").getEventTemplate("young_red_dragon_fire_breath");
+        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std").getEventTemplate("young_red_dragon_fire_breath");
         assertNotNull(eventTemplate,
-                "Event template std_objects:young_red_dragon_fire_breath failed to load."
+                "Event template std:young_red_dragon_fire_breath failed to load."
         );
 
         String expected;
@@ -162,7 +162,7 @@ public class DatapackTest {
 //    void rpglItemTemplate_loadsDatapackContent_meleeWeapon() {
 //        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("longsword");
 //        assertNotNull(itemTemplate,
-//                "Event template demo:longsword failed to load."
+//                "Event template std:longsword failed to load."
 //        );
 //
 //        String expected;
@@ -296,7 +296,7 @@ public class DatapackTest {
 //    void rpglItemTemplate_loadsDatapackContent_rangedWeapon() {
 //        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("heavy_crossbow");
 //        assertNotNull(itemTemplate,
-//                "Event template demo:heavy_crossbow failed to load."
+//                "Event template std:heavy_crossbow failed to load."
 //        );
 //
 //        String expected;
@@ -432,7 +432,7 @@ public class DatapackTest {
 //    void rpglItemTemplate_loadsDatapackContent_armor() {
 //        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("breastplate_armor");
 //        assertNotNull(itemTemplate,
-//                "Event template demo:breastplate_armor failed to load."
+//                "Event template std:breastplate_armor failed to load."
 //        );
 //
 //        String expected;
@@ -540,7 +540,7 @@ public class DatapackTest {
 //    void rpglItemTemplate_loadsDatapackContent_shield() {
 //        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("metal_shield");
 //        assertNotNull(itemTemplate,
-//                "Event template demo:metal_shield failed to load."
+//                "Event template std:metal_shield failed to load."
 //        );
 //
 //        String expected;
@@ -643,9 +643,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLObject templates can be loaded")
     void rpglObjectTemplate_loadsDatapackContent() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std_objects").getObjectTemplate("young_red_dragon");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("young_red_dragon");
         assertNotNull(objectTemplate,
-                "Object template std_objects:young_red_dragon failed to load."
+                "Object template std:young_red_dragon failed to load."
         );
 
         String expected;
@@ -723,12 +723,12 @@ public class DatapackTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["std_objects:young_red_dragon_fire_breath"]""";
+                ["std:young_red_dragon_fire_breath"]""";
         assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
         expected = """
-                ["std_effects:fire_immunity"]""";
+                ["std:fire_immunity"]""";
         assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
         );

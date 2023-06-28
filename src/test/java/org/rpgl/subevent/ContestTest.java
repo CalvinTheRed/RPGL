@@ -65,8 +65,8 @@ public class ContestTest {
     @Test
     @DisplayName("resolveNestedSubevents subevents resolved correctly (source wins)")
     void resolveNestedSubevents_subeventsResolvedCorrectly_sourceWins() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -102,8 +102,8 @@ public class ContestTest {
     @Test
     @DisplayName("resolveNestedSubevents subevents resolved correctly (target wins)")
     void resolveNestedSubevents_subeventsResolvedCorrectly_targetWins() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -139,8 +139,8 @@ public class ContestTest {
     @Test
     @DisplayName("getTargetResultAsAbilityCheck returns correct calculation")
     void getTargetResultAsAbilityCheck_returnsCorrectCalculation() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -181,8 +181,8 @@ public class ContestTest {
     @Test
     @DisplayName("getTargetResultAsSaveDifficultyClass returns correct calculation")
     void getTargetResultAsSaveDifficultyClass_returnsCorrectCalculation() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -218,8 +218,8 @@ public class ContestTest {
     @Test
     @DisplayName("getTargetResult returns correct calculation (ability check)")
     void getTargetResult_returnsCorrectCalculation_abilityCheck() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -254,8 +254,8 @@ public class ContestTest {
     @Test
     @DisplayName("getTargetResult returns correct calculation (save difficulty class)")
     void getTargetResult_returnsCorrectCalculation_saveDifficultyClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -286,8 +286,8 @@ public class ContestTest {
     @Test
     @DisplayName("getTargetResult returns correct calculation (static value)")
     void getTargetResult_returnsCorrectCalculation_staticValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -312,8 +312,8 @@ public class ContestTest {
     @Test
     @DisplayName("getSourceResult returns correct calculation")
     void getSourceResult_returnsCorrectCalculation() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -350,8 +350,8 @@ public class ContestTest {
     @Test
     @DisplayName("prepare  set must_exceed_target false (static value target)")
     void prepare_setsMustExceedTargetFalse_staticValueTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -375,8 +375,8 @@ public class ContestTest {
     @Test
     @DisplayName("prepare sets must_exceed_target false (save difficulty class target)")
     void prepare_setsMustExceedTargetFalse_saveDifficultyClassTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -406,8 +406,8 @@ public class ContestTest {
     @Test
     @DisplayName("prepare sets must_exceed_target true (ability check target)")
     void prepare_setsMustExceedTargetTrue_abilityCheckTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -437,8 +437,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke resolves source_wins subevents (ability check target)")
     void invoke_resolvesSourceWinsSubevents_abilityCheckTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -500,8 +500,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke resolves target_wins subevents (ability check target)")
     void invoke_resolvesTargetWinsSubevents_abilityCheckTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -563,8 +563,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke resolves source_wins subevents (save difficulty class target)")
     void invoke_resolvesSourceWinsSubevents_saveDifficultyClassTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -622,8 +622,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke resolves target_wins subevents (save difficulty class target)")
     void invoke_resolvesTargetWinsSubevents_saveDifficultyClassTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -681,8 +681,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke resolves source_wins subevents (static value target)")
     void invoke_resolvesSourceWinsSubevents_staticValueTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -734,8 +734,8 @@ public class ContestTest {
     @Test
     @DisplayName("invoke resolves target_wins subevents (static value target)")
     void invoke_resolvesTargetWinsSubevents_staticValueTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

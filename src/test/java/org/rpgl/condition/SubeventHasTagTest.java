@@ -70,8 +70,8 @@ public class SubeventHasTagTest {
     @Test
     @DisplayName("evaluate returns true when subevent has desired tag")
     void evaluate_returnsTrueWhenSubeventHasDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -99,8 +99,8 @@ public class SubeventHasTagTest {
     @Test
     @DisplayName("evaluate returns false when subevent does not have desired tag")
     void evaluate_returnsTrueWhenSubeventDoesNotHaveDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

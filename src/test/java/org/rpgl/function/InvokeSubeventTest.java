@@ -70,13 +70,13 @@ public class InvokeSubeventTest {
     @Test
     @DisplayName("InvokeSubevent works using example effect (motivational speech effect passive and active)")
     void invokeSubeventWorksUsingExampleEffect_motivationalSpeechEffectPassiveAndActive() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
-        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        RPGLEffect motivationalSpeechEffectPassive = RPGLFactory.newEffect("demo:motivational_speech_effect_passive");
+        RPGLEffect motivationalSpeechEffectPassive = RPGLFactory.newEffect("std:motivational_speech_effect_passive");
         motivationalSpeechEffectPassive.setSource(target);
         motivationalSpeechEffectPassive.setTarget(target);
         target.addEffect(motivationalSpeechEffectPassive);
@@ -87,7 +87,7 @@ public class InvokeSubeventTest {
 
         source.invokeEvent(
                 new RPGLObject[] { target },
-                RPGLFactory.newEvent("std_items:longsword_melee"),
+                RPGLFactory.newEvent("std:longsword_melee"),
                 new ArrayList<>(),
                 context
         );

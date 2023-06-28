@@ -45,7 +45,7 @@ public class RPGLItemTemplateTest {
     @Test
     @DisplayName("processEquippedEffects processes effects correctly")
     void processEquippedEffects_processesEffectsCorrectly() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std_items").getItemTemplate("frostbrand");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
 
@@ -56,10 +56,10 @@ public class RPGLItemTemplateTest {
                 "2 effects should be created"
         );
 
-        assertEquals("std_effects:cold_resistance", equippedEffects.get(0).getId(),
+        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
                 "First effect should be std:cold_resistance"
         );
-        assertEquals("std_effects:fire_resistance", equippedEffects.get(1).getId(),
+        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
                 "Second effect should be std:fire_resistance"
         );
     }
@@ -67,7 +67,7 @@ public class RPGLItemTemplateTest {
     @Test
     @DisplayName("newInstance correctly creates frostbrand from template")
     void newInstance_correctlyCreatesFrostbrandFromTemplate() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std_items").getItemTemplate("frostbrand");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
         RPGLItem item = itemTemplate.newInstance();
         String expected;
 
@@ -96,7 +96,7 @@ public class RPGLItemTemplateTest {
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
         expected = """
-                {"multiple_hands":["std_items:frostbrand_melee","std_items:frostbrand_melee_finesse","std_items:improvised_thrown"],"one_hand":["std_items:frostbrand_melee","std_items:frostbrand_melee_finesse","std_items:improvised_thrown"],"special":[]}""";
+                {"multiple_hands":["std:frostbrand_melee","std:frostbrand_melee_finesse","std:improvised_thrown"],"one_hand":["std:frostbrand_melee","std:frostbrand_melee_finesse","std:improvised_thrown"],"special":[]}""";
         assertEquals(expected, item.getEvents().toString(),
                 "incorrect field value: " + RPGLItemTO.EVENTS_ALIAS
         );
@@ -105,10 +105,10 @@ public class RPGLItemTemplateTest {
         assertEquals(2, equippedEffects.size(),
                 "2 effects should be created"
         );
-        assertEquals("std_effects:cold_resistance", equippedEffects.get(0).getId(),
+        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
                 "First effect should be std:cold_resistance"
         );
-        assertEquals("std_effects:fire_resistance", equippedEffects.get(1).getId(),
+        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
                 "Second effect should be std:fire_resistance"
         );
 
