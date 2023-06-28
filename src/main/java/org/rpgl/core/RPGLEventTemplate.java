@@ -16,10 +16,15 @@ public class RPGLEventTemplate extends JsonObject {
      *
      * @return a new RPGLEvent object
      */
-    public RPGLEvent newInstance() {
+    public RPGLEvent newInstance(String originItem) {
         RPGLEvent event = new RPGLEvent();
         event.join(this);
+        event.setOriginItem(originItem);
         return event;
+    }
+
+    public RPGLEvent newInstance() {
+        return this.newInstance(null);
     }
 
 }

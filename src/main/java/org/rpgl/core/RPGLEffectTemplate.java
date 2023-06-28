@@ -17,11 +17,16 @@ public class RPGLEffectTemplate extends JsonObject {
      *
      * @return a new RPGLEffect object
      */
-    public RPGLEffect newInstance() {
+    public RPGLEffect newInstance(String originItem) {
         RPGLEffect effect = new RPGLEffect();
         effect.join(this);
+        effect.setOriginItem(originItem);
         UUIDTable.register(effect);
         return effect;
+    }
+
+    public RPGLEffect newInstance() {
+        return this.newInstance(null);
     }
 
 }

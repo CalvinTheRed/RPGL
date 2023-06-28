@@ -20,17 +20,21 @@ public final class RPGLFactory {
      * @param effectId an effect ID <code>(namespace:name)</code>
      * @return a new RPGLEffect object
      */
-    public static RPGLEffect newEffect(String effectId) {
+    public static RPGLEffect newEffect(String effectId, String originItem) {
         String[] effectIdSplit = effectId.split(":");
         try {
             return DatapackLoader.DATAPACKS
                     .get(effectIdSplit[0])
                     .getEffectTemplate(effectIdSplit[1])
-                    .newInstance();
+                    .newInstance(originItem);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEffect: " + effectId);
             throw new RuntimeException("Encountered an error building a new RPGLEffect", e);
         }
+    }
+
+    public static RPGLEffect newEffect(String effectId) {
+        return newEffect(effectId, null);
     }
 
     /**
@@ -39,17 +43,21 @@ public final class RPGLFactory {
      * @param eventId an event ID <code>(namespace:name)</code>
      * @return a new RPGLEvent object
      */
-    public static RPGLEvent newEvent(String eventId) {
+    public static RPGLEvent newEvent(String eventId, String originItem) {
         String[] eventIdSplit = eventId.split(":");
         try {
             return DatapackLoader.DATAPACKS
                     .get(eventIdSplit[0])
                     .getEventTemplate(eventIdSplit[1])
-                    .newInstance();
+                    .newInstance(originItem);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEvent: " + eventId);
             throw new RuntimeException("Encountered an error building a new RPGLEvent", e);
         }
+    }
+
+    public static RPGLEvent newEvent(String eventId) {
+        return newEvent(eventId, null);
     }
 
     /**
@@ -96,17 +104,21 @@ public final class RPGLFactory {
      * @param resourceId a resource ID <code>(namespace:name)</code>
      * @return a new RPGLResource object
      */
-    public static RPGLResource newResource(String resourceId) {
+    public static RPGLResource newResource(String resourceId, String originItem) {
         String[] resourceIdSplit = resourceId.split(":");
         try {
             return DatapackLoader.DATAPACKS
                     .get(resourceIdSplit[0])
                     .getResourceTemplate(resourceIdSplit[1])
-                    .newInstance();
+                    .newInstance(originItem);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLResource: " + resourceId);
             throw new RuntimeException("Encountered an error building a new RPGLResource", e);
         }
+    }
+
+    public static RPGLResource newResource(String resourceId) {
+        return newResource(resourceId, null);
     }
 
 }
