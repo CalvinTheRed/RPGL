@@ -69,8 +69,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("runLowFirst exhausts resources correctly (full count can be met)")
     void runLowFirst_exhaustsResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -118,8 +118,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("runLowFirst exhausts resources correctly (full count can not be met)")
     void runLowFirst_exhaustsResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -169,8 +169,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("runLowFirst exhausts resources correctly skipping exhausted resources")
     void runLowFirst_exhaustsResourcesCorrectlySkippingExhaustedResources() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -205,8 +205,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("runHighFirst exhausts resources correctly (full count can be met)")
     void runHighFirst_exhaustsResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -254,8 +254,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("runHighFirst exhausts resources correctly (full count can not be met)")
     void runHighFirst_exhaustsResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -308,8 +308,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("runHighFirst exhausts resources correctly skipping exhausted resources")
     void runHighFirst_exhaustsResourcesCorrectlySkippingExhaustedResources() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -346,8 +346,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("invoke exhausts resources correctly (low first)")
     void invoke_exhaustsResourcesCorrectly_lowFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -398,8 +398,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("invoke exhausts resources correctly (high first)")
     void invoke_exhaustsResourcesCorrectly_highFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -450,8 +450,8 @@ public class ExhaustResourceTest {
     @Test
     @DisplayName("invoke exhausts only matching resources")
     void invoke_exhaustsOnlyMatchingResources() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

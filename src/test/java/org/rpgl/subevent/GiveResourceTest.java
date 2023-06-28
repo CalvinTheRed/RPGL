@@ -69,8 +69,8 @@ public class GiveResourceTest {
     @Test
     @DisplayName("invoke gives one resource of potency one when no count or potency specified")
     void invoke_givesOneResourceOfPotencyOneWhenNoCountOrPotencySpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -107,8 +107,8 @@ public class GiveResourceTest {
     @Test
     @DisplayName("invoke gives correct number of resources with correct potency when specified")
     void invoke_givesCorrectNumberOfResourcesWithCorrectPotencyWhenSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

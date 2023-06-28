@@ -79,6 +79,24 @@ public class RPGLEffect extends UUIDTableElement {
         this.putString(RPGLEffectTO.TARGET_ALIAS, target.getUuid());
     }
 
+    /**
+     * Returns the origin item UUID for the RPGLEffect if it has one.
+     *
+     * @return an RPGLItem UUID, or null if the effect was not produced by an item.
+     */
+    public String getOriginItem() {
+        return this.getString(RPGLEffectTO.ORIGIN_ITEM_ALIAS);
+    }
+
+    /**
+     * Sets the origin item UUID of the RPGLEffect.
+     *
+     * @param originItem a RPGLItem UUID
+     */
+    public void setOriginItem(String originItem) {
+        this.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================

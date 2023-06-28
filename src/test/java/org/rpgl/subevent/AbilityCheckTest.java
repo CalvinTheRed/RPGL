@@ -69,8 +69,8 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("prepare adds ability_check tag")
     void prepare_addsAbilityCheckTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -94,8 +94,8 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("invoke adds relevant bonuses (no proficiency)")
     void invoke_addsRelevantBonuses_noProficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std_objects:knight");
+        RPGLObject target = RPGLFactory.newObject("std_objects:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

@@ -69,8 +69,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can be met)")
     void runLowFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -119,8 +119,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can not be met)")
     void runLowFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -171,8 +171,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly skipping refreshed resources")
     void runLowFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -209,8 +209,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can be met)")
     void runHighFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -259,8 +259,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can not be met)")
     void runHighFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -314,8 +314,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly skipping refreshed resources")
     void runHighFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("demo:spell_slot");
@@ -352,8 +352,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes resources correctly (low first)")
     void invoke_refreshesResourcesCorrectly_lowFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -405,8 +405,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes resources correctly (high first)")
     void invoke_refreshesResourcesCorrectly_highFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -458,8 +458,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes only matching resources")
     void invoke_refreshesOnlyMatchingResources() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

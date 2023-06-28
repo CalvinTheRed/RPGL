@@ -165,8 +165,8 @@ public class SetDamageDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute sets all dice at or below two to three (fire only)")
     void execute_setsAllDiceAtOrBelowTwoToThree_fireOnly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -201,8 +201,8 @@ public class SetDamageDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute sets all dice at or below two to three (all damage types)")
     void execute_setsAllDiceAtOrBelowTwoToThree_allDamageTypes() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

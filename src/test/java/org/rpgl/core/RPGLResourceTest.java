@@ -166,11 +166,11 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion resolves successfully for source actor")
     void checkCriterion_resolvesSuccessfullyForSourceActor() {
-        RPGLResource resource = RPGLFactory.newResource("demo:action");
+        RPGLResource resource = RPGLFactory.newResource("std_resources:action");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -189,13 +189,13 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion resolves successfully for target actor")
     void checkCriterion_resolvesSuccessfullyForTargetActor() {
-        RPGLResource resource = RPGLFactory.newResource("demo:action");
+        RPGLResource resource = RPGLFactory.newResource("std_resources:action");
         resource.exhaust();
         // manually edit resource criterion for testing
         resource.getRefreshCriterion().getJsonObject(0).putString("actor", "target");
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -216,8 +216,8 @@ public class RPGLResourceTest {
     void processSubevent_doesNothingWhenResourceNotExhausted() {
         RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -238,8 +238,8 @@ public class RPGLResourceTest {
         RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();

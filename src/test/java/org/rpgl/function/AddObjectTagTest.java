@@ -69,7 +69,7 @@ public class AddObjectTagTest {
     @Test
     @DisplayName("execute adds object tag to subevent")
     void execute_addsObjectTagToSubevent() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLObject object = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 

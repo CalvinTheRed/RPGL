@@ -26,21 +26,19 @@
   "equipped_items": { },
   "inventory": [ ],
   "events": [
-    "demo:young_red_dragon_bite_attack",
-    "demo:young_red_dragon_claw_attack",
-    "demo:young_red_dragon_fire_breath"
+    "std_objects:young_red_dragon_fire_breath"
   ],
   "effects": [
-    "demo:fire_immunity"
+    "std_effects:fire_immunity"
   ],
   "resources": [
     {
-      "resource": "demo:action",
+      "resource": "std_resources:action",
       "count": 1,
       "potency": 1
     },
     {
-      "resource": "demo:young_red_dragon_breath_charge",
+      "resource": "std_objects:young_red_dragon_breath_charge",
       "count": 1,
       "potency": 1
     }

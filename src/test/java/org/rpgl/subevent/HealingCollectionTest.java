@@ -157,7 +157,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepare sets default values")
     void prepare_setsDefaultValues() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -175,7 +175,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (range)")
     void prepareHealing_interpretsHealing_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -212,7 +212,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (modifier)")
     void prepareHealing_interpretsHealing_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -257,7 +257,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (ability)")
     void prepareHealing_interpretsHealing_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -302,7 +302,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (proficiency)")
     void prepareHealing_interpretsHealing_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 

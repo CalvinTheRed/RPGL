@@ -70,8 +70,8 @@ public class RerollHealingDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute re-rolls all dice at or below two")
     void execute_rerollsAllDiceAtOrBelowTwo() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

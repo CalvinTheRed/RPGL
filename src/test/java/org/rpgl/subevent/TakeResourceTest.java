@@ -67,8 +67,8 @@ public class TakeResourceTest {
     @Test
     @DisplayName("invoke only takes resources with temporary tag")
     void invoke_onlyTakesResourcesWithTemporaryTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -103,8 +103,8 @@ public class TakeResourceTest {
     @Test
     @DisplayName("invoke removes all matching resources when no count specified")
     void invoke_removesAllMatchingResourcesWhenNoCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -135,8 +135,8 @@ public class TakeResourceTest {
     @Test
     @DisplayName("invoke removes correct number of resources when count specified")
     void invoke_removesCorrectNumberOfResourcesWhenCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

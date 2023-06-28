@@ -64,7 +64,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("getEvents is empty by default")
     void getEvents_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLObject object = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -80,7 +80,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("getTags returns all granted event IDs")
     void getEvents_returnsAllGrantedEventIds() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLObject object = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 

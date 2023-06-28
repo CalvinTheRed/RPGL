@@ -25,6 +25,7 @@ public class InvokeSubevent extends Function {
         JsonArray targets = functionJson.getJsonArray("targets");
         JsonObject nestedSubeventJson = functionJson.getJsonObject("subevent");
         Subevent nestedSubevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);
+        nestedSubevent.setOriginItem(subevent.getOriginItem());
         nestedSubevent.setSource(source);
         nestedSubevent.prepare(context);
         for (int i = 0; i < targets.size(); i++) {

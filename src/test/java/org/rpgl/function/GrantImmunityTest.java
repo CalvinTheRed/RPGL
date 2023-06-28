@@ -70,8 +70,8 @@ public class GrantImmunityTest {
     @Test
     @DisplayName("execute grants immunity to a specific damage type")
     void execute_grantsImmunity_specificDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -109,8 +109,8 @@ public class GrantImmunityTest {
     @Test
     @DisplayName("execute grants immunity to all damage types with unlisted damage type")
     void execute_grantsImmunityToAllDamageTypes_unlistedDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

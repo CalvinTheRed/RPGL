@@ -70,8 +70,8 @@ public class CheckAbilityTest {
     @Test
     @DisplayName("evaluate returns true when Subevent uses indicated ability")
     void evaluate_returnsTrueWhenSubeventUsesIndicatedAbility() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -98,8 +98,8 @@ public class CheckAbilityTest {
     @Test
     @DisplayName("evaluate returns false when Subevent does not use indicated ability")
     void evaluate_returnsFalseWhenSubeventDoesNotUseIndicatedAbility() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

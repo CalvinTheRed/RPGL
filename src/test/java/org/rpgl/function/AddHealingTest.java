@@ -71,8 +71,8 @@ public class AddHealingTest {
     @Test
     @DisplayName("execute adds healing to subevent (range)")
     void execute_addsHealingToSubevent_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -129,8 +129,8 @@ public class AddHealingTest {
     @Test
     @DisplayName("execute adds healing to subevent (modifier)")
     void execute_addsHealingToSubevent_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -185,8 +185,8 @@ public class AddHealingTest {
     @Test
     @DisplayName("execute adds healing to subevent (ability)")
     void execute_addsHealingToSubevent_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -241,8 +241,8 @@ public class AddHealingTest {
     @Test
     @DisplayName("execute adds healing to subevent (proficiency)")
     void execute_addsHealingToSubevent_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

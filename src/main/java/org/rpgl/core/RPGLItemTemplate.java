@@ -7,7 +7,6 @@ import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * This class is used to contain a "template" to be used in the creation of new RPGLItem objects. Data stored in this
@@ -32,8 +31,10 @@ public class RPGLItemTemplate extends JsonObject {
         item.asMap().putIfAbsent(RPGLItemTO.COST_ALIAS, 0);
         item.asMap().putIfAbsent(RPGLItemTO.EVENTS_ALIAS, new HashMap<String, Object>());
         item.asMap().putIfAbsent(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, new ArrayList<>());
+        item.asMap().putIfAbsent(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, new ArrayList<>());
         processEvents(item);
         processEquippedEffects(item);
+        processEquippedResources(item);
         UUIDTable.register(item);
         return item;
     }
@@ -45,20 +46,37 @@ public class RPGLItemTemplate extends JsonObject {
     }
 
     /**
-     * This helper method converts effectId's in an RPGLItemTemplate's while_equipped array to RPGLEffects. The UUID's
+     * This helper method converts effectId's in an RPGLItemTemplate's equipped_effects array to RPGLEffects. The UUID's
      * of these new RPGLEffects replace the original array contents.
      *
      * @param item a RPGLItem being created by this object
      */
     static void processEquippedEffects(RPGLItem item) {
-        JsonArray equippedEffectsIdArray = Objects.requireNonNullElse(item.removeJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS), new JsonArray());
+        JsonArray equippedEffectsIdArray = item.getEquippedEffects();
         JsonArray equippedEffectsUuidArray = new JsonArray();
         for (int i = 0; i < equippedEffectsIdArray.size(); i++) {
             String effectId = equippedEffectsIdArray.getString(i);
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
             equippedEffectsUuidArray.addString(effect.getUuid());
         }
-        item.putJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, equippedEffectsUuidArray);
+        item.setEquippedEffects(equippedEffectsUuidArray);
+    }
+
+    /**
+     * This helper method converts resourceId's in an RPGLItemTemplate's equipped_resources array to RPGLResources. The
+     * UUID's of these new RPGLResources replace the original array contents.
+     *
+     * @param item a RPGLItem being created by this object
+     */
+    static void processEquippedResources(RPGLItem item) {
+        JsonArray equippedResourcesIdArray = item.getEquippedResources();
+        JsonArray equippedResourcesUuidArray = new JsonArray();
+        for (int i = 0; i < equippedResourcesIdArray.size(); i++) {
+            String resourceId = equippedResourcesIdArray.getString(i);
+            RPGLResource resource = RPGLFactory.newResource(resourceId);
+            equippedResourcesUuidArray.addString(resource.getUuid());
+        }
+        item.setEquippedResources(equippedResourcesUuidArray);
     }
 
 }

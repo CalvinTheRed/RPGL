@@ -45,6 +45,7 @@ public abstract class Subevent {
     public static void initialize(boolean includeTestingSubevents) {
         Subevent.SUBEVENTS.clear();
 
+        Subevent.SUBEVENTS.put("add_origin_item_tag", new AddOriginItemTag());
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
         Subevent.SUBEVENTS.put("contest", new Contest());
         Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
@@ -269,6 +270,24 @@ public abstract class Subevent {
      */
     public String getSubeventId() {
         return this.subeventId;
+    }
+
+    /**
+     * Returns the origin item UUID for the Subevent if it has one.
+     *
+     * @return an RPGLItem UUID, or null if the subevent was not produced using an item.
+     */
+    public String getOriginItem() {
+        return this.json.getString("origin_item");
+    }
+
+    /**
+     * Sets the origin item UUID of the Subevent.
+     *
+     * @param originItem a RPGLItem UUID
+     */
+    public void setOriginItem(String originItem) {
+        this.json.putString("origin_item", originItem);
     }
 
     @Override

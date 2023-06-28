@@ -309,7 +309,7 @@ public class HealingRollTest {
     @Test
     @DisplayName("prepare healing dice are rolled")
     void prepare_healingDiceAreRolled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 

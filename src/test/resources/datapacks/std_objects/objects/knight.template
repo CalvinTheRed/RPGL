@@ -25,8 +25,8 @@
   },
   "equipped_items": {
     "mainhand": "std_items:longsword",
-    "offhand": "demo:metal_shield",
-    "armor": "demo:plate_armor"
+    "offhand": "std_items:metal_shield",
+    "armor": "std_items:plate_armor"
   },
   "inventory": [
     "std_items:heavy_crossbow"
@@ -36,6 +36,18 @@
   ],
   "effects": [
 
+  ],
+  "resources": [
+    {
+      "resource": "std_resources:action",
+      "count": 1,
+      "potency": 1
+    },
+    {
+      "resource": "std_resources:action",
+      "count": 1,
+      "potency": 1
+    }
   ],
   "proficiency_bonus": 2
 }

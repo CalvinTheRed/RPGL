@@ -70,8 +70,8 @@ public class RevokeImmunityTest {
     @Test
     @DisplayName("execute revokes immunity for single damage type")
     void execute_revokesImmunityForSingleDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -111,8 +111,8 @@ public class RevokeImmunityTest {
     @Test
     @DisplayName("execute revokes immunity for all damage types")
     void execute_revokesImmunityForAllDamageTypes() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std_objects:commoner");
+        RPGLObject target = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

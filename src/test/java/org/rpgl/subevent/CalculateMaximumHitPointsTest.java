@@ -64,7 +64,7 @@ public class CalculateMaximumHitPointsTest {
     @Test
     @DisplayName("prepare calculates correct default hit point maximum")
     void prepare_calculatesCorrectDefaultHitPointMaximum() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
         DummyContext context = new DummyContext();
         context.add(source);
 

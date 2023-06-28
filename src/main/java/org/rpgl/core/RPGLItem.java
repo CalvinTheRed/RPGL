@@ -118,6 +118,14 @@ public class RPGLItem extends RPGLTaggable {
         this.putJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, equippedEffects);
     }
 
+    public JsonArray getEquippedResources() {
+        return Objects.requireNonNullElse(this.getJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS), new JsonArray());
+    }
+
+    public void setEquippedResources(JsonArray equippedResources) {
+        this.putJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, equippedResources);
+    }
+
     /**
      * Returns the base armor class value of the RPGLItem. This does not include any dexterity bonuses which are allowed.
      *
@@ -184,12 +192,27 @@ public class RPGLItem extends RPGLTaggable {
      * @return a List of RPGLEffect objects
      */
     public List<RPGLEffect> getEquippedEffectsObjects() {
-        JsonArray equippedEffectsUuids = this.getJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS);
+        JsonArray equippedEffectsUuids = this.getEquippedEffects();
         List<RPGLEffect> effects = new ArrayList<>();
         for (int i = 0; i < equippedEffectsUuids.size(); i++) {
             effects.add(UUIDTable.getEffect(equippedEffectsUuids.getString(i)));
         }
         return effects;
+    }
+
+    /**
+     * This method returns all RPGLResource objects which are meant to be available to whichever RPGLObject is wielding
+     * the RPGLItem.
+     *
+     * @return a List of RPGLResource objects
+     */
+    public List<RPGLResource> getEquippedResourcesObjects() {
+        JsonArray equippedResourcesUuids = this.getEquippedResources();
+        List<RPGLResource> resources = new ArrayList<>();
+        for (int i = 0; i < equippedResourcesUuids.size(); i++) {
+            resources.add(UUIDTable.getResource(equippedResourcesUuids.getString(i)));
+        }
+        return resources;
     }
 
     public List<RPGLEvent> getOneHandedEventObjects() {
@@ -201,6 +224,7 @@ public class RPGLItem extends RPGLTaggable {
             if (tags != null && !tags.asList().contains("improvised")) {
                 tags.asList().addAll(this.getTags().asList());
             }
+            event.setOriginItem(this.getUuid());
             events.add(event);
         }
         return events;
@@ -215,6 +239,7 @@ public class RPGLItem extends RPGLTaggable {
             if (tags != null && !tags.asList().contains("improvised")) {
                 tags.asList().addAll(this.getTags().asList());
             }
+            event.setOriginItem(this.getUuid());
             events.add(event);
         }
         return events;
@@ -224,7 +249,9 @@ public class RPGLItem extends RPGLTaggable {
         JsonArray eventIds = this.getEvents().getJsonArray("special");
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
-            events.add(RPGLFactory.newEvent(eventIds.getString(i)));
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            event.setOriginItem(this.getUuid());
+            events.add(event);
         }
         return events;
     }

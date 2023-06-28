@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.rpgl.datapack.RPGLEffectTO;
 import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -76,6 +77,24 @@ public class RPGLResource extends RPGLTaggable {
      */
     public void setRefreshCriterion(JsonArray refreshCriterion) {
         this.putJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS, refreshCriterion);
+    }
+
+    /**
+     * Returns the origin item UUID for the RPGLResource if it has one.
+     *
+     * @return an RPGLItem UUID, or null if the resource was not provided by an item.
+     */
+    public String getOriginItem() {
+        return this.getString(RPGLEffectTO.ORIGIN_ITEM_ALIAS);
+    }
+
+    /**
+     * Sets the origin item UUID of the RPGLResource.
+     *
+     * @param originItem a RPGLItem UUID
+     */
+    public void setOriginItem(String originItem) {
+        this.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
     }
 
     // =================================================================================================================

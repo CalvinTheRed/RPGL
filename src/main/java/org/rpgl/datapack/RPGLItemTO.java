@@ -16,28 +16,21 @@ import java.util.HashMap;
  */
 public class RPGLItemTO extends RPGLTaggableTO {
 
-    // universal item property aliases
     public static final String WEIGHT_ALIAS = "weight";
     public static final String COST_ALIAS = "cost";
-
-    // weapon property aliases
     public static final String EVENTS_ALIAS = "events";
     public static final String ATTACK_BONUS_ALIAS = "attack_bonus";
     public static final String DAMAGE_BONUS_ALIAS = "damage_bonus";
     public static final String EQUIPPED_EFFECTS_ALIAS = "equipped_effects";
-
-    // armor property aliases
+    public static final String EQUIPPED_RESOURCES_ALIAS = "equipped_resources";
     public static final String ARMOR_CLASS_BASE_ALIAS = "armor_class_base";
     public static final String ARMOR_CLASS_DEX_LIMIT_ALIAS = "armor_class_dex_limit";
-
-    // shield property aliases
     public static final String ARMOR_CLASS_BONUS_ALIAS = "armor_class_bonus";
 
     @JsonProperty(WEIGHT_ALIAS)
     Integer weight;
     @JsonProperty(COST_ALIAS)
     Integer cost;
-
     @JsonProperty(EVENTS_ALIAS)
     HashMap<String, Object> events;
     @JsonProperty(ATTACK_BONUS_ALIAS)
@@ -46,12 +39,12 @@ public class RPGLItemTO extends RPGLTaggableTO {
     Integer damageBonus;
     @JsonProperty(EQUIPPED_EFFECTS_ALIAS)
     ArrayList<Object> equippedEffects;
-
+    @JsonProperty(EQUIPPED_RESOURCES_ALIAS)
+    ArrayList<Object> equippedResources;
     @JsonProperty(ARMOR_CLASS_BASE_ALIAS)
     Integer armorClassBase;
     @JsonProperty(ARMOR_CLASS_DEX_LIMIT_ALIAS)
     Integer armorClassDexLimit;
-
     @JsonProperty(ARMOR_CLASS_BONUS_ALIAS)
     Integer armorClassBonus;
 
@@ -76,6 +69,7 @@ public class RPGLItemTO extends RPGLTaggableTO {
         this.attackBonus = rpglItem.getAttackBonus();
         this.damageBonus = rpglItem.getDamageBonus();
         this.equippedEffects = rpglItem.getEquippedEffects().asList();
+        this.equippedResources = rpglItem.getEquippedResources().asList();
         this.armorClassBase = rpglItem.getArmorClassBase();
         this.armorClassDexLimit = rpglItem.getArmorClassDexLimit();
         this.armorClassBonus = rpglItem.getArmorClassBonus();
@@ -94,6 +88,7 @@ public class RPGLItemTO extends RPGLTaggableTO {
             this.putInteger(ATTACK_BONUS_ALIAS, attackBonus);
             this.putInteger(DAMAGE_BONUS_ALIAS, damageBonus);
             this.putJsonArray(EQUIPPED_EFFECTS_ALIAS, new JsonArray(equippedEffects));
+            this.putJsonArray(EQUIPPED_RESOURCES_ALIAS, new JsonArray(equippedResources));
             this.putInteger(ARMOR_CLASS_BASE_ALIAS, armorClassBase);
             this.putInteger(ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
             this.putInteger(ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
@@ -116,6 +111,7 @@ public class RPGLItemTO extends RPGLTaggableTO {
             this.setAttackBonus(attackBonus);
             this.setDamageBonus(damageBonus);
             this.setEquippedEffects(new JsonArray(equippedEffects));
+            this.setEquippedResources(new JsonArray(equippedEffects));
             this.setArmorClassBase(armorClassBase);
             this.setArmorClassDexLimit(armorClassDexLimit);
             this.setArmorClassBonus(armorClassBonus);

@@ -64,7 +64,7 @@ public class CalculateProficiencyBonusTest {
     @Test
     @DisplayName("prepare sets base proficiency bonus from source json")
     void prepare_setsBaseProficiencyBonusFromSourceJson() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject source = RPGLFactory.newObject("std_objects:young_red_dragon");
         DummyContext context = new DummyContext();
         context.add(source);
 

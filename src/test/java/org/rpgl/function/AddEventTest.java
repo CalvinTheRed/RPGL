@@ -69,7 +69,7 @@ public class AddEventTest {
     @Test
     @DisplayName("execute adds event datapack ID to subevent")
     void execute_addsEventDatapackIdToSubevent() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLObject object = RPGLFactory.newObject("std_objects:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
