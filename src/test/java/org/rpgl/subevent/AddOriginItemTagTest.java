@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
@@ -17,19 +16,17 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.subevent.GetEvents class.
+ * Testing class for the org.rpgl.subevent.AddOriginItemTag class.
  *
  * @author Calvin Withun
  */
-public class GetEventsTest {
+public class AddOriginItemTagTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -51,7 +48,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Subevent subevent = new GetEvents();
+        Subevent subevent = new AddOriginItemTag();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
@@ -66,46 +63,26 @@ public class GetEventsTest {
     }
 
     @Test
-    @DisplayName("getEvents is empty by default")
-    void getEvents_isEmptyByDefault() throws Exception {
+    @DisplayName("invoke adds tag")
+    void invoke_addsTag() throws Exception {
         RPGLObject object = RPGLFactory.newObject("std:commoner");
-        DummyContext context = new DummyContext();
-        context.add(object);
-
-        GetEvents getEvents = new GetEvents();
-        getEvents.setSource(object);
-        getEvents.prepare(context);
-
-        assertTrue(getEvents.getEvents().isEmpty(),
-                "getEvents should return an empty array by default"
-        );
-    }
-
-    @Test
-    @DisplayName("getEvents returns the correct events")
-    void getEvents_returnsCorrectEvents() throws Exception {
         RPGLItem item = RPGLFactory.newItem("std:longsword");
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
-        GetEvents getEvents = new GetEvents();
-        getEvents.setSource(object);
-        getEvents.prepare(context);
+        AddOriginItemTag addOriginItemTag = new AddOriginItemTag();
+        addOriginItemTag.joinSubeventData(new JsonObject() {{
+            this.putString("tag", "test_tag");
+        }});
+        addOriginItemTag.setOriginItem(item.getUuid());
+        addOriginItemTag.setSource(object);
+        addOriginItemTag.prepare(context);
+        addOriginItemTag.setTarget(object);
+        addOriginItemTag.invoke(context);
 
-        getEvents.addEvent("std:longsword_melee", item.getUuid());
-        getEvents.addEvent("std:improvised_thrown", item.getUuid());
-
-        List<RPGLEvent> events = getEvents.getEvents();
-        assertEquals(2, events.size(),
-                "2 events should be granted"
+        assertTrue(item.getTags().asList().contains("test_tag"),
+                "invoke should add intended tag to origin item"
         );
-
-        for (RPGLEvent event : events) {
-            assertEquals(item.getUuid(), event.getOriginItem(),
-                    "item-based events should indicate the item providing the event as the origin item"
-            );
-        }
     }
 
 }

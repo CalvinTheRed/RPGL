@@ -57,6 +57,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("info_subevent", new InfoSubevent());
         //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("refresh_resource", new RefreshResource());
+        Subevent.SUBEVENTS.put("remove_origin_item_tag", new RemoveOriginItemTag());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
         Subevent.SUBEVENTS.put("take_resource", new TakeResource());
 

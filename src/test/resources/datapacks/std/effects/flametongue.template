@@ -13,7 +13,7 @@
         {
           "condition": "origin_item_has_tag",
           "origin_item": "subevent",
-          "tag": "flametongue_active"
+          "tag": "flametongue"
         }
       ],
       "functions": [

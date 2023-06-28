@@ -198,16 +198,13 @@ public class RPGLObject extends RPGLTaggable {
             events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
         }
 
-        // get special events
+        // get events from effects
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(this);
         getEvents.prepare(context);
         getEvents.setTarget(this);
         getEvents.invoke(context);
-        eventsArray = getEvents.getEvents();
-        for (int i = 0; i < eventsArray.size(); i++) {
-            events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
-        }
+        events.addAll(getEvents.getEvents());
 
         // get events granted by equipped items
         JsonObject equippedItems = this.getEquippedItems();

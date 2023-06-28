@@ -6,7 +6,6 @@
   "description": "A magical scimitar which can catch fire to deal additional damage and shed light.",
   "tags": [
     "scimitar",
-    "flametongue",
     "metal",
     "magic",
     "martial_melee",
@@ -18,19 +17,19 @@
     "multiple_hands": [
       "std:scimitar_melee",
       "std:scimitar_melee_finesse",
-      "std:improvised_thrown",
-      "std:flametongue_command_word"
+      "std:improvised_thrown"
     ],
     "one_hand": [
       "std:scimitar_melee",
       "std:scimitar_melee_finesse",
-      "std:improvised_thrown",
-      "std:flametongue_command_word"
+      "std:improvised_thrown"
     ],
     "special": [ ]
   },
   "equipped_effects": [
-    "std:flametongue_active"
+    "std:flametongue",
+    "std:flametongue_activation_manager",
+    "std:flametongue_deactivation_manager"
   ],
   "attack_bonus": 0,
   "damage_bonus": 0

@@ -67,8 +67,8 @@ public class AddEventTest {
     }
 
     @Test
-    @DisplayName("execute adds event datapack ID to subevent")
-    void execute_addsEventDatapackIdToSubevent() throws Exception {
+    @DisplayName("")
+    void test() throws Exception {
         RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
@@ -81,19 +81,16 @@ public class AddEventTest {
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "add_event",
-                "event": "std:test"
+                "event": "std:dodge"
             }*/
             this.putString("function", "add_event");
-            this.putString("event", "std:test");
+            this.putString("event", "std:dodge");
         }};
 
         addEvent.execute(null, getEvents, functionJson, context);
 
-        String expected = """
-                ["std:test"]""";
-        assertEquals(expected, getEvents.getEvents().toString(),
-                "execute should add an event datapack ID to the subevent"
+        assertEquals("std:dodge", getEvents.getEvents().get(0).getId(),
+                "execute should add the correct event to the subevent"
         );
     }
-
 }

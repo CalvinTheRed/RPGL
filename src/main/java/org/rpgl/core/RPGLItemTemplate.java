@@ -32,10 +32,10 @@ public class RPGLItemTemplate extends JsonObject {
         item.asMap().putIfAbsent(RPGLItemTO.EVENTS_ALIAS, new HashMap<String, Object>());
         item.asMap().putIfAbsent(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, new ArrayList<>());
         item.asMap().putIfAbsent(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, new ArrayList<>());
+        UUIDTable.register(item);
         processEvents(item);
         processEquippedEffects(item);
         processEquippedResources(item);
-        UUIDTable.register(item);
         return item;
     }
 
@@ -56,7 +56,7 @@ public class RPGLItemTemplate extends JsonObject {
         JsonArray equippedEffectsUuidArray = new JsonArray();
         for (int i = 0; i < equippedEffectsIdArray.size(); i++) {
             String effectId = equippedEffectsIdArray.getString(i);
-            RPGLEffect effect = RPGLFactory.newEffect(effectId);
+            RPGLEffect effect = RPGLFactory.newEffect(effectId, item.getUuid());
             equippedEffectsUuidArray.addString(effect.getUuid());
         }
         item.setEquippedEffects(equippedEffectsUuidArray);
@@ -73,7 +73,7 @@ public class RPGLItemTemplate extends JsonObject {
         JsonArray equippedResourcesUuidArray = new JsonArray();
         for (int i = 0; i < equippedResourcesIdArray.size(); i++) {
             String resourceId = equippedResourcesIdArray.getString(i);
-            RPGLResource resource = RPGLFactory.newResource(resourceId);
+            RPGLResource resource = RPGLFactory.newResource(resourceId, item.getUuid());
             equippedResourcesUuidArray.addString(resource.getUuid());
         }
         item.setEquippedResources(equippedResourcesUuidArray);

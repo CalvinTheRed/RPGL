@@ -17,9 +17,12 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Testing class for miscellaneous scenarios. Tests here are designed to stress test RPGL at a high level.
@@ -59,8 +62,12 @@ public class ScenariosTest {
         source.giveItem(flametongue.getUuid());
         source.equipItem(flametongue.getUuid(), "mainhand");
 
-        RPGLEvent flametongueAttack = TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee");
+        List<RPGLEvent> events = source.getEventObjects(context);
+        RPGLEvent flametongueAttack = TestUtils.getEventById(events, "std:scimitar_melee");
+        assertNotNull(TestUtils.getEventById(events, "std:flametongue_command_word_activate"));
+        assertNull(TestUtils.getEventById(events, "std:flametongue_command_word_deactivate"));
         assertNotNull(flametongueAttack);
+        assertEquals(flametongue.getUuid(), flametongueAttack.getOriginItem());
 
 //        source.invokeEvent(
 //                new RPGLObject[] {

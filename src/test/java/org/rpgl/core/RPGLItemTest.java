@@ -42,18 +42,21 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getEquippedEffectsObjects returns correct effects as objects")
     void getEquippedEffectObjects_returnsCorrectEffectsAsObjects() {
-        RPGLItem item = RPGLFactory.newItem("std:frostbrand");
+        RPGLItem item = RPGLFactory.newItem("std:ring_of_protection");
 
         List<RPGLEffect> equippedEffects = item.getEquippedEffectsObjects();
-        assertEquals(2, equippedEffects.size(),
-                "2 effects should be present"
+        assertEquals(1, equippedEffects.size(),
+                "1 effect should be present"
         );
-        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
-                "First effect should be std:cold_resistance"
+        assertEquals("std:ring_of_protection", equippedEffects.get(0).getId(),
+                "First effect should be std:ring_of_protection"
         );
-        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
-                "Second effect should be std:fire_resistance"
-        );
+
+        for (RPGLEffect effect: equippedEffects) {
+            assertEquals(item.getUuid(), effect.getOriginItem(),
+                    "item-based events should indicate the item providing the event as the origin item"
+            );
+        }
     }
 
     @Test
@@ -63,30 +66,33 @@ public class RPGLItemTest {
         String expected;
 
         List<RPGLEvent> events = item.getOneHandedEventObjects();
-        RPGLEvent event;
         assertEquals(2, events.size(),
                 "longswords should provide 2 one-handed events"
         );
 
-        event = events.get(0);
-        assertEquals("std:longsword_melee", event.getId(),
+        assertEquals("std:longsword_melee", events.get(0).getId(),
                 "first event should be a melee longsword strike"
         );
         expected = """
                 ["melee","longsword","metal","martial_melee","versatile"]""";
-        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+        assertEquals(expected, events.get(0).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should include item tags when not improvised"
         );
 
-        event = events.get(1);
-        assertEquals("std:improvised_thrown", event.getId(),
+        assertEquals("std:improvised_thrown", events.get(1).getId(),
                 "first event should be an improvised thrown weapon attack"
         );
         expected = """
                 ["improvised"]""";
-        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+        assertEquals(expected, events.get(1).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should not include item tags when improvised"
         );
+
+        for (RPGLEvent event : events) {
+            assertEquals(item.getUuid(), event.getOriginItem(),
+                    "item-based events should indicate the item providing the event as the origin item"
+            );
+        }
     }
 
     @Test
@@ -96,30 +102,33 @@ public class RPGLItemTest {
         String expected;
 
         List<RPGLEvent> events = item.getMultiHandedEventObjects();
-        RPGLEvent event;
         assertEquals(2, events.size(),
                 "longswords should provide 2 multiple-handed events"
         );
 
-        event = events.get(0);
-        assertEquals("std:longsword_melee_versatile", event.getId(),
+        assertEquals("std:longsword_melee_versatile", events.get(0).getId(),
                 "first event should be a melee longsword strike (versatile)"
         );
         expected = """
                 ["melee","longsword","metal","martial_melee","versatile"]""";
-        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+        assertEquals(expected, events.get(0).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should include item tags when not improvised"
         );
 
-        event = events.get(1);
-        assertEquals("std:improvised_thrown", event.getId(),
+        assertEquals("std:improvised_thrown", events.get(1).getId(),
                 "first event should be an improvised thrown weapon attack"
         );
         expected = """
                 ["improvised"]""";
-        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+        assertEquals(expected, events.get(1).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should not include item tags when improvised"
         );
+
+        for (RPGLEvent event : events) {
+            assertEquals(item.getUuid(), event.getOriginItem(),
+                    "item-based events should indicate the item providing the event as the origin item"
+            );
+        }
     }
 
     @Test
@@ -129,20 +138,24 @@ public class RPGLItemTest {
         String expected;
 
         List<RPGLEvent> events = item.getSpecialEventObjects();
-        RPGLEvent event;
         assertEquals(1, events.size(),
                 "robe of stars should provide 1 special event"
         );
 
-        event = events.get(0);
-        assertEquals("std:robe_of_stars", event.getId(),
+        assertEquals("std:robe_of_stars", events.get(0).getId(),
                 "first event should be a robe of stars attack"
         );
         expected = """
                 ["spell","magic_missile"]""";
-        assertEquals(expected, event.getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
+        assertEquals(expected, events.get(0).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should match robe of stars event template tags"
         );
+
+        for (RPGLEvent event : events) {
+            assertEquals(item.getUuid(), event.getOriginItem(),
+                    "item-based events should indicate the item providing the event as the origin item"
+            );
+        }
     }
 
 }

@@ -1,8 +1,13 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEvent;
+import org.rpgl.core.RPGLFactory;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This subevent is dedicated to gathering a collection of additional RPGLEvent datapack IDs to which the subevent's
@@ -48,9 +53,10 @@ public class GetEvents extends Subevent {
      * Adds an RPGLEvent datapack ID to the subevent, to be later granted to target.
      *
      * @param eventId an RPGLEvent datapack ID
+     * @param originItem a UUID for a RPGLItem if the event was provided by an item, or null otherwise
      */
-    public void addEvent(String eventId) {
-        this.getEvents().addString(eventId);
+    public void addEvent(String eventId, String originItem) {
+        this.json.getJsonArray("events").addJsonObject(RPGLFactory.newEvent(eventId, originItem));
     }
 
     /**
@@ -58,8 +64,15 @@ public class GetEvents extends Subevent {
      *
      * @return a JsonArray of RPGLEvent datapack IDs
      */
-    public JsonArray getEvents() {
-        return this.json.getJsonArray("events");
+    public List<RPGLEvent> getEvents() {
+        JsonArray eventsRaw = this.json.getJsonArray("events");
+        List<RPGLEvent> events = new ArrayList<>();
+        for (int i = 0; i < eventsRaw.size(); i++) {
+            RPGLEvent event = new RPGLEvent();
+            event.join(eventsRaw.getJsonObject(i));
+            events.add(event);
+        }
+        return events;
     }
 
 }

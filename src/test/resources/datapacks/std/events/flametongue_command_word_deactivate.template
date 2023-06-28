@@ -3,7 +3,7 @@
     "author": "Calvin Withun"
   },
   "name": "Flametongue Command Word",
-  "description": "Activate your Flametongue weapon.",
+  "description": "Deactivate your Flametongue weapon.",
   "area_of_effect": {
 
   },
@@ -15,8 +15,8 @@
   ],
   "subevents": [
     {
-      "subevent": "add_origin_item_tag",
-      "tag": "flametongue_active"
+      "subevent": "remove_origin_item_tag",
+      "tag": "flametongue"
     }
   ]
 }

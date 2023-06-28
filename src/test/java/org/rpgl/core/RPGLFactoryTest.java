@@ -107,7 +107,7 @@ public class RPGLFactoryTest {
 
     @Test
     @DisplayName("newItem using std:frostbrand")
-    void newItem_teacup() {
+    void newItem_frostbrand() {
         RPGLItem item = RPGLFactory.newItem("std:frostbrand");
         String expected;
 

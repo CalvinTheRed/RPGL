@@ -40,6 +40,10 @@ public abstract class RPGLTaggable extends UUIDTableElement {
         }
     }
 
+    public void removeTag(String tag) {
+        this.getTags().asList().remove(tag);
+    }
+
     /**
      * Returns whether the object has a specific tag.
      *

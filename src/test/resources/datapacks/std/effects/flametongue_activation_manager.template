@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Flametongue Activation Manager",
+  "description": "Allows you to activate your Flametongue weapon.",
+  "subevent_filters": {
+    "get_events": {
+      "conditions": [
+        {
+          "condition": "invert",
+          "invert": {
+            "condition": "origin_item_has_tag",
+            "tag": "flametongue"
+          }
+        }
+      ],
+      "functions": [
+        {
+          "function": "add_event",
+          "event": "std:flametongue_command_word_activate"
+        }
+      ]
+    }
+  }
+}
