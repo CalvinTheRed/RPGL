@@ -11,6 +11,7 @@
           "condition": "invert",
           "invert": {
             "condition": "origin_item_has_tag",
+            "origin_item": "effect",
             "tag": "flametongue"
           }
         }

@@ -43,7 +43,10 @@ public class SavingThrow extends Roll {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
+
+        // Add tag so nested subevents such as DamageCollection can know they hail from a saving throw.
         this.addTag("saving_throw");
+
         this.calculateDifficultyClass(context);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
         this.getBaseDamage(context);

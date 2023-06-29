@@ -14,17 +14,23 @@
           "condition": "origin_item_has_tag",
           "origin_item": "subevent",
           "tag": "flametongue"
+        },
+        {
+          "condition": "subevent_has_tag",
+          "tag": "base_damage_collection"
         }
       ],
       "functions": [
         {
           "function": "add_damage",
-          "bonus": {
-            "bonus_formula": "range",
-            "damage_type": "fire",
-            "dice": [ { "count": 2, "size": 6, "determined": [ 3 ] } ],
-            "bonus": 0
-          }
+          "damage": [
+            {
+              "damage_formula": "range",
+              "damage_type": "fire",
+              "dice": [ { "count": 2, "size": 6, "determined": [ 3 ] } ],
+              "bonus": 0
+            }
+          ]
         }
       ]
     }

@@ -21,6 +21,7 @@
           "bonus": 0
         }
       ],
+      "withold_damage_modifier": true,
       "determined": [ 19 ]
     }
   ]

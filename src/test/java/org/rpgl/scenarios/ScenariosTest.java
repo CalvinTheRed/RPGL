@@ -17,12 +17,15 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for miscellaneous scenarios. Tests here are designed to stress test RPGL at a high level.
@@ -61,6 +64,9 @@ public class ScenariosTest {
 
         source.giveItem(flametongue.getUuid());
         source.equipItem(flametongue.getUuid(), "mainhand");
+        assertEquals(3, source.getEffectObjects().size(),
+                "equipping the flametongue should provide 3 effects to the wielder"
+        );
 
         List<RPGLEvent> events = source.getEventObjects(context);
         RPGLEvent flametongueAttack = TestUtils.getEventById(events, "std:scimitar_melee");
@@ -69,16 +75,86 @@ public class ScenariosTest {
         assertNotNull(flametongueAttack);
         assertEquals(flametongue.getUuid(), flametongueAttack.getOriginItem());
 
-//        source.invokeEvent(
-//                new RPGLObject[] {
-//                        target
-//                },
-//                flametongueAttack,
-//                new ArrayList<>() {{
-//                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
-//                }},
-//                context
-//        );
+        // make an attack, not activated
+        source.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
+                context
+        );
+        assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
+                "Dummy should take 6 damage from being hit (6 slashing)"
+        );
+
+        // RESET DUMMY HEALTH TO 1000
+        TestUtils.resetObjectHealth(target, context);
+
+        // activate
+        source.invokeEvent(
+                new RPGLObject[] {
+                        source
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:flametongue_command_word_activate"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:bonus_action"));
+                }},
+                context
+        );
+        assertTrue(flametongue.hasTag("flametongue"),
+                "flametongue tag should be added from the activation command word event"
+        );
+
+        // make an attack, activated
+        source.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
+                context
+        );
+        assertEquals(1000-3-3-3-3, target.getHealthData().getInteger("current"),
+                "Dummy should take 12 damage from being hit (6 slashing, 6 fire)"
+        );
+
+        // RESET DUMMY HEALTH TO 1000
+        TestUtils.resetObjectHealth(target, context);
+
+        // deactivate
+        source.invokeEvent(
+                new RPGLObject[] {
+                        source
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:flametongue_command_word_deactivate"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:bonus_action"));
+                }},
+                context
+        );
+        assertFalse(flametongue.hasTag("flametongue"),
+                "flametongue tag should be removed from the deactivation command word event"
+        );
+
+        // make an attack, activated
+        source.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
+                context
+        );
+        assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
+                "Dummy should take 6 damage from being hit (6 slashing)"
+        );
     }
 
 }

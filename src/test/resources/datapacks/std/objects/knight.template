@@ -44,7 +44,7 @@
       "potency": 1
     },
     {
-      "resource": "std:action",
+      "resource": "std:bonus_action",
       "count": 1,
       "potency": 1
     }
