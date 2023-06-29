@@ -47,7 +47,6 @@ public abstract class Subevent {
 
         Subevent.SUBEVENTS.put("add_origin_item_tag", new AddOriginItemTag());
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
-        Subevent.SUBEVENTS.put("contest", new Contest());
         Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
         Subevent.SUBEVENTS.put("exhaust_resource", new ExhaustResource());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());

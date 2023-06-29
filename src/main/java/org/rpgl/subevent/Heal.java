@@ -84,6 +84,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("base_healing_collection");
             }});
         }});
+        baseHealingCollection.setOriginItem(this.getOriginItem());
         baseHealingCollection.setSource(this.getSource());
         baseHealingCollection.prepare(context);
         baseHealingCollection.setTarget(this.getSource());
@@ -100,6 +101,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("base_healing_roll");
             }});
         }});
+        baseHealingRoll.setOriginItem(this.getOriginItem());
         baseHealingRoll.setSource(this.getSource());
         baseHealingRoll.prepare(context);
         baseHealingRoll.setTarget(this.getSource());
@@ -122,6 +124,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("target_healing_collection");
             }});
         }});
+        targetHealingCollection.setOriginItem(this.getOriginItem());
         targetHealingCollection.setSource(this.getSource());
         targetHealingCollection.prepare(context);
         targetHealingCollection.setTarget(this.getTarget());
@@ -138,6 +141,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("target_healing_roll");
             }});
         }});
+        targetHealingRoll.setOriginItem(this.getOriginItem());
         targetHealingRoll.setSource(this.getSource());
         targetHealingRoll.prepare(context);
         targetHealingRoll.setTarget(this.getTarget());
@@ -162,6 +166,7 @@ public class Heal extends Subevent implements CancelableSubevent {
             this.putJsonArray("healing", json.getJsonArray("healing"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
+        healingDelivery.setOriginItem(this.getOriginItem());
         healingDelivery.setSource(this.getSource());
         healingDelivery.prepare(context);
         healingDelivery.setTarget(this.getTarget());
