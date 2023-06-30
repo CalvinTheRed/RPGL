@@ -5,32 +5,34 @@
   "name": "Loop Detection Chain 3",
   "description": "This effect is designed to create a condition loop for testing purposes.",
   "subevent_filters": {
-    "calculate_ability_score": {
-      "conditions": [
-        {
-          "condition": "check_ability",
-          "ability": "con"
-        },
-        {
-          "condition": "object_ability_score_comparison",
-          "object": {
-            "from": "subevent",
-            "object": "source"
+    "calculate_ability_score": [
+      {
+        "conditions": [
+          {
+            "condition": "check_ability",
+            "ability": "con"
           },
-          "ability": "str",
-          "comparison": "=",
-          "compare_to": 18
-        }
-      ],
-      "functions": [
-        {
-          "function": "set_base",
-          "base": {
-            "base_formula": "number",
-            "value": 18
+          {
+            "condition": "object_ability_score_comparison",
+            "object": {
+              "from": "subevent",
+              "object": "source"
+            },
+            "ability": "str",
+            "comparison": "=",
+            "compare_to": 18
           }
-        }
-      ]
-    }
+        ],
+        "functions": [
+          {
+            "function": "set_base",
+            "base": {
+              "base_formula": "number",
+              "value": 18
+            }
+          }
+        ]
+      }
+    ]
   }
 }

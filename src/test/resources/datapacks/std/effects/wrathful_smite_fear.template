@@ -5,19 +5,21 @@
   "name": "Frightened (Wrathful Smite)",
   "description": "You are scared now",
   "subevent_filters": {
-    "attack_roll": {
-      "conditions": [
-        {
-          "condition": "objects_match",
-          "effect": "target",
-          "subevent": "source"
-        }
-      ],
-      "functions": [
-        {
-          "function": "grant_disadvantage"
-        }
-      ]
-    }
+    "attack_roll": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "source"
+          }
+        ],
+        "functions": [
+          {
+            "function": "grant_disadvantage"
+          }
+        ]
+      }
+    ]
   }
 }

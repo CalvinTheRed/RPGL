@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -87,7 +88,7 @@ public class AddEventTest {
             this.putString("event", "std:dodge");
         }};
 
-        addEvent.execute(null, getEvents, functionJson, context);
+        addEvent.execute(new RPGLEffect(), getEvents, functionJson, context);
 
         assertEquals("std:dodge", getEvents.getEvents().get(0).getId(),
                 "execute should add the correct event to the subevent"

@@ -27,9 +27,7 @@
     "special": [ ]
   },
   "equipped_effects": [
-    "std:flametongue",
-    "std:flametongue_activation_manager",
-    "std:flametongue_deactivation_manager"
+    "std:flametongue"
   ],
   "attack_bonus": 0,
   "damage_bonus": 0

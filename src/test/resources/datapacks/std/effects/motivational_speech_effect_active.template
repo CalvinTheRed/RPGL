@@ -5,22 +5,24 @@
   "name": "Motivational Speech",
   "description": "The creature has advantage on the next attack roll it makes.",
   "subevent_filters": {
-    "attack_roll": {
-      "conditions": [
-        {
-          "condition": "objects_match",
-          "effect": "target",
-          "subevent": "source"
-        }
-      ],
-      "functions": [
-        {
-          "function": "grant_advantage"
-        },
-        {
-          "function": "end_effect"
-        }
-      ]
-    }
+    "attack_roll": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "source"
+          }
+        ],
+        "functions": [
+          {
+            "function": "grant_advantage"
+          },
+          {
+            "function": "end_effect"
+          }
+        ]
+      }
+    ]
   }
 }

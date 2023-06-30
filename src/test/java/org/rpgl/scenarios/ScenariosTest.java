@@ -64,8 +64,8 @@ public class ScenariosTest {
 
         source.giveItem(flametongue.getUuid());
         source.equipItem(flametongue.getUuid(), "mainhand");
-        assertEquals(3, source.getEffectObjects().size(),
-                "equipping the flametongue should provide 3 effects to the wielder"
+        assertEquals(1, source.getEffectObjects().size(),
+                "equipping the flametongue should provide 1 effect to the wielder"
         );
 
         List<RPGLEvent> events = source.getEventObjects(context);

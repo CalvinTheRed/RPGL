@@ -50,31 +50,35 @@ public class RPGLEffectTest {
         effect.join(new JsonObject() {{
             /*{
                 "subevent_filters": {
-                    "dummy_subevent": {
-                        "conditions": [
-                            { "condition": "true" },
-                            { "condition": "subevent_has_tag", "tag": "dummy_subevent" }
-                        ],
-                        "functions": [
-                            { "function": "dummy_function" },
-                            { "function": "dummy_function" }
-                        ]
-                    }
+                    "dummy_subevent": [
+                        {
+                            "conditions": [
+                                { "condition": "true" },
+                                { "condition": "subevent_has_tag", "tag": "dummy_subevent" }
+                            ],
+                            "functions": [
+                                { "function": "dummy_function" },
+                                { "function": "dummy_function" }
+                            ]
+                        }
+                    ]
                 }
             }*/
             this.putJsonObject("subevent_filters", new JsonObject() {{
-                this.putJsonObject("dummy_subevent", new JsonObject() {{
-                    this.putJsonArray("conditions", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putString("condition", "true");
+                this.putJsonArray("dummy_subevent", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putJsonArray("conditions", new JsonArray() {{
+                            this.addJsonObject(new JsonObject() {{
+                                this.putString("condition", "true");
+                            }});
                         }});
-                    }});
-                    this.putJsonArray("functions", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putString("function", "dummy_function");
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putString("function", "dummy_function");
+                        this.putJsonArray("functions", new JsonArray() {{
+                            this.addJsonObject(new JsonObject() {{
+                                this.putString("function", "dummy_function");
+                            }});
+                            this.addJsonObject(new JsonObject() {{
+                                this.putString("function", "dummy_function");
+                            }});
                         }});
                     }});
                 }});
@@ -108,7 +112,7 @@ public class RPGLEffectTest {
 
         effect.executeFunctions(
                 subevent,
-                effect.getSubeventFilters().getJsonObject("dummy_subevent").getJsonArray("functions"),
+                effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("functions"),
                 context
         );
 
@@ -136,7 +140,7 @@ public class RPGLEffectTest {
 
         boolean evaluation = effect.evaluateConditions(
                 subevent,
-                effect.getSubeventFilters().getJsonObject("dummy_subevent").getJsonArray("conditions"),
+                effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("conditions"),
                 context
         );
 

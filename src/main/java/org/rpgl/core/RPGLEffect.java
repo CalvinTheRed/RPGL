@@ -116,15 +116,17 @@ public class RPGLEffect extends UUIDTableElement {
         JsonObject subeventFilters = this.getSubeventFilters();
         for (Map.Entry<String, ?> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
             if (Objects.equals(subevent.getSubeventId(), subeventFilterEntry.getKey())) {
-                JsonObject matchedFilter = subeventFilters.getJsonObject(subeventFilterEntry.getKey());
-                JsonArray conditions = matchedFilter.getJsonArray("conditions");
-                if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
-                    JsonArray functionJsonArray = matchedFilter.getJsonArray("functions");
-                    executeFunctions(subevent, functionJsonArray, context);
-                    subevent.addModifyingEffect(this);
-                    return true;
+                JsonArray matchedFilterBehaviors = subeventFilters.getJsonArray(subeventFilterEntry.getKey());
+                for (int i = 0; i < matchedFilterBehaviors.size(); i++) {
+                    JsonObject matchedFilterBehavior = matchedFilterBehaviors.getJsonObject(i);
+                    JsonArray conditions = matchedFilterBehavior.getJsonArray("conditions");
+                    if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
+                        JsonArray functionJsonArray = matchedFilterBehavior.getJsonArray("functions");
+                        executeFunctions(subevent, functionJsonArray, context);
+                        subevent.addModifyingEffect(this);
+                        return true;
+                    }
                 }
-                break;
             }
         }
         return false;

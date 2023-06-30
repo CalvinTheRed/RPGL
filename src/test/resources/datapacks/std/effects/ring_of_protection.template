@@ -5,43 +5,47 @@
   "name": "Ring of Protection",
   "description": "A weak magical enchantment which helps protect you from harm.",
   "subevent_filters": {
-    "calculate_base_armor_class": {
-      "conditions": [
-        {
-          "condition": "objects_match",
-          "effect": "target",
-          "subevent": "target"
-        }
-      ],
-      "functions": [
-        {
-          "function": "add_bonus",
-          "bonus": {
-            "bonus_formula": "range",
-            "dice": [ ],
-            "bonus": 1
+    "calculate_base_armor_class": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "target"
           }
-        }
-      ]
-    },
-    "saving_throw": {
-      "conditions": [
-        {
-          "condition": "objects_match",
-          "effect": "target",
-          "subevent": "target"
-        }
-      ],
-      "functions": [
-        {
-          "function": "add_bonus",
-          "bonus": {
-            "bonus_formula": "range",
-            "dice": [ ],
-            "bonus": 1
+        ],
+        "functions": [
+          {
+            "function": "add_bonus",
+            "bonus": {
+              "bonus_formula": "range",
+              "dice": [ ],
+              "bonus": 1
+            }
           }
-        }
-      ]
-    }
+        ]
+      }
+    ],
+    "saving_throw": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "target"
+          }
+        ],
+        "functions": [
+          {
+            "function": "add_bonus",
+            "bonus": {
+              "bonus_formula": "range",
+              "dice": [ ],
+              "bonus": 1
+            }
+          }
+        ]
+      }
+    ]
   }
 }
