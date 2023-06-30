@@ -16,12 +16,10 @@
   "events": {
     "multiple_hands": [
       "std:frostbrand_melee",
-      "std:frostbrand_melee_finesse",
       "std:improvised_thrown"
     ],
     "one_hand": [
       "std:frostbrand_melee",
-      "std:frostbrand_melee_finesse",
       "std:improvised_thrown"
     ],
     "special": [ ]

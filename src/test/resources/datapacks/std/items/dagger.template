@@ -16,15 +16,11 @@
   "events": {
     "multiple_hands": [
       "std:dagger_melee",
-      "std:dagger_melee_finesse",
-      "std:dagger_thrown",
-      "std:dagger_thrown_finesse"
+      "std:dagger_thrown"
     ],
     "one_hand": [
       "std:dagger_melee",
-      "std:dagger_melee_finesse",
-      "std:dagger_thrown",
-      "std:dagger_thrown_finesse"
+      "std:dagger_thrown"
     ],
     "special": [ ]
   },

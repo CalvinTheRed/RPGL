@@ -96,7 +96,7 @@ public class RPGLItemTemplateTest {
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
         expected = """
-                {"multiple_hands":["std:frostbrand_melee","std:frostbrand_melee_finesse","std:improvised_thrown"],"one_hand":["std:frostbrand_melee","std:frostbrand_melee_finesse","std:improvised_thrown"],"special":[]}""";
+                {"multiple_hands":["std:frostbrand_melee","std:improvised_thrown"],"one_hand":["std:frostbrand_melee","std:improvised_thrown"],"special":[]}""";
         assertEquals(expected, item.getEvents().toString(),
                 "incorrect field value: " + RPGLItemTO.EVENTS_ALIAS
         );
