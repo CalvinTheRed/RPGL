@@ -51,13 +51,6 @@ public class AttackRoll extends Roll {
         this.addTag("attack_roll");
         this.addTag(this.getAbility(context));
 
-        // Add ability modifier to attack roll
-        this.json.asMap().putIfAbsent("damage", new ArrayList<>());
-        this.addBonus(new JsonObject() {{
-            this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(getAbility(context), context));
-            this.putJsonArray("dice", new JsonArray());
-        }});
-
         // Proficiency is added by Effects during subevent processing
 
         // Add weapon attack bonus, if applicable
@@ -74,6 +67,13 @@ public class AttackRoll extends Roll {
         if (this.isNotCanceled()) {
             this.roll();
             int armorClass = this.getTargetArmorClass(context);
+
+            // Add attack ability modifier to attack roll
+            this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+            this.addBonus(new JsonObject() {{
+                this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(getAbility(context), context));
+                this.putJsonArray("dice", new JsonArray());
+            }});
 
             if (this.isCriticalHit(context)) {
                 this.getBaseDamage(context);

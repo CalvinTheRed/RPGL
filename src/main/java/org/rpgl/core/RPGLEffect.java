@@ -146,6 +146,7 @@ public class RPGLEffect extends UUIDTableElement {
         boolean conditionsMet = true;
         for (int i = 0; i < conditions.size(); i++) {
             JsonObject conditionJson = conditions.getJsonObject(i);
+            System.out.println(conditionJson);
             conditionsMet &= Condition.CONDITIONS
                     .get(conditionJson.getString("condition"))
                     .evaluate(this, subevent, conditionJson, context);

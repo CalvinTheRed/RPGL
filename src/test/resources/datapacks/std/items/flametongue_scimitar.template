@@ -16,12 +16,10 @@
   "events": {
     "multiple_hands": [
       "std:scimitar_melee",
-      "std:scimitar_melee_finesse",
       "std:improvised_thrown"
     ],
     "one_hand": [
       "std:scimitar_melee",
-      "std:scimitar_melee_finesse",
       "std:improvised_thrown"
     ],
     "special": [ ]

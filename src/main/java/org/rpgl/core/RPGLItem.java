@@ -3,6 +3,7 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.AttackAbilityCollection;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
@@ -215,32 +216,51 @@ public class RPGLItem extends RPGLTaggable {
         return resources;
     }
 
-    public List<RPGLEvent> getOneHandedEventObjects() {
+    public List<RPGLEvent> getOneHandedEventObjects(RPGLObject wielder, RPGLContext context) throws Exception {
         JsonArray eventIds = this.getEvents().getJsonArray("one_hand");
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
+            // construct specified events
             RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
-            JsonArray tags = event.getSubevents().getJsonObject(0).getJsonArray("tags");
-            if (tags != null && !tags.asList().contains("improvised")) {
+            JsonObject subevent = event.getSubevents().getJsonObject(0);
+            JsonArray tags = subevent.getJsonArray("tags");
+            if (tags == null) {
+                tags = new JsonArray();
+                subevent.putJsonArray("tags", tags);
+            }
+            if (!tags.asList().contains("improvised")) {
                 tags.asList().addAll(this.getTags().asList());
             }
             event.setOriginItem(this.getUuid());
             events.add(event);
+
+            // construct derived events
+            events.addAll(this.getDerivedEvents(event, wielder, context));
         }
         return events;
     }
 
-    public List<RPGLEvent> getMultiHandedEventObjects() {
+    public List<RPGLEvent> getMultiHandedEventObjects(RPGLObject wielder, RPGLContext context) throws Exception {
         JsonArray eventIds = this.getEvents().getJsonArray("multiple_hands");
+        // TODO redundant code here... helper method?
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
+            // construct specified events
             RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
-            JsonArray tags = event.getSubevents().getJsonObject(0).getJsonArray("tags");
-            if (tags != null && !tags.asList().contains("improvised")) {
+            JsonObject subevent = event.getSubevents().getJsonObject(0);
+            JsonArray tags = subevent.getJsonArray("tags");
+            if (tags == null) {
+                tags = new JsonArray();
+                subevent.putJsonArray("tags", tags);
+            }
+            if (!tags.asList().contains("improvised")) {
                 tags.asList().addAll(this.getTags().asList());
             }
             event.setOriginItem(this.getUuid());
             events.add(event);
+
+            // construct derived events
+            events.addAll(this.getDerivedEvents(event, wielder, context));
         }
         return events;
     }
@@ -270,6 +290,32 @@ public class RPGLItem extends RPGLTaggable {
             effect.setSource(wielder);
             effect.setTarget(wielder);
         }
+    }
+
+    public List<RPGLEvent> getDerivedEvents(RPGLEvent event, RPGLObject wielder, RPGLContext context) throws Exception {
+        List<RPGLEvent> derivedEvents = new ArrayList<>();
+
+        AttackAbilityCollection attackAbilityCollection = new AttackAbilityCollection();
+        attackAbilityCollection.setOriginItem(this.getUuid());
+        attackAbilityCollection.setSource(wielder);
+        attackAbilityCollection.prepare(context);
+        attackAbilityCollection.setTarget(wielder);
+        attackAbilityCollection.invoke(context);
+        JsonArray attackAbilities = attackAbilityCollection.getAbilities();
+
+        for (int i = 0; i < attackAbilities.size(); i++) {
+            RPGLEvent derivedEvent = new RPGLEvent();
+            derivedEvent.join(event.deepClone());
+            JsonArray subevents = derivedEvent.getSubevents();
+            for (int j = 0; j < subevents.size(); j++) {
+                JsonObject subeventJson = subevents.getJsonObject(j);
+                if (Objects.equals("attack_roll", subeventJson.getString("subevent"))) {
+                    subeventJson.putString("attack_ability", attackAbilities.getString(i));
+                }
+            }
+            derivedEvents.add(derivedEvent);
+        }
+        return derivedEvents;
     }
 
 }

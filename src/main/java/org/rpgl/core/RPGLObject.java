@@ -226,9 +226,9 @@ public class RPGLObject extends RPGLTaggable {
         }
         for (Map.Entry<RPGLItem, Integer> entry : wieldedItemsHandedness.entrySet()) {
             if (entry.getValue() == 1) {
-                events.addAll(entry.getKey().getOneHandedEventObjects());
+                events.addAll(entry.getKey().getOneHandedEventObjects(this, context));
             } else {
-                events.addAll(entry.getKey().getMultiHandedEventObjects());
+                events.addAll(entry.getKey().getMultiHandedEventObjects(this, context));
             }
         }
 

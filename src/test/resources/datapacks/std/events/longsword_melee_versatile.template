@@ -16,9 +16,6 @@
       "subevent": "attack_roll",
       "attack_ability": "str",
       "attack_type": "melee",
-      "tags": [
-        "melee"
-      ],
       "damage": [
         {
           "damage_formula": "range",

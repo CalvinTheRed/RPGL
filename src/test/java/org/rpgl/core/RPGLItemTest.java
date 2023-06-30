@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -27,6 +28,7 @@ public class RPGLItemTest {
         DatapackLoader.loadDatapacks(
                 new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
         );
+        RPGLCore.initializeTesting();
     }
 
     @AfterAll
@@ -61,11 +63,14 @@ public class RPGLItemTest {
 
     @Test
     @DisplayName("getOneHandedEventObjects returns correct event objects")
-    void getOneHandedEventObjects_returnsCorrectEventObjects() {
+    void getOneHandedEventObjects_returnsCorrectEventObjects() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLContext context = new DummyContext();
+        context.add(object);
         RPGLItem item = RPGLFactory.newItem("std:longsword");
         String expected;
 
-        List<RPGLEvent> events = item.getOneHandedEventObjects();
+        List<RPGLEvent> events = item.getOneHandedEventObjects(object, context);
         assertEquals(2, events.size(),
                 "longswords should provide 2 one-handed events"
         );
@@ -74,7 +79,7 @@ public class RPGLItemTest {
                 "first event should be a melee longsword strike"
         );
         expected = """
-                ["melee","longsword","metal","martial_melee","versatile"]""";
+                ["longsword","metal","martial_melee","versatile"]""";
         assertEquals(expected, events.get(0).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should include item tags when not improvised"
         );
@@ -97,11 +102,14 @@ public class RPGLItemTest {
 
     @Test
     @DisplayName("getMultiHandedEventObjects returns correct event objects")
-    void getMultiHandedEventObjects_returnsCorrectEventObjects() {
+    void getMultiHandedEventObjects_returnsCorrectEventObjects() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLContext context = new DummyContext();
+        context.add(object);
         RPGLItem item = RPGLFactory.newItem("std:longsword");
         String expected;
 
-        List<RPGLEvent> events = item.getMultiHandedEventObjects();
+        List<RPGLEvent> events = item.getMultiHandedEventObjects(object, context);
         assertEquals(2, events.size(),
                 "longswords should provide 2 multiple-handed events"
         );
@@ -110,7 +118,7 @@ public class RPGLItemTest {
                 "first event should be a melee longsword strike (versatile)"
         );
         expected = """
-                ["melee","longsword","metal","martial_melee","versatile"]""";
+                ["longsword","metal","martial_melee","versatile"]""";
         assertEquals(expected, events.get(0).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should include item tags when not improvised"
         );
@@ -156,6 +164,35 @@ public class RPGLItemTest {
                     "item-based events should indicate the item providing the event as the origin item"
             );
         }
+    }
+
+    @Test
+    @DisplayName("getDerivedEvents derives events correctly")
+    void getDerivedEvents_derivesEventsCorrectly() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLContext context = new DummyContext();
+        context.add(object);
+
+        RPGLEffect effect = RPGLFactory.newEffect("std:artificer_battle_smith_battle_ready");
+        effect.setOriginItem(effect.getOriginItem());
+        effect.setSource(object);
+        effect.setTarget(object);
+        object.addEffect(effect);
+
+        RPGLItem item = RPGLFactory.newItem("std:flametongue_scimitar");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "mainhand");
+
+        List<RPGLEvent> derivedEvents = item.getDerivedEvents(RPGLFactory.newEvent("std:scimitar_melee"), object, context);
+        assertEquals(2, derivedEvents.size(),
+                "there should be 2 derived events, for dex and int"
+        );
+        assertEquals("dex", derivedEvents.get(0).getSubevents().getJsonObject(0).getString("attack_ability"),
+                "first derived event should be dex-based"
+        );
+        assertEquals("int", derivedEvents.get(1).getSubevents().getJsonObject(0).getString("attack_ability"),
+                "first derived event should be int-based"
+        );
     }
 
 }

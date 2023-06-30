@@ -36,6 +36,7 @@ public abstract class Function {
     public static void initialize(boolean includeTestingFunctions) {
         Function.FUNCTIONS.clear();
 
+        Function.FUNCTIONS.put("add_attack_ability", new AddAttackAbility());
         Function.FUNCTIONS.put("add_bonus", new AddBonus());
         Function.FUNCTIONS.put("add_damage", new AddDamage());
         Function.FUNCTIONS.put("add_event", new AddEvent());
