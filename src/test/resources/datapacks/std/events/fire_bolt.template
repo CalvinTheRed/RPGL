@@ -21,7 +21,7 @@
           "bonus": 0
         }
       ],
-      "withold_damage_modifier": true,
+      "withhold_damage_modifier": true,
       "determined": [ 19 ]
     }
   ]

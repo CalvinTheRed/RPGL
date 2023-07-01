@@ -150,7 +150,7 @@ public abstract class Calculation extends Subevent {
 
     /**
      * Sets the minimum of the Calculation. If the provided minimum is lower than the current minimum, this method will
-     * not do anything to modify the SUbevent.
+     * not do anything to modify the Subevent.
      *
      * @param minimumJson the JSON representation of a minimum value for the Calculation
      */

@@ -44,7 +44,7 @@ public class AttackRoll extends Roll {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.json.asMap().putIfAbsent("withold_damage_modifier", false);
+        this.json.asMap().putIfAbsent("withhold_damage_modifier", false);
 
         // Add tags so nested subevents such as DamageCollection can know they
         // hail from an attack roll made using a particular attack ability.
@@ -121,7 +121,7 @@ public class AttackRoll extends Roll {
         baseDamageCollection.invoke(context);
 
         // Add damage modifier from attack ability, if applicable
-        if (!this.json.getBoolean("withold_damage_modifier")) { // TODO make a function ond condition for this stuff...
+        if (!this.json.getBoolean("withhold_damage_modifier")) { // TODO make a function ond condition for this stuff...
             String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
             int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(this.getAbility(context), context);
             baseDamageCollection.addDamage(new JsonObject() {{
@@ -233,7 +233,9 @@ public class AttackRoll extends Roll {
         for (int i = 0; i < damageArray.size(); i++) {
             JsonObject damageJson = damageArray.getJsonObject(i);
             JsonArray dice = damageJson.getJsonArray("dice");
-            dice.asList().addAll(dice.deepClone().asList());
+            if (dice != null) {
+                dice.asList().addAll(dice.deepClone().asList());
+            }
         }
 
         // Collect any extra damage bonuses which aren't doubled
