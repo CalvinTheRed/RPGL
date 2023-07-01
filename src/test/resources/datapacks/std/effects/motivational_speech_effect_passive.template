@@ -43,7 +43,7 @@
             "function": "invoke_subevent",
             "subevent": {
               "subevent": "give_effect",
-              "effect": "spells:motivational_speech_effect_active"
+              "effect": "std:motivational_speech_effect_active"
             },
             "source": {
               "from": "effect",

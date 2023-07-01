@@ -51,7 +51,7 @@ public class AttackRoll extends Roll {
         this.addTag("attack_roll");
         this.addTag(this.getAbility(context));
 
-        // Proficiency is added by Effects during subevent processing
+        // Proficiency is added by effects during subevent processing
 
         // Add weapon attack bonus, if applicable
         if (this.getOriginItem() != null) {

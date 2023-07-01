@@ -34,6 +34,7 @@ public abstract class Calculation extends Subevent {
         this.prepareBase(context);
         this.prepareBonuses(context);
         this.prepareMinimum(context);
+        this.json.getJsonArray("tags").asList().addAll(this.getSource().getAllTags(context));
     }
 
     /**

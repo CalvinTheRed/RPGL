@@ -307,13 +307,14 @@ public class RPGLItem extends RPGLTaggable {
             RPGLEvent derivedEvent = new RPGLEvent();
             derivedEvent.join(event.deepClone());
             JsonArray subevents = derivedEvent.getSubevents();
-            for (int j = 0; j < subevents.size(); j++) {
-                JsonObject subeventJson = subevents.getJsonObject(j);
-                if (Objects.equals("attack_roll", subeventJson.getString("subevent"))) {
+            if (subevents.size() == 1) {
+                JsonObject subeventJson = subevents.getJsonObject(0);
+                if (Objects.equals("attack_roll", subeventJson.getString("subevent"))
+                        && Objects.equals("str", subeventJson.getString("attack_ability"))) {
                     subeventJson.putString("attack_ability", attackAbilities.getString(i));
+                    derivedEvents.add(derivedEvent);
                 }
             }
-            derivedEvents.add(derivedEvent);
         }
         return derivedEvents;
     }

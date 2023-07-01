@@ -14,6 +14,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -86,9 +87,13 @@ public class InvokeSubeventTest {
         );
 
         source.invokeEvent(
-                new RPGLObject[] { target },
-                RPGLFactory.newEvent("std:longsword_melee"),
-                new ArrayList<>(),
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:longsword_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
                 context
         );
 
