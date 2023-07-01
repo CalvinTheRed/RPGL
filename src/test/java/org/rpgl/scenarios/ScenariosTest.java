@@ -56,7 +56,7 @@ public class ScenariosTest {
     @DisplayName("flametongue test")
     void flametongueTest() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:knight");
-        RPGLObject target = RPGLFactory.newObject("bugtest:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
         RPGLItem flametongue = RPGLFactory.newItem("std:flametongue_scimitar");
         DummyContext context = new DummyContext();
         context.add(source);
