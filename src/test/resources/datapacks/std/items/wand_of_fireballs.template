@@ -21,5 +21,11 @@
       "std:improvised_thrown"
     ],
     "special": [ ]
-  }
+  },
+  "equipped_resources": [
+    {
+      "resource": "std:wand_of_fireballs_charge",
+      "count": 3
+    }
+  ]
 }

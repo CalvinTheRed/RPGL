@@ -404,4 +404,27 @@ public class RPGLObjectTest {
         );
     }
 
+    @Test
+    @DisplayName("getResourceObjects returns resources provided by equipped items")
+    void getResourceObjects_returnsResourcesProvidedByEquippedItems() {
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLContext context = new DummyContext();
+        context.add(object);
+
+        RPGLItem wand = RPGLFactory.newItem("std:wand_of_fireballs");
+        object.giveItem(wand.getUuid());
+        object.equipItem(wand.getUuid(), "mainhand");
+
+        List<RPGLResource> resources = object.getResourceObjects();
+
+        assertEquals(3, resources.size(),
+                "commoner should have 3 resources from the wand"
+        );
+        for (RPGLResource resource : resources) {
+            assertEquals("std:wand_of_fireballs_charge", resource.getId(),
+                    "resource should be a std:wand_of_fireballs_charge"
+            );
+        }
+    }
+
 }

@@ -268,9 +268,17 @@ public class RPGLObject extends RPGLTaggable {
     public List<RPGLResource> getResourceObjects() {
         List<RPGLResource> resources = new ArrayList<>();
 
+        // get personal resources
         JsonArray resourceUuids = this.getResources();
         for (int i = 0; i < resourceUuids.size(); i++) {
             resources.add(UUIDTable.getResource(resourceUuids.getString(i)));
+        }
+
+        // get resources from equipped items
+        JsonObject equippedItems = this.getEquippedItems();
+        for (Map.Entry<String, Object> equippedItemEntry : equippedItems.asMap().entrySet()) {
+            RPGLItem equippedItem = UUIDTable.getItem(equippedItems.getString(equippedItemEntry.getKey()));
+            resources.addAll(equippedItem.getEquippedResourcesObjects());
         }
 
         return resources;

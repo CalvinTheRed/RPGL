@@ -10,6 +10,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.RPGLTaggableTO;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -43,6 +44,23 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
+    @DisplayName("processEvents defaults events to empty arrays")
+    void processEvents_defaultsEventsToEmptyArrays() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("teacup");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
+        item.putJsonObject("events", new JsonObject());
+
+        RPGLItemTemplate.processEvents(item);
+
+        String expected = """
+                {"multiple_hands":[],"one_hand":[],"special":[]}""";
+        assertEquals(expected, item.getEvents().toString(),
+                "events arrays should be defaulted to empty arrays when not specified"
+        );
+    }
+
+    @Test
     @DisplayName("processEquippedEffects processes effects correctly")
     void processEquippedEffects_processesEffectsCorrectly() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
@@ -62,6 +80,26 @@ public class RPGLItemTemplateTest {
         assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
                 "Second effect should be std:fire_resistance"
         );
+    }
+
+    @Test
+    @DisplayName("processEquippedResources processes resources correctly")
+    void processEquippedResources_processesResourcesCorrectly() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("wand_of_fireballs");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
+
+        RPGLItemTemplate.processEquippedResources(item);
+
+        List<RPGLResource> resources = item.getEquippedResourcesObjects();
+        assertEquals(3, resources.size(),
+                "item should have 3 resources"
+        );
+        for (RPGLResource resource : resources) {
+            assertEquals("std:wand_of_fireballs_charge", resource.getId(),
+                    "resource should be a std:wand_of_fireballs_charge"
+            );
+        }
     }
 
     @Test

@@ -11,6 +11,10 @@
     {
       "resource_tags": [ "action" ],
       "count": 1
+    },
+    {
+      "resource_tags": [ "wand_of_fireballs_charge" ],
+      "count": 1
     }
   ],
   "subevents": [

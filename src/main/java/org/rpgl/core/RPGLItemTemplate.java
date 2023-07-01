@@ -7,6 +7,7 @@ import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * This class is used to contain a "template" to be used in the creation of new RPGLItem objects. Data stored in this
@@ -69,14 +70,16 @@ public class RPGLItemTemplate extends JsonObject {
      * @param item a RPGLItem being created by this object
      */
     static void processEquippedResources(RPGLItem item) {
-        JsonArray equippedResourcesIdArray = item.getEquippedResources();
-        JsonArray equippedResourcesUuidArray = new JsonArray();
-        for (int i = 0; i < equippedResourcesIdArray.size(); i++) {
-            String resourceId = equippedResourcesIdArray.getString(i);
-            RPGLResource resource = RPGLFactory.newResource(resourceId, item.getUuid());
-            equippedResourcesUuidArray.addString(resource.getUuid());
+        JsonArray processedEquippedResources = new JsonArray();
+        JsonArray unprocessedEquippedResources = item.getEquippedResources();
+        for (int i = 0; i < unprocessedEquippedResources.size(); i++) {
+            String resourceId = unprocessedEquippedResources.getJsonObject(i).getString("resource");
+            int count = Objects.requireNonNullElse(unprocessedEquippedResources.getJsonObject(i).getInteger("count"), 1);
+            for (int j = 0; j < count; j++) {
+                processedEquippedResources.addString(RPGLFactory.newResource(resourceId, item.getUuid()).getUuid());
+            }
         }
-        item.setEquippedResources(equippedResourcesUuidArray);
+        item.setEquippedResources(processedEquippedResources);
     }
 
 }
