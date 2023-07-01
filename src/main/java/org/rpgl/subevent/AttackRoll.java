@@ -66,15 +66,13 @@ public class AttackRoll extends Roll {
     public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
-            int armorClass = this.getTargetArmorClass(context);
-
-            // Add attack ability modifier to attack roll
             this.json.asMap().putIfAbsent("damage", new ArrayList<>());
             this.addBonus(new JsonObject() {{
                 this.putInteger("bonus", getSource().getAbilityModifierFromAbilityName(getAbility(context), context));
                 this.putJsonArray("dice", new JsonArray());
             }});
 
+            int armorClass = this.getTargetArmorClass(context);
             if (this.isCriticalHit(context)) {
                 this.getBaseDamage(context);
                 this.getTargetDamage(context);
@@ -120,14 +118,24 @@ public class AttackRoll extends Roll {
         baseDamageCollection.setTarget(this.getSource());
         baseDamageCollection.invoke(context);
 
+        String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
+
         // Add damage modifier from attack ability, if applicable
         if (!this.json.getBoolean("withhold_damage_modifier")) { // TODO make a function ond condition for this stuff...
-            String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
             int attackAbilityModifier = this.getSource().getAbilityModifierFromAbilityName(this.getAbility(context), context);
             baseDamageCollection.addDamage(new JsonObject() {{
                 this.putString("damage_type", damageType);
                 this.putJsonArray("dice", new JsonArray());
                 this.putInteger("bonus", attackAbilityModifier);
+            }});
+        }
+
+        // Add origin item damage bonus, if applicable
+        if (this.getOriginItem() != null) {
+            baseDamageCollection.addDamage(new JsonObject() {{
+                this.putString("damage_type", damageType);
+                this.putJsonArray("dice", new JsonArray());
+                this.putInteger("bonus", UUIDTable.getItem(getOriginItem()).getDamageBonus());
             }});
         }
 

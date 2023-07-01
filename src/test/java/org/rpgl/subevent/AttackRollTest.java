@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
@@ -640,6 +641,96 @@ public class AttackRollTest {
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated not including ability modifier bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseDamage gets correct base damage (origin item damage bonus)")
+    void getBaseDamage_getsCorrectBaseDamage_originItemDamageBonus() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        item.setDamageBonus(1);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "withhold_damage_modifier": true
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                }});
+            }});
+            this.putBoolean("withhold_damage_modifier", true);
+        }});
+
+        attackRoll.setOriginItem(item.getUuid());
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.getBaseDamage(context);
+
+        String expected = """
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":1,"damage_type":"slashing","dice":[]}]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
+                "base damage should be calculated including item damage bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("prepare adds origin item attack bonus")
+    void prepare_addsOriginItemAttackBonus() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+
+        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        item.setAttackBonus(1);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str"
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+        }});
+
+        attackRoll.setOriginItem(item.getUuid());
+        attackRoll.setSource(source);
+        attackRoll.prepare(context);
+
+        assertEquals(1, attackRoll.getBonus(),
+                "attack roll should include bonus from weapon attack bonus"
         );
     }
 

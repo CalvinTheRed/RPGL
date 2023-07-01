@@ -135,7 +135,7 @@ public abstract class Calculation extends Subevent {
      * @param bonusJson a bonus to be added to the Calculation
      */
     public void addBonus(JsonObject bonusJson) {
-        this.json.getJsonArray("bonuses").addJsonObject(bonusJson);
+        this.getBonuses().addJsonObject(bonusJson);
     }
 
     /**
