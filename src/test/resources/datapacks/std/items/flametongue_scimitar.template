@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Flametongue Scimitar",
+  "description": "A magical scimitar which can catch fire to deal additional damage and shed light.",
+  "tags": [
+    "scimitar",
+    "metal",
+    "magic",
+    "martial_melee",
+    "finesse"
+  ],
+  "weight": 3,
+  "cost": 10000,
+  "events": {
+    "multiple_hands": [
+      "std:scimitar_melee",
+      "std:improvised_thrown"
+    ],
+    "one_hand": [
+      "std:scimitar_melee",
+      "std:improvised_thrown"
+    ],
+    "special": [ ]
+  },
+  "equipped_effects": [
+    "std:flametongue"
+  ],
+  "attack_bonus": 0,
+  "damage_bonus": 0
+}

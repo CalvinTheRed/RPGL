@@ -79,6 +79,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
                 this.addString("base_damage_collection");
             }});
         }});
+        baseDamageCollection.setOriginItem(this.getOriginItem());
         baseDamageCollection.setSource(this.getSource());
         baseDamageCollection.prepare(context);
         baseDamageCollection.setTarget(this.getSource());
@@ -95,6 +96,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
                 this.addString("base_damage_roll");
             }});
         }});
+        baseDamageRoll.setOriginItem(this.getOriginItem());
         baseDamageRoll.setSource(this.getSource());
         baseDamageRoll.prepare(context);
         baseDamageRoll.setTarget(this.getSource());
@@ -124,6 +126,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
                 this.addString("target_damage_collection");
             }});
         }});
+        targetDamageCollection.setOriginItem(this.getOriginItem());
         targetDamageCollection.setSource(this.getSource());
         targetDamageCollection.prepare(context);
         targetDamageCollection.setTarget(this.getTarget());
@@ -140,6 +143,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
                 this.addString("target_damage_roll");
             }});
         }});
+        targetDamageRoll.setOriginItem(this.getOriginItem());
         targetDamageRoll.setSource(this.getSource());
         targetDamageRoll.prepare(context);
         targetDamageRoll.setTarget(this.getTarget());
@@ -160,6 +164,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", json.getJsonArray("damage"));
         }});
+        damageDelivery.setOriginItem(this.getOriginItem());
         damageDelivery.setSource(this.getSource());
         damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());

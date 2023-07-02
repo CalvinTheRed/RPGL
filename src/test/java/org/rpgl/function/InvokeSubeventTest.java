@@ -14,6 +14,7 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -70,13 +71,13 @@ public class InvokeSubeventTest {
     @Test
     @DisplayName("InvokeSubevent works using example effect (motivational speech effect passive and active)")
     void invokeSubeventWorksUsingExampleEffect_motivationalSpeechEffectPassiveAndActive() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        RPGLEffect motivationalSpeechEffectPassive = RPGLFactory.newEffect("demo:motivational_speech_effect_passive");
+        RPGLEffect motivationalSpeechEffectPassive = RPGLFactory.newEffect("std:motivational_speech_effect_passive");
         motivationalSpeechEffectPassive.setSource(target);
         motivationalSpeechEffectPassive.setTarget(target);
         target.addEffect(motivationalSpeechEffectPassive);
@@ -86,9 +87,13 @@ public class InvokeSubeventTest {
         );
 
         source.invokeEvent(
-                new RPGLObject[] { target },
-                RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
-                new ArrayList<>(),
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:longsword_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
                 context
         );
 

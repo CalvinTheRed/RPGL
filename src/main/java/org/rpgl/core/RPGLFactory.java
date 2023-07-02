@@ -18,18 +18,49 @@ public final class RPGLFactory {
      * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
      *
      * @param effectId an effect ID <code>(namespace:name)</code>
+     * @param originItem an item UUID to be stored for the new effect's origin item
      * @return a new RPGLEffect object
      */
-    public static RPGLEffect newEffect(String effectId) {
+    public static RPGLEffect newEffect(String effectId, String originItem) {
         String[] effectIdSplit = effectId.split(":");
         try {
             return DatapackLoader.DATAPACKS
                     .get(effectIdSplit[0])
                     .getEffectTemplate(effectIdSplit[1])
-                    .newInstance();
+                    .newInstance(originItem);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEffect: " + effectId);
             throw new RuntimeException("Encountered an error building a new RPGLEffect", e);
+        }
+    }
+
+    /**
+     * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
+     *
+     * @param effectId an effect ID <code>(namespace:name)</code>
+     * @return a new RPGLEffect object
+     */
+    public static RPGLEffect newEffect(String effectId) {
+        return newEffect(effectId, null);
+    }
+
+    /**
+     * This method creates a new RPGLEvent instance according to template data stored at the given event ID.
+     *
+     * @param eventId an event ID <code>(namespace:name)</code>
+     * @param originItem an item UUID to be stored for the new event's origin item
+     * @return a new RPGLEvent object
+     */
+    public static RPGLEvent newEvent(String eventId, String originItem) {
+        String[] eventIdSplit = eventId.split(":");
+        try {
+            return DatapackLoader.DATAPACKS
+                    .get(eventIdSplit[0])
+                    .getEventTemplate(eventIdSplit[1])
+                    .newInstance(originItem);
+        } catch (NullPointerException e) {
+            LOGGER.error("encountered an error creating RPGLEvent: " + eventId);
+            throw new RuntimeException("Encountered an error building a new RPGLEvent", e);
         }
     }
 
@@ -40,16 +71,7 @@ public final class RPGLFactory {
      * @return a new RPGLEvent object
      */
     public static RPGLEvent newEvent(String eventId) {
-        String[] eventIdSplit = eventId.split(":");
-        try {
-            return DatapackLoader.DATAPACKS
-                    .get(eventIdSplit[0])
-                    .getEventTemplate(eventIdSplit[1])
-                    .newInstance();
-        } catch (NullPointerException e) {
-            LOGGER.error("encountered an error creating RPGLEvent: " + eventId);
-            throw new RuntimeException("Encountered an error building a new RPGLEvent", e);
-        }
+        return newEvent(eventId, null);
     }
 
     /**
@@ -94,19 +116,30 @@ public final class RPGLFactory {
      * This method creates a new RPGLResource instance according to template data stored at the given resource ID.
      *
      * @param resourceId a resource ID <code>(namespace:name)</code>
+     * @param originItem an item UUID to be stored for the new resource's origin item
      * @return a new RPGLResource object
      */
-    public static RPGLResource newResource(String resourceId) {
+    public static RPGLResource newResource(String resourceId, String originItem) {
         String[] resourceIdSplit = resourceId.split(":");
         try {
             return DatapackLoader.DATAPACKS
                     .get(resourceIdSplit[0])
                     .getResourceTemplate(resourceIdSplit[1])
-                    .newInstance();
+                    .newInstance(originItem);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLResource: " + resourceId);
             throw new RuntimeException("Encountered an error building a new RPGLResource", e);
         }
+    }
+
+    /**
+     * This method creates a new RPGLResource instance according to template data stored at the given resource ID.
+     *
+     * @param resourceId a resource ID <code>(namespace:name)</code>
+     * @return a new RPGLResource object
+     */
+    public static RPGLResource newResource(String resourceId) {
+        return newResource(resourceId, null);
     }
 
 }

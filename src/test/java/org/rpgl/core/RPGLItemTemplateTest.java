@@ -9,17 +9,15 @@ import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.datapack.RPGLItemTO;
-import org.rpgl.json.JsonArray;
+import org.rpgl.datapack.RPGLTaggableTO;
+import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.core.RPGLItemTemplate class.
@@ -46,98 +44,68 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
-    @DisplayName("setDefaultItemDamage default damage is added if absent (no melee, no thrown)")
-    void setDefaultItemDamage_defaultDamageIsAddedIfAbsent_noMeleeNoThrown() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("teacup");
+    @DisplayName("processEvents defaults events to empty arrays")
+    void processEvents_defaultsEventsToEmptyArrays() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("teacup");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
+        item.putJsonObject("events", new JsonObject());
 
-        RPGLItemTemplate.setDefaultItemDamage(item);
+        RPGLItemTemplate.processEvents(item);
 
         String expected = """
-                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
-        assertEquals(expected, item.getDamage().toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
+                {"multiple_hands":[],"one_hand":[],"special":[]}""";
+        assertEquals(expected, item.getEvents().toString(),
+                "events arrays should be defaulted to empty arrays when not specified"
         );
     }
 
     @Test
-    @DisplayName("setDefaultItemDamage default damage is added if absent (no thrown)")
-    void setDefaultItemDamage_defaultDamageIsAddedIfAbsent_noThrown() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("longsword");
-        RPGLItem item = new RPGLItem();
-        item.join(itemTemplate);
-
-        RPGLItemTemplate.setDefaultItemDamage(item);
-
-        String expected = """
-                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"slashing","dice":[{"count":1,"determined":[4],"size":8}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
-        assertEquals(expected, item.getDamage().toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
-        );
-    }
-
-    @Test
-    @DisplayName("processEquippedEffects effects are created and loaded in UUIDTable")
-    void processEquippedEffects_effectsCreatedAndLoadedInUUIDTable() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("frostbrand");
+    @DisplayName("processEquippedEffects processes effects correctly")
+    void processEquippedEffects_processesEffectsCorrectly() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
 
         RPGLItemTemplate.processEquippedEffects(item);
 
-        JsonArray whileEquipped = item.getWhileEquippedEffects();
-        assertEquals(1, whileEquipped.size(),
-                "there should be 1 element in the while_equipped field after calling processEquippedEffects() method"
+        List<RPGLEffect> equippedEffects = item.getEquippedEffectsObjects();
+        assertEquals(2, equippedEffects.size(),
+                "2 effects should be created"
         );
-        for (int i = 0; i < whileEquipped.size(); i++) {
-            String effectUuid = whileEquipped.getString(i);
-            assertNotNull(UUIDTable.getEffect(effectUuid),
-                    "effect (index " + i + ") absent from UUIDTable"
+
+        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
+                "First effect should be std:cold_resistance"
+        );
+        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
+                "Second effect should be std:fire_resistance"
+        );
+    }
+
+    @Test
+    @DisplayName("processEquippedResources processes resources correctly")
+    void processEquippedResources_processesResourcesCorrectly() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("wand_of_fireballs");
+        RPGLItem item = new RPGLItem();
+        item.join(itemTemplate);
+
+        RPGLItemTemplate.processEquippedResources(item);
+
+        List<RPGLResource> resources = item.getEquippedResourcesObjects();
+        assertEquals(3, resources.size(),
+                "item should have 3 resources"
+        );
+        for (RPGLResource resource : resources) {
+            assertEquals("std:wand_of_fireballs_charge", resource.getId(),
+                    "resource should be a std:wand_of_fireballs_charge"
             );
         }
     }
 
     @Test
-    @DisplayName("processImprovisedTags improvised weapon property tags added (not melee, not thrown)")
-    void processImprovisedTags_improvisedWeaponPropertyTagsAdded_notMeleeNotThrown() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("teacup");
-        RPGLItem item = new RPGLItem();
-        item.join(itemTemplate);
-
-        RPGLItemTemplate.processImprovisedTags(item);
-
-        JsonArray weaponProperties = item.getWeaponProperties();
-        assertTrue(weaponProperties.asList().contains("improvised_melee"),
-                "weapon properties array missing improvised_melee tag"
-        );
-        assertTrue(weaponProperties.asList().contains("improvised_thrown"),
-                "weapon properties array missing improvised_thrown tag"
-        );
-    }
-
-    @Test
-    @DisplayName("processImprovisedTags improvised weapon property tags added (not thrown)")
-    void processImprovisedTags_improvisedWeaponPropertyTagsAdded_notThrown() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("longsword");
-        RPGLItem item = new RPGLItem();
-        item.join(itemTemplate);
-
-        RPGLItemTemplate.processImprovisedTags(item);
-
-        JsonArray weaponProperties = item.getWeaponProperties();
-        assertFalse(weaponProperties.asList().contains("improvised_melee"),
-                "weapon properties array should not contain improvised_melee tag"
-        );
-        assertTrue(weaponProperties.asList().contains("improvised_thrown"),
-                "weapon properties array missing improvised_thrown tag"
-        );
-    }
-
-    @Test
-    @DisplayName("newInstance comprehensive test using demo:teacup template")
-    void newInstance_teacupTemplate() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("teacup");
+    @DisplayName("newInstance correctly creates frostbrand from template")
+    void newInstance_correctlyCreatesFrostbrandFromTemplate() {
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
         RPGLItem item = itemTemplate.newInstance();
         String expected;
 
@@ -146,62 +114,47 @@ public class RPGLItemTemplateTest {
         assertEquals(expected, item.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Teacup", item.getName(),
+        assertEquals("Frostbrand", item.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A teacup.", item.getDescription(),
+        assertEquals("A legendary scimitar wielded by Drizzt Do'Urden.", item.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("demo:teacup", item.getId(),
-                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+
+        expected = """
+                ["scimitar","metal","magic","martial_melee","finesse"]""";
+        assertEquals(expected, item.getTags().toString(),
+                "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
 
-        assertEquals("[]", item.getTags().toString(),
-                "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
-        );
-        assertEquals(0, item.getWeight(),
+        assertEquals(3, item.getWeight(),
                 "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
-        assertEquals(0, item.getCost(),
+        assertEquals(10000, item.getCost(),
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        assertEquals("[]", item.getProficiencyTags().toString(),
-                "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
-        );
-        assertEquals("[]", item.getWhileEquippedEffects().toString(),
-                "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
-        );
         expected = """
-                ["improvised_melee","improvised_thrown"]""";
-        assertEquals(expected, item.getWeaponProperties().toString(),
-                "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
+                {"multiple_hands":["std:frostbrand_melee","std:improvised_thrown"],"one_hand":["std:frostbrand_melee","std:improvised_thrown"],"special":[]}""";
+        assertEquals(expected, item.getEvents().toString(),
+                "incorrect field value: " + RPGLItemTO.EVENTS_ALIAS
         );
-        expected = """
-                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
-        assertEquals(expected, item.getDamage().toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
+
+        List<RPGLEffect> equippedEffects = item.getEquippedEffectsObjects();
+        assertEquals(2, equippedEffects.size(),
+                "2 effects should be created"
         );
-        assertEquals(0, item.getAttackBonus(),
+        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
+                "First effect should be std:cold_resistance"
+        );
+        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
+                "Second effect should be std:fire_resistance"
+        );
+
+        assertEquals(3, item.getAttackBonus(),
                 "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
         );
-        expected = """
-                {"melee":"str","thrown":"str"}""";
-        assertEquals(expected, item.getAttackAbilities().toString(),
-                "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
-        );
-        expected = """
-                {"long":60,"normal":20}""";
-        assertEquals(expected, item.getRange().toString(),
-                "incorrect field value: " + RPGLItemTO.RANGE_ALIAS
-        );
-        assertNull(item.getArmorClassBase(),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
-        );
-        assertNull(item.getArmorClassDexLimit(),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS
-        );
-        assertNull(item.getArmorClassBonus(),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS
+        assertEquals(3, item.getDamageBonus(),
+                "incorrect field value: " + RPGLItemTO.DAMAGE_BONUS_ALIAS
         );
     }
 

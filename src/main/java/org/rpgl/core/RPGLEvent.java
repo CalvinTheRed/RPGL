@@ -71,4 +71,22 @@ public class RPGLEvent extends DatapackContent {
     // Methods not derived directly from transfer objects
     // =================================================================================================================
 
+    /**
+     * Returns the origin item UUID for the RPGLEvent if it has one.
+     *
+     * @return an RPGLItem UUID, or null if the event was not produced using an item.
+     */
+    public String getOriginItem() {
+        return this.getString("origin_item");
+    }
+
+    /**
+     * Sets the origin item UUID of the RPGLEvent.
+     *
+     * @param originItem a RPGLItem UUID
+     */
+    public void setOriginItem(String originItem) {
+        this.putString("origin_item", originItem);
+    }
+
 }

@@ -3,10 +3,10 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.AttackAbilityCollection;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,79 +55,26 @@ public class RPGLItem extends RPGLTaggable {
     }
 
     /**
-     * Returns the proficiency tags of the RPGLObject.
+     * Returns the event IDs offered by the RPGLItem.
      *
-     * @return a JsonArray containing proficiency tags
+     * @return a JsonObject containing lists of event ID's
      */
-    public JsonArray getProficiencyTags() {
-        return this.getJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS);
+    public JsonObject getEvents() {
+        return this.getJsonObject(RPGLItemTO.EVENTS_ALIAS);
     }
 
     /**
-     * Setter for proficiency tags.
+     * Setter for events.
      *
-     * @param proficiencyTags a new proficiency tags JsonArray
+     * @param events a new events JsonObject
      */
-    public void setProficiencyTags(JsonArray proficiencyTags) {
-        this.putJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS, proficiencyTags);
+    public void setEvents(JsonObject events) {
+        this.putJsonObject(RPGLItemTO.EVENTS_ALIAS, events);
     }
 
     /**
-     * Returns a list of UUIDs for RPGLEffects which are to be applied to any RPGLObject wielding the RPGLItem.
-     *
-     * @return a JsonArray containing RPGLEffect UUIDs
-     */
-    public JsonArray getWhileEquippedEffects() {
-        return this.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS);
-    }
-
-    /**
-     * Setter for while equipped.
-     *
-     * @param whileEquippedEffects a new while equipped JsonArray
-     */
-    public void setWhileEquippedEffects(JsonArray whileEquippedEffects) {
-        this.putJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS, whileEquippedEffects);
-    }
-
-    /**
-     * Returns the weapon properties of the RPGLObject.
-     *
-     * @return a JsonArray containing weapon properties
-     */
-    public JsonArray getWeaponProperties() {
-        return this.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS);
-    }
-
-    /**
-     * Setter for weapon properties.
-     *
-     * @param weaponProperties a new weapon properties JsonArray
-     */
-    public void setWeaponProperties(JsonArray weaponProperties) {
-        this.putJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS, weaponProperties);
-    }
-
-    /**
-     * Returns the damage values of the RPGLObject.
-     *
-     * @return a JsonObject containing damage values
-     */
-    public JsonObject getDamage() {
-        return this.getJsonObject(RPGLItemTO.DAMAGE_ALIAS);
-    }
-
-    /**
-     * Setter for damage.
-     *
-     * @param damage a new damage JsonObject
-     */
-    public void setDamage(JsonObject damage) {
-        this.putJsonObject(RPGLItemTO.DAMAGE_ALIAS, damage);
-    }
-
-    /**
-     * Returns the item's attack bonus (typically reflective of a magic weapon's bonus to attack rolls).
+     * Returns the item's attack bonus (typically reflective of a magic weapon's bonus to attack rolls). This bonus does
+     * not apply to improvised attacks made with the item.
      *
      * @return the item's attack bonus
      */
@@ -145,40 +92,59 @@ public class RPGLItem extends RPGLTaggable {
     }
 
     /**
-     * Returns the current ability scores associated with each type of weapon attack made by this weapon.
+     * Returns the item's damage bonus (typically reflective of a magic weapon's bonus to damage rolls). This bonus will
+     * be applied to the first damage type indicated by the weapon's damage rolls, unless it is the damage roll of an
+     * improvised attack made using the item.
      *
-     * @return a JsonObject storing ability scores mapped to modes (<code>melee</code>, <code>thrown</code>>,
-     *         <code>ranged</code>>) of attacking
+     * @return the item's damage bonus
      */
-    public JsonObject getAttackAbilities() {
-        return this.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS);
+    public int getDamageBonus() {
+        return Objects.requireNonNullElse(this.getInteger(RPGLItemTO.DAMAGE_BONUS_ALIAS), 0);
     }
 
     /**
-     * Setter for attack abilities.
+     * Setter for damage bonus.
      *
-     * @param attackAbilities a new attack abilities JsonObject
+     * @param damageBonus a new attack bonus int
      */
-    public void setAttackAbilities(JsonObject attackAbilities) {
-        this.putJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS, attackAbilities);
+    public void setDamageBonus(int damageBonus) {
+        this.putInteger(RPGLItemTO.DAMAGE_BONUS_ALIAS, damageBonus);
     }
 
     /**
-     * Returns the range of the RPGLItem when used for a thrown or ranged attack.
+     * Returns a list of effects which will be shared with the item's user when this item is equipped.
      *
-     * @return a JsonObject containing range data for thrown and ranged attacks made using the RPGLItem
+     * @return a list of effect UUIDs
      */
-    public JsonObject getRange() {
-        return this.getJsonObject(RPGLItemTO.RANGE_ALIAS);
+    public JsonArray getEquippedEffects() {
+        return Objects.requireNonNullElse(this.getJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS), new JsonArray());
     }
 
     /**
-     * Setter for range.
+     * Setter for the item's equipped effects.
      *
-     * @param range a new range JsonObject
+     * @param equippedEffects a new list of effect UUIDs
      */
-    public void setRange(JsonObject range) {
-        this.putJsonObject(RPGLItemTO.RANGE_ALIAS, range);
+    public void setEquippedEffects(JsonArray equippedEffects) {
+        this.putJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, equippedEffects);
+    }
+
+    /**
+     * Returns a list of resources made available to any object that equips this item.
+     *
+     * @return a list of resource UUIDs
+     */
+    public JsonArray getEquippedResources() {
+        return Objects.requireNonNullElse(this.getJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS), new JsonArray());
+    }
+
+    /**
+     * Setter for this item's resources.
+     *
+     * @param equippedResources a new list of resource UUIDs
+     */
+    public void setEquippedResources(JsonArray equippedResources) {
+        this.putJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, equippedResources);
     }
 
     /**
@@ -246,65 +212,111 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @return a List of RPGLEffect objects
      */
-    public List<RPGLEffect> getWhileEquippedEffectObjects() {
-        JsonArray whileEquippedUuids = this.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS);
+    public List<RPGLEffect> getEquippedEffectsObjects() {
+        JsonArray equippedEffectsUuids = this.getEquippedEffects();
         List<RPGLEffect> effects = new ArrayList<>();
-        for (int i = 0; i < whileEquippedUuids.size(); i++) {
-            effects.add(UUIDTable.getEffect(whileEquippedUuids.getString(i)));
+        for (int i = 0; i < equippedEffectsUuids.size(); i++) {
+            effects.add(UUIDTable.getEffect(equippedEffectsUuids.getString(i)));
         }
         return effects;
     }
 
     /**
-     * Returns the damage dice associated with the weapon for attacks of the given type, or <code>null</code> if the
-     * passed attack type does not apply to the RPGLItem.
+     * This method returns all RPGLResource objects which are meant to be available to whichever RPGLObject is wielding
+     * the RPGLItem.
      *
-     * @param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
-     * @return the damage associated with the RPGLItem for the given attackType
+     * @return a List of RPGLResource objects
      */
-    public JsonArray getDamageForAttackType(String attackType) {
-        return this.getDamage().getJsonArray(attackType);
-    }
-
-    /**
-     * Returns the ability score the weapon is currently set to use for attacks of the given type.
-     *
-     * @param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
-     * @return an ability score, or <code>null</code> if an invalid attackType for the RPGLItem was passed
-     */
-    public String getAttackAbility(String attackType) {
-        return this.getAttackAbilities().getString(attackType);
-    }
-
-    /**
-     * This method defines the default attack abilities for RPGLItems. <i>Melee</i> and <i>thrown</i> attacks default
-     * to using <i>str</i>, unless they have the <i>finesse</i> property, in which case they default to <i>dex</i>.
-     * <i>Ranged</i> attacks always default to <i>dex</i>.
-     */
-    public void defaultAttackAbilities() {
-        HashMap<String, Object> attackAbilities = new HashMap<>();
-        if (this.getWeaponProperties().asList().contains("ranged")) {
-            attackAbilities.put("ranged", "dex");
+    public List<RPGLResource> getEquippedResourcesObjects() {
+        JsonArray equippedResourcesUuids = this.getEquippedResources();
+        List<RPGLResource> resources = new ArrayList<>();
+        for (int i = 0; i < equippedResourcesUuids.size(); i++) {
+            resources.add(UUIDTable.getResource(equippedResourcesUuids.getString(i)));
         }
-        if (this.getWeaponProperties().asList().contains("finesse")) {
-            attackAbilities.put("melee", "dex");
-            attackAbilities.put("thrown", "dex");
-        } else {
-            attackAbilities.put("melee", "str");
-            attackAbilities.put("thrown", "str");
-        }
-        this.putJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS, new JsonObject(attackAbilities));
+        return resources;
     }
 
     /**
-     * This method assigns an ability score to be used for attack and damage rolls made using this item for a given
-     * attack type.
+     * Returns a list of events provided in virtue of wielding this item in one hand.
      *
-     * @param attackType a type of weapon attack <code>("melee", "ranged", "thrown")</code>
-     * @param ability    an ability score reference <code>("str", "dex", etc.)</code>
+     * @param wielder the object wielding this item
+     * @param context the context in which the item's events are being retrieved
+     * @return a list of events
+     *
+     * @throws Exception if an exception occurs
      */
-    public void setAttackAbility(String attackType, String ability) {
-        this.getAttackAbilities().asMap().put(attackType, ability);
+    public List<RPGLEvent> getOneHandedEventObjects(RPGLObject wielder, RPGLContext context) throws Exception {
+        JsonArray eventIds = this.getEvents().getJsonArray("one_hand");
+        List<RPGLEvent> events = new ArrayList<>();
+        for (int i = 0; i < eventIds.size(); i++) {
+            // construct specified events
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            JsonObject subevent = event.getSubevents().getJsonObject(0);
+            JsonArray tags = subevent.getJsonArray("tags");
+            if (tags == null) {
+                tags = new JsonArray();
+                subevent.putJsonArray("tags", tags);
+            }
+            if (!tags.asList().contains("improvised")) {
+                tags.asList().addAll(this.getTags().asList());
+            }
+            event.setOriginItem(this.getUuid());
+            events.add(event);
+
+            // construct derived events
+            events.addAll(this.getDerivedEvents(event, wielder, context));
+        }
+        return events;
+    }
+
+    /**
+     * Returns a list of events provided in virtue of wielding this item in multiple hands.
+     *
+     * @param wielder the object wielding this item
+     * @param context the context in which the item's events are being retrieved
+     * @return a list of events
+     *
+     * @throws Exception if an exception occurs
+     */
+    public List<RPGLEvent> getMultiHandedEventObjects(RPGLObject wielder, RPGLContext context) throws Exception {
+        JsonArray eventIds = this.getEvents().getJsonArray("multiple_hands");
+        // TODO redundant code here... helper method?
+        List<RPGLEvent> events = new ArrayList<>();
+        for (int i = 0; i < eventIds.size(); i++) {
+            // construct specified events
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            JsonObject subevent = event.getSubevents().getJsonObject(0);
+            JsonArray tags = subevent.getJsonArray("tags");
+            if (tags == null) {
+                tags = new JsonArray();
+                subevent.putJsonArray("tags", tags);
+            }
+            if (!tags.asList().contains("improvised")) {
+                tags.asList().addAll(this.getTags().asList());
+            }
+            event.setOriginItem(this.getUuid());
+            events.add(event);
+
+            // construct derived events
+            events.addAll(this.getDerivedEvents(event, wielder, context));
+        }
+        return events;
+    }
+
+    /**
+     * Returns a list of events provided in virtue of having equipped this item at all.
+     *
+     * @return a list of events
+     */
+    public List<RPGLEvent> getSpecialEventObjects() {
+        JsonArray eventIds = this.getEvents().getJsonArray("special");
+        List<RPGLEvent> events = new ArrayList<>();
+        for (int i = 0; i < eventIds.size(); i++) {
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            event.setOriginItem(this.getUuid());
+            events.add(event);
+        }
+        return events;
     }
 
     /**
@@ -314,13 +326,51 @@ public class RPGLItem extends RPGLTaggable {
      * @param wielder an RPGLObject which has equipped this RPGLItem
      */
     public void updateEquippedEffects(RPGLObject wielder) {
-        JsonArray whileEquippedEffects = this.getWhileEquippedEffects();
+        JsonArray whileEquippedEffects = this.getEquippedEffects();
         for (int i = 0; i < whileEquippedEffects.size(); i++) {
             String effectUuid = whileEquippedEffects.getString(i);
             RPGLEffect effect = UUIDTable.getEffect(effectUuid);
             effect.setSource(wielder);
             effect.setTarget(wielder);
         }
+    }
+
+    /**
+     * This helper method returns a list of events derived from a common event. This method is intended to be used to
+     * collect weapon attack events which use non-standard ability scores to make their attack roll.
+     *
+     * @param event the base event to derive other events from
+     * @param wielder the object wielding this item
+     * @param context the context in which the derived events are being retrieved
+     * @return a list of events
+     *
+     * @throws Exception if an exception occurs
+     */
+    List<RPGLEvent> getDerivedEvents(RPGLEvent event, RPGLObject wielder, RPGLContext context) throws Exception {
+        List<RPGLEvent> derivedEvents = new ArrayList<>();
+
+        AttackAbilityCollection attackAbilityCollection = new AttackAbilityCollection();
+        attackAbilityCollection.setOriginItem(this.getUuid());
+        attackAbilityCollection.setSource(wielder);
+        attackAbilityCollection.prepare(context);
+        attackAbilityCollection.setTarget(wielder);
+        attackAbilityCollection.invoke(context);
+        JsonArray attackAbilities = attackAbilityCollection.getAbilities();
+
+        for (int i = 0; i < attackAbilities.size(); i++) {
+            RPGLEvent derivedEvent = new RPGLEvent();
+            derivedEvent.join(event.deepClone());
+            JsonArray subevents = derivedEvent.getSubevents();
+            if (subevents.size() == 1) {
+                JsonObject subeventJson = subevents.getJsonObject(0);
+                if (Objects.equals("attack_roll", subeventJson.getString("subevent"))
+                        && Objects.equals("str", subeventJson.getString("attack_ability"))) {
+                    subeventJson.putString("attack_ability", attackAbilities.getString(i));
+                    derivedEvents.add(derivedEvent);
+                }
+            }
+        }
+        return derivedEvents;
     }
 
 }

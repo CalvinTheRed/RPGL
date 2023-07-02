@@ -45,7 +45,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("generateRequired generates correct required count")
     void generateRequired_generatesCorrectRequiredCount() {
-        RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
 
         assertEquals(4, RPGLResource.generateRequired(resource.getRefreshCriterion().getJsonObject(0).getJsonObject("required_generator")),
                 "required count of 4 should be generated in test mode"
@@ -55,7 +55,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("exhaust exhausts resource properly")
     void exhaust_exhaustsResourceProperly() {
-        RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
         resource.exhaust();
 
         assertTrue(resource.getExhausted(),
@@ -72,7 +72,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("refresh refreshes resource properly")
     void refresh_refreshesResourceProperly() {
-        RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
         resource.exhaust();
         resource.refresh();
 
@@ -90,7 +90,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion partial criterion satisfaction")
     void checkCriterion_partialCriterionSatisfaction() {
-        RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
         resource.exhaust();
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -110,7 +110,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion criterion satisfaction (single requirement)")
     void checkCriterion_criterionSatisfaction_singleRequirement() {
-        RPGLResource resource = RPGLFactory.newResource("demo:pact_spell_slot");
+        RPGLResource resource = RPGLFactory.newResource("std:pact_spell_slot");
         resource.exhaust();
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -130,7 +130,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion criterion satisfaction (multiple requirements)")
     void checkCriterion_criterionSatisfaction_multipleRequirements() {
-        RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
         resource.exhaust();
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -166,11 +166,11 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion resolves successfully for source actor")
     void checkCriterion_resolvesSuccessfullyForSourceActor() {
-        RPGLResource resource = RPGLFactory.newResource("demo:action");
+        RPGLResource resource = RPGLFactory.newResource("std:action");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -189,13 +189,13 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion resolves successfully for target actor")
     void checkCriterion_resolvesSuccessfullyForTargetActor() {
-        RPGLResource resource = RPGLFactory.newResource("demo:action");
+        RPGLResource resource = RPGLFactory.newResource("std:action");
         resource.exhaust();
         // manually edit resource criterion for testing
         resource.getRefreshCriterion().getJsonObject(0).putString("actor", "target");
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -214,10 +214,10 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("processSubevent does nothing when resource not exhausted")
     void processSubevent_doesNothingWhenResourceNotExhausted() {
-        RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -235,11 +235,11 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("processSubevent increments completed counter when resource exhausted")
     void processSubevent_incrementsCompletedCounterWhenResourceExhausted() {
-        RPGLResource resource = RPGLFactory.newResource("demo:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();

@@ -14,12 +14,24 @@ public class RPGLEventTemplate extends JsonObject {
      * Constructs a new RPGLEvent object corresponding to the contents of the RPGLEventTemplate object. The new object
      * is registered to the UUIDTable class when it is constructed.
      *
+     * @param originItem an item UUID to be stored for the new event's origin item
+     * @return a new RPGLEvent object
+     */
+    public RPGLEvent newInstance(String originItem) {
+        RPGLEvent event = new RPGLEvent();
+        event.join(this);
+        event.setOriginItem(originItem);
+        return event;
+    }
+
+    /**
+     * Constructs a new RPGLEvent object corresponding to the contents of the RPGLEventTemplate object. The new object
+     * is registered to the UUIDTable class when it is constructed.
+     *
      * @return a new RPGLEvent object
      */
     public RPGLEvent newInstance() {
-        RPGLEvent event = new RPGLEvent();
-        event.join(this);
-        return event;
+        return this.newInstance(null);
     }
 
 }

@@ -5,7 +5,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
@@ -15,10 +17,12 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.subevent.GetEvents class.
@@ -64,7 +68,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("getEvents is empty by default")
     void getEvents_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -72,15 +76,16 @@ public class GetEventsTest {
         getEvents.setSource(object);
         getEvents.prepare(context);
 
-        assertEquals("[]", getEvents.getEvents().toString(),
+        assertTrue(getEvents.getEvents().isEmpty(),
                 "getEvents should return an empty array by default"
         );
     }
 
     @Test
-    @DisplayName("getTags returns all granted event IDs")
-    void getEvents_returnsAllGrantedEventIds() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+    @DisplayName("getEvents returns the correct events")
+    void getEvents_returnsCorrectEvents() throws Exception {
+        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -88,14 +93,19 @@ public class GetEventsTest {
         getEvents.setSource(object);
         getEvents.prepare(context);
 
-        getEvents.addEvent("demo:test_1");
-        getEvents.addEvent("demo:test_2");
+        getEvents.addEvent("std:longsword_melee", item.getUuid());
+        getEvents.addEvent("std:improvised_thrown", item.getUuid());
 
-        String expected = """
-                ["demo:test_1","demo:test_2"]""";
-        assertEquals(expected, getEvents.getEvents().toString(),
-                "getEvents should return all event IDs which were granted to the subevent"
+        List<RPGLEvent> events = getEvents.getEvents();
+        assertEquals(2, events.size(),
+                "2 events should be granted"
         );
+
+        for (RPGLEvent event : events) {
+            assertEquals(item.getUuid(), event.getOriginItem(),
+                    "item-based events should indicate the item providing the event as the origin item"
+            );
+        }
     }
 
 }

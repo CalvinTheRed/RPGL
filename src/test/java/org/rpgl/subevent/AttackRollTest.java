@@ -3,16 +3,15 @@ package org.rpgl.subevent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
-import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -24,8 +23,6 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -35,8 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Calvin Withun
  */
 public class AttackRollTest {
-
-    private AttackRoll attackRoll;
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -49,25 +44,6 @@ public class AttackRollTest {
     @AfterAll
     static void afterAll() {
         DatapackLoader.DATAPACKS.clear();
-    }
-
-    @BeforeEach
-    void beforeEach() {
-        attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "bonuses": [ ],
-                "minimum": {
-                    "minimum_formula": "number",
-                    "value": Integer.MIN_VALUE
-                }
-            }*/
-            this.putJsonArray("bonuses", new JsonArray());
-            this.putJsonObject("minimum", new JsonObject() {{
-                this.putString("minimum_formula", "number");
-                this.putInteger("value", Integer.MIN_VALUE);
-            }});
-        }});
     }
 
     @AfterEach
@@ -94,21 +70,18 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("applyWeaponAttackBonus adds bonus to roll (longsword +1)")
-    void applyWeaponAttackBonus_addsBonusToRoll_longswordPlusOne() {
-        RPGLItem item = RPGLFactory.newItem("demo:longsword_plus_one");
-        attackRoll.applyWeaponAttackBonus(item);
-
-        assertEquals(1, attackRoll.getBonus(),
-                "weapon bonus of 1 should be applied to the attack roll"
-        );
-    }
-
-    @Test
     @DisplayName("isCriticalMiss returns true (base roll of 1)")
     void isCriticalMiss_returnsTrue_baseRollOne() {
-        attackRoll.setBase(new JsonObject() {{
-            this.putInteger("value", 1);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "base": {
+                    "value": 1
+                }
+            }*/
+            this.putJsonObject("base", new JsonObject() {{
+                this.putInteger("value", 1);
+            }});
         }});
 
         assertTrue(attackRoll.isCriticalMiss(),
@@ -119,8 +92,16 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalMiss returns false (base roll exceeding 1)")
     void isCriticalMiss_returnsFalse_baseRollExceedingOne() {
-        attackRoll.setBase(new JsonObject() {{
-            this.putInteger("value", 10);
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "base": {
+                    "value": 10
+                }
+            }*/
+            this.putJsonObject("base", new JsonObject() {{
+                this.putInteger("value", 10);
+            }});
         }});
 
         assertFalse(attackRoll.isCriticalMiss(),
@@ -131,17 +112,26 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns true (base roll of 20)")
     void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "base": {
+                    "value": 20
+                }
+            }*/
+            this.putJsonObject("base", new JsonObject() {{
+                this.putInteger("value", 20);
+            }});
+        }});
+
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.setBase(new JsonObject() {{
-            this.putInteger("value", 20);
-        }});
 
         assertTrue(attackRoll.isCriticalHit(context),
                 "attack roll with base of 20 should register as a critical hit"
@@ -151,17 +141,26 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns false (base roll below 20)")
     void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "base": {
+                    "value": 10
+                }
+            }*/
+            this.putJsonObject("base", new JsonObject() {{
+                this.putInteger("value", 10);
+            }});
+        }});
+
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.setBase(new JsonObject() {{
-            this.putInteger("value", 10);
-        }});
 
         assertFalse(attackRoll.isCriticalHit(context),
                 "attack roll with base below 20 should not register as a critical hit"
@@ -171,12 +170,13 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on hit)")
     void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "hit": [
@@ -204,12 +204,13 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on miss)")
     void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "miss": [
@@ -237,12 +238,13 @@ public class AttackRollTest {
     @Test
     @DisplayName("deliverDamage object loses health")
     void deliverDamage_objectLosesHealth() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": [
@@ -278,45 +280,15 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("resolveDamage deals damage")
-    void resolveDamage_dealsDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "weapon": "mainhand",
-                "attack_type": "melee"
-            }*/
-            this.putString("weapon", "mainhand");
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(target);
-        attackRoll.getBaseDamage(context);
-        attackRoll.getTargetDamage(context);
-
-        attackRoll.resolveDamage(context);
-
-        assertEquals(45, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "resolveDamage should deduct 7 (4+3) hit points from the knight to leave 45 (52-7=45)"
-        );
-    }
-
-    @Test
     @DisplayName("getTargetArmorClass calculate 20 armor class")
     void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
 
@@ -326,513 +298,19 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("prepareItemWeaponAttack stores weapon damage and applies modifier bonus to attack roll")
-    void prepareItemWeapon_storesWeaponDamageFormulaAndAppliesModifierBonusToAttackRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepareItemWeapon("mainhand", context);
-
-        String expected = """
-                [{"bonus":0,"damage_formula":"range","damage_type":"slashing","dice":[{"count":1,"determined":[4],"size":8}]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "item weapon damage formula should be stored in the subevent following prepareItemWeaponAttack() call"
-        );
-        assertEquals(3, attackRoll.getBonus(),
-                "attack roll should have a bonus of 3 (str modifier of 3)"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareNaturalWeaponAttack stores weapon damage formula and weapon UUID and applies modifier bonus to attack roll")
-    void prepareNaturalWeapon_storesWeaponDamageFormulaAndWeaponUUIDAndAppliesModifierBonusToAttackRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepareNaturalWeapon("demo:young_red_dragon_bite", context);
-
-        String expected = """
-                [{"bonus":0,"damage_formula":"range","damage_type":"piercing","dice":[{"count":2,"determined":[5],"size":10}]},{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":1,"determined":[3],"size":6}]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "weapon damage formula should be stored in the subevent following prepareNaturalWeapon() call"
-        );
-        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
-                "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
-        );
-        assertEquals(6, attackRoll.getBonus(),
-                "attack roll should have a bonus of 6 (str modifier of 6)"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareAttackWithoutWeapon stores damage formula and applies modifier bonus to attack roll")
-    void prepareNoWeapon_storesDamageFormulaAndAppliesModifierBonusToAttackRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "ranged",
-                "attack_ability": "int",
-                "damage": [
-                    {
-                        "damage_formula": "range",
-                        "damage_type": "fire",
-                        "dice": [
-                            { "count": 1, "size": 10, "determined": [ 5 ] }
-                        ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putString("attack_type", "ranged");
-            this.putString("attack_ability","int");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 1);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                    }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepareNoWeapon(context);
-
-        String expected = """
-                [{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":1,"determined":[5],"size":10}]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "attack damage formula should be stored in the subevent"
-        );
-        assertEquals(2, attackRoll.getBonus(),
-                "attack roll should have a bonus of 2 (int modifier of 2)"
-        );
-    }
-
-    @Test
-    @DisplayName("getBaseDamageCollection collects correct damage (item weapon)")
-    void getBaseDamageCollection_collectsCorrectDamage_itemWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("attack_type", "melee");
-            this.putString("weapon", "mainhand");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.getBaseDamage(context);
-
-        String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[4],"size":8}]},{"bonus":3,"damage_type":"slashing","dice":[]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "base damage should include both the item weapon damage and ability modifier damage of the same type"
-        );
-    }
-
-    @Test
-    @DisplayName("getBaseDamageCollection collects correct damage (natural weapon)")
-    void getBaseDamageCollection_collectsCorrectDamage_naturalWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("attack_type", "melee");
-            this.putString("weapon", "demo:young_red_dragon_bite");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.getBaseDamage(context);
-
-        String expected = """
-                [{"bonus":0,"damage_type":"piercing","dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}]},{"bonus":0,"damage_type":"fire","dice":[{"determined":[3],"size":6}]},{"bonus":6,"damage_type":"piercing","dice":[]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "base damage should include both the natural weapon damage and ability modifier damage of the same type"
-        );
-    }
-
-    @Test
-    @DisplayName("getBaseDamageCollection collects correct damage (no weapon)")
-    void getBaseDamageCollection_collectsCorrectDamage_noWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "ranged",
-                "attack_ability": "int",
-                "damage": [
-                    {
-                        "damage_formula": "range",
-                        "damage_type": "fire",
-                        "dice": [
-                            { "count": 1, "size": 10, "determined": [ 5 ] }
-                        ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putString("attack_type", "ranged");
-            this.putString("attack_ability","int");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 1);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                    }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.getBaseDamage(context);
-
-        String expected = """
-                [{"bonus":0,"damage_type":"fire","dice":[{"determined":[5],"size":10}]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "attack damage formula should be stored in the subevent, with no modifier damage added"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare stores weapon damage and stores weapon UUID (item weapon)")
-    void prepare_storesWeaponDamageAndStoresWeaponUUID_itemWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "mainhand");
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-
-        String expected = """
-                [{"bonus":0,"damage_formula":"range","damage_type":"slashing","dice":[{"count":1,"determined":[4],"size":8}]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "weapon damage should be stored in the subevent following prepare() call"
-        );
-        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
-                "weapon UUID should be present in UUIDTable"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare stores weapon damage and stores weapon UUID (natural weapon)")
-    void prepare_storesWeaponDamageAndStoresWeaponUUID_naturalWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "demo:young_red_dragon_bite");
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-
-        String expected = """
-                [{"bonus":0,"damage_formula":"range","damage_type":"piercing","dice":[{"count":2,"determined":[5],"size":10}]},{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":1,"determined":[3],"size":6}]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "weapon damage should be stored in the subevent following prepare() call"
-        );
-        assertNotNull(UUIDTable.getItem(attackRoll.json.getString("weapon")),
-                "weapon UUID should be present in UUIDTable (it gets deleted at a different point in the code)"
-        );
-        assertEquals(6, attackRoll.getBonus(),
-                "attack roll should have a bonus of 6 (str modifier of 6)"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare stores damage (no weapon)")
-    void prepare_storesDamage_noWeapon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "ranged",
-                "attack_ability": "int",
-                "damage": [
-                    {
-                        "damage_formula":"range",
-                        "damage_type": "fire",
-                        "dice": [
-                            { "count":1, "size": 10, "determined": [ 5 ] }
-                        ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putString("attack_type", "ranged");
-            this.putString("attack_ability","int");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 1);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                    }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-
-        String expected = """
-                [{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":1,"determined":[5],"size":10}]}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "weapon damage should be stored in the subevent following prepare() call"
-        );
-        assertEquals(2, attackRoll.getBonus(),
-                "attack roll should have a bonus of 2 (int modifier of 2)"
-        );
-    }
-
-    @Test
-    @DisplayName("invoke stores weapon damage (hit)")
-    void invoke_storesWeaponDamage_hit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "mainhand");
-            this.putString("attack_type", "melee");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(19);
-            }});
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(target);
-        attackRoll.invoke(context);
-
-        assertEquals(45, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take 7 damage after hit (52-7=45)"
-        );
-    }
-
-    @Test
-    @DisplayName("invoke stores weapon damage (critical hit)")
-    void invoke_storesWeaponDamage_criticalHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "mainhand");
-            this.putString("attack_type", "melee");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(20);
-            }});
-        }});
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(target);
-        attackRoll.invoke(context);
-
-        assertEquals(41, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take 11 damage after hit (52-11=41)"
-        );
-    }
-
-    @Test
-    @DisplayName("invoke stores weapon damage (miss)")
-    void invoke_storesWeaponDamage_miss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "mainhand");
-            this.putString("attack_type", "melee");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(1);
-            }});
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(target);
-        attackRoll.invoke(context);
-
-        assertEquals(52, target.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).getInteger("current"),
-                "target should take 0 damage on a miss"
-        );
-    }
-
-    @Test
-    @DisplayName("invoke natural weapons do not persist after subevent")
-    void invoke_naturalWeaponDoesNotPersist() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            this.putString("weapon", "demo:young_red_dragon_bite");
-            this.putString("attack_type", "melee");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(10);
-            }});
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-        attackRoll.setTarget(target);
-        String itemUuid = attackRoll.json.getString("weapon");
-        attackRoll.invoke(context);
-
-        assertNull(UUIDTable.getItem(itemUuid),
-                "natural weapon should not persist in UUIDTable after the subevent is invoked"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare adds correct tags to attack roll (item weapon attack)")
-    void prepare_addsCorrectTagsToAttackRoll_itemWeaponAttack() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:knight");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "weapon": "mainhand",
-                "attack_type": "melee",
-            }*/
-            this.putString("weapon", "mainhand");
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-
-        String expected = """
-                ["humanoid","attack_roll","melee","metal","weapon"]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
-                "object tag (humanoid), subevent tag (attack_roll), and item weapon tags (metal, weapon) should all be present"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare adds correct tags to attack roll (natural weapon attack)")
-    void prepare_addsCorrectTagsToAttackRoll_naturalWeaponAttack() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "weapon": "demo:young_red_dragon_claw",
-                "attack_type": "melee",
-            }*/
-            this.putString("weapon", "demo:young_red_dragon_claw");
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context);
-
-        String expected = """
-                ["dragon","attack_roll","melee","claw"]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("tags").toString(),
-                "object tag (dragon), subevent tag (attack_roll), and natural weapon tag (claw) should all be present"
-        );
-    }
-
-    @Test
     @DisplayName("getBaseDamage calculates correct damage (modifier)")
     void getBaseDamage_calculatesCorrectDamage_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "attack_type": "melee",
-                "attack_ability": "int",
+                "attack_ability": "str",
                 "damage": [
                     {
                         "damage_formula": "modifier",
@@ -843,9 +321,9 @@ public class AttackRollTest {
                             "object": "source"
                         }
                     }
-                ]
+                ],
+                "withhold_damage_modifier": true
             }*/
-            this.putString("damage_type", "fire");
             this.putString("attack_type", "melee");
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -859,6 +337,7 @@ public class AttackRollTest {
                     }});
                 }});
             }});
+            this.putBoolean("withhold_damage_modifier", true);
         }});
 
         attackRoll.setSource(source);
@@ -875,16 +354,17 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (ability)")
     void getBaseDamage_calculatesCorrectDamage_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "attack_type": "melee",
-                "attack_ability": "int",
+                "attack_ability": "str",
                 "damage": [
                     {
                         "damage_formula": "ability",
@@ -895,9 +375,9 @@ public class AttackRollTest {
                             "object": "source"
                         }
                     }
-                ]
+                ],
+                "withhold_damage_modifier": true
             }*/
-            this.putString("damage_type", "fire");
             this.putString("attack_type", "melee");
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -911,6 +391,7 @@ public class AttackRollTest {
                     }});
                 }});
             }});
+            this.putBoolean("withhold_damage_modifier", true);
         }});
 
         attackRoll.setSource(source);
@@ -927,16 +408,17 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (proficiency)")
     void getBaseDamage_calculatesCorrectDamage_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject target = RPGLFactory.newObject("demo:knight");
+        RPGLObject source = RPGLFactory.newObject("std:young_red_dragon");
+        RPGLObject target = RPGLFactory.newObject("std:knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "attack_type": "melee",
-                "attack_ability": "int",
+                "attack_ability": "str",
                 "damage": [
                     {
                         "damage_formula": "proficiency",
@@ -946,9 +428,9 @@ public class AttackRollTest {
                             "object": "source"
                         }
                     }
-                ]
+                ],
+                "withhold_damage_modifier": true
             }*/
-            this.putString("damage_type", "fire");
             this.putString("attack_type", "melee");
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -961,6 +443,7 @@ public class AttackRollTest {
                     }});
                 }});
             }});
+            this.putBoolean("withhold_damage_modifier", true);
         }});
 
         attackRoll.setSource(source);
@@ -971,6 +454,600 @@ public class AttackRollTest {
                 [{"bonus":4,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "damage should include proficiency bonus (+4)"
+        );
+    }
+
+    @Test
+    @DisplayName("getCriticalHitDamage correctly gathers critical hit damage")
+    void getCriticalHitDamage_correctlyGathersCriticalHitDamage() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    },
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "fire",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+
+        attackRoll.getCriticalHitDamage(context);
+
+        String expected = """
+                [{"bonus":0,"damage_formula":"range","damage_type":"slashing","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}]},{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}]}]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
+                "critical hit damage should double the number of dice"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseDamage gets correct base damage (damage modifier not withheld)")
+    void getBaseDamage_getsCorrectBaseDamage_damageModifierNotWithheld() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "withhold_damage_modifier": false
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("withhold_damage_modifier", false);
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.getBaseDamage(context);
+
+        String expected = """
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":3,"damage_type":"slashing","dice":[]}]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
+                "base damage should be calculated including ability modifier bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseDamage gets correct base damage (damage modifier withheld)")
+    void getBaseDamage_getsCorrectBaseDamage_damageModifierWithheld() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "withhold_damage_modifier": true
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("withhold_damage_modifier", true);
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.getBaseDamage(context);
+
+        String expected = """
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]}]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
+                "base damage should be calculated not including ability modifier bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("getBaseDamage gets correct base damage (origin item damage bonus)")
+    void getBaseDamage_getsCorrectBaseDamage_originItemDamageBonus() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        item.setDamageBonus(1);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "withhold_damage_modifier": true
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("withhold_damage_modifier", true);
+        }});
+
+        attackRoll.setOriginItem(item.getUuid());
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.getBaseDamage(context);
+
+        String expected = """
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":1,"damage_type":"slashing","dice":[]}]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
+                "base damage should be calculated including item damage bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("prepare adds origin item attack bonus")
+    void prepare_addsOriginItemAttackBonus() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+
+        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        item.setAttackBonus(1);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str"
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+        }});
+
+        attackRoll.setOriginItem(item.getUuid());
+        attackRoll.setSource(source);
+        attackRoll.prepare(context);
+
+        assertEquals(1, attackRoll.getBonus(),
+                "attack roll should include bonus from weapon attack bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("resolveDamage delivers correct damage values")
+    void resolveDamage_deliversCorrectDamageValues() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(object);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "size": 6, "determined": [ 3 ] },
+                            { "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+        attackRoll.resolveDamage(context);
+
+        assertEquals(1000-3-3, object.getHealthData().getInteger("current"),
+                "dummy should take 6 damage from the attack roll"
+        );
+    }
+    
+    @Test
+    @DisplayName("run resolves correctly (critical miss always misses)")
+    void run_resolvesCorrectly_criticalMissAlwaysMisses() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        source.getAbilityScores().putInteger("str", 100); // should land a hit without critical miss rule
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "fire",
+                        "dice": [ ],
+                        "bonus": 10
+                    }
+                ],
+                "has_advantage": false,
+                "has_disadvantage": false,
+                "bonuses": [ ],
+                "determined": [ 1 ]
+            }*/
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putInteger("bonus", 10);
+                }});
+            }});
+            this.putBoolean("has_advantage", false);
+            this.putBoolean("has_disadvantage", false);
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(1);
+            }});
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.run(context);
+
+        assertEquals(1000, target.getHealthData().getInteger("current"),
+                "target should not have been hit"
+        );
+    }
+
+    @Test
+    @DisplayName("run resolves correctly (normal miss)")
+    void run_resolvesCorrectly_normalMiss() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        target.getAbilityScores().putInteger("dex", 100); // should be able to avoid a hit normally
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "fire",
+                        "dice": [ ],
+                        "bonus": 10
+                    }
+                ],
+                "has_advantage": false,
+                "has_disadvantage": false,
+                "bonuses": [ ],
+                "minimum": {
+                    "value": Integer.MIN_VALUE
+                },
+                "determined": [ 2 ]
+            }*/
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putInteger("bonus", 10);
+                }});
+            }});
+            this.putBoolean("has_advantage", false);
+            this.putBoolean("has_disadvantage", false);
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putInteger("value", Integer.MIN_VALUE);
+            }});
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(2);
+            }});
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.run(context);
+
+        assertEquals(1000, target.getHealthData().getInteger("current"),
+                "target should not have been hit"
+        );
+    }
+
+    @Test
+    @DisplayName("run resolves correctly (normal hit)")
+    void run_resolvesCorrectly_normalhit() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "fire",
+                        "dice": [
+                            { "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "has_advantage": false,
+                "has_disadvantage": false,
+                "bonuses": [ ],
+                "minimum": {
+                    "value": Integer.MIN_VALUE
+                },
+                "determined": [ 19 ],
+                "withhold_damage_modifier": true
+            }*/
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("has_advantage", false);
+            this.putBoolean("has_disadvantage", false);
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putInteger("value", Integer.MIN_VALUE);
+            }});
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(19);
+            }});
+            this.putBoolean("withhold_damage_modifier", true);
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.run(context);
+
+        assertEquals(1000-3, target.getHealthData().getInteger("current"),
+                "target should have been hit and taken damage"
+        );
+    }
+
+    @Test
+    @DisplayName("run resolves correctly (critical hit)")
+    void run_resolvesCorrectly_criticalhit() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        target.getAbilityScores().putInteger("dex", 100);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "fire",
+                        "dice": [
+                            { "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "has_advantage": false,
+                "has_disadvantage": false,
+                "bonuses": [ ],
+                "minimum": {
+                    "value": Integer.MIN_VALUE
+                },
+                "determined": [ 20 ],
+                "withhold_damage_modifier": true
+            }*/
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("has_advantage", false);
+            this.putBoolean("has_disadvantage", false);
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putInteger("value", Integer.MIN_VALUE);
+            }});
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(20);
+            }});
+            this.putBoolean("withhold_damage_modifier", true);
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.run(context);
+
+        assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
+                "target should have been hit and taken critical damage"
         );
     }
 

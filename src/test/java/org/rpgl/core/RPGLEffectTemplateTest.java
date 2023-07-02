@@ -41,9 +41,9 @@ public class RPGLEffectTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using demo:fire_immunity template")
+    @DisplayName("newInstance comprehensive test using std:fire_immunity template")
     void newInstance_fireImmunity() {
-        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("demo").getEffectTemplate("fire_immunity");
+        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std").getEffectTemplate("fire_immunity");
         RPGLEffect effect = effectTemplate.newInstance();
         String expected;
 
@@ -58,12 +58,12 @@ public class RPGLEffectTemplateTest {
         assertEquals("Creatures with this effect take 0 fire damage.", effect.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("demo:fire_immunity", effect.getId(),
+        assertEquals("std:fire_immunity", effect.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
         expected = """
-                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}}""";
+                {"damage_affinity":[{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}]}""";
         assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );

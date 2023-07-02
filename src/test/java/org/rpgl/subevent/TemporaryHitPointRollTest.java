@@ -155,7 +155,7 @@ public class TemporaryHitPointRollTest {
     @Test
     @DisplayName("prepare temporary hit point dice are rolled")
     void prepare_temporaryHitPointDiceAreRolled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 

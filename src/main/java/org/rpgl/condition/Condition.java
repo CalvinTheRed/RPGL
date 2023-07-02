@@ -49,7 +49,10 @@ public abstract class Condition {
         Condition.CONDITIONS.put("is_objects_turn", new IsObjectsTurn());
         Condition.CONDITIONS.put("object_ability_score_comparison", new ObjectAbilityScoreComparison());
         Condition.CONDITIONS.put("object_has_tag", new ObjectHasTag());
+        Condition.CONDITIONS.put("object_wielding_origin_item", new ObjectWieldingOriginItem());
         Condition.CONDITIONS.put("objects_match", new ObjectsMatch());
+        Condition.CONDITIONS.put("origin_item_has_tag", new OriginItemHasTag());
+        Condition.CONDITIONS.put("origin_items_match", new OriginItemsMatch());
         Condition.CONDITIONS.put("subevent_has_tag", new SubeventHasTag());
 
         if (includeTestingConditions) {

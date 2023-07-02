@@ -18,6 +18,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     public static final String SUBEVENT_FILTERS_ALIAS = "subevent_filters";
     public static final String SOURCE_ALIAS = "source";
     public static final String TARGET_ALIAS = "target";
+    public static final String ORIGIN_ITEM_ALIAS = "origin_item";
 
     @JsonProperty(SUBEVENT_FILTERS_ALIAS)
     HashMap<String, Object> subeventFilters;
@@ -25,6 +26,8 @@ public class RPGLEffectTO extends UUIDTableElementTO {
     String source;
     @JsonProperty(TARGET_ALIAS)
     String target;
+    @JsonProperty(ORIGIN_ITEM_ALIAS)
+    String originItem;
 
     /**
      * Default constructor for RPGLEffectTO class.
@@ -44,6 +47,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
         this.subeventFilters = rpglEffect.getSubeventFilters().asMap();
         this.source = rpglEffect.getSource().getUuid();
         this.target = rpglEffect.getTarget().getUuid();
+        this.originItem = rpglEffect.getOriginItem();
     }
 
     /**
@@ -56,6 +60,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
             this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
             // source not needed for template
             // target not needed for template
+            // origin item not needed for template
         }};
         rpglEffectTemplate.join(super.getTemplateData());
         return rpglEffectTemplate;
@@ -71,6 +76,7 @@ public class RPGLEffectTO extends UUIDTableElementTO {
             this.setSubeventFilters(new JsonObject(subeventFilters));
             this.putString(SOURCE_ALIAS, source);
             this.putString(TARGET_ALIAS, target);
+            this.putString(ORIGIN_ITEM_ALIAS, originItem);
         }};
         rpglEffect.join(super.getTemplateData());
         rpglEffect.join(super.getUUIDTableElementData());

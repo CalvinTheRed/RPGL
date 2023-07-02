@@ -71,10 +71,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect source same as subevent source)")
     void evaluate_returnsTrue_effectSourceSameAsSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
         RPGLObject subeventSource = effectSource;
-        RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -109,10 +109,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect source different than subevent source)")
     void evaluate_returnsFalse_effectSourceDifferentThanSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -147,9 +147,9 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect source same as subevent target)")
     void evaluate_returnsTrue_effectSourceSameAsSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventSource = RPGLFactory.newObject("std:commoner");
         RPGLObject subeventTarget = effectSource;
         DummyContext context = new DummyContext();
         context.add(effectSource);
@@ -185,10 +185,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect source different than subevent target)")
     void evaluate_returnsFalse_effectSourceDifferentThanSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -223,10 +223,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect target same as subevent source)")
     void evaluate_returnsTrue_effectTargetSameAsSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
         RPGLObject subeventSource = effectTarget;
-        RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -261,10 +261,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect target different than subevent source)")
     void evaluate_returnsFalse_effectTargetDifferentThanSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -299,9 +299,9 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect target same as subevent target)")
     void evaluate_returnsTrue_effectTargetSameAsSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventSource = RPGLFactory.newObject("std:commoner");
         RPGLObject subeventTarget = effectTarget;
         DummyContext context = new DummyContext();
         context.add(effectSource);
@@ -337,10 +337,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect target different than subevent target)")
     void evaluate_returnsFalse_effectTargetDifferentThanSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("demo:commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("demo:commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject effectTarget = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventSource = RPGLFactory.newObject("std:commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);

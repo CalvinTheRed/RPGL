@@ -84,6 +84,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("base_temporary_hit_point_collection");
             }});
         }});
+        baseTemporaryHitPointCollection.setOriginItem(this.getOriginItem());
         baseTemporaryHitPointCollection.setSource(this.getSource());
         baseTemporaryHitPointCollection.prepare(context);
         baseTemporaryHitPointCollection.setTarget(this.getSource());
@@ -100,6 +101,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("base_temporary_hit_points_roll");
             }});
         }});
+        baseTemporaryHitPointRoll.setOriginItem(this.getOriginItem());
         baseTemporaryHitPointRoll.setSource(this.getSource());
         baseTemporaryHitPointRoll.prepare(context);
         baseTemporaryHitPointRoll.setTarget(this.getSource());
@@ -130,6 +132,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("target_temporary_hit_point_collection");
             }});
         }});
+        targetTemporaryHitPointsCollection.setOriginItem(this.getOriginItem());
         targetTemporaryHitPointsCollection.setSource(this.getSource());
         targetTemporaryHitPointsCollection.prepare(context);
         targetTemporaryHitPointsCollection.setTarget(this.getTarget());
@@ -146,6 +149,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("target_healing_roll");
             }});
         }});
+        targetTemporaryHitPointRoll.setOriginItem(this.getOriginItem());
         targetTemporaryHitPointRoll.setSource(this.getSource());
         targetTemporaryHitPointRoll.prepare(context);
         targetTemporaryHitPointRoll.setTarget(this.getTarget());
@@ -170,6 +174,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
             this.putJsonArray("temporary_hit_points", json.getJsonArray("temporary_hit_points"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
+        temporaryHitPointsDelivery.setOriginItem(this.getOriginItem());
         temporaryHitPointsDelivery.setSource(this.getSource());
         temporaryHitPointsDelivery.prepare(context);
         temporaryHitPointsDelivery.setTarget(this.getTarget());

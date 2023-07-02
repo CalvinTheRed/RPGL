@@ -32,11 +32,13 @@ public class RPGLResourceTemplate extends JsonObject {
      * Constructs a new RPGLResource object corresponding to the contents of the RPGLResourceTemplate object. The new
      * object is registered to the UUIDTable class when it is constructed.
      *
+     * @param originItem an item UUID to be stored for the new resource's origin item
      * @return a new RPGLResource object
      */
-    public RPGLResource newInstance() {
+    public RPGLResource newInstance(String originItem) {
         RPGLResource resource = new RPGLResource();
         resource.join(this);
+        resource.setOriginItem(originItem);
         resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 1);
         resource.asMap().putIfAbsent(RPGLResourceTO.EXHAUSTED_ALIAS, false);
         if (resource.getRefreshCriterion().asList().isEmpty()) {
@@ -46,6 +48,16 @@ public class RPGLResourceTemplate extends JsonObject {
         processRefreshCriterion(resource);
         processRefreshCriterionGenerators(resource);
         return resource;
+    }
+
+    /**
+     * Constructs a new RPGLResource object corresponding to the contents of the RPGLResourceTemplate object. The new
+     * object is registered to the UUIDTable class when it is constructed.
+     *
+     * @return a new RPGLResource object
+     */
+    public RPGLResource newInstance() {
+        return this.newInstance(null);
     }
 
     /**

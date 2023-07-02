@@ -18,6 +18,7 @@ import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -191,20 +192,44 @@ public class RPGLObject extends RPGLTaggable {
         List<RPGLEvent> events = new ArrayList<>();
         JsonArray eventsArray;
 
+        // get innate events
         eventsArray = this.getEvents();
         for (int i = 0; i < eventsArray.size(); i++) {
             events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
         }
 
+        // get events from effects
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(this);
         getEvents.prepare(context);
         getEvents.setTarget(this);
         getEvents.invoke(context);
+        events.addAll(getEvents.getEvents());
 
-        eventsArray = getEvents.getEvents();
-        for (int i = 0; i < eventsArray.size(); i++) {
-            events.add(RPGLFactory.newEvent(eventsArray.getString(i)));
+        // get events granted by equipped items
+        JsonObject equippedItems = this.getEquippedItems();
+        HashMap<RPGLItem, Integer> wieldedItemsHandedness = new HashMap<>();
+        for (Map.Entry<String, Object> entry : equippedItems.asMap().entrySet()) {
+            String key = entry.getKey();
+            RPGLItem item = UUIDTable.getItem(equippedItems.getString(key));
+            if (key.toLowerCase().contains("hand")) {
+                // item is wielded and must be checked for handedness
+                if (wieldedItemsHandedness.containsKey(item)) {
+                    wieldedItemsHandedness.put(item, wieldedItemsHandedness.get(item) + 1);
+                } else {
+                    wieldedItemsHandedness.put(item, 1);
+                }
+            } else {
+                // special events only
+                events.addAll(item.getSpecialEventObjects());
+            }
+        }
+        for (Map.Entry<RPGLItem, Integer> entry : wieldedItemsHandedness.entrySet()) {
+            if (entry.getValue() == 1) {
+                events.addAll(entry.getKey().getOneHandedEventObjects(this, context));
+            } else {
+                events.addAll(entry.getKey().getMultiHandedEventObjects(this, context));
+            }
         }
 
         return events;
@@ -228,7 +253,7 @@ public class RPGLObject extends RPGLTaggable {
         for (Map.Entry<String, ?> equippedItemEntry : equippedItems.asMap().entrySet()) {
             String equippedItemUuid = equippedItems.getString(equippedItemEntry.getKey());
             RPGLItem equippedItem = UUIDTable.getItem(equippedItemUuid);
-            effects.addAll(equippedItem.getWhileEquippedEffectObjects());
+            effects.addAll(equippedItem.getEquippedEffectsObjects());
         }
 
         return effects;
@@ -243,9 +268,17 @@ public class RPGLObject extends RPGLTaggable {
     public List<RPGLResource> getResourceObjects() {
         List<RPGLResource> resources = new ArrayList<>();
 
+        // get personal resources
         JsonArray resourceUuids = this.getResources();
         for (int i = 0; i < resourceUuids.size(); i++) {
             resources.add(UUIDTable.getResource(resourceUuids.getString(i)));
+        }
+
+        // get resources from equipped items
+        JsonObject equippedItems = this.getEquippedItems();
+        for (Map.Entry<String, Object> equippedItemEntry : equippedItems.asMap().entrySet()) {
+            RPGLItem equippedItem = UUIDTable.getItem(equippedItems.getString(equippedItemEntry.getKey()));
+            resources.addAll(equippedItem.getEquippedResourcesObjects());
         }
 
         return resources;
@@ -271,6 +304,7 @@ public class RPGLObject extends RPGLTaggable {
             String subeventId = subeventJson.getString("subevent");
             Subevent subevent = Subevent.SUBEVENTS.get(subeventId).clone(subeventJson);
             subevent.setSource(this);
+            subevent.setOriginItem(event.getOriginItem());
             subevent.prepare(context);
             for (RPGLObject target : targets) {
                 Subevent subeventClone = subevent.clone();
@@ -646,7 +680,6 @@ public class RPGLObject extends RPGLTaggable {
             equippedItems.putString(equipmentSlot, itemUuid);
             RPGLItem item = UUIDTable.getItem(itemUuid);
             item.updateEquippedEffects(this);
-            item.defaultAttackAbilities();
             // TODO account for 2-handed items...
         }
     }

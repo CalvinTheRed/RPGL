@@ -34,6 +34,7 @@ public abstract class Calculation extends Subevent {
         this.prepareBase(context);
         this.prepareBonuses(context);
         this.prepareMinimum(context);
+        this.json.getJsonArray("tags").asList().addAll(this.getSource().getAllTags(context));
     }
 
     /**
@@ -134,7 +135,7 @@ public abstract class Calculation extends Subevent {
      * @param bonusJson a bonus to be added to the Calculation
      */
     public void addBonus(JsonObject bonusJson) {
-        this.json.getJsonArray("bonuses").addJsonObject(bonusJson);
+        this.getBonuses().addJsonObject(bonusJson);
     }
 
     /**
@@ -149,7 +150,7 @@ public abstract class Calculation extends Subevent {
 
     /**
      * Sets the minimum of the Calculation. If the provided minimum is lower than the current minimum, this method will
-     * not do anything to modify the SUbevent.
+     * not do anything to modify the Subevent.
      *
      * @param minimumJson the JSON representation of a minimum value for the Calculation
      */

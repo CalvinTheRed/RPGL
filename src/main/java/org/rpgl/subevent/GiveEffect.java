@@ -45,6 +45,7 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
             RPGLEffect effect = RPGLFactory.newEffect(this.json.getString("effect"));
             effect.setSource(this.getSource());
             effect.setTarget(this.getTarget());
+            effect.setOriginItem(this.getOriginItem());
             this.getTarget().addEffect(effect);
         }
     }

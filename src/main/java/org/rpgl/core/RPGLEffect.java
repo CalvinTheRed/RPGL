@@ -79,6 +79,24 @@ public class RPGLEffect extends UUIDTableElement {
         this.putString(RPGLEffectTO.TARGET_ALIAS, target.getUuid());
     }
 
+    /**
+     * Returns the origin item UUID for the RPGLEffect if it has one.
+     *
+     * @return an RPGLItem UUID, or null if the effect was not produced by an item.
+     */
+    public String getOriginItem() {
+        return this.getString(RPGLEffectTO.ORIGIN_ITEM_ALIAS);
+    }
+
+    /**
+     * Sets the origin item UUID of the RPGLEffect.
+     *
+     * @param originItem a RPGLItem UUID
+     */
+    public void setOriginItem(String originItem) {
+        this.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================
@@ -98,15 +116,17 @@ public class RPGLEffect extends UUIDTableElement {
         JsonObject subeventFilters = this.getSubeventFilters();
         for (Map.Entry<String, ?> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
             if (Objects.equals(subevent.getSubeventId(), subeventFilterEntry.getKey())) {
-                JsonObject matchedFilter = subeventFilters.getJsonObject(subeventFilterEntry.getKey());
-                JsonArray conditions = matchedFilter.getJsonArray("conditions");
-                if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
-                    JsonArray functionJsonArray = matchedFilter.getJsonArray("functions");
-                    executeFunctions(subevent, functionJsonArray, context);
-                    subevent.addModifyingEffect(this);
-                    return true;
+                JsonArray matchedFilterBehaviors = subeventFilters.getJsonArray(subeventFilterEntry.getKey());
+                for (int i = 0; i < matchedFilterBehaviors.size(); i++) {
+                    JsonObject matchedFilterBehavior = matchedFilterBehaviors.getJsonObject(i);
+                    JsonArray conditions = matchedFilterBehavior.getJsonArray("conditions");
+                    if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
+                        JsonArray functionJsonArray = matchedFilterBehavior.getJsonArray("functions");
+                        executeFunctions(subevent, functionJsonArray, context);
+                        subevent.addModifyingEffect(this);
+                        return true;
+                    }
                 }
-                break;
             }
         }
         return false;

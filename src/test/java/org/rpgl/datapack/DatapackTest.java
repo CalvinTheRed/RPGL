@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,9 +46,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLEffect templates can be loaded")
     void rpglEffectTemplate_loadsDatapackContent() {
-        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("demo").getEffectTemplate("fire_immunity");
+        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std").getEffectTemplate("fire_immunity");
         assertNotNull(effectTemplate,
-                "Effect template demo:fire_immunity failed to load."
+                "Effect template std:fire_immunity failed to load."
         );
 
         String expected;
@@ -93,7 +92,7 @@ public class DatapackTest {
         RPGLEffectTO field values
          */
         expected = """
-                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}}""";
+                {"damage_affinity":[{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}]}""";
         assertEquals(expected, effectTemplate.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS).toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );
@@ -102,9 +101,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLEvent templates can be loaded")
     void rpglEventTemplate_loadsDatapackContent() {
-        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("demo").getEventTemplate("young_red_dragon_fire_breath");
+        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std").getEventTemplate("young_red_dragon_fire_breath");
         assertNotNull(eventTemplate,
-                "Event template demo:young_red_dragon_fire_breath failed to load."
+                "Event template std:young_red_dragon_fire_breath failed to load."
         );
 
         String expected;
@@ -161,11 +160,11 @@ public class DatapackTest {
     }
 
     @Test
-    @DisplayName("verify RPGLItem templates can be loaded (melee weapon)")
+    @DisplayName("verify RPGLItem templates can be loaded (frostbrand)")
     void rpglItemTemplate_loadsDatapackContent_meleeWeapon() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("longsword");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
         assertNotNull(itemTemplate,
-                "Event template demo:longsword failed to load."
+                "Event template std:frostbrand failed to load."
         );
 
         String expected;
@@ -195,27 +194,17 @@ public class DatapackTest {
         assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.COST_ALIAS),
                 "template missing field: " + RPGLItemTO.COST_ALIAS
         );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.PROFICIENCY_TAGS_ALIAS),
-                "template missing field: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
+        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS),
+                "template missing field: " + RPGLItemTO.EQUIPPED_EFFECTS_ALIAS
         );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.WHILE_EQUIPPED_ALIAS),
-                "template missing field: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.WEAPON_PROPERTIES_ALIAS),
-                "template missing field: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.DAMAGE_ALIAS),
-                "template missing field: " + RPGLItemTO.DAMAGE_ALIAS
+        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS),
+                "template missing field: " + RPGLItemTO.EQUIPPED_RESOURCES_ALIAS
         );
         assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ATTACK_BONUS_ALIAS),
-                "template missing field: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
+                "template missing field: " + RPGLItemTO.ATTACK_BONUS_ALIAS
         );
-        assertFalse(itemTemplate.asMap().containsKey(RPGLItemTO.ATTACK_ABILITIES_ALIAS),
-                // this field is not included in the RPGLItemTO.toRPGLItemTemplate() method, so it should be absent here
-                "template missing field: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.RANGE_ALIAS),
-                "template missing field: " + RPGLItemTO.RANGE_ALIAS
+        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.DAMAGE_BONUS_ALIAS),
+                "template missing field: " + RPGLItemTO.DAMAGE_BONUS_ALIAS
         );
         assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
                 "template missing field: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
@@ -235,10 +224,10 @@ public class DatapackTest {
         assertEquals(expected, itemTemplate.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Longsword", itemTemplate.getString(RPGLObjectTO.NAME_ALIAS),
+        assertEquals("Frostbrand", itemTemplate.getString(RPGLObjectTO.NAME_ALIAS),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A longsword.", itemTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
+        assertEquals("A legendary scimitar wielded by Drizzt Do'Urden.", itemTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
 
@@ -246,178 +235,27 @@ public class DatapackTest {
         RPGLItemTO field values
          */
         expected = """
-                ["metal","weapon"]""";
+                ["scimitar","metal","magic","martial_melee","finesse"]""";
         assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.TAGS_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
         );
         assertEquals(3, itemTemplate.getInteger(RPGLItemTO.WEIGHT_ALIAS),
                 "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
-        assertEquals(15, itemTemplate.getInteger(RPGLItemTO.COST_ALIAS),
+        assertEquals(10000, itemTemplate.getInteger(RPGLItemTO.COST_ALIAS),
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        expected = """
-                ["martial_melee","longsword"]""";
-        assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
+        assertEquals(2, itemTemplate.getJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS).size(),
+                "incorrect field value: " + RPGLItemTO.EQUIPPED_EFFECTS_ALIAS
         );
-        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
+        assertEquals(0, itemTemplate.getJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS).size(),
+                "incorrect field value: " + RPGLItemTO.EQUIPPED_RESOURCES_ALIAS
         );
-        expected = """
-                ["melee","versatile"]""";
-        assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
-        );
-        expected = """
-                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"slashing","dice":[{"count":1,"determined":[4],"size":8}]}]}""";
-        assertEquals(expected, itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
-        );
-        assertEquals(0, itemTemplate.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
+        assertEquals(3, itemTemplate.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
                 "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
         );
-        assertNull(itemTemplate.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS),
-                "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
-        );
-        assertNull(itemTemplate.getJsonArray(RPGLItemTO.RANGE_ALIAS),
-                "incorrect field value: " + RPGLItemTO.RANGE_ALIAS
-        );
-        assertNull(itemTemplate.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
-                "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
-        );
-        assertNull(itemTemplate.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS
-        );
-        assertNull(itemTemplate.getInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS
-        );
-    }
-
-    @Test
-    @DisplayName("verify RPGLItem templates can be loaded (ranged weapon)")
-    void rpglItemTemplate_loadsDatapackContent_rangedWeapon() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("heavy_crossbow");
-        assertNotNull(itemTemplate,
-                "Event template demo:heavy_crossbow failed to load."
-        );
-
-        String expected;
-
-        /*
-        DatapackContentTO field keys
-         */
-        assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.METADATA_ALIAS),
-                "template missing field: " + DatapackContentTO.METADATA_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.NAME_ALIAS),
-                "template missing field: " + DatapackContentTO.NAME_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.DESCRIPTION_ALIAS),
-                "template missing field: " + DatapackContentTO.DESCRIPTION_ALIAS
-        );
-
-        /*
-        RPGLItemTO field keys
-         */
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.TAGS_ALIAS),
-                "template missing field: " + RPGLItemTO.TAGS_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.WEIGHT_ALIAS),
-                "template missing field: " + RPGLItemTO.WEIGHT_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.COST_ALIAS),
-                "template missing field: " + RPGLItemTO.COST_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.PROFICIENCY_TAGS_ALIAS),
-                "template missing field: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.WHILE_EQUIPPED_ALIAS),
-                "template missing field: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.WEAPON_PROPERTIES_ALIAS),
-                "template missing field: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.DAMAGE_ALIAS),
-                "template missing field: " + RPGLItemTO.DAMAGE_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ATTACK_BONUS_ALIAS),
-                "template missing field: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
-        );
-        assertFalse(itemTemplate.asMap().containsKey(RPGLItemTO.ATTACK_ABILITIES_ALIAS),
-                // this field is not included in the RPGLItemTO.toRPGLItemTemplate() method, so it should be absent here
-                "template missing field: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.RANGE_ALIAS),
-                "template missing field: " + RPGLItemTO.RANGE_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
-                "template missing field: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS),
-                "template missing field: " + RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS
-        );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS),
-                "template missing field: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
-        );
-
-        /*
-        DatapackContentTO field values
-         */
-        expected = """
-                {"author":"Calvin Withun"}""";
-        assertEquals(expected, itemTemplate.getJsonObject(DatapackContentTO.METADATA_ALIAS).toString(),
-                "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
-        );
-        assertEquals("Heavy Crossbow", itemTemplate.getString(RPGLObjectTO.NAME_ALIAS),
-                "incorrect field value: " + DatapackContentTO.NAME_ALIAS
-        );
-        assertEquals("A heavy crossbow.", itemTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
-                "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
-        );
-
-        /*
-        RPGLItemTO field values
-         */
-        expected = """
-                ["weapon"]""";
-        assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.TAGS_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
-        );
-        assertEquals(18, itemTemplate.getInteger(RPGLItemTO.WEIGHT_ALIAS),
-                "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
-        );
-        assertEquals(50, itemTemplate.getInteger(RPGLItemTO.COST_ALIAS),
-                "incorrect field value: " + RPGLItemTO.COST_ALIAS
-        );
-        expected = """
-                ["martial_ranged","heavy_crossbow"]""";
-        assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
-        );
-        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
-        );
-        expected = """
-                ["ammunition","heavy","loading","ranged","two_handed"]""";
-        assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
-        );
-        expected = """
-                {"ranged":[{"bonus":0,"damage_formula":"range","damage_type":"piercing","dice":[{"count":1,"determined":[5],"size":10}]}]}""";
-        assertEquals(expected, itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
-        );
-        assertEquals(0, itemTemplate.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
-                "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
-        );
-        assertNull(itemTemplate.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS),
-                "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
-        );
-        expected = """
-                {"long":400,"normal":100}""";
-        assertEquals(expected, itemTemplate.getJsonObject(RPGLItemTO.RANGE_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.RANGE_ALIAS
+        assertEquals(3, itemTemplate.getInteger(RPGLItemTO.DAMAGE_BONUS_ALIAS),
+                "incorrect field value: " + RPGLItemTO.DAMAGE_BONUS_ALIAS
         );
         assertNull(itemTemplate.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
@@ -433,9 +271,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLItem templates can be loaded (armor)")
     void rpglItemTemplate_loadsDatapackContent_armor() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("breastplate_armor");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("breastplate_armor");
         assertNotNull(itemTemplate,
-                "Event template demo:breastplate_armor failed to load."
+                "Event template std:breastplate_armor failed to load."
         );
 
         String expected;
@@ -465,11 +303,11 @@ public class DatapackTest {
         assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.COST_ALIAS),
                 "template missing field: " + RPGLItemTO.COST_ALIAS
         );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.PROFICIENCY_TAGS_ALIAS),
-                "template missing field: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
+        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS),
+                "template missing field: " + RPGLItemTO.EQUIPPED_EFFECTS_ALIAS
         );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.WHILE_EQUIPPED_ALIAS),
-                "template missing field: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
+        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS),
+                "template missing field: " + RPGLItemTO.EQUIPPED_RESOURCES_ALIAS
         );
         assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
                 "template missing field: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
@@ -497,7 +335,7 @@ public class DatapackTest {
         RPGLEventTO field values
          */
         expected = """
-                ["metal","armor"]""";
+                ["metal","armor","medium_armor"]""";
         assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.TAGS_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
         );
@@ -507,25 +345,14 @@ public class DatapackTest {
         assertEquals(400, itemTemplate.getInteger(RPGLItemTO.COST_ALIAS),
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        expected = """
-                ["medium_armor"]""";
-        assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
+        assertEquals(0, itemTemplate.getJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS).size(),
+                "incorrect field value: " + RPGLItemTO.EQUIPPED_EFFECTS_ALIAS
         );
-        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
-        );
-        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
-        );
-        assertEquals("{}", itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
+        assertEquals(0, itemTemplate.getJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS).size(),
+                "incorrect field value: " + RPGLItemTO.EQUIPPED_RESOURCES_ALIAS
         );
         assertNull(itemTemplate.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
                 "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
-        );
-        assertNull(itemTemplate.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS),
-                "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
         );
         assertEquals(14, itemTemplate.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
@@ -541,9 +368,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLItem templates can be loaded (shield)")
     void rpglItemTemplate_loadsDatapackContent_shield() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("demo").getItemTemplate("metal_shield");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("metal_shield");
         assertNotNull(itemTemplate,
-                "Event template demo:metal_shield failed to load."
+                "Event template std:metal_shield failed to load."
         );
 
         String expected;
@@ -573,11 +400,11 @@ public class DatapackTest {
         assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.COST_ALIAS),
                 "template missing field: " + RPGLItemTO.COST_ALIAS
         );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.PROFICIENCY_TAGS_ALIAS),
-                "template missing field: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
+        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS),
+                "template missing field: " + RPGLItemTO.EQUIPPED_EFFECTS_ALIAS
         );
-        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.WHILE_EQUIPPED_ALIAS),
-                "template missing field: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
+        assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS),
+                "template missing field: " + RPGLItemTO.EQUIPPED_RESOURCES_ALIAS
         );
         assertTrue(itemTemplate.asMap().containsKey(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS),
                 "template missing field: " + RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS
@@ -612,25 +439,14 @@ public class DatapackTest {
         assertEquals(10, itemTemplate.getInteger(RPGLItemTO.COST_ALIAS),
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        expected = """
-                ["shield"]""";
-        assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.PROFICIENCY_TAGS_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
+        assertEquals(0, itemTemplate.getJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS).size(),
+                "incorrect field value: " + RPGLItemTO.EQUIPPED_EFFECTS_ALIAS
         );
-        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WHILE_EQUIPPED_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
-        );
-        assertEquals("[]", itemTemplate.getJsonArray(RPGLItemTO.WEAPON_PROPERTIES_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
-        );
-        assertEquals("{}", itemTemplate.getJsonObject(RPGLItemTO.DAMAGE_ALIAS).toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
+        assertEquals(0, itemTemplate.getJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS).size(),
+                "incorrect field value: " + RPGLItemTO.EQUIPPED_RESOURCES_ALIAS
         );
         assertNull(itemTemplate.getInteger(RPGLItemTO.ATTACK_BONUS_ALIAS),
                 "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
-        );
-        assertNull(itemTemplate.getJsonObject(RPGLItemTO.ATTACK_ABILITIES_ALIAS),
-                "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
         );
         assertNull(itemTemplate.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
@@ -646,9 +462,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLObject templates can be loaded")
     void rpglObjectTemplate_loadsDatapackContent() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("demo").getObjectTemplate("young_red_dragon");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("young_red_dragon");
         assertNotNull(objectTemplate,
-                "Object template demo:young_red_dragon failed to load."
+                "Object template std:young_red_dragon failed to load."
         );
 
         String expected;
@@ -726,12 +542,12 @@ public class DatapackTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["demo:young_red_dragon_bite_attack","demo:young_red_dragon_claw_attack","demo:young_red_dragon_fire_breath"]""";
+                ["std:young_red_dragon_fire_breath"]""";
         assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
         expected = """
-                ["demo:fire_immunity"]""";
+                ["std:fire_immunity"]""";
         assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
         );

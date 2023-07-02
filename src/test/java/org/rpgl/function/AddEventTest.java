@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -67,9 +68,9 @@ public class AddEventTest {
     }
 
     @Test
-    @DisplayName("execute adds event datapack ID to subevent")
-    void execute_addsEventDatapackIdToSubevent() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("demo:commoner");
+    @DisplayName("execute adds event correctly")
+    void execute_addsEventCorrectly() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -81,19 +82,16 @@ public class AddEventTest {
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "add_event",
-                "event": "demo:test"
+                "event": "std:dodge"
             }*/
             this.putString("function", "add_event");
-            this.putString("event", "demo:test");
+            this.putString("event", "std:dodge");
         }};
 
-        addEvent.execute(null, getEvents, functionJson, context);
+        addEvent.execute(new RPGLEffect(), getEvents, functionJson, context);
 
-        String expected = """
-                ["demo:test"]""";
-        assertEquals(expected, getEvents.getEvents().toString(),
-                "execute should add an event datapack ID to the subevent"
+        assertEquals("std:dodge", getEvents.getEvents().get(0).getId(),
+                "execute should add the correct event to the subevent"
         );
     }
-
 }

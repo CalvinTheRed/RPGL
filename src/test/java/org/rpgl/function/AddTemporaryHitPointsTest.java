@@ -71,8 +71,8 @@ public class AddTemporaryHitPointsTest {
     @Test
     @DisplayName("execute adds temporary hit points to subevent (range)")
     void execute_addsTemporaryHitPointsToSubevent_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -129,8 +129,8 @@ public class AddTemporaryHitPointsTest {
     @Test
     @DisplayName("execute adds temporary hit points to subevent (modifier)")
     void execute_addsHealingToSubevent_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -185,8 +185,8 @@ public class AddTemporaryHitPointsTest {
     @Test
     @DisplayName("execute adds temporary hit points to subevent (ability)")
     void execute_addsTemporaryHitPointsToSubevent_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -241,8 +241,8 @@ public class AddTemporaryHitPointsTest {
     @Test
     @DisplayName("execute adds temporary hit points to subevent (proficiency)")
     void execute_addsTemporaryHitPointsToSubevent_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("demo:commoner");
-        RPGLObject target = RPGLFactory.newObject("demo:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject target = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

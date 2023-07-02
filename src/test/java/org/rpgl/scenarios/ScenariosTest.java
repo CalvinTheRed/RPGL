@@ -8,17 +8,24 @@ import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for miscellaneous scenarios. Tests here are designed to stress test RPGL at a high level.
@@ -46,158 +53,107 @@ public class ScenariosTest {
     }
 
     @Test
-    @DisplayName("one round of boring combat between knights and a dragon")
-    void oneRoundBoringCombatKnightsVersusDragon() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject knight1 = RPGLFactory.newObject("demo:knight");
-        RPGLObject knight2 = RPGLFactory.newObject("demo:knight");
-        RPGLObject knight3 = RPGLFactory.newObject("demo:knight");
-        RPGLObject knight4 = RPGLFactory.newObject("demo:knight");
-        RPGLObject knight5 = RPGLFactory.newObject("demo:knight");
-        RPGLObject knight6 = RPGLFactory.newObject("demo:knight");
-
+    @DisplayName("flametongue test")
+    void flametongueTest() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLItem flametongue = RPGLFactory.newItem("std:flametongue_scimitar");
         DummyContext context = new DummyContext();
-        context.add(youngRedDragon);
-        context.add(knight1);
-        context.add(knight2);
-        context.add(knight3);
-        context.add(knight4);
-        context.add(knight5);
-        context.add(knight6);
+        context.add(source);
+        context.add(target);
 
-        RPGLEvent youngRedDragonFireBreath;
-        RPGLEvent mainhandAttack;
+        source.giveItem(flametongue.getUuid());
+        source.equipItem(flametongue.getUuid(), "mainhand");
+        assertEquals(1, source.getEffectObjects().size(),
+                "equipping the flametongue should provide 1 effect to the wielder"
+        );
 
-        youngRedDragonFireBreath = RPGLFactory.newEvent("demo:young_red_dragon_fire_breath");
-        youngRedDragon.invokeEvent(
-                new RPGLObject[] {knight1, knight2, knight3, knight4, knight5, knight6},
-                youngRedDragonFireBreath,
-                youngRedDragon.getResourceObjects(),
+        List<RPGLEvent> events = source.getEventObjects(context);
+        RPGLEvent flametongueAttack = TestUtils.getEventById(events, "std:scimitar_melee");
+        assertNotNull(TestUtils.getEventById(events, "std:flametongue_command_word_activate"));
+        assertNull(TestUtils.getEventById(events, "std:flametongue_command_word_deactivate"));
+        assertNotNull(flametongueAttack);
+        assertEquals(flametongue.getUuid(), flametongueAttack.getOriginItem());
+
+        // make an attack, not activated
+        source.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
                 context
         );
+        assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
+                "Dummy should take 6 damage from being hit (6 slashing)"
+        );
 
-        // each target takes 48 damage
-        assertEquals(4, knight1.getHealthData().getInteger("current"));
-        assertEquals(4, knight2.getHealthData().getInteger("current"));
-        assertEquals(4, knight3.getHealthData().getInteger("current"));
-        assertEquals(4, knight4.getHealthData().getInteger("current"));
-        assertEquals(4, knight5.getHealthData().getInteger("current"));
-        assertEquals(4, knight6.getHealthData().getInteger("current"));
+        // RESET DUMMY HEALTH TO 1000
+        TestUtils.resetObjectHealth(target, context);
 
-        // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight1.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
-        assertEquals(171, youngRedDragon.getHealthData().getInteger("current"));
-
-        // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight2.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
-        assertEquals(164, youngRedDragon.getHealthData().getInteger("current"));
-
-        // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight3.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
-        assertEquals(157, youngRedDragon.getHealthData().getInteger("current"));
-
-        // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight4.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
-        assertEquals(150, youngRedDragon.getHealthData().getInteger("current"));
-
-        // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight5.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
-        assertEquals(143, youngRedDragon.getHealthData().getInteger("current"));
-
-        // dragon takes 7 damage
-        mainhandAttack = RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee");
-        knight6.invokeEvent(new RPGLObject[] {youngRedDragon}, mainhandAttack, new ArrayList<>(), context);
-        assertEquals(136, youngRedDragon.getHealthData().getInteger("current"));
-    }
-
-    @Test
-    @DisplayName("wrathful smite test")
-    void wrathfulSmiteTest() throws Exception {
-        RPGLObject knight1 = RPGLFactory.newObject("demo:knight");
-        RPGLObject knight2 = RPGLFactory.newObject("demo:knight");
-
-        DummyContext context = new DummyContext();
-        context.add(knight1);
-        context.add(knight2);
-
-        // knight 1 uses wrathful smite
-
-        knight1.invokeEvent(
-                new RPGLObject[] { knight1 },
-                RPGLFactory.newEvent("demo:wrathful_smite"),
-                new ArrayList<>(),
+        // activate
+        source.invokeEvent(
+                new RPGLObject[] {
+                        source
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:flametongue_command_word_activate"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:bonus_action"));
+                }},
                 context
         );
-
-        assertEquals("Wrathful Smite 1", knight1.getEffectObjects().get(0).getName(),
-                "knight 1` should have 1 effect (wrathful_smite_1)"
+        assertTrue(flametongue.hasTag("flametongue"),
+                "flametongue tag should be added from the activation command word event"
         );
 
-        // cool! now he attacks
-
-        knight1.invokeEvent(
-                new RPGLObject[] { knight2 },
-                RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
-                new ArrayList<>(),
+        // make an attack, activated
+        source.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
                 context
         );
-
-        assertEquals(52-4-3-3, knight2.getHealthData().getInteger("current"),
-                "knight should get hit and take some damage"
+        assertEquals(1000-3-3-3-3, target.getHealthData().getInteger("current"),
+                "Dummy should take 12 damage from being hit (6 slashing, 6 fire)"
         );
 
-        // check effects
+        // RESET DUMMY HEALTH TO 1000
+        TestUtils.resetObjectHealth(target, context);
 
-        assertEquals(0, knight1.getEffectObjects().size(),
-            "knight 1 should no longer be affected by wrathful_smite_1"
-        );
-
-        assertEquals("Frightened (Wrathful Smite)", knight2.getEffectObjects().get(0).getName(),
-                "knight 2 should be affected by wrathful_smite 2"
-        );
-
-        // knight 2 tries to counter-attack
-
-        knight2.invokeEvent(
-                new RPGLObject[] { knight1 },
-                RPGLFactory.newEvent("demo:weapon_attack_mainhand_melee"),
-                new ArrayList<>(),
+        // deactivate
+        source.invokeEvent(
+                new RPGLObject[] {
+                        source
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:flametongue_command_word_deactivate"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:bonus_action"));
+                }},
                 context
         );
-
-        assertEquals(52, knight1.getHealthData().getInteger("current"),
-                "knight 2 should have missed from disadvantage and dealt no damage to knight 1"
+        assertFalse(flametongue.hasTag("flametongue"),
+                "flametongue tag should be removed from the deactivation command word event"
         );
-    }
 
-    @Test
-    @DisplayName("dragons wrestling and biting")
-    void dragonsWrestlingAndBiting() throws Exception {
-        RPGLObject youngRedDragon1 = RPGLFactory.newObject("demo:young_red_dragon");
-        RPGLObject youngRedDragon2 = RPGLFactory.newObject("demo:young_red_dragon");
-
-        DummyContext context = new DummyContext();
-        context.add(youngRedDragon1);
-        context.add(youngRedDragon2);
-
-        RPGLEvent youngRedDragonBiteAttack;
-
-        youngRedDragonBiteAttack = RPGLFactory.newEvent("demo:young_red_dragon_bite_attack");
-        youngRedDragon1.invokeEvent(
-                new RPGLObject[] {youngRedDragon2},
-                youngRedDragonBiteAttack,
-                new ArrayList<>(),
+        // make an attack, activated
+        source.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                new ArrayList<>() {{
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                }},
                 context
         );
-
-        // dragon takes 16 damage
-        assertEquals(178-16, youngRedDragon2.getHealthData().getInteger("current"),
-                "dragon should take 16 piercing damage (5+5+6) and be immune to fire damage"
+        assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
+                "Dummy should take 6 damage from being hit (6 slashing)"
         );
     }
 

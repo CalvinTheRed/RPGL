@@ -24,7 +24,7 @@ public class AddEvent extends Function {
     @Override
     public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof GetEvents getEvents) {
-            getEvents.addEvent(functionJson.getString("event"));
+            getEvents.addEvent(functionJson.getString("event"), effect.getOriginItem());
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

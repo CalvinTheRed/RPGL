@@ -12,11 +12,13 @@ import org.rpgl.datapack.RPGLEffectTO;
 import org.rpgl.datapack.RPGLEventTO;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,9 +50,9 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newEffect using demo:fire_immunity")
+    @DisplayName("newEffect using std:fire_immunity")
     void newEffect_fireImmunity() {
-        RPGLEffect effect = RPGLFactory.newEffect("demo:fire_immunity");
+        RPGLEffect effect = RPGLFactory.newEffect("std:fire_immunity");
         String expected;
 
         expected = """
@@ -64,21 +66,21 @@ public class RPGLFactoryTest {
         assertEquals("Creatures with this effect take 0 fire damage.", effect.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("demo:fire_immunity", effect.getId(),
+        assertEquals("std:fire_immunity", effect.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
         expected = """
-                {"damage_affinity":{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}}""";
+                {"damage_affinity":[{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}]}""";
         assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
         );
     }
 
     @Test
-    @DisplayName("newEvent using demo:young_red_dragon_fire_breath")
+    @DisplayName("newEvent using std:young_red_dragon_fire_breath")
     void newEvent_youngRedDragonFireBreath() {
-        RPGLEvent event = RPGLFactory.newEvent("demo:young_red_dragon_fire_breath");
+        RPGLEvent event = RPGLFactory.newEvent("std:young_red_dragon_fire_breath");
         String expected;
 
         expected = """
@@ -92,7 +94,7 @@ public class RPGLFactoryTest {
         assertEquals("The dragon breathes fire.", event.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("demo:young_red_dragon_fire_breath", event.getId(),
+        assertEquals("std:young_red_dragon_fire_breath", event.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
@@ -107,9 +109,9 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newItem using demo:teacup")
-    void newItem_teacup() {
-        RPGLItem item = RPGLFactory.newItem("demo:teacup");
+    @DisplayName("newItem using std:frostbrand")
+    void newItem_frostbrand() {
+        RPGLItem item = RPGLFactory.newItem("std:frostbrand");
         String expected;
 
         expected = """
@@ -117,70 +119,54 @@ public class RPGLFactoryTest {
         assertEquals(expected, item.getMetadata().toString(),
                 "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
         );
-        assertEquals("Teacup", item.getName(),
+        assertEquals("Frostbrand", item.getName(),
                 "incorrect field value: " + DatapackContentTO.NAME_ALIAS
         );
-        assertEquals("A teacup.", item.getDescription(),
+        assertEquals("A legendary scimitar wielded by Drizzt Do'Urden.", item.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("demo:teacup", item.getId(),
-                "incorrect field value: " + DatapackContentTO.ID_ALIAS
-        );
 
-        assertEquals("[]", item.getTags().toString(),
+        expected = """
+                ["scimitar","metal","magic","martial_melee","finesse"]""";
+        assertEquals(expected, item.getTags().toString(),
                 "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );
 
-        assertEquals(0, item.getWeight(),
+        assertEquals(3, item.getWeight(),
                 "incorrect field value: " + RPGLItemTO.WEIGHT_ALIAS
         );
-        assertEquals(0, item.getCost(),
+        assertEquals(10000, item.getCost(),
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
-        assertEquals("[]", item.getProficiencyTags().toString(),
-                "incorrect field value: " + RPGLItemTO.PROFICIENCY_TAGS_ALIAS
-        );
-        assertEquals("[]", item.getWhileEquippedEffects().toString(),
-                "incorrect field value: " + RPGLItemTO.WHILE_EQUIPPED_ALIAS
-        );
         expected = """
-                ["improvised_melee","improvised_thrown"]""";
-        assertEquals(expected, item.getWeaponProperties().toString(),
-                "incorrect field value: " + RPGLItemTO.WEAPON_PROPERTIES_ALIAS
+                {"multiple_hands":["std:frostbrand_melee","std:improvised_thrown"],"one_hand":["std:frostbrand_melee","std:improvised_thrown"],"special":[]}""";
+        assertEquals(expected, item.getEvents().toString(),
+                "incorrect field value: " + RPGLItemTO.EVENTS_ALIAS
         );
-        expected = """
-                {"melee":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}],"thrown":[{"bonus":0,"damage_formula":"range","damage_type":"bludgeoning","dice":[{"count":1,"determined":[2],"size":4}]}]}""";
-        assertEquals(expected, item.getDamage().toString(),
-                "incorrect field value: " + RPGLItemTO.DAMAGE_ALIAS
+
+        List<RPGLEffect> equippedEffects = item.getEquippedEffectsObjects();
+        assertEquals(2, equippedEffects.size(),
+                "2 effects should be created"
         );
-        assertEquals(0, item.getAttackBonus(),
+        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
+                "First effect should be std:cold_resistance"
+        );
+        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
+                "Second effect should be std:fire_resistance"
+        );
+
+        assertEquals(3, item.getAttackBonus(),
                 "incorrect field value: " + RPGLItemTO.ATTACK_BONUS_ALIAS
         );
-        expected = """
-                {"melee":"str","thrown":"str"}""";
-        assertEquals(expected, item.getAttackAbilities().toString(),
-                "incorrect field value: " + RPGLItemTO.ATTACK_ABILITIES_ALIAS
-        );
-        expected = """
-                {"long":60,"normal":20}""";
-        assertEquals(expected, item.getRange().toString(),
-                "incorrect field value: " + RPGLItemTO.RANGE_ALIAS
-        );
-        assertNull(item.getArmorClassBase(),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BASE_ALIAS
-        );
-        assertNull(item.getArmorClassDexLimit(),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS
-        );
-        assertNull(item.getArmorClassBonus(),
-                "incorrect field value: " + RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS
+        assertEquals(3, item.getDamageBonus(),
+                "incorrect field value: " + RPGLItemTO.DAMAGE_BONUS_ALIAS
         );
     }
 
     @Test
-    @DisplayName("newObject using demo:young_red_dragon")
+    @DisplayName("newObject using std:young_red_dragon")
     void newObject_youngRedDragon() {
-        RPGLObject object = RPGLFactory.newObject("demo:young_red_dragon");
+        RPGLObject object = RPGLFactory.newObject("std:young_red_dragon");
         String expected;
 
         expected = """
@@ -194,7 +180,7 @@ public class RPGLFactoryTest {
         assertEquals("A young red dragon.", object.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("demo:young_red_dragon", object.getId(),
+        assertEquals("std:young_red_dragon", object.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
@@ -221,7 +207,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["demo:young_red_dragon_bite_attack","demo:young_red_dragon_claw_attack","demo:young_red_dragon_fire_breath"]""";
+                ["std:young_red_dragon_fire_breath"]""";
         assertEquals(expected, object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
@@ -236,4 +222,42 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
         );
     }
+
+    @Test
+    @DisplayName("newResource using std:action")
+    void newResource_action() {
+        RPGLResource resource = RPGLFactory.newResource("std:action");
+        String expected;
+
+        expected = """
+                {"author":"Calvin Withun"}""";
+        assertEquals(expected, resource.getMetadata().toString(),
+                "incorrect field value: " + DatapackContentTO.METADATA_ALIAS
+        );
+        assertEquals("Action", resource.getName(),
+                "incorrect field value: " + DatapackContentTO.NAME_ALIAS
+        );
+        assertEquals("This resource allows you to take actions on your turn.", resource.getDescription(),
+                "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertEquals("std:action", resource.getId(),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
+
+        assertEquals(1, resource.getPotency(),
+                "incorrect field value: " + RPGLResourceTO.POTENCY_ALIAS
+        );
+        assertEquals(false, resource.getExhausted(),
+                "incorrect field value: " + RPGLResourceTO.EXHAUSTED_ALIAS
+        );
+        assertNull(resource.getOriginItem(),
+                "incorrect field value: " + RPGLResourceTO.ORIGIN_ITEM_ALIAS
+        );
+        expected = """
+                [{"actor":"source","chance":100,"completed":0,"required":0,"required_generator":{"bonus":1,"dice":[]},"subevent":"info_subevent","tags":["start_turn"]}]""";
+        assertEquals(expected, resource.getRefreshCriterion().toString(),
+                "incorrect field value: " + RPGLResourceTO.REFRESH_CRITERION_ALIAS
+        );
+    }
+
 }

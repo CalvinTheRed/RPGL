@@ -43,7 +43,10 @@ public class SavingThrow extends Roll {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
+
+        // Add tag so nested subevents such as DamageCollection can know they hail from a saving throw.
         this.addTag("saving_throw");
+
         this.calculateDifficultyClass(context);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
         this.getBaseDamage(context);
@@ -101,10 +104,10 @@ public class SavingThrow extends Roll {
             this.putString("difficulty_class_ability", difficultyClassAbility);
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
-        RPGLObject source = this.getSource();
-        calculateSaveDifficultyClass.setSource(source);
+        calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
+        calculateSaveDifficultyClass.setSource(this.getSource());
         calculateSaveDifficultyClass.prepare(context);
-        calculateSaveDifficultyClass.setTarget(source);
+        calculateSaveDifficultyClass.setTarget(this.getSource());
         calculateSaveDifficultyClass.invoke(context);
         this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
@@ -128,6 +131,7 @@ public class SavingThrow extends Roll {
                 this.addString("base_damage_collection");
             }});
         }});
+        baseDamageCollection.setOriginItem(this.getOriginItem());
         baseDamageCollection.setSource(this.getSource());
         baseDamageCollection.prepare(context);
         baseDamageCollection.setTarget(this.getSource());
@@ -144,6 +148,7 @@ public class SavingThrow extends Roll {
                 this.addString("base_damage_roll");
             }});
         }});
+        baseDamageRoll.setOriginItem(this.getOriginItem());
         baseDamageRoll.setSource(this.getSource());
         baseDamageRoll.prepare(context);
         baseDamageRoll.setTarget(this.getSource());
@@ -173,6 +178,7 @@ public class SavingThrow extends Roll {
                 this.addString("target_damage_collection");
             }});
         }});
+        targetDamageCollection.setOriginItem(this.getOriginItem());
         targetDamageCollection.setSource(this.getSource());
         targetDamageCollection.prepare(context);
         targetDamageCollection.setTarget(this.getTarget());
@@ -189,6 +195,7 @@ public class SavingThrow extends Roll {
                 this.addString("target_damage_roll");
             }});
         }});
+        targetDamageRoll.setOriginItem(this.getOriginItem());
         targetDamageRoll.setSource(this.getSource());
         targetDamageRoll.prepare(context);
         targetDamageRoll.setTarget(this.getTarget());
@@ -237,6 +244,7 @@ public class SavingThrow extends Roll {
                 this.putString("damage_proportion", damageProportion);
                 this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
             }});
+            damageDelivery.setOriginItem(this.getOriginItem());
             damageDelivery.setSource(this.getSource());
             damageDelivery.prepare(context);
             damageDelivery.setTarget(this.getTarget());

@@ -43,9 +43,9 @@ public class RPGLResourceTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using demo:action template")
+    @DisplayName("newInstance comprehensive test using std:action template")
     void newInstance_actionTemplate() {
-        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("demo").getResourceTemplate("action");
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("action");
         RPGLResource resource = resourceTemplate.newInstance();
         String expected;
 
@@ -60,7 +60,7 @@ public class RPGLResourceTemplateTest {
         assertEquals("This resource allows you to take actions on your turn.", resource.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("demo:action", resource.getId(),
+        assertEquals("std:action", resource.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
@@ -86,7 +86,7 @@ public class RPGLResourceTemplateTest {
     @Test
     @DisplayName("processRefreshCriterionGenerators unpacks dice correctly")
     void processRefreshCriterionGenerators_unpacksDiceCorrectly() {
-        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("demo").getResourceTemplate("necrotic_husk");
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("necrotic_husk");
         RPGLResource resource = new RPGLResource();
         resource.join(resourceTemplate);
 
@@ -104,7 +104,7 @@ public class RPGLResourceTemplateTest {
     @Test
     @DisplayName("processRefreshCriterion infers optional required generator values correctly")
     void processRefreshCriterion_infersOptionalRequiredGeneratorValuesCorrectly() {
-        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("demo").getResourceTemplate("pact_spell_slot");
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("pact_spell_slot");
         RPGLResource resource = new RPGLResource();
         resource.join(resourceTemplate);
 

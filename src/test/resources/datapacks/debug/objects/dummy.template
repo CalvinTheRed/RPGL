@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Dummy",
+  "description": "A dummy GameObject.",
+  "ability_scores": {
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10
+  },
+  "health_data": {
+    "hit_dice": [
+      { "count": 1, "size": 4, "determined": [ 2 ] }
+    ],
+    "base": 1000,
+    "current": 1000,
+    "temporary": 0
+  },
+  "equipped_items": {
+
+  },
+  "inventory": [
+
+  ],
+  "events": [
+
+  ],
+  "effects": [
+
+  ],
+  "proficiency_bonus": 2
+}
