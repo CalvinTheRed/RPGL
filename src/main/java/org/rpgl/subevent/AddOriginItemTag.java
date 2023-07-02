@@ -5,11 +5,20 @@ import org.rpgl.core.RPGLItem;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
+/**
+ * This Subevent is dedicated to adding a tag to an item (specifically the origin item of an event).
+ * <br>
+ * <br>
+ * Source: an RPGLObject adding a tag to an origin item
+ * <br>
+ * Target: should be the same as the source
+ *
+ * @author Calvin Withun
+ */
 public class AddOriginItemTag extends Subevent {
 
     public AddOriginItemTag() {
         super("add_origin_item_tag");
-        this.addTag("add_origin_item_tag");
     }
 
     @Override

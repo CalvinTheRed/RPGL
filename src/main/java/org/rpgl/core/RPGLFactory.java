@@ -18,6 +18,7 @@ public final class RPGLFactory {
      * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
      *
      * @param effectId an effect ID <code>(namespace:name)</code>
+     * @param originItem an item UUID to be stored for the new effect's origin item
      * @return a new RPGLEffect object
      */
     public static RPGLEffect newEffect(String effectId, String originItem) {
@@ -33,6 +34,12 @@ public final class RPGLFactory {
         }
     }
 
+    /**
+     * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
+     *
+     * @param effectId an effect ID <code>(namespace:name)</code>
+     * @return a new RPGLEffect object
+     */
     public static RPGLEffect newEffect(String effectId) {
         return newEffect(effectId, null);
     }
@@ -41,6 +48,7 @@ public final class RPGLFactory {
      * This method creates a new RPGLEvent instance according to template data stored at the given event ID.
      *
      * @param eventId an event ID <code>(namespace:name)</code>
+     * @param originItem an item UUID to be stored for the new event's origin item
      * @return a new RPGLEvent object
      */
     public static RPGLEvent newEvent(String eventId, String originItem) {
@@ -56,6 +64,12 @@ public final class RPGLFactory {
         }
     }
 
+    /**
+     * This method creates a new RPGLEvent instance according to template data stored at the given event ID.
+     *
+     * @param eventId an event ID <code>(namespace:name)</code>
+     * @return a new RPGLEvent object
+     */
     public static RPGLEvent newEvent(String eventId) {
         return newEvent(eventId, null);
     }
@@ -102,6 +116,7 @@ public final class RPGLFactory {
      * This method creates a new RPGLResource instance according to template data stored at the given resource ID.
      *
      * @param resourceId a resource ID <code>(namespace:name)</code>
+     * @param originItem an item UUID to be stored for the new resource's origin item
      * @return a new RPGLResource object
      */
     public static RPGLResource newResource(String resourceId, String originItem) {
@@ -117,6 +132,12 @@ public final class RPGLFactory {
         }
     }
 
+    /**
+     * This method creates a new RPGLResource instance according to template data stored at the given resource ID.
+     *
+     * @param resourceId a resource ID <code>(namespace:name)</code>
+     * @return a new RPGLResource object
+     */
     public static RPGLResource newResource(String resourceId) {
         return newResource(resourceId, null);
     }

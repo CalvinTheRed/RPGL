@@ -10,7 +10,7 @@ import org.rpgl.uuidtable.UUIDTable;
 import java.util.Objects;
 
 /**
- * This Condition is dedicated to evaluating whether a particular RPGLObject has a particular tag.
+ * This Condition is dedicated to evaluating whether an origin item has a particular tag.
  *
  * @author Calvin Withun
  */

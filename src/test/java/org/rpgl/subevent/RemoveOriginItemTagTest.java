@@ -48,7 +48,7 @@ public class RemoveOriginItemTagTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Subevent subevent = new AddOriginItemTag();
+        Subevent subevent = new RemoveOriginItemTag();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"

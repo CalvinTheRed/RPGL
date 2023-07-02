@@ -111,18 +111,38 @@ public class RPGLItem extends RPGLTaggable {
         this.putInteger(RPGLItemTO.DAMAGE_BONUS_ALIAS, damageBonus);
     }
 
+    /**
+     * Returns a list of effects which will be shared with the item's user when this item is equipped.
+     *
+     * @return a list of effect UUIDs
+     */
     public JsonArray getEquippedEffects() {
         return Objects.requireNonNullElse(this.getJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS), new JsonArray());
     }
 
+    /**
+     * Setter for the item's equipped effects.
+     *
+     * @param equippedEffects a new list of effect UUIDs
+     */
     public void setEquippedEffects(JsonArray equippedEffects) {
         this.putJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, equippedEffects);
     }
 
+    /**
+     * Returns a list of resources made available to any object that equips this item.
+     *
+     * @return a list of resource UUIDs
+     */
     public JsonArray getEquippedResources() {
         return Objects.requireNonNullElse(this.getJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS), new JsonArray());
     }
 
+    /**
+     * Setter for this item's resources.
+     *
+     * @param equippedResources a new list of resource UUIDs
+     */
     public void setEquippedResources(JsonArray equippedResources) {
         this.putJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, equippedResources);
     }
@@ -216,6 +236,15 @@ public class RPGLItem extends RPGLTaggable {
         return resources;
     }
 
+    /**
+     * Returns a list of events provided in virtue of wielding this item in one hand.
+     *
+     * @param wielder the object wielding this item
+     * @param context the context in which the item's events are being retrieved
+     * @return a list of events
+     *
+     * @throws Exception if an exception occurs
+     */
     public List<RPGLEvent> getOneHandedEventObjects(RPGLObject wielder, RPGLContext context) throws Exception {
         JsonArray eventIds = this.getEvents().getJsonArray("one_hand");
         List<RPGLEvent> events = new ArrayList<>();
@@ -240,6 +269,15 @@ public class RPGLItem extends RPGLTaggable {
         return events;
     }
 
+    /**
+     * Returns a list of events provided in virtue of wielding this item in multiple hands.
+     *
+     * @param wielder the object wielding this item
+     * @param context the context in which the item's events are being retrieved
+     * @return a list of events
+     *
+     * @throws Exception if an exception occurs
+     */
     public List<RPGLEvent> getMultiHandedEventObjects(RPGLObject wielder, RPGLContext context) throws Exception {
         JsonArray eventIds = this.getEvents().getJsonArray("multiple_hands");
         // TODO redundant code here... helper method?
@@ -265,6 +303,11 @@ public class RPGLItem extends RPGLTaggable {
         return events;
     }
 
+    /**
+     * Returns a list of events provided in virtue of having equipped this item at all.
+     *
+     * @return a list of events
+     */
     public List<RPGLEvent> getSpecialEventObjects() {
         JsonArray eventIds = this.getEvents().getJsonArray("special");
         List<RPGLEvent> events = new ArrayList<>();
@@ -292,7 +335,18 @@ public class RPGLItem extends RPGLTaggable {
         }
     }
 
-    public List<RPGLEvent> getDerivedEvents(RPGLEvent event, RPGLObject wielder, RPGLContext context) throws Exception {
+    /**
+     * This helper method returns a list of events derived from a common event. This method is intended to be used to
+     * collect weapon attack events which use non-standard ability scores to make their attack roll.
+     *
+     * @param event the base event to derive other events from
+     * @param wielder the object wielding this item
+     * @param context the context in which the derived events are being retrieved
+     * @return a list of events
+     *
+     * @throws Exception if an exception occurs
+     */
+    List<RPGLEvent> getDerivedEvents(RPGLEvent event, RPGLObject wielder, RPGLContext context) throws Exception {
         List<RPGLEvent> derivedEvents = new ArrayList<>();
 
         AttackAbilityCollection attackAbilityCollection = new AttackAbilityCollection();

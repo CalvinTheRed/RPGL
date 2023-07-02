@@ -68,8 +68,8 @@ public class AddEventTest {
     }
 
     @Test
-    @DisplayName("")
-    void test() throws Exception {
+    @DisplayName("execute adds event correctly")
+    void execute_addsEventCorrectly() throws Exception {
         RPGLObject object = RPGLFactory.newObject("std:commoner");
         DummyContext context = new DummyContext();
         context.add(object);

@@ -5,6 +5,16 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
+/**
+ * This Subevent is dedicated to collecting non-standard attack ability scores for attacks made with particular items.
+ * <br>
+ * <br>
+ * Source: an RPGLObject collecting valid events for weapon attacks
+ * <br>
+ * Target: should be the same as the source
+ *
+ * @author Calvin Withun
+ */
 public class AttackAbilityCollection extends Subevent {
 
     public AttackAbilityCollection() {

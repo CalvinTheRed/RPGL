@@ -40,6 +40,11 @@ public class RPGLItemTemplate extends JsonObject {
         return item;
     }
 
+    /**
+     * This helper method defaults a new item's events to empty arrays if they are not specified.
+     *
+     * @param item a RPGLItem being created by this object
+     */
     static void processEvents(RPGLItem item) {
         item.getEvents().asMap().putIfAbsent("multiple_hands", new ArrayList<>());
         item.getEvents().asMap().putIfAbsent("one_hand", new ArrayList<>());

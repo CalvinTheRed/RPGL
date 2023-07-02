@@ -54,7 +54,7 @@ public class ObjectWieldingOriginItemTest {
     @Test
     @DisplayName("evaluate wrong condition")
     void evaluate_wrongCondition_throwsException() {
-        Condition condition = new True();
+        Condition condition = new ObjectWieldingOriginItem();
         JsonObject conditionJson = new JsonObject() {{
             /*{
                 "condition": "not_a_condition"
