@@ -2,8 +2,13 @@ package org.rpgl.core;
 
 import org.rpgl.datapack.DatapackContent;
 import org.rpgl.datapack.RPGLEventTO;
+import org.rpgl.exception.ResourceCountException;
+import org.rpgl.exception.ResourceMismatchException;
+import org.rpgl.exception.InsufficientResourcePotencyException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+
+import java.util.List;
 
 /**
  * This class represents any high-level verbs which occur in RPGL. Examples of this include actions such as casting
@@ -87,6 +92,48 @@ public class RPGLEvent extends DatapackContent {
      */
     public void setOriginItem(String originItem) {
         this.putString("origin_item", originItem);
+    }
+
+    public void scale(List<RPGLResource> resources) throws ResourceCountException,
+            ResourceMismatchException, InsufficientResourcePotencyException {
+        if (this.doResourcesSatisfyCost(resources)) {
+            JsonArray cost = this.getCost();
+            for (int i = 0; i < cost.size(); i++) {
+                JsonObject costElement = cost.getJsonObject(i);
+                RPGLResource providedResource = resources.get(i);
+                int potencyDifference = providedResource.getPotency() - costElement.getInteger("minimum_potency");
+                if (potencyDifference > 0) {
+                    JsonArray scaling = costElement.getJsonArray("scale");
+                    for (int j = 0; j < scaling.size(); j++) {
+                        JsonObject scalingElement = scaling.getJsonObject(j);
+                        int magnitude = scalingElement.getInteger("magnitude");
+                        String field = scalingElement.getString("field");
+                        this.insertInteger(field, this.seekInteger(field) + potencyDifference * magnitude);
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean doResourcesSatisfyCost(List<RPGLResource> resources) throws ResourceCountException,
+            ResourceMismatchException, InsufficientResourcePotencyException {
+        JsonArray cost = this.getCost();
+        if (cost.size() == resources.size()) {
+            for (int i = 0; i < cost.size(); i++) {
+                JsonObject costElement = cost.getJsonObject(i);
+                RPGLResource resource = resources.get(i);
+                if (!resource.getTags().containsAny(costElement.getJsonArray("resource_tags").asList())) {
+                    throw new ResourceMismatchException(costElement.getJsonArray("resource_tags"), resource.getTags());
+                }
+                if (resource.getPotency() < costElement.getInteger("minimum_potency")) {
+                    throw new InsufficientResourcePotencyException(
+                            resource.getId(), costElement.getInteger("minimum_potency"), resource.getPotency()
+                    );
+                }
+            }
+            return true;
+        }
+        throw new ResourceCountException(cost.size(), resources.size());
     }
 
 }

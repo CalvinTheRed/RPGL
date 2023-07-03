@@ -298,6 +298,7 @@ public class RPGLObject extends RPGLTaggable {
         for (RPGLResource resource : resources) {
             resource.exhaust();
         }
+        event.scale(resources);
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject subeventJson = subeventJsonArray.getJsonObject(i);

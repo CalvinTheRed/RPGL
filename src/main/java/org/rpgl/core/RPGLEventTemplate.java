@@ -1,6 +1,9 @@
 package org.rpgl.core;
 
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+
+import java.util.ArrayList;
 
 /**
  * This class is used to contain a "template" to be used in the creation of new RPGLEvent objects. Data stored in this
@@ -19,8 +22,10 @@ public class RPGLEventTemplate extends JsonObject {
      */
     public RPGLEvent newInstance(String originItem) {
         RPGLEvent event = new RPGLEvent();
+        event.asMap().putIfAbsent("cost", new ArrayList<>());
         event.join(this);
         event.setOriginItem(originItem);
+        processCost(event);
         return event;
     }
 
@@ -32,6 +37,22 @@ public class RPGLEventTemplate extends JsonObject {
      */
     public RPGLEvent newInstance() {
         return this.newInstance(null);
+    }
+
+    static void processCost(RPGLEvent event) {
+        JsonArray rawCost = event.getCost();
+        JsonArray processedCost = new JsonArray();
+        for (int i = 0; i < rawCost.size(); i++) {
+            JsonObject rawCostElement = rawCost.getJsonObject(i);
+            rawCostElement.asMap().putIfAbsent("count", 1);
+            rawCostElement.asMap().putIfAbsent("minimum_potency", 1);
+            rawCostElement.asMap().putIfAbsent("scale", new ArrayList<>());
+            int count = rawCostElement.removeInteger("count");
+            for (int j = 0; j < count; j++) {
+                processedCost.addJsonObject(rawCostElement.deepClone());
+            }
+        }
+        event.setCost(processedCost);
     }
 
 }
