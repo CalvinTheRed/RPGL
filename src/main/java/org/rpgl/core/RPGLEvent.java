@@ -94,29 +94,52 @@ public class RPGLEvent extends DatapackContent {
         this.putString("origin_item", originItem);
     }
 
-    public void scale(List<RPGLResource> resources) throws ResourceCountException,
-            ResourceMismatchException, InsufficientResourcePotencyException {
-        if (this.doResourcesSatisfyCost(resources)) {
-            JsonArray cost = this.getCost();
-            for (int i = 0; i < cost.size(); i++) {
-                JsonObject costElement = cost.getJsonObject(i);
-                RPGLResource providedResource = resources.get(i);
-                int potencyDifference = providedResource.getPotency() - costElement.getInteger("minimum_potency");
-                if (potencyDifference > 0) {
-                    JsonArray scaling = costElement.getJsonArray("scale");
-                    for (int j = 0; j < scaling.size(); j++) {
-                        JsonObject scalingElement = scaling.getJsonObject(j);
-                        int magnitude = scalingElement.getInteger("magnitude");
-                        String field = scalingElement.getString("field");
-                        this.insertInteger(field, this.seekInteger(field) + potencyDifference * magnitude);
-                    }
+    /**
+     * This method takes the scale fields of each resource provided to this event and modifies the event json to reflect
+     * any scaling meant to occur in virtue of a resource with an excessively large potency being provided to satisfy
+     * the event cost.
+     *
+     * @param resources a list of RPGLResource objects provided to satisfy the event cost
+     *
+     * @throws InsufficientResourcePotencyException if a provided resource has a potency which is too low to satisfy its
+     * corresponding required resource
+     * @throws ResourceCountException if the number of provided resources doesn't match the required number of resources
+     * @throws ResourceMismatchException if a provided resource doesn't match any tags for its corresponding required
+     * resource
+     */
+    public void scale(List<RPGLResource> resources) throws InsufficientResourcePotencyException,
+            ResourceMismatchException, ResourceCountException {
+        this.verifyResourcesSatisfyCost(resources);
+        JsonArray cost = this.getCost();
+        for (int i = 0; i < cost.size(); i++) {
+            JsonObject costElement = cost.getJsonObject(i);
+            RPGLResource providedResource = resources.get(i);
+            int potencyDifference = providedResource.getPotency() - costElement.getInteger("minimum_potency");
+            if (potencyDifference > 0) {
+                JsonArray scaling = costElement.getJsonArray("scale");
+                for (int j = 0; j < scaling.size(); j++) {
+                    JsonObject scalingElement = scaling.getJsonObject(j);
+                    int magnitude = scalingElement.getInteger("magnitude");
+                    String field = scalingElement.getString("field");
+                    this.insertInteger(field, this.seekInteger(field) + potencyDifference * magnitude);
                 }
             }
         }
     }
 
-    public boolean doResourcesSatisfyCost(List<RPGLResource> resources) throws ResourceCountException,
-            ResourceMismatchException, InsufficientResourcePotencyException {
+    /**
+     * This method verifies that a list of provided resources satisfies the cost of the event.
+     *
+     * @param resources a list of RPGLResource objects
+     *
+     * @throws InsufficientResourcePotencyException if a provided resource has a potency which is too low to satisfy its
+     * corresponding required resource
+     * @throws ResourceCountException if the number of provided resources doesn't match the required number of resources
+     * @throws ResourceMismatchException if a provided resource doesn't match any tags for its corresponding required
+     * resource
+     */
+    public void verifyResourcesSatisfyCost(List<RPGLResource> resources) throws InsufficientResourcePotencyException,
+            ResourceCountException, ResourceMismatchException {
         JsonArray cost = this.getCost();
         if (cost.size() == resources.size()) {
             for (int i = 0; i < cost.size(); i++) {
@@ -131,7 +154,7 @@ public class RPGLEvent extends DatapackContent {
                     );
                 }
             }
-            return true;
+            return;
         }
         throw new ResourceCountException(cost.size(), resources.size());
     }

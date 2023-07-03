@@ -39,6 +39,12 @@ public class RPGLEventTemplate extends JsonObject {
         return this.newInstance(null);
     }
 
+    /**
+     * This helper method processed the cost field of a new event being constructed. It will default the default count,
+     * minimum potency, and scale fields if none are specified.
+     *
+     * @param event a new RPGLEvent being created by this object
+     */
     static void processCost(RPGLEvent event) {
         JsonArray rawCost = event.getCost();
         JsonArray processedCost = new JsonArray();

@@ -18,7 +18,6 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.core.RPGLEvent class.
@@ -52,12 +51,10 @@ public class RPGLEventTest {
         RPGLResource action = RPGLFactory.newResource("std:action");
         RPGLResource spellSlot = RPGLFactory.newResource("std:spell_slot");
 
-        assertTrue(event.doResourcesSatisfyCost(new ArrayList<>() {{
+        event.verifyResourcesSatisfyCost(new ArrayList<>() {{
             this.add(action);
             this.add(spellSlot);
-        }}),
-                "resources should satisfy resource requirement"
-        );
+        }});
     }
 
     @Test
@@ -65,7 +62,7 @@ public class RPGLEventTest {
     void doResourcesSatisfyCost_returnsFalse_resourceCountMismatch() {
         RPGLEvent event = RPGLFactory.newEvent("std:cure_wounds");
         assertThrows(ResourceCountException.class,
-                () -> event.doResourcesSatisfyCost(new ArrayList<>()),
+                () -> event.verifyResourcesSatisfyCost(new ArrayList<>()),
                 "resources should not satisfy resource requirement"
         );
     }
@@ -79,7 +76,7 @@ public class RPGLEventTest {
         spellSlot.setPotency(0);
 
         assertThrows(InsufficientResourcePotencyException.class,
-                () -> event.doResourcesSatisfyCost(new ArrayList<>() {{
+                () -> event.verifyResourcesSatisfyCost(new ArrayList<>() {{
                     this.add(action);
                     this.add(spellSlot);
                 }}),
@@ -96,7 +93,7 @@ public class RPGLEventTest {
         spellSlot.setPotency(0);
 
         assertThrows(ResourceMismatchException.class,
-                () -> event.doResourcesSatisfyCost(new ArrayList<>() {{
+                () -> event.verifyResourcesSatisfyCost(new ArrayList<>() {{
                     this.add(spellSlot);
                     this.add(action);
                 }}),
