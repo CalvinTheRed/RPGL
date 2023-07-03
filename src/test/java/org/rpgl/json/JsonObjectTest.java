@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -664,6 +665,350 @@ public class JsonObjectTest {
         );
         assertNull(deepClone.data.get("new_key"),
                 "clone should not include new entries made to original"
+        );
+    }
+
+    @Test
+    @DisplayName("seek depth of one")
+    void seek_depthOfOne() {
+        JsonObject json = new JsonObject() {{
+           this.putString("key", "value");
+            this.putString("otherKey", "otherValue");
+        }};
+        assertEquals("value", json.seek("key"),
+                "key of 'key' should have value of 'value'"
+        );
+    }
+
+    @Test
+    @DisplayName("seek greater depths")
+    void seek_greaterDepths() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject() {{
+                this.putJsonObject("key", new JsonObject() {{
+                    this.putString("key", "value");
+                }});
+            }});
+        }};
+        assertEquals("value", json.seek("key.key.key"),
+                "key of 'key.key.key' should have value of 'value'"
+        );
+    }
+
+    @Test
+    @DisplayName("seek can return HashMap")
+    void seek_canReturnHashMap() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject() {{
+                this.putJsonObject("nestedKey", new JsonObject());
+            }});
+        }};
+        assertTrue(json.seek("key.nestedKey") instanceof HashMap<?,?>,
+                "key of 'key.nestedKey' should contain a HashMap (not yet converted to JsonObject)"
+        );
+    }
+
+    @Test
+    @DisplayName("seek can return ArrayList")
+    void seek_canReturnArrayList() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject() {{
+                this.putJsonArray("nestedKey", new JsonArray());
+            }});
+        }};
+        assertTrue(json.seek("key.nestedKey") instanceof ArrayList<?>,
+                "key of 'key.nestedKey' should contain an ArrayList (not yet converted to JsonArray)"
+        );
+    }
+
+    @Test
+    @DisplayName("seek traverses JsonArray")
+    void seek_traversesJsonArray() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonArray("key", new JsonArray() {{
+                this.addString("value");
+            }});
+        }};
+        assertEquals("value", json.seek("key[0]"),
+                "key of 'key[0]' should have value of 'value'"
+        );
+    }
+
+    @Test
+    @DisplayName("seek traverses nested JsonArray")
+    void seek_traversesNestedJsonArray() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonArray("key", new JsonArray() {{
+                this.addJsonArray(new JsonArray() {{
+                    this.addString("value");
+                }});
+            }});
+        }};
+        assertEquals("value", json.seek("key[0][0]"),
+                "key of 'key[0][0]' should have value of 'value'"
+        );
+    }
+
+    @Test
+    @DisplayName("seek traverses and continues past JsonArray")
+    void seek_traversesAndContinuesPastJsonArray() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonArray("key", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("nestedKey", "value");
+                }});
+            }});
+        }};
+        assertEquals("value", json.seek("key[0].nestedKey"),
+                "key of 'key[0].nestedKey' should have value of 'value'"
+        );
+    }
+
+    @Test
+    @DisplayName("seek contains references to original objects")
+    void seek_containsReferencesToOriginalObjects() {
+        JsonObject innerObject = new JsonObject();
+        JsonObject middleObject = new JsonObject() {{
+            this.putJsonObject("key", innerObject);
+        }};
+        JsonObject outerObject = new JsonObject() {{
+            this.putJsonObject("key", middleObject);
+        }};
+
+        JsonObject seekResultForInnerObject = outerObject.seekJsonObject("key.key");
+        seekResultForInnerObject.putString("key", "value");
+        assertEquals(innerObject.toString(), seekResultForInnerObject.toString(),
+                "seek should return references to original objects"
+        );
+    }
+
+    @Test
+    @DisplayName("seekJsonObject returnsCorrectValue")
+    void seekJsonObject_returnsCorrectValue() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject() {{
+                this.putString("nestedKey", "value");
+            }});
+        }};
+        String expected = """
+                {"nestedKey":"value"}""";
+        assertEquals(expected, json.seekJsonObject("key").toString(),
+                "seekJsonObject should return the target JsonObject"
+        );
+    }
+
+    @Test
+    @DisplayName("seekJsonArray returnsCorrectValue")
+    void seekJsonArray_returnsCorrectValue() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonArray("key", new JsonArray() {{
+                this.addString("value");
+            }});
+        }};
+        String expected = """
+                ["value"]""";
+        assertEquals(expected, json.seekJsonArray("key").toString(),
+                "seekJsonArray should return the target JsonArray"
+        );
+    }
+
+    @Test
+    @DisplayName("seekString returnsCorrectValue")
+    void seekString_returnsCorrectValue() {
+        JsonObject json = new JsonObject() {{
+            this.putString("key", "value");
+        }};
+        assertEquals("value", json.seekString("key"),
+                "seekString should return the target String"
+        );
+    }
+
+    @Test
+    @DisplayName("seekInteger returnsCorrectValue")
+    void seekInteger_returnsCorrectValue() {
+        JsonObject json = new JsonObject() {{
+            this.putInteger("key", 100);
+        }};
+        assertEquals(100, json.seekInteger("key"),
+                "seekInteger should return the target integer"
+        );
+    }
+
+    @Test
+    @DisplayName("seekDouble returnsCorrectValue")
+    void seekDouble_returnsCorrectValue() {
+        JsonObject json = new JsonObject() {{
+            this.putDouble("key", 123.456);
+        }};
+        assertEquals(123.456, json.seekDouble("key"),
+                "seekDouble should return the target double"
+        );
+    }
+
+    @Test
+    @DisplayName("seekBoolean returnsCorrectValue")
+    void seekBoolean_returnsCorrectValue() {
+        JsonObject json = new JsonObject() {{
+            this.putBoolean("key", true);
+        }};
+        assertTrue(json.seekBoolean("key"),
+                "seekBoolean should return the target boolean"
+        );
+    }
+
+    @Test
+    @DisplayName("insertJsonObject works for surface depth")
+    void insertJsonObject_worksForSurfaceDepth() {
+        JsonObject json = new JsonObject();
+        json.insertJsonObject("key", new JsonObject() {{
+            this.putString("nestedKey", "value");
+        }});
+        String expected = """
+                {"nestedKey":"value"}""";
+        assertEquals(expected, json.getJsonObject("key").toString(),
+                "key 'key' should have the correct JsonObject value"
+        );
+    }
+
+    @Test
+    @DisplayName("insertJsonObject works for nested depth")
+    void insertJsonObject_worksForNestedDepth() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject());
+        }};
+        json.insertJsonObject("key.nestedKey", new JsonObject() {{
+            this.putString("anotherKey", "value");
+        }});
+        String expected = """
+                {"anotherKey":"value"}""";
+        assertEquals(expected, json.seekJsonObject("key.nestedKey").toString(),
+                "key 'key.nestedKey' should have the correct JsonObject value"
+        );
+    }
+
+    @Test
+    @DisplayName("insertJsonArray works for surface depth")
+    void insertJsonArray_worksForSurfaceDepth() {
+        JsonObject json = new JsonObject();
+        json.insertJsonArray("key", new JsonArray() {{
+            this.addString("value");
+        }});
+        String expected = """
+                ["value"]""";
+        assertEquals(expected, json.getJsonArray("key").toString(),
+                "key 'key' should have the correct JsonArray value"
+        );
+    }
+
+    @Test
+    @DisplayName("insertJsonArray works for nested depth")
+    void insertJsonArray_worksForNestedDepth() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject());
+        }};
+        json.insertJsonArray("key.nestedKey", new JsonArray() {{
+            this.addString("value");
+        }});
+        String expected = """
+                ["value"]""";
+        assertEquals(expected, json.seekJsonArray("key.nestedKey").toString(),
+                "key 'key.nestedKey' should have the correct JsonArray value"
+        );
+    }
+
+    @Test
+    @DisplayName("insertString works for surface depth")
+    void insertString_worksForSurfaceDepth() {
+        JsonObject json = new JsonObject();
+
+        json.insertString("key", "value");
+        assertEquals("value", json.getString("key"),
+                "key 'key' should have value of 'value'"
+        );
+    }
+
+    @Test
+    @DisplayName("insertString works for nested depth")
+    void insertString_worksForNestedDepth() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject());
+        }};
+
+        json.insertString("key.nestedKey", "value");
+        assertEquals("value", json.seekString("key.nestedKey"),
+                "key 'key.nestedKey' should have value of 'value'"
+        );
+    }
+
+    @Test
+    @DisplayName("insertInteger works for surface depth")
+    void insertInteger_worksForSurfaceDepth() {
+        JsonObject json = new JsonObject();
+
+        json.insertInteger("key", 100);
+        assertEquals(100, json.getInteger("key"),
+                "key 'key' should have value of 100"
+        );
+    }
+
+    @Test
+    @DisplayName("insertInteger works for nested depth")
+    void insertInteger_worksForNestedDepth() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject());
+        }};
+
+        json.insertInteger("key.nestedKey", 100);
+        assertEquals(100, json.seekInteger("key.nestedKey"),
+                "key 'key.nestedKey' should have value of 100"
+        );
+    }
+
+    @Test
+    @DisplayName("insertDouble works for surface depth")
+    void insertDouble_worksForSurfaceDepth() {
+        JsonObject json = new JsonObject();
+
+        json.insertDouble("key", 123.456);
+        assertEquals(123.456, json.getDouble("key"),
+                "key 'key' should have value of 123.456"
+        );
+    }
+
+    @Test
+    @DisplayName("insertDouble works for nested depth")
+    void insertDouble_worksForNestedDepth() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject());
+        }};
+
+        json.insertDouble("key.nestedKey", 123.456);
+        assertEquals(123.456, json.seekDouble("key.nestedKey"),
+                "key 'key.nestedKey' should have value of 123.456"
+        );
+    }
+
+    @Test
+    @DisplayName("insertBoolean works for surface depth")
+    void insertBoolean_worksForSurfaceDepth() {
+        JsonObject json = new JsonObject();
+
+        json.insertBoolean("key", true);
+        assertTrue(json.getBoolean("key"),
+                "key 'key' should have value of true"
+        );
+    }
+
+    @Test
+    @DisplayName("insertBoolean works for nested depth")
+    void insertBoolean_worksForNestedDepth() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("key", new JsonObject());
+        }};
+
+        json.insertBoolean("key.nestedKey", true);
+        assertTrue(json.seekBoolean("key.nestedKey"),
+                "key 'key.nestedKey' should have value of true"
         );
     }
 
