@@ -365,6 +365,124 @@ public class JsonObject {
     }
 
     // =================================================================================================================
+    //  seek methods
+    // =================================================================================================================
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public JsonObject seekJsonObject(String path) {
+        return this.seek(path) instanceof HashMap value ? new JsonObject(value) : null;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public JsonArray seekJsonArray(String path) {
+        return this.seek(path) instanceof ArrayList value ? new JsonArray(value) : null;
+    }
+
+    public String seekString(String path) {
+        return this.seek(path) instanceof String value ? value : null;
+    }
+
+    public Integer seekInteger(String path) {
+        return this.seek(path) instanceof Integer value ? value : null;
+    }
+
+    public Double seekDouble(String path) {
+        return this.seek(path) instanceof Double value ? value : null;
+    }
+
+    public Boolean seekBoolean(String path) {
+        return this.seek(path) instanceof Boolean value ? value : null;
+    }
+
+    public Object seek(String path) {
+        Object focus = this.asMap();
+        for (String key : path.split("\\.")) {
+            if (key.contains("[")) {
+                String arrayKey = key.substring(0, key.indexOf("["));
+                focus = ((HashMap<?,?>) focus).get(arrayKey);
+
+                String[] indices = key.substring(key.indexOf("[") + 1, key.length() - 1).split("]\\[");
+                for (String index : indices) {
+                    focus = ((ArrayList<?>) focus).get(Integer.parseInt(index));
+                }
+            } else {
+                focus = ((HashMap<?,?>) focus).get(key);
+            }
+        }
+        return focus;
+    }
+
+    // =================================================================================================================
+    //  insert methods
+    // =================================================================================================================
+
+    public void insertJsonObject(String path, JsonObject jsonObject) {
+        if (path.contains(".")) {
+            String relativeRoot = path.substring(0, path.lastIndexOf('.'));
+            String key = path.substring(path.lastIndexOf('.') + 1);
+            JsonObject object = this.seekJsonObject(relativeRoot);
+            object.putJsonObject(key, jsonObject);
+        } else {
+            this.putJsonObject(path, jsonObject);
+        }
+    }
+
+    public void insertJsonArray(String path, JsonArray jsonArray) {
+        if (path.contains(".")) {
+            String relativeRoot = path.substring(0, path.lastIndexOf('.'));
+            String key = path.substring(path.lastIndexOf('.') + 1);
+            JsonObject object = this.seekJsonObject(relativeRoot);
+            object.putJsonArray(key, jsonArray);
+        } else {
+            this.putJsonArray(path, jsonArray);
+        }
+    }
+
+    public void insertString(String path, String s) {
+        if (path.contains(".")) {
+            String relativeRoot = path.substring(0, path.lastIndexOf('.'));
+            String key = path.substring(path.lastIndexOf('.') + 1);
+            JsonObject object = this.seekJsonObject(relativeRoot);
+            object.putString(key, s);
+        } else {
+            this.putString(path, s);
+        }
+    }
+
+    public void insertInteger(String path, Integer i) {
+        if (path.contains(".")) {
+            String relativeRoot = path.substring(0, path.lastIndexOf('.'));
+            String key = path.substring(path.lastIndexOf('.') + 1);
+            JsonObject object = this.seekJsonObject(relativeRoot);
+            object.putInteger(key, i);
+        } else {
+            this.putInteger(path, i);
+        }
+    }
+
+    public void insertDouble(String path, Double d) {
+        if (path.contains(".")) {
+            String relativeRoot = path.substring(0, path.lastIndexOf('.'));
+            String key = path.substring(path.lastIndexOf('.') + 1);
+            JsonObject object = this.seekJsonObject(relativeRoot);
+            object.putDouble(key, d);
+        } else {
+            this.putDouble(path, d);
+        }
+    }
+
+    public void insertBoolean(String path, Boolean b) {
+        if (path.contains(".")) {
+            String relativeRoot = path.substring(0, path.lastIndexOf('.'));
+            String key = path.substring(path.lastIndexOf('.') + 1);
+            JsonObject object = this.seekJsonObject(relativeRoot);
+            object.putBoolean(key, b);
+        } else {
+            this.putBoolean(path, b);
+        }
+    }
+
+    // =================================================================================================================
     //  inherited method overrides
     // =================================================================================================================
 
