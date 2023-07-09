@@ -9,7 +9,8 @@
     "finesse",
     "light",
     "metal",
-    "simple_melee"
+    "simple_melee",
+    "throwable"
   ],
   "weight": 1,
   "cost": 2,

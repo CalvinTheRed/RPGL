@@ -142,4 +142,16 @@ public final class RPGLFactory {
         return newResource(resourceId, null);
     }
 
+    public static RPGLClass getClass(String classId) {
+        String[] classIdSplit = classId.split(":");
+        try {
+            return DatapackLoader.DATAPACKS
+                    .get(classIdSplit[0])
+                    .getClass(classIdSplit[1]);
+        } catch (NullPointerException e) {
+            LOGGER.error("encountered an error getting RPGLClass: " + classId);
+            throw new RuntimeException("Encountered an error getting a RPGLClass", e);
+        }
+    }
+
 }

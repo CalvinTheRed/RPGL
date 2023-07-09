@@ -64,10 +64,10 @@ public final class UUIDTable {
      * the uuid is null.
      *
      * @param uuid the UUID of a RPGLEffect
-     * @return a RPGLEffect
+     * @return a RPGLEffect, or null if the uuid is null or if the uuid does not map to an effect
      */
     public static RPGLEffect getEffect(String uuid) {
-        return (RPGLEffect) UUID_TABLE.get(uuid);
+        return uuid == null ? null : (RPGLEffect) UUID_TABLE.get(uuid);
     }
 
     /**
@@ -75,10 +75,10 @@ public final class UUIDTable {
      * the uuid is null.
      *
      * @param uuid the UUID of a RPGLItem
-     * @return a RPGLItem
+     * @return a RPGLItem, or null if the uuid is null or if the uuid does not map to an item
      */
     public static RPGLItem getItem(String uuid) {
-        return (RPGLItem) UUID_TABLE.get(uuid);
+        return uuid == null ? null : (RPGLItem) UUID_TABLE.get(uuid);
     }
 
     /**
@@ -86,13 +86,10 @@ public final class UUIDTable {
      * the uuid is null.
      *
      * @param uuid the UUID of a RPGLObject
-     * @return a RPGLObject or null
+     * @return a RPGLObject, or null if the uuid is null or if the uuid does not map to an object
      */
     public static RPGLObject getObject(String uuid) {
-        if (uuid != null) {
-            return (RPGLObject) UUID_TABLE.get(uuid);
-        }
-        return null;
+        return uuid == null ? null : (RPGLObject) UUID_TABLE.get(uuid);
     }
 
     /**
@@ -100,13 +97,10 @@ public final class UUIDTable {
      * the uuid is null.
      *
      * @param uuid the UUID of a RPGLResource
-     * @return a RPGLResource or null
+     * @return a RPGLResource, or null if the uuid is null or if the uuid does not map to a resource
      */
     public static RPGLResource getResource(String uuid) {
-        if (uuid != null) {
-            return (RPGLResource) UUID_TABLE.get(uuid);
-        }
-        return null;
+        return uuid == null ? null : (RPGLResource) UUID_TABLE.get(uuid);
     }
 
     /**

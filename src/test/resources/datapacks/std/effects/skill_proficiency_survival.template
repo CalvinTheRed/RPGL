@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Skill Proficiency (Survival)",
+  "description": "You have proficiency in skill checks made using Survival.",
+  "subevent_filters": { }
+}

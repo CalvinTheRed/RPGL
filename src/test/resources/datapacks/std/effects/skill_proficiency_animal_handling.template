@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Skill Proficiency (Animal Handling)",
+  "description": "You have proficiency in skill checks made using Animal Handling.",
+  "subevent_filters": { }
+}

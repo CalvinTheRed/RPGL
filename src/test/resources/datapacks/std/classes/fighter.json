@@ -1,0 +1,135 @@
+{
+  "metadata": {
+
+  },
+  "name": "Fighter",
+  "description": "The Fighter class.",
+  "hit_die": 10,
+  "subclass_level": 3,
+  "ability_score_increases": [ 4, 6, 8, 12, 14, 16, 19 ],
+  "multiclassing_requirements": [
+    {
+      "ability": [ "str", "dex" ],
+      "minimum_score": 13
+    }
+  ],
+  "starting_class_features": {
+    "effects": [
+      "std:save_proficiency_str",
+      "std:save_proficiency_con",
+      "std:armor_proficiency_heavy",
+      {
+        "name": "Skill Proficiencies",
+        "count": 2,
+        "options": [
+          "std:skill_proficiency_acrobatics",
+          "std:skill_proficiency_animal_handling",
+          "std:skill_proficiency_athletics",
+          "std:skill_proficiency_history",
+          "std:skill_proficiency_insight",
+          "std:skill_proficiency_intimidation",
+          "std:skill_proficiency_perception",
+          "std:skill_proficiency_survival"
+        ]
+      }
+    ]
+  },
+  "class_features": {
+    "1": {
+      "gain": {
+        "effects": [
+          "std:armor_proficiency_light",
+          "std:armor_proficiency_medium",
+          "std:shield_proficiency",
+          "std:weapon_proficiency_simple_melee",
+          "std:weapon_proficiency_simple_ranged",
+          "std:weapon_proficiency_martial_melee",
+          "std:weapon_proficiency_martial_ranged",
+          {
+            "name": "Fighting Style",
+            "count": 1,
+            "options": [
+              "std:fighting_style_archery",
+              "std:fighting_style_defense",
+              "std:fighting_style_great_weapon_fighting",
+              "std:fighting_style_thrown_weapon_fighting"
+            ]
+          }
+        ],
+        "events": [
+          "std:second_wind"
+        ],
+        "resources": [
+          "std:second_wind_charge"
+        ]
+      }
+    },
+    "2": {
+      "gain": {
+        "events": [
+          "std:action_surge"
+        ],
+        "resources": [
+          "std:action_surge_charge",
+          "std:action_surge_limiter"
+        ]
+      }
+    },
+    "5": {
+      "gain": {
+        "events": [
+          "std:extra_attack_1"
+        ]
+      }
+    },
+    "9": {
+      "gain": {
+        "effects": [
+          "std:indomitable"
+        ],
+        "resources": [
+          "std:indomitable_charge"
+        ]
+      }
+    },
+    "11": {
+      "gain": {
+        "events": [
+          "std:extra_attack_2"
+        ]
+      },
+      "lose": {
+        "events": [
+          "std:extra_attack_1"
+        ]
+      }
+    },
+    "13": {
+      "gain": {
+        "resources": [
+          "std:indomitable_charge"
+        ]
+      }
+    },
+    "17": {
+      "gain": {
+        "resources": [
+          "std:action_surge_charge",
+          "std:indomitable_charge"
+        ]
+      }
+    },
+    "20": {
+      "gain": {
+        "events": [
+          "std:extra_attack_3"
+        ]
+      },
+      "lose": {
+        "events": [
+          "std:extra_attack_2"
+        ]
+      }
+    }
+  }
+}

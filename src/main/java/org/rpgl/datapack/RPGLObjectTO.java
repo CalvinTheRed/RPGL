@@ -25,6 +25,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     public static final String EFFECTS_ALIAS           = "effects";
     public static final String PROFICIENCY_BONUS_ALIAS = "proficiency_bonus";
     public static final String RESOURCES_ALIAS         = "resources";
+    public static final String CLASSES_ALIAS           = "classes";
+    public static final String CHALLENGE_RATING_ALIAS  = "challenge_rating";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
     HashMap<String, Object> abilityScores;
@@ -42,6 +44,10 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     Integer proficiencyBonus;
     @JsonProperty(RESOURCES_ALIAS)
     ArrayList<Object> resources;
+    @JsonProperty(CLASSES_ALIAS)
+    ArrayList<Object> classes;
+    @JsonProperty(CHALLENGE_RATING_ALIAS)
+    Double challengeRating;
 
     /**
      * Default constructor for RPGLObjectTO class.
@@ -66,6 +72,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
         this.effects = rpglObject.getEffects().asList();
         this.proficiencyBonus = rpglObject.getProficiencyBonus();
         this.resources = rpglObject.getResources().asList();
+        this.classes = rpglObject.getClasses().asList();
+        this.challengeRating = rpglObject.getChallengeRating();
     }
 
     /**
@@ -83,6 +91,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.putJsonArray(EFFECTS_ALIAS, new JsonArray(effects));
             this.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
             this.putJsonArray(RESOURCES_ALIAS, new JsonArray(resources));
+            this.putJsonArray(CLASSES_ALIAS, new JsonArray(classes));
+            this.putDouble(CHALLENGE_RATING_ALIAS, challengeRating);
         }};
         rpglObjectTemplate.join(super.getTemplateData());
         return rpglObjectTemplate;
@@ -103,6 +113,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.setEffects(new JsonArray(effects));
             this.setProficiencyBonus(proficiencyBonus);
             this.setResources(new JsonArray(resources));
+            this.setClasses(new JsonArray(classes));
+            this.setChallengeRating(challengeRating);
         }};
         rpglObject.join(super.getTemplateData());
         rpglObject.join(super.getUUIDTableElementData());

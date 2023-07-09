@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Skill Proficiency (History)",
+  "description": "You have proficiency in skill checks made using History.",
+  "subevent_filters": { }
+}

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents anything which might appear on a battle map. Examples of this include buildings, Goblins, and
@@ -175,9 +176,46 @@ public class RPGLObject extends RPGLTaggable {
         this.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
     }
 
+    public JsonArray getClasses() {
+        return this.getJsonArray(RPGLObjectTO.CLASSES_ALIAS);
+    }
+
+    public void setClasses(JsonArray classes) {
+        this.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, classes);
+    }
+
+    public Double getChallengeRating() {
+        return this.getDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS);
+    }
+
+    public void setChallengeRating(double challengeRating) {
+        this.putDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS, challengeRating);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================
+
+    public Double getLevel() {
+        JsonArray classes = this.getClasses();
+        int level = 0;
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            level += classData.getInteger("level");
+        }
+        return (level > 0) ? level : this.getChallengeRating();
+    }
+
+    public int getLevel(String classId) {
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            if (Objects.equals(classId, classData.getString("id"))) {
+                return classData.getInteger("level");
+            }
+        }
+        return 0;
+    }
 
     /**
      * Returns a List of all RPGLEvent objects associated with the RPGLObject. This includes RPGLEvents granted by

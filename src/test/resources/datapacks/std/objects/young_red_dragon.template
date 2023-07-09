@@ -43,5 +43,6 @@
       "potency": 1
     }
   ],
-  "proficiency_bonus": 4
+  "proficiency_bonus": 4,
+  "challenge_rating": 10
 }

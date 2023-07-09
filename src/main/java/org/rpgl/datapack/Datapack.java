@@ -1,5 +1,6 @@
 package org.rpgl.datapack;
 
+import org.rpgl.core.RPGLClass;
 import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
 import org.rpgl.core.RPGLItemTemplate;
@@ -30,6 +31,7 @@ public class Datapack {
     private final Map<String, RPGLItemTemplate> ITEM_TEMPLATES = new HashMap<>();
     private final Map<String, RPGLObjectTemplate> OBJECT_TEMPLATES = new HashMap<>();
     private final Map<String, RPGLResourceTemplate> RESOURCE_TEMPLATES = new HashMap<>();
+    private final Map<String, RPGLClass> CLASSES = new HashMap<>();
 
     String datapackNamespace;
 
@@ -49,6 +51,7 @@ public class Datapack {
                     case "items" -> loadItemTemplates(subDirectory);
                     case "objects" -> loadObjectTemplates(subDirectory);
                     case "resources" -> loadResourceTemplates(subDirectory);
+                    case "classes" -> loadClasses(subDirectory);
                 }
             }
         }
@@ -145,48 +148,75 @@ public class Datapack {
     }
 
     /**
+     * This method loads all classes stored in a single directory into the object.
+     *
+     * @param directory a File directory for the classes in a datapack
+     */
+    private void loadClasses(File directory) {
+        for (File classFile : Objects.requireNonNull(directory.listFiles())) {
+            String classId = classFile.getName().substring(0, classFile.getName().indexOf('.'));
+            try {
+                RPGLClass rpglClass = JsonObject.MAPPER.readValue(classFile, RPGLClassTO.class).toRPGLClass();
+                rpglClass.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + classId);
+                this.CLASSES.put(classId, rpglClass);
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+            }
+        }
+    }
+
+    /**
      * This method returns a specified RPGLEffectTemplate object.
      *
-     * @param effectName the name of an effect template stored in this datapack
+     * @param effectId the name of an effect template stored in this datapack
      */
-    public RPGLEffectTemplate getEffectTemplate(String effectName) {
-        return this.EFFECT_TEMPLATES.get(effectName);
+    public RPGLEffectTemplate getEffectTemplate(String effectId) {
+        return this.EFFECT_TEMPLATES.get(effectId);
     }
 
     /**
      * This method returns a specified RPGLEventTemplate object.
      *
-     * @param eventName the name of an event template stored in this datapack
+     * @param eventId the ID of an event template stored in this datapack
      */
-    public RPGLEventTemplate getEventTemplate(String eventName) {
-        return this.EVENT_TEMPLATES.get(eventName);
+    public RPGLEventTemplate getEventTemplate(String eventId) {
+        return this.EVENT_TEMPLATES.get(eventId);
     }
 
     /**
      * This method returns a specified RPGLItemTemplate object.
      *
-     * @param itemName the name of an item template stored in this datapack
+     * @param itemId the ID of an item template stored in this datapack
      */
-    public RPGLItemTemplate getItemTemplate(String itemName) {
-        return this.ITEM_TEMPLATES.get(itemName);
+    public RPGLItemTemplate getItemTemplate(String itemId) {
+        return this.ITEM_TEMPLATES.get(itemId);
     }
 
     /**
      * This method returns a specified RPGLObjectTemplate object.
      *
-     * @param objectName the name of an object template stored in this datapack
+     * @param objectId the ID of an object template stored in this datapack
      */
-    public RPGLObjectTemplate getObjectTemplate(String objectName) {
-        return this.OBJECT_TEMPLATES.get(objectName);
+    public RPGLObjectTemplate getObjectTemplate(String objectId) {
+        return this.OBJECT_TEMPLATES.get(objectId);
     }
 
     /**
      * This method returns a specified RPGLResourceTemplate object.
      *
-     * @param resourceName the name of a resource template stored in this datapack
+     * @param resourceId the ID of a resource template stored in this datapack
      */
-    public RPGLResourceTemplate getResourceTemplate(String resourceName) {
-        return this.RESOURCE_TEMPLATES.get(resourceName);
+    public RPGLResourceTemplate getResourceTemplate(String resourceId) {
+        return this.RESOURCE_TEMPLATES.get(resourceId);
+    }
+
+    /**
+     * This method returns a specified RPGLClass object.
+     *
+     * @param classId the ID of a RPGLClass object stored in this datapack
+     */
+    public RPGLClass getClass(String classId) {
+        return this.CLASSES.get(classId);
     }
 
 }
