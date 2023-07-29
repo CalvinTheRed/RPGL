@@ -64,7 +64,7 @@ public class GetObjectTagsTest {
     @Test
     @DisplayName("getTags is empty by default")
     void getTags_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -80,7 +80,7 @@ public class GetObjectTagsTest {
     @Test
     @DisplayName("getTags returns all granted tags")
     void getTags_returnsAllGrantedTags() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 

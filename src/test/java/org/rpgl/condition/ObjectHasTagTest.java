@@ -70,8 +70,8 @@ public class ObjectHasTagTest {
     @Test
     @DisplayName("evaluate returns true when object has desired tag")
     void evaluate_returnsTrueWhenObjectHasDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -108,8 +108,8 @@ public class ObjectHasTagTest {
     @Test
     @DisplayName("evaluate returns false when object does not have desired tag")
     void evaluate_returnsFalseWhenObjectDoesNotHaveDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

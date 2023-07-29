@@ -90,8 +90,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (range)")
     void execute_addsCorrectBonusToCalculation_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -135,8 +135,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (modifier)")
     void execute_addsCorrectBonusToCalculation_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -190,8 +190,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (ability)")
     void execute_addsCorrectBonusToCalculation_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -245,8 +245,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (proficiency)")
     void execute_addsCorrectBonusToCalculation_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

@@ -49,7 +49,7 @@ public class RPGLObjectTemplateTest {
     @Test
     @DisplayName("processEffects effects are constructed")
     void processEffects_effectsAreConstructed() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("young_red_dragon");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
 
@@ -71,7 +71,7 @@ public class RPGLObjectTemplateTest {
     @Test
     @DisplayName("processInventory items are constructed")
     void processInventory_itemsAreConstructed() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("knight");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
 
@@ -93,7 +93,7 @@ public class RPGLObjectTemplateTest {
     @Test
     @DisplayName("processEquippedItems items are constructed and added to inventory")
     void processEquippedItems_itemsAreConstructedAndAddedToInventory() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("knight");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
 
@@ -116,7 +116,7 @@ public class RPGLObjectTemplateTest {
     @Test
     @DisplayName("processHealthData hit dice enumeration")
     void processHealthData_hitDiceAreEnumerated() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("young_red_dragon");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
 
@@ -143,7 +143,7 @@ public class RPGLObjectTemplateTest {
     @Test
     @DisplayName("processResources resources are constructed correctly")
     void processResources_resourcesAreConstructedCorrectly() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("young_red_dragon");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
 
@@ -152,18 +152,18 @@ public class RPGLObjectTemplateTest {
         assertEquals(2, object.getResourceObjects().size(),
                 "young red dragon should be given 2 resources"
         );
-        assertEquals("std:action", object.getResourceObjects().get(0).getId(),
+        assertEquals("std:common/action", object.getResourceObjects().get(0).getId(),
                 "one resource should be std:action"
         );
-        assertEquals("std:young_red_dragon_breath_charge", object.getResourceObjects().get(1).getId(),
-                "one resource should be std:young_red_dragon_breath_charge"
+        assertEquals("std:object/dragon/red/young/breath_charge", object.getResourceObjects().get(1).getId(),
+                "one resource should be std:object/dragon/red/young/breath_charge"
         );
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:knight template")
+    @DisplayName("newInstance comprehensive test using std:humanoid/knight template")
     void newInstance_knightTemplate() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("knight");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = objectTemplate.newInstance();
         String expected;
 
@@ -178,7 +178,7 @@ public class RPGLObjectTemplateTest {
         assertEquals("A knight.", object.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("std:knight", object.getId(),
+        assertEquals("std:humanoid/knight", object.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
@@ -224,9 +224,9 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:young_red_dragon template")
+    @DisplayName("newInstance comprehensive test using std:dragon/red/young template")
     void newInstance_youngRedDragonTemplate() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("young_red_dragon");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
         RPGLObject object = objectTemplate.newInstance();
         String expected;
 
@@ -265,7 +265,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["std:young_red_dragon_fire_breath"]""";
+                ["std:object/dragon/red/young/breath"]""";
         assertEquals(expected, object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );

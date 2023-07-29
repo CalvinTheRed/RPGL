@@ -55,9 +55,9 @@ public class ScenariosTest {
     @Test
     @DisplayName("flametongue test")
     void flametongueTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
         RPGLObject target = RPGLFactory.newObject("debug:dummy");
-        RPGLItem flametongue = RPGLFactory.newItem("std:flametongue_scimitar");
+        RPGLItem flametongue = RPGLFactory.newItem("std:weapon/melee/martial/scimitar/flametongue");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -69,9 +69,9 @@ public class ScenariosTest {
         );
 
         List<RPGLEvent> events = source.getEventObjects(context);
-        RPGLEvent flametongueAttack = TestUtils.getEventById(events, "std:scimitar_melee");
-        assertNotNull(TestUtils.getEventById(events, "std:flametongue_command_word_activate"));
-        assertNull(TestUtils.getEventById(events, "std:flametongue_command_word_deactivate"));
+        RPGLEvent flametongueAttack = TestUtils.getEventById(events, "std:item/weapon/melee/martial/scimitar/melee");
+        assertNotNull(TestUtils.getEventById(events, "std:item/magic/flametongue/activate"));
+        assertNull(TestUtils.getEventById(events, "std:item/magic/flametongue/deactivate"));
         assertNotNull(flametongueAttack);
         assertEquals(flametongue.getUuid(), flametongueAttack.getOriginItem());
 
@@ -80,9 +80,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         target
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action"));
                 }},
                 context
         );
@@ -98,9 +98,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         source
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:flametongue_command_word_activate"),
+                TestUtils.getEventById(source.getEventObjects(context), "std:item/magic/flametongue/activate"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:bonus_action"));
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/bonus_action"));
                 }},
                 context
         );
@@ -113,9 +113,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         target
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action"));
                 }},
                 context
         );
@@ -131,9 +131,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         source
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:flametongue_command_word_deactivate"),
+                TestUtils.getEventById(source.getEventObjects(context), "std:item/magic/flametongue/deactivate"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:bonus_action"));
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/bonus_action"));
                 }},
                 context
         );
@@ -146,9 +146,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         target
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:scimitar_melee"),
+                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action"));
                 }},
                 context
         );

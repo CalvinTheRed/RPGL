@@ -67,8 +67,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("deliverDamage damage is delivered")
     void deliverDamage_damageIsDelivered() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
-        RPGLObject target = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -113,8 +113,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("getTargetDamage no target damage by default")
     void getTargetDamage_noTargetDamageByDefault() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
-        RPGLObject target = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -141,8 +141,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("getBaseDamage base damage calculated correctly")
     void getBaseDamage_baseDamageCalculatedProperly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
-        RPGLObject target = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -195,8 +195,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("invoke deals correct damage")
     void invoke_dealsCorrectDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
-        RPGLObject target = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

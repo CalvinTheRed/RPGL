@@ -68,7 +68,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("getEvents is empty by default")
     void getEvents_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -84,8 +84,8 @@ public class GetEventsTest {
     @Test
     @DisplayName("getEvents returns the correct events")
     void getEvents_returnsCorrectEvents() throws Exception {
-        RPGLItem item = RPGLFactory.newItem("std:longsword");
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -93,8 +93,8 @@ public class GetEventsTest {
         getEvents.setSource(object);
         getEvents.prepare(context);
 
-        getEvents.addEvent("std:longsword_melee", item.getUuid());
-        getEvents.addEvent("std:improvised_thrown", item.getUuid());
+        getEvents.addEvent("std:item/weapon/melee/martial/longsword/melee", item.getUuid());
+        getEvents.addEvent("std:common/improvised_thrown", item.getUuid());
 
         List<RPGLEvent> events = getEvents.getEvents();
         assertEquals(2, events.size(),

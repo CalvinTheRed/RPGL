@@ -70,8 +70,8 @@ public class AddDamageTest {
     @Test
     @DisplayName("execute adds damage to subevent")
     void execute_addsDamageToSubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

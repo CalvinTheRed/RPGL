@@ -173,8 +173,8 @@ public class RerollDamageDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute re-rolls all dice at or below two (fire only)")
     void execute_rerollsAllDiceAtOrBelowTwo_fireOnly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -207,8 +207,8 @@ public class RerollDamageDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute re-rolls all dice at or below two (all damage types)")
     void execute_rerollsAllDiceAtOrBelowTwo_allDamageTypes() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

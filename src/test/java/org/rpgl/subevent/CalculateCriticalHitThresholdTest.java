@@ -68,7 +68,7 @@ public class CalculateCriticalHitThresholdTest {
     @Test
     @DisplayName("prepare sets the base of the calculation to 20")
     void prepare_setsBaseToTwenty() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         RPGLContext context = new DummyContext();
         context.add(object);
 
