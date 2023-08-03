@@ -72,11 +72,11 @@ public class EndEffectTest {
     @Test
     @DisplayName("execute removes effect from object")
     void execute_removesEffectFromObject() throws Exception {
-        RPGLObject commoner = RPGLFactory.newObject("std:commoner");
+        RPGLObject commoner = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(commoner);
 
-        RPGLEffect fireImmunity = RPGLFactory.newEffect("std:fire_immunity");
+        RPGLEffect fireImmunity = RPGLFactory.newEffect("std:common/damage/immunity/fire");
         fireImmunity.setSource(commoner);
         fireImmunity.setTarget(commoner);
 

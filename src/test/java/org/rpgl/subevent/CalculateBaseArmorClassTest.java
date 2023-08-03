@@ -65,7 +65,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("getShieldBonus returns 0 (commoner not wielding a shield)")
     void getShieldBonus_returnsZero_commoner() {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -81,7 +81,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("getShieldBonus returns 2 (knight wielding a shield)")
     void getShieldBonus_returnsTwo_knight() {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -97,7 +97,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareUnarmored returns 10 (commoner)")
     void prepareUnarmored_returnsTen_commoner() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -113,7 +113,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareArmored returns 18 (knight wearing plate armor)")
     void prepareArmored_returnsEighteen_knightPlateArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -129,13 +129,13 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareArmored returns 14 (knight wearing breastplate armor)")
     void prepareArmored_returnsFourteen_knightBreastplateArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
 
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
 
-        RPGLItem breastplateArmor = RPGLFactory.newItem("std:breastplate_armor");
+        RPGLItem breastplateArmor = RPGLFactory.newItem("std:armor/medium/breastplate");
         source.giveItem(breastplateArmor.getUuid());
         source.equipItem(breastplateArmor.getUuid(), "armor");
         calculateBaseArmorClass.setSource(source);
@@ -148,13 +148,13 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareArmored returns 11 (knight wearing leather armor)")
     void prepareArmored_returnsEleven_knightLeatherArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
 
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
 
-        RPGLItem leatherArmor = RPGLFactory.newItem("std:leather_armor");
+        RPGLItem leatherArmor = RPGLFactory.newItem("std:armor/light/leather");
         source.giveItem(leatherArmor.getUuid());
         source.equipItem(leatherArmor.getUuid(), "armor");
         calculateBaseArmorClass.setSource(source);
@@ -167,7 +167,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepare returns 10 (commoner with no armor or shield)")
     void prepare_returnsTen_commonerNoArmorNoShield() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -184,7 +184,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepare returns 18 (knight wearing plate armor and shield)")
     void prepare_returnsTwenty_knightPlateArmorShield() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
         DummyContext context = new DummyContext();
         context.add(source);
 

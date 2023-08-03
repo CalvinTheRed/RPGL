@@ -70,8 +70,8 @@ public class IncludesDamageTypeTest {
     @Test
     @DisplayName("evaluate returns true if damage type is present")
     void evaluate_returnsTrueIfDamageTypeIsPresent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -100,8 +100,8 @@ public class IncludesDamageTypeTest {
     @Test
     @DisplayName("evaluate returns false if damage type is not present")
     void evaluate_returnsFalseIfDamageTypeIsNotPresent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

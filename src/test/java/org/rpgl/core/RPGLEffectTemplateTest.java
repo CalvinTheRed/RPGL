@@ -41,9 +41,10 @@ public class RPGLEffectTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:fire_immunity template")
+    @DisplayName("newInstance comprehensive test using std:common/damage/immunity/fire template")
     void newInstance_fireImmunity() {
-        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std").getEffectTemplate("fire_immunity");
+        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std")
+                .getEffectTemplate("common/damage/immunity/fire");
         RPGLEffect effect = effectTemplate.newInstance();
         String expected;
 
@@ -58,7 +59,7 @@ public class RPGLEffectTemplateTest {
         assertEquals("Creatures with this effect take 0 fire damage.", effect.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("std:fire_immunity", effect.getId(),
+        assertEquals("std:common/damage/immunity/fire", effect.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 

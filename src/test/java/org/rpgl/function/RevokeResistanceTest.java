@@ -70,8 +70,8 @@ public class RevokeResistanceTest {
     @Test
     @DisplayName("execute grants resistance for single damage type")
     void execute_revokesResistanceForSingleDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -111,8 +111,8 @@ public class RevokeResistanceTest {
     @Test
     @DisplayName("execute grants resistance for all damage types")
     void execute_revokesResistanceForAllDamageTypes() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

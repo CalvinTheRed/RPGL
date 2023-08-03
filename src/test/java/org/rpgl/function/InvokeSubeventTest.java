@@ -71,13 +71,13 @@ public class InvokeSubeventTest {
     @Test
     @DisplayName("InvokeSubevent works using example effect (motivational speech effect passive and active)")
     void invokeSubeventWorksUsingExampleEffect_motivationalSpeechEffectPassiveAndActive() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:knight");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        RPGLEffect motivationalSpeechEffectPassive = RPGLFactory.newEffect("std:motivational_speech_effect_passive");
+        RPGLEffect motivationalSpeechEffectPassive = RPGLFactory.newEffect("std:spell/motivational_speech/passive");
         motivationalSpeechEffectPassive.setSource(target);
         motivationalSpeechEffectPassive.setTarget(target);
         target.addEffect(motivationalSpeechEffectPassive);
@@ -90,9 +90,9 @@ public class InvokeSubeventTest {
                 new RPGLObject[] {
                         target
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:longsword_melee"),
+                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/longsword/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:action"));
+                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action"));
                 }},
                 context
         );

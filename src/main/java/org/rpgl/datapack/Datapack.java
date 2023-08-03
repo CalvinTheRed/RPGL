@@ -60,14 +60,33 @@ public class Datapack {
      * @param directory a File directory for the effects in a datapack
      */
     void loadEffectTemplates(File directory) {
+        this.loadEffectTemplates("", directory);
+    }
+
+    /**
+     * This helper method recursively loads all effect templates stored in a directory into the object.
+     *
+     * @param templateNameBase the file path leading from the base effects directory to the provided directory
+     * @param directory a File directory for effects in a datapack
+     */
+    private void loadEffectTemplates(String templateNameBase, File directory) {
         for (File effectFile : Objects.requireNonNull(directory.listFiles())) {
-            String effectId = effectFile.getName().substring(0, effectFile.getName().indexOf('.'));
-            try {
-                RPGLEffectTemplate rpglEffectTemplate = JsonObject.MAPPER.readValue(effectFile, RPGLEffectTO.class).toRPGLEffectTemplate();
-                rpglEffectTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + effectId);
-                this.EFFECT_TEMPLATES.put(effectId, rpglEffectTemplate);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
+            if (effectFile.isDirectory()) {
+                this.loadEffectTemplates(templateNameBase + effectFile.getName() + "/", effectFile);
+            } else {
+                String effectId = effectFile.getName().substring(0, effectFile.getName().indexOf('.'));
+                try {
+                    RPGLEffectTemplate rpglEffectTemplate = JsonObject.MAPPER
+                            .readValue(effectFile, RPGLEffectTO.class)
+                            .toRPGLEffectTemplate();
+                    rpglEffectTemplate.putString(
+                            DatapackContentTO.ID_ALIAS,
+                            this.datapackNamespace + ":" + templateNameBase + effectId
+                    );
+                    this.EFFECT_TEMPLATES.put(templateNameBase + effectId, rpglEffectTemplate);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
             }
         }
     }
@@ -77,15 +96,34 @@ public class Datapack {
      *
      * @param directory a File directory for the events in a datapack
      */
-    private void loadEventTemplates(File directory) {
+    void loadEventTemplates(File directory) {
+        this.loadEventTemplates("", directory);
+    }
+
+    /**
+     * This helper method recursively loads all event templates stored in a directory into the object.
+     *
+     * @param templateNameBase the file path leading from the base events directory to the provided directory
+     * @param directory a File directory for events in a datapack
+     */
+    private void loadEventTemplates(String templateNameBase, File directory) {
         for (File eventFile : Objects.requireNonNull(directory.listFiles())) {
-            String eventId = eventFile.getName().substring(0, eventFile.getName().indexOf('.'));
-            try {
-                RPGLEventTemplate rpglEventTemplate = JsonObject.MAPPER.readValue(eventFile, RPGLEventTO.class).toRPGLEventTemplate();
-                rpglEventTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + eventId);
-                this.EVENT_TEMPLATES.put(eventId, rpglEventTemplate);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
+            if (eventFile.isDirectory()) {
+                this.loadEventTemplates(templateNameBase + eventFile.getName() + "/", eventFile);
+            } else {
+                String eventId = eventFile.getName().substring(0, eventFile.getName().indexOf('.'));
+                try {
+                    RPGLEventTemplate rpglEventTemplate = JsonObject.MAPPER
+                            .readValue(eventFile, RPGLEventTO.class)
+                            .toRPGLEventTemplate();
+                    rpglEventTemplate.putString(
+                            DatapackContentTO.ID_ALIAS,
+                            this.datapackNamespace + ":" + templateNameBase + eventId
+                    );
+                    this.EVENT_TEMPLATES.put(templateNameBase + eventId, rpglEventTemplate);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
             }
         }
     }
@@ -95,15 +133,34 @@ public class Datapack {
      *
      * @param directory a File directory for the items in a datapack
      */
-    private void loadItemTemplates(File directory) {
+    void loadItemTemplates(File directory) {
+        this.loadItemTemplates("", directory);
+    }
+
+    /**
+     * This helper method recursively loads all item templates stored in a directory into the object.
+     *
+     * @param templateNameBase the file path leading from the base items directory to the provided directory
+     * @param directory a File directory for items in a datapack
+     */
+    private void loadItemTemplates(String templateNameBase, File directory) {
         for (File itemFile : Objects.requireNonNull(directory.listFiles())) {
-            String itemId = itemFile.getName().substring(0, itemFile.getName().indexOf('.'));
-            try {
-                RPGLItemTemplate rpglItemTemplate = JsonObject.MAPPER.readValue(itemFile, RPGLItemTO.class).toRPGLItemTemplate();
-                rpglItemTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + itemId);
-                this.ITEM_TEMPLATES.put(itemId, rpglItemTemplate);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
+            if (itemFile.isDirectory()) {
+                this.loadItemTemplates(templateNameBase + itemFile.getName() + "/", itemFile);
+            } else {
+                String itemId = itemFile.getName().substring(0, itemFile.getName().indexOf('.'));
+                try {
+                    RPGLItemTemplate rpglItemTemplate = JsonObject.MAPPER
+                            .readValue(itemFile, RPGLItemTO.class)
+                            .toRPGLItemTemplate();
+                    rpglItemTemplate.putString(
+                            DatapackContentTO.ID_ALIAS,
+                            this.datapackNamespace + ":" + templateNameBase + itemId
+                    );
+                    this.ITEM_TEMPLATES.put(templateNameBase + itemId, rpglItemTemplate);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
             }
         }
     }
@@ -113,15 +170,34 @@ public class Datapack {
      *
      * @param directory a File directory for the objects in a datapack
      */
-    private void loadObjectTemplates(File directory) {
+    void loadObjectTemplates(File directory) {
+        this.loadObjectTemplates("", directory);
+    }
+
+    /**
+     * This helper method recursively loads all object templates stored in a directory into the object.
+     *
+     * @param templateNameBase the file path leading from the base objects directory to the provided directory
+     * @param directory a File directory for objects in a datapack
+     */
+    private void loadObjectTemplates(String templateNameBase, File directory) {
         for (File objectFile : Objects.requireNonNull(directory.listFiles())) {
-            String objectId = objectFile.getName().substring(0, objectFile.getName().indexOf('.'));
-            try {
-                RPGLObjectTemplate rpglObjectTemplate = JsonObject.MAPPER.readValue(objectFile, RPGLObjectTO.class).toRPGLObjectTemplate();
-                rpglObjectTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + objectId);
-                this.OBJECT_TEMPLATES.put(objectId, rpglObjectTemplate);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
+            if (objectFile.isDirectory()) {
+                this.loadObjectTemplates(templateNameBase + objectFile.getName() + "/", objectFile);
+            } else {
+                String objectId = objectFile.getName().substring(0, objectFile.getName().indexOf('.'));
+                try {
+                    RPGLObjectTemplate rpglObjectTemplate = JsonObject.MAPPER
+                            .readValue(objectFile, RPGLObjectTO.class)
+                            .toRPGLObjectTemplate();
+                    rpglObjectTemplate.putString(
+                            DatapackContentTO.ID_ALIAS,
+                            this.datapackNamespace + ":" + templateNameBase + objectId
+                    );
+                    this.OBJECT_TEMPLATES.put(templateNameBase + objectId, rpglObjectTemplate);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
             }
         }
     }
@@ -131,15 +207,34 @@ public class Datapack {
      *
      * @param directory a File directory for the resources in a datapack
      */
-    private void loadResourceTemplates(File directory) {
+    void loadResourceTemplates(File directory) {
+        this.loadResourceTemplates("", directory);
+    }
+
+    /**
+     * This helper method recursively loads all resource templates stored in a directory into the object.
+     *
+     * @param templateNameBase the file path leading from the base resources directory to the provided directory
+     * @param directory a File directory for resources in a datapack
+     */
+    private void loadResourceTemplates(String templateNameBase, File directory) {
         for (File resourceFile : Objects.requireNonNull(directory.listFiles())) {
-            String resourceId = resourceFile.getName().substring(0, resourceFile.getName().indexOf('.'));
-            try {
-                RPGLResourceTemplate rpglResourceTemplate = JsonObject.MAPPER.readValue(resourceFile, RPGLResourceTO.class).toRPGLResourceTemplate();
-                rpglResourceTemplate.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + resourceId);
-                this.RESOURCE_TEMPLATES.put(resourceId, rpglResourceTemplate);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
+            if (resourceFile.isDirectory()) {
+                this.loadResourceTemplates(templateNameBase + resourceFile.getName() + "/", resourceFile);
+            } else {
+                String resourceId = resourceFile.getName().substring(0, resourceFile.getName().indexOf('.'));
+                try {
+                    RPGLResourceTemplate rpglResourceTemplate = JsonObject.MAPPER
+                            .readValue(resourceFile, RPGLResourceTO.class)
+                            .toRPGLResourceTemplate();
+                    rpglResourceTemplate.putString(
+                            DatapackContentTO.ID_ALIAS,
+                            this.datapackNamespace + ":" + templateNameBase + resourceId
+                    );
+                    this.RESOURCE_TEMPLATES.put(templateNameBase + resourceId, rpglResourceTemplate);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
             }
         }
     }

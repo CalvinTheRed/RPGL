@@ -70,7 +70,7 @@ public class AddEventTest {
     @Test
     @DisplayName("execute adds event correctly")
     void execute_addsEventCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -82,15 +82,15 @@ public class AddEventTest {
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "add_event",
-                "event": "std:dodge"
+                "event": "std:common/dodge"
             }*/
             this.putString("function", "add_event");
-            this.putString("event", "std:dodge");
+            this.putString("event", "std:common/dodge");
         }};
 
         addEvent.execute(new RPGLEffect(), getEvents, functionJson, context);
 
-        assertEquals("std:dodge", getEvents.getEvents().get(0).getId(),
+        assertEquals("std:common/dodge", getEvents.getEvents().get(0).getId(),
                 "execute should add the correct event to the subevent"
         );
     }
