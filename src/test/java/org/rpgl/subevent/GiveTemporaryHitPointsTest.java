@@ -69,8 +69,8 @@ public class GiveTemporaryHitPointsTest {
     @Test
     @DisplayName("invoke gives temporary hit points and applies rider effect (no prior temporary hit points)")
     void invoke_givesTemporaryHitPointsAndAppliesRiderEffect_noPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -86,7 +86,7 @@ public class GiveTemporaryHitPointsTest {
                     }
                 ],
                 "rider_effects": [
-                    "std:fire_immunity"
+                    "std:common/damage/immunity/fire"
                 ]
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
@@ -97,7 +97,7 @@ public class GiveTemporaryHitPointsTest {
                 }});
             }});
             this.putJsonArray("rider_effects", new JsonArray() {{
-                this.addString("std:fire_immunity");
+                this.addString("std:common/damage/immunity/fire");
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
@@ -112,7 +112,7 @@ public class GiveTemporaryHitPointsTest {
         assertEquals(1, effects.size(),
                 "commoner should have 1 effect after the subevent is invoked"
         );
-        assertEquals("std:fire_immunity", effects.get(0).getId(),
+        assertEquals("std:common/damage/immunity/fire", effects.get(0).getId(),
                 "the commoner's subevent should match the effect specified in the subevent json"
         );
     }
@@ -120,8 +120,8 @@ public class GiveTemporaryHitPointsTest {
     @Test
     @DisplayName("invoke gives temporary hit points and applies rider effect (few prior temporary hit points)")
     void invoke_givesTemporaryHitPointsAndAppliesRiderEffect_fewPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -139,7 +139,7 @@ public class GiveTemporaryHitPointsTest {
                     }
                 ],
                 "rider_effects": [
-                    "std:fire_immunity"
+                    "std:common/damage/immunity/fire"
                 ]
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
@@ -150,7 +150,7 @@ public class GiveTemporaryHitPointsTest {
                 }});
             }});
             this.putJsonArray("rider_effects", new JsonArray() {{
-                this.addString("std:fire_immunity");
+                this.addString("std:common/damage/immunity/fire");
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
@@ -165,7 +165,7 @@ public class GiveTemporaryHitPointsTest {
         assertEquals(1, effects.size(),
                 "commoner should have 1 effect after the subevent is invoked"
         );
-        assertEquals("std:fire_immunity", effects.get(0).getId(),
+        assertEquals("std:common/damage/immunity/fire", effects.get(0).getId(),
                 "the commoner's subevent should match the effect specified in the subevent json"
         );
     }
@@ -173,8 +173,8 @@ public class GiveTemporaryHitPointsTest {
     @Test
     @DisplayName("invoke does not give temporary hit points or apply rider effect (many prior temporary hit points)")
     void invoke_doesNotGiveTemporaryHitPointsOrApplyRiderEffect_manyPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -192,7 +192,7 @@ public class GiveTemporaryHitPointsTest {
                     }
                 ],
                 "rider_effects": [
-                    "std:fire_immunity"
+                    "std:common/damage/immunity/fire"
                 ]
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
@@ -203,7 +203,7 @@ public class GiveTemporaryHitPointsTest {
                 }});
             }});
             this.putJsonArray("rider_effects", new JsonArray() {{
-                this.addString("std:fire_immunity");
+                this.addString("std:common/damage/immunity/fire");
             }});
         }});
         giveTemporaryHitPoints.setSource(source);

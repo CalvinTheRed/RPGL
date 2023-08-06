@@ -70,8 +70,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns true (equals) (score equal to value)")
     void evaluate_returnsTrue_equals_scoreEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -113,8 +113,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns false (equals) (score not equal to value)")
     void evaluate_returnsTrue_equals_scoreNotEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -156,8 +156,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns true (less than) (score less than value)")
     void evaluate_returnsTrue_lessThan_scoreLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -199,8 +199,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns false (less than) (score not less than value)")
     void evaluate_returnsFalse_lessThan_scoreNotLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -242,8 +242,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns true (more than) (score more than value)")
     void evaluate_returnsTrue_moreThan_scoreMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -285,8 +285,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns false (more than) (score not more than value)")
     void evaluate_returnsFalse_moreThan_scoreNotMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -328,8 +328,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns true (less than or equal to) (score less than value)")
     void evaluate_returnsTrue_lessThanOrEqualTo_scoreLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -371,8 +371,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns true (less than or equal to) (score equal to value)")
     void evaluate_returnsTrue_lessThanOrEqualTo_scoreEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -414,8 +414,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns false (less than or equal to) (score more than value)")
     void evaluate_returnsFalse_lessThanOrEqualTo_scoreMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -457,8 +457,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns true (more than or equal to) (score more than value)")
     void evaluate_returnsTrue_moreThanOrEqualTo_scoreMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -500,8 +500,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns true (more than or equal to) (score equal to value)")
     void evaluate_returnsTrue_moreThanOrEqualTo_scoreEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -543,8 +543,8 @@ public class ObjectAbilityScoreComparisonTest {
     @Test
     @DisplayName("evaluate returns false (more than or equal to) (score less than value)")
     void evaluate_returnsFalse_moreThanOrEqualTo_scoreLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

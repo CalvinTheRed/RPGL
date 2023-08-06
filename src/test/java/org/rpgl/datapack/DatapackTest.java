@@ -46,9 +46,10 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLEffect templates can be loaded")
     void rpglEffectTemplate_loadsDatapackContent() {
-        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std").getEffectTemplate("fire_immunity");
+        RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std")
+                .getEffectTemplate("common/damage/immunity/fire");
         assertNotNull(effectTemplate,
-                "Effect template std:fire_immunity failed to load."
+                "Effect template std:common/damage/immunity/fire failed to load."
         );
 
         String expected;
@@ -64,6 +65,9 @@ public class DatapackTest {
         );
         assertTrue(effectTemplate.asMap().containsKey(DatapackContentTO.DESCRIPTION_ALIAS),
                 "template missing field: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertTrue(effectTemplate.asMap().containsKey(DatapackContentTO.ID_ALIAS),
+                "template missing field: " + DatapackContentTO.ID_ALIAS
         );
 
         /*
@@ -87,6 +91,9 @@ public class DatapackTest {
         assertEquals("Creatures with this effect take 0 fire damage.", effectTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("std:common/damage/immunity/fire", effectTemplate.getString(RPGLObjectTO.ID_ALIAS),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
         /*
         RPGLEffectTO field values
@@ -101,9 +108,10 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLEvent templates can be loaded")
     void rpglEventTemplate_loadsDatapackContent() {
-        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std").getEventTemplate("young_red_dragon_fire_breath");
+        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std")
+                .getEventTemplate("object/dragon/red/young/breath");
         assertNotNull(eventTemplate,
-                "Event template std:young_red_dragon_fire_breath failed to load."
+                "Event template std:object/dragon/red/young/breath failed to load."
         );
 
         String expected;
@@ -119,6 +127,9 @@ public class DatapackTest {
         );
         assertTrue(eventTemplate.asMap().containsKey(DatapackContentTO.DESCRIPTION_ALIAS),
                 "template missing field: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertTrue(eventTemplate.asMap().containsKey(DatapackContentTO.ID_ALIAS),
+                "template missing field: " + DatapackContentTO.ID_ALIAS
         );
 
         /*
@@ -145,6 +156,9 @@ public class DatapackTest {
         assertEquals("The dragon breathes fire.", eventTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("std:object/dragon/red/young/breath", eventTemplate.getString(RPGLObjectTO.ID_ALIAS),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
         /*
         RPGLEventTO field values
@@ -162,9 +176,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLItem templates can be loaded (frostbrand)")
     void rpglItemTemplate_loadsDatapackContent_meleeWeapon() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("weapon/melee/martial/scimitar/frostbrand");
         assertNotNull(itemTemplate,
-                "Event template std:frostbrand failed to load."
+                "Event template std:weapon/melee/martial/scimitar/frostbrand failed to load."
         );
 
         String expected;
@@ -180,6 +194,9 @@ public class DatapackTest {
         );
         assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.DESCRIPTION_ALIAS),
                 "template missing field: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.ID_ALIAS),
+                "template missing field: " + DatapackContentTO.ID_ALIAS
         );
 
         /*
@@ -230,6 +247,9 @@ public class DatapackTest {
         assertEquals("A legendary scimitar wielded by Drizzt Do'Urden.", itemTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("std:weapon/melee/martial/scimitar/frostbrand", itemTemplate.getString(RPGLObjectTO.ID_ALIAS),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
         /*
         RPGLItemTO field values
@@ -271,9 +291,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLItem templates can be loaded (armor)")
     void rpglItemTemplate_loadsDatapackContent_armor() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("breastplate_armor");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("armor/medium/breastplate");
         assertNotNull(itemTemplate,
-                "Event template std:breastplate_armor failed to load."
+                "Event template std:armor/medium/breastplate failed to load."
         );
 
         String expected;
@@ -289,6 +309,9 @@ public class DatapackTest {
         );
         assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.DESCRIPTION_ALIAS),
                 "template missing field: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.ID_ALIAS),
+                "template missing field: " + DatapackContentTO.ID_ALIAS
         );
 
         /*
@@ -330,6 +353,9 @@ public class DatapackTest {
         assertEquals("A suit of breastplate armor.", itemTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("std:armor/medium/breastplate", itemTemplate.getString(RPGLObjectTO.ID_ALIAS),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
         /*
         RPGLEventTO field values
@@ -368,9 +394,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLItem templates can be loaded (shield)")
     void rpglItemTemplate_loadsDatapackContent_shield() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("metal_shield");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("armor/shield/metal");
         assertNotNull(itemTemplate,
-                "Event template std:metal_shield failed to load."
+                "Event template std:armor/shield/metal failed to load."
         );
 
         String expected;
@@ -386,6 +412,9 @@ public class DatapackTest {
         );
         assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.DESCRIPTION_ALIAS),
                 "template missing field: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertTrue(itemTemplate.asMap().containsKey(DatapackContentTO.ID_ALIAS),
+                "template missing field: " + DatapackContentTO.ID_ALIAS
         );
 
         /*
@@ -423,6 +452,9 @@ public class DatapackTest {
         );
         assertEquals("A metal shield.", itemTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertEquals("std:armor/shield/metal", itemTemplate.getString(RPGLObjectTO.ID_ALIAS),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 
         /*
@@ -462,9 +494,9 @@ public class DatapackTest {
     @Test
     @DisplayName("verify RPGLObject templates can be loaded")
     void rpglObjectTemplate_loadsDatapackContent() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("young_red_dragon");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
         assertNotNull(objectTemplate,
-                "Object template std:young_red_dragon failed to load."
+                "Object template std:dragon/red/young failed to load."
         );
 
         String expected;
@@ -480,6 +512,9 @@ public class DatapackTest {
         );
         assertTrue(objectTemplate.asMap().containsKey(DatapackContentTO.DESCRIPTION_ALIAS),
                 "template missing field: " + DatapackContentTO.DESCRIPTION_ALIAS
+        );
+        assertTrue(objectTemplate.asMap().containsKey(DatapackContentTO.ID_ALIAS),
+                "template missing field: " + DatapackContentTO.ID_ALIAS
         );
 
         /*
@@ -521,6 +556,9 @@ public class DatapackTest {
         assertEquals("A young red dragon.", objectTemplate.getString(RPGLObjectTO.DESCRIPTION_ALIAS),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
+        assertEquals("std:dragon/red/young", objectTemplate.getString(RPGLObjectTO.ID_ALIAS),
+                "incorrect field value: " + DatapackContentTO.ID_ALIAS
+        );
 
         /*
         RPGLObjectTO field values
@@ -542,12 +580,12 @@ public class DatapackTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["std:young_red_dragon_fire_breath"]""";
+                ["std:object/dragon/red/young/breath"]""";
         assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
         expected = """
-                ["std:fire_immunity"]""";
+                ["std:common/damage/immunity/fire"]""";
         assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
         );

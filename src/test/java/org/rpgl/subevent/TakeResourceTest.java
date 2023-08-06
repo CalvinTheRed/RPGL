@@ -67,21 +67,21 @@ public class TakeResourceTest {
     @Test
     @DisplayName("invoke only takes resources with temporary tag")
     void invoke_onlyTakesResourcesWithTemporaryTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
+        RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
         target.addResource(resource);
 
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:necrotic_husk"
+                "resource":"std:class/warlock/the_undead_patron/necrotic_husk"
             }*/
-            this.putString("resource", "std:necrotic_husk");
+            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
         }});
         takeResource.setSource(source);
         takeResource.setTarget(target);
@@ -103,14 +103,14 @@ public class TakeResourceTest {
     @Test
     @DisplayName("invoke removes all matching resources when no count specified")
     void invoke_removesAllMatchingResourcesWhenNoCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         for (int i = 0; i < 5; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
+            RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
             resource.addTag("temporary");
             target.addResource(resource);
         }
@@ -118,9 +118,9 @@ public class TakeResourceTest {
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:necrotic_husk"
+                "resource":"std:class/warlock/the_undead_patron/necrotic_husk"
             }*/
-            this.putString("resource", "std:necrotic_husk");
+            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
         }});
         takeResource.setSource(source);
         takeResource.setTarget(target);
@@ -135,14 +135,14 @@ public class TakeResourceTest {
     @Test
     @DisplayName("invoke removes correct number of resources when count specified")
     void invoke_removesCorrectNumberOfResourcesWhenCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         for (int i = 0; i < 5; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:necrotic_husk");
+            RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
             resource.addTag("temporary");
             target.addResource(resource);
         }
@@ -150,10 +150,10 @@ public class TakeResourceTest {
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:necrotic_husk",
+                "resource":"std:class/warlock/the_undead_patron/necrotic_husk",
                 "count": 3
             }*/
-            this.putString("resource", "std:necrotic_husk");
+            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
             this.putInteger("count", 3);
         }});
         takeResource.setSource(source);

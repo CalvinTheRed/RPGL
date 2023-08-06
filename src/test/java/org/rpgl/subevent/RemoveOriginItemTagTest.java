@@ -65,8 +65,8 @@ public class RemoveOriginItemTagTest {
     @Test
     @DisplayName("invoke removes tag")
     void invoke_removesTag() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
-        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         item.addTag("test_tag");
         DummyContext context = new DummyContext();
         context.add(object);

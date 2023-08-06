@@ -41,9 +41,10 @@ public class RPGLEventTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:young_red_dragon_fire_breath template")
+    @DisplayName("newInstance comprehensive test using std:object/dragon/red/young/breath template")
     void newInstance_youngRedDragonFireBreathTemplate() {
-        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std").getEventTemplate("young_red_dragon_fire_breath");
+        RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std")
+                .getEventTemplate("object/dragon/red/young/breath");
         RPGLEvent event = eventTemplate.newInstance();
         String expected;
 
@@ -58,7 +59,7 @@ public class RPGLEventTemplateTest {
         assertEquals("The dragon breathes fire.", event.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("std:young_red_dragon_fire_breath", event.getId(),
+        assertEquals("std:object/dragon/red/young/breath", event.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 

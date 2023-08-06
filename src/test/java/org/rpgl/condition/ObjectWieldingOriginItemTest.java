@@ -73,7 +73,7 @@ public class ObjectWieldingOriginItemTest {
     @Test
     @DisplayName("evaluate returns false when origin item is null")
     void evaluate_returnsFalseWhenOriginItemIsNull() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -105,11 +105,11 @@ public class ObjectWieldingOriginItemTest {
     @Test
     @DisplayName("evaluate returns false when origin item is not being wielded")
     void evaluate_returnsFalseWhenOriginItemIsNotBeingWielded() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
-        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         object.giveItem(item.getUuid());
 
         Condition condition = new ObjectWieldingOriginItem();
@@ -141,11 +141,11 @@ public class ObjectWieldingOriginItemTest {
     @Test
     @DisplayName("evaluate returns true when origin item is being wielded")
     void evaluate_returnsTrueWhenOriginItemIsBeingWielded() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(object);
 
-        RPGLItem item = RPGLFactory.newItem("std:longsword");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         object.giveItem(item.getUuid());
         object.equipItem(item.getUuid(), "mainhand");
 

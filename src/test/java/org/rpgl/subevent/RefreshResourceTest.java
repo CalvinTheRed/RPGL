@@ -69,11 +69,11 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can be met)")
     void runLowFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -82,11 +82,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 5,
                 "minimum_potency": 3
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
         }});
@@ -119,11 +119,11 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can not be met)")
     void runLowFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -132,12 +132,12 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 5,
                 "minimum_potency": 3,
                 "maximum_potency": 5
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
             this.putInteger("maximum_potency", 5);
@@ -171,11 +171,11 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly skipping refreshed resources")
     void runLowFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             if (i > 4) {
                 resource.exhaust();
@@ -186,11 +186,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 5,
                 "minimum_potency": 3
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
         }});
@@ -209,11 +209,11 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can be met)")
     void runHighFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -222,11 +222,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 5,
                 "maximum_potency": 7
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 5);
             this.putInteger("maximum_potency", 7);
         }});
@@ -259,14 +259,14 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can not be met)")
     void runHighFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -275,12 +275,12 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 5,
                 "minimum_potency": 5,
                 "maximum_potency": 7
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 5);
             this.putInteger("maximum_potency", 7);
@@ -314,11 +314,11 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly skipping refreshed resources")
     void runHighFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             if (i < 6) {
                 resource.exhaust();
@@ -329,11 +329,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 5,
                 "maximum_potency": 5
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 5);
             this.putInteger("maximum_potency", 5);
         }});
@@ -352,14 +352,14 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes resources correctly (low first)")
     void invoke_refreshesResourcesCorrectly_lowFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -368,11 +368,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 2,
                 "selection_mode": "low_first"
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 2);
             this.putString("selection_mode", "low_first");
         }});
@@ -405,14 +405,14 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes resources correctly (high first)")
     void invoke_refreshesResourcesCorrectly_highFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -421,11 +421,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 2,
                 "selection_mode": "high_first"
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 2);
             this.putString("selection_mode", "high_first");
         }});
@@ -458,18 +458,18 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes only matching resources")
     void invoke_refreshesOnlyMatchingResources() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:commoner");
-        RPGLObject target = RPGLFactory.newObject("std:commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        RPGLResource spellSlot = RPGLFactory.newResource("std:spell_slot");
+        RPGLResource spellSlot = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
         spellSlot.exhaust();
         spellSlot.setPotency(1);
         target.addResource(spellSlot);
 
-        RPGLResource pactSpellSlot = RPGLFactory.newResource("std:pact_spell_slot");
+        RPGLResource pactSpellSlot = RPGLFactory.newResource("std:class/pact_caster/pact_spell_slot");
         pactSpellSlot.exhaust();
         pactSpellSlot.setPotency(1);
         target.addResource(pactSpellSlot);
@@ -477,10 +477,10 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:spell_slot",
+                "resource":"std:class/spellcaster/spell_slot",
                 "count": 2
             }*/
-            this.putString("resource", "std:spell_slot");
+            this.putString("resource", "std:class/spellcaster/spell_slot");
             this.putInteger("count", 2);
         }});
         refreshResource.setSource(source);

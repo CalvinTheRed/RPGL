@@ -46,7 +46,7 @@ public class RPGLItemTemplateTest {
     @Test
     @DisplayName("processEvents defaults events to empty arrays")
     void processEvents_defaultsEventsToEmptyArrays() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("teacup");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("common/teacup");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
         item.putJsonObject("events", new JsonObject());
@@ -63,7 +63,7 @@ public class RPGLItemTemplateTest {
     @Test
     @DisplayName("processEquippedEffects processes effects correctly")
     void processEquippedEffects_processesEffectsCorrectly() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("weapon/melee/martial/scimitar/frostbrand");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
 
@@ -74,18 +74,18 @@ public class RPGLItemTemplateTest {
                 "2 effects should be created"
         );
 
-        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
-                "First effect should be std:cold_resistance"
+        assertEquals("std:common/damage/resistance/cold", equippedEffects.get(0).getId(),
+                "First effect should be std:common/damage/resistance/cold"
         );
-        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
-                "Second effect should be std:fire_resistance"
+        assertEquals("std:common/damage/resistance/fire", equippedEffects.get(1).getId(),
+                "Second effect should be std:common/damage/resistance/fire"
         );
     }
 
     @Test
     @DisplayName("processEquippedResources processes resources correctly")
     void processEquippedResources_processesResourcesCorrectly() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("wand_of_fireballs");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("wand/wand_of_fireballs");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
 
@@ -96,8 +96,8 @@ public class RPGLItemTemplateTest {
                 "item should have 3 resources"
         );
         for (RPGLResource resource : resources) {
-            assertEquals("std:wand_of_fireballs_charge", resource.getId(),
-                    "resource should be a std:wand_of_fireballs_charge"
+            assertEquals("std:item/wand/wand_of_fireballs_charge", resource.getId(),
+                    "resource should be a std:item/wand/wand_of_fireballs_charge"
             );
         }
     }
@@ -105,7 +105,7 @@ public class RPGLItemTemplateTest {
     @Test
     @DisplayName("newInstance correctly creates frostbrand from template")
     void newInstance_correctlyCreatesFrostbrandFromTemplate() {
-        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("frostbrand");
+        RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("weapon/melee/martial/scimitar/frostbrand");
         RPGLItem item = itemTemplate.newInstance();
         String expected;
 
@@ -134,7 +134,7 @@ public class RPGLItemTemplateTest {
                 "incorrect field value: " + RPGLItemTO.COST_ALIAS
         );
         expected = """
-                {"multiple_hands":["std:frostbrand_melee","std:improvised_thrown"],"one_hand":["std:frostbrand_melee","std:improvised_thrown"],"special":[]}""";
+                {"multiple_hands":["std:item/weapon/melee/martial/scimitar/frostbrand/melee","std:common/improvised_thrown"],"one_hand":["std:item/weapon/melee/martial/scimitar/frostbrand/melee","std:common/improvised_thrown"],"special":[]}""";
         assertEquals(expected, item.getEvents().toString(),
                 "incorrect field value: " + RPGLItemTO.EVENTS_ALIAS
         );
@@ -143,11 +143,11 @@ public class RPGLItemTemplateTest {
         assertEquals(2, equippedEffects.size(),
                 "2 effects should be created"
         );
-        assertEquals("std:cold_resistance", equippedEffects.get(0).getId(),
-                "First effect should be std:cold_resistance"
+        assertEquals("std:common/damage/resistance/cold", equippedEffects.get(0).getId(),
+                "First effect should be std:common/damage/resistance/cold"
         );
-        assertEquals("std:fire_resistance", equippedEffects.get(1).getId(),
-                "Second effect should be std:fire_resistance"
+        assertEquals("std:common/damage/resistance/fire", equippedEffects.get(1).getId(),
+                "Second effect should be std:common/damage/resistance/fire"
         );
 
         assertEquals(3, item.getAttackBonus(),
