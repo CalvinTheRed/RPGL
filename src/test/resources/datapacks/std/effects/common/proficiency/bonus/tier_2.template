@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Proficiency Bonus",
+  "description": "This effect controls the base of your proficiency bonus.",
+  "subevent_filters": {
+    "calculate_proficiency_bonus": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "target"
+          }
+        ],
+        "functions": [
+          {
+            "function": "set_base",
+            "base": 3
+          }
+        ]
+      }
+    ]
+  }
+}

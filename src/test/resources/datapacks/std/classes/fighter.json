@@ -1,6 +1,6 @@
 {
   "metadata": {
-
+    "author": "Calvin Withun"
   },
   "name": "Fighter",
   "description": "The Fighter class.",
@@ -13,121 +13,121 @@
       "minimum_score": 13
     }
   ],
-  "starting_class_features": {
+  "starting_features": {
     "effects": [
-      "std:save_proficiency_str",
-      "std:save_proficiency_con",
-      "std:armor_proficiency_heavy",
+      "std:common/proficiency/save/strength",
+      "std:common/proficiency/save/constitution",
+      "std:common/proficiency/armor/heavy",
       {
         "name": "Skill Proficiencies",
         "count": 2,
         "options": [
-          "std:skill_proficiency_acrobatics",
-          "std:skill_proficiency_animal_handling",
-          "std:skill_proficiency_athletics",
-          "std:skill_proficiency_history",
-          "std:skill_proficiency_insight",
-          "std:skill_proficiency_intimidation",
-          "std:skill_proficiency_perception",
-          "std:skill_proficiency_survival"
+          "std:common/proficiency/skill/acrobatics",
+          "std:common/proficiency/skill/animal_handling",
+          "std:common/proficiency/skill/athletics",
+          "std:common/proficiency/skill/history",
+          "std:common/proficiency/skill/insight",
+          "std:common/proficiency/skill/intimidation",
+          "std:common/proficiency/skill/perception",
+          "std:common/proficiency/skill/survival"
         ]
       }
     ]
   },
-  "class_features": {
+  "features": {
     "1": {
       "gain": {
         "effects": [
-          "std:armor_proficiency_light",
-          "std:armor_proficiency_medium",
-          "std:shield_proficiency",
-          "std:weapon_proficiency_simple_melee",
-          "std:weapon_proficiency_simple_ranged",
-          "std:weapon_proficiency_martial_melee",
-          "std:weapon_proficiency_martial_ranged",
+          "std:common/proficiency/armor/light",
+          "std:common/proficiency/armor/medium",
+          "std:common/proficiency/armor/shield",
+          "std:common/proficiency/weapon/melee/martial",
+          "std:common/proficiency/weapon/melee/simple",
+          "std:common/proficiency/weapon/ranged/martial",
+          "std:common/proficiency/weapon/ranged/simple",
           {
             "name": "Fighting Style",
             "count": 1,
             "options": [
-              "std:fighting_style_archery",
-              "std:fighting_style_defense",
-              "std:fighting_style_great_weapon_fighting",
-              "std:fighting_style_thrown_weapon_fighting"
+              "std:class/common/fighting_style/archery",
+              "std:class/common/fighting_style/defense",
+              "std:class/common/fighting_style/great_weapon_fighting",
+              "std:class/common/fighting_style/thrown_weapon_fighting"
             ]
           }
         ],
         "events": [
-          "std:second_wind"
+          "std:class/fighter/second_wind"
         ],
         "resources": [
-          "std:second_wind_charge"
+          "std:class/fighter/second_wind_charge"
         ]
       }
     },
     "2": {
       "gain": {
         "events": [
-          "std:action_surge"
+          "std:class/fighter/action_surge"
         ],
         "resources": [
-          "std:action_surge_charge",
-          "std:action_surge_limiter"
+          "std:class/fighter/action_surge_charge",
+          "std:class/fighter/action_surge_limiter"
         ]
       }
     },
     "5": {
       "gain": {
         "events": [
-          "std:extra_attack_1"
+          "std:class/common/extra_attack/1"
         ]
       }
     },
     "9": {
       "gain": {
         "effects": [
-          "std:indomitable"
+          "std:class/fighter/indomitable"
         ],
         "resources": [
-          "std:indomitable_charge"
+          "std:class/fighter/indomitable_charge"
         ]
       }
     },
     "11": {
       "gain": {
         "events": [
-          "std:extra_attack_2"
+          "std:class/common/extra_attack/2"
         ]
       },
       "lose": {
         "events": [
-          "std:extra_attack_1"
+          "std:class/common/extra_attack/1"
         ]
       }
     },
     "13": {
       "gain": {
         "resources": [
-          "std:indomitable_charge"
+          "std:class/fighter/indomitable_charge"
         ]
       }
     },
     "17": {
       "gain": {
         "resources": [
-          "std:action_surge_charge",
-          "std:indomitable_charge"
+          "std:class/fighter/action_surge_charge",
+          "std:class/fighter/indomitable_charge"
         ]
       }
     },
     "20": {
       "gain": {
         "events": [
-          "std:extra_attack_3"
+          "std:class/common/extra_attack/3"
         ]
       },
       "lose": {
         "events": [
-          "std:extra_attack_2"
+          "std:class/common/extra_attack/2"
         ]
       }
     }

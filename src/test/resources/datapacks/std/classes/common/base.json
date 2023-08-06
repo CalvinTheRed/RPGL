@@ -1,0 +1,98 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Base",
+  "description": "This meta-class is the base of all classes, and provides actions, bonus actions, and proficiency bonus scaling. All classes should contribute to this class at a rate of 1:1.",
+  "features": {
+    "1": {
+      "gain": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_1"
+        ],
+        "resources": [
+          "std:common/action/01",
+          "std:common/bonus_action/01"
+        ]
+      }
+    },
+    "5": {
+      "gain": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_2"
+        ],
+        "resources": [
+          "std:common/action/05",
+          "std:common/bonus_action/05"
+        ]
+      },
+      "lose": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_1"
+        ],
+        "resources": [
+          "std:common/action/01",
+          "std:common/bonus_action/01"
+        ]
+      }
+    },
+    "9": {
+      "gain": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_3"
+        ]
+      },
+      "lose": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_2"
+        ]
+      }
+    },
+    "11": {
+      "gain": {
+        "resources": [
+          "std:common/action/11",
+          "std:common/bonus_action/11"
+        ]
+      },
+      "lose": {
+        "resources": [
+          "std:common/action/05",
+          "std:common/bonus_action/05"
+        ]
+      }
+    },
+    "13": {
+      "gain": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_4"
+        ]
+      },
+      "lose": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_3"
+        ]
+      }
+    },
+    "17": {
+      "gain": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_5"
+        ],
+        "resources": [
+          "std:common/action/17",
+          "std:common/bonus_action/17"
+        ]
+      },
+      "lose": {
+        "effects": [
+          "std:common/proficiency/bonus/tier_4"
+        ],
+        "resources": [
+          "std:common/action/11",
+          "std:common/bonus_action/11"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Spellcaster",
+  "description": "This meta-class is the class which provides spellcasters with their spell slots (not including pact casters).",
+  "features": {
+    "1": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/01",
+          "std:class/common/spell_slot/01"
+        ]
+      }
+    },
+    "2": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/01"
+        ]
+      }
+    },
+    "3": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/01",
+          "std:class/common/spell_slot/02",
+          "std:class/common/spell_slot/02"
+        ]
+      }
+    },
+    "4": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/02"
+        ]
+      }
+    },
+    "5": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/03",
+          "std:class/common/spell_slot/03"
+        ]
+      }
+    },
+    "6": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/03"
+        ]
+      }
+    },
+    "7": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/04"
+        ]
+      }
+    },
+    "8": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/04"
+        ]
+      }
+    },
+    "9": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/04",
+          "std:class/common/spell_slot/05"
+        ]
+      }
+    },
+    "10": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/05"
+        ]
+      }
+    },
+    "11": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/06"
+        ]
+      }
+    },
+    "13": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/07"
+        ]
+      }
+    },
+    "15": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/08"
+        ]
+      }
+    },
+    "17": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/09"
+        ]
+      }
+    },
+    "18": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/05"
+        ]
+      }
+    },
+    "19": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/06"
+        ]
+      }
+    },
+    "20": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/07"
+        ]
+      }
+    }
+  }
+}

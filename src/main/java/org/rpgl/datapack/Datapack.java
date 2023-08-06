@@ -242,20 +242,33 @@ public class Datapack {
         }
     }
 
+    void loadClasses(File directory) {
+        this.loadClasses("", directory);
+    }
+
     /**
      * This method loads all classes stored in a single directory into the object.
      *
      * @param directory a File directory for the classes in a datapack
      */
-    private void loadClasses(File directory) {
+    private void loadClasses(String classNameBase, File directory) {
         for (File classFile : Objects.requireNonNull(directory.listFiles())) {
-            String classId = classFile.getName().substring(0, classFile.getName().indexOf('.'));
-            try {
-                RPGLClass rpglClass = JsonObject.MAPPER.readValue(classFile, RPGLClassTO.class).toRPGLClass();
-                rpglClass.putString(DatapackContentTO.ID_ALIAS, this.datapackNamespace + ":" + classId);
-                this.CLASSES.put(classId, rpglClass);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage());
+            if (classFile.isDirectory()) {
+                this.loadClasses(classNameBase + classFile.getName() + "/", classFile);
+            } else {
+                String classId = classFile.getName().substring(0, classFile.getName().indexOf('.'));
+                try {
+                    RPGLClass rpglClass = JsonObject.MAPPER
+                            .readValue(classFile, RPGLClassTO.class)
+                            .toRPGLClass();
+                    rpglClass.putString(
+                            DatapackContentTO.ID_ALIAS,
+                            this.datapackNamespace + ":" + classNameBase + classId
+                    );
+                    this.CLASSES.put(classNameBase + classId, rpglClass);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
             }
         }
     }

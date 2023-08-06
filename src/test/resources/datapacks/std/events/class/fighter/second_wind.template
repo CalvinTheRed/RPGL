@@ -2,12 +2,12 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Cure Wounds",
-  "description": "A low-level healing spell.",
+  "name": "Second Wind",
+  "description": "Recover a small amount of hit points quickly in combat.",
   "area_of_effect": { },
   "cost": [
     {
-      "resource_tags": [ "action" ],
+      "resource_tags": [ "bonus_action" ],
       "count": 1
     },
     {
@@ -26,6 +26,10 @@
             { "count": 1, "size": 10, "determined": [ 5 ] }
           ],
           "bonus": 0
+        },
+        {
+          "healing_formula": "level",
+          "class": "std:fighter"
         }
       ]
     }

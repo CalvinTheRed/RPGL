@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Pact Caster",
+  "description": "This meta-class is the class which provides pact casters with their spell slots.",
+  "features": {
+    "1": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/01"
+        ]
+      }
+    },
+    "2": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/01"
+        ]
+      }
+    },
+    "3": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/02",
+          "std:class/common/spell_slot/pact_magic/02"
+        ]
+      },
+      "lose": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/01",
+          "std:class/common/spell_slot/pact_magic/01"
+        ]
+      }
+    },
+    "5": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/03",
+          "std:class/common/spell_slot/pact_magic/03"
+        ]
+      },
+      "lose": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/02",
+          "std:class/common/spell_slot/pact_magic/02"
+        ]
+      }
+    },
+    "7": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/04",
+          "std:class/common/spell_slot/pact_magic/04"
+        ]
+      },
+      "lose": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/03",
+          "std:class/common/spell_slot/pact_magic/03"
+        ]
+      }
+    },
+    "9": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/05",
+          "std:class/common/spell_slot/pact_magic/05"
+        ]
+      },
+      "lose": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/04",
+          "std:class/common/spell_slot/pact_magic/04"
+        ]
+      }
+    },
+    "11": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/05"
+        ]
+      }
+    },
+    "17": {
+      "gain": {
+        "resources": [
+          "std:class/common/spell_slot/pact_magic/05"
+        ]
+      }
+    }
+  }
+}

@@ -260,7 +260,7 @@ public class RPGLClassTest {
         RPGLClass rpglClass = new RPGLClass();
         rpglClass.setName("Test Class");
         rpglClass.setId("test:test");
-        rpglClass.setClassFeatures(new JsonObject() {{
+        rpglClass.setFeatures(new JsonObject() {{
             /*{
                 "1": {
                     "gain": {
@@ -386,31 +386,31 @@ public class RPGLClassTest {
         assertEquals(13, effects.size(),
                 "dummy should have 13 effects after setting base class to std:fighter"
         );
-        assertEquals("std:save_proficiency_str", effects.get(0).getId());
-        assertEquals("std:save_proficiency_con", effects.get(1).getId());
-        assertEquals("std:armor_proficiency_heavy", effects.get(2).getId());
-        assertEquals("std:skill_proficiency_athletics", effects.get(3).getId());
-        assertEquals("std:skill_proficiency_insight", effects.get(4).getId());
-        assertEquals("std:armor_proficiency_light", effects.get(5).getId());
-        assertEquals("std:armor_proficiency_medium", effects.get(6).getId());
-        assertEquals("std:shield_proficiency", effects.get(7).getId());
-        assertEquals("std:weapon_proficiency_simple_melee", effects.get(8).getId());
-        assertEquals("std:weapon_proficiency_simple_ranged", effects.get(9).getId());
-        assertEquals("std:weapon_proficiency_martial_melee", effects.get(10).getId());
-        assertEquals("std:weapon_proficiency_martial_ranged", effects.get(11).getId());
-        assertEquals("std:fighting_style_archery", effects.get(12).getId());
+        assertEquals("std:common/proficiency/save/strength", effects.get(0).getId());
+        assertEquals("std:common/proficiency/save/constitution", effects.get(1).getId());
+        assertEquals("std:common/proficiency/armor/heavy", effects.get(2).getId());
+        assertEquals("std:common/proficiency/skill/athletics", effects.get(3).getId());
+        assertEquals("std:common/proficiency/skill/insight", effects.get(4).getId());
+        assertEquals("std:common/proficiency/armor/light", effects.get(5).getId());
+        assertEquals("std:common/proficiency/armor/medium", effects.get(6).getId());
+        assertEquals("std:common/proficiency/armor/shield", effects.get(7).getId());
+        assertEquals("std:common/proficiency/weapon/melee/martial", effects.get(8).getId());
+        assertEquals("std:common/proficiency/weapon/melee/simple", effects.get(9).getId());
+        assertEquals("std:common/proficiency/weapon/ranged/martial", effects.get(10).getId());
+        assertEquals("std:common/proficiency/weapon/ranged/simple", effects.get(11).getId());
+        assertEquals("std:class/common/fighting_style/archery", effects.get(12).getId());
 
         JsonArray events = object.getEvents();
         assertEquals(1, events.size(),
                 "dummy should have 1 event after setting base class to std:fighter"
         );
-        assertEquals("std:second_wind", events.getString(0));
+        assertEquals("std:class/fighter/second_wind", events.getString(0));
 
         List<RPGLResource> resources = object.getResourceObjects();
         assertEquals(1, resources.size(),
                 "dummy should have 1 resource after setting base class to std:fighter"
         );
-        assertEquals("std:second_wind_charge", resources.get(0).getId());
+        assertEquals("std:class/fighter/second_wind_charge", resources.get(0).getId());
 
         assertEquals(1, object.getLevel("std:fighter"),
                 "dummy should have 1 level in fighter after setting base class to std:fighter"

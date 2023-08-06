@@ -8,6 +8,7 @@
     "spell_slot",
     "pact_spell_slot"
   ],
+  "potency": 4,
   "refresh_criterion": [
     {
       "subevent": "info_subevent",

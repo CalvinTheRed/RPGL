@@ -44,20 +44,20 @@ public class RPGLClass extends DatapackContent {
         this.putJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS, multiclassingRequirements);
     }
 
-    public JsonObject getStartingClassFeatures() {
-        return this.getJsonObject(RPGLClassTO.STARTING_CLASS_FEATURES_ALIAS);
+    public JsonObject getStartingFeatures() {
+        return this.getJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS);
     }
 
-    public void setStartingClassFeatures(JsonObject startingClassFeatures) {
-        this.putJsonObject(RPGLClassTO.STARTING_CLASS_FEATURES_ALIAS, startingClassFeatures);
+    public void setStartingFeatures(JsonObject startingFeatures) {
+        this.putJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS, startingFeatures);
     }
 
-    public JsonObject getClassFeatures() {
-        return this.getJsonObject(RPGLClassTO.CLASS_FEATURES_ALIAS);
+    public JsonObject getFeatures() {
+        return this.getJsonObject(RPGLClassTO.FEATURES_ALIAS);
     }
 
-    public void setClassFeatures(JsonObject classFeatures) {
-        this.putJsonObject(RPGLClassTO.CLASS_FEATURES_ALIAS, classFeatures);
+    public void setFeatures(JsonObject features) {
+        this.putJsonObject(RPGLClassTO.FEATURES_ALIAS, features);
     }
 
     // =================================================================================================================
@@ -66,13 +66,13 @@ public class RPGLClass extends DatapackContent {
 
     public void setBaseClass(RPGLObject object, JsonObject choices) {
         // TODO check for existing class levels
-        this.grantGainedEffects(object, this.getStartingClassFeatures(), choices);
+        this.grantGainedEffects(object, this.getStartingFeatures(), choices);
         this.levelUpRPGLObject(object, choices);
     }
 
     public void levelUpRPGLObject(RPGLObject object, JsonObject choices) {
         int level = this.incrementRPGLObjectLevel(object);
-        JsonObject features = this.getClassFeatures().getJsonObject(Integer.toString(level));
+        JsonObject features = this.getFeatures().getJsonObject(Integer.toString(level));
         if (features != null) {
             JsonObject gainedFeatures = Objects.requireNonNullElse(features.getJsonObject("gain"), new JsonObject());
             this.grantGainedEffects(object, gainedFeatures, choices);
