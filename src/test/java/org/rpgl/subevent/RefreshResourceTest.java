@@ -73,7 +73,7 @@ public class RefreshResourceTest {
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -82,11 +82,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 5,
                 "minimum_potency": 3
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
         }});
@@ -123,7 +123,7 @@ public class RefreshResourceTest {
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -132,12 +132,12 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 5,
                 "minimum_potency": 3,
                 "maximum_potency": 5
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
             this.putInteger("maximum_potency", 5);
@@ -175,7 +175,7 @@ public class RefreshResourceTest {
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             if (i > 4) {
                 resource.exhaust();
@@ -186,11 +186,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 5,
                 "minimum_potency": 3
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
         }});
@@ -213,7 +213,7 @@ public class RefreshResourceTest {
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -222,11 +222,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 5,
                 "maximum_potency": 7
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 5);
             this.putInteger("maximum_potency", 7);
         }});
@@ -266,7 +266,7 @@ public class RefreshResourceTest {
         context.add(target);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -275,12 +275,12 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 5,
                 "minimum_potency": 5,
                 "maximum_potency": 7
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 5);
             this.putInteger("maximum_potency", 7);
@@ -318,7 +318,7 @@ public class RefreshResourceTest {
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             if (i < 6) {
                 resource.exhaust();
@@ -329,11 +329,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 5,
                 "maximum_potency": 5
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 5);
             this.putInteger("maximum_potency", 5);
         }});
@@ -359,7 +359,7 @@ public class RefreshResourceTest {
         context.add(target);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -368,11 +368,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 2,
                 "selection_mode": "low_first"
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 2);
             this.putString("selection_mode", "low_first");
         }});
@@ -412,7 +412,7 @@ public class RefreshResourceTest {
         context.add(target);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
             resource.setPotency(i);
             resource.exhaust();
             target.addResource(resource);
@@ -421,11 +421,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 2,
                 "selection_mode": "high_first"
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 2);
             this.putString("selection_mode", "high_first");
         }});
@@ -464,12 +464,12 @@ public class RefreshResourceTest {
         context.add(source);
         context.add(target);
 
-        RPGLResource spellSlot = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
         spellSlot.exhaust();
         spellSlot.setPotency(1);
         target.addResource(spellSlot);
 
-        RPGLResource pactSpellSlot = RPGLFactory.newResource("std:class/pact_caster/pact_spell_slot");
+        RPGLResource pactSpellSlot = RPGLFactory.newResource("std:common/spell_slot/pact_magic/01");
         pactSpellSlot.exhaust();
         pactSpellSlot.setPotency(1);
         target.addResource(pactSpellSlot);
@@ -477,10 +477,10 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/spellcaster/spell_slot",
+                "resource":"std:common/spell_slot/01",
                 "count": 2
             }*/
-            this.putString("resource", "std:class/spellcaster/spell_slot");
+            this.putString("resource", "std:common/spell_slot/01");
             this.putInteger("count", 2);
         }});
         refreshResource.setSource(source);

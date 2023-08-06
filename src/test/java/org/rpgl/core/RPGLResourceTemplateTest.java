@@ -104,7 +104,7 @@ public class RPGLResourceTemplateTest {
     @Test
     @DisplayName("processRefreshCriterion infers optional required generator values correctly")
     void processRefreshCriterion_infersOptionalRequiredGeneratorValuesCorrectly() {
-        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("class/pact_caster/pact_spell_slot");
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("common/spell_slot/pact_magic/01");
         RPGLResource resource = new RPGLResource();
         resource.join(resourceTemplate);
 

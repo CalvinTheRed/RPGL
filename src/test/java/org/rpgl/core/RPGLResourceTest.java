@@ -110,7 +110,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion criterion satisfaction (single requirement)")
     void checkCriterion_criterionSatisfaction_singleRequirement() {
-        RPGLResource resource = RPGLFactory.newResource("std:class/pact_caster/pact_spell_slot");
+        RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/pact_magic/01");
         resource.exhaust();
 
         InfoSubevent infoSubevent = new InfoSubevent();

@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class RefreshResource extends Subevent {
 
-    // TODO allow for this to refresh based on tags?
+    // TODO this subevent should refresh based on resource tags, not on resource ID.
 
     public RefreshResource() {
         super("refresh_resource");

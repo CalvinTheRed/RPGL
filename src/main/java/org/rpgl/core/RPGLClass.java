@@ -44,6 +44,14 @@ public class RPGLClass extends DatapackContent {
         this.putJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS, multiclassingRequirements);
     }
 
+    public JsonObject getClassContributions() {
+        return this.getJsonObject(RPGLClassTO.CLASS_CONTRIBUTIONS_ALIAS);
+    }
+
+    public void setClassContributions(JsonObject classContributions) {
+        this.putJsonObject(RPGLClassTO.CLASS_CONTRIBUTIONS_ALIAS, classContributions);
+    }
+
     public JsonObject getStartingFeatures() {
         return this.getJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS);
     }

@@ -13,6 +13,9 @@
       "minimum_score": 13
     }
   ],
+  "class_contributions": {
+    "std:common/base": 1
+  },
   "starting_features": {
     "effects": [
       "std:common/proficiency/save/strength",
