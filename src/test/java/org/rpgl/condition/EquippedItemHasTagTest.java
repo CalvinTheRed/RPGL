@@ -138,7 +138,7 @@ public class EquippedItemHasTagTest {
             this.putString("tag", "test");
         }};
 
-        RPGLItem item = RPGLFactory.newItem("std:dagger");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
         item.addTag("test");
         object.giveItem(item.getUuid());
         object.equipItem(item.getUuid(), "mainhand");
@@ -183,7 +183,7 @@ public class EquippedItemHasTagTest {
             this.putString("tag", "test");
         }};
 
-        RPGLItem item = RPGLFactory.newItem("std:dagger");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
         object.giveItem(item.getUuid());
         object.equipItem(item.getUuid(), "mainhand");
 

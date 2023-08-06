@@ -43,7 +43,7 @@ public class RPGLClassTest {
     @DisplayName("revokeLostResources revokes and unregisters resources")
     void revokeLostResources_revokesAndUnregistersResource() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
-        RPGLResource resource = RPGLFactory.newResource("std:action");
+        RPGLResource resource = RPGLFactory.newResource("std:common/action");
         String resourceUuid = resource.getUuid();
         object.addResource(resource);
 
@@ -53,7 +53,7 @@ public class RPGLClassTest {
 
         new RPGLClass().revokeLostResources(object, new JsonObject() {{
             this.putJsonArray("resources", new JsonArray() {{
-                this.addString("std:action");
+                this.addString("std:common/action");
             }});
         }});
 
@@ -90,7 +90,7 @@ public class RPGLClassTest {
     @DisplayName("revokeLostEffects revokes and unregisters effects")
     void revokeLostEffects_revokesAndUnregistersEffects() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
-        RPGLEffect effect = RPGLFactory.newEffect("std:dodge");
+        RPGLEffect effect = RPGLFactory.newEffect("std:common/dodge");
         String effectUuid = effect.getUuid();
         object.addEffect(effect);
 
@@ -100,7 +100,7 @@ public class RPGLClassTest {
 
         new RPGLClass().revokeLostEffects(object, new JsonObject() {{
             this.putJsonArray("effects", new JsonArray() {{
-                this.addString("std:dodge");
+                this.addString("std:common/dodge");
             }});
         }});
 
@@ -118,7 +118,7 @@ public class RPGLClassTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
         new RPGLClass().grantGainedResources(object, new JsonObject() {{
             this.putJsonArray("resources", new JsonArray() {{
-                this.addString("std:action");
+                this.addString("std:common/action");
             }});
         }});
 
@@ -133,7 +133,7 @@ public class RPGLClassTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
         new RPGLClass().grantGainedEvents(object, new JsonObject() {{
             this.putJsonArray("events", new JsonArray() {{
-                this.addString("std:young_red_dragon_fire_breath");
+                this.addString("std:object/dragon/red/young/breath");
             }});
         }});
 
@@ -148,8 +148,8 @@ public class RPGLClassTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
         JsonObject features = new JsonObject() {{
             this.putJsonArray("effects", new JsonArray() {{
-                this.addString("std:fire_immunity");
-                this.addString("std:cold_resistance");
+                this.addString("std:common/damage/immunity/fire");
+                this.addString("std:common/damage/resistance/cold");
             }});
         }};
         new RPGLClass().grantGainedEffects(object, features, new JsonObject());
@@ -169,10 +169,10 @@ public class RPGLClassTest {
                     this.putString("name", "testname");
                     this.putInteger("count", 2);
                     this.putJsonArray("options", new JsonArray() {{
-                        this.addString("std:dodge");
-                        this.addString("std:cold_resistance");
-                        this.addString("std:fire_immunity");
-                        this.addString("std:ring_of_protection");
+                        this.addString("std:common/dodge");
+                        this.addString("std:common/damage/resistance/cold");
+                        this.addString("std:common/damage/immunity/fire");
+                        this.addString("std:item/ring/ring_of_protection");
                     }});
                 }});
             }});
@@ -189,11 +189,11 @@ public class RPGLClassTest {
         assertEquals(2, effects.size(),
                 "dummy should have 2 effects"
         );
-        assertEquals("std:cold_resistance", effects.get(0).getId(),
-                "first effect should be std:cold_resistance"
+        assertEquals("std:common/damage/resistance/cold", effects.get(0).getId(),
+                "first effect should be std:common/damage/resistance/cold"
         );
-        assertEquals("std:fire_immunity", effects.get(1).getId(),
-                "second effect should be std:fire_immunity"
+        assertEquals("std:common/damage/immunity/fire", effects.get(1).getId(),
+                "second effect should be std:common/damage/immunity/fire"
         );
     }
 
@@ -242,19 +242,19 @@ public class RPGLClassTest {
     @DisplayName("levelUpRPGLObject levels up correctly (with features)")
     void levelUpRPGLObject_levelsUpCorrectly_withFeatures() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
-        object.addEffect(RPGLFactory.newEffect("std:fire_immunity"));
-        object.getEvents().addString("std:young_red_dragon_fire_breath");
-        object.addResource(RPGLFactory.newResource("std:bonus_action"));
+        object.addEffect(RPGLFactory.newEffect("std:common/damage/immunity/fire"));
+        object.getEvents().addString("std:object/dragon/red/young/breath");
+        object.addResource(RPGLFactory.newResource("std:common/bonus_action"));
 
         // ensure object is set up properly
-        assertEquals("std:fire_immunity", object.getEffectObjects().get(0).getId(),
-                "dummy should have std:fire_immunity effect at start of test"
+        assertEquals("std:common/damage/immunity/fire", object.getEffectObjects().get(0).getId(),
+                "dummy should have std:common/damage/immunity/fire effect at start of test"
         );
-        assertEquals("std:young_red_dragon_fire_breath", object.getEvents().getString(0),
-                "dummy should have std:young_red_dragon_fire_breath event at start of test"
+        assertEquals("std:object/dragon/red/young/breath", object.getEvents().getString(0),
+                "dummy should have std:object/dragon/red/young/breath event at start of test"
         );
-        assertEquals("std:bonus_action", object.getResourceObjects().get(0).getId(),
-                "dummy should have std:bonus_action resource at start of test"
+        assertEquals("std:common/bonus_action", object.getResourceObjects().get(0).getId(),
+                "dummy should have std:common/bonus_action resource at start of test"
         );
 
         RPGLClass rpglClass = new RPGLClass();
@@ -269,27 +269,27 @@ public class RPGLClassTest {
                                 "name": "Test Effect Choice",
                                 "count": 1,
                                 "options": [
-                                    "std:fire_resistance",
-                                    "std:cold_resistance"
+                                    "std:common/damage/resistance/fire",
+                                    "std:common/damage/resistance/cold"
                                 ]
                             }
                         ],
                         "events": [
-                            "std:fire_bolt"
+                            "std:spell/fire_bolt"
                         ],
                         "resources": [
-                            "std:action"
+                            "std:common/action"
                         ]
                     },
                     "lose": {
                         "effects": [
-                            "std:fire_immunity"
+                            "std:common/damage/immunity/fire"
                         ],
                         "events": [
-                            "std:young_red_dragon_fire_breath"
+                            "std:object/dragon/red/young/breath"
                         ],
                         "resources": [
-                            "std:bonus_action"
+                            "std:common/bonus_action"
                         ]
                     }
                 }
@@ -301,27 +301,27 @@ public class RPGLClassTest {
                             this.putString("name", "Test Effect Choice");
                             this.putInteger("count", 1);
                             this.putJsonArray("options", new JsonArray() {{
-                                this.addString("std:fire_resistance");
-                                this.addString("std:cold_resistance");
+                                this.addString("std:common/damage/resistance/fire");
+                                this.addString("std:common/damage/resistance/cold");
                             }});
                         }});
                     }});
                     this.putJsonArray("events", new JsonArray() {{
-                        this.addString("std:fire_bolt");
+                        this.addString("std:spell/fire_bolt");
                     }});
                     this.putJsonArray("resources", new JsonArray() {{
-                        this.addString("std:action");
+                        this.addString("std:common/action");
                     }});
                 }});
                 this.putJsonObject("lose", new JsonObject() {{
                     this.putJsonArray("effects", new JsonArray() {{
-                        this.addString("std:fire_immunity");
+                        this.addString("std:common/damage/immunity/fire");
                     }});
                     this.putJsonArray("events", new JsonArray() {{
-                        this.addString("std:young_red_dragon_fire_breath");
+                        this.addString("std:object/dragon/red/young/breath");
                     }});
                     this.putJsonArray("resources", new JsonArray() {{
-                        this.addString("std:bonus_action");
+                        this.addString("std:common/bonus_action");
                     }});
                 }});
             }});
@@ -343,24 +343,24 @@ public class RPGLClassTest {
         assertEquals(1, effects.size(),
                 "dummy should have 1 effect after level up"
         );
-        assertEquals("std:cold_resistance", effects.get(0).getId(),
-                "dummy should have std:cold_resistance effect after level up"
+        assertEquals("std:common/damage/resistance/cold", effects.get(0).getId(),
+                "dummy should have std:common/damage/resistance/cold effect after level up"
         );
 
         JsonArray events = object.getEvents();
         assertEquals(1, events.size(),
                 "dummy should have 1 event after level up"
         );
-        assertEquals("std:fire_bolt", events.getString(0),
-                "dummy should have std:fire_bolt event after level up"
+        assertEquals("std:spell/fire_bolt", events.getString(0),
+                "dummy should have std:spell/fire_bolt event after level up"
         );
 
         List<RPGLResource> resources = object.getResourceObjects();
         assertEquals(1, resources.size(),
                 "dummy should have 1 resource after level up"
         );
-        assertEquals("std:action", resources.get(0).getId(),
-                "dummy should have std:action resource after level up"
+        assertEquals("std:common/action", resources.get(0).getId(),
+                "dummy should have std:common/action resource after level up"
         );
     }
 

@@ -90,7 +90,7 @@ public class OriginItemHasTagTest {
             this.putString("tag", "test");
         }};
 
-        RPGLItem item = RPGLFactory.newItem("std:dagger");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
         item.addTag("test");
 
         RPGLEffect effect = new RPGLEffect();
@@ -126,7 +126,7 @@ public class OriginItemHasTagTest {
             this.putString("tag", "test");
         }};
 
-        RPGLItem item = RPGLFactory.newItem("std:dagger");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
         item.addTag("test");
 
         RPGLEffect effect = new RPGLEffect();
@@ -162,7 +162,7 @@ public class OriginItemHasTagTest {
             this.putString("tag", "test");
         }};
 
-        RPGLItem item = RPGLFactory.newItem("std:dagger");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
 
         RPGLEffect effect = new RPGLEffect();
         effect.setSource(object);
@@ -197,7 +197,7 @@ public class OriginItemHasTagTest {
             this.putString("tag", "test");
         }};
 
-        RPGLItem item = RPGLFactory.newItem("std:dagger");
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
 
         RPGLEffect effect = new RPGLEffect();
         effect.setSource(object);
