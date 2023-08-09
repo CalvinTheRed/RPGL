@@ -33,7 +33,7 @@
   ],
   "resources": [
     {
-      "resource": "std:common/action",
+      "resource": "std:common/action/01",
       "count": 1,
       "potency": 1
     },

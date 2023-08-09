@@ -154,4 +154,16 @@ public final class RPGLFactory {
         }
     }
 
+    public static RPGLRace getRace(String raceId) {
+        String[] raceIdSplit = raceId.split(":");
+        try {
+            return DatapackLoader.DATAPACKS
+                    .get(raceIdSplit[0])
+                    .getRace(raceIdSplit[1]);
+        } catch (NullPointerException e) {
+            LOGGER.error("encountered an error getting RPGLRace: " + raceId);
+            throw new RuntimeException("Encountered an error getting a RPGLRace", e);
+        }
+    }
+
 }

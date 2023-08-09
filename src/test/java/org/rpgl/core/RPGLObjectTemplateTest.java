@@ -152,7 +152,7 @@ public class RPGLObjectTemplateTest {
         assertEquals(2, object.getResourceObjects().size(),
                 "young red dragon should be given 2 resources"
         );
-        assertEquals("std:common/action", object.getResourceObjects().get(0).getId(),
+        assertEquals("std:common/action/01", object.getResourceObjects().get(0).getId(),
                 "one resource should be std:action"
         );
         assertEquals("std:object/dragon/red/young/breath_charge", object.getResourceObjects().get(1).getId(),

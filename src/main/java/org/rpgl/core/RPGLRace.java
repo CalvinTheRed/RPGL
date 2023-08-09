@@ -1,7 +1,7 @@
 package org.rpgl.core;
 
 import org.rpgl.datapack.DatapackContent;
-import org.rpgl.datapack.RPGLClassTO;
+import org.rpgl.datapack.RPGLRaceTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -10,75 +10,30 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class RPGLClass extends DatapackContent {
+public class RPGLRace extends DatapackContent {
 
-    public Integer getHitDie() {
-        return this.getInteger(RPGLClassTO.HIT_DIE_ALIAS);
-    }
-
-    public void setHitDie(int hitDie) {
-        this.putInteger(RPGLClassTO.HIT_DIE_ALIAS, hitDie);
-    }
-
-    public Integer getSubclassLevel() {
-        return this.getInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS);
-    }
-
-    public void setSubclassLevel(int subclassLevel) {
-        this.putInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS, subclassLevel);
-    }
-
-    public JsonArray getAbilityScoreIncreases() {
-        return this.getJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS);
+    public JsonObject getAbilityScoreIncreases() {
+        return this.getJsonObject(RPGLRaceTO.ABILITY_SCORE_INCREASES_ALIAS);
     }
 
     public void setAbilityScoreIncreases(JsonArray abilityScoreIncreases) {
-        this.putJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS, abilityScoreIncreases);
-    }
-
-    public JsonArray getMulticlassingRequirements() {
-        return this.getJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS);
-    }
-
-    public void setMulticlassingRequirements(JsonArray multiclassingRequirements) {
-        this.putJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS, multiclassingRequirements);
-    }
-
-    public JsonObject getNestedClasses() {
-        return this.getJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS);
-    }
-
-    public void setNestedClasses(JsonObject nestedClasses) {
-        this.putJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS, nestedClasses);
-    }
-
-    public JsonObject getStartingFeatures() {
-        return this.getJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS);
-    }
-
-    public void setStartingFeatures(JsonObject startingFeatures) {
-        this.putJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS, startingFeatures);
+        this.putJsonArray(RPGLRaceTO.ABILITY_SCORE_INCREASES_ALIAS, abilityScoreIncreases);
     }
 
     public JsonObject getFeatures() {
-        return this.getJsonObject(RPGLClassTO.FEATURES_ALIAS);
+        return this.getJsonObject(RPGLRaceTO.FEATURES_ALIAS);
     }
 
     public void setFeatures(JsonObject features) {
-        this.putJsonObject(RPGLClassTO.FEATURES_ALIAS, features);
+        this.putJsonObject(RPGLRaceTO.FEATURES_ALIAS, features);
     }
 
     // =================================================================================================================
     // methods not derived directly from json data
     // =================================================================================================================
 
-    public void grantStartingFeatures(RPGLObject object, JsonObject choices) {
-        this.grantGainedEffects(object, this.getStartingFeatures(), choices);
-        this.levelUpRPGLObject(object, choices);
-    }
-
     public void levelUpRPGLObject(RPGLObject object, JsonObject choices) {
-        int level = this.incrementRPGLObjectLevel(object);
+        int level = object.getLevel();
         JsonObject features = this.getFeatures().getJsonObject(Integer.toString(level));
         if (features != null) {
             JsonObject gainedFeatures = Objects.requireNonNullElse(features.getJsonObject("gain"), new JsonObject());
@@ -90,29 +45,6 @@ public class RPGLClass extends DatapackContent {
             this.revokeLostEvents(object, lostFeatures);
             this.revokeLostResources(object, lostFeatures);
         }
-    }
-
-    int incrementRPGLObjectLevel(RPGLObject object) {
-        // TODO check for meeting multiclassing requirements
-        int level = object.getLevel(this.getId()) + 1;
-        if (level == 1) {
-            object.getClasses().addJsonObject(new JsonObject() {{
-                this.putString("name", getName());
-                this.putString("id", getId());
-                this.putInteger("level", level);
-                this.putJsonObject("additional_nested_classes", new JsonObject());
-            }});
-        } else {
-            JsonArray classes = object.getClasses();
-            for (int i = 0; i < classes.size(); i++) {
-                JsonObject classData = classes.getJsonObject(i);
-                if (Objects.equals(this.getId(), classData.getString("id"))) {
-                    classData.putInteger("level", level);
-                    break;
-                }
-            }
-        }
-        return level;
     }
 
     void grantGainedEffects(RPGLObject object, JsonObject gainedFeatures, JsonObject choices) {

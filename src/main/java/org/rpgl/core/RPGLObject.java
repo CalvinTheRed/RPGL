@@ -184,6 +184,14 @@ public class RPGLObject extends RPGLTaggable {
         this.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, classes);
     }
 
+    public JsonArray getRaces() {
+        return this.getJsonArray(RPGLObjectTO.RACES_ALIAS);
+    }
+
+    public void setRaces(JsonArray races) {
+        this.putJsonArray(RPGLObjectTO.RACES_ALIAS, races);
+    }
+
     public Double getChallengeRating() {
         return this.getDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS);
     }
@@ -791,11 +799,21 @@ public class RPGLObject extends RPGLTaggable {
     public void levelUp(String classId, JsonObject choices) {
         RPGLClass rpglClass = RPGLFactory.getClass(classId);
         if (this.getLevel() == 0) {
-            rpglClass.setBaseClass(this, choices);
+            rpglClass.grantStartingFeatures(this, choices);
         } else {
             rpglClass.levelUpRPGLObject(this, choices);
         }
         this.levelUpNestedClasses(classId, choices);
+        this.levelUpRaces(choices);
+    }
+
+    void levelUpRaces(JsonObject choices) {
+        JsonArray races = this.getRaces();
+        for (int i = 0; i < races.size(); i++) {
+            String raceId = races.getString(i);
+            RPGLRace race = RPGLFactory.getRace(raceId);
+            race.levelUpRPGLObject(this, choices);
+        }
     }
 
     void levelUpNestedClasses(String classId, JsonObject choices) {

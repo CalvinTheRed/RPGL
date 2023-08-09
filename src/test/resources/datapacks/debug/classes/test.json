@@ -24,7 +24,7 @@
           "std:spell/fire_bolt"
         ],
         "resources": [
-          "std:common/action"
+          "std:common/action/01"
         ]
       },
       "lose": {
@@ -35,7 +35,7 @@
           "std:object/dragon/red/young/breath"
         ],
         "resources": [
-          "std:common/bonus_action"
+          "std:common/bonus_action/01"
         ]
       }
     }

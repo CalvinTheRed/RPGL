@@ -43,9 +43,9 @@ public class RPGLResourceTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:common/action template")
+    @DisplayName("newInstance comprehensive test using std:common/action/01 template")
     void newInstance_actionTemplate() {
-        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("common/action");
+        RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("common/action/01");
         RPGLResource resource = resourceTemplate.newInstance();
         String expected;
 
@@ -60,7 +60,7 @@ public class RPGLResourceTemplateTest {
         assertEquals("This resource allows you to take actions on your turn.", resource.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("std:common/action", resource.getId(),
+        assertEquals("std:common/action/01", resource.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 

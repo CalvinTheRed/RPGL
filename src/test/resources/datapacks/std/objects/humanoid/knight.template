@@ -39,12 +39,12 @@
   ],
   "resources": [
     {
-      "resource": "std:common/action",
+      "resource": "std:common/action/01",
       "count": 1,
       "potency": 1
     },
     {
-      "resource": "std:common/bonus_action",
+      "resource": "std:common/bonus_action/01",
       "count": 1,
       "potency": 1
     }

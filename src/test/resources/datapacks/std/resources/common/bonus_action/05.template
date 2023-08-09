@@ -6,6 +6,6 @@
   "description": "This resource allows you to take bonus actions on your turn.",
   "potency": 2,
   "tags": [
-    "action"
+    "bonus_action"
   ]
 }

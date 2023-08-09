@@ -5,6 +5,7 @@ import org.rpgl.core.RPGLEffectTemplate;
 import org.rpgl.core.RPGLEventTemplate;
 import org.rpgl.core.RPGLItemTemplate;
 import org.rpgl.core.RPGLObjectTemplate;
+import org.rpgl.core.RPGLRace;
 import org.rpgl.core.RPGLResourceTemplate;
 import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class Datapack {
     private final Map<String, RPGLObjectTemplate> OBJECT_TEMPLATES = new HashMap<>();
     private final Map<String, RPGLResourceTemplate> RESOURCE_TEMPLATES = new HashMap<>();
     private final Map<String, RPGLClass> CLASSES = new HashMap<>();
+    private final Map<String, RPGLRace> RACES = new HashMap<>();
 
     String datapackNamespace;
 
@@ -52,6 +54,7 @@ public class Datapack {
                     case "objects" -> loadObjectTemplates(subDirectory);
                     case "resources" -> loadResourceTemplates(subDirectory);
                     case "classes" -> loadClasses(subDirectory);
+                    case "races" -> loadRaces(subDirectory);
                 }
             }
         }
@@ -273,6 +276,37 @@ public class Datapack {
         }
     }
 
+    void loadRaces(File directory) {
+        this.loadRaces("", directory);
+    }
+
+    /**
+     * This method loads all races stored in a single directory into the object.
+     *
+     * @param directory a File directory for the races in a datapack
+     */
+    private void loadRaces(String raceNameBase, File directory) {
+        for (File raceFile : Objects.requireNonNull(directory.listFiles())) {
+            if (raceFile.isDirectory()) {
+                this.loadRaces(raceNameBase + raceFile.getName() + "/", raceFile);
+            } else {
+                String raceId = raceFile.getName().substring(0, raceFile.getName().indexOf('.'));
+                try {
+                    RPGLRace race = JsonObject.MAPPER
+                            .readValue(raceFile, RPGLRaceTO.class)
+                            .toRPGLRace();
+                    race.putString(
+                            DatapackContentTO.ID_ALIAS,
+                            this.datapackNamespace + ":" + raceNameBase + raceId
+                    );
+                    this.RACES.put(raceNameBase + raceId, race);
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+            }
+        }
+    }
+
     /**
      * This method returns a specified RPGLEffectTemplate object.
      *
@@ -325,6 +359,15 @@ public class Datapack {
      */
     public RPGLClass getClass(String classId) {
         return this.CLASSES.get(classId);
+    }
+
+    /**
+     * This method returns a specified RPGLRace object.
+     *
+     * @param raceId the ID of a RPGLRace object stored in this datapack
+     */
+    public RPGLRace getRace(String raceId) {
+        return this.RACES.get(raceId);
     }
 
 }

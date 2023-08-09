@@ -393,7 +393,7 @@ public class RPGLObjectTest {
         context.add(source);
         context.add(target);
 
-        RPGLResource resource = RPGLFactory.newResource("std:common/action");
+        RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         source.addResource(resource);
 
         resource.exhaust();

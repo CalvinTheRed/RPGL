@@ -26,6 +26,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     public static final String PROFICIENCY_BONUS_ALIAS = "proficiency_bonus";
     public static final String RESOURCES_ALIAS         = "resources";
     public static final String CLASSES_ALIAS           = "classes";
+    public static final String RACES_ALIAS             = "races";
     public static final String CHALLENGE_RATING_ALIAS  = "challenge_rating";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
@@ -46,6 +47,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     ArrayList<Object> resources;
     @JsonProperty(CLASSES_ALIAS)
     ArrayList<Object> classes;
+    @JsonProperty(RACES_ALIAS)
+    ArrayList<Object> races;
     @JsonProperty(CHALLENGE_RATING_ALIAS)
     Double challengeRating;
 
@@ -73,6 +76,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
         this.proficiencyBonus = rpglObject.getProficiencyBonus();
         this.resources = rpglObject.getResources().asList();
         this.classes = rpglObject.getClasses().asList();
+        this.races = rpglObject.getRaces().asList();
         this.challengeRating = rpglObject.getChallengeRating();
     }
 
@@ -92,6 +96,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.putInteger(PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
             this.putJsonArray(RESOURCES_ALIAS, new JsonArray(resources));
             this.putJsonArray(CLASSES_ALIAS, new JsonArray(classes));
+            this.putJsonArray(RACES_ALIAS, new JsonArray(races));
             this.putDouble(CHALLENGE_RATING_ALIAS, challengeRating);
         }};
         rpglObjectTemplate.join(super.getTemplateData());
@@ -114,6 +119,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.setProficiencyBonus(proficiencyBonus);
             this.setResources(new JsonArray(resources));
             this.setClasses(new JsonArray(classes));
+            this.setRaces(new JsonArray(races));
             this.setChallengeRating(challengeRating);
         }};
         rpglObject.join(super.getTemplateData());

@@ -227,9 +227,9 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newResource using std:common/action")
+    @DisplayName("newResource using std:common/action/01")
     void newResource_action() {
-        RPGLResource resource = RPGLFactory.newResource("std:common/action");
+        RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         String expected;
 
         expected = """
@@ -243,7 +243,7 @@ public class RPGLFactoryTest {
         assertEquals("This resource allows you to take actions on your turn.", resource.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("std:common/action", resource.getId(),
+        assertEquals("std:common/action/01", resource.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 

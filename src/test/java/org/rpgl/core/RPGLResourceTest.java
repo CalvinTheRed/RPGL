@@ -166,7 +166,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion resolves successfully for source actor")
     void checkCriterion_resolvesSuccessfullyForSourceActor() {
-        RPGLResource resource = RPGLFactory.newResource("std:common/action");
+        RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         resource.exhaust();
 
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
@@ -189,7 +189,7 @@ public class RPGLResourceTest {
     @Test
     @DisplayName("checkCriterion resolves successfully for target actor")
     void checkCriterion_resolvesSuccessfullyForTargetActor() {
-        RPGLResource resource = RPGLFactory.newResource("std:common/action");
+        RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         resource.exhaust();
         // manually edit resource criterion for testing
         resource.getRefreshCriterion().getJsonObject(0).putString("actor", "target");
