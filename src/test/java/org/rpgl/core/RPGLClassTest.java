@@ -257,75 +257,7 @@ public class RPGLClassTest {
                 "dummy should have std:common/bonus_action resource at start of test"
         );
 
-        RPGLClass rpglClass = new RPGLClass();
-        rpglClass.setName("Test Class");
-        rpglClass.setId("test:test");
-        rpglClass.setFeatures(new JsonObject() {{
-            /*{
-                "1": {
-                    "gain": {
-                        "effects": [
-                            {
-                                "name": "Test Effect Choice",
-                                "count": 1,
-                                "options": [
-                                    "std:common/damage/resistance/fire",
-                                    "std:common/damage/resistance/cold"
-                                ]
-                            }
-                        ],
-                        "events": [
-                            "std:spell/fire_bolt"
-                        ],
-                        "resources": [
-                            "std:common/action"
-                        ]
-                    },
-                    "lose": {
-                        "effects": [
-                            "std:common/damage/immunity/fire"
-                        ],
-                        "events": [
-                            "std:object/dragon/red/young/breath"
-                        ],
-                        "resources": [
-                            "std:common/bonus_action"
-                        ]
-                    }
-                }
-            }*/
-            this.putJsonObject("1", new JsonObject() {{
-                this.putJsonObject("gain", new JsonObject() {{
-                    this.putJsonArray("effects", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putString("name", "Test Effect Choice");
-                            this.putInteger("count", 1);
-                            this.putJsonArray("options", new JsonArray() {{
-                                this.addString("std:common/damage/resistance/fire");
-                                this.addString("std:common/damage/resistance/cold");
-                            }});
-                        }});
-                    }});
-                    this.putJsonArray("events", new JsonArray() {{
-                        this.addString("std:spell/fire_bolt");
-                    }});
-                    this.putJsonArray("resources", new JsonArray() {{
-                        this.addString("std:common/action");
-                    }});
-                }});
-                this.putJsonObject("lose", new JsonObject() {{
-                    this.putJsonArray("effects", new JsonArray() {{
-                        this.addString("std:common/damage/immunity/fire");
-                    }});
-                    this.putJsonArray("events", new JsonArray() {{
-                        this.addString("std:object/dragon/red/young/breath");
-                    }});
-                    this.putJsonArray("resources", new JsonArray() {{
-                        this.addString("std:common/bonus_action");
-                    }});
-                }});
-            }});
-        }});
+        RPGLClass rpglClass = RPGLFactory.getClass("debug:test");
 
         JsonObject choices = new JsonObject() {{
            this.putJsonArray("Test Effect Choice", new JsonArray() {{
@@ -335,8 +267,8 @@ public class RPGLClassTest {
 
         rpglClass.levelUpRPGLObject(object, choices);
 
-        assertEquals(1, object.getLevel("test:test"),
-                "object should have 1 level in class test:test after level up"
+        assertEquals(1, object.getLevel("debug:test"),
+                "object should have 1 level in class debug:test after level up"
         );
 
         List<RPGLEffect> effects = object.getEffectObjects();

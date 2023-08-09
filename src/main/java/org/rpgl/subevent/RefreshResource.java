@@ -24,8 +24,6 @@ import java.util.Objects;
  */
 public class RefreshResource extends Subevent {
 
-    // TODO this subevent should refresh based on resource tags, not on resource ID.
-
     public RefreshResource() {
         super("refresh_resource");
     }
@@ -60,7 +58,7 @@ public class RefreshResource extends Subevent {
      * potency to highest.
      */
     void runLowFirst() {
-        String resourceId = this.json.getString("resource");
+        String resourceTag = this.json.getString("resource_tag");
         final int[] count = { Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE) };
         final int minimumPotency = Objects.requireNonNullElse(this.json.getInteger("minimum_potency"), 0);
         final int maximumPotency = Objects.requireNonNullElse(this.json.getInteger("maximum_potency"), Integer.MAX_VALUE);
@@ -68,7 +66,7 @@ public class RefreshResource extends Subevent {
         this.getTarget().getResourceObjects().stream().sorted(Comparator.comparing(RPGLResource::getPotency)).forEach(resource -> {
             if (count[0] > 0
                     && resource.getExhausted()
-                    && Objects.equals(resourceId, resource.getId())
+                    && resource.hasTag(resourceTag)
                     && resource.getPotency() >= minimumPotency
                     && resource.getPotency() <= maximumPotency) {
                 resource.refresh();
@@ -82,7 +80,7 @@ public class RefreshResource extends Subevent {
      * potency to lowest.
      */
     void runHighFirst() {
-        String resourceId = this.json.getString("resource");
+        String resourceTag = this.json.getString("resource_tag");
         final int[] count = { Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE) };
         final int minimumPotency = Objects.requireNonNullElse(this.json.getInteger("minimum_potency"), 0);
         final int maximumPotency = Objects.requireNonNullElse(this.json.getInteger("maximum_potency"), Integer.MAX_VALUE);
@@ -90,7 +88,7 @@ public class RefreshResource extends Subevent {
         this.getTarget().getResourceObjects().stream().sorted(Collections.reverseOrder(Comparator.comparing(RPGLResource::getPotency))).forEach(resource -> {
             if (count[0] > 0
                     && resource.getExhausted()
-                    && Objects.equals(resourceId, resource.getId())
+                    && resource.hasTag(resourceTag)
                     && resource.getPotency() >= minimumPotency
                     && resource.getPotency() <= maximumPotency) {
                 resource.refresh();
@@ -104,7 +102,7 @@ public class RefreshResource extends Subevent {
      * order.
      */
     void runRandom() {
-        String resourceId = this.json.getString("resource");
+        String resourceTag = this.json.getString("resource_tag");
         int count = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);
         int minimumPotency = Objects.requireNonNullElse(this.json.getInteger("minimum_potency"), 0);
         int maximumPotency = Objects.requireNonNullElse(this.json.getInteger("maximum_potency"), Integer.MAX_VALUE);
@@ -119,7 +117,7 @@ public class RefreshResource extends Subevent {
             RPGLResource resource = resources.get(i);
             if (count > 0
                     && resource.getExhausted()
-                    && Objects.equals(resourceId, resource.getId())
+                    && resource.hasTag(resourceTag)
                     && resource.getPotency() >= minimumPotency
                     && resource.getPotency() <= maximumPotency) {
                 resource.refresh();

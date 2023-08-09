@@ -82,11 +82,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 5,
                 "minimum_potency": 3
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
         }});
@@ -132,12 +132,12 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 5,
                 "minimum_potency": 3,
                 "maximum_potency": 5
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
             this.putInteger("maximum_potency", 5);
@@ -186,11 +186,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 5,
                 "minimum_potency": 3
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 3);
         }});
@@ -222,11 +222,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 5,
                 "maximum_potency": 7
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 5);
             this.putInteger("maximum_potency", 7);
         }});
@@ -275,12 +275,12 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 5,
                 "minimum_potency": 5,
                 "maximum_potency": 7
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 5);
             this.putInteger("minimum_potency", 5);
             this.putInteger("maximum_potency", 7);
@@ -329,11 +329,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 5,
                 "maximum_potency": 5
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 5);
             this.putInteger("maximum_potency", 5);
         }});
@@ -368,11 +368,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 2,
                 "selection_mode": "low_first"
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 2);
             this.putString("selection_mode", "low_first");
         }});
@@ -421,11 +421,11 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"spell_slot",
                 "count": 2,
                 "selection_mode": "high_first"
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "spell_slot");
             this.putInteger("count", 2);
             this.putString("selection_mode", "high_first");
         }});
@@ -477,10 +477,10 @@ public class RefreshResourceTest {
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:common/spell_slot/01",
+                "resource_tag":"pact_spell_slot",
                 "count": 2
             }*/
-            this.putString("resource", "std:common/spell_slot/01");
+            this.putString("resource_tag", "pact_spell_slot");
             this.putInteger("count", 2);
         }});
         refreshResource.setSource(source);
@@ -488,11 +488,11 @@ public class RefreshResourceTest {
 
         refreshResource.invoke(context);
 
-        assertFalse(spellSlot.getExhausted(),
-                "matching resource should not be exhausted"
-        );
-        assertTrue(pactSpellSlot.getExhausted(),
+        assertTrue(spellSlot.getExhausted(),
                 "non-matching resource should be exhausted"
+        );
+        assertFalse(pactSpellSlot.getExhausted(),
+                "matching resource should not be exhausted"
         );
     }
 

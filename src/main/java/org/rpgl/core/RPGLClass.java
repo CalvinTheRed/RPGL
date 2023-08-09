@@ -44,12 +44,12 @@ public class RPGLClass extends DatapackContent {
         this.putJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS, multiclassingRequirements);
     }
 
-    public JsonObject getClassContributions() {
-        return this.getJsonObject(RPGLClassTO.CLASS_CONTRIBUTIONS_ALIAS);
+    public JsonObject getNestedClasses() {
+        return this.getJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS);
     }
 
-    public void setClassContributions(JsonObject classContributions) {
-        this.putJsonObject(RPGLClassTO.CLASS_CONTRIBUTIONS_ALIAS, classContributions);
+    public void setNestedClasses(JsonObject nestedClasses) {
+        this.putJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS, nestedClasses);
     }
 
     public JsonObject getStartingFeatures() {
@@ -91,7 +91,6 @@ public class RPGLClass extends DatapackContent {
             this.revokeLostEvents(object, lostFeatures);
             this.revokeLostResources(object, lostFeatures);
         }
-        // TODO update proficiency bonus when appropriate
     }
 
     int incrementRPGLObjectLevel(RPGLObject object) {
@@ -102,6 +101,7 @@ public class RPGLClass extends DatapackContent {
                 this.putString("name", getName());
                 this.putString("id", getId());
                 this.putInteger("level", level);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
             }});
         } else {
             JsonArray classes = object.getClasses();

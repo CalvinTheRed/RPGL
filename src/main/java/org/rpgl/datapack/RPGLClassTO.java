@@ -14,7 +14,7 @@ public class RPGLClassTO extends DatapackContentTO {
     public static final String SUBCLASS_LEVEL_ALIAS = "subclass_level";
     public static final String ABILITY_SCORE_INCREASES_ALIAS = "ability_score_increases";
     public static final String MULTICLASSING_REQUIREMENTS_ALIAS = "multiclassing_requirements";
-    public static final String CLASS_CONTRIBUTIONS_ALIAS = "class_contributions";
+    public static final String NESTED_CLASSES_ALIAS = "nested_classes";
     public static final String STARTING_FEATURES_ALIAS = "starting_features";
     public static final String FEATURES_ALIAS = "features";
 
@@ -26,7 +26,7 @@ public class RPGLClassTO extends DatapackContentTO {
     ArrayList<Object> abilityScoreIncreases;
     @JsonProperty(MULTICLASSING_REQUIREMENTS_ALIAS)
     ArrayList<Object> multiclassingRequirements;
-    @JsonProperty(CLASS_CONTRIBUTIONS_ALIAS)
+    @JsonProperty(NESTED_CLASSES_ALIAS)
     HashMap<String, Object> classContributions;
     @JsonProperty(STARTING_FEATURES_ALIAS)
     HashMap<String, Object> startingClassFeatures;
@@ -52,7 +52,7 @@ public class RPGLClassTO extends DatapackContentTO {
             this.putInteger(SUBCLASS_LEVEL_ALIAS, subclassLevel);
             this.putJsonArray(ABILITY_SCORE_INCREASES_ALIAS, new JsonArray(abilityScoreIncreases));
             this.putJsonArray(MULTICLASSING_REQUIREMENTS_ALIAS, new JsonArray(multiclassingRequirements));
-            this.putJsonObject(CLASS_CONTRIBUTIONS_ALIAS, new JsonObject(classContributions));
+            this.putJsonObject(NESTED_CLASSES_ALIAS, new JsonObject(classContributions));
             this.putJsonObject(STARTING_FEATURES_ALIAS, new JsonObject(startingClassFeatures));
             this.putJsonObject(FEATURES_ALIAS, new JsonObject(classFeatures));
         }};

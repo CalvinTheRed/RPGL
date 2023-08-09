@@ -13,8 +13,11 @@
       "minimum_score": 13
     }
   ],
-  "class_contributions": {
-    "std:common/base": 1
+  "nested_classes": {
+    "std:common/base": {
+      "scale": 1,
+      "round_up": true
+    }
   },
   "starting_features": {
     "effects": [

@@ -196,27 +196,6 @@ public class RPGLObject extends RPGLTaggable {
     // Methods not derived directly from transfer objects
     // =================================================================================================================
 
-    public Double getLevel() {
-        JsonArray classes = this.getClasses();
-        int level = 0;
-        for (int i = 0; i < classes.size(); i++) {
-            JsonObject classData = classes.getJsonObject(i);
-            level += classData.getInteger("level");
-        }
-        return (level > 0) ? level : this.getChallengeRating();
-    }
-
-    public int getLevel(String classId) {
-        JsonArray classes = this.getClasses();
-        for (int i = 0; i < classes.size(); i++) {
-            JsonObject classData = classes.getJsonObject(i);
-            if (Objects.equals(classId, classData.getString("id"))) {
-                return classData.getInteger("level");
-            }
-        }
-        return 0;
-    }
-
     /**
      * Returns a List of all RPGLEvent objects associated with the RPGLObject. This includes RPGLEvents granted by
      * effects.
@@ -415,14 +394,11 @@ public class RPGLObject extends RPGLTaggable {
      * as well.
      *
      * @param resourceUuid the UUID for a RPGLResource
-     * @return true if the resource was removed, false otherwise
      */
-    public boolean removeResource(String resourceUuid) {
+    public void removeResource(String resourceUuid) {
         if (this.getResources().asList().remove(resourceUuid)) {
             UUIDTable.unregister(resourceUuid);
-            return true;
         }
-        return false;
     }
 
     /**
@@ -776,6 +752,105 @@ public class RPGLObject extends RPGLTaggable {
         }
 
         return tagsList;
+    }
+
+    public Integer getLevel(String classId) {
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            if (classData.getString("id").equals(classId)) {
+                return classData.getInteger("level");
+            }
+        }
+        return 0;
+    }
+
+    public int getLevel() {
+        JsonArray classes = this.getClasses();
+        ArrayList<String> classIds = new ArrayList<>();
+        ArrayList<String> nestedClassIds = new ArrayList<>();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            String classId = classData.getString("id");
+            classIds.add(classId);
+            for (Map.Entry<String, ?> nestedClassEntry : RPGLFactory.getClass(classId).getNestedClasses().asMap().entrySet()) {
+                nestedClassIds.add(nestedClassEntry.getKey());
+            }
+            for (Map.Entry<String, ?> additionalNestedClassEntry : classData.getJsonObject("additional_nested_classes").asMap().entrySet()) {
+                nestedClassIds.add(additionalNestedClassEntry.getKey());
+            }
+        }
+        classIds.removeAll(nestedClassIds);
+        int level = 0;
+        for (String classId : classIds) {
+            level += this.getLevel(classId);
+        }
+        return level;
+    }
+
+    public void levelUp(String classId, JsonObject choices) {
+        RPGLClass rpglClass = RPGLFactory.getClass(classId);
+        if (this.getLevel() == 0) {
+            rpglClass.setBaseClass(this, choices);
+        } else {
+            rpglClass.levelUpRPGLObject(this, choices);
+        }
+        this.levelUpNestedClasses(classId, choices);
+    }
+
+    void levelUpNestedClasses(String classId, JsonObject choices) {
+        for (String nestedClassId : this.getNestedClassIds(classId)) {
+            RPGLClass rpglClass = RPGLFactory.getClass(nestedClassId);
+            int intendedLevel = this.calculateLevelForNestedClass(nestedClassId);
+            int currentLevel = this.getLevel(nestedClassId);
+            while (currentLevel < intendedLevel) {
+                rpglClass.levelUpRPGLObject(this, choices);
+                currentLevel = this.getLevel(nestedClassId);
+            }
+        }
+    }
+
+    List<String> getNestedClassIds(String classId) {
+        RPGLClass rpglClass = RPGLFactory.getClass(classId);
+        JsonObject nestedClasses = rpglClass.getNestedClasses();
+        ArrayList<String> nestedClassIds = new ArrayList<>(nestedClasses.asMap().keySet());
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            if (classData.getString("id").equals(classId)) {
+                nestedClassIds.addAll(classData.getJsonObject("additional_nested_classes").asMap().keySet());
+                break;
+            }
+        }
+        return nestedClassIds;
+    }
+
+    int calculateLevelForNestedClass(String nestedClassId) {
+        int nestedClassLevel = 0;
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            RPGLClass rpglClass = RPGLFactory.getClass(classData.getString("id"));
+            JsonObject nestedClasses = rpglClass.getNestedClasses();
+            JsonObject additionalNestedClasses = classData.getJsonObject("additional_nested_classes");
+            JsonObject nestedClassData = null;
+            if (nestedClasses.asMap().containsKey(nestedClassId)) {
+                nestedClassData = nestedClasses.getJsonObject(nestedClassId);
+            } else if (additionalNestedClasses.asMap().containsKey(nestedClassId)) {
+                nestedClassData = additionalNestedClasses.getJsonObject(nestedClassId);
+            }
+            if (nestedClassData != null) {
+                int classLevel = classData.getInteger("level");
+                int scale = nestedClassData.getInteger("scale");
+                boolean roundUp = Objects.requireNonNullElse(nestedClassData.getBoolean("round_up"), false);
+                if (roundUp) {
+                    nestedClassLevel += Math.ceil(classLevel / (double) scale);
+                } else {
+                    nestedClassLevel += classLevel / (double) scale;
+                }
+            }
+        }
+        return nestedClassLevel;
     }
 
 }
