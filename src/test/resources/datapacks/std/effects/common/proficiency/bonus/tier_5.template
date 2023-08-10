@@ -17,7 +17,10 @@
         "functions": [
           {
             "function": "set_base",
-            "base": 6
+            "base": {
+              "base_formula": "number",
+              "value": 6
+            }
           }
         ]
       }

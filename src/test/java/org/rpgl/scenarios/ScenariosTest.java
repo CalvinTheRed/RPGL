@@ -55,13 +55,17 @@ public class ScenariosTest {
     @Test
     @DisplayName("flametongue test")
     void flametongueTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
         RPGLObject target = RPGLFactory.newObject("debug:dummy");
-        RPGLItem flametongue = RPGLFactory.newItem("std:weapon/melee/martial/scimitar/flametongue");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        // configure source dummy
+        source.addResource(RPGLFactory.newResource("std:common/action/01"));
+        source.addResource(RPGLFactory.newResource("std:common/bonus_action/01"));
+        source.getAbilityScores().putInteger("str", 16);
+        RPGLItem flametongue = RPGLFactory.newItem("std:weapon/melee/martial/scimitar/flametongue");
         source.giveItem(flametongue.getUuid());
         source.equipItem(flametongue.getUuid(), "mainhand");
         assertEquals(1, source.getEffectObjects().size(),

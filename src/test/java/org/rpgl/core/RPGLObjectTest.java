@@ -253,7 +253,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("addRemoveEffect effects can be added and removed")
     void addRemoveEffect_effectsCanBeAddedAndRemoved() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("debug:dummy");
         DummyContext context = new DummyContext();
         context.add(knight);
 

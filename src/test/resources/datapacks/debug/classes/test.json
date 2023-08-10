@@ -5,7 +5,10 @@
   "name": "TEST CLASS",
   "description": "A test class.",
   "nested_classes": {
-    "debug:blank": 1
+    "debug:blank": {
+      "scale": 1,
+      "round_up": false
+    }
   },
   "features": {
     "1": {

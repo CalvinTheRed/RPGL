@@ -37,18 +37,14 @@
   "effects": [
 
   ],
-  "resources": [
+  "classes": [
     {
-      "resource": "std:common/action/01",
-      "count": 1,
-      "potency": 1
-    },
-    {
-      "resource": "std:common/bonus_action/01",
-      "count": 1,
-      "potency": 1
+      "id": "std:common/base",
+      "level": 1,
+      "choices": { }
     }
   ],
+  "resources": [ ],
   "proficiency_bonus": 2,
   "challenge_rating": 3
 }

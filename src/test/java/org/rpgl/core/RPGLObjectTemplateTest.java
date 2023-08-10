@@ -161,6 +161,137 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
+    @DisplayName("processClasses classes are applied correctly (no nested classes)")
+    void processClasses_classesAreAppliedCorrectly_noNestedClasses() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
+        objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
+            /*[
+                {
+                    "id": "debug:blank",
+                    "level": 1,
+                    "choices": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putInteger("level", 1);
+                this.putJsonObject("choices", new JsonObject());
+            }});
+        }});
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processClasses(object);
+
+        assertEquals(1, object.getLevel("debug:blank"),
+                "object should have 1 level in debug:blank"
+        );
+        assertEquals(1, object.getLevel(),
+                "object should be level 1"
+        );
+    }
+
+    @Test
+    @DisplayName("processClasses classes are applied correctly (with nested classes)")
+    void processClasses_classesAreAppliedCorrectly_withNestedClasses() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
+        objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
+            /*[
+                {
+                    "id": "debug:test",
+                    "level": 1,
+                    "choices": {
+                        "Test Effect Choice": [ 0 ]
+                    }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:test");
+                this.putInteger("level", 1);
+                this.putJsonObject("choices", new JsonObject() {{
+                    this.putJsonArray("Test Effect Choice", new JsonArray() {{
+                        this.addInteger(0);
+                    }});
+                }});
+            }});
+        }});
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processClasses(object);
+
+        assertEquals(1, object.getLevel("debug:test"),
+                "object should have 1 level in debug:test"
+        );
+        assertEquals(1, object.getLevel("debug:blank"),
+                "object should have 1 level in debug:blank"
+        );
+        assertEquals(1, object.getLevel(),
+                "object should be level 1"
+        );
+    }
+
+    @Test
+    @DisplayName("processClasses classes are applied correctly (with additional nested classes)")
+    void processClasses_classesAreAppliedCorrectly_withAdditionalNestedClasses() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
+        objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "level": 3,
+                    "choices": {
+                        "Skill Proficiencies": [ 0, 1 ],
+                        "Fighting Style": [ 0 ]
+                    },
+                    "additional_nested_classes": {
+                        "std:fighter/champion": {
+                            "scale": 1,
+                            "round_up": false
+                        }
+                    }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putInteger("level", 3);
+                this.putJsonObject("choices", new JsonObject() {{
+                    this.putJsonArray("Skill Proficiencies", new JsonArray() {{
+                        this.addInteger(0);
+                        this.addInteger(1);
+                    }});
+                    this.putJsonArray("Fighting Style", new JsonArray() {{
+                        this.addInteger(0);
+                    }});
+                }});
+                this.putJsonObject("additional_nested_classes", new JsonObject() {{
+                    this.putJsonObject("std:fighter/champion", new JsonObject() {{
+                        this.putInteger("scale", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+        }});
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processClasses(object);
+
+        assertEquals(3, object.getLevel("std:fighter"),
+                "object should have 3 levels in std:fighter"
+        );
+        assertEquals(3, object.getLevel("std:common/base"),
+                "object should have 3 levels in std:common/base"
+        );
+        assertEquals(3, object.getLevel("std:fighter/champion"),
+                "object should have 3 levels in std:fighter/champion"
+        );
+        assertEquals(3, object.getLevel(),
+                "object should be level 3"
+        );
+    }
+
+    @Test
     @DisplayName("newInstance comprehensive test using std:humanoid/knight template")
     void newInstance_knightTemplate() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
@@ -215,7 +346,7 @@ public class RPGLObjectTemplateTest {
         assertEquals("[]", object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
-        assertEquals("[]", object.getEffects().toString(),
+        assertEquals(1, object.getEffects().size(),
                 "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
         );
         assertEquals(2, object.getProficiencyBonus(),

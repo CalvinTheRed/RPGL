@@ -816,7 +816,7 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
-    void levelUpNestedClasses(String classId, JsonObject choices) {
+    public void levelUpNestedClasses(String classId, JsonObject choices) {
         for (String nestedClassId : this.getNestedClassIds(classId)) {
             RPGLClass rpglClass = RPGLFactory.getClass(nestedClassId);
             int intendedLevel = this.calculateLevelForNestedClass(nestedClassId);
@@ -869,6 +869,19 @@ public class RPGLObject extends RPGLTaggable {
             }
         }
         return nestedClassLevel;
+    }
+
+    public void addAdditionalNestedClass(String classId, String additionalNestedClassId, int scale, boolean roundUp) {
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            if (classData.getString("id").equals(classId)) {
+                classData.getJsonObject("additional_nested_classes").putJsonObject(additionalNestedClassId, new JsonObject() {{
+                    this.putInteger("scale", scale);
+                    this.putBoolean("round_up", roundUp);
+                }});
+            }
+        }
     }
 
 }

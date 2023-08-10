@@ -32,6 +32,7 @@ public class RPGLObjectTemplate extends JsonObject {
         this.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, new HashMap<String, Object>());
         this.asMap().putIfAbsent(RPGLObjectTO.EVENTS_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.RESOURCES_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.CLASSES_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.RACES_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0.0);
@@ -39,8 +40,10 @@ public class RPGLObjectTemplate extends JsonObject {
         processEffects(object);
         processInventory(object);
         processEquippedItems(object);
-        processHealthData(object);
         processResources(object);
+        processHealthData(object); // this should become unnecessary before this branch is merged
+        processClasses(object);
+//        processRaces(object);
         return object;
     }
 
@@ -142,6 +145,34 @@ public class RPGLObjectTemplate extends JsonObject {
             }
         }
         object.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resourceUuids);
+    }
+
+    static void processClasses(RPGLObject object) {
+        JsonArray classes = object.removeJsonArray(RPGLObjectTO.CLASSES_ALIAS);
+        object.setClasses(new JsonArray());
+        // set classes and nested classes
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            String classId = classData.getString("id");
+            int level = Objects.requireNonNullElse(classData.getInteger("level"), 1);
+            JsonObject choices = Objects.requireNonNullElse(classData.getJsonObject("choices"), new JsonObject());
+            for (int j = 0; j < level; j++) {
+                object.levelUp(classId, choices);
+            }
+            // re-assign additional nested classes
+            JsonObject additionalNestedClasses = Objects.requireNonNullElse(classData.getJsonObject("additional_nested_classes"), new JsonObject());
+            for (Map.Entry<String, ?> additionalNestedClassEntry : additionalNestedClasses.asMap().entrySet()) {
+                JsonObject additionalNestedClassData = additionalNestedClasses.getJsonObject(additionalNestedClassEntry.getKey());
+                object.addAdditionalNestedClass(
+                        classId,
+                        additionalNestedClassEntry.getKey(),
+                        additionalNestedClassData.getInteger("scale"),
+                        additionalNestedClassData.getBoolean("round_up")
+                );
+            }
+            // update nested classes
+            object.levelUpNestedClasses(classId, choices);
+        }
     }
 
 }
