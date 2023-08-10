@@ -43,7 +43,6 @@ public class RPGLObjectTemplate extends JsonObject {
         processResources(object);
         processHealthData(object); // this should become unnecessary before this branch is merged
         processClasses(object);
-//        processRaces(object);
         return object;
     }
 

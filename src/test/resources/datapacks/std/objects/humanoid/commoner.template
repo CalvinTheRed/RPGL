@@ -32,6 +32,12 @@
   "effects": [
 
   ],
+  "classes": [
+
+  ],
+  "races": [
+
+  ],
   "proficiency_bonus": 2,
   "challenge_rating": 0
 }

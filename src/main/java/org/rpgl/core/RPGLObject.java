@@ -804,15 +804,15 @@ public class RPGLObject extends RPGLTaggable {
             rpglClass.levelUpRPGLObject(this, choices);
         }
         this.levelUpNestedClasses(classId, choices);
-        this.levelUpRaces(choices);
+        this.levelUpRaces(choices, this.getLevel());
     }
 
-    void levelUpRaces(JsonObject choices) {
+    void levelUpRaces(JsonObject choices, int level) {
         JsonArray races = this.getRaces();
         for (int i = 0; i < races.size(); i++) {
             String raceId = races.getString(i);
             RPGLRace race = RPGLFactory.getRace(raceId);
-            race.levelUpRPGLObject(this, choices);
+            race.levelUpRPGLObject(this, choices, level);
         }
     }
 

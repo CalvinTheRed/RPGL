@@ -32,8 +32,7 @@ public class RPGLRace extends DatapackContent {
     // methods not derived directly from json data
     // =================================================================================================================
 
-    public void levelUpRPGLObject(RPGLObject object, JsonObject choices) {
-        int level = object.getLevel();
+    public void levelUpRPGLObject(RPGLObject object, JsonObject choices, int level) {
         JsonObject features = this.getFeatures().getJsonObject(Integer.toString(level));
         if (features != null) {
             JsonObject gainedFeatures = Objects.requireNonNullElse(features.getJsonObject("gain"), new JsonObject());

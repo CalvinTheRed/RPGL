@@ -292,6 +292,42 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
+    @DisplayName("processClasses classes are applied correctly (with race)")
+    void processClasses_classesAreAppliedCorrectly_withRace() {
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
+        objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
+            /*[
+                {
+                    "id": "debug:blank",
+                    "level": 1,
+                    "choices": { },
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putInteger("level", 1);
+                this.putJsonObject("choices", new JsonObject());
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+        }});
+        objectTemplate.putJsonArray(RPGLObjectTO.RACES_ALIAS, new JsonArray() {{
+            this.addString("std:human");
+        }});
+        RPGLObject object = new RPGLObject();
+        object.join(objectTemplate);
+
+        RPGLObjectTemplate.processClasses(object);
+
+        assertEquals(1, object.getLevel("debug:blank"),
+                "object should have 3 levels in std:fighter"
+        );
+        assertEquals(1, object.getEffects().size(),
+                "object should have 1 effect from being set to a level 1 character with race std:human"
+        );
+    }
+
+    @Test
     @DisplayName("newInstance comprehensive test using std:humanoid/knight template")
     void newInstance_knightTemplate() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
@@ -346,7 +382,7 @@ public class RPGLObjectTemplateTest {
         assertEquals("[]", object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
-        assertEquals(1, object.getEffects().size(),
+        assertEquals(2, object.getEffects().size(),
                 "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
         );
         assertEquals(2, object.getProficiencyBonus(),

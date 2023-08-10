@@ -201,16 +201,8 @@ public class RPGLRaceTest {
     @DisplayName("levelUpRPGLObject grants correct features on level up")
     void levelUpRPGLObject_grantsCorrectFeaturesOnLevelUp() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
-        object.setClasses(new JsonArray() {{
-            this.addJsonObject(new JsonObject() {{
-                this.putString("id", "debug:blank");
-                this.putString("name", "BLANK CLASS");
-                this.putInteger("level", 1);
-                this.putJsonObject("additional_nested_classes", new JsonObject());
-            }});
-        }});
 
-        RPGLFactory.getRace("std:human").levelUpRPGLObject(object, new JsonObject());
+        RPGLFactory.getRace("std:human").levelUpRPGLObject(object, new JsonObject(), 1);
 
         assertEquals(1, object.getEffects().size(),
                 "object should have 1 effect from leveling up at level 1 with race std:human"
