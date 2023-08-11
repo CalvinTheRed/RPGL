@@ -3,7 +3,6 @@ package org.rpgl.testUtils;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
 import java.util.List;
@@ -27,22 +26,6 @@ public final class TestUtils {
         for (RPGLEvent event : events) {
             if (Objects.equals(event.getId(), eventId)) {
                 return event;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Returns a resource by ID from a list (first match)
-     *
-     * @param resources a list of resources
-     * @param resourceId a resource ID being searched for
-     * @return an RPGLResource, or null if none match the resource ID
-     */
-    public static RPGLResource getResourceById(List<RPGLResource> resources, String resourceId) {
-        for (RPGLResource resource : resources) {
-            if (Objects.equals(resource.getId(), resourceId)) {
-                return resource;
             }
         }
         return null;

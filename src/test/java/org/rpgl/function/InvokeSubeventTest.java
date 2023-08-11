@@ -92,7 +92,7 @@ public class InvokeSubeventTest {
                 },
                 TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/longsword/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action/01"));
+                    this.add(source.getResourcesWithTag("action").get(0));
                 }},
                 context
         );

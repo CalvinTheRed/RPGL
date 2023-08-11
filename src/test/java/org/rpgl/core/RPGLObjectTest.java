@@ -11,7 +11,6 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.testUtils.DummyContext;
-import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -322,17 +321,12 @@ public class RPGLObjectTest {
         context.add(youngRedDragon);
         context.add(knight);
 
-        List<RPGLResource> resources = youngRedDragon.getResourceObjects();
-        RPGLResource action = TestUtils.getResourceById(resources, "std:common/action/17");
-        RPGLResource breathAttack = TestUtils.getResourceById(resources, "std:object/common/breath_attack/33");
-        assert action != null;
-        assert breathAttack != null;
         youngRedDragon.invokeEvent(
                 new RPGLObject[] { knight },
                 RPGLFactory.newEvent("std:object/dragon/red/young/breath"),
                 new ArrayList<>() {{
-                    this.add(action);
-                    this.add(breathAttack);
+                    this.add(youngRedDragon.getResourcesWithTag("action").get(0));
+                    this.add(youngRedDragon.getResourcesWithTag("breath_attack").get(0));
                 }},
                 context
         );
@@ -340,10 +334,10 @@ public class RPGLObjectTest {
         assertEquals(4, knight.getHealthData().getInteger("current"),
                 "std:humanoid/knight should have 4 health left after failing a save against std:dragon/red/young's breath attack"
         );
-        assertTrue(action.getExhausted(),
+        assertTrue(youngRedDragon.getResourcesWithTag("action").get(0).getExhausted(),
                 "resource should be exhausted"
         );
-        assertTrue(breathAttack.getExhausted(),
+        assertTrue(youngRedDragon.getResourcesWithTag("breath_attack").get(0).getExhausted(),
                 "resource should be exhausted"
         );
     }

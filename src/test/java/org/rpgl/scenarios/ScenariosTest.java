@@ -86,7 +86,7 @@ public class ScenariosTest {
                 },
                 TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action/01"));
+                    this.add(source.getResourcesWithTag("action").get(0));
                 }},
                 context
         );
@@ -104,7 +104,7 @@ public class ScenariosTest {
                 },
                 TestUtils.getEventById(source.getEventObjects(context), "std:item/magic/flametongue/activate"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/bonus_action/01"));
+                    this.add(source.getResourcesWithTag("bonus_action").get(0));
                 }},
                 context
         );
@@ -119,7 +119,7 @@ public class ScenariosTest {
                 },
                 TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action/01"));
+                    this.add(source.getResourcesWithTag("action").get(0));
                 }},
                 context
         );
@@ -137,7 +137,7 @@ public class ScenariosTest {
                 },
                 TestUtils.getEventById(source.getEventObjects(context), "std:item/magic/flametongue/deactivate"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/bonus_action/01"));
+                    this.add(source.getResourcesWithTag("bonus_action").get(0));
                 }},
                 context
         );
@@ -152,7 +152,7 @@ public class ScenariosTest {
                 },
                 TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
                 new ArrayList<>() {{
-                    this.add(TestUtils.getResourceById(source.getResourceObjects(), "std:common/action/01"));
+                    this.add(source.getResourcesWithTag("action").get(0));
                 }},
                 context
         );
