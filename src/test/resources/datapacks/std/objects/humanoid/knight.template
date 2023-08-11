@@ -16,9 +16,6 @@
     "cha": 15
   },
   "health_data": {
-    "hit_dice": [
-      { "count": 8, "size": 8, "determined": [ 4 ] }
-    ],
     "base": 36,
     "current": 52,
     "temporary": 0
@@ -41,6 +38,11 @@
     {
       "id": "std:common/base",
       "level": 1,
+      "choices": { }
+    },
+    {
+      "id": "std:common/hit_die/d8",
+      "level": 8,
       "choices": { }
     }
   ],

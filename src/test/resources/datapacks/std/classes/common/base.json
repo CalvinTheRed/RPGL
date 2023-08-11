@@ -7,52 +7,49 @@
   "features": {
     "1": {
       "gain": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_1"
-        ],
         "resources": [
-          "std:common/action/01",
-          "std:common/bonus_action/01"
+          {
+            "resource": "std:common/action/01",
+            "count": 1
+          },
+          {
+            "resource": "std:common/bonus_action/01",
+            "count": 1
+          }
         ]
       }
     },
     "5": {
       "gain": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_2"
-        ],
         "resources": [
-          "std:common/action/05",
-          "std:common/bonus_action/05"
+          {
+            "resource": "std:common/action/05",
+            "count": 1
+          },
+          {
+            "resource": "std:common/bonus_action/05",
+            "count": 1
+          }
         ]
       },
       "lose": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_1"
-        ],
         "resources": [
           "std:common/action/01",
           "std:common/bonus_action/01"
-        ]
-      }
-    },
-    "9": {
-      "gain": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_3"
-        ]
-      },
-      "lose": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_2"
         ]
       }
     },
     "11": {
       "gain": {
         "resources": [
-          "std:common/action/11",
-          "std:common/bonus_action/11"
+          {
+            "resource": "std:common/action/11",
+            "count": 1
+          },
+          {
+            "resource": "std:common/bonus_action/11",
+            "count": 1
+          }
         ]
       },
       "lose": {
@@ -62,32 +59,20 @@
         ]
       }
     },
-    "13": {
-      "gain": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_4"
-        ]
-      },
-      "lose": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_3"
-        ]
-      }
-    },
     "17": {
       "gain": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_5"
-        ],
         "resources": [
-          "std:common/action/17",
-          "std:common/bonus_action/17"
+          {
+            "resource": "std:common/action/17",
+            "count": 1
+          },
+          {
+            "resource": "std:common/bonus_action/17",
+            "count": 1
+          }
         ]
       },
       "lose": {
-        "effects": [
-          "std:common/proficiency/bonus/tier_4"
-        ],
         "resources": [
           "std:common/action/11",
           "std:common/bonus_action/11"

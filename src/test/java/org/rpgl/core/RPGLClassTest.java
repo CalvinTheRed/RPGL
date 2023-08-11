@@ -118,7 +118,10 @@ public class RPGLClassTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy");
         new RPGLClass().grantGainedResources(object, new JsonObject() {{
             this.putJsonArray("resources", new JsonArray() {{
-                this.addString("std:common/action/01");
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("resource", "std:common/action/01");
+                    this.putInteger("count", 1);
+                }});
             }});
         }});
 

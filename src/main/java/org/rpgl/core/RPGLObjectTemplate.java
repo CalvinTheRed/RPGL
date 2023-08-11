@@ -3,7 +3,6 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.math.Die;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class RPGLObjectTemplate extends JsonObject {
         processInventory(object);
         processEquippedItems(object);
         processResources(object);
-        processHealthData(object); // this should become unnecessary before this branch is merged
         processClasses(object);
         return object;
     }
@@ -107,21 +105,6 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * This helper method unpacks the condensed representation of hit dice in a RPGLObjectTemplate into multiple dice
-     * objects in accordance with the <code>count</code> field.
-     *
-     * @param object a RPGLObject being created by this object
-     */
-    static void processHealthData(RPGLObject object) {
-        JsonObject healthData = object.getHealthData();
-        JsonArray hitDice = Die.unpack(healthData.removeJsonArray("hit_dice"));
-        for (int i = 0; i < hitDice.size(); i++) {
-            hitDice.getJsonObject(i).putBoolean("spent", false);
-        }
-        healthData.putJsonArray("hit_dice", hitDice);
-    }
-
-    /**
      * This helper method converts resource IDs in an RPGLObjectTemplate's effects array to RPGLResources. The UUID's of
      * these new RPGLResources replace the original array contents.
      *
@@ -132,15 +115,9 @@ public class RPGLObjectTemplate extends JsonObject {
         JsonArray resourceUuids = new JsonArray();
         for (int i = 0; i < resources.size(); i++) {
             JsonObject resourceInstructions = resources.getJsonObject(i);
-            String resourceId = resourceInstructions.getString("resource");
             int count = Objects.requireNonNullElse(resourceInstructions.getInteger("count"), 1);
             for (int j = 0; j < count; j++) {
-                RPGLResource resource = RPGLFactory.newResource(resourceId);
-                Integer potency = resourceInstructions.getInteger("potency");
-                if (potency != null) {
-                    resource.setPotency(potency);
-                }
-                resourceUuids.addString(resource.getUuid());
+                resourceUuids.addString(RPGLFactory.newResource(resourceInstructions.getString("resource")).getUuid());
             }
         }
         object.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resourceUuids);

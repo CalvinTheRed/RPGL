@@ -4,7 +4,6 @@
   },
   "name": "Fighter",
   "description": "The Fighter class.",
-  "hit_die": 10,
   "subclass_level": 3,
   "ability_score_increases": [ 4, 6, 8, 12, 14, 16, 19 ],
   "multiclassing_requirements": [
@@ -15,6 +14,10 @@
   ],
   "nested_classes": {
     "std:common/base": {
+      "scale": 1,
+      "round_up": true
+    },
+    "std:common/hit_die/d10": {
       "scale": 1,
       "round_up": true
     }
@@ -66,7 +69,10 @@
           "std:class/fighter/second_wind"
         ],
         "resources": [
-          "std:class/fighter/second_wind_charge"
+          {
+            "resource": "std:class/fighter/second_wind_charge",
+            "count": 1
+          }
         ]
       }
     },
@@ -76,8 +82,14 @@
           "std:class/fighter/action_surge"
         ],
         "resources": [
-          "std:class/fighter/action_surge_charge",
-          "std:class/fighter/action_surge_limiter"
+          {
+            "resource": "std:class/fighter/action_surge_charge",
+            "count": 1
+          },
+          {
+            "resource": "std:class/fighter/action_surge_limiter",
+            "count": 1
+          }
         ]
       }
     },
@@ -94,7 +106,10 @@
           "std:class/fighter/indomitable"
         ],
         "resources": [
-          "std:class/fighter/indomitable_charge"
+          {
+            "resource": "std:class/fighter/indomitable_charge",
+            "count": 1
+          }
         ]
       }
     },
@@ -113,15 +128,24 @@
     "13": {
       "gain": {
         "resources": [
-          "std:class/fighter/indomitable_charge"
+          {
+            "resource": "std:class/fighter/indomitable_charge",
+            "count": 1
+          }
         ]
       }
     },
     "17": {
       "gain": {
         "resources": [
-          "std:class/fighter/action_surge_charge",
-          "std:class/fighter/indomitable_charge"
+          {
+            "resource": "std:class/fighter/action_surge_charge",
+            "count": 1
+          },
+          {
+            "resource": "std:class/fighter/indomitable_charge",
+            "count": 1
+          }
         ]
       }
     },

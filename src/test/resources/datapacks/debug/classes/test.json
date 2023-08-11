@@ -27,7 +27,10 @@
           "std:spell/fire_bolt"
         ],
         "resources": [
-          "std:common/action/01"
+          {
+            "resource": "std:common/action/01",
+            "count": 1
+          }
         ]
       },
       "lose": {

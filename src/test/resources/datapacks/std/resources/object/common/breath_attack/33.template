@@ -2,10 +2,10 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Young Red Dragon Breath Charge",
-  "description": "This resource allows Young Red Dragons to use their breath weapon attack.",
+  "name": "Breath Attack",
+  "description": "This resource allows you to make an attack using a breath weapon.",
   "tags": [
-    "young_red_dragon_breath_charge"
+    "breath_attack"
   ],
   "refresh_criterion": [
     {

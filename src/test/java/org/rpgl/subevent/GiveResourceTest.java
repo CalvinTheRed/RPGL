@@ -67,8 +67,8 @@ public class GiveResourceTest {
     }
 
     @Test
-    @DisplayName("invoke gives one resource of potency one when no count or potency specified")
-    void invoke_givesOneResourceOfPotencyOneWhenNoCountOrPotencySpecified() throws Exception {
+    @DisplayName("invoke gives one resource of potency one when no count specified")
+    void invoke_givesOneResourceOfPotencyOneWhenNoCountSpecified() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
@@ -105,8 +105,8 @@ public class GiveResourceTest {
     }
 
     @Test
-    @DisplayName("invoke gives correct number of resources with correct potency when specified")
-    void invoke_givesCorrectNumberOfResourcesWithCorrectPotencyWhenSpecified() throws Exception {
+    @DisplayName("invoke gives correct number of resources when count specified")
+    void invoke_givesCorrectNumberOfResourcesWhenCountSpecified() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
@@ -117,12 +117,10 @@ public class GiveResourceTest {
         giveResource.joinSubeventData(new JsonObject() {{
             /*{
                 "resource":"std:class/warlock/the_undead_patron/necrotic_husk",
-                "count": 2,
-                "potency": 5
+                "count": 2
             }*/
             this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
             this.putInteger("count", 2);
-            this.putInteger("potency", 5);
         }});
         giveResource.setSource(source);
         giveResource.setTarget(target);
@@ -133,9 +131,6 @@ public class GiveResourceTest {
                 "target should be given two resources"
         );
         for (RPGLResource resource : target.getResourceObjects()) {
-            assertEquals(5, resource.getPotency(),
-                    "resource should have potency of 5"
-            );
             assertEquals("std:class/warlock/the_undead_patron/necrotic_husk", resource.getId(),
                     "resource should be the correct type"
             );

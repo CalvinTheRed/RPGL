@@ -12,6 +12,7 @@ import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -19,7 +20,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -49,7 +49,7 @@ public class RPGLObjectTemplateTest {
     @Test
     @DisplayName("processEffects effects are constructed")
     void processEffects_effectsAreConstructed() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("test");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
 
@@ -114,49 +114,22 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processHealthData hit dice enumeration")
-    void processHealthData_hitDiceAreEnumerated() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
-        RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
-
-        RPGLObjectTemplate.processHealthData(object);
-
-        JsonArray hitDiceArray = object.getHealthData().getJsonArray("hit_dice");
-        assertEquals(17, hitDiceArray.size(),
-                "compact hit dice view should be unpacked into 17 objects"
-        );
-        for (int i = 0; i < hitDiceArray.size(); i++) {
-            JsonObject hitDie = hitDiceArray.getJsonObject(i);
-            assertFalse(hitDie.getBoolean("spent"),
-                    "hit die (index " + i + ") should be unspent"
-            );
-            assertEquals(10, hitDie.getInteger("size"),
-                    "hit die (index " + i + ") has the wrong size"
-            );
-            assertEquals("[5]", hitDie.getJsonArray("determined").toString(),
-                    "hit die (index " + i + ") has the wrong determined value"
-            );
-        }
-    }
-
-    @Test
     @DisplayName("processResources resources are constructed correctly")
     void processResources_resourcesAreConstructedCorrectly() {
-        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
+        RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("test");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
 
         RPGLObjectTemplate.processResources(object);
 
         assertEquals(2, object.getResourceObjects().size(),
-                "young red dragon should be given 2 resources"
+                "debug:test should be given 2 resources"
         );
         assertEquals("std:common/action/01", object.getResourceObjects().get(0).getId(),
-                "one resource should be std:action"
+                "one resource should be std:common/action/01"
         );
-        assertEquals("std:object/dragon/red/young/breath_charge", object.getResourceObjects().get(1).getId(),
-                "one resource should be std:object/dragon/red/young/breath_charge"
+        assertEquals("std:common/bonus_action/01", object.getResourceObjects().get(1).getId(),
+                "one resource should be std:common/bonus_action/01"
         );
     }
 
@@ -361,7 +334,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":36,"current":52,"hit_dice":[{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false},{"determined":[4],"size":8,"spent":false}],"temporary":0}""";
+                {"base":36,"current":52,"temporary":0}""";
         assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
@@ -382,8 +355,8 @@ public class RPGLObjectTemplateTest {
         assertEquals("[]", object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
-        assertEquals(2, object.getEffects().size(),
-                "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
+        assertEquals(1, object.getEffects().size(),
+                "incorrect field size: " + RPGLObjectTO.EFFECTS_ALIAS
         );
         assertEquals(2, object.getProficiencyBonus(),
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
@@ -392,7 +365,7 @@ public class RPGLObjectTemplateTest {
 
     @Test
     @DisplayName("newInstance comprehensive test using std:dragon/red/young template")
-    void newInstance_youngRedDragonTemplate() {
+    void newInstance_youngRedDragonTemplate() throws Exception {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
         RPGLObject object = objectTemplate.newInstance();
         String expected;
@@ -421,7 +394,7 @@ public class RPGLObjectTemplateTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":93,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"temporary":0}""";
+                {"base":93,"current":178,"temporary":0}""";
         assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
@@ -431,10 +404,8 @@ public class RPGLObjectTemplateTest {
         assertEquals("[]", object.getInventory().toString(),
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
-        expected = """
-                ["std:object/dragon/red/young/breath"]""";
-        assertEquals(expected, object.getEvents().toString(),
-                "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
+        assertEquals(4, object.getEventObjects(new DummyContext()).size(),
+                "incorrect field size: " + RPGLObjectTO.EVENTS_ALIAS
         );
         JsonArray effects = object.getEffects();
         for (int i = 0; i < effects.size(); i++) {

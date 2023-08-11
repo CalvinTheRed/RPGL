@@ -2,15 +2,18 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Spellcaster",
-  "description": "This meta-class is the class which provides spellcasters with their spell slots (not including pact casters).",
+  "name": "D6",
+  "description": "This class is responsible for providing an object with d6 hit dice.",
   "features": {
     "1": {
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/01",
-            "count": 2
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
+            "count": 1
           }
         ]
       }
@@ -19,7 +22,10 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/01",
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
             "count": 1
           }
         ]
@@ -29,12 +35,11 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/01",
+            "resource": {
+            "resource": "std:common/hit_die/06",
             "count": 1
           },
-          {
-            "resource": "std:class/common/spell_slot/02",
-            "count": 2
+            "count": 1
           }
         ]
       }
@@ -43,7 +48,10 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/02",
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
             "count": 1
           }
         ]
@@ -53,8 +61,11 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/03",
-            "count": 2
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
+            "count": 1
           }
         ]
       }
@@ -63,7 +74,10 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/03",
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
             "count": 1
           }
         ]
@@ -73,7 +87,10 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/04",
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
             "count": 1
           }
         ]
@@ -83,7 +100,10 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/04",
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
             "count": 1
           }
         ]
@@ -93,11 +113,10 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/04",
+            "resource": {
+            "resource": "std:common/hit_die/06",
             "count": 1
           },
-          {
-            "resource": "std:class/common/spell_slot/05",
             "count": 1
           }
         ]
@@ -107,7 +126,10 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/05",
+            "resource": {
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          },
             "count": 1
           }
         ]
@@ -117,7 +139,17 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/06",
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          }
+        ]
+      }
+    },
+    "12": {
+      "gain": {
+        "resources": [
+          {
+            "resource": "std:common/hit_die/06",
             "count": 1
           }
         ]
@@ -127,7 +159,17 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/07",
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          }
+        ]
+      }
+    },
+    "14": {
+      "gain": {
+        "resources": [
+          {
+            "resource": "std:common/hit_die/06",
             "count": 1
           }
         ]
@@ -137,7 +179,17 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/08",
+            "resource": "std:common/hit_die/06",
+            "count": 1
+          }
+        ]
+      }
+    },
+    "16": {
+      "gain": {
+        "resources": [
+          {
+            "resource": "std:common/hit_die/06",
             "count": 1
           }
         ]
@@ -147,7 +199,7 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/09",
+            "resource": "std:common/hit_die/06",
             "count": 1
           }
         ]
@@ -157,7 +209,7 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/05",
+            "resource": "std:common/hit_die/06",
             "count": 1
           }
         ]
@@ -167,7 +219,7 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/06",
+            "resource": "std:common/hit_die/06",
             "count": 1
           }
         ]
@@ -177,7 +229,7 @@
       "gain": {
         "resources": [
           {
-            "resource": "std:class/common/spell_slot/07",
+            "resource": "std:common/hit_die/06",
             "count": 1
           }
         ]

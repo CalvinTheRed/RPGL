@@ -5,7 +5,6 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -46,13 +45,12 @@ public class TakeResource extends Subevent {
 
     @Override
     public void run(RPGLContext context) {
-        String resourceId = this.json.getString("resource");
+        String resourceTag = this.json.getString("resource_tag");
         int count = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);
         RPGLObject target = this.getTarget();
 
-        List<RPGLResource> resources = target.getResourceObjects();
-        for (RPGLResource resource : resources) {
-            if (count > 0 && resource.hasTag("temporary") && Objects.equals(resource.getId(), resourceId)) {
+        for (RPGLResource resource : target.getResourceObjects()) {
+            if (count > 0 && resource.hasTag("temporary") && resource.hasTag(resourceTag)) {
                 target.removeResource(resource.getUuid());
                 count--;
             }

@@ -10,7 +10,6 @@ import java.util.HashMap;
 
 public class RPGLClassTO extends DatapackContentTO {
 
-    public static final String HIT_DIE_ALIAS = "hit_die";
     public static final String SUBCLASS_LEVEL_ALIAS = "subclass_level";
     public static final String ABILITY_SCORE_INCREASES_ALIAS = "ability_score_increases";
     public static final String MULTICLASSING_REQUIREMENTS_ALIAS = "multiclassing_requirements";
@@ -18,8 +17,6 @@ public class RPGLClassTO extends DatapackContentTO {
     public static final String STARTING_FEATURES_ALIAS = "starting_features";
     public static final String FEATURES_ALIAS = "features";
 
-    @JsonProperty(HIT_DIE_ALIAS)
-    Integer hitDie;
     @JsonProperty(SUBCLASS_LEVEL_ALIAS)
     Integer subclassLevel;
     @JsonProperty(ABILITY_SCORE_INCREASES_ALIAS)
@@ -48,7 +45,6 @@ public class RPGLClassTO extends DatapackContentTO {
      */
     public RPGLClass toRPGLClass() {
         RPGLClass rpglClass = new RPGLClass() {{
-            this.putInteger(HIT_DIE_ALIAS, hitDie);
             this.putInteger(SUBCLASS_LEVEL_ALIAS, subclassLevel);
             this.putJsonArray(ABILITY_SCORE_INCREASES_ALIAS, new JsonArray(abilityScoreIncreases));
             this.putJsonArray(MULTICLASSING_REQUIREMENTS_ALIAS, new JsonArray(multiclassingRequirements));

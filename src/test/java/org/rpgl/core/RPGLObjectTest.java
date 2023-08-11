@@ -11,9 +11,11 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -225,11 +227,20 @@ public class RPGLObjectTest {
 
         List<RPGLEvent> events = youngRedDragon.getEventObjects(context);
 
-        assertEquals(1, events.size(),
+        assertEquals(4, events.size(),
                 "std:dragon/red/young should have 1 RPGLEvent"
         );
         assertEquals("std:object/dragon/red/young/breath", events.get(0).getId(),
                 "std:dragon/red/young should have the std:object/dragon/red/young/breath event"
+        );
+        assertEquals("std:object/dragon/red/young/claw", events.get(1).getId(),
+                "std:dragon/red/young should have the std:object/dragon/red/young/claw event"
+        );
+        assertEquals("std:object/dragon/red/young/bite", events.get(2).getId(),
+                "std:dragon/red/young should have the std:object/dragon/red/young/bite event"
+        );
+        assertEquals("std:object/dragon/red/young/multiattack", events.get(3).getId(),
+                "std:dragon/red/young should have the std:object/dragon/red/young/multiattack event"
         );
     }
 
@@ -242,11 +253,35 @@ public class RPGLObjectTest {
 
         List<RPGLEffect> effects = youngRedDragon.getEffectObjects();
 
-        assertEquals(1, effects.size(),
-                "std:dragon/red/young should have 1 RPGLEffect"
+        assertEquals(9, effects.size(),
+                "std:dragon/red/young should have 9 RPGLEffects"
         );
-        assertEquals("std:common/damage/immunity/fire", effects.get(0).getId(),
+        assertEquals("std:common/proficiency/save/dexterity", effects.get(0).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/dexterity effect"
+        );
+        assertEquals("std:common/proficiency/save/constitution", effects.get(1).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/constitution effect"
+        );
+        assertEquals("std:common/proficiency/save/wisdom", effects.get(2).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/wisdom effect"
+        );
+        assertEquals("std:common/proficiency/save/charisma", effects.get(3).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/charisma effect"
+        );
+        assertEquals("std:common/damage/immunity/fire", effects.get(4).getId(),
                 "std:dragon/red/young should have the std:common/damage/immunity/fire effect"
+        );
+        assertEquals("std:common/proficiency/skill/perception", effects.get(5).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/skill/perception effect"
+        );
+        assertEquals("std:common/proficiency/skill/stealth", effects.get(6).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/skill/stealth effect"
+        );
+        assertEquals("std:resource/take/claw_attack", effects.get(7).getId(),
+                "std:dragon/red/young should have the std:resource/take/claw_attack effect"
+        );
+        assertEquals("std:resource/take/bite_attack", effects.get(8).getId(),
+                "std:dragon/red/young should have the std:resource/take/bite_attack effect"
         );
     }
 
@@ -287,19 +322,30 @@ public class RPGLObjectTest {
         context.add(youngRedDragon);
         context.add(knight);
 
+        List<RPGLResource> resources = youngRedDragon.getResourceObjects();
+        RPGLResource action = TestUtils.getResourceById(resources, "std:common/action/17");
+        RPGLResource breathAttack = TestUtils.getResourceById(resources, "std:object/common/breath_attack/33");
+        assert action != null;
+        assert breathAttack != null;
         youngRedDragon.invokeEvent(
                 new RPGLObject[] { knight },
                 RPGLFactory.newEvent("std:object/dragon/red/young/breath"),
-                youngRedDragon.getResourceObjects(),
+                new ArrayList<>() {{
+                    this.add(action);
+                    this.add(breathAttack);
+                }},
                 context
         );
 
         assertEquals(4, knight.getHealthData().getInteger("current"),
                 "std:humanoid/knight should have 4 health left after failing a save against std:dragon/red/young's breath attack"
         );
-        for (RPGLResource resource : youngRedDragon.getResourceObjects()) {
-            assertTrue(resource.getExhausted());
-        }
+        assertTrue(action.getExhausted(),
+                "resource should be exhausted"
+        );
+        assertTrue(breathAttack.getExhausted(),
+                "resource should be exhausted"
+        );
     }
 
     @Test
@@ -791,13 +837,16 @@ public class RPGLObjectTest {
         }});
 
         List<String> nestedClassIds = object.getNestedClassIds("std:fighter");
-        assertEquals(2, nestedClassIds.size(),
-                "std:fighter should have 2 nested classes for this object"
+        assertEquals(3, nestedClassIds.size(),
+                "std:fighter should have 3 nested classes for this object"
         );
-        assertEquals("std:common/base", nestedClassIds.get(0),
+        assertEquals("std:common/hit_die/d10", nestedClassIds.get(0),
+                "std:fighter should have std:common/hit_die/d10 as a nested class"
+        );
+        assertEquals("std:common/base", nestedClassIds.get(1),
                 "std:fighter should have std:common/base as a nested class"
         );
-        assertEquals("debug:blank", nestedClassIds.get(1),
+        assertEquals("debug:blank", nestedClassIds.get(2),
                 "std:fighter should have debug:blank as a nested class"
         );
     }

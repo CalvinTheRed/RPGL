@@ -884,4 +884,12 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
+    public int getProficiencyBonusByLevel() {
+        return (int) (1 + Math.ceil(this.getLevel() / 4.0));
+    }
+
+    public List<RPGLResource> getResourcesWithTag(String tag) {
+        return this.getResourceObjects().stream().filter(resource -> resource.hasTag(tag)).toList();
+    }
+
 }

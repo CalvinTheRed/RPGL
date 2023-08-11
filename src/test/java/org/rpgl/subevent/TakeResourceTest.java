@@ -79,9 +79,9 @@ public class TakeResourceTest {
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/warlock/the_undead_patron/necrotic_husk"
+                "resource_tag": "necrotic_husk"
             }*/
-            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
+            this.putString("resource_tag", "necrotic_husk");
         }});
         takeResource.setSource(source);
         takeResource.setTarget(target);
@@ -118,9 +118,9 @@ public class TakeResourceTest {
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/warlock/the_undead_patron/necrotic_husk"
+                "resource_tag": "necrotic_husk"
             }*/
-            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
+            this.putString("resource_tag", "necrotic_husk");
         }});
         takeResource.setSource(source);
         takeResource.setTarget(target);
@@ -150,10 +150,10 @@ public class TakeResourceTest {
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
             /*{
-                "resource":"std:class/warlock/the_undead_patron/necrotic_husk",
+                "resource_tag": "necrotic_husk",
                 "count": 3
             }*/
-            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
+            this.putString("resource_tag", "necrotic_husk");
             this.putInteger("count", 3);
         }});
         takeResource.setSource(source);

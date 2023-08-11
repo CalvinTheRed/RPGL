@@ -12,14 +12,6 @@ import java.util.Objects;
 
 public class RPGLClass extends DatapackContent {
 
-    public Integer getHitDie() {
-        return this.getInteger(RPGLClassTO.HIT_DIE_ALIAS);
-    }
-
-    public void setHitDie(int hitDie) {
-        this.putInteger(RPGLClassTO.HIT_DIE_ALIAS, hitDie);
-    }
-
     public Integer getSubclassLevel() {
         return this.getInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS);
     }
@@ -73,7 +65,9 @@ public class RPGLClass extends DatapackContent {
     // =================================================================================================================
 
     public void grantStartingFeatures(RPGLObject object, JsonObject choices) {
+        this.grantGainedEvents(object, this.getStartingFeatures());
         this.grantGainedEffects(object, this.getStartingFeatures(), choices);
+        this.grantGainedResources(object, this.getStartingFeatures());
         this.levelUpRPGLObject(object, choices);
     }
 
@@ -155,8 +149,12 @@ public class RPGLClass extends DatapackContent {
     void grantGainedResources(RPGLObject object, JsonObject gainedFeatures) {
         JsonArray resources = Objects.requireNonNullElse(gainedFeatures.getJsonArray("resources"), new JsonArray());
         for (int i = 0; i < resources.size(); i++) {
-            RPGLResource resource = RPGLFactory.newResource(resources.getString(i));
-            object.addResource(resource);
+            JsonObject resourceData = resources.getJsonObject(i);
+            int count = Objects.requireNonNullElse(resourceData.getInteger("count"), 1);
+            for (int j = 0; j < count; j++) {
+                RPGLResource resource = RPGLFactory.newResource(resourceData.getString("resource"));
+                object.addResource(resource);
+            }
         }
     }
 
