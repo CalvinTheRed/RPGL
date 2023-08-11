@@ -77,7 +77,7 @@ public class AddTemporaryHitPoints extends Function {
                 "object": "..."
             },{
                 "name": "...",
-                "temporary_hit_point_formula": "level", // TODO this feature not yet supported
+                "temporary_hit_point_formula": "level",
                 "class": "...",
                 "object": "..."
             }
@@ -103,6 +103,16 @@ public class AddTemporaryHitPoints extends Function {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context) / 2);
                 } else {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                }
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            case "level" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, temporaryHitPointsJson.getJsonObject("object"));
+                String classId = temporaryHitPointsJson.getString("class");
+                if (classId == null) {
+                    this.putInteger("bonus", object.getLevel());
+                } else {
+                    this.putInteger("bonus", object.getLevel(classId));
                 }
                 this.putJsonArray("dice", new JsonArray());
             }};

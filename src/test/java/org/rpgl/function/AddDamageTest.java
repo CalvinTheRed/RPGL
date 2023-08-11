@@ -397,5 +397,4 @@ public class AddDamageTest {
                 "execute should add appropriate damage level to collection"
         );
     }
-
 }

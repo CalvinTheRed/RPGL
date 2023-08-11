@@ -395,5 +395,4 @@ public class AddHealingTest {
                 "execute should add source's level to HealingCollection subevent"
         );
     }
-
 }

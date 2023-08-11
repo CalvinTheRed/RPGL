@@ -396,5 +396,4 @@ public class AddBonusTest {
                 "source's level should be added as bonus to calculation (+17)"
         );
     }
-
 }
