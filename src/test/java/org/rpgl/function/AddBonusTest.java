@@ -293,4 +293,57 @@ public class AddBonusTest {
         );
     }
 
+    @Test
+    @DisplayName("execute adds correct bonus to calculation (level)")
+    void execute_addsCorrectBonusToCalculation_level() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        calculation.setSource(source);
+        calculation.prepare(context);
+        calculation.setTarget(target);
+
+        AddBonus addBonus = new AddBonus();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "add_bonus",
+                "bonus": [
+                    ]
+                        "bonus_formula": "level",
+                        "class": "std:monster/dragon/red/young",
+                        "object": {
+                            "from": "effect",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("function", "add_bonus");
+            this.putJsonArray("bonus", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("bonus_formula", "level");
+                    this.putString("class", "std:monster/dragon/red/young");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "effect");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+        effect.setName("TEST");
+
+        addBonus.execute(effect, calculation, functionJson, context);
+
+        assertEquals(17, calculation.getBonus(),
+                "source's level should be added as bonus to calculation (+17)"
+        );
+    }
+
 }
