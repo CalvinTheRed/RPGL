@@ -256,32 +256,32 @@ public class RPGLObjectTest {
         assertEquals(9, effects.size(),
                 "std:dragon/red/young should have 9 RPGLEffects"
         );
-        assertEquals("std:common/proficiency/save/dexterity", effects.get(0).getId(),
+        assertEquals("std:resource/take/claw_attack", effects.get(0).getId(),
                 "std:dragon/red/young should have the std:common/proficiency/save/dexterity effect"
         );
-        assertEquals("std:common/proficiency/save/constitution", effects.get(1).getId(),
+        assertEquals("std:resource/take/bite_attack", effects.get(1).getId(),
                 "std:dragon/red/young should have the std:common/proficiency/save/constitution effect"
         );
-        assertEquals("std:common/proficiency/save/wisdom", effects.get(2).getId(),
+        assertEquals("std:common/proficiency/save/dexterity", effects.get(2).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/dexterity effect"
+        );
+        assertEquals("std:common/proficiency/save/constitution", effects.get(3).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/constitution effect"
+        );
+        assertEquals("std:common/proficiency/save/wisdom", effects.get(4).getId(),
                 "std:dragon/red/young should have the std:common/proficiency/save/wisdom effect"
         );
-        assertEquals("std:common/proficiency/save/charisma", effects.get(3).getId(),
+        assertEquals("std:common/proficiency/save/charisma", effects.get(5).getId(),
                 "std:dragon/red/young should have the std:common/proficiency/save/charisma effect"
         );
-        assertEquals("std:common/damage/immunity/fire", effects.get(4).getId(),
+        assertEquals("std:common/damage/immunity/fire", effects.get(6).getId(),
                 "std:dragon/red/young should have the std:common/damage/immunity/fire effect"
         );
-        assertEquals("std:common/proficiency/skill/perception", effects.get(5).getId(),
+        assertEquals("std:common/proficiency/skill/perception", effects.get(7).getId(),
                 "std:dragon/red/young should have the std:common/proficiency/skill/perception effect"
         );
-        assertEquals("std:common/proficiency/skill/stealth", effects.get(6).getId(),
+        assertEquals("std:common/proficiency/skill/stealth", effects.get(8).getId(),
                 "std:dragon/red/young should have the std:common/proficiency/skill/stealth effect"
-        );
-        assertEquals("std:resource/take/claw_attack", effects.get(7).getId(),
-                "std:dragon/red/young should have the std:resource/take/claw_attack effect"
-        );
-        assertEquals("std:resource/take/bite_attack", effects.get(8).getId(),
-                "std:dragon/red/young should have the std:resource/take/bite_attack effect"
         );
     }
 

@@ -22,10 +22,13 @@
   },
   "classes": [
     {
-      "id": "std:object/dragon/red/young",
+      "id": "std:monster/dragon/red/young",
       "level": 17,
       "choices": { }
     }
+  ],
+  "races": [
+    "std:dragon/red"
   ],
   "proficiency_bonus": 4,
   "challenge_rating": 10

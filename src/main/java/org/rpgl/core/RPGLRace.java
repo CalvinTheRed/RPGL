@@ -86,8 +86,12 @@ public class RPGLRace extends DatapackContent {
     void grantGainedResources(RPGLObject object, JsonObject gainedFeatures) {
         JsonArray resources = Objects.requireNonNullElse(gainedFeatures.getJsonArray("resources"), new JsonArray());
         for (int i = 0; i < resources.size(); i++) {
-            RPGLResource resource = RPGLFactory.newResource(resources.getString(i));
-            object.addResource(resource);
+            JsonObject resourceData = resources.getJsonObject(i);
+            int count = Objects.requireNonNullElse(resourceData.getInteger("count"), 1);
+            for (int j = 0; j < count; j++) {
+                RPGLResource resource = RPGLFactory.newResource(resourceData.getString("resource"));
+                object.addResource(resource);
+            }
         }
     }
 

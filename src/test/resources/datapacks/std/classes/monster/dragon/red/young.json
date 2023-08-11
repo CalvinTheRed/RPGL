@@ -19,13 +19,6 @@
   },
   "starting_features": {
     "effects": [
-      "std:common/proficiency/save/dexterity",
-      "std:common/proficiency/save/constitution",
-      "std:common/proficiency/save/wisdom",
-      "std:common/proficiency/save/charisma",
-      "std:common/damage/immunity/fire",
-      "std:common/proficiency/skill/perception",
-      "std:common/proficiency/skill/stealth",
       "std:resource/take/claw_attack",
       "std:resource/take/bite_attack"
     ],
@@ -34,12 +27,6 @@
       "std:object/dragon/red/young/claw",
       "std:object/dragon/red/young/bite",
       "std:object/dragon/red/young/multiattack"
-    ],
-    "resources": [
-      {
-        "resource": "std:object/common/breath_attack/33",
-        "count": 1
-      }
     ]
   }
 }
