@@ -76,7 +76,7 @@ public class AddHealing extends Function {
                 "object": "..."
             },{
                 "name": "...",
-                "healing_formula": "level", // TODO this feature not yet supported
+                "healing_formula": "level",
                 "class": "...",
                 "object": "..."
             }
@@ -102,6 +102,16 @@ public class AddHealing extends Function {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context) / 2);
                 } else {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                }
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            case "level" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, healingJson.getJsonObject("object"));
+                String classId = healingJson.getString("class");
+                if (classId == null) {
+                    this.putInteger("bonus", object.getLevel());
+                } else {
+                    this.putInteger("bonus", object.getLevel(classId));
                 }
                 this.putJsonArray("dice", new JsonArray());
             }};

@@ -290,4 +290,110 @@ public class AddHealingTest {
         );
     }
 
+    @Test
+    @DisplayName("execute adds healing to subevent (level with specified class)")
+    void execute_addsHealingToSubevent_levelWithSpecifiedClass() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        HealingCollection healingCollection = new HealingCollection();
+        healingCollection.setSource(source);
+        healingCollection.prepare(context);
+
+        AddHealing addHealing = new AddHealing();
+        JsonObject functionJson = new JsonObject() {{
+           /*{
+                "function": "add_healing",
+                "healing": [
+                    {
+                        "healing_formula": "level",
+                        "class": "std:common/base",
+                        "object": {
+                            "from": "effect",
+                            "object": "source"
+                        }
+                    }
+                ]
+           }*/
+            this.putString("function", "add_healing");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "level");
+                    this.putString("class", "std:common/base");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "effect");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+
+        addHealing.execute(effect, healingCollection, functionJson, context);
+
+        String expected = """
+                [{"bonus":1,"dice":[]}]""";
+        assertEquals(expected, healingCollection.getHealingCollection().toString(),
+                "execute should add source's level to HealingCollection subevent"
+        );
+    }
+
+    @Test
+    @DisplayName("execute adds healing to subevent (level without specified class)")
+    void execute_addsHealingToSubevent_levelWithoutSpecifiedClass() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        HealingCollection healingCollection = new HealingCollection();
+        healingCollection.setSource(source);
+        healingCollection.prepare(context);
+
+        AddHealing addHealing = new AddHealing();
+        JsonObject functionJson = new JsonObject() {{
+           /*{
+                "function": "add_healing",
+                "healing": [
+                    {
+                        "healing_formula": "level",
+                        "object": {
+                            "from": "effect",
+                            "object": "source"
+                        }
+                    }
+                ]
+           }*/
+            this.putString("function", "add_healing");
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("healing_formula", "level");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "effect");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+
+        addHealing.execute(effect, healingCollection, functionJson, context);
+
+        String expected = """
+                [{"bonus":9,"dice":[]}]""";
+        assertEquals(expected, healingCollection.getHealingCollection().toString(),
+                "execute should add source's level to HealingCollection subevent"
+        );
+    }
+
 }
