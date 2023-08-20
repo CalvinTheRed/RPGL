@@ -3,6 +3,8 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonObject;
 
+import java.util.Objects;
+
 /**
  * This subevent is dedicated to calculating the proficiency bonus of an RPGLObject.
  * <br>
@@ -39,7 +41,10 @@ public class CalculateProficiencyBonus extends Calculation {
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
         super.setBase(new JsonObject() {{
-            this.putInteger("value", getSource().getProficiencyBonus());
+            this.putInteger("value", Objects.requireNonNullElse(
+                    getSource().getProficiencyBonus(),
+                    getSource().getProficiencyBonusByLevel()
+            ));
         }});
     }
 

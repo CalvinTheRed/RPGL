@@ -199,7 +199,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":93,"current":178,"hit_dice":[{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false},{"determined":[5],"size":10,"spent":false}],"temporary":0}""";
+                {"base":93,"current":178,"temporary":0}""";
         assertEquals(expected, object.getHealthData().toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
@@ -210,7 +210,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
         expected = """
-                ["std:object/dragon/red/young/breath"]""";
+                ["std:object/dragon/red/young/breath","std:object/dragon/red/young/claw","std:object/dragon/red/young/bite","std:object/dragon/red/young/multiattack"]""";
         assertEquals(expected, object.getEvents().toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
@@ -227,9 +227,9 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newResource using std:common/action")
+    @DisplayName("newResource using std:common/action/01")
     void newResource_action() {
-        RPGLResource resource = RPGLFactory.newResource("std:common/action");
+        RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         String expected;
 
         expected = """
@@ -243,7 +243,7 @@ public class RPGLFactoryTest {
         assertEquals("This resource allows you to take actions on your turn.", resource.getDescription(),
                 "incorrect field value: " + DatapackContentTO.DESCRIPTION_ALIAS
         );
-        assertEquals("std:common/action", resource.getId(),
+        assertEquals("std:common/action/01", resource.getId(),
                 "incorrect field value: " + DatapackContentTO.ID_ALIAS
         );
 

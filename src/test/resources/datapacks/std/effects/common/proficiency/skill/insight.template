@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Skill Proficiency (Insight)",
+  "description": "You have proficiency in skill checks made using Insight.",
+  "subevent_filters": { }
+}

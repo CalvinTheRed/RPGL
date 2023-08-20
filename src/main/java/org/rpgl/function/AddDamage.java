@@ -69,25 +69,37 @@ public class AddDamage extends Function {
                 "damage_formula": "modifier",
                 "damage_type": string,
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "damage_formula": "ability",
                 "damage_type": string,
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "damage_formula": "proficiency",
                 "damage_type": string,
                 "half": boolean,
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
-                "damage_formula": "level", // TODO this feature not yet supported
+                "damage_formula": "level",
                 "damage_type": string,
                 "class": "...",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             }
         ]*/
         return switch (damageJson.getString("damage_formula")) {
@@ -116,6 +128,17 @@ public class AddDamage extends Function {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context) / 2);
                 } else {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                }
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            case "level" -> new JsonObject() {{
+                this.putString("damage_type", damageJson.getString("damage_type"));
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, damageJson.getJsonObject("object"));
+                String classId = damageJson.getString("class");
+                if (classId == null) {
+                    this.putInteger("bonus", object.getLevel());
+                } else {
+                    this.putInteger("bonus", object.getLevel(classId));
                 }
                 this.putJsonArray("dice", new JsonArray());
             }};

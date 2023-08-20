@@ -569,7 +569,7 @@ public class DatapackTest {
                 "incorrect field value: " + RPGLObjectTO.ABILITY_SCORES_ALIAS
         );
         expected = """
-                {"base":93,"current":178,"hit_dice":[{"count":17,"determined":[5],"size":10}],"temporary":0}""";
+                {"base":93,"current":178,"temporary":0}""";
         assertEquals(expected, objectTemplate.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.HEALTH_DATA_ALIAS
         );
@@ -579,14 +579,10 @@ public class DatapackTest {
         assertEquals("[]", objectTemplate.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.INVENTORY_ALIAS
         );
-        expected = """
-                ["std:object/dragon/red/young/breath"]""";
-        assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
+        assertEquals("[]", objectTemplate.getJsonArray(RPGLObjectTO.EVENTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EVENTS_ALIAS
         );
-        expected = """
-                ["std:common/damage/immunity/fire"]""";
-        assertEquals(expected, objectTemplate.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
+        assertEquals("[]", objectTemplate.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS).toString(),
                 "incorrect field value: " + RPGLObjectTO.EFFECTS_ALIAS
         );
         assertEquals(4, objectTemplate.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS),

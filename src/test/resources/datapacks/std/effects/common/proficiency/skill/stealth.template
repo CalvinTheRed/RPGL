@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Skill Proficiency (Stealth)",
+  "description": "You have proficiency in skill checks made using Stealth.",
+  "subevent_filters": { }
+}

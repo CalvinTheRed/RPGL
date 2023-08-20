@@ -16,9 +16,6 @@
     "cha": 15
   },
   "health_data": {
-    "hit_dice": [
-      { "count": 8, "size": 8, "determined": [ 4 ] }
-    ],
     "base": 36,
     "current": 52,
     "temporary": 0
@@ -37,17 +34,22 @@
   "effects": [
 
   ],
-  "resources": [
+  "classes": [
     {
-      "resource": "std:common/action",
-      "count": 1,
-      "potency": 1
+      "id": "std:common/base",
+      "level": 1,
+      "choices": { }
     },
     {
-      "resource": "std:common/bonus_action",
-      "count": 1,
-      "potency": 1
+      "id": "std:common/hit_die/d8",
+      "level": 8,
+      "choices": { }
     }
   ],
-  "proficiency_bonus": 2
+  "races": [
+    "std:human"
+  ],
+  "resources": [ ],
+  "proficiency_bonus": 2,
+  "challenge_rating": 3
 }

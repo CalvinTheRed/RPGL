@@ -44,12 +44,10 @@ public class GiveResource extends Subevent {
     public void run(RPGLContext context) throws Exception {
         int count = Objects.requireNonNullElse(this.json.getInteger("count"), 1);
         String resourceId = this.json.getString("resource");
-        int potency = Objects.requireNonNullElse(this.json.getInteger("potency"), 1);
         for (int i = 0; i < count; i++) {
             RPGLResource resource = RPGLFactory.newResource(resourceId);
             resource.setOriginItem(this.getOriginItem());
             resource.addTag("temporary");
-            resource.setPotency(potency);
             this.getTarget().addResource(resource);
         }
     }

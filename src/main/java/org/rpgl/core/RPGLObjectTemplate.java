@@ -3,7 +3,6 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.math.Die;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
@@ -29,15 +28,19 @@ public class RPGLObjectTemplate extends JsonObject {
         RPGLObject object = new RPGLObject();
         object.join(this);
         this.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, new HashMap<String, Object>());
         this.asMap().putIfAbsent(RPGLObjectTO.EVENTS_ALIAS, new ArrayList<>());
-        this.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.RESOURCES_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.CLASSES_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.RACES_ALIAS, new ArrayList<>());
+        this.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0.0);
         UUIDTable.register(object);
         processEffects(object);
         processInventory(object);
         processEquippedItems(object);
-        processHealthData(object);
         processResources(object);
+        processClasses(object);
         return object;
     }
 
@@ -102,23 +105,8 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * This helper method unpacks the condensed representation of hit dice in a RPGLObjectTemplate into multiple dice
-     * objects in accordance with the <code>count</code> field.
-     *
-     * @param object a RPGLObject being created by this object
-     */
-    static void processHealthData(RPGLObject object) {
-        JsonObject healthData = object.getHealthData();
-        JsonArray hitDice = Die.unpack(healthData.removeJsonArray("hit_dice"));
-        for (int i = 0; i < hitDice.size(); i++) {
-            hitDice.getJsonObject(i).putBoolean("spent", false);
-        }
-        healthData.putJsonArray("hit_dice", hitDice);
-    }
-
-    /**
-     * This helper method converts resource IDs in an RPGLObjectTemplate's effects array to RPGLResources. The UUID's of
-     * these new RPGLResources replace the original array contents.
+     * This helper method converts resource IDs in an RPGLObjectTemplate's resources array to RPGLResources. The UUID's
+     * of these new RPGLResources replace the original array contents.
      *
      * @param object an RPGLObject
      */
@@ -127,18 +115,46 @@ public class RPGLObjectTemplate extends JsonObject {
         JsonArray resourceUuids = new JsonArray();
         for (int i = 0; i < resources.size(); i++) {
             JsonObject resourceInstructions = resources.getJsonObject(i);
-            String resourceId = resourceInstructions.getString("resource");
             int count = Objects.requireNonNullElse(resourceInstructions.getInteger("count"), 1);
             for (int j = 0; j < count; j++) {
-                RPGLResource resource = RPGLFactory.newResource(resourceId);
-                Integer potency = resourceInstructions.getInteger("potency");
-                if (potency != null) {
-                    resource.setPotency(potency);
-                }
-                resourceUuids.addString(resource.getUuid());
+                resourceUuids.addString(RPGLFactory.newResource(resourceInstructions.getString("resource")).getUuid());
             }
         }
         object.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resourceUuids);
+    }
+
+    /**
+     * This helper method processes the classes in the RPGLObjectTemplate's classes array and assigns features and
+     * levels to the object under construction accordingly.
+     *
+     * @param object an RPGLObject
+     */
+    static void processClasses(RPGLObject object) {
+        JsonArray classes = object.removeJsonArray(RPGLObjectTO.CLASSES_ALIAS);
+        object.setClasses(new JsonArray());
+        // set classes and nested classes
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            String classId = classData.getString("id");
+            int level = Objects.requireNonNullElse(classData.getInteger("level"), 1);
+            JsonObject choices = Objects.requireNonNullElse(classData.getJsonObject("choices"), new JsonObject());
+            for (int j = 0; j < level; j++) {
+                object.levelUp(classId, choices);
+            }
+            // re-assign additional nested classes
+            JsonObject additionalNestedClasses = Objects.requireNonNullElse(classData.getJsonObject("additional_nested_classes"), new JsonObject());
+            for (Map.Entry<String, ?> additionalNestedClassEntry : additionalNestedClasses.asMap().entrySet()) {
+                JsonObject additionalNestedClassData = additionalNestedClasses.getJsonObject(additionalNestedClassEntry.getKey());
+                object.addAdditionalNestedClass(
+                        classId,
+                        additionalNestedClassEntry.getKey(),
+                        additionalNestedClassData.getInteger("scale"),
+                        additionalNestedClassData.getBoolean("round_up")
+                );
+            }
+            // update nested classes
+            object.levelUpNestedClasses(classId, choices);
+        }
     }
 
 }

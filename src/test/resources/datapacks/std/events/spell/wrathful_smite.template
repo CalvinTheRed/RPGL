@@ -8,7 +8,7 @@
   "subevents": [
     {
       "subevent": "give_effect",
-      "effect": "std:wrathful_smite"
+      "effect": "std:spell/wrathful_smite/passive"
     }
   ]
 }

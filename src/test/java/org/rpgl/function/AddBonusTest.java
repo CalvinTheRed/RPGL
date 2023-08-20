@@ -293,4 +293,107 @@ public class AddBonusTest {
         );
     }
 
+    @Test
+    @DisplayName("execute adds correct bonus to calculation (level with specified class)")
+    void execute_addsCorrectBonusToCalculation_levelWithSpecifiedClass() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        calculation.setSource(source);
+        calculation.prepare(context);
+        calculation.setTarget(target);
+
+        AddBonus addBonus = new AddBonus();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "add_bonus",
+                "bonus": [
+                    ]
+                        "bonus_formula": "level",
+                        "class": "std:common/base",
+                        "object": {
+                            "from": "effect",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("function", "add_bonus");
+            this.putJsonArray("bonus", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("bonus_formula", "level");
+                    this.putString("class", "std:common/base");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "effect");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+        effect.setName("TEST");
+
+        addBonus.execute(effect, calculation, functionJson, context);
+
+        assertEquals(1, calculation.getBonus(),
+                "source's level should be added as bonus to calculation (+17)"
+        );
+    }
+
+    @Test
+    @DisplayName("execute adds correct bonus to calculation (level without specified class)")
+    void execute_addsCorrectBonusToCalculation_levelWithoutSpecifiedClass() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        calculation.setSource(source);
+        calculation.prepare(context);
+        calculation.setTarget(target);
+
+        AddBonus addBonus = new AddBonus();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "add_bonus",
+                "bonus": [
+                    ]
+                        "bonus_formula": "level",
+                        "object": {
+                            "from": "effect",
+                            "object": "source"
+                        }
+                    }
+                ]
+            }*/
+            this.putString("function", "add_bonus");
+            this.putJsonArray("bonus", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("bonus_formula", "level");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "effect");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+        effect.setName("TEST");
+
+        addBonus.execute(effect, calculation, functionJson, context);
+
+        assertEquals(9, calculation.getBonus(),
+                "source's level should be added as bonus to calculation (+17)"
+        );
+    }
 }

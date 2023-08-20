@@ -257,7 +257,7 @@ public class AddTemporaryHitPointsTest {
                 "function": "add_temporary_hit_points",
                 "temporary_hit_points": [
                     {
-                        "healing_formula": "proficiency",
+                        "temporary_hit_point_formula": "proficiency",
                         "object": {
                             "from": "effect",
                             "object": "source"
@@ -290,4 +290,109 @@ public class AddTemporaryHitPointsTest {
         );
     }
 
+    @Test
+    @DisplayName("execute adds temporary hit points to subevent (level with specified class)")
+    void execute_addsTemporaryHitPointsToSubevent_levelWithSpecifiedClass() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.setSource(source);
+        temporaryHitPointCollection.prepare(context);
+
+        AddTemporaryHitPoints addTemporaryHitPoints = new AddTemporaryHitPoints();
+        JsonObject functionJson = new JsonObject() {{
+           /*{
+                "function": "add_temporary_hit_points",
+                "temporary_hit_points": [
+                    {
+                        "temporary_hit_point_formula": "level",
+                        "class": "std:common/base",
+                        "object": {
+                            "from": "effect",
+                            "object": "source"
+                        }
+                    }
+                ]
+           }*/
+            this.putString("function", "add_temporary_hit_points");
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("temporary_hit_point_formula", "level");
+                    this.putString("class", "std:common/base");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "effect");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+
+        addTemporaryHitPoints.execute(effect, temporaryHitPointCollection, functionJson, context);
+
+        String expected = """
+                [{"bonus":1,"dice":[]}]""";
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "execute should add source's level to TemporaryHitPointCollection subevent"
+        );
+    }
+
+    @Test
+    @DisplayName("execute adds temporary hit points to subevent (level without specified class)")
+    void execute_addsTemporaryHitPointsToSubevent_levelWithoutSpecifiedClass() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
+        temporaryHitPointCollection.setSource(source);
+        temporaryHitPointCollection.prepare(context);
+
+        AddTemporaryHitPoints addTemporaryHitPoints = new AddTemporaryHitPoints();
+        JsonObject functionJson = new JsonObject() {{
+           /*{
+                "function": "add_temporary_hit_points",
+                "temporary_hit_points": [
+                    {
+                        "temporary_hit_point_formula": "level",
+                        "object": {
+                            "from": "effect",
+                            "object": "source"
+                        }
+                    }
+                ]
+           }*/
+            this.putString("function", "add_temporary_hit_points");
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("temporary_hit_point_formula", "level");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "effect");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }};
+
+        RPGLEffect effect = new RPGLEffect();
+        effect.setSource(source);
+        effect.setTarget(target);
+
+        addTemporaryHitPoints.execute(effect, temporaryHitPointCollection, functionJson, context);
+
+        String expected = """
+                [{"bonus":9,"dice":[]}]""";
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+                "execute should add source's level to TemporaryHitPointCollection subevent"
+        );
+    }
 }

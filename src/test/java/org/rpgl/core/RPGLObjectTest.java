@@ -14,6 +14,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -225,11 +226,20 @@ public class RPGLObjectTest {
 
         List<RPGLEvent> events = youngRedDragon.getEventObjects(context);
 
-        assertEquals(1, events.size(),
+        assertEquals(4, events.size(),
                 "std:dragon/red/young should have 1 RPGLEvent"
         );
         assertEquals("std:object/dragon/red/young/breath", events.get(0).getId(),
                 "std:dragon/red/young should have the std:object/dragon/red/young/breath event"
+        );
+        assertEquals("std:object/dragon/red/young/claw", events.get(1).getId(),
+                "std:dragon/red/young should have the std:object/dragon/red/young/claw event"
+        );
+        assertEquals("std:object/dragon/red/young/bite", events.get(2).getId(),
+                "std:dragon/red/young should have the std:object/dragon/red/young/bite event"
+        );
+        assertEquals("std:object/dragon/red/young/multiattack", events.get(3).getId(),
+                "std:dragon/red/young should have the std:object/dragon/red/young/multiattack event"
         );
     }
 
@@ -242,18 +252,42 @@ public class RPGLObjectTest {
 
         List<RPGLEffect> effects = youngRedDragon.getEffectObjects();
 
-        assertEquals(1, effects.size(),
-                "std:dragon/red/young should have 1 RPGLEffect"
+        assertEquals(9, effects.size(),
+                "std:dragon/red/young should have 9 RPGLEffects"
         );
-        assertEquals("std:common/damage/immunity/fire", effects.get(0).getId(),
+        assertEquals("std:resource/take/claw_attack", effects.get(0).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/dexterity effect"
+        );
+        assertEquals("std:resource/take/bite_attack", effects.get(1).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/constitution effect"
+        );
+        assertEquals("std:common/proficiency/save/dexterity", effects.get(2).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/dexterity effect"
+        );
+        assertEquals("std:common/proficiency/save/constitution", effects.get(3).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/constitution effect"
+        );
+        assertEquals("std:common/proficiency/save/wisdom", effects.get(4).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/wisdom effect"
+        );
+        assertEquals("std:common/proficiency/save/charisma", effects.get(5).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/save/charisma effect"
+        );
+        assertEquals("std:common/damage/immunity/fire", effects.get(6).getId(),
                 "std:dragon/red/young should have the std:common/damage/immunity/fire effect"
+        );
+        assertEquals("std:common/proficiency/skill/perception", effects.get(7).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/skill/perception effect"
+        );
+        assertEquals("std:common/proficiency/skill/stealth", effects.get(8).getId(),
+                "std:dragon/red/young should have the std:common/proficiency/skill/stealth effect"
         );
     }
 
     @Test
     @DisplayName("addRemoveEffect effects can be added and removed")
     void addRemoveEffect_effectsCanBeAddedAndRemoved() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("debug:dummy");
         DummyContext context = new DummyContext();
         context.add(knight);
 
@@ -290,16 +324,22 @@ public class RPGLObjectTest {
         youngRedDragon.invokeEvent(
                 new RPGLObject[] { knight },
                 RPGLFactory.newEvent("std:object/dragon/red/young/breath"),
-                youngRedDragon.getResourceObjects(),
+                new ArrayList<>() {{
+                    this.add(youngRedDragon.getResourcesWithTag("action").get(0));
+                    this.add(youngRedDragon.getResourcesWithTag("breath_attack").get(0));
+                }},
                 context
         );
 
         assertEquals(4, knight.getHealthData().getInteger("current"),
                 "std:humanoid/knight should have 4 health left after failing a save against std:dragon/red/young's breath attack"
         );
-        for (RPGLResource resource : youngRedDragon.getResourceObjects()) {
-            assertTrue(resource.getExhausted());
-        }
+        assertTrue(youngRedDragon.getResourcesWithTag("action").get(0).getExhausted(),
+                "resource should be exhausted"
+        );
+        assertTrue(youngRedDragon.getResourcesWithTag("breath_attack").get(0).getExhausted(),
+                "resource should be exhausted"
+        );
     }
 
     @Test
@@ -393,7 +433,7 @@ public class RPGLObjectTest {
         context.add(source);
         context.add(target);
 
-        RPGLResource resource = RPGLFactory.newResource("std:common/action");
+        RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         source.addResource(resource);
 
         resource.exhaust();
@@ -425,6 +465,570 @@ public class RPGLObjectTest {
                     "resource should be a std:item/wand/wand_of_fireballs_charge"
             );
         }
+    }
+
+    @Test
+    @DisplayName("getLevel returns correct level (with class parameter)")
+    void getLevel_returnsCorrectLevel_withClassParameter() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "debug:test",
+                    "name": "TEST CLASS",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:test");
+                this.putString("name", "TEST CLASS");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+        }});
+
+        assertEquals(5, object.getLevel("debug:test"),
+                "object should have 5 levels in class debug:test"
+        );
+    }
+
+    @Test
+    @DisplayName("getLevel returns correct level (no parameter, no nested classes)")
+    void getLevel_returnsCorrectLevel_noParameterNoNestedClasses() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "debug:blank",
+                    "name": "BLANK CLASS",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putString("name", "BLANK CLASS");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+        }});
+
+        assertEquals(5, object.getLevel(),
+                "object should have 5 levels overall"
+        );
+    }
+
+    @Test
+    @DisplayName("getLevel returns correct level (no parameter, with nested classes)")
+    void getLevel_returnsCorrectLevel_noParameterWithNestedClasses() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "debug:test",
+                    "name": "TEST CLASS",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "debug:blank",
+                    "name": "BLANK CLASS",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:test");
+                this.putString("name", "TEST CLASS");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putString("name", "BLANK CLASS");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+        }});
+
+        assertEquals(5, object.getLevel(),
+                "object should have 5 levels overall (ignore the levels of the nested class)"
+        );
+    }
+
+    @Test
+    @DisplayName("getLevel returns correct level (no parameter, with additional nested classes)")
+    void getLevel_returnsCorrectLevel_noParameterWithAdditionalNestedClasses() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 5,
+                    "additional_nested_classes": {
+                        "std:fighter/champion": {
+                            "scale": 1,
+                            "round_up": false
+                        }
+                    }
+                },
+                {
+                    "id": "std:common/base",
+                    "name": "Base",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "std:fighter/champion",
+                    "name": "Champion",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject() {{
+                    this.putJsonObject("std:fighter/champion", new JsonObject() {{
+                        this.putInteger("scale", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:common/base");
+                this.putString("name", "Base");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter/champion");
+                this.putString("name", "Champion");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+        }});
+
+        assertEquals(5, object.getLevel(),
+                "object should have 5 levels overall (ignore the levels of the nested class and the additional nested class)"
+        );
+    }
+
+    @Test
+    @DisplayName("calculateLevelForNestedClass calculates correct level (no additional nested classes)")
+    void calculateLevelForNestedClass_calculatesCorrectLevel_noAdditionalNestedClasses() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 3,
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject() );
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 3);
+                this.putJsonObject("additional_nested_classes", new JsonObject() );
+            }});
+        }});
+
+        assertEquals(5+3, object.calculateLevelForNestedClass("std:common/base"),
+                "object should expect to have 8 levels in std:common/base"
+        );
+    }
+
+    @Test
+    @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes)")
+    void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClasses() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "debug:blank",
+                    "name": "BLANK CLASS",
+                    "level": 3,
+                    "additional_nested_classes": {
+                        "std:common/base": {
+                            "scale": 1,
+                            "round_up": false
+                        }
+                    }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject() );
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putString("name", "BLANK CLASS");
+                this.putInteger("level", 3);
+                this.putJsonObject("additional_nested_classes", new JsonObject() {{
+                    this.putJsonObject("std:common/base", new JsonObject() {{
+                        this.putInteger("scale", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+        }});
+
+        assertEquals(5+3, object.calculateLevelForNestedClass("std:common/base"),
+                "object should expect to have 8 levels in std:common/base"
+        );
+    }
+
+    @Test
+    @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes and partial scaling rounded down)")
+    void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClassesAndPartialScalingRoundedDown() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "debug:blank",
+                    "name": "BLANK CLASS",
+                    "level": 3,
+                    "additional_nested_classes": {
+                        "std:common/base": {
+                            "scale": 2,
+                            "round_up": false
+                        }
+                    }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject() );
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putString("name", "BLANK CLASS");
+                this.putInteger("level", 3);
+                this.putJsonObject("additional_nested_classes", new JsonObject() {{
+                    this.putJsonObject("std:common/base", new JsonObject() {{
+                        this.putInteger("scale", 2);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+        }});
+
+        assertEquals(5+1, object.calculateLevelForNestedClass("std:common/base"),
+                "object should expect to have 6 levels in std:common/base"
+        );
+    }
+
+    @Test
+    @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes and partial scaling rounded up)")
+    void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClassesAndPartialScalingRoundedUp() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 5,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "debug:blank",
+                    "name": "BLANK CLASS",
+                    "level": 3,
+                    "additional_nested_classes": {
+                        "std:common/base": {
+                            "scale": 2,
+                            "round_up": true
+                        }
+                    }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject() );
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putString("name", "BLANK CLASS");
+                this.putInteger("level", 3);
+                this.putJsonObject("additional_nested_classes", new JsonObject() {{
+                    this.putJsonObject("std:common/base", new JsonObject() {{
+                        this.putInteger("scale", 2);
+                        this.putBoolean("round_up", true);
+                    }});
+                }});
+            }});
+        }});
+
+        assertEquals(5+2, object.calculateLevelForNestedClass("std:common/base"),
+                "object should expect to have 7 levels in std:common/base"
+        );
+    }
+
+    @Test
+    @DisplayName("getNestedClassIds returns correct nested classes")
+    void getNestedClassIds_returnsCorrectNestedClasses() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 5,
+                    "additional_nested_classes": {
+                        "debug:blank": {
+                            "scale": 1,
+                            "round_up": false
+                        }
+                    }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 5);
+                this.putJsonObject("additional_nested_classes", new JsonObject(){{
+                    this.putJsonObject("debug:blank", new JsonObject() {{
+                        this.putInteger("scale", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+        }});
+
+        List<String> nestedClassIds = object.getNestedClassIds("std:fighter");
+        assertEquals(3, nestedClassIds.size(),
+                "std:fighter should have 3 nested classes for this object"
+        );
+        assertEquals("std:common/hit_die/d10", nestedClassIds.get(0),
+                "std:fighter should have std:common/hit_die/d10 as a nested class"
+        );
+        assertEquals("std:common/base", nestedClassIds.get(1),
+                "std:fighter should have std:common/base as a nested class"
+        );
+        assertEquals("debug:blank", nestedClassIds.get(2),
+                "std:fighter should have debug:blank as a nested class"
+        );
+    }
+
+    @Test
+    @DisplayName("levelUpNestedClasses levels up nested classes correctly")
+    void levelUpNestedClasses_levelsUpNestedClassesCorrectly() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 2,
+                    "additional_nested_classes": {
+                        "debug:blank": {
+                            "scale": 1,
+                            "round_up": false
+                        }
+                    }
+                },
+                {
+                    "id": "std:common/base",
+                    "name": "Base",
+                    "level": 1,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "debug:blank",
+                    "name": "BLANK CLASS",
+                    "level": 1,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "std:common/spellcaster",
+                    "name": "Spellcaster",
+                    "level": 1,
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 2);
+                this.putJsonObject("additional_nested_classes", new JsonObject(){{
+                    this.putJsonObject("debug:blank", new JsonObject() {{
+                        this.putInteger("scale", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:common/base");
+                this.putString("name", "Base");
+                this.putInteger("level", 1);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putString("name", "BLANK CLASS");
+                this.putInteger("level", 1);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:common/spellcaster");
+                this.putString("name", "Spellcaster");
+                this.putInteger("level", 1);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+        }});
+
+        object.levelUpNestedClasses("std:fighter", new JsonObject());
+
+        assertEquals(2, object.getLevel("std:common/base"),
+                "object should gain a 2nd level in class std:common/base"
+        );
+        assertEquals(2, object.getLevel("debug:blank"),
+                "object should gain a 2nd level in class debug:blank"
+        );
+        assertEquals(1, object.getLevel("std:common/spellcaster"),
+                "object should not gain a 2nd level in class std:common/spellcaster"
+        );
+    }
+
+    @Test
+    @DisplayName("levelUp levels up all classes correctly (no new classes)")
+    void levelUp_levelsUpAllClassesCorrectly_noNewClasses() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        object.setClasses(new JsonArray() {{
+            /*[
+                {
+                    "id": "std:fighter",
+                    "name": "Fighter",
+                    "level": 1,
+                    "additional_nested_classes": {
+                        "debug:blank": {
+                            "scale": 1,
+                            "round_up": false
+                        }
+                    }
+                },
+                {
+                    "id": "std:common/base",
+                    "name": "Base",
+                    "level": 1,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "debug:blank",
+                    "name": "BLANK CLASS",
+                    "level": 1,
+                    "additional_nested_classes": { }
+                },
+                {
+                    "id": "std:common/spellcaster",
+                    "name": "Spellcaster",
+                    "level": 1,
+                    "additional_nested_classes": { }
+                }
+            ]*/
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:fighter");
+                this.putString("name", "Fighter");
+                this.putInteger("level", 1);
+                this.putJsonObject("additional_nested_classes", new JsonObject(){{
+                    this.putJsonObject("debug:blank", new JsonObject() {{
+                        this.putInteger("scale", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:common/base");
+                this.putString("name", "Base");
+                this.putInteger("level", 1);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "debug:blank");
+                this.putString("name", "BLANK CLASS");
+                this.putInteger("level", 1);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("id", "std:common/spellcaster");
+                this.putString("name", "Spellcaster");
+                this.putInteger("level", 1);
+                this.putJsonObject("additional_nested_classes", new JsonObject());
+            }});
+        }});
+
+        object.levelUp("std:fighter", new JsonObject());
+
+        assertEquals(2, object.getLevel("std:fighter"),
+                "object should gain a 2nd level in class std:fighter"
+        );
+        assertEquals(2, object.getLevel("std:common/base"),
+                "object should gain a 2nd level in class std:common/base"
+        );
+        assertEquals(2, object.getLevel("debug:blank"),
+                "object should gain a 2nd level in class debug:blank"
+        );
+        assertEquals(1, object.getLevel("std:common/spellcaster"),
+                "object should not gain a 2nd level in class std:common/spellcaster"
+        );
+    }
+
+    @Test
+    @DisplayName("levelUp levels up all classes correctly (first class level)")
+    void levelUp_levelsUpAllClassesCorrectly_firstClassLevel() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+
+        object.levelUp("std:fighter", new JsonObject() {{
+            this.putJsonArray("Skill Proficiencies", new JsonArray() {{
+                this.addInteger(0);
+                this.addInteger(1);
+            }});
+            this.putJsonArray("Fighting Style", new JsonArray() {{
+                this.addInteger(0);
+            }});
+        }});
+
+        assertEquals(1, object.getLevel("std:fighter"),
+                "object should gain 1 level in class std:fighter"
+        );
+        assertEquals(1, object.getLevel("std:common/base"),
+                "object should gain 1 level in class std:common/base"
+        );
     }
 
 }

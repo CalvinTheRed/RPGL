@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "TEST CLASS",
+  "description": "A test class.",
+  "nested_classes": {
+    "debug:blank": {
+      "scale": 1,
+      "round_up": false
+    }
+  },
+  "features": {
+    "1": {
+      "gain": {
+        "effects": [
+          {
+            "name": "Test Effect Choice",
+            "count": 1,
+            "options": [
+              "std:common/damage/resistance/fire",
+              "std:common/damage/resistance/cold"
+            ]
+          }
+        ],
+        "events": [
+          "std:spell/fire_bolt"
+        ],
+        "resources": [
+          {
+            "resource": "std:common/action/01",
+            "count": 1
+          }
+        ]
+      },
+      "lose": {
+        "effects": [
+          "std:common/damage/immunity/fire"
+        ],
+        "events": [
+          "std:object/dragon/red/young/breath"
+        ],
+        "resources": [
+          "std:common/bonus_action/01"
+        ]
+      }
+    }
+  }
+}

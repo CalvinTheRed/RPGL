@@ -63,22 +63,34 @@ public class AddBonus extends Function {
                 "name": "...",
                 "bonus_formula": "modifier",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "bonus_formula": "ability",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "bonus_formula": "proficiency",
                 "half": boolean,
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
-                "bonus_formula": "level", // TODO this feature not yet supported
+                "bonus_formula": "level",
                 "class": "...",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             }
         ]*/
         return switch (bonusJson.getString("bonus_formula")) {
@@ -102,6 +114,16 @@ public class AddBonus extends Function {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context) / 2);
                 } else {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                }
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            case "level" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, bonusJson.getJsonObject("object"));
+                String classId = bonusJson.getString("class");
+                if (classId == null) {
+                    this.putInteger("bonus", object.getLevel());
+                } else {
+                    this.putInteger("bonus", object.getLevel(classId));
                 }
                 this.putJsonArray("dice", new JsonArray());
             }};

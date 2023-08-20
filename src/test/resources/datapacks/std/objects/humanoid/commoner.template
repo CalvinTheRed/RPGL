@@ -13,9 +13,6 @@
     "cha": 10
   },
   "health_data": {
-    "hit_dice": [
-      { "count": 1, "size": 4, "determined": [ 2 ] }
-    ],
     "base": 2,
     "current": 2,
     "temporary": 0
@@ -32,5 +29,12 @@
   "effects": [
 
   ],
-  "proficiency_bonus": 2
+  "classes": [
+
+  ],
+  "races": [
+
+  ],
+  "proficiency_bonus": 2,
+  "challenge_rating": 0
 }

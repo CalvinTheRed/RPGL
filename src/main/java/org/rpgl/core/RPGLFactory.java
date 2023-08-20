@@ -142,4 +142,40 @@ public final class RPGLFactory {
         return newResource(resourceId, null);
     }
 
+    /**
+     * Returns the RPGLClass stored at the given classId.
+     *
+     * @param classId a class ID <code>(namespace:name)</code>
+     * @return a RPGLClass object
+     */
+    public static RPGLClass getClass(String classId) {
+        String[] classIdSplit = classId.split(":");
+        try {
+            return DatapackLoader.DATAPACKS
+                    .get(classIdSplit[0])
+                    .getClass(classIdSplit[1]);
+        } catch (NullPointerException e) {
+            LOGGER.error("encountered an error getting RPGLClass: " + classId);
+            throw new RuntimeException("Encountered an error getting a RPGLClass", e);
+        }
+    }
+
+    /**
+     * Returns the RPGLRace stored at the given raceId.
+     *
+     * @param raceId a race ID <code>(namespace:name)</code>
+     * @return a RPGLRace object
+     */
+    public static RPGLRace getRace(String raceId) {
+        String[] raceIdSplit = raceId.split(":");
+        try {
+            return DatapackLoader.DATAPACKS
+                    .get(raceIdSplit[0])
+                    .getRace(raceIdSplit[1]);
+        } catch (NullPointerException e) {
+            LOGGER.error("encountered an error getting RPGLRace: " + raceId);
+            throw new RuntimeException("Encountered an error getting a RPGLRace", e);
+        }
+    }
+
 }

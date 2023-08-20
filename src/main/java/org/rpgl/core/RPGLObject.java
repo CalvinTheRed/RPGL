@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents anything which might appear on a battle map. Examples of this include buildings, Goblins, and
@@ -173,6 +174,60 @@ public class RPGLObject extends RPGLTaggable {
      */
     public void setResources(JsonArray resources) {
         this.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
+    }
+
+    /**
+     * Getter for classes.
+     *
+     * @return an array of class and level data
+     */
+    public JsonArray getClasses() {
+        return this.getJsonArray(RPGLObjectTO.CLASSES_ALIAS);
+    }
+
+    /**
+     * Setter for classes.
+     *
+     * @param classes a new array of class and level data
+     */
+    public void setClasses(JsonArray classes) {
+        this.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, classes);
+    }
+
+    /**
+     * Getter for races.
+     *
+     * @return an array of race IDs
+     */
+    public JsonArray getRaces() {
+        return this.getJsonArray(RPGLObjectTO.RACES_ALIAS);
+    }
+
+    /**
+     * Setter for races.
+     *
+     * @param races a new array of race IDs
+     */
+    public void setRaces(JsonArray races) {
+        this.putJsonArray(RPGLObjectTO.RACES_ALIAS, races);
+    }
+
+    /**
+     * Getter for challenge rating.
+     *
+     * @return the object's challenge rating
+     */
+    public Double getChallengeRating() {
+        return this.getDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS);
+    }
+
+    /**
+     * Setter for challenge rating.
+     *
+     * @param challengeRating a new challenge rating
+     */
+    public void setChallengeRating(double challengeRating) {
+        this.putDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS, challengeRating);
     }
 
     // =================================================================================================================
@@ -377,14 +432,11 @@ public class RPGLObject extends RPGLTaggable {
      * as well.
      *
      * @param resourceUuid the UUID for a RPGLResource
-     * @return true if the resource was removed, false otherwise
      */
-    public boolean removeResource(String resourceUuid) {
+    public void removeResource(String resourceUuid) {
         if (this.getResources().asList().remove(resourceUuid)) {
             UUIDTable.unregister(resourceUuid);
-            return true;
         }
-        return false;
     }
 
     /**
@@ -738,6 +790,197 @@ public class RPGLObject extends RPGLTaggable {
         }
 
         return tagsList;
+    }
+
+    /**
+     * Returns the object's level in a given class.
+     *
+     * @param classId a class ID
+     * @return the object's level in the passed class
+     */
+    public Integer getLevel(String classId) {
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            if (classData.getString("id").equals(classId)) {
+                return classData.getInteger("level");
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Returns the object's level.
+     *
+     * @return the object's level
+     */
+    public int getLevel() {
+        JsonArray classes = this.getClasses();
+        ArrayList<String> classIds = new ArrayList<>();
+        ArrayList<String> nestedClassIds = new ArrayList<>();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            String classId = classData.getString("id");
+            classIds.add(classId);
+            for (Map.Entry<String, ?> nestedClassEntry : RPGLFactory.getClass(classId).getNestedClasses().asMap().entrySet()) {
+                nestedClassIds.add(nestedClassEntry.getKey());
+            }
+            for (Map.Entry<String, ?> additionalNestedClassEntry : classData.getJsonObject("additional_nested_classes").asMap().entrySet()) {
+                nestedClassIds.add(additionalNestedClassEntry.getKey());
+            }
+        }
+        classIds.removeAll(nestedClassIds);
+        int level = 0;
+        for (String classId : classIds) {
+            level += this.getLevel(classId);
+        }
+        return level;
+    }
+
+    /**
+     * Levels up the object for the passed class.
+     *
+     * @param classId a class ID
+     * @param choices a JSON object indicating any choices required to level up in the passed class
+     */
+    public void levelUp(String classId, JsonObject choices) {
+        RPGLClass rpglClass = RPGLFactory.getClass(classId);
+        if (this.getLevel() == 0) {
+            rpglClass.grantStartingFeatures(this, choices);
+        } else {
+            rpglClass.levelUpRPGLObject(this, choices);
+        }
+        this.levelUpNestedClasses(classId, choices);
+        this.levelUpRaces(choices, this.getLevel());
+    }
+
+    /**
+     * This helper method updates race-granted features upon level-up.
+     *
+     * @param choices a JSON object indicating any choices required to level up, given the object's races
+     * @param level the object's new level
+     */
+    void levelUpRaces(JsonObject choices, int level) {
+        JsonArray races = this.getRaces();
+        for (int i = 0; i < races.size(); i++) {
+            String raceId = races.getString(i);
+            RPGLRace race = RPGLFactory.getRace(raceId);
+            race.levelUpRPGLObject(this, choices, level);
+        }
+    }
+
+    /**
+     * Levels up a class's nested classes.
+     *
+     * @param classId a class ID whose nested classes must be leveled up
+     * @param choices a JSON object indicating any choices required to level up the object's nested classes
+     */
+    public void levelUpNestedClasses(String classId, JsonObject choices) {
+        for (String nestedClassId : this.getNestedClassIds(classId)) {
+            RPGLClass rpglClass = RPGLFactory.getClass(nestedClassId);
+            int intendedLevel = this.calculateLevelForNestedClass(nestedClassId);
+            int currentLevel = this.getLevel(nestedClassId);
+            while (currentLevel < intendedLevel) {
+                rpglClass.levelUpRPGLObject(this, choices);
+                currentLevel = this.getLevel(nestedClassId);
+            }
+        }
+    }
+
+    /**
+     * This helper method returns a lost of class IDs for all nested classes indicated by a given class.
+     *
+     * @param classId a class
+     * @return a list of class IDs
+     */
+    List<String> getNestedClassIds(String classId) {
+        RPGLClass rpglClass = RPGLFactory.getClass(classId);
+        JsonObject nestedClasses = rpglClass.getNestedClasses();
+        ArrayList<String> nestedClassIds = new ArrayList<>(nestedClasses.asMap().keySet());
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            if (classData.getString("id").equals(classId)) {
+                nestedClassIds.addAll(classData.getJsonObject("additional_nested_classes").asMap().keySet());
+                break;
+            }
+        }
+        return nestedClassIds;
+    }
+
+    /**
+     * This helper method calculates what level the object should be in a nested class, accounting for all non-nested
+     * classes which contribute to it.
+     *
+     * @param nestedClassId a nested class's class ID
+     * @return the level the object should be in the passed nested class
+     */
+    int calculateLevelForNestedClass(String nestedClassId) {
+        int nestedClassLevel = 0;
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            RPGLClass rpglClass = RPGLFactory.getClass(classData.getString("id"));
+            JsonObject nestedClasses = rpglClass.getNestedClasses();
+            JsonObject additionalNestedClasses = classData.getJsonObject("additional_nested_classes");
+            JsonObject nestedClassData = null;
+            if (nestedClasses.asMap().containsKey(nestedClassId)) {
+                nestedClassData = nestedClasses.getJsonObject(nestedClassId);
+            } else if (additionalNestedClasses.asMap().containsKey(nestedClassId)) {
+                nestedClassData = additionalNestedClasses.getJsonObject(nestedClassId);
+            }
+            if (nestedClassData != null) {
+                int classLevel = classData.getInteger("level");
+                int scale = nestedClassData.getInteger("scale");
+                boolean roundUp = Objects.requireNonNullElse(nestedClassData.getBoolean("round_up"), false);
+                if (roundUp) {
+                    nestedClassLevel += Math.ceil(classLevel / (double) scale);
+                } else {
+                    nestedClassLevel += classLevel / (double) scale;
+                }
+            }
+        }
+        return nestedClassLevel;
+    }
+
+    /**
+     * Adds a given class to the nested class list of another class.
+     *
+     * @param classId the class ID of the class to be given another nested class
+     * @param additionalNestedClassId the class ID of the class to be added as a nested class
+     * @param scale the scale of how many levels it takes to increment the nested class level by 1
+     * @param roundUp whether <code>scale</code> should round up when evaluating the nested class's intended level
+     */
+    public void addAdditionalNestedClass(String classId, String additionalNestedClassId, int scale, boolean roundUp) {
+        JsonArray classes = this.getClasses();
+        for (int i = 0; i < classes.size(); i++) {
+            JsonObject classData = classes.getJsonObject(i);
+            if (classData.getString("id").equals(classId)) {
+                classData.getJsonObject("additional_nested_classes").putJsonObject(additionalNestedClassId, new JsonObject() {{
+                    this.putInteger("scale", scale);
+                    this.putBoolean("round_up", roundUp);
+                }});
+            }
+        }
+    }
+
+    /**
+     * Calculates the object's proficiency bonus by level.
+     *
+     * @return the object's proficiency bonus according to its level
+     */
+    public int getProficiencyBonusByLevel() {
+        return (int) (1 + Math.ceil(this.getLevel() / 4.0));
+    }
+
+    /**
+     * Returns a list of all resources possessed by this object which contain a given tag.
+     *
+     * @param tag a resource tag
+     * @return a list of RPGLResource objects
+     */
+    public List<RPGLResource> getResourcesWithTag(String tag) {
+        return this.getResourceObjects().stream().filter(resource -> resource.hasTag(tag)).toList();
     }
 
 }

@@ -63,22 +63,34 @@ public class AddHealing extends Function {
                 "name": "...",
                 "healing_formula": "modifier",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "healing_formula": "ability",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "healing_formula": "proficiency",
                 "half": boolean,
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
-                "healing_formula": "level", // TODO this feature not yet supported
+                "healing_formula": "level",
                 "class": "...",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             }
         ]*/
         return switch (healingJson.getString("healing_formula")) {
@@ -102,6 +114,16 @@ public class AddHealing extends Function {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context) / 2);
                 } else {
                     this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                }
+                this.putJsonArray("dice", new JsonArray());
+            }};
+            case "level" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, healingJson.getJsonObject("object"));
+                String classId = healingJson.getString("class");
+                if (classId == null) {
+                    this.putInteger("bonus", object.getLevel());
+                } else {
+                    this.putInteger("bonus", object.getLevel(classId));
                 }
                 this.putJsonArray("dice", new JsonArray());
             }};

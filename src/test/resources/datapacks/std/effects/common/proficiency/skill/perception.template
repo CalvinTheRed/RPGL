@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Skill Proficiency (Perception)",
+  "description": "You have proficiency in skill checks made using Perception.",
+  "subevent_filters": { }
+}

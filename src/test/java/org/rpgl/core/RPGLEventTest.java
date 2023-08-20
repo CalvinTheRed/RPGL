@@ -48,8 +48,8 @@ public class RPGLEventTest {
     @DisplayName("doResourcesSatisfyCost returns true (resources satisfy cost)")
     void doResourcesSatisfyCost_returnsTrue_resourcesSatisfyCost() {
         RPGLEvent event = RPGLFactory.newEvent("std:spell/cure_wounds");
-        RPGLResource action = RPGLFactory.newResource("std:common/action");
-        RPGLResource spellSlot = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
+        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
 
         event.verifyResourcesSatisfyCost(new ArrayList<>() {{
             this.add(action);
@@ -71,8 +71,8 @@ public class RPGLEventTest {
     @DisplayName("doResourcesSatisfyCost throws exception (resource potency too low)")
     void doResourcesSatisfyCost_throwsException_resourcePotencyTooLow() {
         RPGLEvent event = RPGLFactory.newEvent("std:spell/cure_wounds");
-        RPGLResource action = RPGLFactory.newResource("std:common/action");
-        RPGLResource spellSlot = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
+        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
         spellSlot.setPotency(0);
 
         assertThrows(InsufficientResourcePotencyException.class,
@@ -88,8 +88,8 @@ public class RPGLEventTest {
     @DisplayName("doResourcesSatisfyCost throws exception (resources don't match cost)")
     void doResourcesSatisfyCost_throwsException_resourcesDontMatchCost() {
         RPGLEvent event = RPGLFactory.newEvent("std:spell/cure_wounds");
-        RPGLResource action = RPGLFactory.newResource("std:common/action");
-        RPGLResource spellSlot = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
+        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
         spellSlot.setPotency(0);
 
         assertThrows(ResourceMismatchException.class,
@@ -105,8 +105,8 @@ public class RPGLEventTest {
     @DisplayName("scale scales target field correctly for resources with extra potency")
     void scale_scalesTargetFieldCorrectlyForResourcesWithExtraPotency() {
         RPGLEvent event = RPGLFactory.newEvent("std:spell/cure_wounds");
-        RPGLResource action = RPGLFactory.newResource("std:common/action");
-        RPGLResource spellSlot = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
+        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
         spellSlot.setPotency(9);
 
         event.scale(new ArrayList<>() {{
@@ -123,8 +123,8 @@ public class RPGLEventTest {
     @DisplayName("scale does not scale target field when resources have minimum required potency")
     void scale_doesNotScaleTargetFieldWhenResourcesHaveMinimumRequiredPotency() {
         RPGLEvent event = RPGLFactory.newEvent("std:spell/cure_wounds");
-        RPGLResource action = RPGLFactory.newResource("std:common/action");
-        RPGLResource spellSlot = RPGLFactory.newResource("std:class/spellcaster/spell_slot");
+        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
+        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
         spellSlot.setPotency(1);
 
         event.scale(new ArrayList<>() {{

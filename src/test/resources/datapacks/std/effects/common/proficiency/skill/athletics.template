@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Skill Proficiency (Athletics)",
+  "description": "You have proficiency in skill checks made using Athletics.",
+  "subevent_filters": { }
+}
