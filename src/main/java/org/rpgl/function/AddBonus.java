@@ -63,22 +63,34 @@ public class AddBonus extends Function {
                 "name": "...",
                 "bonus_formula": "modifier",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "bonus_formula": "ability",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "bonus_formula": "proficiency",
                 "half": boolean,
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "bonus_formula": "level",
                 "class": "...",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             }
         ]*/
         return switch (bonusJson.getString("bonus_formula")) {

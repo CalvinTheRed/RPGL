@@ -69,25 +69,37 @@ public class AddDamage extends Function {
                 "damage_formula": "modifier",
                 "damage_type": string,
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "damage_formula": "ability",
                 "damage_type": string,
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "damage_formula": "proficiency",
                 "damage_type": string,
                 "half": boolean,
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "damage_formula": "level",
                 "damage_type": string,
                 "class": "...",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             }
         ]*/
         return switch (damageJson.getString("damage_formula")) {

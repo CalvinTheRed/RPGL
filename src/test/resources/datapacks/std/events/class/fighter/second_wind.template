@@ -29,7 +29,11 @@
         },
         {
           "healing_formula": "level",
-          "class": "std:fighter"
+          "class": "std:fighter",
+          "object": {
+            "from": "subevent",
+            "object": "source"
+          }
         }
       ]
     }
