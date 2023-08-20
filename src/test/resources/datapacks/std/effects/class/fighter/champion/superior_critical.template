@@ -3,7 +3,7 @@
     "author": "Calvin Withun"
   },
   "name": "Improved Critical",
-  "description": "Your weapon attacks score a critical hit on a roll of 19 or 20.",
+  "description": "Your weapon attacks score a critical hit on a roll of 18, 19, or 20.",
   "subevent_filters": {
     "calculate_critical_hit_threshold": [
       {

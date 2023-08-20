@@ -8,6 +8,11 @@ import org.rpgl.json.JsonObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class is used to create transfer objects between a datapack and RPGL for RPGLClasses.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLClassTO extends DatapackContentTO {
 
     public static final String SUBCLASS_LEVEL_ALIAS = "subclass_level";

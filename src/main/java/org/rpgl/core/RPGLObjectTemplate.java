@@ -105,8 +105,8 @@ public class RPGLObjectTemplate extends JsonObject {
     }
 
     /**
-     * This helper method converts resource IDs in an RPGLObjectTemplate's effects array to RPGLResources. The UUID's of
-     * these new RPGLResources replace the original array contents.
+     * This helper method converts resource IDs in an RPGLObjectTemplate's resources array to RPGLResources. The UUID's
+     * of these new RPGLResources replace the original array contents.
      *
      * @param object an RPGLObject
      */
@@ -123,6 +123,12 @@ public class RPGLObjectTemplate extends JsonObject {
         object.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resourceUuids);
     }
 
+    /**
+     * This helper method processes the classes in the RPGLObjectTemplate's classes array and assigns features and
+     * levels to the object under construction accordingly.
+     *
+     * @param object an RPGLObject
+     */
     static void processClasses(RPGLObject object) {
         JsonArray classes = object.removeJsonArray(RPGLObjectTO.CLASSES_ALIAS);
         object.setClasses(new JsonArray());

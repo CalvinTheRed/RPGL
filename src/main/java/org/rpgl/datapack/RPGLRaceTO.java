@@ -6,6 +6,11 @@ import org.rpgl.json.JsonObject;
 
 import java.util.HashMap;
 
+/**
+ * This class is used to create transfer objects between a datapack and RPGL for RPGLRaces.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLRaceTO extends DatapackContentTO {
 
     public static final String ABILITY_SCORE_INCREASES_ALIAS = "ability_score_increases";

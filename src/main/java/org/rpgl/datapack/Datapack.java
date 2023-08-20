@@ -245,6 +245,11 @@ public class Datapack {
         }
     }
 
+    /**
+     * This method loads all classes stored in a single directory into the object.
+     *
+     * @param directory a File directory for the classes in a datapack
+     */
     void loadClasses(File directory) {
         this.loadClasses("", directory);
     }
@@ -276,6 +281,11 @@ public class Datapack {
         }
     }
 
+    /**
+     * This method loads all race templates stored in a single directory into the object.
+     *
+     * @param directory a File directory for the races in a datapack
+     */
     void loadRaces(File directory) {
         this.loadRaces("", directory);
     }

@@ -19,6 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the org.rpgl.core.RPGLRace class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLRaceTest {
 
     @BeforeAll

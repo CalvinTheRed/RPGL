@@ -3,7 +3,7 @@
     "author": "Calvin Withun"
   },
   "name": "D10",
-  "description": "This class is responsible for providing an object with d6 hit dice.",
+  "description": "This class is responsible for providing an object with d10 hit dice.",
   "features": {
     "1": {
       "gain": {

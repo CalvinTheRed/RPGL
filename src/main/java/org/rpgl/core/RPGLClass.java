@@ -10,52 +10,121 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This class represents a RPG class such as Wizard or Fighter, and contains all necessary information to progress along
+ * within that class.
+ *
+ * @author Calvin Withun
+ */
 public class RPGLClass extends DatapackContent {
 
+    /**
+     * Getter for subclass level.
+     *
+     * @return the level at which this class gains a subclass
+     */
     public Integer getSubclassLevel() {
         return this.getInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS);
     }
 
+    /**
+     * Setter for subclass level.
+     *
+     * @param subclassLevel the new level at which this class gains a subclass
+     */
     public void setSubclassLevel(int subclassLevel) {
         this.putInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS, subclassLevel);
     }
 
+    /**
+     * Getter for ability score increases.
+     *
+     * @return an array of levels at which this class grants ability score increases
+     */
     public JsonArray getAbilityScoreIncreases() {
         return this.getJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS);
     }
 
+    /**
+     * Setter for ability score increases.
+     *
+     * @param abilityScoreIncreases the new array of levels at which this class grants ability score increases
+     */
     public void setAbilityScoreIncreases(JsonArray abilityScoreIncreases) {
         this.putJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS, abilityScoreIncreases);
     }
 
+    /**
+     * Getter for multiclassing requirements.
+     *
+     * @return an array of multiclassing requirements which must be met to multiclass into or out of this class
+     */
     public JsonArray getMulticlassingRequirements() {
         return this.getJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS);
     }
 
+    /**
+     * Setter for multiclassing requirements.
+     *
+     * @param multiclassingRequirements the new array of multiclassing requirements which must be met to multiclass into
+     *                                  or out of this class
+     */
     public void setMulticlassingRequirements(JsonArray multiclassingRequirements) {
         this.putJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS, multiclassingRequirements);
     }
 
+    /**
+     * Getter for nested classes.
+     *
+     * @return an array of class IDs for classes nested within this class
+     */
     public JsonObject getNestedClasses() {
         return this.getJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS);
     }
 
+    /**
+     * Setter for nested classes.
+     *
+     * @param nestedClasses the new array of class IDs for classes nested within this class
+     */
     public void setNestedClasses(JsonObject nestedClasses) {
         this.putJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS, nestedClasses);
     }
 
+    /**
+     * Getter for starting features.
+     *
+     * @return a JSON object indicating features granted by this class if this class is assigned as an object's first
+     * level
+     */
     public JsonObject getStartingFeatures() {
         return this.getJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS);
     }
 
+    /**
+     * Setter for starting features.
+     *
+     * @param startingFeatures the new JSON object indicating features granted by this class if this class is assigned
+     *                         as an object's first level
+     */
     public void setStartingFeatures(JsonObject startingFeatures) {
         this.putJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS, startingFeatures);
     }
 
+    /**
+     * Getter for features.
+     *
+     * @return a JSON object indicating features to be gained or lost at specified levels in this class
+     */
     public JsonObject getFeatures() {
         return this.getJsonObject(RPGLClassTO.FEATURES_ALIAS);
     }
 
+    /**
+     * Setter for features.
+     *
+     * @param features the new JSON object indicating features to be gained or lost at specified levels in this class
+     */
     public void setFeatures(JsonObject features) {
         this.putJsonObject(RPGLClassTO.FEATURES_ALIAS, features);
     }
@@ -64,6 +133,12 @@ public class RPGLClass extends DatapackContent {
     // methods not derived directly from json data
     // =================================================================================================================
 
+    /**
+     * Grants the passed object the starting features specified by this class.
+     *
+     * @param object an RPGLObject to be granted this class's starting features
+     * @param choices a JSON object indicating any choices required to choose starting features in this class
+     */
     public void grantStartingFeatures(RPGLObject object, JsonObject choices) {
         this.grantGainedEvents(object, this.getStartingFeatures());
         this.grantGainedEffects(object, this.getStartingFeatures(), choices);
@@ -71,6 +146,12 @@ public class RPGLClass extends DatapackContent {
         this.levelUpRPGLObject(object, choices);
     }
 
+    /**
+     * Levels up an object in this class.
+     *
+     * @param object an RPGLObject to be leveled up in this class
+     * @param choices a JSON object indicating any choices required to choose features in this class on level-up
+     */
     public void levelUpRPGLObject(RPGLObject object, JsonObject choices) {
         int level = this.incrementRPGLObjectLevel(object);
         JsonObject features = this.getFeatures().getJsonObject(Integer.toString(level));
@@ -86,6 +167,12 @@ public class RPGLClass extends DatapackContent {
         }
     }
 
+    /**
+     * This helper method increments an objejct's level in this class.
+     *
+     * @param object an RPGLObject
+     * @return the new level of the object in this class
+     */
     int incrementRPGLObjectLevel(RPGLObject object) {
         // TODO check for meeting multiclassing requirements
         int level = object.getLevel(this.getId()) + 1;
@@ -109,6 +196,13 @@ public class RPGLClass extends DatapackContent {
         return level;
     }
 
+    /**
+     * Grants the passed object the passed features (effects only).
+     *
+     * @param object an RPGLObject to gain the passed features
+     * @param gainedFeatures a JSON object of class features gained at a particular level
+     * @param choices a JSON object indicating any choices required to choose from the passed features
+     */
     void grantGainedEffects(RPGLObject object, JsonObject gainedFeatures, JsonObject choices) {
         JsonArray effects = Objects.requireNonNullElse(gainedFeatures.getJsonArray("effects"), new JsonArray());
         for (int i = 0; i < effects.size(); i++) {
@@ -141,11 +235,23 @@ public class RPGLClass extends DatapackContent {
         }
     }
 
+    /**
+     * Grants the passed object the passed features (events only).
+     *
+     * @param object an RPGLObject to gain the passed features
+     * @param gainedFeatures a JSON object of class features gained at a particular level
+     */
     void grantGainedEvents(RPGLObject object, JsonObject gainedFeatures) {
         JsonArray events = Objects.requireNonNullElse(gainedFeatures.getJsonArray("events"), new JsonArray());
         object.getEvents().asList().addAll(events.asList());
     }
 
+    /**
+     * Grants the passed object the passed features (resources only).
+     *
+     * @param object an RPGLObject to gain the passed features
+     * @param gainedFeatures a JSON object of class features gained at a particular level
+     */
     void grantGainedResources(RPGLObject object, JsonObject gainedFeatures) {
         JsonArray resources = Objects.requireNonNullElse(gainedFeatures.getJsonArray("resources"), new JsonArray());
         for (int i = 0; i < resources.size(); i++) {
@@ -158,6 +264,12 @@ public class RPGLClass extends DatapackContent {
         }
     }
 
+    /**
+     * Revokes the passed features from the passed object (effects only).
+     *
+     * @param object an RPGLObject to lose the passed features
+     * @param lostFeatures a JSON object of class features lost at a particular level
+     */
     void revokeLostEffects(RPGLObject object, JsonObject lostFeatures) {
         JsonArray lostEffects = Objects.requireNonNullElse(lostFeatures.getJsonArray("effects"), new JsonArray());
         JsonArray effects = object.getEffects();
@@ -174,11 +286,23 @@ public class RPGLClass extends DatapackContent {
         }
     }
 
+    /**
+     * Revokes the passed features from the passed object (events only).
+     *
+     * @param object an RPGLObject to lose the passed features
+     * @param lostFeatures a JSON object of class features lost at a particular level
+     */
     void revokeLostEvents(RPGLObject object, JsonObject lostFeatures) {
         JsonArray lostEvents = Objects.requireNonNullElse(lostFeatures.getJsonArray("events"), new JsonArray());
         object.getEvents().asList().removeAll(lostEvents.asList());
     }
 
+    /**
+     * Revokes the passed features from the passed object (resources only).
+     *
+     * @param object an RPGLObject to lose the passed features
+     * @param lostFeatures a JSON object of class features lost at a particular level
+     */
     void revokeLostResources(RPGLObject object, JsonObject lostFeatures) {
         JsonArray lostResources = Objects.requireNonNullElse(lostFeatures.getJsonArray("resources"), new JsonArray());
         JsonArray resources = object.getResources();

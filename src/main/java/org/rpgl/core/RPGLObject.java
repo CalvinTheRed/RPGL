@@ -176,26 +176,56 @@ public class RPGLObject extends RPGLTaggable {
         this.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
     }
 
+    /**
+     * Getter for classes.
+     *
+     * @return an array of class and level data
+     */
     public JsonArray getClasses() {
         return this.getJsonArray(RPGLObjectTO.CLASSES_ALIAS);
     }
 
+    /**
+     * Setter for classes.
+     *
+     * @param classes a new array of class and level data
+     */
     public void setClasses(JsonArray classes) {
         this.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, classes);
     }
 
+    /**
+     * Getter for races.
+     *
+     * @return an array of race IDs
+     */
     public JsonArray getRaces() {
         return this.getJsonArray(RPGLObjectTO.RACES_ALIAS);
     }
 
+    /**
+     * Setter for races.
+     *
+     * @param races a new array of race IDs
+     */
     public void setRaces(JsonArray races) {
         this.putJsonArray(RPGLObjectTO.RACES_ALIAS, races);
     }
 
+    /**
+     * Getter for challenge rating.
+     *
+     * @return the object's challenge rating
+     */
     public Double getChallengeRating() {
         return this.getDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS);
     }
 
+    /**
+     * Setter for challenge rating.
+     *
+     * @param challengeRating a new challenge rating
+     */
     public void setChallengeRating(double challengeRating) {
         this.putDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS, challengeRating);
     }
@@ -762,6 +792,12 @@ public class RPGLObject extends RPGLTaggable {
         return tagsList;
     }
 
+    /**
+     * Returns the object's level in a given class.
+     *
+     * @param classId a class ID
+     * @return the object's level in the passed class
+     */
     public Integer getLevel(String classId) {
         JsonArray classes = this.getClasses();
         for (int i = 0; i < classes.size(); i++) {
@@ -773,6 +809,11 @@ public class RPGLObject extends RPGLTaggable {
         return 0;
     }
 
+    /**
+     * Returns the object's level.
+     *
+     * @return the object's level
+     */
     public int getLevel() {
         JsonArray classes = this.getClasses();
         ArrayList<String> classIds = new ArrayList<>();
@@ -796,6 +837,12 @@ public class RPGLObject extends RPGLTaggable {
         return level;
     }
 
+    /**
+     * Levels up the object for the passed class.
+     *
+     * @param classId a class ID
+     * @param choices a JSON object indicating any choices required to level up in the passed class
+     */
     public void levelUp(String classId, JsonObject choices) {
         RPGLClass rpglClass = RPGLFactory.getClass(classId);
         if (this.getLevel() == 0) {
@@ -807,6 +854,12 @@ public class RPGLObject extends RPGLTaggable {
         this.levelUpRaces(choices, this.getLevel());
     }
 
+    /**
+     * This helper method updates race-granted features upon level-up.
+     *
+     * @param choices a JSON object indicating any choices required to level up, given the object's races
+     * @param level the object's new level
+     */
     void levelUpRaces(JsonObject choices, int level) {
         JsonArray races = this.getRaces();
         for (int i = 0; i < races.size(); i++) {
@@ -816,6 +869,12 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
+    /**
+     * Levels up a class's nested classes.
+     *
+     * @param classId a class ID whose nested classes must be leveled up
+     * @param choices a JSON object indicating any choices required to level up the object's nested classes
+     */
     public void levelUpNestedClasses(String classId, JsonObject choices) {
         for (String nestedClassId : this.getNestedClassIds(classId)) {
             RPGLClass rpglClass = RPGLFactory.getClass(nestedClassId);
@@ -828,6 +887,12 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
+    /**
+     * This helper method returns a lost of class IDs for all nested classes indicated by a given class.
+     *
+     * @param classId a class
+     * @return a list of class IDs
+     */
     List<String> getNestedClassIds(String classId) {
         RPGLClass rpglClass = RPGLFactory.getClass(classId);
         JsonObject nestedClasses = rpglClass.getNestedClasses();
@@ -843,6 +908,13 @@ public class RPGLObject extends RPGLTaggable {
         return nestedClassIds;
     }
 
+    /**
+     * This helper method calculates what level the object should be in a nested class, accounting for all non-nested
+     * classes which contribute to it.
+     *
+     * @param nestedClassId a nested class's class ID
+     * @return the level the object should be in the passed nested class
+     */
     int calculateLevelForNestedClass(String nestedClassId) {
         int nestedClassLevel = 0;
         JsonArray classes = this.getClasses();
@@ -871,6 +943,14 @@ public class RPGLObject extends RPGLTaggable {
         return nestedClassLevel;
     }
 
+    /**
+     * Adds a given class to the nested class list of another class.
+     *
+     * @param classId the class ID of the class to be given another nested class
+     * @param additionalNestedClassId the class ID of the class to be added as a nested class
+     * @param scale the scale of how many levels it takes to increment the nested class level by 1
+     * @param roundUp whether <code>scale</code> should round up when evaluating the nested class's intended level
+     */
     public void addAdditionalNestedClass(String classId, String additionalNestedClassId, int scale, boolean roundUp) {
         JsonArray classes = this.getClasses();
         for (int i = 0; i < classes.size(); i++) {
@@ -884,10 +964,21 @@ public class RPGLObject extends RPGLTaggable {
         }
     }
 
+    /**
+     * Calculates the object's proficiency bonus by level.
+     *
+     * @return the object's proficiency bonus according to its level
+     */
     public int getProficiencyBonusByLevel() {
         return (int) (1 + Math.ceil(this.getLevel() / 4.0));
     }
 
+    /**
+     * Returns a list of all resources possessed by this object which contain a given tag.
+     *
+     * @param tag a resource tag
+     * @return a list of RPGLResource objects
+     */
     public List<RPGLResource> getResourcesWithTag(String tag) {
         return this.getResourceObjects().stream().filter(resource -> resource.hasTag(tag)).toList();
     }
