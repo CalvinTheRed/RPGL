@@ -93,4 +93,49 @@ public class HealingDeliveryTest {
         );
     }
 
+    @Test
+    @DisplayName("maximizeHealingDice maximizes all healing dice")
+    void maximizeHealingDice_maximizesAllHealingDice() {
+        HealingDelivery healingDelivery = new HealingDelivery();
+        healingDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "healing": [
+                    {
+                        "dice": [
+                            { "roll": 1, "size": 4 },
+                            { "roll": 1, "size": 6 },
+                            { "roll": 1, "size": 8 }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putJsonArray("healing", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 4);
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 6);
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 8);
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+
+        healingDelivery.maximizeHealingDice();
+
+        assertEquals(4+6+8, healingDelivery.getHealing(),
+                "getHealing should return the maximum healing possible given die sizes"
+        );
+    }
+
 }
