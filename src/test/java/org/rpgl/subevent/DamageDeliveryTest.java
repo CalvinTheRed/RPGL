@@ -100,4 +100,116 @@ public class DamageDeliveryTest {
         );
     }
 
+    @Test
+    @DisplayName("maximizeTypedDamageDice maximizes damage for specified damage type")
+    void maximizeTypedDamageDice_maximizesDamageForSpecifiedDamageType() {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire",
+                        "dice": [
+                            { "roll": 1, "size": 4 }
+                        ],
+                        "bonus": 0,
+                    },
+                    {
+                        "damage_type": "cold",
+                        "dice": [
+                            { "roll": 1, "size": 4 }
+                        ],
+                        "bonus": 0,
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 4);
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "cold");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 4);
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+
+        damageDelivery.maximizeTypedDamageDice("fire");
+
+        String expected = """
+                {"cold":1,"fire":4}""";
+        assertEquals(expected, damageDelivery.getDamage().toString(),
+                "maximizeDamage should only maximize damage for the passed damage type"
+        );
+    }
+
+    @Test
+    @DisplayName("maximizeTypedDamageDice maximizes damage for unspecified damage type")
+    void maximizeTypedDamageDice_maximizesDamageForUnspecifiedDamageType() {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire",
+                        "dice": [
+                            { "roll": 1, "size": 4 }
+                        ],
+                        "bonus": 0,
+                    },
+                    {
+                        "damage_type": "cold",
+                        "dice": [
+                            { "roll": 1, "size": 4 }
+                        ],
+                        "bonus": 0,
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 4);
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "cold");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 4);
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+
+        damageDelivery.maximizeTypedDamageDice(null);
+
+        String expected = """
+                {"cold":4,"fire":4}""";
+        assertEquals(expected, damageDelivery.getDamage().toString(),
+                "maximizeDamage should maximize damage for all damage types when null damage type is passed"
+        );
+    }
+
 }

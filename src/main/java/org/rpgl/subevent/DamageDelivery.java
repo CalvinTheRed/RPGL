@@ -46,6 +46,26 @@ public class DamageDelivery extends Subevent {
     }
 
     /**
+     * This method sets all damage dice of the indicated type to their maximum face values. Passing a null damage type
+     * counts as a wild card and applies the changes to all damage types.
+     *
+     * @param damageType the damage type of dice to be changed by this method
+     */
+    public void maximizeTypedDamageDice(String damageType) {
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            JsonObject damageJson = damageArray.getJsonObject(i);
+            if (damageType == null || Objects.equals(damageType, damageJson.getString("damage_type"))) {
+                JsonArray dice = damageJson.getJsonArray("dice");
+                for (int j = 0; j < dice.size(); j++) {
+                    JsonObject die = dice.getJsonObject(j);
+                    die.putInteger("roll", die.getInteger("size"));
+                }
+            }
+        }
+    }
+
+    /**
      * This method returns the typed damage being delivered to <code>target</code>.
      *
      * @return an object of damage types and values

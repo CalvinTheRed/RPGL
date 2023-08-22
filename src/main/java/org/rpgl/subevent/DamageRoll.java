@@ -107,7 +107,7 @@ public class DamageRoll extends Subevent {
 
     /**
      * This method sets all damage dice of the indicated type to their maximum face values. Passing a null damage type
-     * or "" counts as a wild card and applies the changes to all damage types.
+     * counts as a wild card and applies the changes to all damage types.
      *
      * @param damageType the damage type of dice to be changed by this method
      */
@@ -115,7 +115,7 @@ public class DamageRoll extends Subevent {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
-            if (damageType == null || "".equals(damageType) || Objects.equals(damageType, typedDamage.getString("damage_type"))) {
+            if (damageType == null || Objects.equals(damageType, typedDamage.getString("damage_type"))) {
                 JsonArray typedDamageDieArray = Objects.requireNonNullElse(typedDamage.getJsonArray("dice"), new JsonArray());
                 for (int j = 0; j < typedDamageDieArray.size(); j++) {
                     JsonObject typedDamageDie = typedDamageDieArray.getJsonObject(j);
