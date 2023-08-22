@@ -36,6 +36,9 @@ public class TemporaryHitPointsDelivery extends Subevent {
         return clone;
     }
 
+    /**
+     * Maximizes all temporary hit point dice contained in this subevent.
+     */
     public void maximizeTemporaryHitPointDice() {
         JsonArray temporaryHitPointsArray = this.json.getJsonArray("temporary_hit_points");
         for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
