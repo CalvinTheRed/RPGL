@@ -3,7 +3,6 @@ package org.rpgl.function;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
@@ -15,6 +14,7 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.TemporaryHitPointRoll;
+import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -31,8 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class MaximizeTemporaryHitPointsTest {
 
-    private TemporaryHitPointRoll temporaryHitPointRoll;
-
     @BeforeAll
     static void beforeAll() throws Exception {
         DatapackLoader.loadDatapacks(
@@ -46,9 +44,40 @@ public class MaximizeTemporaryHitPointsTest {
         DatapackLoader.DATAPACKS.clear();
     }
 
-    @BeforeEach
-    void beforeEach() {
-        temporaryHitPointRoll = new TemporaryHitPointRoll();
+    @AfterEach
+    void afterEach() {
+        UUIDTable.clear();
+    }
+
+    @Test
+    @DisplayName("execute wrong function")
+    void execute_wrongFunction_throwsException() {
+        Function function = new MaximizeTemporaryHitPoints();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "not_a_function"
+            }*/
+            this.putString("function", "not_a_function");
+        }};
+
+        DummyContext context = new DummyContext();
+
+        assertThrows(FunctionMismatchException.class,
+                () -> function.execute(null, null, functionJson, context),
+                "Function should throw a FunctionMismatchException if the specified function doesn't match"
+        );
+    }
+
+    @Test
+    @DisplayName("execute maximizes temporary hit points for TemporaryHitPointRoll")
+    void execute_maximizesTemporaryHitPointsForTemporaryHitPointRoll() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        TemporaryHitPointRoll temporaryHitPointRoll = new TemporaryHitPointRoll();
         temporaryHitPointRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "temporary_hit_points": [
@@ -81,40 +110,6 @@ public class MaximizeTemporaryHitPointsTest {
                 }});
             }});
         }});
-    }
-
-    @AfterEach
-    void afterEach() {
-        UUIDTable.clear();
-    }
-
-    @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new MaximizeTemporaryHitPoints();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
-                "Function should throw a FunctionMismatchException if the specified function doesn't match"
-        );
-    }
-
-    @Test
-    @DisplayName("execute maximizes specific damage type")
-    void execute_maximizesSpecificDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         temporaryHitPointRoll.setSource(source);
         temporaryHitPointRoll.prepare(context);
@@ -133,6 +128,64 @@ public class MaximizeTemporaryHitPointsTest {
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
         assertEquals(expected, temporaryHitPointRoll.getTemporaryHitPoints().toString(),
+                "execute should set all temporary hit point dice to their maximum face value"
+        );
+    }
+
+    @Test
+    @DisplayName("execute maximizes temporary hit points for TemporaryHitPointsDelivery")
+    void execute_maximizesTemporaryHitPointsForTemporaryHitPointDelivery() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
+        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "temporary_hit_points": [
+                    {
+                        "dice": [
+                            { "roll": 1, "size": 6 },
+                            { "roll": 1, "size": 6 }
+                        ],
+                        "bonus": 0
+                    }
+                ]
+            }*/
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 6);
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("roll", 1);
+                            this.putInteger("size", 6);
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+        }});
+
+        temporaryHitPointsDelivery.setSource(source);
+        temporaryHitPointsDelivery.prepare(context);
+        temporaryHitPointsDelivery.setTarget(target);
+
+        MaximizeTemporaryHitPoints maximizeTemporaryHitPoints = new MaximizeTemporaryHitPoints();
+        JsonObject functionJson = new JsonObject() {{
+            /*{
+                "function": "maximize_temporary_hit_points"
+            }*/
+            this.putString("function", "maximize_temporary_hit_points");
+        }};
+
+        maximizeTemporaryHitPoints.execute(null, temporaryHitPointsDelivery, functionJson, context);
+
+        assertEquals(12, temporaryHitPointsDelivery.getTemporaryHitPoints(),
                 "execute should set all temporary hit point dice to their maximum face value"
         );
     }

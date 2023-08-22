@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This Function is dedicated to maximizing the damage dice of DamageRoll Subevents. If a damage type is specified, only
- * damage dice of that type will be maximized.
+ * This Function is dedicated to maximizing the damage dice of DamageRoll and DamageDelivery Subevents. If a damage type
+ * is specified, only damage dice of that type will be maximized.
  *
  * @author Calvin Withun
  */

@@ -5,11 +5,13 @@ import org.rpgl.core.RPGLEffect;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.subevent.TemporaryHitPointRoll;
+import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This Function is dedicated to maximizing the temporary hit point dice of TemporaryHitPointRoll Subevents.
+ * This Function is dedicated to maximizing the temporary hit point dice of TemporaryHitPointRoll and
+ * TemporaryHitPointDelivery Subevents.
  */
 public class MaximizeTemporaryHitPoints extends Function {
 
@@ -23,6 +25,8 @@ public class MaximizeTemporaryHitPoints extends Function {
     public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof TemporaryHitPointRoll temporaryHitPointRoll) {
             temporaryHitPointRoll.maximizeTemporaryHitPointsDice();
+        } else if (subevent instanceof TemporaryHitPointsDelivery temporaryHitPointsDelivery) {
+            temporaryHitPointsDelivery.maximizeTemporaryHitPointDice();
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }
