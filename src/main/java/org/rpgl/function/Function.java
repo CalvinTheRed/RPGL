@@ -53,8 +53,10 @@ public abstract class Function {
         Function.FUNCTIONS.put("invoke_subevent", new InvokeSubevent());
         Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
         Function.FUNCTIONS.put("maximize_healing", new MaximizeHealing());
+        Function.FUNCTIONS.put("maximize_temporary_hit_points", new MaximizeTemporaryHitPoints());
         Function.FUNCTIONS.put("reroll_damage_dice_matching_or_below", new RerollDamageDiceMatchingOrBelow());
         Function.FUNCTIONS.put("reroll_healing_dice_matching_or_below", new RerollHealingDiceMatchingOrBelow());
+        Function.FUNCTIONS.put("reroll_temporary_hit_point_dice_matching_or_below", new RerollTemporaryHitPointDiceMatchingOrBelow());
         Function.FUNCTIONS.put("revoke_immunity", new RevokeImmunity());
         Function.FUNCTIONS.put("revoke_resistance", new RevokeResistance());
         Function.FUNCTIONS.put("revoke_vulnerability", new RevokeVulnerability());
@@ -62,6 +64,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("set_damage_dice_matching_or_below", new SetDamageDiceMatchingOrBelow());
         Function.FUNCTIONS.put("set_healing_dice_matching_or_below", new SetHealingDiceMatchingOrBelow());
         Function.FUNCTIONS.put("set_minimum", new SetMinimum());
+        Function.FUNCTIONS.put("set_temporary_hit_point_dice_matching_or_below", new SetTemporaryHitPointDiceMatchingOrBelow());
 
         if (includeTestingFunctions) {
             Function.FUNCTIONS.put("dummy_function", new DummyFunction());

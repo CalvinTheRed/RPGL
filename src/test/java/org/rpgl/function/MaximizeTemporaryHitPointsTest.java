@@ -3,7 +3,6 @@ package org.rpgl.function;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
@@ -14,8 +13,8 @@ import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.HealingDelivery;
-import org.rpgl.subevent.HealingRoll;
+import org.rpgl.subevent.TemporaryHitPointRoll;
+import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -26,11 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.function.MaximizeHealing class.
+ * Testing class for the org.rpgl.function.MaximizeTemporaryHitPoints class.
  *
  * @author Calvin Withun
  */
-public class MaximizeHealingTest {
+public class MaximizeTemporaryHitPointsTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -45,11 +44,6 @@ public class MaximizeHealingTest {
         DatapackLoader.DATAPACKS.clear();
     }
 
-    @BeforeEach
-    void beforeEach() {
-
-    }
-
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
@@ -58,7 +52,7 @@ public class MaximizeHealingTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new MaximizeHealing();
+        Function function = new MaximizeTemporaryHitPoints();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -75,18 +69,18 @@ public class MaximizeHealingTest {
     }
 
     @Test
-    @DisplayName("execute maximizes healing for HealingRoll subevents")
-    void execute_maximizesHealingForHealingRollSubevents() throws Exception {
+    @DisplayName("execute maximizes temporary hit points for TemporaryHitPointRoll")
+    void execute_maximizesTemporaryHitPointsForTemporaryHitPointRoll() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        HealingRoll healingRoll = new HealingRoll();
-        healingRoll.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointRoll temporaryHitPointRoll = new TemporaryHitPointRoll();
+        temporaryHitPointRoll.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": [
+                "temporary_hit_points": [
                     {
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
@@ -96,7 +90,7 @@ public class MaximizeHealingTest {
                     }
                 ]
             }*/
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -117,64 +111,59 @@ public class MaximizeHealingTest {
             }});
         }});
 
-        healingRoll.setSource(source);
-        healingRoll.prepare(context);
-        healingRoll.setTarget(target);
+        temporaryHitPointRoll.setSource(source);
+        temporaryHitPointRoll.prepare(context);
+        temporaryHitPointRoll.setTarget(target);
 
-        MaximizeHealing maximizeHealing = new MaximizeHealing();
+        MaximizeTemporaryHitPoints maximizeTemporaryHitPoints = new MaximizeTemporaryHitPoints();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "maximize_healing"
+                "function": "maximize_temporary_hit_points"
             }*/
-            this.putString("function", "maximize_healing");
+            this.putString("function", "maximize_temporary_hit_points");
         }};
 
-        maximizeHealing.execute(null, healingRoll, functionJson, context);
+        maximizeTemporaryHitPoints.execute(null, temporaryHitPointRoll, functionJson, context);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
-        assertEquals(expected, healingRoll.getHealing().toString(),
-                "execute should set all healing dice to their maximum face value"
+        assertEquals(expected, temporaryHitPointRoll.getTemporaryHitPoints().toString(),
+                "execute should set all temporary hit point dice to their maximum face value"
         );
     }
 
     @Test
-    @DisplayName("execute maximizes healing for HealingDelivery subevents")
-    void execute_maximizesHealingForHealingDeliverySubevents() throws Exception {
+    @DisplayName("execute maximizes temporary hit points for TemporaryHitPointsDelivery")
+    void execute_maximizesTemporaryHitPointsForTemporaryHitPointDelivery() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        HealingDelivery healingDelivery = new HealingDelivery();
-        healingDelivery.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
+        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": [
+                "temporary_hit_points": [
                     {
                         "dice": [
-                            { "roll": 1, "size": 4 },
+                            { "roll": 1, "size": 6 },
                             { "roll": 1, "size": 6 }
-                            { "roll": 1, "size": 8 }
                         ],
                         "bonus": 0
                     }
                 ]
             }*/
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 1);
-                            this.putInteger("size", 4);
-                        }});
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("roll", 1);
                             this.putInteger("size", 6);
                         }});
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("roll", 1);
-                            this.putInteger("size", 8);
+                            this.putInteger("size", 6);
                         }});
                     }});
                     this.putInteger("bonus", 0);
@@ -182,22 +171,22 @@ public class MaximizeHealingTest {
             }});
         }});
 
-        healingDelivery.setSource(source);
-        healingDelivery.prepare(context);
-        healingDelivery.setTarget(target);
+        temporaryHitPointsDelivery.setSource(source);
+        temporaryHitPointsDelivery.prepare(context);
+        temporaryHitPointsDelivery.setTarget(target);
 
-        MaximizeHealing maximizeHealing = new MaximizeHealing();
+        MaximizeTemporaryHitPoints maximizeTemporaryHitPoints = new MaximizeTemporaryHitPoints();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "maximize_healing"
+                "function": "maximize_temporary_hit_points"
             }*/
-            this.putString("function", "maximize_healing");
+            this.putString("function", "maximize_temporary_hit_points");
         }};
 
-        maximizeHealing.execute(null, healingDelivery, functionJson, context);
+        maximizeTemporaryHitPoints.execute(null, temporaryHitPointsDelivery, functionJson, context);
 
-        assertEquals(4+6+8, healingDelivery.getHealing(),
-                "execute should set all healing dice to their maximum face value"
+        assertEquals(12, temporaryHitPointsDelivery.getTemporaryHitPoints(),
+                "execute should set all temporary hit point dice to their maximum face value"
         );
     }
 

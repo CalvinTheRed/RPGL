@@ -37,6 +37,20 @@ public class TemporaryHitPointsDelivery extends Subevent {
     }
 
     /**
+     * Maximizes all temporary hit point dice contained in this subevent.
+     */
+    public void maximizeTemporaryHitPointDice() {
+        JsonArray temporaryHitPointsArray = this.json.getJsonArray("temporary_hit_points");
+        for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
+            JsonArray dice = temporaryHitPointsArray.getJsonObject(i).getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                die.putInteger("roll", die.getInteger("size"));
+            }
+        }
+    }
+
+    /**
      * This method returns the sum of all bonuses and dice being delivered to target as temporary hit points.
      *
      * @return an integer representing a quantity of temporary hit points

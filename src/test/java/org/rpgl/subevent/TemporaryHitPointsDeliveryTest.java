@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.subevent.HealingDelivery class.
+ * Testing class for the org.rpgl.subevent.TemporaryHitPointsDelivery class.
  *
  * @author Calvin Withun
  */
-public class HealingDeliveryTest {
+public class TemporaryHitPointsDeliveryTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -46,7 +46,7 @@ public class HealingDeliveryTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Subevent subevent = new HealingDelivery();
+        Subevent subevent = new TemporaryHitPointsDelivery();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
@@ -61,12 +61,12 @@ public class HealingDeliveryTest {
     }
 
     @Test
-    @DisplayName("getHealing returns stored healing amount")
-    void getHealing_returnsStoredDamageValues() {
-        HealingDelivery healingDelivery = new HealingDelivery();
-        healingDelivery.joinSubeventData(new JsonObject() {{
+    @DisplayName("getTemporaryHitPoints returns stored temporary hit point amount")
+    void getTemporaryHitPoints_returnsStoredDamageValues() {
+        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
+        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": [
+                "temporary_hit_points": [
                     {
                         "bonus": 2,
                         "dice": [
@@ -75,7 +75,7 @@ public class HealingDeliveryTest {
                     }
                 ]
             }*/
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putInteger("bonus", 2);
                     this.putJsonArray("dice", new JsonArray() {{
@@ -88,18 +88,18 @@ public class HealingDeliveryTest {
             }});
         }});
 
-        assertEquals(5, healingDelivery.getHealing(),
-                "getHealing should return the healing being conveyed by the subevent"
+        assertEquals(5, temporaryHitPointsDelivery.getTemporaryHitPoints(),
+                "getTemporaryHitPoints should return the temporary hit points being conveyed by the subevent"
         );
     }
 
     @Test
-    @DisplayName("maximizeHealingDice maximizes all healing dice")
-    void maximizeHealingDice_maximizesAllHealingDice() {
-        HealingDelivery healingDelivery = new HealingDelivery();
-        healingDelivery.joinSubeventData(new JsonObject() {{
+    @DisplayName("maximizeTemporaryHitPointDice maximizes all temporary hit point dice")
+    void maximizeTemporaryHitPointDice_maximizesAllTemporaryHitPointDice() {
+        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
+        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": [
+                "temporary_hit_points": [
                     {
                         "dice": [
                             { "roll": 1, "size": 4 },
@@ -110,7 +110,7 @@ public class HealingDeliveryTest {
                     }
                 ]
             }*/
-            this.putJsonArray("healing", new JsonArray() {{
+            this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -131,10 +131,10 @@ public class HealingDeliveryTest {
             }});
         }});
 
-        healingDelivery.maximizeHealingDice();
+        temporaryHitPointsDelivery.maximizeTemporaryHitPointDice();
 
-        assertEquals(4+6+8, healingDelivery.getHealing(),
-                "getHealing should return the maximum healing possible given die sizes"
+        assertEquals(4+6+8, temporaryHitPointsDelivery.getTemporaryHitPoints(),
+                "getTemporaryHitPoints should return the maximum temporary hit points possible given die sizes"
         );
     }
 

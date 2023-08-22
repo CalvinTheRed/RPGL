@@ -37,6 +37,20 @@ public class HealingDelivery extends Subevent {
     }
 
     /**
+     * Maximizes all healing dice contained in this subevent.
+     */
+    public void maximizeHealingDice() {
+        JsonArray healingArray = this.json.getJsonArray("healing");
+        for (int i = 0; i < healingArray.size(); i++) {
+            JsonArray dice = healingArray.getJsonObject(i).getJsonArray("dice");
+            for (int j = 0; j < dice.size(); j++) {
+                JsonObject die = dice.getJsonObject(j);
+                die.putInteger("roll", die.getInteger("size"));
+            }
+        }
+    }
+
+    /**
      * This method returns the healing delivered to <code>target</code>.
      *
      * @return an integer representing a quantity of healing
