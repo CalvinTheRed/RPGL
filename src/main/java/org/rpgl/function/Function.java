@@ -64,6 +64,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("set_damage_dice_matching_or_below", new SetDamageDiceMatchingOrBelow());
         Function.FUNCTIONS.put("set_healing_dice_matching_or_below", new SetHealingDiceMatchingOrBelow());
         Function.FUNCTIONS.put("set_minimum", new SetMinimum());
+        Function.FUNCTIONS.put("set_temporary_hit_point_dice_matching_or_below", new SetTemporaryHitPointDiceMatchingOrBelow());
 
         if (includeTestingFunctions) {
             Function.FUNCTIONS.put("dummy_function", new DummyFunction());

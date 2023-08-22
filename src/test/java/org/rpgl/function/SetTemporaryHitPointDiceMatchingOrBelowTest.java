@@ -24,11 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Testing class for the org.rpgl.function.RerollTemporaryHitPointDiceMatchingOrBelow class.
+ * Testing class for the org.rpgl.function.SetTemporaryHitPointDiceMatchingOrBelow class.
  *
  * @author Calvin Withun
  */
-public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
+public class SetTemporaryHitPointDiceMatchingOrBelowTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -51,7 +51,7 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new RerollTemporaryHitPointDiceMatchingOrBelow();
+        Function function = new SetTemporaryHitPointDiceMatchingOrBelow();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -68,8 +68,8 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
     }
 
     @Test
-    @DisplayName("execute re-rolls all dice at or below two")
-    void execute_rerollsAllDiceAtOrBelowTwo() throws Exception {
+    @DisplayName("execute sets all dice at or below two to three")
+    void execute_setsAllDiceAtOrBelowTwoToThree() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
@@ -82,25 +82,25 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
                 "temporary_hit_points": [
                     {
                         "dice": [
-                            { "size": 6, "determined": [ 1, 6 ] }
+                            { "size": 6, "determined": [ 1 ] }
                         ],
                         "bonus": 0
                     },
                     {
                         "dice": [
-                            { "size": 6, "determined": [ 2, 6 ] }
+                            { "size": 6, "determined": [ 2 ] }
                         ],
                         "bonus": 0
                     },
                     {
                         "dice": [
-                            { "size": 6, "determined": [ 3, 6 ] }
+                            { "size": 6, "determined": [ 3 ] }
                         ],
                         "bonus": 0
                     },
                     {
                         "dice": [
-                            { "size": 6, "determined": [ 4, 6 ] }
+                            { "size": 6, "determined": [ 4 ] }
                         ],
                         "bonus": 0
                     }
@@ -113,7 +113,6 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
                             this.putInteger("size", 6);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(1);
-                                this.addInteger(6);
                             }});
                         }});
                     }});
@@ -125,7 +124,6 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
                             this.putInteger("size", 6);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(2);
-                                this.addInteger(6);
                             }});
                         }});
                     }});
@@ -137,7 +135,6 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
                             this.putInteger("size", 6);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(3);
-                                this.addInteger(6);
                             }});
                         }});
                     }});
@@ -149,7 +146,6 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
                             this.putInteger("size", 6);
                             this.putJsonArray("determined", new JsonArray() {{
                                 this.addInteger(4);
-                                this.addInteger(6);
                             }});
                         }});
                     }});
@@ -161,22 +157,24 @@ public class RerollTemporaryHitPointDiceMatchingOrBelowTest {
         temporaryHitPointRoll.prepare(context);
         temporaryHitPointRoll.setTarget(target);
 
-        RerollTemporaryHitPointDiceMatchingOrBelow rerollTemporaryHitPointDiceMatchingOrBelow = new RerollTemporaryHitPointDiceMatchingOrBelow();
+        SetTemporaryHitPointDiceMatchingOrBelow setTemporaryHitPointDiceMatchingOrBelow = new SetTemporaryHitPointDiceMatchingOrBelow();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "reroll_temporary_hit_point_dice_matching_or_below",
-                "threshold": 2
+                "function": "set_temporary_hit_point_dice_matching_or_below",
+                "threshold": 2,
+                "set": 3
             }*/
-            this.putString("function", "reroll_temporary_hit_point_dice_matching_or_below");
+            this.putString("function", "set_temporary_hit_point_dice_matching_or_below");
             this.putInteger("threshold", 2);
+            this.putInteger("set", 3);
         }};
 
-        rerollTemporaryHitPointDiceMatchingOrBelow.execute(null, temporaryHitPointRoll, functionJson, context);
+        setTemporaryHitPointDiceMatchingOrBelow.execute(null, temporaryHitPointRoll, functionJson, context);
 
         String expected = """
-                [{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":4,"size":6}]}]""";
+                [{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":4,"size":6}]}]""";
         assertEquals(expected, temporaryHitPointRoll.getTemporaryHitPoints().toString(),
-                "execute should re-roll all dice which rolled 2 or lower to 3"
+                "execute should set all dice which rolled 2 or lower to 3"
         );
     }
 
