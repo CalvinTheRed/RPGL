@@ -1,5 +1,6 @@
 package org.rpgl.subevent;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.exception.SubeventMismatchException;
@@ -8,7 +9,9 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.subevent.CriticalHitDamageCollection class.
@@ -16,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Calvin Withun
  */
 public class CriticalHitDamageCollectionTest {
+
+    private CriticalHitDamageCollection criticalHitDamageCollection;
 
     @Test
     @DisplayName("invoke wrong subevent")
@@ -34,10 +39,9 @@ public class CriticalHitDamageCollectionTest {
         );
     }
 
-    @Test
-    @DisplayName("doubleDice number of dice in the damage collection are doubled")
-    void doubleDice_numberOfDiceIsDoubled() {
-        CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
+    @BeforeEach
+    void beforeEach() {
+        criticalHitDamageCollection = new CriticalHitDamageCollection();
         criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
             /*{
                 "damage": [
@@ -90,13 +94,63 @@ public class CriticalHitDamageCollectionTest {
                 }});
             }});
         }});
+    }
 
+    @Test
+    @DisplayName("doubleDice number of dice in the damage collection are doubled")
+    void doubleDice_numberOfDiceIsDoubled() {
         criticalHitDamageCollection.doubleDice();
 
         String expected = """
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}]}]""";
         assertEquals(expected, criticalHitDamageCollection.getDamageCollection().toString(),
                 "the number of dice should be doubled after calling doubleDice()"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns true for present damage type")
+    void includesDamageType_returnsTrueForPresentDamageType() {
+        assertTrue(criticalHitDamageCollection.includesDamageType("fire"),
+                "should return true for present damage type"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns false for absent damage type")
+    void includesDamageType_returnsFalseForAbsentDamageType() {
+        assertFalse(criticalHitDamageCollection.includesDamageType("not_a_damage_type"),
+                "should return false for absent damage type"
+        );
+    }
+
+    @Test
+    @DisplayName("addDamage adds damage correctly")
+    void addDamage_addsDamageCorrectly() {
+        criticalHitDamageCollection.addDamage(new JsonObject() {{
+            /*{
+                "damage_type": "acid",
+                "dice": [
+                    { "size": 4, "determined": [ 2 ] }
+                ],
+                "bonus": 5
+            }*/
+            this.putString("damage_type", "acid");
+            this.putJsonArray("dice", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putInteger("size", 4);
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(2);
+                    }});
+                }});
+            }});
+            this.putInteger("bonus", 5);
+        }});
+
+        String expected = """
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[5],"size":10}]},{"bonus":5,"damage_type":"acid","dice":[{"determined":[2],"size":4}]}]""";
+        assertEquals(expected, criticalHitDamageCollection.getDamageCollection().toString(),
+                "new damage should be included in the subevent damage report"
         );
     }
 
