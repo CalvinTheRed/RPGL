@@ -49,6 +49,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("attack_ability_collection", new AttackAbilityCollection());
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
         Subevent.SUBEVENTS.put("deal_damage", new DealDamage());
+        Subevent.SUBEVENTS.put("destroy_origin_item", new DestroyOriginItem());
         Subevent.SUBEVENTS.put("exhaust_resource", new ExhaustResource());
         Subevent.SUBEVENTS.put("give_effect", new GiveEffect());
         Subevent.SUBEVENTS.put("give_resource", new GiveResource());
