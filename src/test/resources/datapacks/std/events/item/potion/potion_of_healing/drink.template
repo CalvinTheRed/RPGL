@@ -24,6 +24,9 @@
           "bonus": 2
         }
       ]
+    },
+    {
+      "subevent": "destroy_origin_item"
     }
   ]
 }
