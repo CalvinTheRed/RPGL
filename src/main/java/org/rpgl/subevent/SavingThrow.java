@@ -206,7 +206,7 @@ public class SavingThrow extends Roll {
 
     /**
      * This helper method resolves any nested Subevents within this Subevent in accordance to whether <code>target</code>
-     * passed or fails its saving throw.
+     * passed or failed its saving throw.
      *
      * @param passOrFail a String indicating whether the saving throw was passed or failed
      * @param context the context this Subevent takes place in

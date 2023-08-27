@@ -44,6 +44,7 @@ public abstract class Condition {
         Condition.CONDITIONS.put("all", new All());
         Condition.CONDITIONS.put("any", new Any());
         Condition.CONDITIONS.put("check_ability", new CheckAbility());
+        Condition.CONDITIONS.put("check_skill", new CheckSkill());
         Condition.CONDITIONS.put("equipped_item_has_tag", new EquippedItemHasTag());
         Condition.CONDITIONS.put("includes_damage_type", new IncludesDamageType());
         Condition.CONDITIONS.put("invert", new Invert());

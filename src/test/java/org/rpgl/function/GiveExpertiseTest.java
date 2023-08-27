@@ -3,10 +3,8 @@ package org.rpgl.function;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -14,8 +12,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.Roll;
-import org.rpgl.subevent.Subevent;
+import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -26,13 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.function.GrantAdvantage class.
+ * Testing class for the org.rpgl.function.GiveExpertise class.
  *
  * @author Calvin Withun
  */
-public class GrantAdvantageTest {
-
-    private Roll roll;
+public class GiveExpertiseTest {
 
     @BeforeAll
     static void beforeAll() throws Exception {
@@ -47,26 +42,6 @@ public class GrantAdvantageTest {
         DatapackLoader.DATAPACKS.clear();
     }
 
-    @BeforeEach
-    void beforeEach() {
-        roll = new Roll("roll") {
-            @Override
-            public String getAbility(RPGLContext context) {
-                return null;
-            }
-
-            @Override
-            public Subevent clone() {
-                return null;
-            }
-
-            @Override
-            public Subevent clone(JsonObject jsonData) {
-                return null;
-            }
-        };
-    }
-
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
@@ -75,7 +50,7 @@ public class GrantAdvantageTest {
     @Test
     @DisplayName("execute wrong function")
     void execute_wrongFunction_throwsException() {
-        Function function = new GrantAdvantage();
+        Function function = new GiveExpertise();
         JsonObject functionJson = new JsonObject() {{
             /*{
                 "function": "not_a_function"
@@ -92,30 +67,29 @@ public class GrantAdvantageTest {
     }
 
     @Test
-    @DisplayName("execute grants advantage to roll")
-    void execute_grantsAdvantageToRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+    @DisplayName("execute gives expertise")
+    void execute_givesExpertise() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
         DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+        context.add(object);
 
-        roll.setSource(source);
-        roll.prepare(context);
-        roll.setTarget(target);
+        AbilityCheck abilityCheck = new AbilityCheck();
+        abilityCheck.setSource(object);
+        abilityCheck.prepare(context);
+        abilityCheck.setTarget(object);
 
-        GrantAdvantage grantAdvantage = new GrantAdvantage();
+        GiveExpertise giveExpertise = new GiveExpertise();
         JsonObject functionJson = new JsonObject() {{
             /*{
-                "function": "grant_advantage"
+                "function": "give_expertise"
             }*/
-            this.putString("function", "grant_advantage");
+            this.putString("function", "give_expertise");
         }};
 
-        grantAdvantage.execute(null, roll, functionJson, context);
+        giveExpertise.execute(null, abilityCheck, functionJson, context);
 
-        assertTrue(roll.isAdvantageRoll(),
-                "execute should grant advantage to roll"
+        assertTrue(abilityCheck.hasExpertise(),
+                "execute should give expertise to roll"
         );
     }
 
