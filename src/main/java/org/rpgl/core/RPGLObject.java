@@ -3,6 +3,7 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateBaseArmorClass;
 import org.rpgl.subevent.CalculateMaximumHitPoints;
@@ -981,6 +982,22 @@ public class RPGLObject extends RPGLTaggable {
      */
     public List<RPGLResource> getResourcesWithTag(String tag) {
         return this.getResourceObjects().stream().filter(resource -> resource.hasTag(tag)).toList();
+    }
+
+    public int abilityCheck(String ability, String skill, RPGLContext context) throws Exception {
+        AbilityCheck abilityCheck = new AbilityCheck();
+        abilityCheck.joinSubeventData(new JsonObject() {{
+            this.putString("ability", ability);
+            this.putString("skill", skill);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(10);
+            }});
+        }});
+        abilityCheck.setSource(this);
+        abilityCheck.prepare(context);
+        abilityCheck.setTarget(this);
+        abilityCheck.invoke(context);
+        return abilityCheck.get();
     }
 
 }
