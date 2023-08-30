@@ -355,12 +355,18 @@ public class RPGLObject extends RPGLTaggable {
             resource.exhaust();
         }
         event.scale(resources);
+
+        String sourceUuid = event.getString("source");
+        RPGLObject source = sourceUuid != null
+                ? UUIDTable.getObject(sourceUuid)
+                : this;
+
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
             String subeventId = subeventJson.getString("subevent");
             Subevent subevent = Subevent.SUBEVENTS.get(subeventId).clone(subeventJson);
-            subevent.setSource(this);
+            subevent.setSource(source);
             subevent.setOriginItem(event.getOriginItem());
             subevent.prepare(context);
             for (RPGLObject target : targets) {

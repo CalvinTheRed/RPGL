@@ -256,6 +256,8 @@ public class ScenariosTest {
                 context
         );
 
+        // With the current check bonus, target can pass if target generates the DC, but not if source generates the DC.
+        // This assertion is to show that source is the one generating the DC.
         assertNotNull(TestUtils.getEffectById(target.getEffectObjects(), "std:spell/wrathful_smite/fear"),
                 "target should still have the wrathful smite fear applied after a failed save"
         );
@@ -266,6 +268,17 @@ public class ScenariosTest {
         target.startTurn(context);
 
         target.getAbilityScores().putInteger("wis", 20); // save bonus +5
+
+        target.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(target.getEventObjects(context), "std:special/spell/wrathful_smite/repeat_save"),
+                new ArrayList<>() {{
+                    this.add(target.getResourcesWithTag("action").get(0));
+                }},
+                context
+        );
 
         assertNull(TestUtils.getEffectById(target.getEffectObjects(), "std:spell/wrathful_smite/fear"),
                 "target should not still have the wrathful smite fear applied after a successful save"

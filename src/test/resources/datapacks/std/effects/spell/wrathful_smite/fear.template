@@ -38,7 +38,11 @@
         "functions": [
           {
             "function": "add_event",
-            "event": "std:special/spell/wrathful_smite/repeat_save"
+            "event": "std:special/spell/wrathful_smite/repeat_save",
+            "source": {
+              "from": "effect",
+              "object": "source"
+            }
           }
         ]
       }

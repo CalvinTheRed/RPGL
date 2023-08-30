@@ -27,18 +27,22 @@ public class GetEvents extends Subevent {
         super("get_events");
     }
 
+    private List<RPGLEvent> events = new ArrayList<>();
+
     @Override
-    public Subevent clone() {
-        Subevent clone = new GetEvents();
+    public GetEvents clone() {
+        GetEvents clone = new GetEvents();
         clone.joinSubeventData(this.json);
+        clone.events = new ArrayList<>(this.events);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
 
     @Override
-    public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new GetEvents();
+    public GetEvents clone(JsonObject jsonData) {
+        GetEvents clone = new GetEvents();
         clone.joinSubeventData(jsonData);
+        clone.events = new ArrayList<>(this.events);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
     }
@@ -54,9 +58,11 @@ public class GetEvents extends Subevent {
      *
      * @param eventId an RPGLEvent datapack ID
      * @param originItem a UUID for a RPGLItem if the event was provided by an item, or null otherwise
+     * @param sourceUuid a UUID for the source of the event if it should differ from the object which invokes it, or
+     *                   null otherwise
      */
-    public void addEvent(String eventId, String originItem) {
-        this.json.getJsonArray("events").addJsonObject(RPGLFactory.newEvent(eventId, originItem));
+    public void addEvent(String eventId, String originItem, String sourceUuid) {
+        this.json.getJsonArray("events").addJsonObject(RPGLFactory.newEvent(eventId, originItem, sourceUuid));
     }
 
     /**
