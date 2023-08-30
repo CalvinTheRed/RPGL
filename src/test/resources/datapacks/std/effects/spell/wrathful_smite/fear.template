@@ -4,6 +4,11 @@
   },
   "name": "Frightened (Wrathful Smite)",
   "description": "You are scared now",
+  "tags": [
+    "wrathful_smite",
+    "fear",
+    "spell"
+  ],
   "subevent_filters": {
     "attack_roll": [
       {
@@ -17,6 +22,23 @@
         "functions": [
           {
             "function": "grant_disadvantage"
+          }
+        ]
+      }
+    ],
+    "get_events": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "target"
+          }
+        ],
+        "functions": [
+          {
+            "function": "add_event",
+            "event": "std:special/spell/wrathful_smite/repeat_save"
           }
         ]
       }

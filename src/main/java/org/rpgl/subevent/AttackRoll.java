@@ -184,7 +184,7 @@ public class AttackRoll extends Roll {
         calculateEffectiveArmorClass.joinSubeventData(new JsonObject() {{
             this.putJsonObject("base", new JsonObject() {{
                 this.putString("base_formula", "number");
-                this.putInteger("value", getTarget().getBaseArmorClass(context));
+                this.putInteger("number", getTarget().getBaseArmorClass(context));
             }});
         }});
         calculateEffectiveArmorClass.setOriginItem(this.getOriginItem());
@@ -216,7 +216,7 @@ public class AttackRoll extends Roll {
         calculateCriticalHitThreshold.setTarget(this.getTarget());
         calculateCriticalHitThreshold.invoke(context);
 
-        return this.getBase().getInteger("value") >= calculateCriticalHitThreshold.get();
+        return this.getBase() >= calculateCriticalHitThreshold.get();
     }
 
     /**
@@ -225,7 +225,7 @@ public class AttackRoll extends Roll {
      * @return true if the attack is a critical miss
      */
     public boolean isCriticalMiss() {
-        return this.getBase().getInteger("value") == 1;
+        return this.getBase() == 1;
     }
 
     /**

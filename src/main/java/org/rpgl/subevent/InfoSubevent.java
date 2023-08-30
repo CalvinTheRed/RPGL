@@ -1,5 +1,6 @@
 package org.rpgl.subevent;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonObject;
 
 import java.util.Objects;
@@ -36,6 +37,12 @@ public class InfoSubevent extends Subevent implements CancelableSubevent {
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
+    }
+
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        this.json.putBoolean("cancel", false);
     }
 
     @Override

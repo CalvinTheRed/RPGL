@@ -105,13 +105,13 @@ public class SetMinimumTest {
                 "function": "set_minimum",
                 "minimum": {
                     "minimum_formula": "number",
-                    "value": 13
+                    "number": 13
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
                 this.putString("minimum_formula", "number");
-                this.putInteger("value", 13);
+                this.putInteger("number", 13);
             }});
         }};
 
@@ -120,7 +120,7 @@ public class SetMinimumTest {
 
         setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(13, calculation.getMinimum().getInteger("value"),
+        assertEquals(13, calculation.getMinimum(),
                 "execute should set calculation minimum to 13"
         );
     }
@@ -171,7 +171,7 @@ public class SetMinimumTest {
 
         setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(5, calculation.getMinimum().getInteger("value"),
+        assertEquals(5, calculation.getMinimum(),
                 "execute should set calculation minimum to source's dex modifier (+5)"
         );
     }
@@ -222,7 +222,7 @@ public class SetMinimumTest {
 
         setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(20, calculation.getMinimum().getInteger("value"),
+        assertEquals(20, calculation.getMinimum(),
                 "execute should set calculation minimum to source's dex score (20)"
         );
     }
@@ -269,7 +269,7 @@ public class SetMinimumTest {
 
         setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(2, calculation.getMinimum().getInteger("value"),
+        assertEquals(2, calculation.getMinimum(),
                 "execute should set calculation minimum to source's proficiency bonus (+2)"
         );
     }
@@ -300,19 +300,19 @@ public class SetMinimumTest {
                 "function": "set_minimum",
                 "minimum": {
                     "minimum_formula": "number",
-                    "value": 10
+                    "number": 10
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
                 this.putString("minimum_formula", "number");
-                this.putInteger("value", 10);
+                this.putInteger("number", 10);
             }});
         }};
 
         setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(10, calculation.getMinimum().getInteger("value"),
+        assertEquals(10, calculation.getMinimum(),
                 "execute should set calculation minimum to 10"
         );
 
@@ -323,19 +323,19 @@ public class SetMinimumTest {
                 "function": "set_minimum",
                 "minimum": {
                     "minimum_formula": "number",
-                    "value": 15
+                    "number": 15
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
                 this.putString("minimum_formula", "number");
-                this.putInteger("value", 15);
+                this.putInteger("number", 15);
             }});
         }};
 
         setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(15, calculation.getMinimum().getInteger("value"),
+        assertEquals(15, calculation.getMinimum(),
                 "execute should set calculation minimum to 15 (15 > 10)"
         );
 
@@ -346,19 +346,19 @@ public class SetMinimumTest {
                 "function": "set_minimum",
                 "minimum": {
                     "minimum_formula": "number",
-                    "value": 5
+                    "number": 5
                 }
             }*/
             this.putString("function", "set_minimum");
             this.putJsonObject("minimum", new JsonObject() {{
                 this.putString("minimum_formula", "number");
-                this.putInteger("value", 5);
+                this.putInteger("number", 5);
             }});
         }};
 
         setMinimum.execute(effect, calculation, functionJson, context);
 
-        assertEquals(15, calculation.getMinimum().getInteger("value"),
+        assertEquals(15, calculation.getMinimum(),
                 "execute should not change calculation minimum (5 < 15>)"
         );
     }

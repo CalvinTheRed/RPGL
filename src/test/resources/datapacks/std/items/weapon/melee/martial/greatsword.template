@@ -9,7 +9,8 @@
     "heavy",
     "metal",
     "martial_melee",
-    "two_handed"
+    "two_handed",
+    "weapon"
   ],
   "weight": 6,
   "cost": 50,

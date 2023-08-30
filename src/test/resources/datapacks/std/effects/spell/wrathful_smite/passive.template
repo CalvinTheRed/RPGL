@@ -39,6 +39,10 @@
                 {
                   "subevent": "give_effect",
                   "effect": "std:spell/wrathful_smite/fear"
+                },
+                {
+                  "subevent": "give_effect",
+                  "effect": "std:spell/wrathful_smite/repeat_save_manager"
                 }
               ],
               "damage_on_pass": "none",

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLFactory;
@@ -84,7 +85,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         target
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
+                TestUtils.getEventById(source.getEventObjects(context),
+                        "std:item/weapon/melee/martial/scimitar/melee"
+                ),
                 new ArrayList<>() {{
                     this.add(source.getResourcesWithTag("action").get(0));
                 }},
@@ -102,7 +105,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         source
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:item/magic/flametongue/activate"),
+                TestUtils.getEventById(source.getEventObjects(context),
+                        "std:item/magic/flametongue/activate"
+                ),
                 new ArrayList<>() {{
                     this.add(source.getResourcesWithTag("bonus_action").get(0));
                 }},
@@ -117,7 +122,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         target
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
+                TestUtils.getEventById(source.getEventObjects(context),
+                        "std:item/weapon/melee/martial/scimitar/melee"
+                ),
                 new ArrayList<>() {{
                     this.add(source.getResourcesWithTag("action").get(0));
                 }},
@@ -135,7 +142,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         source
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:item/magic/flametongue/deactivate"),
+                TestUtils.getEventById(source.getEventObjects(context),
+                        "std:item/magic/flametongue/deactivate"
+                ),
                 new ArrayList<>() {{
                     this.add(source.getResourcesWithTag("bonus_action").get(0));
                 }},
@@ -150,7 +159,9 @@ public class ScenariosTest {
                 new RPGLObject[] {
                         target
                 },
-                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/martial/scimitar/melee"),
+                TestUtils.getEventById(source.getEventObjects(context),
+                        "std:item/weapon/melee/martial/scimitar/melee"
+                ),
                 new ArrayList<>() {{
                     this.add(source.getResourcesWithTag("action").get(0));
                 }},
@@ -158,6 +169,106 @@ public class ScenariosTest {
         );
         assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
                 "Dummy should take 6 damage from being hit (6 slashing)"
+        );
+    }
+
+    @Test
+    @DisplayName("wrathful smite test")
+    void wrathfulSmiteTest() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        // give resources
+
+        source.giveEvent("std:spell/wrathful_smite");
+        source.addResource(RPGLFactory.newResource("std:common/action/01"));
+        source.addResource(RPGLFactory.newResource("std:common/bonus_action/01"));
+        source.addResource(RPGLFactory.newResource("std:common/spell_slot/01"));
+
+        target.addResource(RPGLFactory.newResource("std:common/action/01"));
+
+        // give equipment
+
+        RPGLItem dagger = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        source.giveItem(dagger.getUuid());
+        source.equipItem(dagger.getUuid(), "right_hand");
+
+        // assign ability scores
+
+        source.getAbilityScores().putInteger("str", 20);
+        source.getAbilityScores().putInteger("cha", 20); // save DC 15
+
+        target.getAbilityScores().putInteger("wis", 12); // save bonus +1, save DC 10
+
+        // start doing stuff
+
+        source.invokeEvent(
+                new RPGLObject[] {
+                        source
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:spell/wrathful_smite"),
+                new ArrayList<>() {{
+                    this.add(source.getResourcesWithTag("bonus_action").get(0));
+                    this.add(source.getResourcesWithTag("spell_slot").get(0));
+                }},
+                context
+        );
+
+        assertNotNull(TestUtils.getEffectById(source.getEffectObjects(), "std:spell/wrathful_smite/passive"),
+                "source should have the passive wrathful smite applied"
+        );
+
+        source.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(source.getEventObjects(context), "std:item/weapon/melee/simple/dagger/melee"),
+                new ArrayList<>() {{
+                    this.add(source.getResourcesWithTag("action").get(0));
+                }},
+                context
+        );
+
+        assertEquals(1000-2-5-3, target.getHealthData().getInteger("current"),
+                "target should no longer have all of its hit points"
+        );
+        assertNull(TestUtils.getEffectById(source.getEffectObjects(), "std:spell/wrathful_smite/passive"),
+                "source should not have the passive wrathful smite applied any longer"
+        );
+        assertNotNull(TestUtils.getEffectById(target.getEffectObjects(), "std:spell/wrathful_smite/fear"),
+                "target should have the wrathful smite fear applied"
+        );
+
+        source.endTurn(context);
+        target.startTurn(context);
+
+        target.invokeEvent(
+                new RPGLObject[] {
+                        target
+                },
+                TestUtils.getEventById(target.getEventObjects(context), "std:special/spell/wrathful_smite/repeat_save"),
+                new ArrayList<>() {{
+                    this.add(target.getResourcesWithTag("action").get(0));
+                }},
+                context
+        );
+
+        assertNotNull(TestUtils.getEffectById(target.getEffectObjects(), "std:spell/wrathful_smite/fear"),
+                "target should still have the wrathful smite fear applied after a failed save"
+        );
+
+        // try again with a better save bonus
+
+        target.endTurn(context);
+        target.startTurn(context);
+
+        target.getAbilityScores().putInteger("wis", 20); // save bonus +5
+
+        assertNull(TestUtils.getEffectById(target.getEffectObjects(), "std:spell/wrathful_smite/fear"),
+                "target should not still have the wrathful smite fear applied after a successful save"
         );
     }
 

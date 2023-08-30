@@ -1000,4 +1000,12 @@ public class RPGLObject extends RPGLTaggable {
         return abilityCheck.get();
     }
 
+    public void giveEvent(String eventId) {
+        this.getEvents().addString(eventId);
+    }
+
+    public void removeEvent(String eventId) {
+        this.getEvents().asList().remove(eventId);
+    }
+
 }
