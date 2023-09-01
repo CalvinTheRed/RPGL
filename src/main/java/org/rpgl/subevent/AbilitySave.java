@@ -57,10 +57,7 @@ public class AbilitySave extends Subevent {
         abilityCheck.joinSubeventData(new JsonObject() {{
             this.putString("ability", json.getString("ability"));
             this.putString("skill", json.getString("skill"));
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("ability_save");
-            }});
+            this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.getJsonArray("determined"));
         }});
         abilityCheck.setSource(this.getSource());

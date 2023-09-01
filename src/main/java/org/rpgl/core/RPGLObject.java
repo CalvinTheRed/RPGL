@@ -629,7 +629,7 @@ public class RPGLObject extends RPGLTaggable {
                 currentHitPoints -= amount;
                 healthData.put("temporary", temporaryHitPoints);
                 healthData.put("current", currentHitPoints);
-                this.invokeInfoSubevent(new String[] { "reduced_to_zero_temporary_hit_points" }, context);
+                this.invokeInfoSubevent(context, "reduced_to_zero_temporary_hit_points");
             } else {
                 currentHitPoints -= amount;
                 healthData.put("current", currentHitPoints);
@@ -640,10 +640,10 @@ public class RPGLObject extends RPGLTaggable {
         }
         if (currentHitPoints <= -this.getMaximumHitPoints(context)) {
             healthData.put("current", 0);
-            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points", "killed" }, context); // TODO is there a more elegant way to do this?
+            this.invokeInfoSubevent(context, "reduced_to_zero_hit_points", "killed"); // TODO is there a more elegant way to do this?
         } else if (currentHitPoints < 0) {
             healthData.put("current", 0);
-            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points" }, context);
+            this.invokeInfoSubevent(context, "reduced_to_zero_hit_points");
         }
     }
 
@@ -656,7 +656,7 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @throws Exception if nan exception occurs
      */
-    InfoSubevent invokeInfoSubevent(String[] tags, RPGLContext context) throws Exception {
+    public InfoSubevent invokeInfoSubevent(RPGLContext context, String... tags) throws Exception {
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -673,28 +673,6 @@ public class RPGLObject extends RPGLTaggable {
         infoSubevent.setTarget(this);
         infoSubevent.invoke(context);
         return infoSubevent;
-    }
-
-    /**
-     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has started.
-     *
-     * @param context the context in which the RPGLObject starts its turn
-     *
-     * @throws Exception if an exception occurs
-     */
-    public void startTurn(RPGLContext context) throws Exception {
-        this.invokeInfoSubevent(new String[] { "start_turn" }, context);
-    }
-
-    /**
-     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has ended.
-     *
-     * @param context the context in which the RPGLObject ends its turn
-     *
-     * @throws Exception if an exception occurs
-     */
-    public void endTurn(RPGLContext context) throws Exception {
-        this.invokeInfoSubevent(new String[] { "end_turn" }, context);
     }
 
     /**
@@ -762,7 +740,7 @@ public class RPGLObject extends RPGLTaggable {
         for (int i = 0; i < itemTags.size() ; i++) {
             infoSubeventTags[i + 1] = itemTags.getString(i);
         }
-        if (force || this.invokeInfoSubevent(infoSubeventTags, context).isNotCanceled()) {
+        if (force || this.invokeInfoSubevent(context, infoSubeventTags).isNotCanceled()) {
             this.getEquippedItems().removeString(equipmentSlot);
         }
     }

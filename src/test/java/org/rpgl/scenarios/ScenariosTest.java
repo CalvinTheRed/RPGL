@@ -242,8 +242,8 @@ public class ScenariosTest {
                 "target should have the wrathful smite fear applied"
         );
 
-        source.endTurn(context);
-        target.startTurn(context);
+        source.invokeInfoSubevent(context, "end_turn");
+        target.invokeInfoSubevent(context, "start_turn");
 
         target.invokeEvent(
                 new RPGLObject[] {
@@ -264,8 +264,8 @@ public class ScenariosTest {
 
         // try again with a better save bonus
 
-        target.endTurn(context);
-        target.startTurn(context);
+        target.invokeInfoSubevent(context, "end_turn");
+        target.invokeInfoSubevent(context, "start_turn");
 
         target.getAbilityScores().putInteger("wis", 20); // save bonus +5
 

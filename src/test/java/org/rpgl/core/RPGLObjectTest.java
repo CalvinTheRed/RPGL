@@ -437,7 +437,7 @@ public class RPGLObjectTest {
         source.addResource(resource);
 
         resource.exhaust();
-        source.startTurn(context);
+        source.invokeInfoSubevent(context, "start_turn");
 
         assertFalse(resource.getExhausted(),
                 "resource should not be exhausted after turn start"

@@ -4,6 +4,16 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
+/**
+ * This Subevent is dedicated to performing ability checks and skill checks.
+ * <br>
+ * <br>
+ * Source: an RPGLObject initiating an ability check
+ * <br>
+ * Target: an RPGLObject being required to make an ability check
+ *
+ * @author Calvin Withun
+ */
 public class AbilityCheck extends Roll {
 
     public AbilityCheck() {
