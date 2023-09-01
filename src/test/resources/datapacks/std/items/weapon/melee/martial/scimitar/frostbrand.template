@@ -9,7 +9,8 @@
     "metal",
     "magic",
     "martial_melee",
-    "finesse"
+    "finesse",
+    "weapon"
   ],
   "weight": 3,
   "cost": 10000,

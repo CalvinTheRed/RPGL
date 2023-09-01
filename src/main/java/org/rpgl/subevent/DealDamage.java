@@ -37,6 +37,7 @@ public class DealDamage extends Subevent implements CancelableSubevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
+        this.json.putBoolean("cancel", false);
         this.addTag("deal_damage");
         this.getBaseDamage(context);
     }

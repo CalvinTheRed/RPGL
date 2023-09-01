@@ -3,6 +3,7 @@ package org.rpgl.core;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateBaseArmorClass;
 import org.rpgl.subevent.CalculateMaximumHitPoints;
@@ -354,12 +355,18 @@ public class RPGLObject extends RPGLTaggable {
             resource.exhaust();
         }
         event.scale(resources);
+
+        String sourceUuid = event.getString("source");
+        RPGLObject source = sourceUuid != null
+                ? UUIDTable.getObject(sourceUuid)
+                : this;
+
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
             String subeventId = subeventJson.getString("subevent");
             Subevent subevent = Subevent.SUBEVENTS.get(subeventId).clone(subeventJson);
-            subevent.setSource(this);
+            subevent.setSource(source);
             subevent.setOriginItem(event.getOriginItem());
             subevent.prepare(context);
             for (RPGLObject target : targets) {
@@ -622,7 +629,7 @@ public class RPGLObject extends RPGLTaggable {
                 currentHitPoints -= amount;
                 healthData.put("temporary", temporaryHitPoints);
                 healthData.put("current", currentHitPoints);
-                this.invokeInfoSubevent(new String[] { "reduced_to_zero_temporary_hit_points" }, context);
+                this.invokeInfoSubevent(context, "reduced_to_zero_temporary_hit_points");
             } else {
                 currentHitPoints -= amount;
                 healthData.put("current", currentHitPoints);
@@ -633,23 +640,23 @@ public class RPGLObject extends RPGLTaggable {
         }
         if (currentHitPoints <= -this.getMaximumHitPoints(context)) {
             healthData.put("current", 0);
-            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points", "killed" }, context); // TODO is there a more elegant way to do this?
+            this.invokeInfoSubevent(context, "reduced_to_zero_hit_points", "killed"); // TODO is there a more elegant way to do this?
         } else if (currentHitPoints < 0) {
             healthData.put("current", 0);
-            this.invokeInfoSubevent(new String[] { "reduced_to_zero_hit_points" }, context);
+            this.invokeInfoSubevent(context, "reduced_to_zero_hit_points");
         }
     }
 
     /**
-     * This helper method causes the RPGLObject to invoke an InfoSubevent using the passed tags.
+     * This method causes the RPGLObject to invoke an InfoSubevent using the passed tags.
      *
      * @param tags    the tags to be stored in the InfoSubevent
      * @param context the context in which the InfoSubevent is invoked
      * @return the InfoSubevent which was invoked
      *
-     * @throws Exception if nan exception occurs
+     * @throws Exception if an exception occurs
      */
-    InfoSubevent invokeInfoSubevent(String[] tags, RPGLContext context) throws Exception {
+    public InfoSubevent invokeInfoSubevent(RPGLContext context, String... tags) throws Exception {
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -666,28 +673,6 @@ public class RPGLObject extends RPGLTaggable {
         infoSubevent.setTarget(this);
         infoSubevent.invoke(context);
         return infoSubevent;
-    }
-
-    /**
-     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has started.
-     *
-     * @param context the context in which the RPGLObject starts its turn
-     *
-     * @throws Exception if an exception occurs
-     */
-    public void startTurn(RPGLContext context) throws Exception {
-        this.invokeInfoSubevent(new String[] { "start_turn" }, context);
-    }
-
-    /**
-     * Precipitates an InfoSubevent indicating that the RPGLObject's turn has ended.
-     *
-     * @param context the context in which the RPGLObject ends its turn
-     *
-     * @throws Exception if an exception occurs
-     */
-    public void endTurn(RPGLContext context) throws Exception {
-        this.invokeInfoSubevent(new String[] { "end_turn" }, context);
     }
 
     /**
@@ -755,7 +740,7 @@ public class RPGLObject extends RPGLTaggable {
         for (int i = 0; i < itemTags.size() ; i++) {
             infoSubeventTags[i + 1] = itemTags.getString(i);
         }
-        if (force || this.invokeInfoSubevent(infoSubeventTags, context).isNotCanceled()) {
+        if (force || this.invokeInfoSubevent(context, infoSubeventTags).isNotCanceled()) {
             this.getEquippedItems().removeString(equipmentSlot);
         }
     }
@@ -981,6 +966,50 @@ public class RPGLObject extends RPGLTaggable {
      */
     public List<RPGLResource> getResourcesWithTag(String tag) {
         return this.getResourceObjects().stream().filter(resource -> resource.hasTag(tag)).toList();
+    }
+
+    /**
+     * Cause the object to make an ability check and return the result.
+     *
+     * @param ability an ability to use for the check
+     * @param skill a skill to use for the check
+     * @param context the context in which the check takes place
+     * @return the result of the ability check
+     *
+     * @throws Exception if an exception occurs
+     */
+    public int abilityCheck(String ability, String skill, RPGLContext context) throws Exception {
+        AbilityCheck abilityCheck = new AbilityCheck();
+        abilityCheck.joinSubeventData(new JsonObject() {{
+            this.putString("ability", ability);
+            this.putString("skill", skill);
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(10);
+            }});
+        }});
+        abilityCheck.setSource(this);
+        abilityCheck.prepare(context);
+        abilityCheck.setTarget(this);
+        abilityCheck.invoke(context);
+        return abilityCheck.get();
+    }
+
+    /**
+     * Give a new event to the object.
+     *
+     * @param eventId an event ID
+     */
+    public void giveEvent(String eventId) {
+        this.getEvents().addString(eventId);
+    }
+
+    /**
+     * Remove an existing event from the object.
+     *
+     * @param eventId an event ID
+     */
+    public void removeEvent(String eventId) {
+        this.getEvents().asList().remove(eventId);
     }
 
 }

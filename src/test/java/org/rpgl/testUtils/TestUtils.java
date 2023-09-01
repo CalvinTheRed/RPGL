@@ -1,6 +1,7 @@
 package org.rpgl.testUtils;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
@@ -14,6 +15,22 @@ import java.util.Objects;
  * @author Calvin Withun
  */
 public final class TestUtils {
+
+    /**
+     * Returns an effect by ID from a list (first match)
+     *
+     * @param effects a list of effects
+     * @param effectId an effect ID being searched for
+     * @return an RPGLEffect, or null if none match the event ID
+     */
+    public static RPGLEffect getEffectById(List<RPGLEffect> effects, String effectId) {
+        for (RPGLEffect effect : effects) {
+            if (Objects.equals(effect.getId(), effectId)) {
+                return effect;
+            }
+        }
+        return null;
+    }
 
     /**
      * Returns an event by ID from a list (first match)
@@ -43,7 +60,7 @@ public final class TestUtils {
     public static void resetObjectHealth(RPGLObject object, RPGLContext context) throws Exception {
         JsonObject healthData = object.getHealthData();
         int base = healthData.getInteger("base");
-        int hitDiceCount = healthData.getJsonArray("hit_dice").size();
+        int hitDiceCount = object.getResourcesWithTag("hit_die").size();
         int conModifier = object.getAbilityModifierFromAbilityName("con", context);
         healthData.putInteger("current", base + hitDiceCount * conModifier);
     }

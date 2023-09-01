@@ -12,7 +12,7 @@ import java.util.HashMap;
  *
  * @author Calvin Withun
  */
-public class RPGLEffectTO extends UUIDTableElementTO {
+public class RPGLEffectTO extends RPGLTaggableTO {
 
     // JSON property aliases
     public static final String SUBEVENT_FILTERS_ALIAS = "subevent_filters";

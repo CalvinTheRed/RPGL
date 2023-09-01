@@ -73,7 +73,7 @@ public class CalculateProficiencyBonusTest {
         calculateProficiencyBonus.setSource(source);
         calculateProficiencyBonus.prepare(context);
 
-        assertEquals(4, calculateProficiencyBonus.getBase().getInteger("value"),
+        assertEquals(4, calculateProficiencyBonus.getBase(),
                 "prepare() should assign the proficiency bonus from the source json to the subevent base value"
         );
     }

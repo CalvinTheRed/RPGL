@@ -105,13 +105,13 @@ public class SetBaseTest {
                 "function": "set_base",
                 "base": {
                     "base_formula": "number",
-                    "value": 13
+                    "number": 13
                 }
             }*/
             this.putString("function", "set_base");
             this.putJsonObject("base", new JsonObject() {{
                 this.putString("base_formula", "number");
-                this.putInteger("value", 13);
+                this.putInteger("number", 13);
             }});
         }};
 
@@ -120,7 +120,7 @@ public class SetBaseTest {
 
         setBase.execute(effect, calculation, functionJson, context);
 
-        assertEquals(13, calculation.getBase().getInteger("value"),
+        assertEquals(13, calculation.getBase(),
                 "execute should set calculation base to 13"
         );
     }
@@ -171,7 +171,7 @@ public class SetBaseTest {
 
         setBase.execute(effect, calculation, functionJson, context);
 
-        assertEquals(5, calculation.getBase().getInteger("value"),
+        assertEquals(5, calculation.getBase(),
                 "execute should set calculation base to source's dex modifier (+5)"
         );
     }
@@ -222,7 +222,7 @@ public class SetBaseTest {
 
         setBase.execute(effect, calculation, functionJson, context);
 
-        assertEquals(20, calculation.getBase().getInteger("value"),
+        assertEquals(20, calculation.getBase(),
                 "execute should set calculation base to source's dex score (20)"
         );
     }
@@ -269,7 +269,7 @@ public class SetBaseTest {
 
         setBase.execute(effect, calculation, functionJson, context);
 
-        assertEquals(2, calculation.getBase().getInteger("value"),
+        assertEquals(2, calculation.getBase(),
                 "execute should set calculation base to source's proficiency bonus (+2)"
         );
     }

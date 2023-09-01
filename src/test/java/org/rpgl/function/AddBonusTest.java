@@ -364,7 +364,7 @@ public class AddBonusTest {
             /*{
                 "function": "add_bonus",
                 "bonus": [
-                    ]
+                    {
                         "bonus_formula": "level",
                         "object": {
                             "from": "effect",

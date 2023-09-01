@@ -41,6 +41,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
+        this.json.putBoolean("cancel", false);
         this.json.asMap().putIfAbsent("temporary_hit_points", new ArrayList<>());
         this.json.asMap().putIfAbsent("rider_effects", new ArrayList<>());
         this.getBaseTemporaryHitPoints(context);

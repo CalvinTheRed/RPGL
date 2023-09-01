@@ -79,7 +79,7 @@ public class RPGLItemTest {
                 "first event should be a melee longsword strike"
         );
         expected = """
-                ["longsword","metal","martial_melee","versatile"]""";
+                ["longsword","metal","martial_melee","versatile","weapon"]""";
         assertEquals(expected, events.get(0).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should include item tags when not improvised"
         );
@@ -118,7 +118,7 @@ public class RPGLItemTest {
                 "first event should be a melee longsword strike (versatile)"
         );
         expected = """
-                ["longsword","metal","martial_melee","versatile"]""";
+                ["longsword","metal","martial_melee","versatile","weapon"]""";
         assertEquals(expected, events.get(0).getSubevents().getJsonObject(0).getJsonArray("tags").toString(),
                 "subevent attack tags should include item tags when not improvised"
         );

@@ -93,8 +93,8 @@ public class GetEventsTest {
         getEvents.setSource(object);
         getEvents.prepare(context);
 
-        getEvents.addEvent("std:item/weapon/melee/martial/longsword/melee", item.getUuid());
-        getEvents.addEvent("std:common/improvised_thrown", item.getUuid());
+        getEvents.addEvent("std:item/weapon/melee/martial/longsword/melee", item.getUuid(), null);
+        getEvents.addEvent("std:common/improvised_thrown", item.getUuid(), null);
 
         List<RPGLEvent> events = getEvents.getEvents();
         assertEquals(2, events.size(),

@@ -2,7 +2,6 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
-import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
@@ -44,58 +43,58 @@ public class SetBase extends Function {
      *
      * @throws Exception if an exception occurs
      */
-    public static JsonObject processJson(RPGLEffect effect, Subevent subevent, JsonObject baseJson, RPGLContext context) throws Exception {
+    public static int processJson(RPGLEffect effect, Subevent subevent, JsonObject baseJson, RPGLContext context) throws Exception {
         /*[
             {
                 "name": "...",
                 "base_formula": "number",
-                "value": #
+                "number": #
             },{
                 "name": "...",
                 "base_formula": "modifier",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "base_formula": "ability",
                 "ability": "dex",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
                 "base_formula": "proficiency",
                 "half": boolean,
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             },{
                 "name": "...",
-                "base_formula": "level", // TODO this feature not yet supported
+                "base_formula": "level", // TODO allow level references to have a scale: { numerator, denominator }
                 "class": "...",
-                "object": "..."
+                "object": {
+                    "from": "...",
+                    "object": "..."
+                }
             }
         ]*/
         return switch (baseJson.getString("base_formula")) {
-            case "number" -> new JsonObject() {{
-                this.putInteger("value", Objects.requireNonNullElse(baseJson.getInteger("value"), 0));
-            }};
-            case "modifier" -> new JsonObject() {{
-                RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
-                this.putInteger("value", object.getAbilityModifierFromAbilityName(baseJson.getString("ability"), context));
-            }};
-            case "ability" -> new JsonObject() {{
-                RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
-                this.putInteger("value", object.getAbilityScoreFromAbilityName(baseJson.getString("ability"), context));
-            }};
-            case "proficiency" -> new JsonObject() {{
-                RPGLObject object = RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"));
-                if (Objects.requireNonNullElse(baseJson.getBoolean("half"), false)) {
-                    this.putInteger("value", object.getEffectiveProficiencyBonus(context) / 2);
-                } else {
-                    this.putInteger("value", object.getEffectiveProficiencyBonus(context));
-                }
-            }};
-            default -> new JsonObject() {{
-                // TODO log a warning here concerning an unexpected bonus_formula value
-                this.putInteger("value", 0);
-            }};
+            case "number" -> baseJson.getInteger("number");
+            case "modifier" -> RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"))
+                    .getAbilityModifierFromAbilityName(baseJson.getString("ability"), context);
+            case "ability" -> RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"))
+                    .getAbilityScoreFromAbilityName(baseJson.getString("ability"), context);
+            case "proficiency" -> Objects.requireNonNullElse(baseJson.getBoolean("half"), false)
+                    ? RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object")).getEffectiveProficiencyBonus(context) / 2
+                    : RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object")).getEffectiveProficiencyBonus(context);
+            case "level" -> RPGLEffect.getObject(effect, subevent, baseJson.getJsonObject("object"))
+                    .getLevel(baseJson.getString("class"));
+            default -> 0;
         };
     }
 

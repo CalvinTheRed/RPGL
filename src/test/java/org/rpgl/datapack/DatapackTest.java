@@ -255,7 +255,7 @@ public class DatapackTest {
         RPGLItemTO field values
          */
         expected = """
-                ["scimitar","metal","magic","martial_melee","finesse"]""";
+                ["scimitar","metal","magic","martial_melee","finesse","weapon"]""";
         assertEquals(expected, itemTemplate.getJsonArray(RPGLItemTO.TAGS_ALIAS).toString(),
                 "incorrect field value: " + RPGLItemTO.TAGS_ALIAS
         );

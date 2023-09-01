@@ -122,7 +122,7 @@ public class RPGLItemTemplateTest {
         );
 
         expected = """
-                ["scimitar","metal","magic","martial_melee","finesse"]""";
+                ["scimitar","metal","magic","martial_melee","finesse","weapon"]""";
         assertEquals(expected, item.getTags().toString(),
                 "incorrect field value: " + RPGLTaggableTO.TAGS_ALIAS
         );

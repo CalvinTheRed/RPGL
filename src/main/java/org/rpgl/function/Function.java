@@ -45,6 +45,9 @@ public abstract class Function {
         Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
         Function.FUNCTIONS.put("add_temporary_hit_points", new AddTemporaryHitPoints());
         Function.FUNCTIONS.put("end_effect", new EndEffect());
+        Function.FUNCTIONS.put("give_expertise", new GiveExpertise());
+        Function.FUNCTIONS.put("give_half_proficiency", new GiveHalfProficiency());
+        Function.FUNCTIONS.put("give_proficiency", new GiveProficiency());
         Function.FUNCTIONS.put("grant_advantage", new GrantAdvantage());
         Function.FUNCTIONS.put("grant_disadvantage", new GrantDisadvantage());
         Function.FUNCTIONS.put("grant_immunity", new GrantImmunity());

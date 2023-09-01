@@ -51,13 +51,15 @@ public final class RPGLFactory {
      * @param originItem an item UUID to be stored for the new event's origin item
      * @return a new RPGLEvent object
      */
-    public static RPGLEvent newEvent(String eventId, String originItem) {
+    public static RPGLEvent newEvent(String eventId, String originItem, String sourceUuid) {
         String[] eventIdSplit = eventId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
+            RPGLEvent event = DatapackLoader.DATAPACKS
                     .get(eventIdSplit[0])
                     .getEventTemplate(eventIdSplit[1])
                     .newInstance(originItem);
+            event.putString("source", sourceUuid);
+            return event;
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEvent: " + eventId);
             throw new RuntimeException("Encountered an error building a new RPGLEvent", e);
@@ -71,7 +73,7 @@ public final class RPGLFactory {
      * @return a new RPGLEvent object
      */
     public static RPGLEvent newEvent(String eventId) {
-        return newEvent(eventId, null);
+        return newEvent(eventId, null, null);
     }
 
     /**

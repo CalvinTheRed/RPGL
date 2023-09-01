@@ -10,18 +10,19 @@
     "light",
     "metal",
     "simple_melee",
-    "throwable"
+    "throwable",
+    "weapon"
   ],
   "weight": 1,
   "cost": 2,
   "events": {
     "multiple_hands": [
-      "std:item/weapon/martial/simple/dagger/melee",
-      "std:item/weapon/martial/simple/dagger/thrown"
+      "std:item/weapon/melee/simple/dagger/melee",
+      "std:item/weapon/melee/simple/dagger/thrown"
     ],
     "one_hand": [
-      "std:item/weapon/martial/simple/dagger/melee",
-      "std:item/weapon/martial/simple/dagger/thrown"
+      "std:item/weapon/melee/simple/dagger/melee",
+      "std:item/weapon/melee/simple/dagger/thrown"
     ],
     "special": [ ]
   },

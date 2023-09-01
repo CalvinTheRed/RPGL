@@ -437,7 +437,7 @@ public class RPGLObjectTest {
         source.addResource(resource);
 
         resource.exhaust();
-        source.startTurn(context);
+        source.invokeInfoSubevent(context, "start_turn");
 
         assertFalse(resource.getExhausted(),
                 "resource should not be exhausted after turn start"
@@ -1028,6 +1028,26 @@ public class RPGLObjectTest {
         );
         assertEquals(1, object.getLevel("std:common/base"),
                 "object should gain 1 level in class std:common/base"
+        );
+    }
+
+    @Test
+    @DisplayName("abilityCheck evaluates correctly")
+    void abilityCheck_evaluatesCorrectly() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLContext context = new DummyContext();
+        context.add(object);
+
+        object.getAbilityScores().putInteger("str", 20);
+        object.setProficiencyBonus(5);
+
+        RPGLEffect athleticsProficiency = RPGLFactory.newEffect("std:common/proficiency/skill/athletics");
+        athleticsProficiency.setSource(object);
+        athleticsProficiency.setTarget(object);
+        object.addEffect(athleticsProficiency);
+
+        assertEquals(10+5+5, object.abilityCheck("str", "athletics", context),
+                "ability check should return a 20 (10+5+5)"
         );
     }
 

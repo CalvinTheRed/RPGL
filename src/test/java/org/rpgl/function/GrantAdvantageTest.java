@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Testing class for the org.rpgl.function.GrantDisadvantage class.
+ * Testing class for the org.rpgl.function.GrantAdvantage class.
  *
  * @author Calvin Withun
  */

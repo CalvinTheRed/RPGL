@@ -45,6 +45,8 @@ public abstract class Subevent {
     public static void initialize(boolean includeTestingSubevents) {
         Subevent.SUBEVENTS.clear();
 
+        Subevent.SUBEVENTS.put("ability_contest", new AbilityContest());
+        Subevent.SUBEVENTS.put("ability_save", new AbilitySave());
         Subevent.SUBEVENTS.put("add_origin_item_tag", new AddOriginItemTag());
         Subevent.SUBEVENTS.put("attack_ability_collection", new AttackAbilityCollection());
         Subevent.SUBEVENTS.put("attack_roll", new AttackRoll());
@@ -56,8 +58,8 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("give_temporary_hit_points", new GiveTemporaryHitPoints());
         Subevent.SUBEVENTS.put("heal", new Heal());
         Subevent.SUBEVENTS.put("info_subevent", new InfoSubevent());
-        //Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("refresh_resource", new RefreshResource());
+        Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("remove_origin_item_tag", new RemoveOriginItemTag());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
         Subevent.SUBEVENTS.put("take_resource", new TakeResource());

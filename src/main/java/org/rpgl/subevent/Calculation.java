@@ -34,7 +34,6 @@ public abstract class Calculation extends Subevent {
         this.prepareBase(context);
         this.prepareBonuses(context);
         this.prepareMinimum(context);
-        this.json.getJsonArray("tags").asList().addAll(this.getSource().getAllTags(context));
     }
 
     /**
@@ -46,10 +45,8 @@ public abstract class Calculation extends Subevent {
      * @throws Exception if an exception occurs
      */
     void prepareBase(RPGLContext context) throws Exception {
-        JsonObject baseJson = this.json.removeJsonObject("base");
-        this.setBase(new JsonObject() {{
-            this.putInteger("value", 0);
-        }});
+        JsonObject baseJson = this.json.getJsonObject("base");
+        this.setBase(0);
         if (baseJson != null) {
             RPGLEffect effect = new RPGLEffect();
             effect.setSource(this.getSource());
@@ -90,9 +87,7 @@ public abstract class Calculation extends Subevent {
      */
     void prepareMinimum(RPGLContext context) throws Exception {
         JsonObject minimumJson = this.json.removeJsonObject("minimum");
-        this.setMinimum(new JsonObject() {{
-            this.putInteger("value", Integer.MIN_VALUE);
-        }});
+        this.setMinimum(Integer.MIN_VALUE);
         if (minimumJson != null) {
             RPGLEffect effect = new RPGLEffect();
             effect.setSource(this.getSource());
@@ -103,21 +98,27 @@ public abstract class Calculation extends Subevent {
 
     /**
      * Returns the base of the Calculation. Call getInteger("value") to get the base value.
-     * TODO should base be stored as an int after prepare()?
      *
      * @return a JsonObject storing the base calculation value.
      */
-    public JsonObject getBase() {
-        return this.json.getJsonObject("base");
+    public int getBase() {
+        return this.json.getJsonObject("base").getInteger("value");
     }
 
     /**
      * Sets the base of the Calculation. This always overrides the previous base value for the Calculation.
      *
-     * @param baseJson the JSON representation of a base value for the Calculation
+     * @param baseValue the base value for the Calculation
      */
-    public void setBase(JsonObject baseJson) {
-        this.json.putJsonObject("base", baseJson);
+    public void setBase(int baseValue) {
+        JsonObject baseJson = this.json.getJsonObject("base");
+        if (baseJson == null) {
+            this.json.putJsonObject("base", new JsonObject() {{
+                this.putInteger("value", baseValue);
+            }});
+        } else {
+            baseJson.putInteger("value", baseValue);
+        }
     }
 
     /**
@@ -140,24 +141,31 @@ public abstract class Calculation extends Subevent {
 
     /**
      * Returns the minimum of the Calculation. Call getInteger("value") to get the base value.
-     * TODO should minimum be stored as an int after prepare()?
      *
      * @return a JsonObject storing the minimum calculation value.
      */
-    public JsonObject getMinimum() {
-        return this.json.getJsonObject("minimum");
+    public int getMinimum() {
+        JsonObject minimumJson = this.json.getJsonObject("minimum");
+        if (minimumJson == null) {
+            this.json.putJsonObject("minimum", new JsonObject() {{
+                this.putInteger("value", 0);
+            }});
+            return 0;
+        } else {
+            return Objects.requireNonNullElse(this.json.getJsonObject("minimum").getInteger("value"), 0);
+        }
     }
 
     /**
      * Sets the minimum of the Calculation. If the provided minimum is lower than the current minimum, this method will
      * not do anything to modify the Subevent.
      *
-     * @param minimumJson the JSON representation of a minimum value for the Calculation
+     * @param minimum the minimum value for the Calculation
      */
-    public void setMinimum(JsonObject minimumJson) {
-        JsonObject currentMinimum = this.getMinimum();
-        if (currentMinimum == null || minimumJson.getInteger("value") > currentMinimum.getInteger("value")) {
-            this.json.putJsonObject("minimum", minimumJson);
+    public void setMinimum(int minimum) {
+        int currentMinimum = this.getMinimum();
+        if (minimum > currentMinimum) {
+            this.json.getJsonObject("minimum").putInteger("value", minimum);
         }
     }
 
@@ -168,9 +176,9 @@ public abstract class Calculation extends Subevent {
      * @return the final value of the Calculation
      */
     public int get() {
-        int total = this.getBase().getInteger("value");
+        int total = this.getBase();
         total += this.getBonus();
-        int minimum = this.getMinimum().getInteger("value");
+        int minimum = this.getMinimum();
         if (total < minimum) {
             total = minimum;
         }

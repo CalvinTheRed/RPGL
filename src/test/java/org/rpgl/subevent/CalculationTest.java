@@ -77,22 +77,16 @@ public class CalculationTest {
     @Test
     @DisplayName("setBase should be the most recent value")
     void setBase_mostRecentValue() {
-        calculation.setBase(new JsonObject() {{
-            this.putInteger("value", 1);
-        }});
-        assertEquals(1, calculation.getBase().getInteger("value"),
+        calculation.setBase(1);
+        assertEquals(1, calculation.getBase(),
                 "base should be most recent value (1)"
         );
-        calculation.setBase(new JsonObject() {{
-            this.putInteger("value", -5);
-        }});
-        assertEquals(-5, calculation.getBase().getInteger("value"),
+        calculation.setBase(-5);
+        assertEquals(-5, calculation.getBase(),
                 "base should be most recent value (-5)"
         );
-        calculation.setBase(new JsonObject() {{
-            this.putInteger("value", 5);
-        }});
-        assertEquals(5, calculation.getBase().getInteger("value"),
+        calculation.setBase(5);
+        assertEquals(5, calculation.getBase(),
                 "base should be most recent value (5)"
         );
     }
@@ -100,9 +94,7 @@ public class CalculationTest {
     @Test
     @DisplayName("get returns base + bonus when set is null")
     void get_notSet() {
-        calculation.setBase(new JsonObject() {{
-            this.putInteger("value", 10);
-        }});
+        calculation.setBase(10);
         calculation.addBonus(new JsonObject() {{
             this.putInteger("bonus", 5);
             this.putJsonArray("dice", new JsonArray());

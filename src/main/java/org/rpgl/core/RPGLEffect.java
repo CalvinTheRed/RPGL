@@ -7,7 +7,6 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
-import org.rpgl.uuidtable.UUIDTableElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class RPGLEffect extends UUIDTableElement {
+public class RPGLEffect extends RPGLTaggable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RPGLEffect.class);
 

@@ -39,9 +39,7 @@ public class CalculateAbilityScore extends Calculation implements AbilitySubeven
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-        this.setBase(new JsonObject() {{
-            this.putInteger("value", getSource().getAbilityScores().getInteger(getAbility(context)));
-        }});
+        this.setBase(getSource().getAbilityScores().getInteger(getAbility(context)));
     }
 
     @Override

@@ -12,6 +12,8 @@ import org.rpgl.subevent.Subevent;
  */
 public class EndEffect extends Function {
 
+    // TODO should this exist now that RemoveEffect is a Subevent?
+
     public EndEffect() {
         super("end_effect");
     }
