@@ -11,12 +11,12 @@
       "tags": [
         "grapple"
       ],
-      "source": {
+      "source_check": {
         "ability": "str",
         "skill": "athletics",
         "determined": [ 10 ]
       },
-      "target": {
+      "target_check": {
         "ability": "str",
         "skill": "athletics",
         "determined": [ 10 ]
