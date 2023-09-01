@@ -648,13 +648,13 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
-     * This helper method causes the RPGLObject to invoke an InfoSubevent using the passed tags.
+     * This method causes the RPGLObject to invoke an InfoSubevent using the passed tags.
      *
      * @param tags    the tags to be stored in the InfoSubevent
      * @param context the context in which the InfoSubevent is invoked
      * @return the InfoSubevent which was invoked
      *
-     * @throws Exception if nan exception occurs
+     * @throws Exception if an exception occurs
      */
     public InfoSubevent invokeInfoSubevent(RPGLContext context, String... tags) throws Exception {
         InfoSubevent infoSubevent = new InfoSubevent();
