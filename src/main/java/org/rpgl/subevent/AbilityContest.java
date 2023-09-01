@@ -39,7 +39,6 @@ public class AbilityContest extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
-
         // Add tag so nested subevents such as DamageCollection can know they hail from an ability save.
         this.addTag("ability_contest");
     }
@@ -56,6 +55,14 @@ public class AbilityContest extends Subevent {
         }
     }
 
+    /**
+     * This helper method calculates the source object's ability check and returns the result.
+     *
+     * @param context the context in which the object makes its ability check.
+     * @return the result of the ability check
+     *
+     * @throws Exception if an exception occurs
+     */
     int getSourceAbilityCheck(RPGLContext context) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
@@ -71,6 +78,14 @@ public class AbilityContest extends Subevent {
         return abilityCheck.get();
     }
 
+    /**
+     * This helper method calculates the target object's ability check and returns the result.
+     *
+     * @param context the context in which the object makes its ability check.
+     * @return the result of the ability check
+     *
+     * @throws Exception if an exception occurs
+     */
     int getTargetAbilityCheck(RPGLContext context) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{

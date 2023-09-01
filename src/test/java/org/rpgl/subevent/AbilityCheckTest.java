@@ -26,6 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the org.rpgl.subevent.AbilityCheck class.
+ *
+ * @author Calvin Withun
+ */
 public class AbilityCheckTest {
     @BeforeAll
     static void beforeAll() throws Exception {

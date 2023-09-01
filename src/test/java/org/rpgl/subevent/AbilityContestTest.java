@@ -24,6 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the org.rpgl.subevent.AbilityContestTest class.
+ *
+ * @author Calvin Withun
+ */
 public class AbilityContestTest {
 
     @BeforeAll
@@ -488,6 +493,72 @@ public class AbilityContestTest {
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on pass"
+        );
+    }
+
+    @Test
+    @DisplayName("invoke does not invoke any subevents (on tie)")
+    void invoke_doesNotInvokeAnySubevents_onTie() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        AbilityContest abilityContest = new AbilityContest();
+        abilityContest.joinSubeventData(new JsonObject() {{
+            /*{
+                "subevent": "ability_contest",
+                "source_check": {
+                    "ability": "wis",
+                    "skill": "perception",
+                    "determined": [ 20 ]
+                },
+                "target_check": {
+                    "ability": "wis",
+                    "skill": "perception",
+                    "determined": [ 20 ]
+                },
+                "pass": [
+                    { "subevent": "dummy_subevent" }
+                ],
+                "fail": [
+                    { "subevent": "dummy_subevent" }
+                ]
+            }*/
+            this.putString("subevent", "ability_contest");
+            this.putJsonObject("source_check", new JsonObject() {{
+                this.putString("ability", "wis");
+                this.putString("skill", "perception");
+                this.putJsonArray("determined", new JsonArray() {{
+                    this.addInteger(20);
+                }});
+            }});
+            this.putJsonObject("target_check", new JsonObject() {{
+                this.putString("ability", "wis");
+                this.putString("skill", "perception");
+                this.putJsonArray("determined", new JsonArray() {{
+                    this.addInteger(20);
+                }});
+            }});
+            this.putJsonArray("pass", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("subevent", "dummy_subevent");
+                }});
+            }});
+            this.putJsonArray("fail", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("subevent", "dummy_subevent");
+                }});
+            }});
+        }});
+        abilityContest.setSource(source);
+        abilityContest.prepare(context);
+        abilityContest.setTarget(target);
+        abilityContest.invoke(context);
+
+        assertEquals(0, DummySubevent.counter,
+                "dummy subevent should not be invoked on tie"
         );
     }
 

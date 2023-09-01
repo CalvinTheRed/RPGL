@@ -24,6 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Testing class for the org.rpgl.subevent.AbilitySave class.
+ *
+ * @author Calvin Withun
+ */
 public class AbilitySaveTest {
 
     @BeforeAll

@@ -968,6 +968,16 @@ public class RPGLObject extends RPGLTaggable {
         return this.getResourceObjects().stream().filter(resource -> resource.hasTag(tag)).toList();
     }
 
+    /**
+     * Cause the object to make an ability check and return the result.
+     *
+     * @param ability an ability to use for the check
+     * @param skill a skill to use for the check
+     * @param context the context in which the check takes place
+     * @return the result of the ability check
+     *
+     * @throws Exception if an exception occurs
+     */
     public int abilityCheck(String ability, String skill, RPGLContext context) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
@@ -984,10 +994,20 @@ public class RPGLObject extends RPGLTaggable {
         return abilityCheck.get();
     }
 
+    /**
+     * Give a new event to the object.
+     *
+     * @param eventId an event ID
+     */
     public void giveEvent(String eventId) {
         this.getEvents().addString(eventId);
     }
 
+    /**
+     * Remove an existing event from the object.
+     *
+     * @param eventId an event ID
+     */
     public void removeEvent(String eventId) {
         this.getEvents().asList().remove(eventId);
     }

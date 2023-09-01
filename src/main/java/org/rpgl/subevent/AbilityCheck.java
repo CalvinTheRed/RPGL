@@ -64,36 +64,71 @@ public class AbilityCheck extends Roll {
         return this.json.getString("ability");
     }
 
+    /**
+     * Returns the skill used by the ability check.
+     *
+     * @return the skill used by the subevent, or null if no skill is used
+     */
     public String getSkill() {
         return this.json.getString("skill");
     }
 
+    /**
+     * Indicate that the check should benefit from half proficiency.
+     */
     public void giveHalfProficiency() {
         this.json.putBoolean("has_half_proficiency", true);
     }
 
+    /**
+     * Indicate that the check should benefit from proficiency.
+     */
     public void giveProficiency() {
         this.json.putBoolean("has_proficiency", true);
     }
 
+    /**
+     * Indicate that the check should benefit from expertise.
+     */
     public void giveExpertise() {
         this.json.putBoolean("has_expertise", true);
     }
 
+    /**
+     * Returns whether the subevent should add half proficiency as a bonus for the ability check.
+     *
+     * @return if half proficiency should be added as a bonus to the check
+     */
     public boolean hasHalfProficiency() {
         return this.json.getBoolean("has_half_proficiency")
                 && !this.json.getBoolean("has_proficiency")
                 && !this.json.getBoolean("has_expertise");
     }
 
+    /**
+     * Returns whether the subevent should add proficiency as a bonus for the ability check.
+     *
+     * @return if proficiency should be added as a bonus to the check
+     */
     public boolean hasProficiency() {
         return this.json.getBoolean("has_proficiency") && !this.json.getBoolean("has_expertise");
     }
 
+    /**
+     * Returns whether the subevent should add expertise as a bonus for the ability check.
+     *
+     * @return if expertise should be added as a bonus to the check
+     */
     public boolean hasExpertise() {
         return this.json.getBoolean("has_expertise");
     }
 
+    /**
+     * This helper method returns the proficiency bonus which should be applied to the check, after considering half
+     * proficiency and expertise.
+     *
+     * @return a proficiency bonus
+     */
     int getProficiencyBonus() {
         if (this.json.getBoolean("has_expertise")) {
             return this.getSource().getProficiencyBonus() * 2;
