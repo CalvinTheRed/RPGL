@@ -10,6 +10,7 @@ import org.rpgl.testUtils.DummyContext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.subevent.DamageAffinity class.
@@ -55,6 +56,28 @@ public class DamageAffinityTest {
         );
         assertFalse(damageAffinity.isVulnerable(damageType),
                 "damageAffinity should not report vulnerable by default"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns true (damage type included)")
+    void includesDamageType_returnsTrue_damageTypeIncluded() {
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType("fire");
+
+        assertTrue(damageAffinity.includesDamageType("fire"),
+                "should return true when damage type is included"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns false (damage type not included)")
+    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType("cold");
+
+        assertFalse(damageAffinity.includesDamageType("fire"),
+                "should return false when damage type is not included"
         );
     }
 

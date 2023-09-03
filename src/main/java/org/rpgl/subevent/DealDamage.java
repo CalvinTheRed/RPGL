@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class DealDamage extends Subevent implements CancelableSubevent {
+public class DealDamage extends Subevent implements CancelableSubevent, DamageTypeSubevent {
 
     public DealDamage() {
         super("deal_damage");
@@ -58,6 +58,17 @@ public class DealDamage extends Subevent implements CancelableSubevent {
     @Override
     public boolean isNotCanceled() {
         return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
+    }
+
+    @Override
+    public boolean includesDamageType(String damageType) {
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            if (Objects.equals(damageType, damageArray.getJsonObject(i).getString("damage_type"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

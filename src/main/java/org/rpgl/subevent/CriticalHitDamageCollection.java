@@ -1,8 +1,10 @@
 package org.rpgl.subevent;
 
+import org.rpgl.core.RPGLContext;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -15,7 +17,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class CriticalHitDamageCollection extends Subevent {
+public class CriticalHitDamageCollection extends Subevent implements DamageTypeSubevent {
 
     public CriticalHitDamageCollection() {
         super("critical_hit_damage_collection");
@@ -37,6 +39,23 @@ public class CriticalHitDamageCollection extends Subevent {
         return clone;
     }
 
+    @Override
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
+        this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+    }
+
+    @Override
+    public boolean includesDamageType(String damageType) {
+        JsonArray damageDiceArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageDiceArray.size(); i++) {
+            if (Objects.equals(damageDiceArray.getJsonObject(i).getString("damage_type"), damageType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Adds extra damage to the Collection.
      *
@@ -44,25 +63,6 @@ public class CriticalHitDamageCollection extends Subevent {
      */
     public void addDamage(JsonObject damageJson) {
         this.getDamageCollection().addJsonObject(damageJson);
-    }
-
-    /**
-     * This method returns whether a given damage type is present in the damage dice collection.
-     *
-     * @param damageType the damage type being searched for
-     * @return true if the passed damage type is present in the damage dice collection
-     */
-    public boolean includesDamageType(String damageType) {
-        JsonArray damageDiceArray = this.json.getJsonArray("damage");
-        if (damageDiceArray != null) {
-            for (int i = 0; i < damageDiceArray.size(); i++) {
-                JsonObject damageDice = damageDiceArray.getJsonObject(i);
-                if (Objects.equals(damageDice.getString("damage_type"), damageType)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**

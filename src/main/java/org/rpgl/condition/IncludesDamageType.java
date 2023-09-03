@@ -3,7 +3,7 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.DamageAffinity;
+import org.rpgl.subevent.DamageTypeSubevent;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +23,8 @@ public class IncludesDamageType extends Condition {
 
     @Override
     public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) {
-        if (subevent instanceof DamageAffinity damageAffinity) {
-            return damageAffinity.includesDamageType(conditionJson.getString("damage_type"));
+        if (subevent instanceof DamageTypeSubevent damageTypeSubevent) {
+            return damageTypeSubevent.includesDamageType(conditionJson.getString("damage_type"));
         }
         LOGGER.warn("Can not evaluate condition for " + subevent.getClass());
         return false;

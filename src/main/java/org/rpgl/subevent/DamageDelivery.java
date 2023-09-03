@@ -17,7 +17,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class DamageDelivery extends Subevent {
+public class DamageDelivery extends Subevent implements DamageTypeSubevent {
 
     public DamageDelivery() {
         super("damage_delivery");
@@ -43,6 +43,17 @@ public class DamageDelivery extends Subevent {
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
         this.json.asMap().putIfAbsent("damage_proportion", "all");
+    }
+
+    @Override
+    public boolean includesDamageType(String damageType) {
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            if (Objects.equals(damageType, damageArray.getJsonObject(i).getString("damage_type"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

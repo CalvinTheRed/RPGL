@@ -17,7 +17,9 @@ import java.io.File;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.subevent.DamageDelivery class.
@@ -209,6 +211,54 @@ public class DamageDeliveryTest {
                 {"cold":4,"fire":4}""";
         assertEquals(expected, damageDelivery.getDamage().toString(),
                 "maximizeDamage should maximize damage for all damage types when null damage type is passed"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns true (damage type included)")
+    void includesDamageType_returnsTrue_damageTypeIncluded() {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire"
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                }});
+            }});
+        }});
+
+        assertTrue(damageDelivery.includesDamageType("fire"),
+                "should return true when damage type is included"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns false (damage type not included)")
+    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire"
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                }});
+            }});
+        }});
+
+        assertFalse(damageDelivery.includesDamageType("cold"),
+                "should return false when damage type is not included"
         );
     }
 

@@ -20,7 +20,9 @@ import java.io.File;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.subevent.DealDamage class.
@@ -240,6 +242,54 @@ public class DealDamageTest {
 
         assertEquals(49, target.getHealthData().getInteger("current"),
                 "invoking DealDamage should deal 3 points of damage (52-3=49)"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns true (damage type included)")
+    void includesDamageType_returnsTrue_damageTypeIncluded() {
+        DealDamage dealDamage = new DealDamage();
+        dealDamage.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire"
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                }});
+            }});
+        }});
+
+        assertTrue(dealDamage.includesDamageType("fire"),
+                "should return true when damage type is present"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns false (damage type not included)")
+    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+        DealDamage dealDamage = new DealDamage();
+        dealDamage.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire"
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                }});
+            }});
+        }});
+
+        assertFalse(dealDamage.includesDamageType("cold"),
+                "should return false when damage type is not present"
         );
     }
 
