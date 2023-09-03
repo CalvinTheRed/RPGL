@@ -11,7 +11,9 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.subevent.DamageRoll class.
@@ -223,6 +225,22 @@ public class DamageRollTest {
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
                 "all dice should maximize to 4"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns true (damage type included)")
+    void includesDamageType_returnsTrue_damageTypeIncluded() {
+        assertTrue(damageRoll.includesDamageType("fire"),
+                "should return true when damage type is included"
+        );
+    }
+
+    @Test
+    @DisplayName("includesDamageType returns true (damage type not included)")
+    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+        assertFalse(damageRoll.includesDamageType("acid"),
+                "should return false when damage type is not included"
         );
     }
 

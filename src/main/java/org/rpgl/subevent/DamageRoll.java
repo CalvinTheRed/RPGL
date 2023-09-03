@@ -17,7 +17,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class DamageRoll extends Subevent {
+public class DamageRoll extends Subevent implements DamageTypeSubevent {
 
     public DamageRoll() {
         super("damage_roll");
@@ -43,6 +43,17 @@ public class DamageRoll extends Subevent {
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
         this.roll();
+    }
+
+    @Override
+    public boolean includesDamageType(String damageType) {
+        JsonArray damageArray = this.json.getJsonArray("damage");
+        for (int i = 0; i < damageArray.size(); i++) {
+            if (Objects.equals(damageType, damageArray.getJsonObject(i).getString("damage_type"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

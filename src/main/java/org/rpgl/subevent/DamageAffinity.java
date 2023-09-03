@@ -18,7 +18,7 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class DamageAffinity extends Subevent {
+public class DamageAffinity extends Subevent implements DamageTypeSubevent {
 
     public DamageAffinity() {
         super("damage_affinity");
@@ -44,6 +44,17 @@ public class DamageAffinity extends Subevent {
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
         this.json.asMap().putIfAbsent("affinities", new ArrayList<>());
+    }
+
+    @Override
+    public boolean includesDamageType(String damageType) {
+        JsonArray affinities = this.getAffinities();
+        for (int i = 0; i < affinities.size(); i++) {
+            if (Objects.equals(affinities.getJsonObject(i).getString("damage_type"), damageType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -226,23 +237,6 @@ public class DamageAffinity extends Subevent {
             JsonObject affinity = affinities.getJsonObject(i);
             if (Objects.equals(affinity.getString("damage_type"), damageType)) {
                 return affinity.getBoolean("vulnerability") && !affinity.getBoolean("vulnerability_revoked");
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns whether a given damage type is included in the DamageAffinity.
-     *
-     * @param damageType a damage type
-     * @return true if the given damage type is included in the DamageAffinity
-     */
-    public boolean includesDamageType(String damageType) {
-        JsonArray affinities = this.getAffinities();
-        for (int i = 0; i < affinities.size(); i++) {
-            JsonObject affinity = affinities.getJsonObject(i);
-            if (Objects.equals(affinity.getString("damage_type"), damageType)) {
-                return true;
             }
         }
         return false;
