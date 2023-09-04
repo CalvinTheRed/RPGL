@@ -306,7 +306,7 @@ public class AttackRoll extends Roll {
      * attack hit or missed.
      *
      * @param resolution a String indicating the resolution of the Subevent (<code>"hit"</code> or <code>"miss"</code>)
-     * @param context    the context this Subevent takes place in
+     * @param context the context this Subevent takes place in
      * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.

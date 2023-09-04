@@ -100,10 +100,10 @@ public abstract class Function {
     /**
      * This method facilitates the execution of a Function. It verifies the Function and then runs it.
      *
-     * @param effect       the RPGLEffect containing this Function
-     * @param subevent     a Subevent being invoked
+     * @param effect the RPGLEffect containing this Function
+     * @param subevent a Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the Function to be executed
-     * @param context      the context in which the Function is being executed
+     * @param context the context in which the Function is being executed
      * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs

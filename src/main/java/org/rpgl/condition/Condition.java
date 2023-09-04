@@ -86,10 +86,10 @@ public abstract class Condition {
     /**
      * This method facilitates the evaluation of a Condition. It verifies the Condition and then runs it.
      *
-     * @param effect        the RPGLEffect containing this Condition
-     * @param subevent      a Subevent being invoked
+     * @param effect the RPGLEffect containing this Condition
+     * @param subevent a Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
-     * @param context       the context in which the Condition is being invoked
+     * @param context the context in which the Condition is being invoked
      * @return true if the condition is satisfied. Note that if a subevent-condition loop is formed, this method will
      * return false until that loop is exited.
      *
@@ -124,10 +124,10 @@ public abstract class Condition {
     /**
      * This method contains the logic definitive of the Condition.
      *
-     * @param effect        the RPGLEffect containing this Condition
-     * @param subevent      a Subevent being invoked
+     * @param effect the RPGLEffect containing this Condition
+     * @param subevent a Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
-     * @param context       the context in which the Condition is being invoked
+     * @param context the context in which the Condition is being invoked
      *
      * @throws Exception if an exception occurs
      */
@@ -140,8 +140,8 @@ public abstract class Condition {
     /**
      * This helper method compares two integer values in accordance with a specified comparison operator.
      *
-     * @param value      the int being compared to another value
-     * @param target     the int being compared against
+     * @param value the int being compared to another value
+     * @param target the int being compared against
      * @param comparison the operator being used for the comparison (<code>"=", "<", "<=", ">", ">="</code>)
      * @return true if the comparison is satisfied
      *

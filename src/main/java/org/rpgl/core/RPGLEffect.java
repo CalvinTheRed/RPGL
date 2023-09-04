@@ -97,10 +97,20 @@ public class RPGLEffect extends RPGLTaggable {
         this.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
     }
 
+    /**
+     * Returns the scale data for the RPGLEffect.
+     *
+     * @return an array indicating how the effect scales with more potent resources
+     */
     public JsonArray getScale() {
         return this.getJsonArray(RPGLEffectTO.SCALE_ALIAS);
     }
 
+    /**
+     * Sets the scale data for the RPGLEffect.
+     *
+     * @param scale a new array indicating scale data
+     */
     public void setScale(JsonArray scale) {
         this.putJsonArray(RPGLEffectTO.SCALE_ALIAS, scale);
     }
@@ -114,7 +124,7 @@ public class RPGLEffect extends RPGLTaggable {
      * RPGLEffect executes its functions.
      *
      * @param subevent a Subevent
-     * @param context  the context in which the subevent is being processed
+     * @param context the context in which the subevent is being processed
      * @param resources a list of resources used to produce the passed subevent
      * @return true if the Subevent was present in this object's subevent filter and if the Conditions in that filter
      *         were satisfied
@@ -144,9 +154,9 @@ public class RPGLEffect extends RPGLTaggable {
     /**
      * This helper method evaluates a given collection of Conditions on a given RPGLObject source and target.
      *
-     * @param subevent   the Subevent being invoked
+     * @param subevent the Subevent being invoked
      * @param conditions a collection of JSON data defining Conditions
-     * @param context    the context in which the Conditions are being evaluated
+     * @param context the context in which the Conditions are being evaluated
      * @return true if any Conditions evaluated to true
      *
      * @throws Exception if an exception occurs
@@ -165,9 +175,9 @@ public class RPGLEffect extends RPGLTaggable {
     /**
      * This helper method executes a given collection of Functions on given RPGLObjects and Subevents.
      *
-     * @param subevent  the Subevent being invoked
+     * @param subevent the Subevent being invoked
      * @param functions a collection of JSON data defining Functions
-     * @param context   the context in which the Functions are being executed
+     * @param context the context in which the Functions are being executed
      * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
@@ -185,8 +195,8 @@ public class RPGLEffect extends RPGLTaggable {
      * This helper method retrieves the source or the target RPGLObject of either an RPGLEffect or a Subevent being
      * processed.
      *
-     * @param effect       the RPGLEffect processing subevent
-     * @param subevent     the Subevent being processed
+     * @param effect the RPGLEffect processing subevent
+     * @param subevent the Subevent being processed
      * @param instructions the JSON data instructing which RPGLObject should be returned
      * @return a RPGLObject
      *

@@ -21,6 +21,7 @@ public final class RPGLFactory {
      *
      * @param effectId an effect ID <code>(namespace:name)</code>
      * @param originItem an item UUID to be stored for the new effect's origin item
+     * @param resources a list of resources used to produce a new effect
      * @return a new RPGLEffect object
      */
     public static RPGLEffect newEffect(String effectId, String originItem, List<RPGLResource> resources) {

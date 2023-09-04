@@ -39,10 +39,10 @@ public class SetMinimum extends Function {
     /**
      * This helper method processes minimum JSON data and translates minimum formula data to numerical value form.
      *
-     * @param effect      the RPGLEffect applying this minimum
-     * @param subevent    the Calculation receiving this minimum
+     * @param effect the RPGLEffect applying this minimum
+     * @param subevent the Calculation receiving this minimum
      * @param minimumJson the minimum formula data
-     * @param context     the context in which this minimum is being applied
+     * @param context the context in which this minimum is being applied
      * @return a int evaluated from the provided minimum formula data
      *
      * @throws Exception if an exception occurs

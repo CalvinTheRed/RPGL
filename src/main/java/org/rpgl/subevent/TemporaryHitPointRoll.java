@@ -86,7 +86,7 @@ public class TemporaryHitPointRoll extends Subevent {
      * Sets the face value of all dice which rolled below or at the passed threshold.
      *
      * @param threshold the value which a die must roll at or below to be changed by this method
-     * @param set       the value to set for each die changed by this method
+     * @param set the value to set for each die changed by this method
      */
     public void setTemporaryHitPointsDiceMatchingOrBelow(int threshold, int set) {
         JsonArray temporaryHitPointsArray = this.json.getJsonArray("temporary_hit_points");

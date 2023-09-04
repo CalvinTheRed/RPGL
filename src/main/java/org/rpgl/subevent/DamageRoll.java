@@ -75,7 +75,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
      * This method re-rolls any dice of a given damage type whose rolled values are matching or below a given threshold.
      * Passing a null damage type or "" counts as a wild card and applies the changes to all damage types.
      *
-     * @param threshold  the value a die must roll at or below to be changed by this method
+     * @param threshold the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
     public void rerollTypedDiceMatchingOrBelow(int threshold, String damageType) {
@@ -99,7 +99,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
      * a given threshold. Passing a null damage type or "" counts as a wild card and applies the changes to all
      * damage types.
      *
-     * @param threshold  the value a die must roll at or below to be changed by this method
+     * @param threshold the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
     public void setTypedDiceMatchingOrBelow(int threshold, int set, String damageType) {

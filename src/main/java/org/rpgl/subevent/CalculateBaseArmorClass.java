@@ -74,7 +74,7 @@ public class CalculateBaseArmorClass extends Calculation {
     /**
      * This helper method prepares the subevent if <code>source</code> is wearing armor.
      *
-     * @param armor   the armor worn by <code>source</code>
+     * @param armor the armor worn by <code>source</code>
      * @param context the context this Subevent takes place in
      * @return the base armor class of the armored <code>source</code>
      *

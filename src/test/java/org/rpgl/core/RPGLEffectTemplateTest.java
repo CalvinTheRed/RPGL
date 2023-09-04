@@ -74,8 +74,8 @@ public class RPGLEffectTemplateTest {
     }
 
     @Test
-    @DisplayName("")
-    void test() {
+    @DisplayName("processScale scales effect data according to resource potency")
+    void processScale_scalesEffectDataAccordingToResourcePotency() {
         RPGLEffect effect = new RPGLEffect();
         effect.join(new JsonObject() {{
             /*{

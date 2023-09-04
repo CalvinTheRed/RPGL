@@ -193,6 +193,7 @@ public abstract class Subevent {
      * this method is called. This method does nothing by default.
      *
      * @param context the context in which the Subevent is being invoked
+     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs
      */

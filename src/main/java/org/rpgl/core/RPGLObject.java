@@ -343,10 +343,10 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method exhausts resources and then precipitates the process of invoking an RPGLEvent.
      *
-     * @param targets   an array of RPGLObjects targeted by the RPGLEvent being invoked
-     * @param event     the RPGLEvent being invoked
+     * @param targets an array of RPGLObjects targeted by the RPGLEvent being invoked
+     * @param event the RPGLEvent being invoked
      * @param resources a list of resources to be exhausted through the invocation of the passed event
-     * @param context   the RPGLContext in which the RPGLEvent is invoked
+     * @param context the RPGLContext in which the RPGLEvent is invoked
      *
      * @throws Exception if an exception occurs.
      */
@@ -517,7 +517,7 @@ public class RPGLObject extends RPGLTaggable {
      * This method is how a RPGLObject is intended to take damage.
      *
      * @param damageDelivery a DamageDelivery object containing damage data
-     * @param context        the RPGLContext in which the RPGLObject takes damage
+     * @param context the RPGLContext in which the RPGLObject takes damage
      * @return a JSON object indicating the final damage suffered by the target by damage type
      *
      * @throws Exception if an exception occurs.
@@ -569,7 +569,7 @@ public class RPGLObject extends RPGLTaggable {
      * to heal the object beyond its hit point maximum.
      *
      * @param healingDelivery a HealingDelivery Subevent containing a quantity of healing to apply to the RPGLObject
-     * @param context         the context in which the RPGLObject is receiving healing.
+     * @param context the context in which the RPGLObject is receiving healing.
      *
      * @throws Exception if an exception occurs
      */
@@ -588,8 +588,8 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param temporaryHitPointsDelivery a TemporaryHitPointsDelivery Subevent containing a quantity of temporary hit
      *                                   points to apply to the RPGLObject
-     * @param riderEffects               a list of effects to be applied if the temporary hit points from
-     *                                   temporaryHitPointsDelivery are applied
+     * @param riderEffects a list of effects to be applied if the temporary hit points from temporaryHitPointsDelivery
+     *                     are applied
      */
     public void receiveTemporaryHitPoints(TemporaryHitPointsDelivery temporaryHitPointsDelivery, JsonArray riderEffects) {
         JsonObject healthData = this.getHealthData();
@@ -624,7 +624,7 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This helper method directly reduces the hit points of the RPGLObject. This is not intended to be called directly.
      *
-     * @param amount  a quantity of damage
+     * @param amount a quantity of damage
      * @param context the context in which the RPGLObject's hit points are reduced
      *
      * @throws Exception if an exception occurs
@@ -661,7 +661,7 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method causes the RPGLObject to invoke an InfoSubevent using the passed tags.
      *
-     * @param tags    the tags to be stored in the InfoSubevent
+     * @param tags the tags to be stored in the InfoSubevent
      * @param context the context in which the InfoSubevent is invoked
      * @return the InfoSubevent which was invoked
      *
@@ -719,7 +719,7 @@ public class RPGLObject extends RPGLTaggable {
      * This method causes the RPGLObject to equip a RPGLItem in a specified equipment slot. The RPGLItem will not be
      * equipped if it is not already in the RPGLObject's inventory.
      *
-     * @param itemUuid      a RPGLItem's UUID String
+     * @param itemUuid a RPGLItem's UUID String
      * @param equipmentSlot an equipment slot name (can be anything other than <code>"inventory"</code>)
      */
     public void equipItem(String itemUuid, String equipmentSlot) {
@@ -737,9 +737,8 @@ public class RPGLObject extends RPGLTaggable {
      * Un-equips an RPGLItem from an inventory slot, unless an InfoSubevent created to announce this is canceled.
      *
      * @param equipmentSlot an equipment slot String
-     * @param force         if true, the RPGLItem will be removed regardless of whether the associated InfoSubevent is
-     *                      canceled
-     * @param context       the context in which the RPGLItem is being un-equipped
+     * @param force if true, the RPGLItem will be removed regardless of whether the associated InfoSubevent is canceled
+     * @param context the context in which the RPGLItem is being un-equipped
      *
      * @throws Exception if an exception occurs
      */

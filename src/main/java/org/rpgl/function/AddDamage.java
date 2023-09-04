@@ -48,10 +48,10 @@ public class AddDamage extends Function {
     /**
      * This helper method processes damage JSON data and translates damage formula data to dice and bonus form.
      *
-     * @param effect     the RPGLEffect applying this damage
-     * @param subevent   the DamageCollection or CriticalDamageCollection receiving this damage
+     * @param effect the RPGLEffect applying this damage
+     * @param subevent the DamageCollection or CriticalDamageCollection receiving this damage
      * @param damageJson the damage formula data
-     * @param context    the context in which this damage is being applied
+     * @param context the context in which this damage is being applied
      * @return a JsonObject representing the evaluated form of the provided damage formula data
      *
      * @throws Exception if an exception occurs

@@ -21,6 +21,7 @@ public class RPGLEffectTemplate extends JsonObject {
      * object is registered to the UUIDTable class when it is constructed.
      *
      * @param originItem an item UUID to be stored for the new effect's origin item
+     * @param resources a list of resources used to produce a new effect
      * @return a new RPGLEffect object
      */
     public RPGLEffect newInstance(String originItem, List<RPGLResource> resources) {

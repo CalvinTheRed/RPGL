@@ -44,10 +44,10 @@ public class AddBonus extends Function {
     /**
      * This helper method processes bonus JSON data and translates bonus formula data to dice and bonus form.
      *
-     * @param effect    the RPGLEffect applying this bonus
-     * @param subevent  the Calculation receiving this bonus
+     * @param effect the RPGLEffect applying this bonus
+     * @param subevent the Calculation receiving this bonus
      * @param bonusJson the bonus formula data
-     * @param context   the context in which this bonus is being applied
+     * @param context the context in which this bonus is being applied
      * @return a JsonObject representing the evaluated form of the provided bonus formula data
      *
      * @throws Exception if an exception occurs
