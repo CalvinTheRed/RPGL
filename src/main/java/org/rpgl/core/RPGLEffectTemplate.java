@@ -43,6 +43,12 @@ public class RPGLEffectTemplate extends JsonObject {
         return this.newInstance(null, List.of());
     }
 
+    /**
+     * This helper method scales the effect in accordance with the resources used to produce it, if applicable.
+     *
+     * @param effect an effect being constructed
+     * @param resources a list of resources used to produce the passed effect
+     */
     static void processScale(RPGLEffect effect, List<RPGLResource> resources) {
         JsonArray scaleArray = effect.getScale();
         for (int i = 0; i < scaleArray.size(); i++) {
@@ -63,6 +69,13 @@ public class RPGLEffectTemplate extends JsonObject {
         }
     }
 
+    /**
+     * This helper method isolates a single resource according to specified resource tags from a list of resources.
+     *
+     * @param resources a list of resources
+     * @param resourceTags a list of tags, of which a resource must contain at least one to be returned
+     * @return a resource with a desired tag
+     */
     static RPGLResource getResourceByTags(List<RPGLResource> resources, JsonArray resourceTags) {
         for (RPGLResource resource : resources) {
             if (resource.getTags().containsAny(resourceTags.asList())) {
