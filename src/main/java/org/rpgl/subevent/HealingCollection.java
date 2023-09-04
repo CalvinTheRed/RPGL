@@ -6,6 +6,8 @@ import org.rpgl.function.AddHealing;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
+import java.util.ArrayList;
+
 /**
  * This Subevent is dedicated to collecting unrolled healing dice and bonuses.
  * <br>
@@ -41,6 +43,7 @@ public class HealingCollection extends Subevent {
     @Override
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
+        this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.prepareHealing(context);
     }
 

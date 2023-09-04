@@ -181,7 +181,11 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());
         damageDelivery.invoke(context);
-        this.getTarget().receiveDamage(damageDelivery, context);
+
+        JsonObject damageByType = damageDelivery.getTarget().receiveDamage(damageDelivery, context);
+        if (this.json.asMap().containsKey("vampirism")) {
+            VampiricSubevent.handleVampirism(this, damageByType, context);
+        }
     }
 
 }

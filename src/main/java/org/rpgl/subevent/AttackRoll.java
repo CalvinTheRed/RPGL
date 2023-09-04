@@ -335,17 +335,11 @@ public class AttackRoll extends Roll {
         damageDelivery.prepare(context);
         damageDelivery.setTarget(this.getTarget());
         damageDelivery.invoke(context);
-        damageDelivery.getTarget().receiveDamage(damageDelivery, context);
-    }
 
-    /**
-     * Returns whether the AttackRoll deals any damage.
-     *
-     * @return true if the AttackRoll deals any damage
-     */
-    public boolean dealsDamage() {
-        // TODO make condition for this
-        return !Objects.requireNonNullElse(this.json.getJsonArray("damage"), new JsonArray()).asList().isEmpty();
+        JsonObject damageByType = damageDelivery.getTarget().receiveDamage(damageDelivery, context);
+        if (this.json.asMap().containsKey("vampirism")) {
+            VampiricSubevent.handleVampirism(this, damageByType, context);
+        }
     }
 
 }

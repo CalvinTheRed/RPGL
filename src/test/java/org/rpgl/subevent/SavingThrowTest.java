@@ -453,4 +453,82 @@ public class SavingThrowTest {
         );
     }
 
+    @Test
+    @DisplayName("invoke accommodates vampirism")
+    void invoke_accommodatesVampirism() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        source.getHealthData().putInteger("current", 1);
+        target.getHealthData().putInteger("current", 11);
+
+        SavingThrow savingThrow = new SavingThrow();
+        savingThrow.joinSubeventData(new JsonObject() {{
+            /*{
+                "difficulty_class_ability": "int",
+                "save_ability": "con",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "necrotic",
+                        "dice": [
+                        { "count": 2, "size": 10, "determined": [ 5 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "vampirism": {
+                    "numerator": 1,
+                    "denominator": 2,
+                    "round_up": false,
+                    "damage_type": "necrotic"
+                },
+                "damage_on_pass": "half",
+                "determined": [ 1 ]
+            }*/
+            this.putString("difficulty_class_ability", "int");
+            this.putString("save_ability", "con");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "necrotic");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 10);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(5);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putJsonObject("vampirism", new JsonObject() {{
+                this.putInteger("numerator", 1);
+                this.putInteger("denominator", 2);
+                this.putBoolean("round_up", false);
+                this.putString("damage_type", "necrotic");
+            }});
+            this.putString("damage_on_pass", "half");
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(1);
+            }});
+        }});
+        savingThrow.setSource(source);
+        savingThrow.prepare(context);
+        savingThrow.setTarget(target);
+        savingThrow.invoke(context);
+
+        assertEquals(6, source.getHealthData().getInteger("current"),
+                "source should be healed for half damage from vampirism"
+        );
+        assertEquals(1, target.getHealthData().getInteger("current"),
+                "target should take damage and not be healed from vampirism"
+        );
+    }
+
 }
