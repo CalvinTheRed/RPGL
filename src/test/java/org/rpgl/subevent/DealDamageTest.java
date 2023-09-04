@@ -246,6 +246,75 @@ public class DealDamageTest {
     }
 
     @Test
+    @DisplayName("invoke accommodates vampirism")
+    void invoke_accommodatesVampirism() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        source.getHealthData().putInteger("current", 1);
+        target.getHealthData().putInteger("current", 11);
+
+        DealDamage dealDamage = new DealDamage();
+        dealDamage.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "necrotic",
+                        "dice": [
+                            { "count": 2, "size": 10, "determined": [ 5 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "vampirism": {
+                    "numerator": 1,
+                    "denominator": 2,
+                    "round_up": false,
+                    "damage_type": "necrotic"
+                }
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "necrotic");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 10);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(5);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putJsonObject("vampirism", new JsonObject() {{
+                this.putInteger("numerator", 1);
+                this.putInteger("denominator", 2);
+                this.putBoolean("round_up", false);
+                this.putString("damage_type", "necrotic");
+            }});
+        }});
+
+        dealDamage.setSource(source);
+        dealDamage.prepare(context);
+        dealDamage.setTarget(target);
+        dealDamage.invoke(context);
+
+        assertEquals(6, source.getHealthData().getInteger("current"),
+                "source should be healed for half damage from vampirism"
+        );
+        assertEquals(1, target.getHealthData().getInteger("current"),
+                "target should take damage and not be healed from vampirism"
+        );
+    }
+
+    @Test
     @DisplayName("includesDamageType returns true (damage type included)")
     void includesDamageType_returnsTrue_damageTypeIncluded() {
         DealDamage dealDamage = new DealDamage();

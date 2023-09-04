@@ -280,6 +280,56 @@ public class AttackRollTest {
     }
 
     @Test
+    @DisplayName("deliverDamage source heals from vampirism")
+    void deliverDamage_sourceHealsFromVampirism() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        source.getHealthData().putInteger("current", 1);
+        target.getHealthData().putInteger("current", 11);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "necrotic",
+                        "dice": [ ],
+                        "bonus": 10
+                    }
+                ],
+                "vampirism": {
+                    "damage_type": "necrotic"
+                }
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "necrotic");
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putInteger("bonus", 10);
+                }});
+            }});
+            this.putJsonObject("vampirism", new JsonObject() {{
+                this.putString("damage_type", "necrotic");
+            }});
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.deliverDamage(context);
+
+        assertEquals(1, target.getHealthData().getInteger("current"),
+                "target should suffer 10 damage and receive no healing from vampirism"
+        );
+        assertEquals(6, source.getHealthData().getInteger("current"),
+                "source should heal for half damage from vampirism"
+        );
+    }
+
+    @Test
     @DisplayName("getTargetArmorClass calculate 20 armor class")
     void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
@@ -1048,6 +1098,53 @@ public class AttackRollTest {
 
         assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken critical damage"
+        );
+    }
+
+    @Test
+    @DisplayName("handleVampirism heals source for half damage (specific damage type)")
+    void handleVampirism_healsSourceForHalfDamage_specificDamageType() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        source.getHealthData().putInteger("current", 1);
+        target.getHealthData().putInteger("current", 1);
+
+        JsonObject damageByType = new JsonObject() {{
+            this.putInteger("necrotic", 10);
+            this.putInteger("radiant", 10);
+        }};
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "vampirism": {
+                    "numerator": 1,
+                    "denominator": 2,
+                    "round_up": false,
+                    "damage_type": "necrotic"
+                }
+            }*/
+            this.putJsonObject("vampirism", new JsonObject() {{
+                this.putInteger("numerator", 1);
+                this.putInteger("denominator", 2);
+                this.putBoolean("round_up", false);
+                this.putString("damage_type", "necrotic");
+            }});
+        }});
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+
+        VampiricSubevent.handleVampirism(attackRoll, damageByType, context);
+
+        assertEquals(6, source.getHealthData().getInteger("current"),
+                "source should be healed for half necrotic damage via vampirism"
+        );
+        assertEquals(1, target.getHealthData().getInteger("current"),
+                "target should not be healed via vampirism"
         );
     }
 
