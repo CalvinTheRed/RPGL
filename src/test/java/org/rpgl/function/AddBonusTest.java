@@ -21,6 +21,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,7 +83,7 @@ public class AddBonusTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -97,7 +98,7 @@ public class AddBonusTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         AddBonus addBonus = new AddBonus();
@@ -125,7 +126,7 @@ public class AddBonusTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        addBonus.execute(effect, calculation, functionJson, context);
+        addBonus.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(2, calculation.getBonus(),
                 "bonus of 2 should be applied to the calculation following execution"
@@ -144,7 +145,7 @@ public class AddBonusTest {
         source.getAbilityScores().putInteger("dex", 20);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         AddBonus addBonus = new AddBonus();
@@ -180,7 +181,7 @@ public class AddBonusTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        addBonus.execute(effect, calculation, functionJson, context);
+        addBonus.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(5, calculation.getBonus(),
                 "source's dex modifier should be added as bonus to calculation (+5)"
@@ -199,7 +200,7 @@ public class AddBonusTest {
         source.getAbilityScores().putInteger("dex", 20);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         AddBonus addBonus = new AddBonus();
@@ -235,7 +236,7 @@ public class AddBonusTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        addBonus.execute(effect, calculation, functionJson, context);
+        addBonus.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(20, calculation.getBonus(),
                 "source's dex score should be added as bonus to calculation (20)"
@@ -252,7 +253,7 @@ public class AddBonusTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         AddBonus addBonus = new AddBonus();
@@ -286,7 +287,7 @@ public class AddBonusTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        addBonus.execute(effect, calculation, functionJson, context);
+        addBonus.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(2, calculation.getBonus(),
                 "source's proficiency bonus should be added as bonus to calculation (+2)"
@@ -303,7 +304,7 @@ public class AddBonusTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         AddBonus addBonus = new AddBonus();
@@ -339,7 +340,7 @@ public class AddBonusTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        addBonus.execute(effect, calculation, functionJson, context);
+        addBonus.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(1, calculation.getBonus(),
                 "source's level should be added as bonus to calculation (+17)"
@@ -356,7 +357,7 @@ public class AddBonusTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         AddBonus addBonus = new AddBonus();
@@ -390,7 +391,7 @@ public class AddBonusTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        addBonus.execute(effect, calculation, functionJson, context);
+        addBonus.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(9, calculation.getBonus(),
                 "source's level should be added as bonus to calculation (+17)"

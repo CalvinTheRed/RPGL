@@ -20,6 +20,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,7 +82,7 @@ public class SetMinimumTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -96,7 +97,7 @@ public class SetMinimumTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetMinimum setMinimum = new SetMinimum();
@@ -118,7 +119,7 @@ public class SetMinimumTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        setMinimum.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(13, calculation.getMinimum(),
                 "execute should set calculation minimum to 13"
@@ -137,7 +138,7 @@ public class SetMinimumTest {
         source.getAbilityScores().putInteger("dex", 20);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetMinimum setMinimum = new SetMinimum();
@@ -169,7 +170,7 @@ public class SetMinimumTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setMinimum.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(5, calculation.getMinimum(),
                 "execute should set calculation minimum to source's dex modifier (+5)"
@@ -188,7 +189,7 @@ public class SetMinimumTest {
         source.getAbilityScores().putInteger("dex", 20);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetMinimum setMinimum = new SetMinimum();
@@ -220,7 +221,7 @@ public class SetMinimumTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setMinimum.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(20, calculation.getMinimum(),
                 "execute should set calculation minimum to source's dex score (20)"
@@ -237,7 +238,7 @@ public class SetMinimumTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetMinimum setMinimum = new SetMinimum();
@@ -267,7 +268,7 @@ public class SetMinimumTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setMinimum.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(2, calculation.getMinimum(),
                 "execute should set calculation minimum to source's proficiency bonus (+2)"
@@ -284,7 +285,7 @@ public class SetMinimumTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         RPGLEffect effect = new RPGLEffect();
@@ -310,7 +311,7 @@ public class SetMinimumTest {
             }});
         }};
 
-        setMinimum.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(10, calculation.getMinimum(),
                 "execute should set calculation minimum to 10"
@@ -333,7 +334,7 @@ public class SetMinimumTest {
             }});
         }};
 
-        setMinimum.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(15, calculation.getMinimum(),
                 "execute should set calculation minimum to 15 (15 > 10)"
@@ -356,7 +357,7 @@ public class SetMinimumTest {
             }});
         }};
 
-        setMinimum.execute(effect, calculation, functionJson, context);
+        setMinimum.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(15, calculation.getMinimum(),
                 "execute should not change calculation minimum (5 < 15>)"

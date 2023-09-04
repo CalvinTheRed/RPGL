@@ -19,6 +19,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,7 +64,7 @@ public class AddHealingTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -79,7 +80,7 @@ public class AddHealingTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(context);
+        healingCollection.prepare(context, List.of());
 
         AddHealing addHealing = new AddHealing();
         JsonObject functionJson = new JsonObject() {{
@@ -117,7 +118,7 @@ public class AddHealingTest {
         effect.setSource(source);
         effect.setTarget(target);
 
-        addHealing.execute(effect, healingCollection, functionJson, context);
+        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}]}]""";
@@ -139,7 +140,7 @@ public class AddHealingTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(context);
+        healingCollection.prepare(context, List.of());
 
         AddHealing addHealing = new AddHealing();
         JsonObject functionJson = new JsonObject() {{
@@ -173,7 +174,7 @@ public class AddHealingTest {
         effect.setSource(source);
         effect.setTarget(target);
 
-        addHealing.execute(effect, healingCollection, functionJson, context);
+        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":5,"dice":[]}]""";
@@ -195,7 +196,7 @@ public class AddHealingTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(context);
+        healingCollection.prepare(context, List.of());
 
         AddHealing addHealing = new AddHealing();
         JsonObject functionJson = new JsonObject() {{
@@ -229,7 +230,7 @@ public class AddHealingTest {
         effect.setSource(source);
         effect.setTarget(target);
 
-        addHealing.execute(effect, healingCollection, functionJson, context);
+        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":20,"dice":[]}]""";
@@ -249,7 +250,7 @@ public class AddHealingTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(context);
+        healingCollection.prepare(context, List.of());
 
         AddHealing addHealing = new AddHealing();
         JsonObject functionJson = new JsonObject() {{
@@ -281,7 +282,7 @@ public class AddHealingTest {
         effect.setSource(source);
         effect.setTarget(target);
 
-        addHealing.execute(effect, healingCollection, functionJson, context);
+        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[]}]""";
@@ -301,7 +302,7 @@ public class AddHealingTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(context);
+        healingCollection.prepare(context, List.of());
 
         AddHealing addHealing = new AddHealing();
         JsonObject functionJson = new JsonObject() {{
@@ -335,7 +336,7 @@ public class AddHealingTest {
         effect.setSource(source);
         effect.setTarget(target);
 
-        addHealing.execute(effect, healingCollection, functionJson, context);
+        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":1,"dice":[]}]""";
@@ -355,7 +356,7 @@ public class AddHealingTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(context);
+        healingCollection.prepare(context, List.of());
 
         AddHealing addHealing = new AddHealing();
         JsonObject functionJson = new JsonObject() {{
@@ -387,7 +388,7 @@ public class AddHealingTest {
         effect.setSource(source);
         effect.setTarget(target);
 
-        addHealing.execute(effect, healingCollection, functionJson, context);
+        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":9,"dice":[]}]""";

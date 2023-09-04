@@ -186,7 +186,7 @@ public class ScenariosTest {
         source.giveEvent("std:spell/wrathful_smite");
         source.addResource(RPGLFactory.newResource("std:common/action/01"));
         source.addResource(RPGLFactory.newResource("std:common/bonus_action/01"));
-        source.addResource(RPGLFactory.newResource("std:common/spell_slot/01"));
+        source.addResource(RPGLFactory.newResource("std:common/spell_slot/02"));
 
         target.addResource(RPGLFactory.newResource("std:common/action/01"));
 
@@ -217,8 +217,9 @@ public class ScenariosTest {
                 context
         );
 
-        assertNotNull(TestUtils.getEffectById(source.getEffectObjects(), "std:spell/wrathful_smite/passive"),
-                "source should have the passive wrathful smite applied"
+        assertEquals(2, Objects.requireNonNull(TestUtils.getEffectById(source.getEffectObjects(), "std:spell/wrathful_smite/passive"))
+                        .seek("subevent_filters.damage_collection[0].functions[1].damage[0].dice[0].count"),
+                "wrathful smite passive effect should exist and have 2 extra damage dice, rather than 1, due to upcasting"
         );
 
         source.invokeEvent(
@@ -232,7 +233,7 @@ public class ScenariosTest {
                 context
         );
 
-        assertEquals(1000-2-5-3, target.getHealthData().getInteger("current"),
+        assertEquals(1000-2-5-3-3, target.getHealthData().getInteger("current"),
                 "target should no longer have all of its hit points"
         );
         assertNull(TestUtils.getEffectById(source.getEffectObjects(), "std:spell/wrathful_smite/passive"),

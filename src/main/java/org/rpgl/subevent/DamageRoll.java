@@ -1,10 +1,12 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,8 +42,8 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         this.roll();
     }
 
@@ -73,7 +75,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
      * This method re-rolls any dice of a given damage type whose rolled values are matching or below a given threshold.
      * Passing a null damage type or "" counts as a wild card and applies the changes to all damage types.
      *
-     * @param threshold  the value a die must roll at or below to be changed by this method
+     * @param threshold the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
     public void rerollTypedDiceMatchingOrBelow(int threshold, String damageType) {
@@ -97,7 +99,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
      * a given threshold. Passing a null damage type or "" counts as a wild card and applies the changes to all
      * damage types.
      *
-     * @param threshold  the value a die must roll at or below to be changed by this method
+     * @param threshold the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
     public void setTypedDiceMatchingOrBelow(int threshold, int set, String damageType) {

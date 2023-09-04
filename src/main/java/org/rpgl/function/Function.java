@@ -2,6 +2,7 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -98,28 +100,32 @@ public abstract class Function {
     /**
      * This method facilitates the execution of a Function. It verifies the Function and then runs it.
      *
-     * @param effect       the RPGLEffect containing this Function
-     * @param subevent     a Subevent being invoked
+     * @param effect the RPGLEffect containing this Function
+     * @param subevent a Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the Function to be executed
-     * @param context      the context in which the Function is being executed
+     * @param context the context in which the Function is being executed
+     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                        List<RPGLResource> resources) throws Exception {
         this.verifyFunction(functionJson);
-        this.run(effect, subevent, functionJson, context);
+        this.run(effect, subevent, functionJson, context, resources);
     }
 
     /**
      * This method contains the logic definitive of the Function.
      *
-     * @param effect       the RPGLEffect containing this Function
-     * @param subevent     a Subevent being invoked
+     * @param effect the RPGLEffect containing this Function
+     * @param subevent a Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the Function to be executed
-     * @param context      the context in which the Function is being executed
+     * @param context the context in which the Function is being executed
+     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception;
+    public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                             List<RPGLResource> resources) throws Exception;
 
 }

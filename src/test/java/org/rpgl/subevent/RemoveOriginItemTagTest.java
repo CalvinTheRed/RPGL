@@ -16,6 +16,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -57,7 +58,7 @@ public class RemoveOriginItemTagTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -77,9 +78,9 @@ public class RemoveOriginItemTagTest {
         }});
         removeOriginItemTag.setOriginItem(item.getUuid());
         removeOriginItemTag.setSource(object);
-        removeOriginItemTag.prepare(context);
+        removeOriginItemTag.prepare(context, List.of());
         removeOriginItemTag.setTarget(object);
-        removeOriginItemTag.invoke(context);
+        removeOriginItemTag.invoke(context, List.of());
 
         assertFalse(item.getTags().asList().contains("test_tag"),
                 "invoke should remove intended tag from origin item"

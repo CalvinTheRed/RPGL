@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,7 +62,7 @@ public class AddObjectTagTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -75,7 +76,7 @@ public class AddObjectTagTest {
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(context);
+        getObjectTags.prepare(context, List.of());
 
         AddObjectTag addObjectTag = new AddObjectTag();
         JsonObject functionJson = new JsonObject() {{
@@ -87,7 +88,7 @@ public class AddObjectTagTest {
             this.putString("tag", "test_tag");
         }};
 
-        addObjectTag.execute(null, getObjectTags, functionJson, context);
+        addObjectTag.execute(null, getObjectTags, functionJson, context, List.of());
 
         String expected = """
                 ["test_tag"]""";

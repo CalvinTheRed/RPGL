@@ -20,6 +20,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -184,7 +185,7 @@ public class MaximizeDamageTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -199,7 +200,7 @@ public class MaximizeDamageTest {
         context.add(target);
 
         damageRoll.setSource(source);
-        damageRoll.prepare(context);
+        damageRoll.prepare(context, List.of());
         damageRoll.setTarget(target);
 
         MaximizeDamage maximizeDamage = new MaximizeDamage();
@@ -212,7 +213,7 @@ public class MaximizeDamageTest {
             this.putString("damage_type", "fire");
         }};
 
-        maximizeDamage.execute(null, damageRoll, functionJson, context);
+        maximizeDamage.execute(null, damageRoll, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
@@ -231,7 +232,7 @@ public class MaximizeDamageTest {
         context.add(target);
 
         damageRoll.setSource(source);
-        damageRoll.prepare(context);
+        damageRoll.prepare(context, List.of());
         damageRoll.setTarget(target);
 
         MaximizeDamage maximizeDamage = new MaximizeDamage();
@@ -242,7 +243,7 @@ public class MaximizeDamageTest {
             this.putString("function", "maximize_damage");
         }};
 
-        maximizeDamage.execute(null, damageRoll, functionJson, context);
+        maximizeDamage.execute(null, damageRoll, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
@@ -261,7 +262,7 @@ public class MaximizeDamageTest {
         context.add(target);
 
         damageDelivery.setSource(source);
-        damageDelivery.prepare(context);
+        damageDelivery.prepare(context, List.of());
         damageDelivery.setTarget(target);
 
         MaximizeDamage maximizeDamage = new MaximizeDamage();
@@ -274,7 +275,7 @@ public class MaximizeDamageTest {
             this.putString("damage_type", "fire");
         }};
 
-        maximizeDamage.execute(null, damageDelivery, functionJson, context);
+        maximizeDamage.execute(null, damageDelivery, functionJson, context, List.of());
 
         String expected = """
                 {"cold":2,"fire":12}""";
@@ -293,7 +294,7 @@ public class MaximizeDamageTest {
         context.add(target);
 
         damageDelivery.setSource(source);
-        damageDelivery.prepare(context);
+        damageDelivery.prepare(context, List.of());
         damageDelivery.setTarget(target);
 
         MaximizeDamage maximizeDamage = new MaximizeDamage();
@@ -304,7 +305,7 @@ public class MaximizeDamageTest {
             this.putString("function", "maximize_damage");
         }};
 
-        maximizeDamage.execute(null, damageDelivery, functionJson, context);
+        maximizeDamage.execute(null, damageDelivery, functionJson, context, List.of());
 
         String expected = """
                 {"cold":12,"fire":12}""";

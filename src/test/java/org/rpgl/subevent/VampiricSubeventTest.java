@@ -16,6 +16,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -114,7 +115,7 @@ public class VampiricSubeventTest {
         dummySubevent.setSource(source);
         dummySubevent.setTarget(target);
 
-        VampiricSubevent.handleVampirism(dummySubevent, damageByType, context);
+        VampiricSubevent.handleVampirism(dummySubevent, damageByType, context, List.of());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half necrotic damage via vampirism"
@@ -159,7 +160,7 @@ public class VampiricSubeventTest {
         dummySubevent.setSource(source);
         dummySubevent.setTarget(target);
 
-        VampiricSubevent.handleVampirism(dummySubevent, damageByType, context);
+        VampiricSubevent.handleVampirism(dummySubevent, damageByType, context, List.of());
 
         assertEquals(11, source.getHealthData().getInteger("current"),
                 "source should be healed for half total damage via vampirism"

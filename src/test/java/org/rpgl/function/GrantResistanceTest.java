@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -62,7 +63,7 @@ public class GrantResistanceTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -83,7 +84,7 @@ public class GrantResistanceTest {
         damageAffinity.addDamageType(damageTypeFire);
         damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
-        damageAffinity.prepare(context);
+        damageAffinity.prepare(context, List.of());
         damageAffinity.setTarget(target);
 
         GrantResistance grantResistance = new GrantResistance();
@@ -96,7 +97,7 @@ public class GrantResistanceTest {
             this.putString("damage_type", damageTypeFire);
         }};
 
-        grantResistance.execute(null, damageAffinity, functionJson, context);
+        grantResistance.execute(null, damageAffinity, functionJson, context, List.of());
 
         assertTrue(damageAffinity.isResistant(damageTypeFire),
                 "execute should grant resistance to fire damage"
@@ -122,7 +123,7 @@ public class GrantResistanceTest {
         damageAffinity.addDamageType(damageTypeFire);
         damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
-        damageAffinity.prepare(context);
+        damageAffinity.prepare(context, List.of());
         damageAffinity.setTarget(target);
 
         GrantResistance grantResistance = new GrantResistance();
@@ -133,7 +134,7 @@ public class GrantResistanceTest {
             this.putString("function", "grant_resistance");
         }};
 
-        grantResistance.execute(null, damageAffinity, functionJson, context);
+        grantResistance.execute(null, damageAffinity, functionJson, context, List.of());
 
         assertTrue(damageAffinity.isResistant(damageTypeFire),
                 "execute should grant resistance to fire damage"

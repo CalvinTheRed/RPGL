@@ -3,6 +3,7 @@ package org.rpgl.function;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -12,6 +13,7 @@ import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -29,7 +31,8 @@ public class AddDamage extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) throws Exception {
         if (subevent instanceof DamageCollection damageCollection) {
             JsonArray damageArray = functionJson.getJsonArray("damage");
             for (int i = 0; i < damageArray.size(); i++) {
@@ -45,10 +48,10 @@ public class AddDamage extends Function {
     /**
      * This helper method processes damage JSON data and translates damage formula data to dice and bonus form.
      *
-     * @param effect     the RPGLEffect applying this damage
-     * @param subevent   the DamageCollection or CriticalDamageCollection receiving this damage
+     * @param effect the RPGLEffect applying this damage
+     * @param subevent the DamageCollection or CriticalDamageCollection receiving this damage
      * @param damageJson the damage formula data
-     * @param context    the context in which this damage is being applied
+     * @param context the context in which this damage is being applied
      * @return a JsonObject representing the evaluated form of the provided damage formula data
      *
      * @throws Exception if an exception occurs

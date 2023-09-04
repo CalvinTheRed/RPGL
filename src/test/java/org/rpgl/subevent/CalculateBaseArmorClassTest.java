@@ -16,6 +16,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,7 +58,7 @@ public class CalculateBaseArmorClassTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -174,7 +175,7 @@ public class CalculateBaseArmorClassTest {
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
 
         calculateBaseArmorClass.setSource(source);
-        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.prepare(context, List.of());
 
         assertEquals(10, calculateBaseArmorClass.get(),
                 "commoner with no armor or shield should have a base armor class of 10"
@@ -191,7 +192,7 @@ public class CalculateBaseArmorClassTest {
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
 
         calculateBaseArmorClass.setSource(source);
-        calculateBaseArmorClass.prepare(context);
+        calculateBaseArmorClass.prepare(context, List.of());
 
         assertEquals(20, calculateBaseArmorClass.get(),
                 "knight with plate armor and shield should have a base armor class of 20"

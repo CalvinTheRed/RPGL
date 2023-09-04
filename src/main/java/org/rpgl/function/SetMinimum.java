@@ -2,12 +2,14 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,7 +27,8 @@ public class SetMinimum extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) throws Exception {
         if (subevent instanceof Calculation calculation) {
             calculation.setMinimum(processJson(effect, subevent, functionJson.getJsonObject("minimum"), context));
         } else {
@@ -36,10 +39,10 @@ public class SetMinimum extends Function {
     /**
      * This helper method processes minimum JSON data and translates minimum formula data to numerical value form.
      *
-     * @param effect      the RPGLEffect applying this minimum
-     * @param subevent    the Calculation receiving this minimum
+     * @param effect the RPGLEffect applying this minimum
+     * @param subevent the Calculation receiving this minimum
      * @param minimumJson the minimum formula data
-     * @param context     the context in which this minimum is being applied
+     * @param context the context in which this minimum is being applied
      * @return a int evaluated from the provided minimum formula data
      *
      * @throws Exception if an exception occurs

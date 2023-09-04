@@ -105,7 +105,7 @@ public class RPGLResource extends RPGLTaggable {
      * This method investigates a Subevent to check if it satisfies the refresh criterion for the resource.
      *
      * @param subevent a Subevent
-     * @param owner    the RPGLObject to which this resource is assigned
+     * @param owner the RPGLObject to which this resource is assigned
      */
     public void processSubevent(Subevent subevent, RPGLObject owner) {
         if (this.getExhausted()) {
@@ -122,9 +122,9 @@ public class RPGLResource extends RPGLTaggable {
      * This helper method evaluates whether a Subevent matches a particular refresh criterion of this resource, and
      * refreshes it if the criterion is fully satisfied.
      *
-     * @param subevent  a Subevent
+     * @param subevent a Subevent
      * @param criterion a particular refresh criterion for this resource
-     * @param owner     the RPGLObject to which this resource is assigned
+     * @param owner the RPGLObject to which this resource is assigned
      * @return true if this causes the resource to be refreshed, false otherwise. Note that this may return false even
      *         if the criterion ismet, in the case where it is chance-based or must be satisfied multiple times before
      *         refreshing the resource.

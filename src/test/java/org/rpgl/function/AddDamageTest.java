@@ -19,6 +19,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,7 +64,7 @@ public class AddDamageTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -79,7 +80,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(source);
-        damageCollection.prepare(context);
+        damageCollection.prepare(context, List.of());
 
         AddDamage addDamage = new AddDamage();
         JsonObject functionJson = new JsonObject() {{
@@ -118,7 +119,7 @@ public class AddDamageTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        addDamage.execute(effect, damageCollection, functionJson, context);
+        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
         [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
@@ -139,7 +140,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(source);
-        damageCollection.prepare(context);
+        damageCollection.prepare(context, List.of());
 
         AddDamage addDamage = new AddDamage();
         JsonObject functionJson = new JsonObject() {{
@@ -174,7 +175,7 @@ public class AddDamageTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        addDamage.execute(effect, damageCollection, functionJson, context);
+        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
         [{"bonus":5,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
@@ -195,7 +196,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(source);
-        damageCollection.prepare(context);
+        damageCollection.prepare(context, List.of());
 
         AddDamage addDamage = new AddDamage();
         JsonObject functionJson = new JsonObject() {{
@@ -230,7 +231,7 @@ public class AddDamageTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        addDamage.execute(effect, damageCollection, functionJson, context);
+        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
         [{"bonus":20,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
@@ -251,7 +252,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(source);
-        damageCollection.prepare(context);
+        damageCollection.prepare(context, List.of());
 
         AddDamage addDamage = new AddDamage();
         JsonObject functionJson = new JsonObject() {{
@@ -284,7 +285,7 @@ public class AddDamageTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        addDamage.execute(effect, damageCollection, functionJson, context);
+        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
         [{"bonus":3,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
@@ -303,7 +304,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(source);
-        damageCollection.prepare(context);
+        damageCollection.prepare(context, List.of());
 
         AddDamage addDamage = new AddDamage();
         JsonObject functionJson = new JsonObject() {{
@@ -338,7 +339,7 @@ public class AddDamageTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        addDamage.execute(effect, damageCollection, functionJson, context);
+        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
         [{"bonus":1,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
@@ -357,7 +358,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(source);
-        damageCollection.prepare(context);
+        damageCollection.prepare(context, List.of());
 
         AddDamage addDamage = new AddDamage();
         JsonObject functionJson = new JsonObject() {{
@@ -390,7 +391,7 @@ public class AddDamageTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        addDamage.execute(effect, damageCollection, functionJson, context);
+        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
         [{"bonus":9,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),

@@ -10,6 +10,7 @@ import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -96,6 +97,24 @@ public class RPGLEffect extends RPGLTaggable {
         this.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
     }
 
+    /**
+     * Returns the scale data for the RPGLEffect.
+     *
+     * @return an array indicating how the effect scales with more potent resources
+     */
+    public JsonArray getScale() {
+        return this.getJsonArray(RPGLEffectTO.SCALE_ALIAS);
+    }
+
+    /**
+     * Sets the scale data for the RPGLEffect.
+     *
+     * @param scale a new array indicating scale data
+     */
+    public void setScale(JsonArray scale) {
+        this.putJsonArray(RPGLEffectTO.SCALE_ALIAS, scale);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================
@@ -105,13 +124,14 @@ public class RPGLEffect extends RPGLTaggable {
      * RPGLEffect executes its functions.
      *
      * @param subevent a Subevent
-     * @param context  the context in which the subevent is being processed
+     * @param context the context in which the subevent is being processed
+     * @param resources a list of resources used to produce the passed subevent
      * @return true if the Subevent was present in this object's subevent filter and if the Conditions in that filter
      *         were satisfied
      *
      * @throws Exception if an exception occurs
      */
-    public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
+    public boolean processSubevent(Subevent subevent, RPGLContext context, List<RPGLResource> resources) throws Exception {
         JsonObject subeventFilters = this.getSubeventFilters();
         for (Map.Entry<String, ?> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
             if (Objects.equals(subevent.getSubeventId(), subeventFilterEntry.getKey())) {
@@ -121,7 +141,7 @@ public class RPGLEffect extends RPGLTaggable {
                     JsonArray conditions = matchedFilterBehavior.getJsonArray("conditions");
                     if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
                         JsonArray functionJsonArray = matchedFilterBehavior.getJsonArray("functions");
-                        executeFunctions(subevent, functionJsonArray, context);
+                        executeFunctions(subevent, functionJsonArray, context, resources);
                         subevent.addModifyingEffect(this);
                         return true;
                     }
@@ -134,9 +154,9 @@ public class RPGLEffect extends RPGLTaggable {
     /**
      * This helper method evaluates a given collection of Conditions on a given RPGLObject source and target.
      *
-     * @param subevent   the Subevent being invoked
+     * @param subevent the Subevent being invoked
      * @param conditions a collection of JSON data defining Conditions
-     * @param context    the context in which the Conditions are being evaluated
+     * @param context the context in which the Conditions are being evaluated
      * @return true if any Conditions evaluated to true
      *
      * @throws Exception if an exception occurs
@@ -155,18 +175,19 @@ public class RPGLEffect extends RPGLTaggable {
     /**
      * This helper method executes a given collection of Functions on given RPGLObjects and Subevents.
      *
-     * @param subevent  the Subevent being invoked
+     * @param subevent the Subevent being invoked
      * @param functions a collection of JSON data defining Functions
-     * @param context   the context in which the Functions are being executed
+     * @param context the context in which the Functions are being executed
+     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context) throws Exception {
+    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context, List<RPGLResource> resources) throws Exception {
         for (int i = 0; i < functions.size(); i++) {
             JsonObject functionJson = functions.getJsonObject(i);
             Function.FUNCTIONS
                     .get(functionJson.getString("function"))
-                    .execute(this, subevent, functionJson, context);
+                    .execute(this, subevent, functionJson, context, resources);
         }
     }
 
@@ -174,8 +195,8 @@ public class RPGLEffect extends RPGLTaggable {
      * This helper method retrieves the source or the target RPGLObject of either an RPGLEffect or a Subevent being
      * processed.
      *
-     * @param effect       the RPGLEffect processing subevent
-     * @param subevent     the Subevent being processed
+     * @param effect the RPGLEffect processing subevent
+     * @param subevent the Subevent being processed
      * @param instructions the JSON data instructing which RPGLObject should be returned
      * @return a RPGLObject
      *

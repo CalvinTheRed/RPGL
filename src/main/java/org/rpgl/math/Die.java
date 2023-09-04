@@ -26,7 +26,7 @@ public final class Die {
      * This method returns a number as though a die matching the parameter has been rolled. Unless the die haas a
      * determined value to be rolled, the rolled number will be a random number from 1 to the die's maximum face value.
      *
-     * @param upperBound     the maximum face value of the die to be simulated.
+     * @param upperBound the maximum face value of the die to be simulated.
      * @param determinedList a JsonArray of upcoming values the simulated die should roll (if null or empty, the
      *                       simulated die will roll randomly). This parameter is only used if Die is in testing mode.
      * @return the value rolled by the simulated die.
@@ -62,7 +62,7 @@ public final class Die {
      * This helper method logs a number rolled in the roll() method.
      *
      * @param upperBound the maximum face value of the rolled die
-     * @param roll       the value rolled by the simulated die
+     * @param roll the value rolled by the simulated die
      */
     private static void logRoll(int upperBound, int roll) {
         StringBuilder stringBuilder = new StringBuilder();

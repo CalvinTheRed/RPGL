@@ -47,7 +47,7 @@ public class ExhaustResource extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, List<RPGLResource> resources) {
         switch (Objects.requireNonNullElse(this.json.getString("selection_mode"), "low_first")) {
             case "low_first" -> this.runLowFirst();
             case "high_first" -> this.runHighFirst();

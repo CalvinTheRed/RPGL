@@ -19,6 +19,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,7 +64,7 @@ public class MaximizeTemporaryHitPointsTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -112,7 +113,7 @@ public class MaximizeTemporaryHitPointsTest {
         }});
 
         temporaryHitPointRoll.setSource(source);
-        temporaryHitPointRoll.prepare(context);
+        temporaryHitPointRoll.prepare(context, List.of());
         temporaryHitPointRoll.setTarget(target);
 
         MaximizeTemporaryHitPoints maximizeTemporaryHitPoints = new MaximizeTemporaryHitPoints();
@@ -123,7 +124,7 @@ public class MaximizeTemporaryHitPointsTest {
             this.putString("function", "maximize_temporary_hit_points");
         }};
 
-        maximizeTemporaryHitPoints.execute(null, temporaryHitPointRoll, functionJson, context);
+        maximizeTemporaryHitPoints.execute(null, temporaryHitPointRoll, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
@@ -172,7 +173,7 @@ public class MaximizeTemporaryHitPointsTest {
         }});
 
         temporaryHitPointsDelivery.setSource(source);
-        temporaryHitPointsDelivery.prepare(context);
+        temporaryHitPointsDelivery.prepare(context, List.of());
         temporaryHitPointsDelivery.setTarget(target);
 
         MaximizeTemporaryHitPoints maximizeTemporaryHitPoints = new MaximizeTemporaryHitPoints();
@@ -183,7 +184,7 @@ public class MaximizeTemporaryHitPointsTest {
             this.putString("function", "maximize_temporary_hit_points");
         }};
 
-        maximizeTemporaryHitPoints.execute(null, temporaryHitPointsDelivery, functionJson, context);
+        maximizeTemporaryHitPoints.execute(null, temporaryHitPointsDelivery, functionJson, context, List.of());
 
         assertEquals(12, temporaryHitPointsDelivery.getTemporaryHitPoints(),
                 "execute should set all temporary hit point dice to their maximum face value"

@@ -2,12 +2,15 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.DamageRoll;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * This Function is dedicated to maximizing the damage dice of DamageRoll and DamageDelivery Subevents. If a damage type
@@ -24,7 +27,8 @@ public class MaximizeDamage extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) {
         if (subevent instanceof DamageRoll damageRoll) {
             damageRoll.maximizeTypedDamageDice(functionJson.getString("damage_type"));
         } else if (subevent instanceof DamageDelivery damageDelivery) {

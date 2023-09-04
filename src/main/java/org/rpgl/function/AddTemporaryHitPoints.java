@@ -3,6 +3,7 @@ package org.rpgl.function;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -11,6 +12,7 @@ import org.rpgl.subevent.TemporaryHitPointCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,7 +29,8 @@ public class AddTemporaryHitPoints extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) throws Exception {
         if (subevent instanceof TemporaryHitPointCollection temporaryHitPointCollection) {
             JsonArray temporaryHitPointsArray = functionJson.getJsonArray("temporary_hit_points");
             for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
@@ -42,10 +45,10 @@ public class AddTemporaryHitPoints extends Function {
      * This helper method processes temporary hit point JSON data and translates temporary hit point formula data to
      * dice and bonus form.
      *
-     * @param effect                 the RPGLEffect applying this bonus
-     * @param subevent               the TemporaryHitPointCollection receiving these temporary hit points
+     * @param effect the RPGLEffect applying this bonus
+     * @param subevent the TemporaryHitPointCollection receiving these temporary hit points
      * @param temporaryHitPointsJson the temporary hit point formula data
-     * @param context                the context in which these temporary hit points are being applied
+     * @param context the context in which these temporary hit points are being applied
      * @return a JsonObject representing the evaluated form of the provided temporary hit point formula data
      *
      * @throws Exception if an exception occurs

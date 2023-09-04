@@ -19,6 +19,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,7 +64,7 @@ public class ApplyVampirismTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -99,7 +100,7 @@ public class ApplyVampirismTest {
             }});
         }};
 
-        applyVampirism.execute(null, attackRoll, functionJson, context);
+        applyVampirism.execute(null, attackRoll, functionJson, context, List.of());
 
         String expected = """
                 {"subevent":"attack_roll","tags":[],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -139,7 +140,7 @@ public class ApplyVampirismTest {
             }});
         }};
 
-        applyVampirism.execute(null, dealDamage, functionJson, context);
+        applyVampirism.execute(null, dealDamage, functionJson, context, List.of());
 
         String expected = """
                 {"subevent":"deal_damage","tags":[],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -179,7 +180,7 @@ public class ApplyVampirismTest {
             }});
         }};
 
-        applyVampirism.execute(null, savingThrow, functionJson, context);
+        applyVampirism.execute(null, savingThrow, functionJson, context, List.of());
 
         String expected = """
                 {"subevent":"saving_throw","tags":[],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";

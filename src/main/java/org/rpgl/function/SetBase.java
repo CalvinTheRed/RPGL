@@ -2,12 +2,14 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,7 +26,8 @@ public class SetBase extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) throws Exception {
         if (subevent instanceof Calculation calculation) {
             calculation.setBase(processJson(effect, subevent, functionJson.getJsonObject("base"), context));
         } else {
@@ -35,10 +38,10 @@ public class SetBase extends Function {
     /**
      * This helper method processes base JSON data and translates base formula data to numerical value form.
      *
-     * @param effect   the RPGLEffect applying this base
+     * @param effect the RPGLEffect applying this base
      * @param subevent the Calculation receiving this base
      * @param baseJson the base formula data
-     * @param context  the context in which this base is being applied
+     * @param context the context in which this base is being applied
      * @return a JsonObject representing the evaluated form of the provided base formula data
      *
      * @throws Exception if an exception occurs

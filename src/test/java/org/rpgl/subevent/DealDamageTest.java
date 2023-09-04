@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,7 +62,7 @@ public class DealDamageTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -105,7 +106,7 @@ public class DealDamageTest {
 
         dealDamage.setSource(source);
         dealDamage.setTarget(target);
-        dealDamage.deliverDamage(context);
+        dealDamage.deliverDamage(context, List.of());
 
         assertEquals(42, target.getHealthData().getInteger("current"),
                 "10 damage should be delivered (52-10=42)"
@@ -133,7 +134,7 @@ public class DealDamageTest {
 
         dealDamage.setSource(source);
         dealDamage.setTarget(target);
-        dealDamage.getTargetDamage(context);
+        dealDamage.getTargetDamage(context, List.of());
 
         assertEquals("[]", dealDamage.json.getJsonArray("damage").toString(),
                 "target damage object should be empty by default"
@@ -185,7 +186,7 @@ public class DealDamageTest {
 
         dealDamage.setSource(source);
         dealDamage.setTarget(target);
-        dealDamage.getBaseDamage(context);
+        dealDamage.getBaseDamage(context, List.of());
 
         String expected = """
                 [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}]}]""";
@@ -236,9 +237,9 @@ public class DealDamageTest {
         }});
 
         dealDamage.setSource(source);
-        dealDamage.prepare(context);
+        dealDamage.prepare(context, List.of());
         dealDamage.setTarget(target);
-        dealDamage.invoke(context);
+        dealDamage.invoke(context, List.of());
 
         assertEquals(49, target.getHealthData().getInteger("current"),
                 "invoking DealDamage should deal 3 points of damage (52-3=49)"
@@ -302,9 +303,9 @@ public class DealDamageTest {
         }});
 
         dealDamage.setSource(source);
-        dealDamage.prepare(context);
+        dealDamage.prepare(context, List.of());
         dealDamage.setTarget(target);
-        dealDamage.invoke(context);
+        dealDamage.invoke(context, List.of());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"

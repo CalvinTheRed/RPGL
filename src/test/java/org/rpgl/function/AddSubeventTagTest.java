@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,7 +62,7 @@ public class AddSubeventTagTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -89,7 +90,7 @@ public class AddSubeventTagTest {
             this.putString("tag", "test_tag");
         }};
 
-        addSubeventTag.execute(null, dummySubevent, functionJson, context);
+        addSubeventTag.execute(null, dummySubevent, functionJson, context, List.of());
 
         assertTrue(dummySubevent.hasTag("test_tag"),
                 "execute should add tag to subevent"

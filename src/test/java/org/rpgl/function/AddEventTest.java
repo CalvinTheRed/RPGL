@@ -18,6 +18,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,7 +63,7 @@ public class AddEventTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -76,7 +77,7 @@ public class AddEventTest {
 
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(object);
-        getEvents.prepare(context);
+        getEvents.prepare(context, List.of());
 
         AddEvent addEvent = new AddEvent();
         JsonObject functionJson = new JsonObject() {{
@@ -88,7 +89,7 @@ public class AddEventTest {
             this.putString("event", "std:common/dodge");
         }};
 
-        addEvent.execute(new RPGLEffect(), getEvents, functionJson, context);
+        addEvent.execute(new RPGLEffect(), getEvents, functionJson, context, List.of());
 
         assertEquals("std:common/dodge", getEvents.getEvents().get(0).getId(),
                 "execute should add the correct event to the subevent"

@@ -2,11 +2,14 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.subevent.TemporaryHitPointRoll;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * This function is dedicated to setting temporary hit point dice matching or below a certain threshold in
@@ -23,7 +26,8 @@ public class SetTemporaryHitPointDiceMatchingOrBelow extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) {
         if (subevent instanceof TemporaryHitPointRoll temporaryHitPointRoll) {
             temporaryHitPointRoll.setTemporaryHitPointsDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),

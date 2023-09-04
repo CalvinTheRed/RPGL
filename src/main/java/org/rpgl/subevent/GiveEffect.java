@@ -3,8 +3,10 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,15 +42,15 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         this.json.putBoolean("cancel", false);
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, List<RPGLResource> resources) {
         if (this.isNotCanceled()) {
-            RPGLEffect effect = RPGLFactory.newEffect(this.json.getString("effect"));
+            RPGLEffect effect = RPGLFactory.newEffect(this.json.getString("effect"), this.getOriginItem(), resources);
             effect.setSource(this.getSource());
             effect.setTarget(this.getTarget());
             effect.setOriginItem(this.getOriginItem());

@@ -1,7 +1,10 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
+
+import java.util.List;
 
 /**
  * This Subevent is dedicated to rolling all dice which will be copied to all targets of a damaging RPGLEvent. This
@@ -37,8 +40,8 @@ public class CalculateAbilityScore extends Calculation implements AbilitySubeven
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         this.setBase(getSource().getAbilityScores().getInteger(getAbility(context)));
     }
 

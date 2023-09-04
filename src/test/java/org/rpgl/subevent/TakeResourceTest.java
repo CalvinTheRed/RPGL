@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +60,7 @@ public class TakeResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -86,14 +87,14 @@ public class TakeResourceTest {
         takeResource.setSource(source);
         takeResource.setTarget(target);
 
-        takeResource.invoke(context);
+        takeResource.invoke(context, List.of());
 
         assertEquals(1, target.getResourceObjects().size(),
                 "target should not have a non-temporary resource taken away"
         );
 
         resource.addTag("temporary");
-        takeResource.invoke(context);
+        takeResource.invoke(context, List.of());
 
         assertEquals(0, target.getResourceObjects().size(),
                 "resource should be taken away once it has temporary tag"
@@ -125,7 +126,7 @@ public class TakeResourceTest {
         takeResource.setSource(source);
         takeResource.setTarget(target);
 
-        takeResource.invoke(context);
+        takeResource.invoke(context, List.of());
 
         assertEquals(0, target.getResourceObjects().size(),
                 "target should have all matching resources taken away when count is not specified"
@@ -159,7 +160,7 @@ public class TakeResourceTest {
         takeResource.setSource(source);
         takeResource.setTarget(target);
 
-        takeResource.invoke(context);
+        takeResource.invoke(context, List.of());
 
         assertEquals(2, target.getResourceObjects().size(),
                 "target have 3 of 5 resources taken away when count of 3 is specified"

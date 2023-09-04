@@ -3,6 +3,7 @@ package org.rpgl.function;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -11,6 +12,7 @@ import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,7 +29,8 @@ public class AddHealing extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) throws Exception {
         if (subevent instanceof HealingCollection healingCollection) {
             JsonArray healingArray = functionJson.getJsonArray("healing");
             for (int i = 0; i < healingArray.size(); i++) {
@@ -41,10 +44,10 @@ public class AddHealing extends Function {
     /**
      * This helper method processes healing JSON data and translates healing formula data to dice and bonus form.
      *
-     * @param effect      the RPGLEffect applying this healing
-     * @param subevent    the HealingCollection receiving this healing
+     * @param effect the RPGLEffect applying this healing
+     * @param subevent the HealingCollection receiving this healing
      * @param healingJson the healing formula data
-     * @param context     the context in which this healing is being applied
+     * @param context the context in which this healing is being applied
      * @return a JsonObject representing the evaluated form of the provided healing formula data
      *
      * @throws Exception if an exception occurs

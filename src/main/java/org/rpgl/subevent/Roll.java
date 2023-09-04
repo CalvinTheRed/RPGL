@@ -1,9 +1,11 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.math.Die;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,8 +26,8 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         this.json.putBoolean("cancel", false);
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
