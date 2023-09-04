@@ -19,6 +19,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -64,7 +65,7 @@ public class EndEffectTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -95,7 +96,7 @@ public class EndEffectTest {
             this.putString("function", "end_effect");
         }};
 
-        endEffect.execute(fireImmunity, subevent, functionJson, context);
+        endEffect.execute(fireImmunity, subevent, functionJson, context, List.of());
 
         assertFalse(commoner.getEffects().asList().contains(fireImmunity.getUuid()),
                 "commoner should no longer have effect after it is ended"

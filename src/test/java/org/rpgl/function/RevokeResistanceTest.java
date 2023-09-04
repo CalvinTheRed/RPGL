@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -62,7 +63,7 @@ public class RevokeResistanceTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -83,7 +84,7 @@ public class RevokeResistanceTest {
         damageAffinity.addDamageType(damageTypeFire);
         damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
-        damageAffinity.prepare(context);
+        damageAffinity.prepare(context, List.of());
         damageAffinity.setTarget(target);
         damageAffinity.grantResistance(damageTypeFire);
         damageAffinity.grantResistance(damageTypeCold);
@@ -98,7 +99,7 @@ public class RevokeResistanceTest {
             this.putString("damage_type", damageTypeFire);
         }};
 
-        revokeResistance.execute(null, damageAffinity, functionJson, context);
+        revokeResistance.execute(null, damageAffinity, functionJson, context, List.of());
 
         assertFalse(damageAffinity.isResistant(damageTypeFire),
                 "execute should revoke resistance to counter the granted fire resistance"
@@ -124,7 +125,7 @@ public class RevokeResistanceTest {
         damageAffinity.addDamageType(damageTypeFire);
         damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
-        damageAffinity.prepare(context);
+        damageAffinity.prepare(context, List.of());
         damageAffinity.setTarget(target);
         damageAffinity.grantResistance(damageTypeFire);
         damageAffinity.grantResistance(damageTypeCold);
@@ -137,7 +138,7 @@ public class RevokeResistanceTest {
             this.putString("function", "revoke_resistance");
         }};
 
-        revokeResistance.execute(null, damageAffinity, functionJson, context);
+        revokeResistance.execute(null, damageAffinity, functionJson, context, List.of());
 
         assertFalse(damageAffinity.isResistant(damageTypeFire),
                 "execute should revoke resistance to counter the granted fire resistance"

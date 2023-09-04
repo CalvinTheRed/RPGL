@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,7 +61,7 @@ public class SavingThrowTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -102,7 +103,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.deliverDamage("all", context);
+        savingThrow.deliverDamage("all", context, List.of());
 
         assertEquals(42, target.getHealthData().getInteger("current"),
                 "target should take 10 cold damage (52-10=42)"
@@ -136,7 +137,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents("pass", context);
+        savingThrow.resolveNestedSubevents("pass", context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested pass subevent"
@@ -170,7 +171,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents("fail", context);
+        savingThrow.resolveNestedSubevents("fail", context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested fail subevent"
@@ -194,7 +195,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(source);
         savingThrow.setTarget(target);
-        savingThrow.getTargetDamage(context);
+        savingThrow.getTargetDamage(context, List.of());
 
         assertEquals("[]", savingThrow.json.getJsonArray("damage").toString(),
                 "target damage should be empty by default"
@@ -245,7 +246,7 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(source);
-        savingThrow.getBaseDamage(context);
+        savingThrow.getBaseDamage(context, List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}]}]""";
@@ -269,7 +270,7 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(source);
-        savingThrow.calculateDifficultyClass(context);
+        savingThrow.calculateDifficultyClass(context, List.of());
 
         assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
                 "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
@@ -320,7 +321,7 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(source);
-        savingThrow.prepare(context);
+        savingThrow.prepare(context, List.of());
 
         assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
                 "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
@@ -384,9 +385,9 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(source);
-        savingThrow.prepare(context);
+        savingThrow.prepare(context, List.of());
         savingThrow.setTarget(target);
-        savingThrow.invoke(context);
+        savingThrow.invoke(context, List.of());
 
         assertEquals(42, target.getHealthData().getInteger("current"),
                 "invoke should deal full damage on a fail (52-10=42)"
@@ -444,9 +445,9 @@ public class SavingThrowTest {
             }});
         }});
         savingThrow.setSource(source);
-        savingThrow.prepare(context);
+        savingThrow.prepare(context, List.of());
         savingThrow.setTarget(target);
-        savingThrow.invoke(context);
+        savingThrow.invoke(context, List.of());
 
         assertEquals(47, target.getHealthData().getInteger("current"),
                 "invoke should deal full damage on a fail (52-5=47)"
@@ -519,9 +520,9 @@ public class SavingThrowTest {
             }});
         }});
         savingThrow.setSource(source);
-        savingThrow.prepare(context);
+        savingThrow.prepare(context, List.of());
         savingThrow.setTarget(target);
-        savingThrow.invoke(context);
+        savingThrow.invoke(context, List.of());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"

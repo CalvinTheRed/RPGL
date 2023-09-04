@@ -1,7 +1,10 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
+
+import java.util.List;
 
 /**
  * This Subevent is a dummy Subevent only meant to be used during testing. It has no practical application.
@@ -39,7 +42,7 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, List<RPGLResource> resources) {
         DummySubevent.counter++;
     }
 

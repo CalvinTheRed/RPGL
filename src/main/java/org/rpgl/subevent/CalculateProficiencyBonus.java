@@ -1,8 +1,10 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -38,8 +40,8 @@ public class CalculateProficiencyBonus extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         super.setBase(Objects.requireNonNullElse(
                 getSource().getProficiencyBonus(),
                 getSource().getProficiencyBonusByLevel())

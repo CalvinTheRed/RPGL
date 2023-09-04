@@ -2,8 +2,11 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
+
+import java.util.List;
 
 /**
  * This class is a dummy function only intended to be used during testing. Its only behavior is to increment a static
@@ -20,7 +23,8 @@ public class DummyFunction extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) {
         DummyFunction.counter++;
     }
 

@@ -15,6 +15,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,7 +57,7 @@ public class CalculateSaveDifficultyClassTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -74,7 +75,7 @@ public class CalculateSaveDifficultyClassTest {
         }});
 
         calculateSaveDifficultyClass.setSource(source);
-        calculateSaveDifficultyClass.prepare(context);
+        calculateSaveDifficultyClass.prepare(context, List.of());
 
         assertEquals(17, calculateSaveDifficultyClass.get(),
                 "young red dragon save DC calculated from Constitution should be 17"

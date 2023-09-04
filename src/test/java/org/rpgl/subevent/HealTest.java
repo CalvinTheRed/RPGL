@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +60,7 @@ public class HealTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -101,7 +102,7 @@ public class HealTest {
         heal.setSource(source);
         heal.setTarget(target);
 
-        heal.deliverHealing(context);
+        heal.deliverHealing(context, List.of());
 
         assertEquals(20, target.getHealthData().getInteger("current"),
                 "target should recover 10 hit points (10+10=20)"
@@ -119,9 +120,9 @@ public class HealTest {
 
         Heal heal = new Heal();
         heal.setSource(source);
-        heal.prepare(context);
+        heal.prepare(context, List.of());
         heal.setTarget(target);
-        heal.getTargetHealing(context);
+        heal.getTargetHealing(context, List.of());
 
         String expected = """
                 []""";
@@ -170,7 +171,7 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.getBaseHealing(context);
+        heal.getBaseHealing(context, List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
@@ -221,9 +222,9 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.prepare(context);
+        heal.prepare(context, List.of());
         heal.setTarget(target);
-        heal.invoke(context);
+        heal.invoke(context, List.of());
 
         assertEquals(14, target.getHealthData().getInteger("current"),
                 "invoking heal should restore 4 hit points (1+1+2=+4)"
@@ -268,7 +269,7 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.prepare(context);
+        heal.prepare(context, List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
@@ -319,9 +320,9 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.prepare(context);
+        heal.prepare(context, List.of());
         heal.setTarget(target);
-        heal.invoke(context);
+        heal.invoke(context, List.of());
 
         assertEquals(14, target.getHealthData().getInteger("current"),
                 "target should recover 4 hit points from Heal subevent (1+1+2=+4)"
@@ -366,7 +367,7 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.getBaseHealing(context);
+        heal.getBaseHealing(context, List.of());
 
         String expected = """
                 [{"bonus":6,"dice":[]}]""";
@@ -413,7 +414,7 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.getBaseHealing(context);
+        heal.getBaseHealing(context, List.of());
 
         String expected = """
                 [{"bonus":23,"dice":[]}]""";
@@ -458,7 +459,7 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.getBaseHealing(context);
+        heal.getBaseHealing(context, List.of());
 
         String expected = """
                 [{"bonus":4,"dice":[]}]""";

@@ -5,6 +5,7 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -41,7 +42,7 @@ public class GiveResource extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
         int count = Objects.requireNonNullElse(this.json.getInteger("count"), 1);
         String resourceId = this.json.getString("resource");
         for (int i = 0; i < count; i++) {

@@ -1,8 +1,11 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+
+import java.util.List;
 
 /**
  * This Subevent is dedicated to collecting all tags which apply to a RPGLObject, beyond what appears on its template.
@@ -37,8 +40,8 @@ public class GetObjectTags extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         this.json.putJsonArray("object_tags", new JsonArray());
     }
 

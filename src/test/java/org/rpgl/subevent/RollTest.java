@@ -18,6 +18,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -84,7 +85,7 @@ public class RollTest {
         context.add(target);
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
 
         assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
@@ -107,7 +108,7 @@ public class RollTest {
         context.add(target);
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.grantAdvantage();
 
         assertTrue(roll.isAdvantageRoll(),
@@ -131,7 +132,7 @@ public class RollTest {
         context.add(target);
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.grantDisadvantage();
 
         assertFalse(roll.isAdvantageRoll(),
@@ -182,7 +183,7 @@ public class RollTest {
         }});
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.roll();
 
         assertEquals(5, roll.get(),
@@ -210,7 +211,7 @@ public class RollTest {
         }});
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.roll();
 
         assertEquals(15, roll.get(),
@@ -238,7 +239,7 @@ public class RollTest {
         }});
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.grantAdvantage();
         roll.roll();
 
@@ -267,7 +268,7 @@ public class RollTest {
         }});
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.grantAdvantage();
         roll.roll();
 
@@ -295,7 +296,7 @@ public class RollTest {
             }});
         }});
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.grantDisadvantage();
         roll.roll();
 
@@ -324,7 +325,7 @@ public class RollTest {
         }});
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.grantDisadvantage();
         roll.roll();
 

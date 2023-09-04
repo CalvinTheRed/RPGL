@@ -18,6 +18,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,7 +63,7 @@ public class AbilitySaveTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -87,7 +88,7 @@ public class AbilitySaveTest {
         abilitySave.setSource(source);
         abilitySave.setTarget(target);
 
-        abilitySave.resolveNestedSubevents("pass", context);
+        abilitySave.resolveNestedSubevents("pass", context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -114,7 +115,7 @@ public class AbilitySaveTest {
         abilitySave.setSource(source);
         abilitySave.setTarget(target);
 
-        abilitySave.resolveNestedSubevents("pass", context);
+        abilitySave.resolveNestedSubevents("pass", context, List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on fail"
@@ -141,7 +142,7 @@ public class AbilitySaveTest {
         abilitySave.setSource(source);
         abilitySave.setTarget(target);
 
-        abilitySave.resolveNestedSubevents("fail", context);
+        abilitySave.resolveNestedSubevents("fail", context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -168,7 +169,7 @@ public class AbilitySaveTest {
         abilitySave.setSource(source);
         abilitySave.setTarget(target);
 
-        abilitySave.resolveNestedSubevents("pass", context);
+        abilitySave.resolveNestedSubevents("pass", context, List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on pass"
@@ -194,7 +195,7 @@ public class AbilitySaveTest {
         abilitySave.setSource(source);
         abilitySave.setTarget(target);
 
-        abilitySave.calculateDifficultyClass(context);
+        abilitySave.calculateDifficultyClass(context, List.of());
 
         assertEquals(8+5+6, abilitySave.json.getInteger("save_difficulty_class"),
                 "difficulty class should be calculated to 19 (8+5+6)"
@@ -219,7 +220,7 @@ public class AbilitySaveTest {
             this.putString("difficulty_class_ability", "wis");
         }});
         abilitySave.setSource(source);
-        abilitySave.prepare(context);
+        abilitySave.prepare(context, List.of());
 
         assertEquals(8+5+6, abilitySave.json.getInteger("save_difficulty_class"),
                 "difficulty class should be calculated to 19 (8+5+6)"
@@ -262,9 +263,9 @@ public class AbilitySaveTest {
             }});
         }});
         abilitySave.setSource(source);
-        abilitySave.prepare(context);
+        abilitySave.prepare(context, List.of());
         abilitySave.setTarget(target);
-        abilitySave.invoke(context);
+        abilitySave.invoke(context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -304,9 +305,9 @@ public class AbilitySaveTest {
             }});
         }});
         abilitySave.setSource(source);
-        abilitySave.prepare(context);
+        abilitySave.prepare(context, List.of());
         abilitySave.setTarget(target);
-        abilitySave.invoke(context);
+        abilitySave.invoke(context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"

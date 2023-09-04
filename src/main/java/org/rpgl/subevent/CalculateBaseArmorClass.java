@@ -2,12 +2,14 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,8 +47,8 @@ public class CalculateBaseArmorClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         // Set base armor class from armor (or no armor)
         String armorUuid = this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("armor");
         int baseArmorClass;

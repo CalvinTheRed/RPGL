@@ -19,6 +19,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,7 +64,7 @@ public class AbilityCheckTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -103,7 +104,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
 
         abilityCheck.giveHalfProficiency();
 
@@ -130,7 +131,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -158,7 +159,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -187,7 +188,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
 
         assertFalse(abilityCheck.hasHalfProficiency(),
                 "should not have half proficiency"
@@ -225,9 +226,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(context);
+        abilityCheck.invoke(context, List.of());
 
         assertEquals(10, abilityCheck.get(),
                 "abilityCheck should roll 10 (10+0)"
@@ -258,9 +259,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(context);
+        abilityCheck.invoke(context, List.of());
 
         assertEquals(10+5, abilityCheck.get(),
                 "abilityCheck should roll 15 (10+5)"
@@ -296,9 +297,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(context);
+        abilityCheck.invoke(context, List.of());
 
         assertEquals(10+2, abilityCheck.get(),
                 "abilityCheck should roll 12 (10+2)"

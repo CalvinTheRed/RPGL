@@ -3,6 +3,7 @@ package org.rpgl.function;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -11,6 +12,7 @@ import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -27,7 +29,8 @@ public class AddBonus extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
+                    List<RPGLResource> resources) throws Exception {
         if (subevent instanceof Calculation calculation) {
             JsonArray bonusArray = functionJson.getJsonArray("bonus");
             for (int i = 0; i < bonusArray.size(); i++) {

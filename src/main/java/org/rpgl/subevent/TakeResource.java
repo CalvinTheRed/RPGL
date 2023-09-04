@@ -5,6 +5,7 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -44,7 +45,7 @@ public class TakeResource extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, List<RPGLResource> resources) {
         String resourceTag = this.json.getString("resource_tag");
         int count = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);
         RPGLObject target = this.getTarget();

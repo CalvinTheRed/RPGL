@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,7 +62,7 @@ public class GiveExpertiseTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -75,7 +76,7 @@ public class GiveExpertiseTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, List.of());
         abilityCheck.setTarget(object);
 
         GiveExpertise giveExpertise = new GiveExpertise();
@@ -86,7 +87,7 @@ public class GiveExpertiseTest {
             this.putString("function", "give_expertise");
         }};
 
-        giveExpertise.execute(null, abilityCheck, functionJson, context);
+        giveExpertise.execute(null, abilityCheck, functionJson, context, List.of());
 
         assertTrue(abilityCheck.hasExpertise(),
                 "execute should give expertise to roll"

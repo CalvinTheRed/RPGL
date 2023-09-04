@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -62,7 +63,7 @@ public class GrantImmunityTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -83,7 +84,7 @@ public class GrantImmunityTest {
         damageAffinity.addDamageType(damageTypeFire);
         damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
-        damageAffinity.prepare(context);
+        damageAffinity.prepare(context, List.of());
         damageAffinity.setTarget(target);
 
         GrantImmunity grantImmunity = new GrantImmunity();
@@ -96,7 +97,7 @@ public class GrantImmunityTest {
             this.putString("damage_type", damageTypeFire);
         }};
 
-        grantImmunity.execute(null, damageAffinity, functionJson, context);
+        grantImmunity.execute(null, damageAffinity, functionJson, context, List.of());
 
         assertTrue(damageAffinity.isImmune(damageTypeFire),
                 "execute should grant immunity to fire damage"
@@ -122,7 +123,7 @@ public class GrantImmunityTest {
         damageAffinity.addDamageType(damageTypeFire);
         damageAffinity.addDamageType(damageTypeCold);
         damageAffinity.setSource(source);
-        damageAffinity.prepare(context);
+        damageAffinity.prepare(context, List.of());
         damageAffinity.setTarget(target);
 
         GrantImmunity grantImmunity = new GrantImmunity();
@@ -133,7 +134,7 @@ public class GrantImmunityTest {
             this.putString("function", "grant_immunity");
         }};
 
-        grantImmunity.execute(null, damageAffinity, functionJson, context);
+        grantImmunity.execute(null, damageAffinity, functionJson, context, List.of());
 
         assertTrue(damageAffinity.isImmune(damageTypeFire),
                 "execute should grant immunity to fire damage"

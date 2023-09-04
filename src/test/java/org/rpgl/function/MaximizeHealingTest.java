@@ -20,6 +20,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,7 +70,7 @@ public class MaximizeHealingTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -118,7 +119,7 @@ public class MaximizeHealingTest {
         }});
 
         healingRoll.setSource(source);
-        healingRoll.prepare(context);
+        healingRoll.prepare(context, List.of());
         healingRoll.setTarget(target);
 
         MaximizeHealing maximizeHealing = new MaximizeHealing();
@@ -129,7 +130,7 @@ public class MaximizeHealingTest {
             this.putString("function", "maximize_healing");
         }};
 
-        maximizeHealing.execute(null, healingRoll, functionJson, context);
+        maximizeHealing.execute(null, healingRoll, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
@@ -183,7 +184,7 @@ public class MaximizeHealingTest {
         }});
 
         healingDelivery.setSource(source);
-        healingDelivery.prepare(context);
+        healingDelivery.prepare(context, List.of());
         healingDelivery.setTarget(target);
 
         MaximizeHealing maximizeHealing = new MaximizeHealing();
@@ -194,7 +195,7 @@ public class MaximizeHealingTest {
             this.putString("function", "maximize_healing");
         }};
 
-        maximizeHealing.execute(null, healingDelivery, functionJson, context);
+        maximizeHealing.execute(null, healingDelivery, functionJson, context, List.of());
 
         assertEquals(4+6+8, healingDelivery.getHealing(),
                 "execute should set all healing dice to their maximum face value"

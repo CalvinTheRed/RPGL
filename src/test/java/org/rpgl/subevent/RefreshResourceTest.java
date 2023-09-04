@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,7 +62,7 @@ public class RefreshResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -379,7 +380,7 @@ public class RefreshResourceTest {
         refreshResource.setSource(source);
         refreshResource.setTarget(target);
 
-        refreshResource.invoke(context);
+        refreshResource.invoke(context, List.of());
 
         boolean[] expectedExhaustValues = {
                 false,
@@ -432,7 +433,7 @@ public class RefreshResourceTest {
         refreshResource.setSource(source);
         refreshResource.setTarget(target);
 
-        refreshResource.invoke(context);
+        refreshResource.invoke(context, List.of());
 
         boolean[] expectedExhaustValues = {
                 true,
@@ -486,7 +487,7 @@ public class RefreshResourceTest {
         refreshResource.setSource(source);
         refreshResource.setTarget(target);
 
-        refreshResource.invoke(context);
+        refreshResource.invoke(context, List.of());
 
         assertTrue(spellSlot.getExhausted(),
                 "non-matching resource should be exhausted"

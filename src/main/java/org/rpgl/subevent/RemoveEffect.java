@@ -3,10 +3,12 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -42,13 +44,13 @@ public class RemoveEffect extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         this.json.putBoolean("cancel", false);
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, List<RPGLResource> resources) {
         if (this.isNotCanceled()) {
             JsonArray effectTags = this.json.getJsonArray("effect_tags");
             JsonArray effects = this.getTarget().getEffects().deepClone();

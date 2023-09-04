@@ -18,6 +18,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,7 +63,7 @@ public class RerollHealingDiceMatchingOrBelowTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -158,7 +159,7 @@ public class RerollHealingDiceMatchingOrBelowTest {
             }});
         }});
         healingRoll.setSource(source);
-        healingRoll.prepare(context);
+        healingRoll.prepare(context, List.of());
         healingRoll.setTarget(target);
 
         RerollHealingDiceMatchingOrBelow rerollHealingDiceMatchingOrBelow = new RerollHealingDiceMatchingOrBelow();
@@ -171,7 +172,7 @@ public class RerollHealingDiceMatchingOrBelowTest {
             this.putInteger("threshold", 2);
         }};
 
-        rerollHealingDiceMatchingOrBelow.execute(null, healingRoll, functionJson, context);
+        rerollHealingDiceMatchingOrBelow.execute(null, healingRoll, functionJson, context, List.of());
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":4,"size":6}]}]""";

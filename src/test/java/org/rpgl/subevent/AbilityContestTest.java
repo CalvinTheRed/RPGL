@@ -18,6 +18,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -62,7 +63,7 @@ public class AbilityContestTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -87,7 +88,7 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        abilityContest.resolveNestedSubevents("pass", context);
+        abilityContest.resolveNestedSubevents("pass", context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -114,7 +115,7 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        abilityContest.resolveNestedSubevents("pass", context);
+        abilityContest.resolveNestedSubevents("pass", context, List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on fail"
@@ -141,7 +142,7 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        abilityContest.resolveNestedSubevents("fail", context);
+        abilityContest.resolveNestedSubevents("fail", context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -168,7 +169,7 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        abilityContest.resolveNestedSubevents("pass", context);
+        abilityContest.resolveNestedSubevents("pass", context, List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on pass"
@@ -206,7 +207,7 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        assertEquals(25, abilityContest.getSourceAbilityCheck(context),
+        assertEquals(25, abilityContest.getSourceAbilityCheck(context, List.of()),
                 "source ability check should evaluate to 25 (20+5)"
         );
     }
@@ -242,7 +243,7 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        assertEquals(25, abilityContest.getTargetAbilityCheck(context),
+        assertEquals(25, abilityContest.getTargetAbilityCheck(context, List.of()),
                 "target ability check should evaluate to 25 (20+5)"
         );
     }
@@ -257,7 +258,7 @@ public class AbilityContestTest {
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject());
         abilityContest.setSource(source);
-        abilityContest.prepare(context);
+        abilityContest.prepare(context, List.of());
 
         assertTrue(abilityContest.getTags().asList().contains("ability_contest"),
                 "subevent should be given the ability_contest tag upon preparation"
@@ -313,9 +314,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context);
+        abilityContest.prepare(context, List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context);
+        abilityContest.invoke(context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -371,9 +372,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context);
+        abilityContest.prepare(context, List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context);
+        abilityContest.invoke(context, List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on fail"
@@ -429,9 +430,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context);
+        abilityContest.prepare(context, List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context);
+        abilityContest.invoke(context, List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -487,9 +488,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context);
+        abilityContest.prepare(context, List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context);
+        abilityContest.invoke(context, List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on pass"
@@ -553,9 +554,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context);
+        abilityContest.prepare(context, List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context);
+        abilityContest.invoke(context, List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on tie"

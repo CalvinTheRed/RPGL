@@ -4,6 +4,8 @@ import org.rpgl.datapack.DatapackLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * This class is a factory which creates RPGL-x objects. Any time such objects are needed, they should be created using
  * methods from this class.
@@ -21,13 +23,13 @@ public final class RPGLFactory {
      * @param originItem an item UUID to be stored for the new effect's origin item
      * @return a new RPGLEffect object
      */
-    public static RPGLEffect newEffect(String effectId, String originItem) {
+    public static RPGLEffect newEffect(String effectId, String originItem, List<RPGLResource> resources) {
         String[] effectIdSplit = effectId.split(":");
         try {
             return DatapackLoader.DATAPACKS
                     .get(effectIdSplit[0])
                     .getEffectTemplate(effectIdSplit[1])
-                    .newInstance(originItem);
+                    .newInstance(originItem, resources);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEffect: " + effectId);
             throw new RuntimeException("Encountered an error building a new RPGLEffect", e);
@@ -41,7 +43,7 @@ public final class RPGLFactory {
      * @return a new RPGLEffect object
      */
     public static RPGLEffect newEffect(String effectId) {
-        return newEffect(effectId, null);
+        return newEffect(effectId, null, List.of());
     }
 
     /**

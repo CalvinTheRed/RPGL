@@ -1,11 +1,13 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This abstract Subevent is dedicated to rolling healing dice.
@@ -40,8 +42,8 @@ public class HealingRoll extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
         this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.roll();
     }

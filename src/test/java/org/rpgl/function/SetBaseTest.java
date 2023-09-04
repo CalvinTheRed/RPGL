@@ -20,6 +20,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -81,7 +82,7 @@ public class SetBaseTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -96,7 +97,7 @@ public class SetBaseTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetBase setBase = new SetBase();
@@ -118,7 +119,7 @@ public class SetBaseTest {
         RPGLEffect effect = new RPGLEffect();
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setBase.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(13, calculation.getBase(),
                 "execute should set calculation base to 13"
@@ -137,7 +138,7 @@ public class SetBaseTest {
         source.getAbilityScores().putInteger("dex", 20);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetBase setBase = new SetBase();
@@ -169,7 +170,7 @@ public class SetBaseTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setBase.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(5, calculation.getBase(),
                 "execute should set calculation base to source's dex modifier (+5)"
@@ -188,7 +189,7 @@ public class SetBaseTest {
         source.getAbilityScores().putInteger("dex", 20);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetBase setBase = new SetBase();
@@ -220,7 +221,7 @@ public class SetBaseTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setBase.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(20, calculation.getBase(),
                 "execute should set calculation base to source's dex score (20)"
@@ -237,7 +238,7 @@ public class SetBaseTest {
         context.add(target);
 
         calculation.setSource(source);
-        calculation.prepare(context);
+        calculation.prepare(context, List.of());
         calculation.setTarget(target);
 
         SetBase setBase = new SetBase();
@@ -267,7 +268,7 @@ public class SetBaseTest {
         effect.setTarget(target);
         effect.setName("TEST");
 
-        setBase.execute(effect, calculation, functionJson, context);
+        setBase.execute(effect, calculation, functionJson, context, List.of());
 
         assertEquals(2, calculation.getBase(),
                 "execute should set calculation base to source's proficiency bonus (+2)"

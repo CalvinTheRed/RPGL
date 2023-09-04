@@ -58,7 +58,7 @@ public class GiveEffectTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), List.of()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -77,9 +77,9 @@ public class GiveEffectTest {
             this.putString("effect", "std:common/damage/immunity/fire");
         }});
         giveEffect.setSource(source);
-        giveEffect.prepare(context);
+        giveEffect.prepare(context, List.of());
         giveEffect.setTarget(target);
-        giveEffect.invoke(context);
+        giveEffect.invoke(context, List.of());
 
         List<RPGLEffect> effects = target.getEffectObjects();
         assertEquals(1, effects.size(),

@@ -20,6 +20,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -86,7 +87,7 @@ public class GrantDisadvantageTest {
         DummyContext context = new DummyContext();
 
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context),
+                () -> function.execute(null, null, functionJson, context, List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -101,7 +102,7 @@ public class GrantDisadvantageTest {
         context.add(target);
 
         roll.setSource(source);
-        roll.prepare(context);
+        roll.prepare(context, List.of());
         roll.setTarget(target);
 
         GrantDisadvantage grantDisadvantage = new GrantDisadvantage();
@@ -112,7 +113,7 @@ public class GrantDisadvantageTest {
             this.putString("function", "grant_disadvantage");
         }};
 
-        grantDisadvantage.execute(null, roll, functionJson, context);
+        grantDisadvantage.execute(null, roll, functionJson, context, List.of());
 
         assertTrue(roll.isDisadvantageRoll(),
                 "execute should grant disadvantage to roll"

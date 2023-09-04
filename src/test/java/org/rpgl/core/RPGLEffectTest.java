@@ -17,6 +17,7 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -107,13 +108,14 @@ public class RPGLEffectTest {
 
         Subevent subevent = new DummySubevent();
         subevent.setSource(source);
-        subevent.prepare(context);
+        subevent.prepare(context, List.of());
         subevent.setTarget(target);
 
         effect.executeFunctions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("functions"),
-                context
+                context,
+                List.of()
         );
 
         assertEquals(2, DummyFunction.counter,
@@ -135,7 +137,7 @@ public class RPGLEffectTest {
 
         Subevent subevent = new DummySubevent();
         subevent.setSource(source);
-        subevent.prepare(context);
+        subevent.prepare(context, List.of());
         subevent.setTarget(target);
 
         boolean evaluation = effect.evaluateConditions(
@@ -163,10 +165,10 @@ public class RPGLEffectTest {
 
         Subevent subevent = new DummySubevent();
         subevent.setSource(source);
-        subevent.prepare(context);
+        subevent.prepare(context, List.of());
         subevent.setTarget(target);
 
-        effect.processSubevent(subevent, context);
+        effect.processSubevent(subevent, context, List.of());
 
         assertEquals(2, DummyFunction.counter,
                 "both instances of dummy_function should be executed"
