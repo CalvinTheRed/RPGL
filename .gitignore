@@ -15,3 +15,6 @@ out/
 
 ### logging files
 logs/
+
+### save directories
+src/test/resources/saves/
