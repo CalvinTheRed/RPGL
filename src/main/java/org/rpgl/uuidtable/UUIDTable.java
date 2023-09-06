@@ -10,9 +10,12 @@ import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.json.JsonObject;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -119,7 +122,7 @@ public final class UUIDTable {
         return UUID_TABLE.size();
     }
 
-    public static void saveAllToDirectory(File directory) throws IOException {
+    public static void saveToDirectory(File directory) throws IOException {
         deleteDir(directory);
         File effectsDirectory = new File(directory.getAbsolutePath() + File.separator + "effects");
         File itemsDirectory = new File(directory.getAbsolutePath() + File.separator + "items");
@@ -134,32 +137,36 @@ public final class UUIDTable {
         for (Map.Entry<String, UUIDTableElement> entry : UUID_TABLE.entrySet()) {
             UUIDTableElement element = entry.getValue();
             if (element instanceof RPGLEffect effect) {
-                JsonObject.MAPPER.writeValue(
-                        new File(effectsDirectory.getAbsolutePath() + File.separator + effect.getUuid() + ".json"),
-                        new RPGLEffectTO(effect)
-                );
+                BufferedWriter writer = new BufferedWriter(new FileWriter(
+                        effectsDirectory.getAbsolutePath() + File.separator + effect.getUuid() + ".json"
+                ));
+                writer.write(new RPGLEffectTO(effect).toRPGLEffect().toString());
+                writer.close();
             } else if (element instanceof RPGLItem item) {
-                JsonObject.MAPPER.writeValue(
-                        new File(itemsDirectory.getAbsolutePath() + File.separator + item.getUuid() + ".json"),
-                        new RPGLItemTO(item)
-                );
+                BufferedWriter writer = new BufferedWriter(new FileWriter(
+                        itemsDirectory.getAbsolutePath() + File.separator + item.getUuid() + ".json"
+                ));
+                writer.write(new RPGLItemTO(item).toRPGLItem().toString());
+                writer.close();
             } else if (element instanceof RPGLObject object) {
-                JsonObject.MAPPER.writeValue(
-                        new File(objectsDirectory.getAbsolutePath() + File.separator + object.getUuid() + ".json"),
-                        new RPGLObjectTO(object)
-                );
+                BufferedWriter writer = new BufferedWriter(new FileWriter(
+                        objectsDirectory.getAbsolutePath() + File.separator + object.getUuid() + ".json"
+                ));
+                writer.write(new RPGLObjectTO(object).toRPGLObject().toString());
+                writer.close();
             } else if (element instanceof RPGLResource resource) {
-                JsonObject.MAPPER.writeValue(
-                        new File(resourcesDirectory.getAbsolutePath() + File.separator + resource.getUuid() + ".json"),
-                        new RPGLResourceTO(resource)
-                );
+                BufferedWriter writer = new BufferedWriter(new FileWriter(
+                        resourcesDirectory.getAbsolutePath() + File.separator + resource.getUuid() + ".json"
+                ));
+                writer.write(new RPGLResourceTO(resource).toRPGLResource().toString());
+                writer.close();
             }
         }
     }
 
     static void deleteDir(File directory) {
         if (directory.exists()) {
-            for (File file : directory.listFiles()) {
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
                 if (file.exists()) {
                     if (file.isDirectory()) {
                         deleteDir(file);
@@ -167,6 +174,21 @@ public final class UUIDTable {
                     file.delete();
                 }
             }
+        }
+    }
+
+    public static void loadFromDirectory(File directory) throws IOException {
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "effects").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLEffectTO.class).toRPGLEffect());
+        }
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "items").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLItemTO.class).toRPGLItem());
+        }
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "objects").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLObjectTO.class).toRPGLObject());
+        }
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "resources").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLResourceTO.class).toRPGLResource());
         }
     }
 
