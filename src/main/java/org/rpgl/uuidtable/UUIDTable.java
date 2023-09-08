@@ -134,30 +134,24 @@ public final class UUIDTable {
         objectsDirectory.mkdirs();
         resourcesDirectory.mkdirs();
 
+        BufferedWriter writer;
+
         for (Map.Entry<String, UUIDTableElement> entry : UUID_TABLE.entrySet()) {
             UUIDTableElement element = entry.getValue();
             if (element instanceof RPGLEffect effect) {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(
-                        effectsDirectory.getAbsolutePath() + File.separator + effect.getUuid() + ".json"
-                ));
+                writer = new BufferedWriter(new FileWriter(effectsDirectory.getAbsolutePath() + File.separator + effect.getUuid() + ".json"));
                 writer.write(new RPGLEffectTO(effect).toRPGLEffect().toString());
                 writer.close();
             } else if (element instanceof RPGLItem item) {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(
-                        itemsDirectory.getAbsolutePath() + File.separator + item.getUuid() + ".json"
-                ));
+                writer = new BufferedWriter(new FileWriter(itemsDirectory.getAbsolutePath() + File.separator + item.getUuid() + ".json"));
                 writer.write(new RPGLItemTO(item).toRPGLItem().toString());
                 writer.close();
             } else if (element instanceof RPGLObject object) {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(
-                        objectsDirectory.getAbsolutePath() + File.separator + object.getUuid() + ".json"
-                ));
+                writer = new BufferedWriter(new FileWriter(objectsDirectory.getAbsolutePath() + File.separator + object.getUuid() + ".json"));
                 writer.write(new RPGLObjectTO(object).toRPGLObject().toString());
                 writer.close();
             } else if (element instanceof RPGLResource resource) {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(
-                        resourcesDirectory.getAbsolutePath() + File.separator + resource.getUuid() + ".json"
-                ));
+                writer = new BufferedWriter(new FileWriter(resourcesDirectory.getAbsolutePath() + File.separator + resource.getUuid() + ".json"));
                 writer.write(new RPGLResourceTO(resource).toRPGLResource().toString());
                 writer.close();
             }
