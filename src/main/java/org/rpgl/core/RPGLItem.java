@@ -32,7 +32,7 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @param weight a new weight int
      */
-    public void setWeight(int weight) {
+    public void setWeight(Integer weight) {
         this.putInteger(RPGLItemTO.WEIGHT_ALIAS, weight);
     }
 
@@ -50,7 +50,7 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @param cost a new cost int
      */
-    public void setCost(int cost) {
+    public void setCost(Integer cost) {
         this.putInteger(RPGLItemTO.COST_ALIAS, cost);
     }
 
@@ -87,7 +87,7 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @param attackBonus a new attack bonus int
      */
-    public void setAttackBonus(int attackBonus) {
+    public void setAttackBonus(Integer attackBonus) {
         this.putInteger(RPGLItemTO.ATTACK_BONUS_ALIAS, attackBonus);
     }
 
@@ -107,7 +107,7 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @param damageBonus a new attack bonus int
      */
-    public void setDamageBonus(int damageBonus) {
+    public void setDamageBonus(Integer damageBonus) {
         this.putInteger(RPGLItemTO.DAMAGE_BONUS_ALIAS, damageBonus);
     }
 
@@ -161,7 +161,7 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @param armorClassBase a new armor class base int
      */
-    public void setArmorClassBase(int armorClassBase) {
+    public void setArmorClassBase(Integer armorClassBase) {
         this.putInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS, armorClassBase);
     }
 
@@ -180,7 +180,7 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @param armorClassDexLimit a new armor class dex limit int
      */
-    public void setArmorClassDexLimit(int armorClassDexLimit) {
+    public void setArmorClassDexLimit(Integer armorClassDexLimit) {
         this.putInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
     }
 
@@ -198,7 +198,7 @@ public class RPGLItem extends RPGLTaggable {
      *
      * @param armorClassBonus a new armor class bonus int
      */
-    public void setArmorClassBonus(int armorClassBonus) {
+    public void setArmorClassBonus(Integer armorClassBonus) {
         this.putInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
     }
 

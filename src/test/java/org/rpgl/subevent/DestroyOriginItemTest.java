@@ -10,7 +10,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
-import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
@@ -19,7 +18,6 @@ import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -33,9 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class DestroyOriginItemTest {
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         DatapackLoader.loadDatapacks(
-                new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
+                new File("src/test/resources/datapacks".replace("/", File.separator))
         );
         RPGLCore.initializeTesting();
     }

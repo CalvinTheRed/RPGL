@@ -12,7 +12,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
-import org.rpgl.datapack.DatapackTest;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
@@ -36,9 +35,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ScenariosTest {
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         DatapackLoader.loadDatapacks(
-                new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
+                new File("src/test/resources/datapacks".replace("/", File.separator))
         );
         RPGLCore.initializeTesting();
     }

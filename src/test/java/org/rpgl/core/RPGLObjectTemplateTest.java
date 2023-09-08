@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
-import org.rpgl.datapack.DatapackTest;
 import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
@@ -17,7 +16,6 @@ import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,9 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class RPGLObjectTemplateTest {
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         DatapackLoader.loadDatapacks(
-                new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
+                new File("src/test/resources/datapacks".replace("/", File.separator))
         );
     }
 

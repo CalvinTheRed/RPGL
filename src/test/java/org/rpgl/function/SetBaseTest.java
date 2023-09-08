@@ -11,7 +11,6 @@ import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
-import org.rpgl.datapack.DatapackTest;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
@@ -21,7 +20,6 @@ import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,9 +34,9 @@ public class SetBaseTest {
     private Calculation calculation;
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         DatapackLoader.loadDatapacks(
-                new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
+                new File("src/test/resources/datapacks".replace("/", File.separator))
         );
         RPGLCore.initializeTesting();
     }

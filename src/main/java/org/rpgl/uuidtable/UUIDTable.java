@@ -4,8 +4,18 @@ import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.datapack.RPGLEffectTO;
+import org.rpgl.datapack.RPGLItemTO;
+import org.rpgl.datapack.RPGLObjectTO;
+import org.rpgl.datapack.RPGLResourceTO;
+import org.rpgl.json.JsonObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -110,6 +120,89 @@ public final class UUIDTable {
      */
     public static int size() {
         return UUID_TABLE.size();
+    }
+
+    /**
+     * Saves all data in UUIDTable to the passed directory.
+     *
+     * @param directory a directory in which UUIDTable data is to be stored
+     *
+     * @throws IOException if an I/O exception occurs
+     */
+    public static void saveToDirectory(File directory) throws IOException {
+        deleteDir(directory);
+        File effectsDirectory = new File(directory.getAbsolutePath() + File.separator + "effects");
+        File itemsDirectory = new File(directory.getAbsolutePath() + File.separator + "items");
+        File objectsDirectory = new File(directory.getAbsolutePath() + File.separator + "objects");
+        File resourcesDirectory = new File(directory.getAbsolutePath() + File.separator + "resources");
+
+        effectsDirectory.mkdirs();
+        itemsDirectory.mkdirs();
+        objectsDirectory.mkdirs();
+        resourcesDirectory.mkdirs();
+
+        BufferedWriter writer;
+
+        for (Map.Entry<String, UUIDTableElement> entry : UUID_TABLE.entrySet()) {
+            UUIDTableElement element = entry.getValue();
+            if (element instanceof RPGLEffect effect) {
+                writer = new BufferedWriter(new FileWriter(effectsDirectory.getAbsolutePath() + File.separator + effect.getUuid() + ".json"));
+                writer.write(new RPGLEffectTO(effect).toRPGLEffect().toString());
+                writer.close();
+            } else if (element instanceof RPGLItem item) {
+                writer = new BufferedWriter(new FileWriter(itemsDirectory.getAbsolutePath() + File.separator + item.getUuid() + ".json"));
+                writer.write(new RPGLItemTO(item).toRPGLItem().toString());
+                writer.close();
+            } else if (element instanceof RPGLObject object) {
+                writer = new BufferedWriter(new FileWriter(objectsDirectory.getAbsolutePath() + File.separator + object.getUuid() + ".json"));
+                writer.write(new RPGLObjectTO(object).toRPGLObject().toString());
+                writer.close();
+            } else if (element instanceof RPGLResource resource) {
+                writer = new BufferedWriter(new FileWriter(resourcesDirectory.getAbsolutePath() + File.separator + resource.getUuid() + ".json"));
+                writer.write(new RPGLResourceTO(resource).toRPGLResource().toString());
+                writer.close();
+            }
+        }
+    }
+
+    /**
+     * This helper method recursively deletes files and directories within a passed directory.
+     *
+     * @param directory a directory to be deleted, along with all of its contents
+     */
+    static void deleteDir(File directory) {
+        if (directory.exists()) {
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
+                if (file.exists()) {
+                    if (file.isDirectory()) {
+                        deleteDir(file);
+                    }
+                    file.delete();
+                }
+            }
+        }
+    }
+
+    /**
+     * Loads data into UUIDTable from the passed directory.
+     *
+     * @param directory a directory in which UUIDTable data is stored
+     *
+     * @throws IOException if an I/O exception occurs
+     */
+    public static void loadFromDirectory(File directory) throws IOException {
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "effects").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLEffectTO.class).toRPGLEffect());
+        }
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "items").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLItemTO.class).toRPGLItem());
+        }
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "objects").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLObjectTO.class).toRPGLObject());
+        }
+        for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "resources").listFiles())) {
+            UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLResourceTO.class).toRPGLResource());
+        }
     }
 
 }

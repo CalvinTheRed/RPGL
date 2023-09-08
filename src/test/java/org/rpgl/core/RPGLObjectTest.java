@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
-import org.rpgl.datapack.DatapackTest;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingDelivery;
@@ -31,9 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class RPGLObjectTest {
 
     @BeforeAll
-    static void beforeAll() throws Exception {
+    static void beforeAll() {
         DatapackLoader.loadDatapacks(
-                new File(Objects.requireNonNull(DatapackTest.class.getClassLoader().getResource("datapacks")).toURI())
+                new File("src/test/resources/datapacks".replace("/", File.separator))
         );
         RPGLCore.initializeTesting();
     }
