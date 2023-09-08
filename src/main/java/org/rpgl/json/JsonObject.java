@@ -1,7 +1,5 @@
 package org.rpgl.json;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
@@ -16,9 +14,7 @@ import java.util.Objects;
  */
 public class JsonObject {
 
-    public static final ObjectMapper MAPPER = new ObjectMapper() {{
-        this.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-    }};
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
     HashMap<String, Object> data;
 

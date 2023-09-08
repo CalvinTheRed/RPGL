@@ -122,6 +122,13 @@ public final class UUIDTable {
         return UUID_TABLE.size();
     }
 
+    /**
+     * Saves all data in UUIDTable to the passed directory.
+     *
+     * @param directory a directory in which UUIDTable data is to be stored
+     *
+     * @throws IOException if an I/O exception occurs
+     */
     public static void saveToDirectory(File directory) throws IOException {
         deleteDir(directory);
         File effectsDirectory = new File(directory.getAbsolutePath() + File.separator + "effects");
@@ -158,6 +165,11 @@ public final class UUIDTable {
         }
     }
 
+    /**
+     * This helper method recursively deletes files and directories within a passed directory.
+     *
+     * @param directory a directory to be deleted, along with all of its contents
+     */
     static void deleteDir(File directory) {
         if (directory.exists()) {
             for (File file : Objects.requireNonNull(directory.listFiles())) {
@@ -171,6 +183,13 @@ public final class UUIDTable {
         }
     }
 
+    /**
+     * Loads data into UUIDTable from the passed directory.
+     *
+     * @param directory a directory in which UUIDTable data is stored
+     *
+     * @throws IOException if an I/O exception occurs
+     */
     public static void loadFromDirectory(File directory) throws IOException {
         for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "effects").listFiles())) {
             UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLEffectTO.class).toRPGLEffect());
