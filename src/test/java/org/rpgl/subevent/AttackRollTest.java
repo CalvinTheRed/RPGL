@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
@@ -1148,8 +1149,8 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("confirmCriticalHit returns true if not canceled")
-    void confirmCriticalHit_returnsTrueIfNotCanceled() throws Exception {
+    @DisplayName("confirmCriticalDamage returns true if not canceled")
+    void confirmCriticalDamage_returnsTrueIfNotCanceled() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy");
         RPGLObject target = RPGLFactory.newObject("debug:dummy");
         RPGLContext context = new DummyContext();
@@ -1158,45 +1159,49 @@ public class AttackRollTest {
 
         AttackRoll attackRoll = new AttackRoll();
 
-        assertTrue(attackRoll.confirmCriticalHit(context, List.of()),
-                "critical hit should be confirmed"
+        assertTrue(attackRoll.confirmCriticalDamage(context, List.of()),
+                "critical damage should be confirmed"
         );
     }
 
     @Test
-    @DisplayName("confirmCriticalHit returns false if canceled")
-    void confirmCriticalHit_returnsFalseIfCanceled() throws Exception {
+    @DisplayName("confirmCriticalDamage returns false if canceled")
+    void confirmCriticalDamage_returnsFalseIfCanceled() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy");
         RPGLObject target = RPGLFactory.newObject("debug:dummy");
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        RPGLItem adamantimePlate = RPGLFactory.newItem("std:armor/heavy/plate/adamantine");
-        target.giveItem(adamantimePlate.getUuid());
-        target.equipItem(adamantimePlate.getUuid(), "armor");
+        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine");
+        adamantineArmorEffect.setSource(target);
+        adamantineArmorEffect.setTarget(target);
+        target.addEffect(adamantineArmorEffect);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
 
-        assertFalse(attackRoll.confirmCriticalHit(context, List.of()),
-                "critical hit should not be confirmed"
+        assertFalse(attackRoll.confirmCriticalDamage(context, List.of()),
+                "critical damage should not be confirmed"
         );
     }
 
     @Test
-    @DisplayName("run resolves correctly (critical hit not confirmed)")
-    void run_resolvesCorrectly_criticalHitNotConfirmed() throws Exception {
+    @DisplayName("run resolves correctly (critical damage not confirmed)")
+    void run_resolvesCorrectly_criticalDamageNotConfirmed() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
         RPGLObject target = RPGLFactory.newObject("debug:dummy");
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
-        RPGLItem adamantimePlate = RPGLFactory.newItem("std:armor/heavy/plate/adamantine");
-        target.giveItem(adamantimePlate.getUuid());
-        target.equipItem(adamantimePlate.getUuid(), "armor");
+        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine");
+        adamantineArmorEffect.setSource(target);
+        adamantineArmorEffect.setTarget(target);
+        target.addEffect(adamantineArmorEffect);
+
+        target.getAbilityScores().putInteger("dex", 100);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{

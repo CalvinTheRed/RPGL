@@ -7,15 +7,15 @@ import org.rpgl.json.JsonObject;
 import java.util.List;
 import java.util.Objects;
 
-public class CriticalHitConfirmation extends Subevent implements CancelableSubevent {
+public class CriticalDamageConfirmation extends Subevent implements CancelableSubevent {
 
-    public CriticalHitConfirmation() {
-        super("critical_hit_confirmation");
+    public CriticalDamageConfirmation() {
+        super("critical_damage_confirmation");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new CriticalHitConfirmation();
+        Subevent clone = new CriticalDamageConfirmation();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -23,7 +23,7 @@ public class CriticalHitConfirmation extends Subevent implements CancelableSubev
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new CriticalHitConfirmation();
+        Subevent clone = new CriticalDamageConfirmation();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;

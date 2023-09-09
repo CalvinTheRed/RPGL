@@ -5,7 +5,7 @@
   "name": "Adamantine Armor",
   "description": "Adamantine armor turns critical hits scored against the wearer into normal hits.",
   "subevent_filters": {
-    "critical_hit_confirmation": [
+    "critical_damage_confirmation": [
       {
         "conditions": [
           {

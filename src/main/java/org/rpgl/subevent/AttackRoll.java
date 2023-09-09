@@ -78,7 +78,7 @@ public class AttackRoll extends Roll {
             if (this.isCriticalHit(context, resources)) {
                 this.getBaseDamage(context, resources);
                 this.getTargetDamage(context, resources);
-                if (this.confirmCriticalHit(context, resources)) {
+                if (this.confirmCriticalDamage(context, resources)) {
                     this.getCriticalHitDamage(context, resources);
                 }
                 this.resolveDamage(context, resources);
@@ -203,7 +203,7 @@ public class AttackRoll extends Roll {
     }
 
     /**
-     * This method returns whether the attack roll is a critical hit.
+     * This helper method returns whether the attack roll is a critical hit.
      *
      * @param context the context this Subevent takes place in
      * @param resources a list of resources used to produce this subevent
@@ -211,7 +211,7 @@ public class AttackRoll extends Roll {
      *
      * @throws Exception if an exception occurs.
      */
-    public boolean isCriticalHit(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    boolean isCriticalHit(RPGLContext context, List<RPGLResource> resources) throws Exception {
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
         calculateCriticalHitThreshold.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray() {{
@@ -227,19 +227,28 @@ public class AttackRoll extends Roll {
         return this.getBase() >= calculateCriticalHitThreshold.get();
     }
 
-    public boolean confirmCriticalHit(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        CriticalHitConfirmation criticalHitConfirmation = new CriticalHitConfirmation();
-        criticalHitConfirmation.joinSubeventData(new JsonObject() {{
+    /**
+     * This helper method confirms that a critical hit deals critical damage.
+     *
+     * @param context the context in which a critical hit is scored
+     * @param resources a list of resources used to produce this subevent
+     * @return true if the attack should deal critical damage, false otherwise
+     *
+     * @throws Exception if an exception occurs
+     */
+    boolean confirmCriticalDamage(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        CriticalDamageConfirmation criticalDamageConfirmation = new CriticalDamageConfirmation();
+        criticalDamageConfirmation.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});
         }});
-        criticalHitConfirmation.setOriginItem(this.getOriginItem());
-        criticalHitConfirmation.setSource(this.getSource());
-        criticalHitConfirmation.prepare(context, resources);
-        criticalHitConfirmation.setTarget(this.getTarget());
-        criticalHitConfirmation.invoke(context, resources);
-        return criticalHitConfirmation.isNotCanceled();
+        criticalDamageConfirmation.setOriginItem(this.getOriginItem());
+        criticalDamageConfirmation.setSource(this.getSource());
+        criticalDamageConfirmation.prepare(context, resources);
+        criticalDamageConfirmation.setTarget(this.getTarget());
+        criticalDamageConfirmation.invoke(context, resources);
+        return criticalDamageConfirmation.isNotCanceled();
     }
 
     /**
