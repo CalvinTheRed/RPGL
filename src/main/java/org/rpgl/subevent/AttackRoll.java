@@ -78,7 +78,9 @@ public class AttackRoll extends Roll {
             if (this.isCriticalHit(context, resources)) {
                 this.getBaseDamage(context, resources);
                 this.getTargetDamage(context, resources);
-                this.getCriticalHitDamage(context, resources);
+                if (this.confirmCriticalHit(context, resources)) {
+                    this.getCriticalHitDamage(context, resources);
+                }
                 this.resolveDamage(context, resources);
                 this.resolveNestedSubevents("hit", context, resources);
             } else if (this.isCriticalMiss() || this.get() < armorClass) {
@@ -223,6 +225,21 @@ public class AttackRoll extends Roll {
         calculateCriticalHitThreshold.invoke(context, resources);
 
         return this.getBase() >= calculateCriticalHitThreshold.get();
+    }
+
+    public boolean confirmCriticalHit(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        CriticalHitConfirmation criticalHitConfirmation = new CriticalHitConfirmation();
+        criticalHitConfirmation.joinSubeventData(new JsonObject() {{
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(json.getJsonArray("tags").asList());
+            }});
+        }});
+        criticalHitConfirmation.setOriginItem(this.getOriginItem());
+        criticalHitConfirmation.setSource(this.getSource());
+        criticalHitConfirmation.prepare(context, resources);
+        criticalHitConfirmation.setTarget(this.getTarget());
+        criticalHitConfirmation.invoke(context, resources);
+        return criticalHitConfirmation.isNotCanceled();
     }
 
     /**
