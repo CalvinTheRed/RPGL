@@ -7,6 +7,16 @@ import org.rpgl.json.JsonObject;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * This Subevent is dedicated to confirming that a critical hit deals critical damage.
+ * <br>
+ * <br>
+ * Source: an RPGLObject scoring a critical hit
+ * <br>
+ * Target: an RPGLObject suffering a critical hit
+ *
+ * @author Calvin Withun
+ */
 public class CriticalDamageConfirmation extends Subevent implements CancelableSubevent {
 
     public CriticalDamageConfirmation() {
