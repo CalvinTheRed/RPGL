@@ -47,6 +47,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
         Function.FUNCTIONS.put("add_temporary_hit_points", new AddTemporaryHitPoints());
         Function.FUNCTIONS.put("apply_vampirism", new ApplyVampirism());
+        Function.FUNCTIONS.put("cancel_subevent", new CancelSubevent());
         Function.FUNCTIONS.put("end_effect", new EndEffect());
         Function.FUNCTIONS.put("give_expertise", new GiveExpertise());
         Function.FUNCTIONS.put("give_half_proficiency", new GiveHalfProficiency());

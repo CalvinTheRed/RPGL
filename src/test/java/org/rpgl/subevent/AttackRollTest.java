@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
@@ -1144,6 +1145,121 @@ public class AttackRollTest {
         );
         assertEquals(1, target.getHealthData().getInteger("current"),
                 "target should not be healed via vampirism"
+        );
+    }
+
+    @Test
+    @DisplayName("confirmCriticalDamage returns true if not canceled")
+    void confirmCriticalDamage_returnsTrueIfNotCanceled() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        AttackRoll attackRoll = new AttackRoll();
+
+        assertTrue(attackRoll.confirmCriticalDamage(context, List.of()),
+                "critical damage should be confirmed"
+        );
+    }
+
+    @Test
+    @DisplayName("confirmCriticalDamage returns false if canceled")
+    void confirmCriticalDamage_returnsFalseIfCanceled() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine");
+        adamantineArmorEffect.setSource(target);
+        adamantineArmorEffect.setTarget(target);
+        target.addEffect(adamantineArmorEffect);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+
+        assertFalse(attackRoll.confirmCriticalDamage(context, List.of()),
+                "critical damage should not be confirmed"
+        );
+    }
+
+    @Test
+    @DisplayName("run resolves correctly (critical damage not confirmed)")
+    void run_resolvesCorrectly_criticalDamageNotConfirmed() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine");
+        adamantineArmorEffect.setSource(target);
+        adamantineArmorEffect.setTarget(target);
+        target.addEffect(adamantineArmorEffect);
+
+        target.getAbilityScores().putInteger("dex", 100);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_ability": "str",
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "fire",
+                        "dice": [
+                            { "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "has_advantage": false,
+                "has_disadvantage": false,
+                "bonuses": [ ],
+                "minimum": {
+                    "value": Integer.MIN_VALUE
+                },
+                "determined": [ 20 ],
+                "withhold_damage_modifier": true
+            }*/
+            this.putString("attack_ability", "str");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("has_advantage", false);
+            this.putBoolean("has_disadvantage", false);
+            this.putJsonArray("bonuses", new JsonArray());
+            this.putJsonObject("minimum", new JsonObject() {{
+                this.putInteger("value", Integer.MIN_VALUE);
+            }});
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(20);
+            }});
+            this.putBoolean("withhold_damage_modifier", true);
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.run(context, List.of());
+
+        assertEquals(1000-3, target.getHealthData().getInteger("current"),
+                "target should have been hit but should not have suffered critical damage"
         );
     }
 
