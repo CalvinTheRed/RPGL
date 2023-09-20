@@ -2,7 +2,7 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Fighting Style (archery)",
+  "name": "Fighting Style (Archery)",
   "description": "You gain a +2 bonus to ranged attack rolls.",
   "subevent_filters": {
     "attack_roll": [

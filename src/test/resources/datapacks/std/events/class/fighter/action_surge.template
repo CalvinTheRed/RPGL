@@ -18,7 +18,7 @@
   "subevents": [
     {
       "subevent": "refresh_resource",
-      "tags": [ "second_wind" ],
+      "tags": [ "action_surge" ],
       "resource_tag": "action",
       "selection_mode": "low_first"
     }
