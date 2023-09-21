@@ -28,28 +28,19 @@
   "inventory": [
     "std:weapon/ranged/martial/heavy_crossbow"
   ],
-  "events": [
-
-  ],
-  "effects": [
-
-  ],
   "classes": [
     {
       "id": "std:common/base",
-      "level": 1,
-      "choices": { }
+      "level": 1
     },
     {
       "id": "std:common/hit_die/d8",
-      "level": 8,
-      "choices": { }
+      "level": 8
     }
   ],
   "races": [
     "std:human"
   ],
-  "resources": [ ],
   "proficiency_bonus": 2,
   "challenge_rating": 3
 }

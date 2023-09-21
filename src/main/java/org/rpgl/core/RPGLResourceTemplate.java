@@ -6,6 +6,8 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
 import org.rpgl.uuidtable.UUIDTable;
 
+import java.util.ArrayList;
+
 /**
  * This class is used to contain a "template" to be used in the creation of new RPGLResource objects. Data stored in this
  * object is copied and then processed to create a specific RPGLResource defined somewhere in a datapack.
@@ -41,6 +43,7 @@ public class RPGLResourceTemplate extends JsonObject {
         resource.setOriginItem(originItem);
         resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 1);
         resource.asMap().putIfAbsent(RPGLResourceTO.EXHAUSTED_ALIAS, false);
+        resource.asMap().putIfAbsent(RPGLResourceTO.REFRESH_CRITERION_ALIAS, new ArrayList<>());
         if (resource.getRefreshCriterion().asList().isEmpty()) {
             resource.setRefreshCriterion(DEFAULT_REFRESH_CRITERION.deepClone());
         }

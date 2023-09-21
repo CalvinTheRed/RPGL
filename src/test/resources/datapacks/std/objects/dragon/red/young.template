@@ -23,8 +23,7 @@
   "classes": [
     {
       "id": "std:monster/dragon/red/young",
-      "level": 17,
-      "choices": { }
+      "level": 17
     }
   ],
   "races": [

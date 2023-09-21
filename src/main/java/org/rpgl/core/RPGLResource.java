@@ -133,11 +133,11 @@ public class RPGLResource extends RPGLTaggable {
         String actorAlias = criterion.getString("actor"); // TODO could this have a better field name?
         RPGLObject actor = null;
         boolean anyActor = false;
-        if ("source".equals(actorAlias)) {
+        if (Objects.equals("source", actorAlias)) {
             actor = subevent.getSource();
-        } else if ("target".equals(actorAlias)) {
+        } else if (Objects.equals("target", actorAlias)) {
             actor = subevent.getTarget();
-        } else if ("any".equals(actorAlias)) {
+        } else if (Objects.equals("any", actorAlias)) {
             anyActor = true;
         }
         if (Objects.equals(subevent.getSubeventId(), criterion.getString("subevent"))

@@ -46,10 +46,6 @@ RPGL repository.
 RPGL makes use of a number of custom classes which clients must understand to effectively use it. This section is
 intended to give a high-level summary of each of the core data types introduced by RPGL.
 
-- **RPGLClass.** This class represents any role-playing class (as distinct from Java classes). This includes the likes
-  of wizards, fighters, and rangers. The client is encouraged to use the `RPGLFactory.getClass(...)` method to get
-  references to objects of this type (this data type is not designed to have new instances created by the client, and
-  doing so is not recommended).
 - **RPGLEffect.** This class represents anything which might influence how RPGL processes certain events. This includes
   typical status effects such as being poisoned or stunned, as well as other more mechanical features such as scoring
   critical hits on rolls of 19 or 20 on the d20. The client is encouraged to use the `RPGLFactory.newEffect(...)` method
@@ -63,14 +59,20 @@ intended to give a high-level summary of each of the core data types introduced 
 - **RPGLObject.** This class represents anything which might appear on a game map or world map. This includes the likes
   of goblins, dragons, chairs, barrels, and unattended items. The client is encouraged to use the
   `RPGLFactory.newObject(...)` method to create objects of this type.
-- **RPGLRace.** This class represents any role-playing race. This includes the likes of humans, elves, and pixies. The
-  client is encouraged to use the `RPGLFactory.getRace(...)` method to get references to objects of this type (this data
-  type is not designed to have new instances created by the client, and doing so is not recommended).
 - **RPGLResource.** This class represents any expendable, non-item resources which might be expended by an object during
   a turn. This includes the likes of spell slots, actions, ki points, and action surges. The client is encouraged to use
   the `RPGLFactory.newResource(...)` method to create objects of this type.
 
-  
+
+- **RPGLClass.** This class represents any role-playing class (as distinct from Java classes). This includes the likes
+  of wizards, fighters, and rangers. The client is encouraged to use the `RPGLFactory.getClass(...)` method to get
+  references to objects of this type (this data type is not designed to have new instances created by the client, and
+  doing so is not recommended).
+- **RPGLRace.** This class represents any role-playing race. This includes the likes of humans, elves, and pixies. The
+  client is encouraged to use the `RPGLFactory.getRace(...)` method to get references to objects of this type (this data
+  type is not designed to have new instances created by the client, and doing so is not recommended).
+
+
 - **Subevent.** This class represents a particular low-level game mechanic. This includes the likes of making an attack
   roll, making a saving throw, making an ability check, determining an ability score, and gathering damage for a damage
   roll. Not all Subevents are accessible when defining an RPGLEvent, but all RPGLEvents are defined in terms of
@@ -154,8 +156,16 @@ of your content with an author key!
 `description` is the description of the Effect, as it would be displayed to a user.
 
 `subevent_filters` is an array of filters defining which subevents this Effect will apply itself to, under what
-conditions the Effect will be applied, and what the Effect's effect is when applied. Note that an Effect may have
-multiple behaviors for a single Subevent if multiple JSON objects are provided for it.
+conditions the Effect will be applied, and what the Effect's effect is when applied.
+
+`subevent_filters.<subevent id>` is a set of behaviors which apply to particular types of subevents being invoked within
+RPGL.
+
+`subevent_filters.<subevent id>[#].conditions` is an array of condition instructions which must be satisfied in order
+for the Effect to run its Functions.
+
+`subevent_filters.<subevent id>[#].functions` is an array of function instructions which constitute the effect this
+Effect has on qualifying Subevents.
 
 _As a rule of thumb, every Effect should have an `"objects_match"` Condition for each behavior to ensure that the
 Effect is restricted to only affect Subevents originating from or directed to the intended subject._
@@ -524,11 +534,11 @@ of your content with an author key!
 
 `description` is the description of the Item, as it would be displayed to a user.
 
-`tags` is a list of tags which describe the item. This field defaults to `[]` if not specified.
+`tags` is a list of tags which describe the Item. This field defaults to `[]` if not specified.
 
-`weight` is the weight of the item. This field defaults to 0 if not specified.
+`weight` is the weight of the Item. This field defaults to 0 if not specified.
 
-`cost` is the cost of the item. This field defaults to 0 if not specified.
+`cost` is the cost of the Item. This field defaults to 0 if not specified.
 
 `events` indicates which events the Item can grant to an Object. This field defaults to `{}` if not specified.
 
@@ -664,4 +674,371 @@ field may be ignored if this Item is not a shield.
 
 ## RPGLObject templates
 
+```
+{
+  "metadata": {...}
+  "name": "Object Name",
+  "description": "Object Description",
+  "tags": [...],
+  "ability_scores": {...},
+  "health_data": {
+    "base": #,
+    "current": #,
+    "temporary": #
+  },
+  "classes": [
+    {
+      "id": "class ID",
+      "level": #,
+      "choices": {
+        <choice name>: [...]
+      }
+    }
+  ],
+  "races": [...],
+  "equipped_items": {...},
+  "inventory": [...],
+  "events": [...],
+  "effects": [...],
+  "resources": [...],
+  "challenge_rating": #,
+  "proficiency_bonus": #
+}
+```
+
+<details>
+<summary>Read more</summary>
+
+`metadata` can contain any data the datapack developer wishes to include - this is an excellent place to claim ownership
+of your content with an author key!
+
+`name` is the name of this Object, as it would be displayed to a user.
+
+`description` is the description of the Object, as it would be displayed to a user.
+
+`tags` is a list of tags which describe the Object. This field defaults to `[]` if not specified.
+
+`ability_scores` is an object containing the raw ability scores for the Object.
+
+`health_data` contains information about the Object's health.
+
+`health_data.base` indicates the Object's base hit points (not including any modifiers provided by ability scores, level
+gain, and other features).
+
+`health_data.current` indicates the Object's current hit points.
+
+`health_data.temporary` indicates how many temporary hit points the Object has.
+
+`classes` is an array of the Object's levels in various Classes. This field defaults to `[]` if not specified.
+
+`classes[#].id` is a particular Class's ID.
+
+`classes[#].level` is how many levels the Object has in a Class.
+
+`classes[#].choices` indicates what choices the Object makes whenever a new level requires a choice be made, such as a
+Fighter choosing a Fighting Style at level 1. This field defaults to `{}` if not specified.
+
+`classes[#].choices.<choice name>` is an array of indices for selected options offered by a particular choice. These
+indices will correspond to the order of the options as defined in the appropriate Class template.
+
+`races` is an array of Race IDs indicating which Race(s) the Object belongs to. If the Object has a sub-race, that can
+be treated as a second Race and included in addition to the base Race. This field defaults to `[]` if not specified.
+
+_Note that as of RPGL v1.0.0-beta, if an Object has a Race specified in its template, any choices which must be made
+during the Object's creation must be included in the_ choices _fields of the Object's_ classes.
+
+`equipped_items` is an object indicating what items the Object has in which equipment slot. This field defaults to `{}`
+if not specified.
+
+`inventory` is an array of Items carried by the Object, beyond what it already has equipped. This field defaults to `[]`
+if not specified.
+
+`events` is an array indicating any extra Events made available to the Object. This field defaults to `[]` if not
+specified.
+
+`effects` is an array indicating any extra Effects applied to the Object. This field defaults to `[]` if not specified.
+
+`resources` is an array indicating any extra Resources made available to the Object. This field defaults to `[]` if not
+specified.
+
+`challenge_rating` indicates the challenge rating of the Object, if it has one. Note that this field contains a double,
+allowing for decimal values. This field is optional and will default to `null` if not specified.
+
+`proficiency_bonus` indicates the Object's proficiency bonus. If not specified, this field will default to `null` and
+any references to the Object's proficiency bonus will determine its value according to the Object's level.
+
+  <details>
+  <summary>See example: Knight</summary>
+
+  **Knight**
+
+  ```
+  {
+    "metadata": {
+      "author": "Calvin Withun"
+    },
+    "name": "Knight",
+    "description": "A knight.",
+    "tags": [
+      "humanoid"
+    ],
+    "ability_scores": {
+      "str": 16,
+      "dex": 11,
+      "con": 14,
+      "int": 11,
+      "wis": 11,
+      "cha": 15
+    },
+    "health_data": {
+      "base": 36,
+      "current": 52,
+      "temporary": 0
+    },
+    "equipped_items": {
+      "mainhand": "std:weapon/melee/martial/longsword",
+      "offhand": "std:armor/shield/metal",
+      "armor": "std:armor/heavy/plate"
+    },
+    "inventory": [
+      "std:weapon/ranged/martial/heavy_crossbow"
+    ],
+    "classes": [
+      {
+        "id": "std:common/base",
+        "level": 1
+      },
+      {
+        "id": "std:common/hit_die/d8",
+        "level": 8
+      }
+    ],
+    "races": [
+      "std:human"
+    ],
+    "proficiency_bonus": 2,
+    "challenge_rating": 3
+  }
+  ```
+  </details>
+  <details>
+  <summary>See example: Commoner</summary>
+
+  **Commoner**
+
+  ```
+  {
+    "metadata": {
+      "author": "Calvin Withun"
+    },
+    "name": "Commoner",
+    "description": "A Commoner.",
+    "ability_scores": {
+      "str": 10,
+      "dex": 10,
+      "con": 10,
+      "int": 10,
+      "wis": 10,
+      "cha": 10
+    },
+    "health_data": {
+      "base": 2,
+      "current": 2,
+      "temporary": 0
+    },
+    "proficiency_bonus": 2,
+    "challenge_rating": 0
+  }
+  ```
+  </details>
+  <details>
+  <summary>See example: Young Red Dragon</summary>
+
+  **Young Red Dragon**
+
+  ```
+  {
+    "metadata": {
+      "author": "Calvin Withun"
+    },
+    "name": "Young Red Dragon",
+    "description": "A young red dragon.",
+    "tags": [
+      "dragon"
+    ],
+    "ability_scores": {
+      "str": 23,
+      "dex": 10,
+      "con": 21,
+      "int": 14,
+      "wis": 11,
+      "cha": 19
+    },
+    "health_data": {
+      "base": 93,
+      "current": 178,
+      "temporary": 0
+    },
+    "classes": [
+      {
+        "id": "std:monster/dragon/red/young",
+        "level": 17
+      }
+    ],
+    "races": [
+      "std:dragon/red"
+    ],
+    "proficiency_bonus": 4,
+    "challenge_rating": 10
+  }
+  ```
+  </details>
+
+</details>
+
 ## RPGLResource templates
+
+```
+{
+  "metadata": {...}
+  "name": "Resource Name",
+  "description": "Resource Description",
+  "tags": [...],
+  "potency": #,
+  "refresh_criterion": [
+    {
+      "subevent": "<subevent id>",
+      "tags": [...],
+      "actor": "source" | "target" | "any",
+      "chance": #,
+      "required_generator": {
+        "dice": [
+          {
+            "count": #,
+            "size": #
+          }
+        ],
+        "bonus": #
+      }
+    }
+  ]
+}
+```
+
+<details>
+<summary>Read more</summary>
+
+`metadata` can contain any data the datapack developer wishes to include - this is an excellent place to claim ownership
+of your content with an author key!
+
+`name` is the name of this Resource, as it would be displayed to a user.
+
+`description` is the description of the Resource, as it would be displayed to a user.
+
+`tags` is a list of tags which describe the Resource.
+
+`potency` indicates the potency of the Resource. This field defaults to `1` if not specified.
+
+`refresh_criterion` is an array defining what must occur in order for the Resource to change from being exhausted to not
+being exhausted. If any one of the criterion are met, the Resource ceases to be exhausted. This field will default to
+`[ { "subevent": "info_subevent", "tags": [ "start_turn" ] } ]` if not specified **OR** if left as an empty array.
+
+`refresh_criterion[#].subevent` is a Subevent ID which can contribute to refreshing the Resource if it is exhausted.
+
+`refresh_criterion[#].tags` is an array of tags which must all be present in the Subevent in order for it to qualify for
+refreshing the Resource.
+
+`refresh_criterion[#].actor` indicated whether the owner of the Resource must be the source of the Subevent, the target
+of the Subevent, or either in order for the Subevent to qualify for refreshing the Resource. This field will default to
+`source` if not specified.
+
+`refresh_criterion[#].chance` indicates the odds that the Resource will be refreshed, should the Subevent meet all other
+criteria to do so. This should be a value between `1` and `100`. This field will default to `100` if not specified.
+
+`refresh_criterion[#].required_generator` is an object defining the algorithm used to decide how many times the Resource
+must be refreshed before it ceases to be exhausted. This algorithm is consulted each time the Resource is exhausted.
+This field defaults to `{ "dice": [], "bonus": 1 }` if not specified. 
+
+`refresh_criterion[#].required_generator.dice` indicates any dice which must be rolled as a part of determining how many
+times the Resource must be refreshed.
+
+`refresh_criterion[#].required_generator.dice[#].count` is the number of dice to roll.
+
+`refresh_criterion[#].required_generator.dice[#].size` is the size of dice being rolled.
+
+`refresh_criterion[#].required_generator.bonus` indicates any static bonus added to the number of times the Resource
+must be refreshed
+
+  <details>
+  <summary>See example: Action</summary>
+
+  **Action**
+
+  ```
+  {
+    "metadata": {
+      "author": "Calvin Withun"
+    },
+    "name": "Action",
+    "description": "This resource allows you to take actions on your turn.",
+    "tags": [
+      "action"
+    ]
+  }
+  ```
+  </details>
+  <details>
+  <summary>See example: 4th-Level Warlock Spell Slot</summary>
+
+  **4th-Level Warlock Spell Slot**
+
+  ```
+  {
+    "metadata": {
+      "author": "Calvin Withun"
+    },
+    "name": "Spell Slot (Pact Magic)",
+    "description": "This resource allows you to cast spells and use certain Invocations.",
+    "tags": [
+      "spell_slot",
+      "pact_spell_slot"
+    ],
+    "potency": 4,
+    "refresh_criterion": [
+      {
+        "subevent": "info_subevent",
+        "tags": [
+          "short_rest"
+        ]
+      },
+      {
+        "subevent": "info_subevent",
+        "tags": [
+          "long_rest"
+        ]
+      }
+    ]
+  }
+  ```
+  </details>
+  <details>
+  <summary>See example: d10 Hit Die</summary>
+
+  **d10 Hit Die**
+
+  ```
+  {
+    "metadata": {
+      "author": "Calvin Withun"
+    },
+    "name": "Hit Die (1d10)",
+    "description": "This resource represents your body's ability to heal itself, and can be used to heal during rests.",
+    "tags": [
+      "hit_die"
+    ],
+    "potency": 10
+  }
+  ```
+  </details>
+
+</details>
