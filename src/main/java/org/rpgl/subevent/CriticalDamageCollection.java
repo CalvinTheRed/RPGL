@@ -19,15 +19,15 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class CriticalHitDamageCollection extends Subevent implements DamageTypeSubevent {
+public class CriticalDamageCollection extends Subevent implements DamageTypeSubevent {
 
-    public CriticalHitDamageCollection() {
-        super("critical_hit_damage_collection");
+    public CriticalDamageCollection() {
+        super("critical_damage_collection");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new CriticalHitDamageCollection();
+        Subevent clone = new CriticalDamageCollection();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -35,7 +35,7 @@ public class CriticalHitDamageCollection extends Subevent implements DamageTypeS
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new CriticalHitDamageCollection();
+        Subevent clone = new CriticalDamageCollection();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;

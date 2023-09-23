@@ -13,7 +13,7 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.TemporaryHitPointRoll;
-import org.rpgl.subevent.TemporaryHitPointsDelivery;
+import org.rpgl.subevent.TemporaryHitPointDelivery;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -140,8 +140,8 @@ public class MaximizeTemporaryHitPointsTest {
         context.add(source);
         context.add(target);
 
-        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
-        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointDelivery temporaryHitPointDelivery = new TemporaryHitPointDelivery();
+        temporaryHitPointDelivery.joinSubeventData(new JsonObject() {{
             /*{
                 "temporary_hit_points": [
                     {
@@ -170,9 +170,9 @@ public class MaximizeTemporaryHitPointsTest {
             }});
         }});
 
-        temporaryHitPointsDelivery.setSource(source);
-        temporaryHitPointsDelivery.prepare(context, List.of());
-        temporaryHitPointsDelivery.setTarget(target);
+        temporaryHitPointDelivery.setSource(source);
+        temporaryHitPointDelivery.prepare(context, List.of());
+        temporaryHitPointDelivery.setTarget(target);
 
         MaximizeTemporaryHitPoints maximizeTemporaryHitPoints = new MaximizeTemporaryHitPoints();
         JsonObject functionJson = new JsonObject() {{
@@ -182,9 +182,9 @@ public class MaximizeTemporaryHitPointsTest {
             this.putString("function", "maximize_temporary_hit_points");
         }};
 
-        maximizeTemporaryHitPoints.execute(null, temporaryHitPointsDelivery, functionJson, context, List.of());
+        maximizeTemporaryHitPoints.execute(null, temporaryHitPointDelivery, functionJson, context, List.of());
 
-        assertEquals(12, temporaryHitPointsDelivery.getTemporaryHitPoints(),
+        assertEquals(12, temporaryHitPointDelivery.getTemporaryHitPoints(),
                 "execute should set all temporary hit point dice to their maximum face value"
         );
     }

@@ -120,7 +120,7 @@ public class AddTemporaryHitPointsTest {
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "execute should add temporary hit points to TemporaryHitPointCollection subevent"
         );
     }
@@ -176,7 +176,7 @@ public class AddTemporaryHitPointsTest {
 
         String expected = """
                 [{"bonus":5,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "execute should add source's dex modifier to TemporaryHitPointCollection subevent"
         );
     }
@@ -232,7 +232,7 @@ public class AddTemporaryHitPointsTest {
 
         String expected = """
                 [{"bonus":20,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "execute should add source's dex score to TemporaryHitPointCollection subevent"
         );
     }
@@ -284,7 +284,7 @@ public class AddTemporaryHitPointsTest {
 
         String expected = """
                 [{"bonus":2,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "execute should add source's proficiency modifier to TemporaryHitPointCollection subevent"
         );
     }
@@ -338,7 +338,7 @@ public class AddTemporaryHitPointsTest {
 
         String expected = """
                 [{"bonus":1,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "execute should add source's level to TemporaryHitPointCollection subevent"
         );
     }
@@ -390,7 +390,7 @@ public class AddTemporaryHitPointsTest {
 
         String expected = """
                 [{"bonus":9,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "execute should add source's level to TemporaryHitPointCollection subevent"
         );
     }

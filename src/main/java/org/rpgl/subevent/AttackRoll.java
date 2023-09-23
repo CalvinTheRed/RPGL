@@ -280,21 +280,21 @@ public class AttackRoll extends Roll {
         }
 
         // Collect any extra damage bonuses which aren't doubled
-        CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
-        criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
+        CriticalDamageCollection criticalDamageCollection = new CriticalDamageCollection();
+        criticalDamageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", damageArray);
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});
         }});
-        criticalHitDamageCollection.setOriginItem(this.getOriginItem());
-        criticalHitDamageCollection.setSource(this.getSource());
-        criticalHitDamageCollection.prepare(context, resources);
-        criticalHitDamageCollection.setTarget(this.getTarget());
-        criticalHitDamageCollection.invoke(context, resources);
+        criticalDamageCollection.setOriginItem(this.getOriginItem());
+        criticalDamageCollection.setSource(this.getSource());
+        criticalDamageCollection.prepare(context, resources);
+        criticalDamageCollection.setTarget(this.getTarget());
+        criticalDamageCollection.invoke(context, resources);
 
         // Set the attack damage to the critical hit damage collection
-        this.json.putJsonArray("damage", criticalHitDamageCollection.getDamageCollection());
+        this.json.putJsonArray("damage", criticalDamageCollection.getDamageCollection());
     }
 
     /**

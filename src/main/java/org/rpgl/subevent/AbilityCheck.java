@@ -8,7 +8,7 @@ import org.rpgl.json.JsonObject;
 import java.util.List;
 
 /**
- * This Subevent is dedicated to performing ability checks and skill checks.
+ * This Subevent is dedicated to performing ability checks, including skill checks and tool checks.
  * <br>
  * <br>
  * Source: an RPGLObject initiating an ability check

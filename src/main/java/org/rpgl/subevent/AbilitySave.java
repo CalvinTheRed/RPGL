@@ -6,6 +6,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This Subevent is dedicated to making an ability save and resolving all fallout from making the save. This is a
@@ -18,7 +19,7 @@ import java.util.List;
  *
  * @author Calvin Withun
  */
-public class AbilitySave extends Subevent {
+public class AbilitySave extends Subevent implements AbilitySubevent, CancelableSubevent {
 
     public AbilitySave() {
         super("ability_save");
@@ -41,8 +42,19 @@ public class AbilitySave extends Subevent {
     }
 
     @Override
+    public void cancel() {
+        this.json.putBoolean("cancel", true);
+    }
+
+    @Override
+    public boolean isNotCanceled() {
+        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
+    }
+
+    @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
+        this.json.putBoolean("cancel", false);
         // Add tag so nested subevents such as DamageCollection can know they hail from an ability save.
         this.addTag("ability_save");
         this.calculateDifficultyClass(context, resources);
@@ -67,6 +79,11 @@ public class AbilitySave extends Subevent {
         } else {
             this.resolveNestedSubevents("pass", context, resources);
         }
+    }
+
+    @Override
+    public String getAbility(RPGLContext context) {
+        return this.json.getString("ability");
     }
 
     /**
@@ -115,5 +132,4 @@ public class AbilitySave extends Subevent {
             }
         }
     }
-
 }

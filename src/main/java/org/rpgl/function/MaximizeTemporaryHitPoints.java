@@ -6,7 +6,7 @@ import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.subevent.TemporaryHitPointRoll;
-import org.rpgl.subevent.TemporaryHitPointsDelivery;
+import org.rpgl.subevent.TemporaryHitPointDelivery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +29,8 @@ public class MaximizeTemporaryHitPoints extends Function {
                     List<RPGLResource> resources) {
         if (subevent instanceof TemporaryHitPointRoll temporaryHitPointRoll) {
             temporaryHitPointRoll.maximizeTemporaryHitPointsDice();
-        } else if (subevent instanceof TemporaryHitPointsDelivery temporaryHitPointsDelivery) {
-            temporaryHitPointsDelivery.maximizeTemporaryHitPointDice();
+        } else if (subevent instanceof TemporaryHitPointDelivery temporaryHitPointDelivery) {
+            temporaryHitPointDelivery.maximizeTemporaryHitPointDice();
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

@@ -7,7 +7,7 @@ import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
-import org.rpgl.subevent.CriticalHitDamageCollection;
+import org.rpgl.subevent.CriticalDamageCollection;
 import org.rpgl.subevent.DamageCollection;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This Function is dedicated to adding to a DamageCollection or a CriticalHitDamageCollection Subevent. Note that while
+ * This Function is dedicated to adding to a DamageCollection or a CriticalDamageCollection Subevent. Note that while
  * this Function can add negative bonuses, it can not add "negative dice."
  *
  * @author Calvin Withun
@@ -38,8 +38,8 @@ public class AddDamage extends Function {
             for (int i = 0; i < damageArray.size(); i++) {
                 damageCollection.addDamage(processJson(effect, subevent, damageArray.getJsonObject(i), context));
             }
-        } else if (subevent instanceof CriticalHitDamageCollection criticalHitDamageCollection) {
-            criticalHitDamageCollection.addDamage(processJson(effect, subevent, functionJson.getJsonObject("damage"), context));
+        } else if (subevent instanceof CriticalDamageCollection criticalDamageCollection) {
+            criticalDamageCollection.addDamage(processJson(effect, subevent, functionJson.getJsonObject("damage"), context));
         } else {
             LOGGER.warn("Can not execute function on " + subevent.getClass());
         }

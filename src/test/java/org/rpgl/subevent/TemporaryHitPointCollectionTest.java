@@ -96,7 +96,7 @@ public class TemporaryHitPointCollectionTest {
 
         String expected = """
                 [{"bonus":2,"dice":[{"roll":1},{"roll":6}]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "getHealingCollection should return an object with the subevent's bonus and dice stored inside"
         );
     }
@@ -141,14 +141,14 @@ public class TemporaryHitPointCollectionTest {
         temporaryHitPointCollection.addTemporaryHitPoints(extraTemporaryHitPoints);
         expected = """
                 [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "extra temporary hit point dice and bonus should be applied properly"
         );
 
         temporaryHitPointCollection.addTemporaryHitPoints(extraTemporaryHitPoints);
         expected = """
                 [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]},{"bonus":2,"dice":[{"size":6}]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "extra temporary hit point dice and bonus should not delete or override any old data"
         );
     }
@@ -166,7 +166,7 @@ public class TemporaryHitPointCollectionTest {
 
         String expected = """
                 []""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "prepare should default to [ ] if no temporary hit points are defined"
         );
     }
@@ -203,7 +203,7 @@ public class TemporaryHitPointCollectionTest {
 
         String expected = """
                 [{"bonus":10,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "prepare should correctly interpret temporary hit points instructions"
         );
     }
@@ -248,7 +248,7 @@ public class TemporaryHitPointCollectionTest {
 
         String expected = """
                 [{"bonus":5,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "prepare should correctly interpret temporary hit points instructions"
         );
     }
@@ -293,7 +293,7 @@ public class TemporaryHitPointCollectionTest {
 
         String expected = """
                 [{"bonus":20,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "prepare should correctly interpret temporary hit points instructions"
         );
     }
@@ -334,7 +334,7 @@ public class TemporaryHitPointCollectionTest {
 
         String expected = """
                 [{"bonus":2,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
+        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointCollection().toString(),
                 "prepare should correctly interpret temporary hit points instructions"
         );
     }

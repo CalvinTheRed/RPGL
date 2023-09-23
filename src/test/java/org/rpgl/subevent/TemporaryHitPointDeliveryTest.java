@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Calvin Withun
  */
-public class TemporaryHitPointsDeliveryTest {
+public class TemporaryHitPointDeliveryTest {
 
     @BeforeAll
     static void beforeAll() {
@@ -45,7 +45,7 @@ public class TemporaryHitPointsDeliveryTest {
     @Test
     @DisplayName("invoke wrong subevent")
     void invoke_wrongSubevent_throwsException() {
-        Subevent subevent = new TemporaryHitPointsDelivery();
+        Subevent subevent = new TemporaryHitPointDelivery();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
@@ -62,8 +62,8 @@ public class TemporaryHitPointsDeliveryTest {
     @Test
     @DisplayName("getTemporaryHitPoints returns stored temporary hit point amount")
     void getTemporaryHitPoints_returnsStoredDamageValues() {
-        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
-        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointDelivery temporaryHitPointDelivery = new TemporaryHitPointDelivery();
+        temporaryHitPointDelivery.joinSubeventData(new JsonObject() {{
             /*{
                 "temporary_hit_points": [
                     {
@@ -87,7 +87,7 @@ public class TemporaryHitPointsDeliveryTest {
             }});
         }});
 
-        assertEquals(5, temporaryHitPointsDelivery.getTemporaryHitPoints(),
+        assertEquals(5, temporaryHitPointDelivery.getTemporaryHitPoints(),
                 "getTemporaryHitPoints should return the temporary hit points being conveyed by the subevent"
         );
     }
@@ -95,8 +95,8 @@ public class TemporaryHitPointsDeliveryTest {
     @Test
     @DisplayName("maximizeTemporaryHitPointDice maximizes all temporary hit point dice")
     void maximizeTemporaryHitPointDice_maximizesAllTemporaryHitPointDice() {
-        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
-        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointDelivery temporaryHitPointDelivery = new TemporaryHitPointDelivery();
+        temporaryHitPointDelivery.joinSubeventData(new JsonObject() {{
             /*{
                 "temporary_hit_points": [
                     {
@@ -130,9 +130,9 @@ public class TemporaryHitPointsDeliveryTest {
             }});
         }});
 
-        temporaryHitPointsDelivery.maximizeTemporaryHitPointDice();
+        temporaryHitPointDelivery.maximizeTemporaryHitPointDice();
 
-        assertEquals(4+6+8, temporaryHitPointsDelivery.getTemporaryHitPoints(),
+        assertEquals(4+6+8, temporaryHitPointDelivery.getTemporaryHitPoints(),
                 "getTemporaryHitPoints should return the maximum temporary hit points possible given die sizes"
         );
     }

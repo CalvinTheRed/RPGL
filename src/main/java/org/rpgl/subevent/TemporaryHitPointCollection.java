@@ -75,7 +75,7 @@ public class TemporaryHitPointCollection extends Subevent {
      * @param temporaryHitPointsJson healing data to be added to the collection
      */
     public void addTemporaryHitPoints(JsonObject temporaryHitPointsJson) {
-        this.getTemporaryHitPointsCollection().addJsonObject(temporaryHitPointsJson);
+        this.getTemporaryHitPointCollection().addJsonObject(temporaryHitPointsJson);
     }
 
     /**
@@ -83,7 +83,7 @@ public class TemporaryHitPointCollection extends Subevent {
      *
      * @return a JsonArray storing healing dice and a healing bonus
      */
-    public JsonArray getTemporaryHitPointsCollection() {
+    public JsonArray getTemporaryHitPointCollection() {
         return this.json.getJsonArray("temporary_hit_points");
     }
 

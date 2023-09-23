@@ -99,7 +99,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
          */
         TemporaryHitPointRoll baseTemporaryHitPointRoll = new TemporaryHitPointRoll();
         baseTemporaryHitPointRoll.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("temporary_hit_points", baseTemporaryHitPointCollection.getTemporaryHitPointsCollection());
+            this.putJsonArray("temporary_hit_points", baseTemporaryHitPointCollection.getTemporaryHitPointCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("base_temporary_hit_points_roll");
@@ -130,25 +130,25 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         /*
          * Collect target typed temporary hit points dice and bonuses
          */
-        TemporaryHitPointCollection targetTemporaryHitPointsCollection = new TemporaryHitPointCollection();
-        targetTemporaryHitPointsCollection.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointCollection targetTemporaryHitPointCollection = new TemporaryHitPointCollection();
+        targetTemporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_temporary_hit_point_collection");
             }});
         }});
-        targetTemporaryHitPointsCollection.setOriginItem(this.getOriginItem());
-        targetTemporaryHitPointsCollection.setSource(this.getSource());
-        targetTemporaryHitPointsCollection.prepare(context, resources);
-        targetTemporaryHitPointsCollection.setTarget(this.getTarget());
-        targetTemporaryHitPointsCollection.invoke(context, resources);
+        targetTemporaryHitPointCollection.setOriginItem(this.getOriginItem());
+        targetTemporaryHitPointCollection.setSource(this.getSource());
+        targetTemporaryHitPointCollection.prepare(context, resources);
+        targetTemporaryHitPointCollection.setTarget(this.getTarget());
+        targetTemporaryHitPointCollection.invoke(context, resources);
 
         /*
          * Roll target temporary hit points dice
          */
         TemporaryHitPointRoll targetTemporaryHitPointRoll = new TemporaryHitPointRoll();
         targetTemporaryHitPointRoll.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("temporary_hit_points", targetTemporaryHitPointsCollection.getTemporaryHitPointsCollection());
+            this.putJsonArray("temporary_hit_points", targetTemporaryHitPointCollection.getTemporaryHitPointCollection());
             this.putJsonArray("tags", new JsonArray() {{
                 this.asList().addAll(json.getJsonArray("tags").asList());
                 this.addString("target_healing_roll");
@@ -175,17 +175,17 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
      * @throws Exception if an exception occurs
      */
     void deliverTemporaryHitPoints(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
-        temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
+        TemporaryHitPointDelivery temporaryHitPointDelivery = new TemporaryHitPointDelivery();
+        temporaryHitPointDelivery.joinSubeventData(new JsonObject() {{
             this.putJsonArray("temporary_hit_points", json.getJsonArray("temporary_hit_points"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
-        temporaryHitPointsDelivery.setOriginItem(this.getOriginItem());
-        temporaryHitPointsDelivery.setSource(this.getSource());
-        temporaryHitPointsDelivery.prepare(context, resources);
-        temporaryHitPointsDelivery.setTarget(this.getTarget());
-        temporaryHitPointsDelivery.invoke(context, resources);
-        this.getTarget().receiveTemporaryHitPoints(temporaryHitPointsDelivery, this.json.getJsonArray("rider_effects"));
+        temporaryHitPointDelivery.setOriginItem(this.getOriginItem());
+        temporaryHitPointDelivery.setSource(this.getSource());
+        temporaryHitPointDelivery.prepare(context, resources);
+        temporaryHitPointDelivery.setTarget(this.getTarget());
+        temporaryHitPointDelivery.invoke(context, resources);
+        this.getTarget().receiveTemporaryHitPoints(temporaryHitPointDelivery, this.json.getJsonArray("rider_effects"));
     }
 
 }

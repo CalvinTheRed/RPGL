@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This Function is dedicated to adding some amount of temporary hit points to a TemporaryHitPointsCollection Subevent.
+ * This Function is dedicated to adding some amount of temporary hit points to a TemporaryHitPointCollection Subevent.
  *
  * @author Calvin Withun
  */

@@ -1,3 +1,9 @@
+<style>
+  .indent {
+    margin-left: 25px;
+  }
+</style>
+
 # RPGL
 RPGL (Role-Playing Game Library) is a Java code library designed to automate certain common game mechanics for table-top
 role-playing games (TTRPG's), namely Dungeons and Dragons 5th edition. RPGL employs a generic solution to accomplish
@@ -170,6 +176,7 @@ Effect has on qualifying Subevents.
 _As a rule of thumb, every Effect should have an `"objects_match"` Condition for each behavior to ensure that the
 Effect is restricted to only affect Subevents originating from or directed to the intended subject._
 
+<div class="indent">
   <details>
   <summary>See example: Fighting Style (Archery)</summary>
 
@@ -281,6 +288,7 @@ Effect is restricted to only affect Subevents originating from or directed to th
   }
   ```
   </details>
+</div>
   
 </details>
 
@@ -349,10 +357,11 @@ not specified._
 
 `subevents` indicates which subevents are invoked when this Event is invoked.
 
+<div class="indent">
   <details>
   <summary>See example: Fireball</summary>
 
-**Fireball**
+  **Fireball**
 
   ```
   {
@@ -405,7 +414,7 @@ not specified._
   <details>
   <summary>See example: Second Wind</summary>
 
-**Second Wind**
+  **Second Wind**
 
   ```
   {
@@ -452,7 +461,7 @@ not specified._
   <details>
   <summary>See example: Fire Breath</summary>
 
-**Fire Breath**
+  **Fire Breath**
 
   ```
   {
@@ -493,6 +502,7 @@ not specified._
   }
   ```
   </details>
+</div>
 
 </details>
 
@@ -573,6 +583,7 @@ this bonus.
 `armor_class_bonus` is the bonus provided to an Object's armor class when the Item is being wielded as a shield. This
 field may be ignored if this Item is not a shield.
 
+<div class="indent">
   <details>
   <summary>See example: Breastplate</summary>
 
@@ -669,6 +680,7 @@ field may be ignored if this Item is not a shield.
   }
   ```
   </details>
+</div>
 
 </details>
 
@@ -767,6 +779,7 @@ allowing for decimal values. This field is optional and will default to `null` i
 `proficiency_bonus` indicates the Object's proficiency bonus. If not specified, this field will default to `null` and
 any references to the Object's proficiency bonus will determine its value according to the Object's level.
 
+<div class="indent">
   <details>
   <summary>See example: Knight</summary>
 
@@ -893,6 +906,7 @@ any references to the Object's proficiency bonus will determine its value accord
   }
   ```
   </details>
+</div>
 
 </details>
 
@@ -969,6 +983,7 @@ times the Resource must be refreshed.
 `refresh_criterion[#].required_generator.bonus` indicates any static bonus added to the number of times the Resource
 must be refreshed
 
+<div class="indent">
   <details>
   <summary>See example: Action</summary>
 
@@ -1040,6 +1055,7 @@ must be refreshed
   }
   ```
   </details>
+</div>
 
 </details>
 
@@ -1047,17 +1063,214 @@ must be refreshed
 RPGL makes use of many different Subevents, all with their own unique purpose and a unique set of Conditions and
 Functions which they can synergize with. Fortunately for new datapack developers, not every Subevent is
 Event-compatible! Many of them operate in the background, and will never appear in an Event template. This section will
-provide an overview for every Event-compatible Subevent.
+provide an overview for all Subevents, and indicate which ones can be directly used in an Event.
 
 _Note that which Conditions and Functions synergize with which Subevents will be described in the_ Conditions _and_
 Functions _sections following this one._
 
 <details>
+<summary>AbilityCheck</summary>
+
+**AbilityCheck**
+
+```
+{
+  "subevent": "ability_check",
+  "tags": [...],
+  "ability": "...",
+  "skill": "..."
+}
+```
+
+This subevent is dedicated to resolving ability checks, including skill checks and ability checks involving tools.
+
+Source: an RPGLObject initiating an ability check
+
+Target: an RPGLObject being required to make an ability check
+
+This Subevent **CAN NOT** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+
+  `tags` is an array of tags which describe the Subevent.
+
+  `ability` is which ability score the subevent source uses to make the check.
+
+  `skill` is which skill is involved in making the check. This field is optional; if it is not specified, it will remain
+  null and the ability check will resolve without a skill.
+
+  _Note that_ skill _can also be used to indicate a tool._
+
+  Conditions:
+
+  <ul>
+    <li>CheckAbility</li>
+    <li>CheckSkill</li>
+    <li>EquippedItemHasTag</li>
+    <li>SubeventHasTag</li>
+  </ul>
+
+  Functions:
+
+  <ul>
+    <li>AddBonus</li>
+    <li>CancelSubevent</li>
+    <li>GiveExpertise</li>
+    <li>GiveHalfProficiency</li>
+    <li>GiveProficiency</li>
+    <li>GrantAdvantage</li>
+    <li>GrantDisadvantage</li>
+    <li>SetBase</li>
+    <li>SetMinimum</li>
+  </ul>
+
+  </details>
+</div>
+</details>
+
+<details>
 <summary>AbilityContest</summary>
+
+**AbilityContest**
+
+```
+{
+  "subevent": "ability_contest",
+  "tags": [...]
+  "source_check": {
+    "ability": "...",
+    "skill": "..."
+  },
+  "target_check": {
+    "ability": "...",
+    "skill": "..."
+  },
+  "pass": [
+    { <subevent instructions> }
+  ],
+  "fail": [
+    { <subevent instructions> }
+  ]
+}
+```
+
+This Subevent is dedicated to resolving ability contests between two RPGLObjects. It creates two `AbilityCheck`
+Subevents, one for the source and one for the target, and pits them against each other.
+
+Source: an RPGLObject initiating an ability check
+
+Target: an RPGLObject against whom an ability check is being initiated
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+
+  `source_check` indicates instructions for the ability check to be made by the source of the Subevent.
+
+  `source_check.ability` is which ability score the subevent source uses to make the check.
+
+  `source_check.skill` is which skill is involved in making the check. This field is optional; if it is not specified,
+  it will remain null and the ability check will resolve without a skill.
+
+  _Note that_ source_check.skill _can also be used to indicate a tool._
+
+  `target_check` indicates instructions for the ability check to be made by the target of the Subevent.
+  
+  `target_check.ability` is which ability score the subevent target uses to make the check.
+
+  `target_check.skill` is which skill is involved in making the check. This field is optional; if it is not specified,
+  it will remain null and the ability check will resolve without a skill.
+  
+  _Note that_ target_check.skill _can also be used to indicate a tool._
+  
+  Conditions:
+
+  _This Subevent has no special Conditions with which it is compatible._
+
+  Functions:
+
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+</div>
 </details>
 
 <details>
 <summary>AbilitySave</summary>
+
+**AbilitySave**
+
+```
+{
+  "subevent": "ability_save",
+  "tags": [...],
+  "ability": "...",
+  "skill": "...",
+  "difficulty_class_ability": "...",
+  "pass": [
+    { <subevent instructions> }
+  ],
+  "fail": [
+    { <subevent instructions> }
+  ]
+}
+```
+
+This Subevent is dedicated to making an ability save and resolving all fallout from making the save. It
+creates an `AbilityCheck` Subevent to perform the ability check used for the save, and uses a
+`CalculateSaveDifficultyClass` Subevent to determine the save DC.
+
+Source: an RPGLObject requiring that other RPGLObjects make an ability save
+
+Target: an RPGLObject making an ability save
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `ability` is which ability score the subevent target uses to make the save.
+  
+  `skill` is which skill is involved in making the save. This field is optional; if it is not specified, it will remain
+  null and the ability save will resolve without a skill.
+  
+  _Note that_ skill _can also be used to indicate a tool._
+  
+  `difficulty_class_ability` is the ability score the Subevent source uses to determine the difficulty class of the save.
+  
+  `pass` is an array of Subevent instructions establishing the fallout when the save passes. The save is considered to
+  have passed if the save meets or exceeds its difficulty class.
+  
+  `fail` is an array of Subevent instructions establishing the fallout when the save fails. The save is considered to have
+  failed if the save is less than its difficulty class.
+  
+  Conditions:
+
+  _This Subevent has no special Conditions with which it is compatible._
+
+  Functions:
+
+  <ul>
+    <li>CancelSubevent</li>
+  </ul>
+
+  </details>
+</div>
 </details>
 
 <details>
@@ -1065,7 +1278,59 @@ Functions _sections following this one._
 </details>
 
 <details>
+<summary>AttackAbilityCollection</summary>
+</details>
+
+<details>
 <summary>AttackRoll</summary>
+</details>
+
+<details>
+<summary>CalculateAbilityScore</summary>
+</details>
+
+<details>
+<summary>CalculateBaseArmorClass</summary>
+</details>
+
+<details>
+<summary>CalculateCriticalHitThreshold</summary>
+</details>
+
+<details>
+<summary>CalculateEffectiveArmorClass</summary>
+</details>
+
+<details>
+<summary>CalculateMaximumHitPoints</summary>
+</details>
+
+<details>
+<summary>CalculateProficiencyBonus</summary>
+</details>
+
+<details>
+<summary>CalculateSaveDifficultyClass</summary>
+</details>
+
+<details>
+<summary>CriticalDamageConfirmation</summary>
+</details>
+
+<details>
+<summary>DamageAffinity</summary>
+</details>
+
+<details>
+<summary>DamageCollection</summary>
+</details>
+
+<details>
+<summary>DamageDelivery</summary>
+</details>
+
+<details>
+<summary>DamageRoll</summary>
 </details>
 
 <details>
@@ -1078,6 +1343,14 @@ Functions _sections following this one._
 
 <details>
 <summary>ExhaustResource</summary>
+</details>
+
+<details>
+<summary>GetEvents</summary>
+</details>
+
+<details>
+<summary>GetObjectTags</summary>
 </details>
 
 <details>
@@ -1094,6 +1367,18 @@ Functions _sections following this one._
 
 <details>
 <summary>Heal</summary>
+</details>
+
+<details>
+<summary>HealingCollection</summary>
+</details>
+
+<details>
+<summary>HealingDelivery</summary>
+</details>
+
+<details>
+<summary>HealingRoll</summary>
 </details>
 
 <details>
@@ -1120,7 +1405,19 @@ Functions _sections following this one._
 <summary>TakeResource</summary>
 </details>
 
-# Conditions
+<details>
+<summary>TemporaryHitPointCollection</summary>
+</details>
+
+<details>
+<summary>TemporaryHitPointDelivery</summary>
+</details>
+
+<details>
+<summary>TemporaryHitPointRoll</summary>
+</details>
+
+<!--# Conditions
 RPGL provides datapack developers with a suite of Conditions used to control when Effects act upon Subevents. This
 section will provide an overview for all of RPGL's Conditions, and which Subevents they apply to.
 
@@ -1325,3 +1622,4 @@ Subevents. This section will provide an overview for all of RPGL's Functions, an
 </details>
 
 <br />
+-->

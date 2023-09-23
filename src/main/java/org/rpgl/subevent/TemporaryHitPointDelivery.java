@@ -13,15 +13,15 @@ import org.rpgl.json.JsonObject;
  *
  * @author Calvin Withun
  */
-public class TemporaryHitPointsDelivery extends Subevent {
+public class TemporaryHitPointDelivery extends Subevent {
 
-    public TemporaryHitPointsDelivery() {
+    public TemporaryHitPointDelivery() {
         super("temporary_hit_points_delivery");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new TemporaryHitPointsDelivery();
+        Subevent clone = new TemporaryHitPointDelivery();
         clone.joinSubeventData(this.json);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
@@ -29,7 +29,7 @@ public class TemporaryHitPointsDelivery extends Subevent {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new TemporaryHitPointsDelivery();
+        Subevent clone = new TemporaryHitPointDelivery();
         clone.joinSubeventData(jsonData);
         clone.modifyingEffects.addAll(this.modifyingEffects);
         return clone;
