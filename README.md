@@ -1129,8 +1129,9 @@ This Subevent **CAN NOT** be referenced in an Event.
   </ul>
 
   </details>
+  <br/>
 </div>
-</details>
+</details><!--AbilityCheck-->
 
 <details>
 <summary>AbilityContest</summary>
@@ -1202,8 +1203,9 @@ This Subevent **CAN** be referenced in an Event.
   _This Subevent has no special Functions with which it is compatible._
 
   </details>
+  <br/>
 </div>
-</details>
+</details><!--AbilityContest-->
 
 <details>
 <summary>AbilitySave</summary>
@@ -1270,152 +1272,1621 @@ This Subevent **CAN** be referenced in an Event.
   </ul>
 
   </details>
+  <br/>
 </div>
-</details>
+</details><!--AbilitySave-->
 
 <details>
 <summary>AddOriginItemTag</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--AddOriginItemTag-->
 
 <details>
 <summary>AttackAbilityCollection</summary>
-</details>
+
+**AddOriginItemTag**
+
+This Subevent is dedicated to collecting non-standard attack abilities for attacks made with an Item.
+
+Source: an RPGLObject collecting valid events for weapon attacks
+
+Target: should be the same as the source
+
+This Subevent **CAN NOT** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  <ul>
+    <li>AddAttackAbility</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+</details><!--AttackAbilityCollection-->
 
 <details>
 <summary>AttackRoll</summary>
-</details>
+
+**AttackRoll**
+
+```
+{
+  "subevent": "attack_roll",
+  "tags": [...],
+  "attack_type": "melee" | "ranged" | "thrown",
+  "attack_ability": "...",
+  "damage": [
+    { <damage instructions> }
+  ],
+  "withhold_damage_modifier": t/f,
+  "vampirism": {
+    "damage_type": "...",
+    "round_up": t/f,
+    "numerator": #,
+    "denominator": #
+  }
+}
+```
+
+This Subevent is dedicated to making an attack roll and resolving all fallout from making the attack.
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `attack_type` is the type of attack this Subevent represents.
+
+  `attack_ability` indicates which ability is used for the attack.
+
+  `damage` is an array of damage instructions defining the damage dealt by the attack on a hit.
+
+  `withhold_damage_modifier` indicates whether the attack's damage should include the modifier from the attack ability.
+
+  `vampirism` indicates any vampiric properties possessed by the attack. This allows the attacker to heal some portion
+  of the damage dealt by the attack. This field is optional, and if left unspecified, the attack will resolve without
+  applying any vampirism.
+
+  `vampirism.damage_type` indicates which damage type has the vampiric property. This field is optional, and all damage
+  dealt by the attack will become vampiric if left unspecified.
+
+  `vampirism.round_up` indicates whether the vampiric calculation should round up. This field defaults to `false` if not
+  specified.
+
+  `vampirism.numerator` is the numerator by which the vampiric damage is multiplied during calculation to determine the
+  vampiric healing.
+
+  `vampirism.denominator` is the denominator by which the vampiric damage is divided during calculation to determine the
+  vampiric healing.
+  
+  Conditions:
+  
+  <ul>
+    <li>CheckAbility</li>
+  </ul>
+  
+  Functions:
+  
+  <ul>
+    <li>ApplyVampirism</li>
+    <li>CancelSubevent</li>
+    <li>GrantAdvantage</li>
+    <li>GrantDisadvantage</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+</details><!--AttackRoll-->
 
 <details>
 <summary>CalculateAbilityScore</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CalculateAbilityScore-->
 
 <details>
 <summary>CalculateBaseArmorClass</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CalculateBaseArmorClass-->
 
 <details>
 <summary>CalculateCriticalHitThreshold</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CalculateCriticalHitThreshold-->
 
 <details>
 <summary>CalculateEffectiveArmorClass</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CalculateEffectiveArmorClass-->
 
 <details>
 <summary>CalculateMaximumHitPoints</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CalculateMaximumHitPoints-->
 
 <details>
 <summary>CalculateProficiencyBonus</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CalculateProficiencyBonus-->
 
 <details>
 <summary>CalculateSaveDifficultyClass</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CalculateSaveDifficultyClass-->
 
 <details>
 <summary>CriticalDamageConfirmation</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--CriticalDamageConfirmation-->
 
 <details>
 <summary>DamageAffinity</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--DamageAffinity-->
 
 <details>
 <summary>DamageCollection</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--DamageCollection-->
 
 <details>
 <summary>DamageDelivery</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--DamageDelivery-->
 
 <details>
 <summary>DamageRoll</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--DamageRoll-->
 
 <details>
 <summary>DealDamage</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--DealDamage-->
 
 <details>
 <summary>DestroyOriginItem</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--DestroyOriginItem-->
 
 <details>
 <summary>ExhaustResource</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--ExhaustResource-->
 
 <details>
 <summary>GetEvents</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--GetEvents-->
 
 <details>
 <summary>GetObjectTags</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--GetObjectTags-->
 
 <details>
 <summary>GiveEffect</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--GiveEffect-->
 
 <details>
 <summary>GiveResource</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--GiveResource-->
 
 <details>
 <summary>GiveTemporaryHitPoints</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--GiveTemporaryHitPoints-->
 
 <details>
 <summary>Heal</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--Heal-->
 
 <details>
 <summary>HealingCollection</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--HealingCollection-->
 
 <details>
 <summary>HealingDelivery</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--HealingDelivery-->
 
 <details>
 <summary>HealingRoll</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--HealingRoll-->
 
 <details>
 <summary>InfoSubevent</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--InfoSubevent-->
 
 <details>
 <summary>RefreshResource</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--RefreshResource-->
 
 <details>
 <summary>RemoveEffect</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--RemoveEffect-->
 
 <details>
 <summary>RemoveOriginItemTag</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--RemoveOriginItemTag-->
 
 <details>
 <summary>SavingThrow</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--SavingThrow-->
 
 <details>
 <summary>TakeResource</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--TakeResource-->
 
 <details>
 <summary>TemporaryHitPointCollection</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--TemporaryHitPointCollection-->
 
 <details>
 <summary>TemporaryHitPointDelivery</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--TemporaryHitPointDelivery-->
 
 <details>
 <summary>TemporaryHitPointRoll</summary>
-</details>
+
+**AddOriginItemTag**
+
+```
+{
+  "subevent": "add_origin_item_tag",
+  "tags": [...],
+  "tag": "..."
+}
+```
+
+This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+
+Source: an RPGLObject adding a tag to an origin item
+
+Target: should be the same as the source
+
+This Subevent **CAN** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+  
+  `tags` is an array of tags which describe the Subevent.
+  
+  `tag` is the tag to be added to the origin item.
+  
+  Conditions:
+  
+  _This Subevent has no special Conditions with which it is compatible._
+  
+  Functions:
+  
+  _This Subevent has no special Functions with which it is compatible._
+
+  </details>
+  <br/>
+</div>
+</details><!--TemporaryHitPointRoll-->
 
 <!--# Conditions
 RPGL provides datapack developers with a suite of Conditions used to control when Effects act upon Subevents. This
