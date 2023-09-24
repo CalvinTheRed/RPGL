@@ -1580,34 +1580,20 @@ This Subevent **CAN NOT** be referenced in an Event.
 <details>
 <summary>CalculateMaximumHitPoints</summary>
 
-**AddOriginItemTag**
+**CalculateMaximumHitPoints**
 
-```
-{
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
-}
-```
+This Subevent is dedicated to calculating the maximum hit points of an RPGLObject.
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
-
-Source: an RPGLObject adding a tag to an origin item
+Source: the RPGLObject whose maximum hit point value is being calculated
 
 Target: should be the same as the source
 
-This Subevent **CAN** be referenced in an Event.
+This Subevent **CAN NOT** be referenced in an Event.
 
 <div class="indent">
   <details>
   <summary>Read more</summary>
 
-  `subevent` is the subevent ID.
-  
-  `tags` is an array of tags which describe the Subevent.
-  
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
   _This Subevent has no special Conditions with which it is compatible._
