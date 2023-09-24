@@ -1822,41 +1822,31 @@ This Subevent **CAN NOT** be referenced in an Event.
 <details>
 <summary>DamageDelivery</summary>
 
-**AddOriginItemTag**
+**DamageDelivery**
 
-```
-{
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
-}
-```
+This Subevent is dedicated to delivering a quantity of typed damage to an RPGLObject.
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+Source: an RPGLObject dealing damage
 
-Source: an RPGLObject adding a tag to an origin item
+Target: an RPGLObject suffering damage
 
-Target: should be the same as the source
-
-This Subevent **CAN** be referenced in an Event.
+This Subevent **CAN NOT** be referenced in an Event.
 
 <div class="indent">
   <details>
   <summary>Read more</summary>
 
-  `subevent` is the subevent ID.
-  
-  `tags` is an array of tags which describe the Subevent.
-  
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
-  _This Subevent has no special Conditions with which it is compatible._
+  <ul>
+    <li>IncludesDamageType</li>
+  </ul>
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>MaximizeDamage</li>
+  </ul>
 
   </details>
   <br/>
