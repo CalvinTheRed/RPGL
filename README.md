@@ -1405,16 +1405,16 @@ This Subevent **CAN** be referenced in an Event.
   applying any vampirism.
 
   `vampirism.damage_type` indicates which damage type has the vampiric property. This field is optional, and all damage
-  dealt by the attack will become vampiric if left unspecified.
+  dealt by the attack will become vampiric if not specified.
 
   `vampirism.round_up` indicates whether the vampiric calculation should round up. This field defaults to `false` if not
   specified.
 
   `vampirism.numerator` is the numerator by which the vampiric damage is multiplied during calculation to determine the
-  vampiric healing.
+  vampiric healing. This field defaults to `1` if not specified.
 
   `vampirism.denominator` is the denominator by which the vampiric damage is divided during calculation to determine the
-  vampiric healing.
+  vampiric healing. This field defaults to `2` if not specified.
   
   Conditions:
   
@@ -1892,21 +1892,30 @@ This Subevent **CAN NOT** be referenced in an Event.
 <details>
 <summary>DealDamage</summary>
 
-**AddOriginItemTag**
+**DealDamage**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "deal_damage",
   "tags": [...],
-  "tag": "..."
+  "damage": [
+    { <damage instructions> }
+  ],
+  "vampirism": {
+    "damage_type": "...",
+    "round_up": t/f,
+    "numerator": #,
+    "denominator": #
+  }
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to directly dealing damage to an RPGLObject without first requiring an attack roll or saving
+throw.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject dealing damage
 
-Target: should be the same as the source
+Target: an RPGLObject suffering damage
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -1917,16 +1926,37 @@ This Subevent **CAN** be referenced in an Event.
   `subevent` is the subevent ID.
   
   `tags` is an array of tags which describe the Subevent.
+
+  `damage` is an array of damage instructions defining the damage dealt to the target.
+
+  `vampirism` indicates any vampiric properties possessed by the Subevent. This allows the attacker to heal some portion
+  of the damage dealt by the Subevent. This field is optional, and if left unspecified, the Subevent will resolve
+  without applying any vampirism.
   
-  `tag` is the tag to be added to the origin item.
+  `vampirism.damage_type` indicates which damage type has the vampiric property. This field is optional, and all damage
+  dealt by the Subevent will become vampiric if not specified.
+  
+  `vampirism.round_up` indicates whether the vampiric calculation should round up. This field defaults to `false` if not
+  specified.
+  
+  `vampirism.numerator` is the numerator by which the vampiric damage is multiplied during calculation to determine the
+  vampiric healing. This field defaults to `1` if not specified.
+  
+  `vampirism.denominator` is the denominator by which the vampiric damage is divided during calculation to determine the
+  vampiric healing. This field defaults to `2` if not specified.
   
   Conditions:
   
-  _This Subevent has no special Conditions with which it is compatible._
+  <ul>
+    <li>IncludesDamageType</li>
+  </ul>
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>ApplyVampirism</li>
+    <li>CancelSubevent</li>
+  </ul>
 
   </details>
   <br/>

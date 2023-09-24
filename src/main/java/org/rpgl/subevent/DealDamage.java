@@ -11,6 +11,11 @@ import java.util.Objects;
 /**
  * This Subevent is dedicated to directly dealing damage to an RPGLObject without first requiring an attack roll or
  * saving throw.
+ * <br>
+ * <br>
+ * Source: an RPGLObject dealing damage
+ * <br>
+ * Target: an RPGLObject suffering damage
  *
  * @author Calvin Withun
  */
