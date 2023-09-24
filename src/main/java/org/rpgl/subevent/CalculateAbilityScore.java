@@ -7,8 +7,7 @@ import org.rpgl.json.JsonObject;
 import java.util.List;
 
 /**
- * This Subevent is dedicated to rolling all dice which will be copied to all targets of a damaging RPGLEvent. This
- * Subevent is typically only created within a SavingThrow Subevent.
+ * This Subevent is dedicated to calculating an ability score.
  * <br>
  * <br>
  * Source: the RPGLObject whose ability score is being calculated
