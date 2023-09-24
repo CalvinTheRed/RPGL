@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * This Subevent is dedicated to confirming that a critical hit deals critical damage.
+ * TODO can this be a specialized InfoSubevent?
  * <br>
  * <br>
  * Source: an RPGLObject scoring a critical hit
