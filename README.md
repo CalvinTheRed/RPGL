@@ -1473,41 +1473,33 @@ This Subevent **CAN NOT** be referenced in an Event.
 <details>
 <summary>CalculateBaseArmorClass</summary>
 
-**AddOriginItemTag**
+**CalculateBaseArmorClass**
 
-```
-{
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
-}
-```
+This subevent is dedicated to calculating the armor class against which attack rolls are made. Once the attack roll is
+made, the target will have an opportunity to raise its armor class further through the `CalculateEffectiveArmorClass`
+subevent, but reactive changes to armor class are not accounted for in this subevent.
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
-
-Source: an RPGLObject adding a tag to an origin item
+Source: the RPGLObject whose base armor class is being calculated
 
 Target: should be the same as the source
 
-This Subevent **CAN** be referenced in an Event.
+This Subevent **CAN NOT** be referenced in an Event.
 
 <div class="indent">
   <details>
   <summary>Read more</summary>
 
-  `subevent` is the subevent ID.
-  
-  `tags` is an array of tags which describe the Subevent.
-  
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
   _This Subevent has no special Conditions with which it is compatible._
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>AddBonus</li>
+    <li>SetBase</li>
+    <li>SetMinimum</li>
+  </ul>
 
   </details>
   <br/>
@@ -1517,41 +1509,32 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>CalculateCriticalHitThreshold</summary>
 
-**AddOriginItemTag**
+**CalculateCriticalHitThreshold**
 
-```
-{
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
-}
-```
+This subevent is dedicated to calculating the threshold which must be met on the d20 of an attack to count as a critical
+hit. Typically, an attack is a critical hit if the d20 rolls a 20.
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
-
-Source: an RPGLObject adding a tag to an origin item
+Source: the RPGLObject whose critical hit threshold is being calculated
 
 Target: should be the same as the source
 
-This Subevent **CAN** be referenced in an Event.
+This Subevent **CAN NOT** be referenced in an Event.
 
 <div class="indent">
   <details>
   <summary>Read more</summary>
 
-  `subevent` is the subevent ID.
-  
-  `tags` is an array of tags which describe the Subevent.
-  
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
   _This Subevent has no special Conditions with which it is compatible._
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>AddBonus</li>
+    <li>SetBase</li>
+    <li>SetMinimum</li>
+  </ul>
 
   </details>
   <br/>
