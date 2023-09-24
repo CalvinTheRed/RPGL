@@ -1680,6 +1680,40 @@ This Subevent **CAN** be referenced in an Event.
 </details><!--CalculateSaveDifficultyClass-->
 
 <details>
+<summary>CriticalDamageCollection</summary>
+
+**CriticalDamageCollection**
+
+This Subevent is dedicated to representing a collection of damage to be rolled when a critical hit occurs.
+
+Source: an RPGLObject delivering a critical hit attack
+
+Target: an RPGLObject targeted by a critical hit attack
+
+This Subevent **CAN NOT** be referenced in an Event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Conditions:
+  
+  <ul>
+    <li>IncludesDamageType</li>
+  </ul>
+  
+  Functions:
+  
+  <ul>
+    <li>AddDamage</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+</details><!--CriticalDamageCollection-->
+
+<details>
 <summary>CriticalDamageConfirmation</summary>
 
 **AddOriginItemTag**

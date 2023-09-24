@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This Subevent is dedicated to representing a collection of damage dice to be rolled when a critical hit occurs.
+ * This Subevent is dedicated to representing a collection of damage to be rolled when a critical hit occurs.
  * <br>
  * <br>
  * Source: an RPGLObject delivering a critical hit attack
