@@ -2139,21 +2139,21 @@ This Subevent **CAN NOT** be referenced in an Event.
 <details>
 <summary>GiveEffect</summary>
 
-**AddOriginItemTag**
+**GiveEffect**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "give_effect",
   "tags": [...],
-  "tag": "..."
+  "effect": "..."
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to assigning an RPGLEffect to an RPGLObject.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject attempting to apply an RPGLEffect to another RPGLObject
 
-Target: should be the same as the source
+Target: an RPGLObject to whom an RPGLEffect is being applied
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2165,7 +2165,7 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `effect` the Effect ID of the Effect being applied to the target.
   
   Conditions:
   
@@ -2173,7 +2173,9 @@ This Subevent **CAN** be referenced in an Event.
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>CancelSubevent</li>
+  </ul>
 
   </details>
   <br/>
