@@ -2073,41 +2073,31 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>GetEvents</summary>
 
-**AddOriginItemTag**
+**GetEvents**
 
-```
-{
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
-}
-```
+This subevent is dedicated to gathering a collection of additional RPGLEvent datapack IDs to which the subevent's target
+is meant to have access. This allows for RPGLEffects to grant situational access to an RPGLEvent which target might not
+otherwise have access to.
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
-
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject whose events are being listed
 
 Target: should be the same as the source
 
-This Subevent **CAN** be referenced in an Event.
+This Subevent **CAN NOT** be referenced in an Event.
 
 <div class="indent">
   <details>
   <summary>Read more</summary>
 
-  `subevent` is the subevent ID.
-  
-  `tags` is an array of tags which describe the Subevent.
-  
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
   _This Subevent has no special Conditions with which it is compatible._
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>AddEvent</li>
+  </ul>
 
   </details>
   <br/>
