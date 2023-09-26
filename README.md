@@ -2185,21 +2185,22 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>GiveResource</summary>
 
-**AddOriginItemTag**
+**GiveResource**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "give_resource",
   "tags": [...],
-  "tag": "..."
+  "resource": "...",
+  "count": #
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to giving a new RPGLResource to a RPGLObject.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: a RPGLObject granting a new resource
 
-Target: should be the same as the source
+Target: a RPGLObject receiving a new resource
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2211,7 +2212,9 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `resource` is the Resource ID for the Resource being given to the target.
+
+  `count` is the number of Resources to be given to the target. This field defaults to `1` if not specified.
   
   Conditions:
   

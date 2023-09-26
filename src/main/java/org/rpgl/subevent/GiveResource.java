@@ -9,13 +9,12 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This Subevent is dedicated to giving a new RPGLResource to a RPGLObject. This Subevent allows for the specification
- * of the new resource's potency, with a default of 1 if not specified.
+ * This Subevent is dedicated to giving a new RPGLResource to a RPGLObject.
  * <br>
  * <br>
- * source: a RPGLObject granting a new resource
+ * Source: a RPGLObject granting a new resource
  * <br>
- * target: a RPGLObject receiving a new resource
+ * Target: a RPGLObject receiving a new resource
  *
  * @author Calvin Withun
  */
