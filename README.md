@@ -2232,21 +2232,27 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>GiveTemporaryHitPoints</summary>
 
-**AddOriginItemTag**
+**GiveTemporaryHitPoints**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "give_temporary_hit_points",
   "tags": [...],
-  "tag": "..."
+  "temporary_hit_points": [
+    { <temporary hit point instructions> }
+  ],
+  "rider_effects": [
+    "..."
+  ]
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to giving temporary hit points to an RPGLObject. This Subevent also supports granting
+RPGLEffects to the Subevent's target if the temporary hit points are successfully assigned to the target.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject granting temporary hit points
 
-Target: should be the same as the source
+Target: an RPGLObject being granted temporary hit points
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2258,7 +2264,10 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `temporary_hit_points` indicates the quantity of temporary hit points to provide the target.
+
+  `rider_effects` is a list of Effect IDs which will be applied to the target so long as the temporary hit points
+  provided by this Subevent persist.
   
   Conditions:
   
@@ -2266,7 +2275,10 @@ This Subevent **CAN** be referenced in an Event.
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>AddTemporaryHitPoints</li>
+    <li>CancelSubevent</li>
+  </ul>
 
   </details>
   <br/>
