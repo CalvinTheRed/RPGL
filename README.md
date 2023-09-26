@@ -1968,6 +1968,13 @@ This Subevent **CAN** be referenced in an Event.
 
 **DestroyOriginItem**
 
+```
+{
+  "subevent": "destroy_origin_item",
+  "tags": [...]
+}
+```
+
 This Subevent is dedicated to destroying an Event's origin item, if one exists. This is meant to be used to destroy
 consumable items such as potions, or in the case that an Event breaks its origin item.
 
@@ -1980,6 +1987,10 @@ This Subevent **CAN** be referenced in an Event.
 <div class="indent">
   <details>
   <summary>Read more</summary>
+
+  `subevent` is the subevent ID.
+
+  `tags` is an array of tags which describe the Subevent.
 
   Conditions:
   
