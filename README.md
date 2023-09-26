@@ -1966,19 +1966,12 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>DestroyOriginItem</summary>
 
-**AddOriginItemTag**
+**DestroyOriginItem**
 
-```
-{
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
-}
-```
+This Subevent is dedicated to destroying an Event's origin item, if one exists. This is meant to be used to destroy
+consumable items such as potions, or in the case that an Event breaks its origin item.
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
-
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject destroying an origin item
 
 Target: should be the same as the source
 
@@ -1988,12 +1981,6 @@ This Subevent **CAN** be referenced in an Event.
   <details>
   <summary>Read more</summary>
 
-  `subevent` is the subevent ID.
-  
-  `tags` is an array of tags which describe the Subevent.
-  
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
   _This Subevent has no special Conditions with which it is compatible._

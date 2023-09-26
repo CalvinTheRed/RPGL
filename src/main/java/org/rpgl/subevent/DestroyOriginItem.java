@@ -15,8 +15,13 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * This subevent is dedicated to destroying the event's origin item, if one exists. This is meant to be used to destroy
+ * This Subevent is dedicated to destroying an Event's origin item, if one exists. This is meant to be used to destroy
  * consumable items such as potions, or in the case that an Event breaks its origin item.
+ * <br>
+ * <br>
+ * Source: an RPGLObject destroying an origin item
+ * <br>
+ * Target: should be the same as the source
  *
  * @author Calvin Withun
  */
