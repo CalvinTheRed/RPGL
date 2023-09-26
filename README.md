@@ -2008,21 +2008,27 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>ExhaustResource</summary>
 
-**AddOriginItemTag**
+**ExhaustResource**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "exhaust_resource",
   "tags": [...],
-  "tag": "..."
+  "resource": "...",
+  "count": #,
+  "minimum_potency": #,
+  "maximum_potency": #,
+  "selection_mode": "low_first" | "high_first" | "random"
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to exhausting a number of RPGLResources according to their Resource ID and potency. This
+Subevent allows for prioritization by high, low, or random potency, as well as bounding the potencies which can be
+exhausted.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: a RPGLObject causing for resources to be exhausted
 
-Target: should be the same as the source
+Target: a RPGLObject whose resources are being exhausted
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2034,7 +2040,22 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `resource` is the resource ID indicating which resource should be exhausted.
+
+  _Note that as of RPGL v1.0.0-beta, there is no way to use this Subevent to exhaust a resource by tags._
+
+  `count` is the number of qualifying resources which should be exhausted by the Subevent. This field defaults to `1` if
+  not specified.
+
+  `minimum_potency` is the minimum potency a Resource must have to qualify to be exhausted by this Subevent. This field
+  defaults to `0` if not specified.
+
+  `maximum_potency` is the maximum potency a Resource can have to qualify to be exhausted by this Subevent. This field
+  defaults to `2147483647` if not specified.
+
+  `selection_mode` indicates the prioritization of qualifying resources by potency. Qualifying resources can be
+  exhausted in random order, in order of highest potency to lowest potency, or in order of lowest potency to highest
+  potency. This field defaults to `"low_first"` if not specified.
   
   Conditions:
   

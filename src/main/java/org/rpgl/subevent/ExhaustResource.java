@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This Subevent is dedicated to exhausting a number of RPGLResources according to their Subevent ID and potency. This
+ * This Subevent is dedicated to exhausting a number of RPGLResources according to their Resource ID and potency. This
  * Subevent allows for prioritization by high, low, or random potency, as well as bounding the potencies which can be
  * exhausted.
  * <br>
  * <br>
- * source: a RPGLObject causing for resources to be exhausted
+ * Source: a RPGLObject causing for resources to be exhausted
  * <br>
- * target: a RPGLObject whose resources are being exhausted
+ * Target: a RPGLObject whose resources are being exhausted
  *
  * @author Calvin Withun
  */
