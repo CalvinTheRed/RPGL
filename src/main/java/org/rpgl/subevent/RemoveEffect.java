@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This Subevent is dedicated to removing an RPGLEffect from an RPGLObject.
+ * This Subevent is dedicated to removing RPGLEffects from an RPGLObject.
  * <br>
  * <br>
- * Source: an RPGLObject attempting to remove an RPGLEffect from a RPGLObject
+ * Source: an RPGLObject attempting to remove RPGLEffects from a RPGLObject
  * <br>
  * Target: an RPGLObject from whom an RPGLEffect is being removed
  *

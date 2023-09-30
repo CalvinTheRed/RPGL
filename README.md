@@ -2166,6 +2166,8 @@ This Subevent **CAN** be referenced in an Event.
   `tags` is an array of tags which describe the Subevent.
   
   `effect` the Effect ID of the Effect being applied to the target.
+
+  _Note that any Effect applied with this Subevent is given the_ `"temporary"` _tag._
   
   Conditions:
   
@@ -2540,21 +2542,23 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>RemoveEffect</summary>
 
-**AddOriginItemTag**
+**RemoveEffect**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "remove_effect",
   "tags": [...],
-  "tag": "..."
+  "effect_tags": [
+    "..."
+  ]
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to removing RPGLEffects from an RPGLObject.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject attempting to remove RPGLEffects from a RPGLObject
 
-Target: should be the same as the source
+Target: an RPGLObject from whom an RPGLEffect is being removed
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2566,7 +2570,10 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `effect_tags` is an array of tags which must all be possessed by an Effect in order for it to be removed by this
+  Subevent.
+
+  _Note that an Effect must also have the_ `"temporary"` _tag in order to be removed by this Subevent._
   
   Conditions:
   
@@ -2574,7 +2581,9 @@ This Subevent **CAN** be referenced in an Event.
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>CancelSubevent</li>
+  </ul>
 
   </details>
   <br/>
