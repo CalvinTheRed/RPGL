@@ -2434,19 +2434,20 @@ This Subevent **CAN NOT** be referenced in an Event.
 <details>
 <summary>InfoSubevent</summary>
 
-**AddOriginItemTag**
+**InfoSubevent**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
+  "subevent": "info_subevent",
+  "tags": [...]
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to communicating the occurrence of some non-functional but informative change, such as
+starting a turn, ending a turn, running out of temporary hit points, etc. This type of Subevent allows for a more
+flexible degree of responsiveness to be achieved than would be possible through the use of functional Subevents alone.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject emitting information about what it is doing
 
 Target: should be the same as the source
 
@@ -2460,15 +2461,15 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
   _This Subevent has no special Conditions with which it is compatible._
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>CancelSubevent</li>
+  </ul>
 
   </details>
   <br/>

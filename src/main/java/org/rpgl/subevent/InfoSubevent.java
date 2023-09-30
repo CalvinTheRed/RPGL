@@ -13,7 +13,7 @@ import java.util.Objects;
  * flexible degree of responsiveness to be achieved than would be possible through the use of functional Subevents alone.
  * <br>
  * <br>
- * Source: an RPGLObject undergoing a non-functional change
+ * Source: an RPGLObject emitting information about what it is doing
  * <br>
  * Target: should be the same as the source
  *
