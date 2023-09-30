@@ -2637,21 +2637,33 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>SavingThrow</summary>
 
-**AddOriginItemTag**
+**SavingThrow**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "saving_throw",
   "tags": [...],
-  "tag": "..."
+  "difficulty_class_ability": "...",
+  "save_ability": "...",
+  "damage": [
+    { <damage instructions> }
+  ],
+  "damage_on_pass": "all" | "half" | "none",
+  "vampirism": {
+    "damage_type": "...",
+    "round_up": t/f,
+    "numerator": #,
+    "denominator": #
+  }
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to making a saving throw and resolving all fallout from making the save. This is a high-level
+Subevent which can be referenced in an RPGLEvent template.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject requiring that other RPGLObjects make a saving throw
 
-Target: should be the same as the source
+Target: an RPGLObject making a saving throw
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2663,15 +2675,45 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `difficulty_class_ability` is the ability score of the source used to determine the saving throw's DC.
+
+  `save_ability` is the ability score of the target used to perform the saving throw.
+
+  `damage` is an array of damage instructions defining the damage dealt by the saving throw on a fail.
+
+  `damage_on_pass` indicates how much of the Subevent's damage should be dealt to a target which passes its save. The
+  saving throw can do all damage, half damage, or no damage on a successful save.
+
+  `vampirism` indicates any vampiric properties possessed by the saving throw. This allows the source to heal some
+  portion of the damage dealt by the saving throw. This field is optional, and if left unspecified, the saving throw
+  will resolve without applying any vampirism.
   
+  `vampirism.damage_type` indicates which damage type has the vampiric property. This field is optional, and all damage
+  dealt by the saving throw will become vampiric if not specified.
+  
+  `vampirism.round_up` indicates whether the vampiric calculation should round up. This field defaults to `false` if not
+  specified.
+  
+  `vampirism.numerator` is the numerator by which the vampiric damage is multiplied during calculation to determine the
+  vampiric healing. This field defaults to `1` if not specified.
+  
+  `vampirism.denominator` is the denominator by which the vampiric damage is divided during calculation to determine the
+  vampiric healing. This field defaults to `2` if not specified.
+
   Conditions:
-  
-  _This Subevent has no special Conditions with which it is compatible._
-  
+
+  <ul>
+    <li>CheckAbility</li>
+  </ul>
+
   Functions:
-  
-  _This Subevent has no special Functions with which it is compatible._
+
+  <ul>
+    <li>ApplyVampirism</li>
+    <li>CancelSubevent</li>
+    <li>GrantAdvantage</li>
+    <li>GrantDisadvantage</li>
+  </ul>
 
   </details>
   <br/>
