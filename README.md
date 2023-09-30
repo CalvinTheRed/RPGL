@@ -2479,21 +2479,27 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>RefreshResource</summary>
 
-**AddOriginItemTag**
+**RefreshResource**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "refresh_resource",
   "tags": [...],
-  "tag": "..."
+  "resource_tag": "...",
+  "count": #,
+  "minimum_potency": #,
+  "maximum_potency": #,
+  "selection_mode": "low_first" | "high_first" | "random"
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to refreshing a number of RPGLResources according to their Subevent ID and potency. This
+Subevent allows for prioritization by high, low, or random potency, as well as bounding the potencies which can be
+refreshed.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: a RPGLObject causing for resources to be refreshed
 
-Target: should be the same as the source
+Target: a RPGLObject whose resources are being refreshed
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2505,7 +2511,18 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `resource_tag` is a tag which must be possessed by a Resource to be eligible for being refreshed.
+
+  `count` is the number of Resources to be refreshed. This field defaults to `2147483647` if not specified.
+
+  `minimum_potency` is the minimum potency a Resource must have to be eligible for being refreshed. This field defaults
+  to `0` if not specified.
+  
+  `maximum_potency` is the maximum potency a Resource can have while remaining eligible for being refreshed. This field
+  defaults to `2147483647` if not specified.
+
+  `selection_mode` indicates the priority by which eligible Resources are refreshed. This Subevent can refresh eligible
+  Resources in random order, in order of increasing potency, or in order of decreasing potency.
   
   Conditions:
   

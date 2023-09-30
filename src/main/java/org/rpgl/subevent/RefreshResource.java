@@ -16,9 +16,9 @@ import java.util.Objects;
  * refreshed.
  * <br>
  * <br>
- * source: a RPGLObject causing for resources to be refreshed
+ * Source: a RPGLObject causing for resources to be refreshed
  * <br>
- * target: a RPGLObject whose resources are being refreshed
+ * Target: a RPGLObject whose resources are being refreshed
  *
  * @author Calvin Withun
  */
