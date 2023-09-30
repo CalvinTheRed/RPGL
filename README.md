@@ -2593,19 +2593,19 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>RemoveOriginItemTag</summary>
 
-**AddOriginItemTag**
+**RemoveOriginItemTag**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "remove_origin_item_tag",
   "tags": [...],
   "tag": "..."
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to removing a tag from an item (specifically the origin item of an event).
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject removing a tag from an origin item
 
 Target: should be the same as the source
 
@@ -2619,7 +2619,7 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `tag` is the tag to be removed from the origin item.
   
   Conditions:
   
