@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * This Subevent is dedicated to taking one or more RPGLResource objects away from the target according to their
- * resource ID. An unspecified <code>"count"</code> field results in all matching resources to be removed.
+ * resource ID.
  * <br>
  * <br>
  * NOTE: this Subevent can only remove an RPGLResource if it has the <code>"temporary"</code> tag.

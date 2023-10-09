@@ -2723,21 +2723,23 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>TakeResource</summary>
 
-**AddOriginItemTag**
+**TakeResource**
 
 ```
 {
-  "subevent": "add_origin_item_tag",
+  "subevent": "take_resource",
   "tags": [...],
-  "tag": "..."
+  "resource_tag": "...",
+  "count": #
 }
 ```
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+This Subevent is dedicated to taking one or more RPGLResource objects away from the target according to their resource
+ID.
 
-Source: an RPGLObject adding a tag to an origin item
+Source: an RPGLObject taking away a RPGLResource
 
-Target: should be the same as the source
+Target: an RPGLObject having its RPGLResource taken away
 
 This Subevent **CAN** be referenced in an Event.
 
@@ -2749,7 +2751,13 @@ This Subevent **CAN** be referenced in an Event.
   
   `tags` is an array of tags which describe the Subevent.
   
-  `tag` is the tag to be added to the origin item.
+  `resource_tag` is the tag which a Resource must possess in order to be taken away by this Subevent.
+
+  _NOTE: this Subevent can only remove an RPGLResource if it has the `"temporary"` tag, typically added automatically by
+  the `GiveResource` Subevent._
+
+  `count` indicates the number of matching Resources to be taken away by this Subevent. When not specified, this
+  Subevent takes away all matching Resources.
   
   Conditions:
   
