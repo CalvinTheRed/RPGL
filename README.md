@@ -2775,41 +2775,29 @@ This Subevent **CAN** be referenced in an Event.
 <details>
 <summary>TemporaryHitPointCollection</summary>
 
-**AddOriginItemTag**
+**TemporaryHitPointCollection**
 
-```
-{
-  "subevent": "add_origin_item_tag",
-  "tags": [...],
-  "tag": "..."
-}
-```
+This Subevent is dedicated to collecting unrolled temporary hit point dice and bonuses.
 
-This Subevent is dedicated to adding a tag to an item (specifically the origin item of an Event).
+Source: an RPGLObject preparing to give temporary hit points
 
-Source: an RPGLObject adding a tag to an origin item
+Target: an RPGLObject which will later receive the collected temporary hit points
 
-Target: should be the same as the source
-
-This Subevent **CAN** be referenced in an Event.
+This Subevent **CAN NOT** be referenced in an Event.
 
 <div class="indent">
   <details>
   <summary>Read more</summary>
 
-  `subevent` is the subevent ID.
-  
-  `tags` is an array of tags which describe the Subevent.
-  
-  `tag` is the tag to be added to the origin item.
-  
   Conditions:
   
   _This Subevent has no special Conditions with which it is compatible._
   
   Functions:
   
-  _This Subevent has no special Functions with which it is compatible._
+  <ul>
+    <li>AddTemporaryHitPoints</li>
+  </ul>
 
   </details>
   <br/>
