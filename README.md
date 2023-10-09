@@ -2870,71 +2870,541 @@ This Subevent **CAN NOT** be referenced in an Event.
 </div>
 </details><!--TemporaryHitPointRoll-->
 
-<!--# Conditions
+# Conditions
 RPGL provides datapack developers with a suite of Conditions used to control when Effects act upon Subevents. This
 section will provide an overview for all of RPGL's Conditions, and which Subevents they apply to.
 
 <details>
 <summary>All</summary>
-</details>
+
+**All**
+
+```
+{
+  "condition": "all",
+  "conditions": [
+    { <condition instructions> }
+  ]
+}
+```
+
+This Condition evaluates true if all of its nested Conditions evaluate to true.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `conditions` is a list of Conditions to be evaluated as a part of this Condition.
+
+  Subevents:
+    
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--All-->
 
 <details>
 <summary>Any</summary>
-</details>
+
+**Any**
+
+```
+{
+  "condition": "any",
+  "conditions": [
+    { <condition instructions> }
+  ]
+}
+```
+
+This Condition evaluates true if one or more of its nested Conditions evaluate to true.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `conditions` is a list of Conditions to be evaluated as a part of this Condition.
+  
+  Subevents:
+  
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--Any-->
 
 <details>
 <summary>CheckAbility</summary>
-</details>
+
+**CheckAbility**
+
+```
+{
+  "condition": "check_ability",
+  "ability": "..."
+}
+```
+
+This Condition is dedicated to checking the ability score being used for an AbilitySubevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `ability` is the ability score the Subevent must use for the Condition to evaluate as true.
+
+  Subevents:
+  
+  <ul>
+    <li>AbilityCheck</li>
+    <li>AbilitySave</li>
+    <li>AttackRoll</li>
+    <li>CalculateAbilityScore</li>
+    <li>SavingThrow</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--CheckAbility-->
 
 <details>
 <summary>CheckSkill</summary>
-</details>
+
+**CheckSkill**
+
+```
+{
+  "condition": "check_skill",
+  "skill": "..."
+}
+```
+
+This Condition is dedicated to checking the skill being used for a AbilityCheck.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `skill` is the skill which must be used by the Subevent for the Condition to evaluate as true.
+  
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--CheckSkill-->
 
 <details>
 <summary>EquippedItemHasTag</summary>
-</details>
+
+**EquippedItemHasTag**
+
+```
+{
+  "condition": "equipped_item_has_tag",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  },
+  "slot": "...",
+  "tag": "..."
+}
+```
+
+This Condition is dedicated to evaluating whether an equipped item has a particular tag.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `object` indicates the Object being checked for the equipped Item.
+
+  `object.from` indicates whether the Object in question is determined from the perspective of the Subevent or the
+  Condition.
+
+  `object.object` indicates whether the Object is the source or the target viewed from the indicated perspective.
+
+  `slot` is the equipment slot being checked for an Item with a particular tag.
+
+  `tag` is the tag which must be possessed by the target Item in order for the Condition to evaluate as true.
+  
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--EquippedItemHasTag-->
 
 <details>
 <summary>IncludesDamageType</summary>
-</details>
+
+**IncludesDamageType**
+
+```
+{
+  "condition": "includes_damage_type",
+  "damage_type": "..."
+}
+```
+
+This Condition is dedicated to checking if a DamageTypeSubevent Subevent includes a given damage type.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates which damage type must be included in the Subevent for the Condition to evaluate as true.
+  
+  Subevents:
+
+  <ul>
+    <li>CriticalDamageCollection</li>
+    <li>DamageAffinity</li>
+    <li>DamageCollection</li>
+    <li>DamageDelivery</li>
+    <li>DamageRoll</li>
+    <li>DealDamage</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--IncludesDamageType-->
 
 <details>
 <summary>Invert</summary>
-</details>
+
+**Invert**
+
+```
+{
+  "condition": "invert",
+  "invert": { <condition instructions> }
+}
+```
+
+This Condition ...
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `invert` is the condition which must evaluate false in order for this Condition to evaluate as true.
+  
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--Invert-->
 
 <details>
 <summary>IsObjectsTurn</summary>
-</details>
+
+**IsObjectsTurn**
+
+```
+{
+  "condition": "is_objects_turn",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+This Condition is dedicated to determining whether it is an RPGLObject's turn.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `object` indicates which Object's turn it must be in order for this Condition to evaluate as true.
+
+  `object.from` indicates whether the Object in question is determined from the perspective of the Subevent or the
+  Condition.
+  
+  `object.object` indicates whether the Object is the source or the target viewed from the indicated perspective.
+  
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--IsObjectsTurn-->
 
 <details>
 <summary>ObjectAbilityScoreComparison</summary>
-</details>
+
+**ObjectAbilityScoreComparison**
+
+```
+{
+  "condition": "object_ability_score_comparison",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  },
+  "ability": "...",
+  "comparison": "<" | ">" | "<=" | ">=" | "="
+  "compare_to": #,
+}
+```
+
+This Condition is dedicated to comparing an RPGLObject's ability score against a particular value.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `object` indicates which Object's ability score is being checked.
+  
+  `object.from` indicates whether the Object in question is determined from the perspective of the Subevent or the
+  Condition.
+  
+  `object.object` indicates whether the Object is the source or the target viewed from the indicated perspective.
+
+  `ability` is the ability score being checked.
+
+  `comparison` indicates the comparison being performed between the ability score and the target value.
+
+  `compare_to` is the value the ability score is being compared against.
+  
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--ObjectAbilityScoreComparison-->
 
 <details>
 <summary>ObjectHasTag</summary>
-</details>
 
-<details>
-<summary>ObjectWieldingOriginItem</summary>
-</details>
+**ObjectHasTag**
+
+```
+{
+  "condition": "object_has_tag",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target
+  },
+  "tag": "..."
+}
+```
+
+This Condition is dedicated to evaluating whether a particular RPGLObject has a particular tag.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `object` indicates which Object's ability score is being checked.
+  
+  `object.from` indicates whether the Object in question is determined from the perspective of the Subevent or the
+  Condition.
+  
+  `object.object` indicates whether the Object is the source or the target viewed from the indicated perspective.
+
+  `tag` is the tag which the indicated Object must possess in order for the Condition to evaluate as true.
+  
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--ObjectHasTag-->
 
 <details>
 <summary>ObjectsMatch</summary>
-</details>
+
+**ObjectsMatch**
+
+```
+{
+  "condition": "objects_match",
+  "effect": "source" | "target",
+  "subevent": "source" | "target"
+}
+```
+
+This Condition ...
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `effect` indicates whether the Effect's source or target is used in the comparison.
+
+  `subevent` indicates whether the Subevent's source or target is used in the comparison.
+  
+  Subevents:
+  
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--ObjectsMatch-->
+
+<details>
+<summary>ObjectWieldingOriginItem</summary>
+
+**ObjectWieldingOriginItem**
+
+```
+{
+  "condition": "object_wielding_origin_item",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+This Condition returns true if the indicated object is wielding the origin item of the RPGLEffect, if the RPGLEffect has
+an origin item.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `object` indicates which Object is being checked for wielding the Effect's origin item.
+  
+  `object.from` indicates whether the Object in question is determined from the perspective of the Subevent or the
+  Condition.
+  
+  `object.object` indicates whether the Object is the source or the target viewed from the indicated perspective.
+  
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--ObjectWieldingOriginItem-->
 
 <details>
 <summary>OriginItemHasTag</summary>
-</details>
+
+**OriginItemHasTag**
+
+```
+{
+  "condition": "origin_item_has_tag",
+  "origin_item": "subevent" | "effect",
+  "tag": "..."
+}
+```
+
+This Condition is dedicated to evaluating whether an origin item has a particular tag.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `origin_item` indicates whether the origin item comes from the Subevent or the Effect.
+
+  `tag` is a tag which must be possessed by the origin item in order for the Condition to evaluate as true.
+  
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--OriginItemHasTag-->
 
 <details>
 <summary>OriginItemsMatch</summary>
-</details>
+
+**OriginItemsMatch**
+
+```
+{
+  "condition": "origin_items_match"
+}
+```
+
+This Condition is dedicated to comparing the origin items of an RPGLEvent and an RPGLEffect to determine if the effect
+was produced by the same item being used to perform an event.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--OriginItemsMatch-->
 
 <details>
 <summary>SubeventHasTag</summary>
-</details>
 
-# Functions
+**SubeventHasTag**
+
+```
+{
+  "condition": "subevent_has_tag",
+  "tag": "..."
+}
+```
+
+This Condition evaluates true if the subevent contains a specified tag.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `tag` is a tag which the Subevent must possess in order for the Condition to evaluate as true.
+  
+  Subevents:
+
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--SubeventHasTag-->
+
+<!--# Functions
 RPGL provides datapack developers with a suite of Functions used to control what Effects do when they act upon
 Subevents. This section will provide an overview for all of RPGL's Functions, and which Subevents they apply to.
 

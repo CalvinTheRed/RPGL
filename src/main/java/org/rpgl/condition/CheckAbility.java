@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 /**
- * This Condition is dedicated to checking the ability score being used for a AbilitySubevent.
+ * This Condition is dedicated to checking the ability score being used for an AbilitySubevent.
  *
  * @author Calvin Withun
  */

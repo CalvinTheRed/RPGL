@@ -9,7 +9,7 @@ import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
 
 /**
- * This Condition is dedicated to evaluating whether an origin item has a particular tag.
+ * This Condition is dedicated to evaluating whether an equipped item has a particular tag.
  *
  * @author Calvin Withun
  */

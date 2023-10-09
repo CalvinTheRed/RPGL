@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This Condition is dedicated to checking if a DamageAffinity Subevent includes a given damage type.
+ * This Condition is dedicated to checking if a DamageTypeSubevent Subevent includes a given damage type.
  *
  * @author Calvin Withun
  */
