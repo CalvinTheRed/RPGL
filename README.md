@@ -3404,145 +3404,1193 @@ This Condition evaluates true if the subevent contains a specified tag.
 
 </details><!--SubeventHasTag-->
 
-<!--# Functions
+# Functions
 RPGL provides datapack developers with a suite of Functions used to control what Effects do when they act upon
 Subevents. This section will provide an overview for all of RPGL's Functions, and which Subevents they apply to.
 
 <details>
 <summary>AddAttackAbility</summary>
-</details>
+
+**AddAttackAbility**
+
+```
+{
+  "function": "add_attack_ability",
+  "ability": "..."
+}
+```
+
+This Function is dedicated to adding abilities to AttackAbilityCollection subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `ability` is the ability to be added to the AttackAbilityCollection Subevent.
+  
+  Subevents:
+  
+  <ul>
+    <li>AttackAbilityCollection</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddAttackAbility-->
 
 <details>
 <summary>AddBonus</summary>
-</details>
+
+**AddBonus**
+
+```
+{
+  "function": "add_bonus",
+  "bonus": { <bonus instructions> }
+}
+```
+
+This Function is dedicated to adding a bonus to Calculation Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `bonus` specifies how large of a bonus to add to the Subevent.
+  
+  Subevents:
+
+  <ul>
+    <li>CalculateAbilityScore</li>
+    <li>CalculateBaseArmorClass</li>
+    <li>CalculateCriticalHitThreshold</li>
+    <li>CalculateEffectiveArmorClass</li>
+    <li>CalculateMaximumHitPoints</li>
+    <li>CalculateProficiencyBonus</li>
+    <li>CalculateSaveDifficultyClass</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddBonus-->
 
 <details>
 <summary>AddDamage</summary>
-</details>
+
+**AddDamage**
+
+```
+{
+  "function": "add_damage",
+  "damage": { <damage instructions> }
+}
+```
+
+This Function is dedicated to adding to a DamageCollection or a CriticalDamageCollection Subevent.
+
+_Note that while this Function can add negative bonuses, it can not add "negative dice."_
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage` specifies what damage to add to the Subevent.
+  
+  Subevents:
+
+  <ul>
+    <li>CriticalDamageCollection</li>
+    <li>DamageCollection</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddDamage-->
 
 <details>
 <summary>AddEvent</summary>
-</details>
+
+**AddEvent**
+
+```
+{
+  "function": "add_event",
+  "event": "...",
+  "source": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+This Function is dedicated to adding a RPGLEvent to GetEvents Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `event` is the Event being added to the GetEvents Subevent.
+
+  `source` specifies which Object serves as the source of the granted Event.
+
+  `source.from` indicated whether the Event source is to be assigned from the perspective of the Subevent or the Effect.
+
+  `source.object` indicates whether the source of the Event is the source or the target from the indicated perspective.
+  
+  Subevents:
+
+  <ul>
+    <li>GetEvents</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddEvent-->
 
 <details>
 <summary>AddHealing</summary>
-</details>
+
+**AddHealing**
+
+```
+{
+  "function": "add_healing",
+  "healing": { <healing instructions> }
+}
+```
+
+This Function is dedicated to adding some amount of healing to a HealingCollection Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `healing` indicates how much healing to add to the Subevent.
+  
+  Subevents:
+
+  <ul>
+    <li>HealingCollection</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddHealing-->
 
 <details>
 <summary>AddObjectTag</summary>
-</details>
+
+**AddObjectTag**
+
+```
+{
+  "function": "add_object_tag",
+  "tag": "..."
+}
+```
+
+This Function is dedicated to adding a tag to GetObjectTags Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `tag` is the tag to be added to the GetObjectTags Subevent.
+  
+  Subevents:
+
+  <ul>
+    <li>GetObjectTags</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddObjectTag-->
 
 <details>
 <summary>AddSubeventTag</summary>
-</details>
+
+**AddSubeventTag**
+
+```
+{
+  "function": "add_subevent_tag",
+  "tag": "..."
+}
+```
+
+This Function is dedicated to adding tags to Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `tag` is the tag to be added to the Subevent.
+
+  Subevents:
+
+  _This Function can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddSubeventTag-->
 
 <details>
 <summary>AddTemporaryHitPoints</summary>
-</details>
+
+**AddTemporaryHitPoints**
+
+```
+{
+  "function": "add_temporary_hit_points",
+  "temporary_hit_points": { <temporary hit points instructions> }
+}
+```
+
+This Function is dedicated to adding some amount of temporary hit points to a TemporaryHitPointCollection Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `temporary_hit_points` indicates how many temporary hit points to add to the Subevent.
+
+  Subevents:
+
+  <ul>
+    <li>TemporaryHitPointCollection</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--AddTemporaryHitPoints-->
 
 <details>
 <summary>ApplyVampirism</summary>
-</details>
+
+**ApplyVampirism**
+
+```
+{
+  "function": "apply_vampirism",
+  "vampirism": {
+    "damage_type": "...",
+    "round_up": t/f,
+    "numerator": #,
+    "denominator": #
+  }
+}
+```
+
+This Function is dedicated to applying vampirism to AttackRoll, DealDamage, and SavingThrow Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `vampirism` indicates the vampiric properties to be applied to the Subevent. This field defaults to `{}` if not
+  specified.
+
+  `vampirism.damage_type` indicates which damage type has the vampiric property. This field is optional, and all damage
+  dealt by the Subevent will become vampiric if not specified.
+
+  `vampirism.round_up` indicates whether the vampiric calculation should round up. This field defaults to `false` if not
+  specified.
+
+  `vampirism.numerator` is the numerator by which the vampiric damage is multiplied during calculation to determine the
+  vampiric healing. This field defaults to `1` if not specified.
+
+  `vampirism.denominator` is the denominator by which the vampiric damage is divided during calculation to determine the
+  vampiric healing. This field defaults to `2` if not specified.
+
+  Subevents:
+
+  <ul>
+    <li>AttackRoll</li>
+    <li>DealDamage</li>
+    <li>SavingThrow</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--ApplyVampirism-->
 
 <details>
 <summary>CancelSubevent</summary>
-</details>
+
+**CancelSubevent**
+
+```
+{
+  "function": "cancel_subevent",
+}
+```
+
+This Function is dedicated to canceling cancelable Subevents.
+
+_Note that this Function is not robustly supported and may lead to unintended behavior depending upon the order in which
+Effects are resolved during execution._
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+    <li>AbilitySave</li>
+    <li>AttackRoll</li>
+    <li>CriticalDamageConfirmation</li>
+    <li>DealDamage</li>
+    <li>GiveEffect</li>
+    <li>GiveTemporaryHitPoints</li>
+    <li>Heal</li>
+    <li>InfoSubevent</li>
+    <li>RemoveEffect</li>
+    <li>SavingThrow</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--CancelSubevent-->
 
 <details>
 <summary>EndEffect</summary>
-</details>
+
+**EndEffect**
+
+```
+{
+  "function": "end_effect"
+}
+```
+
+This Function is dedicated to ending the RPGLEffect containing it.
+
+_Note that this Function may be removed in the future in favor of the RemoveEffect Subevent._
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+  
+  _This Condition can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--EndEffect-->
 
 <details>
 <summary>GiveExpertise</summary>
-</details>
+
+**GiveExpertise**
+
+```
+{
+  "function": "give_expertise"
+}
+```
+
+This Function is dedicated to giving expertise to AbilityCheck Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GiveExpertise-->
 
 <details>
 <summary>GiveHalfProficiency</summary>
-</details>
+
+**GiveHalfProficiency**
+
+```
+{
+  "function": "give_half_proficiency"
+}
+```
+
+This Function is dedicated to giving half proficiency to AbilityCheck Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GiveHalfProficiency-->
 
 <details>
 <summary>GiveProficiency</summary>
-</details>
+
+**GiveProficiency**
+
+```
+{
+  "function": "give_proficiency"
+}
+```
+
+This Function is dedicated to giving proficiency to AbilityCheck Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GiveProficiency-->
 
 <details>
 <summary>GrantAdvantage</summary>
-</details>
+
+**GrantAdvantage**
+
+```
+{
+  "function": "grant_advantage"
+}
+```
+
+This Function is dedicated to granting advantage to Roll Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+    <li>AttackRoll</li>
+    <li>SavingThrow</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GrantAdvantage-->
 
 <details>
 <summary>GrantDisadvantage</summary>
-</details>
+
+**GrantDisadvantage**
+
+```
+{
+  "function": "grant_disadvantage"
+}
+```
+
+This Function is dedicated to granting disadvantage to Roll Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+    <li>AttackRoll</li>
+    <li>SavingThrow</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GrantDisadvantage-->
 
 <details>
 <summary>GrantImmunity</summary>
-</details>
+
+**GrantImmunity**
+
+```
+{
+  "function": "grant_immunity",
+  "damage_type": "..."
+}
+```
+
+This Function is dedicated to granting immunity to a damage type as indicated by a DamageAffinity Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates which damage type this Function grants immunity for.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageAffinity</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GrantImmunity-->
 
 <details>
 <summary>GrantResistance</summary>
-</details>
+
+**GrantResistance**
+
+```
+{
+  "function": "grant_resistance",
+}
+```
+
+This Function is dedicated to granting resistance to a damage type as indicated by a DamageAffinity Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates which damage type this Function grants resistance for.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageAffinity</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GrantResistance-->
 
 <details>
 <summary>GrantVulnerability</summary>
-</details>
+
+**GrantVulnerability**
+
+```
+{
+  "function": "grant_vulnerability",
+  "damage_type": "..."
+}
+```
+
+This Function is dedicated to granting vulnerability to a damage type as indicated by a DamageAffinity Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates which damage type this Function grants vulnerability for.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageAffinity</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--GrantVulnerability-->
 
 <details>
 <summary>InvokeSubevent</summary>
-</details>
+
+**InvokeSubevent**
+
+```
+{
+  "function": "invoke_subevent",
+  "source": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  },
+  "targets": [
+    {
+      "from": "subevent" | "effect",
+      "object": "source" | "target"
+    }
+  ],
+  "subevent": { <subevent instructions> }
+}
+```
+
+This Function is dedicated to invoking a particular Subevent. This Function allows for the fine control of the
+Subevent's source and targets.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `source` indicates which Object is to be treated as the source for the Subevent invoked by this Function.
+
+  `source.from` indicates whether the source is taken from the perspective of the Subevent or the Effect.
+
+  `source.object` indicates whether the source is the source or the target taken from the indicated perspective.
+
+  `targets` is an array of Objects to be targeted by the Subevent invoked by this Function.
+
+  `targets[#]` is a specific Object targeted by the Subevent invoked by this Function.
+
+  `targets[#].from` indicates whether the target is taken from the perspective of the Subevent or the Effect.
+
+  `targets[#].object` indicates whether the target is the source or the target taken from the indicated perspective.
+
+  `subevent` contains the instructions for the Subevent to e invoked by this Function using the specified source and
+  target(s).
+  
+  Subevents:
+  
+  _This Function can be used in context of any Subevent._
+
+  </details>
+  <br/>
+</div>
+
+</details><!--InvokeSubevent-->
 
 <details>
 <summary>MaximizeDamage</summary>
-</details>
+
+**MaximizeDamage**
+
+```
+{
+  "function": "maximize_damage",
+  "damage_type": "..."
+}
+```
+
+This Function is dedicated to maximizing the damage dice of DamageRoll and DamageDelivery Subevents. If a damage type is
+specified, only damage dice of that type will be maximized.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates which damage type should be maximized by this Function. If not specified, all damage is
+  maximized, regardless of damage type.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageDelivery</li>
+    <li>DamageRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--MaximizeDamage-->
 
 <details>
 <summary>MaximizeHealing</summary>
-</details>
+
+**MaximizeHealing**
+
+```
+{
+  "function": "maximize_healing"
+}
+```
+
+This Function is dedicated to maximizing the healing dice of HealingRoll and HealingDelivery Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>HealingDelivery</li>
+    <li>HealingRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--MaximizeHealing-->
 
 <details>
 <summary>MaximizeTemporaryHitPoints</summary>
-</details>
+
+**MaximizeTemporaryHitPoints**
+
+```
+{
+  "function": "maximize_temporary_hit_points"
+}
+```
+
+This Function is dedicated to maximizing the temporary hit point dice of TemporaryHitPointRoll and
+TemporaryHitPointDelivery Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  Subevents:
+
+  <ul>
+    <li>TemporaryHitPointDelivery</li>
+    <li>TemporaryHitPointRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--MaximizeTemporaryHitPoints-->
 
 <details>
 <summary>RerollDamageDiceMatchingOrBelow</summary>
-</details>
+
+**RerollDamageDiceMatchingOrBelow**
+
+```
+{
+  "function": reroll_damage_dice_matches_or_below",
+  "damage_type": "...",
+  "threshold": #
+}
+```
+
+This function is dedicated to re-rolling typed damage dice matching or below a certain threshold in DamageRoll Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates which damage type's dice should be rerolled if they don't exceed the threshold. If not
+  specified, this causes all damage dice which don't exceed the threshold to be rerolled, regardless of damage type.
+
+  `threshold` is the value which a damage die must exceed in order to not be rerolled by this Function.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--RerollDamageDiceMatchingOrBelow-->
 
 <details>
 <summary>RerollHealingDiceMatchingOrBelow</summary>
-</details>
+
+**RerollHealingDiceMatchingOrBelow**
+
+```
+{
+  "function": "reroll_healing_dice_matching_or_below",
+  "threshold": #
+}
+```
+
+This function is dedicated to re-rolling healing dice matching or below a certain threshold in HealingRoll Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `threshold` is the value which a healing die must exceed in order to not be rerolled by this Function.
+  
+  Subevents:
+
+  <ul>
+    <li>HealingRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--RerollHealingDiceMatchingOrBelow-->
 
 <details>
 <summary>RerollTemporaryHitPointDiceMatchingOrBelow</summary>
-</details>
+
+**RerollTemporaryHitPointDiceMatchingOrBelow**
+
+```
+{
+  "function": "reroll_temporary_hit_point_dice_matching_or_below",
+  "threshold": #
+}
+```
+
+This function is dedicated to re-rolling temporary hit point dice matching or below a certain threshold in
+TemporaryHitPointRoll Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `threshold` is the value which a temporary hit point die must exceed in order to not be rerolled by this Function.
+  
+  Subevents:
+
+  <ul>
+    <li>TemporaryHitPointRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--RerollTemporaryHitPointDiceMatchingOrBelow-->
 
 <details>
 <summary>RevokeImmunity</summary>
-</details>
+
+**RevokeImmunity**
+
+```
+{
+  "function": "revoke_immunity",
+  "damage_type": "..."
+}
+```
+
+This Function is dedicated to revoking immunity to a damage type as indicated by a DamageAffinity Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates the damage type whose immunity is being revoked. If not specified, every damage type will have
+  its immunity revoked.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageAffinity</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--RevokeImmunity-->
 
 <details>
 <summary>RevokeResistance</summary>
-</details>
+
+**RevokeResistance**
+
+```
+{
+  "function": "revoke_resistance",
+  "damage_type": "..."
+}
+```
+
+This Function is dedicated to revoking resistance to a damage type as indicated by a DamageAffinity Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates the damage type whose resistance is being revoked. If not specified, every damage type will
+  have its resistance revoked.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageAffinity</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--RevokeResistance-->
 
 <details>
 <summary>RevokeVulnerability</summary>
-</details>
+
+**RevokeVulnerability**
+
+```
+{
+  "function": "revoke_vulnerability",
+  "damage_type": "..."
+}
+```
+
+This Function is dedicated to revoking vulnerability to a damage type as indicated by a DamageAffinity Subevent.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates the damage type whose vulnerability is being revoked. If not specified, every damage type will
+  have its vulnerability revoked.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageAffinity</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--RevokeVulnerability-->
 
 <details>
 <summary>SetBase</summary>
-</details>
+
+**SetBase**
+
+```
+{
+  "function": "set_base",
+  "base": { <base instructions> }
+}
+```
+
+This Function is dedicated to assigning the base field of Calculation Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `base` contains the instructions for defining the base value assigned to the Subevent.
+  
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+    <li>AttackRoll</li>
+    <li>CalculateAbilityScore</li>
+    <li>CalculateBaseArmorClass</li>
+    <li>CalculateCriticalHitThreshold</li>
+    <li>CalculateEffectiveArmorClass</li>
+    <li>CalculateMaximumHitPoints</li>
+    <li>CalculateProficiencyBonus</li>
+    <li>CalculateSaveDifficultyClass</li>
+    <li>SavingThrow</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--SetBase-->
 
 <details>
 <summary>SetDamageDiceMatchingOrBelow</summary>
-</details>
+
+**SetDamageDiceMatchingOrBelow**
+
+```
+{
+  "function": "set_damage_dice_matching_or_below",
+  "damage_type": "...",
+  "threshold": #,
+  "set": #
+}
+```
+
+This function is dedicated to setting typed damage dice matching or below a certain threshold in DamageRoll Subevents to
+a given value.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `damage_type` indicates which damage type's dice will be set if they don't exceed the threshold. If not specified,
+  this will set all qualifying damage dice regardless of damage type.
+  `threshold` is the value which a die must exceed in order to not be set by this Function.
+  `set` is the value qualifying dice will be set to by this Function.
+  
+  Subevents:
+
+  <ul>
+    <li>DamageRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--SetDamageDiceMatchingOrBelow-->
 
 <details>
 <summary>SetHealingDiceMatchingOrBelow</summary>
-</details>
+
+**SetHealingDiceMatchingOrBelow**
+
+```
+{
+  "function": "set_healing_dice_matching_or_below",
+  "threshold": #,
+  "set": #
+}
+```
+
+This function is dedicated to setting healing dice matching or below a certain threshold in HealingRoll Subevents to a
+given value.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `threshold` is the value which a die must exceed in order to not be set by this Function.
+  `set` is the value qualifying dice will be set to by this Function.
+  
+  Subevents:
+  
+  _This Condition can be used in context of any Subevent._
+
+  <ul>
+    <li>HealingRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--SetHealingDiceMatchingOrBelow-->
 
 <details>
 <summary>SetMinimum</summary>
-</details>
+
+**SetMinimum**
+
+```
+{
+  "function": "set_minimum",
+  "minimum": { <minimum instructions> }
+}
+```
+
+This Function is dedicated to assigning the minimum field of Calculation Subevents.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `minimum` contains the instructions for defining the minimum value assigned to the Subevent.
+  
+  Subevents:
+
+  <ul>
+    <li>AbilityCheck</li>
+    <li>AttackRoll</li>
+    <li>CalculateAbilityScore</li>
+    <li>CalculateBaseArmorClass</li>
+    <li>CalculateCriticalHitThreshold</li>
+    <li>CalculateEffectiveArmorClass</li>
+    <li>CalculateMaximumHitPoints</li>
+    <li>CalculateProficiencyBonus</li>
+    <li>CalculateSaveDifficultyClass</li>
+    <li>SavingThrow</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--SetMinimum-->
 
 <details>
 <summary>SetTemporaryHitPointDiceMatchingOrBelow</summary>
-</details>
+
+**SetTemporaryHitPointDiceMatchingOrBelow**
+
+```
+{
+  "function": "set_temporary_hit_point_dice_matching_or_below",
+  "threshold": #,
+  "set": #
+}
+```
+
+This function is dedicated to setting temporary hit point dice matching or below a certain threshold in
+TemporaryHitPointRoll Subevents to a given value.
+
+<div class="indent">
+  <details>
+  <summary>Read more</summary>
+
+  `threshold` is the value which a die must exceed in order to not be set by this Function.
+
+  `set` is the value qualifying dice will be set to by this Function.
+  
+  Subevents:
+
+  <ul>
+    <li>TemporaryHitPointRoll</li>
+  </ul>
+
+  </details>
+  <br/>
+</div>
+
+</details><!--SetTemporaryHitPointDiceMatchingOrBelow-->
 
 <br />
--->

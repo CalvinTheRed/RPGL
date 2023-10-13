@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * This Function is dedicated to adding a RPGLEvent datapack ID to GetEvents Subevents.
+ * This Function is dedicated to adding a RPGLEvent to GetEvents Subevents.
  *
  * @author Calvin Withun
  */
