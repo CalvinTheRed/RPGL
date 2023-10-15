@@ -5328,3 +5328,13 @@ referred to as an origin item. All Subevents invoked by an Event granted by an o
 origin item, and any Subevents created by other Subevents which contain a reference to an origin item are assigned that
 same origin item reference. This allows for low-level Subevents to maintain a connection to whatever Item is used to
 produce them, if one exists.
+
+# FAQ & Troubleshooting
+
+_At this time, RPGL has few useful exception messages. As more useful and informative error messages and exceptions are
+implemented, this section of the README will be updated._
+
+### What is D&D, anyway?
+If you are new to Dungeons and Dragons, it may be difficult to make use of RPGL. This README is not intended to
+communicate the basic rules of D&D, but you can visit [DnDBeyond](https://www.dndbeyond.com/sources/basic-rules) to
+learn more.
