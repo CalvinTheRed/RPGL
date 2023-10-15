@@ -5256,11 +5256,11 @@ RPGL supports saving the state of the program to a save directory, as well as lo
 where the client left off at a later time. This section explains how to use these features.
 
 ### Saving
-To save, you can use the `UUIDTable.saveToDIrectory()` method and point it to the desired save directory. This will
+To save, you can use the `UUIDTable.saveToDirectory()` method and point it to the desired save directory. This will
 cause all RPGLEffects, RPGLItems, RPGLObjects, and RPGLResources currently stored in the UUIDTable to be saved into JSON
-files in the indicated save directory. 
+files in the indicated save directory.
 
 ### Loading
-To load saved data, you can use the `UUIDTable.loadFromDIrectory()` method and point it to the save directory from which
+To load saved data, you can use the `UUIDTable.loadFromDirectory()` method and point it to the save directory from which
 you wish to load. This will read all of the JSON files contained within the directory and copy their content into the
 UUIDTable. RPGL will then be aware of that content and will be able to process it from the state in which it was saved.
