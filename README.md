@@ -4593,4 +4593,630 @@ TemporaryHitPointRoll Subevents to a given value.
 
 </details><!--SetTemporaryHitPointDiceMatchingOrBelow-->
 
-<br />
+# Additional Instructions
+Some Subevents and Functions call for additional instructions with many possible values. This section provides details
+on what the accepted values for those instructions may be.
+
+_Note that as of v1.0.0-beta, many of these values cannot be scaled directly (for example you can't add damage equal to
+half an Object's level). Support for such scaling will be introduced in a later update._ 
+
+<details>
+<summary>Base Instructions</summary>
+
+```
+{
+  "base_formula": "number",
+  "number": #
+}
+```
+
+`number` is the value to be used for the base.
+
+```
+{
+  "base_formula": "modifier",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability's modifier will be used for the base.
+
+`object` indicates which Object's ability score modifier is used for the base.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "base_formula": "ability",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability score will be used for the base.
+
+`object` indicates which Object's ability score is used for the base.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "base_formula": "proficiency",
+  "half": t/f,
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`half` indicates whether te proficiency bonus is halved when used for the base.
+
+`object` indicates which Object's proficiency bonus is used for the base.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "base_formula": "level",
+  "class": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`class` indicates which class's level should be used for the base.
+
+`object` indicates which Object's class level is used for the base.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+<br/>
+</details><!--base instructions-->
+
+<details>
+<summary>Bonus Instructions</summary>
+
+```
+{
+  "bonus_formula": "range",
+  "dice": [
+    {
+      "count": #,
+      "size": #
+    }
+  ],
+  "bonus": #,
+}
+```
+
+`dice` is an array of dice to be rolled to determine the bonus to add. This field defaults to `[]` if not specified.
+
+`dice[#]` is a collection of dice of a common size.
+
+`dice[#].count` is the number of dice of a given size to be included in the damage roll.
+
+`dice[#].size` is the size of dice being rolled.
+
+`bonus` is a numerical bonus to be added to the results of the dice. This field defaults to `0` if not specified.
+
+```
+{
+  "bonus_formula": "modifier",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability's modifier will be used for the bonus.
+
+`object` indicates which Object's ability score modifier is used for the bonus.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "bonus_formula": "ability",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability score will be used for the bonus.
+
+`object` indicates which Object's ability score is used for the bonus.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "bonus_formula": "proficiency",
+  "half": t/f,
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`half` indicates whether te proficiency bonus is halved when used for the bonus.
+
+`object` indicates which Object's proficiency bonus is used for the bonus.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "bonus_formula": "level",
+  "class": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`class` indicates which class's level should be used for the bonus.
+
+`object` indicates which Object's class level is used for the bonus.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+<br/>
+</details><!--bonus instructions-->
+
+<details>
+<summary>Damage Instructions</summary>
+
+```
+{
+  "damage_formula": "range",
+  "damage_type": "...",
+  "dice": [
+    {
+      "count": #,
+      "size": #
+    }
+  ],
+  "bonus": #,
+}
+```
+
+`damage_type` indicates the type of the damage.
+
+`dice` is an array of dice to be rolled to determine the amount of damage to add. This field defaults to `[]` if not
+specified.
+
+`dice[#]` is a collection of dice of a common size.
+
+`dice[#].count` is the number of dice of a given size to be included in the damage roll.
+
+`dice[#].size` is the size of dice being rolled.
+
+`bonus` is a numerical bonus to be added to the results of the dice. This field defaults to `0` if not specified.
+
+```
+{
+  "damage_formula": "modifier",
+  "damage_type": "...",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`damage_type` indicates the type of the damage.
+
+`ability` indicates which ability's modifier will be used for damage.
+
+`object` indicates which Object's ability score modifier is used for damage.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "damage_formula": "ability",
+  "damage_type": "...",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`damage_type` indicates the type of the damage.
+
+`ability` indicates which ability score will be used for damage.
+
+`object` indicates which Object's ability score is used for damage.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "damage_formula": "proficiency",
+  "damage_type": "...",
+  "half": t/f,
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`damage_type` indicates the type of the damage.
+
+`half` indicates whether te proficiency bonus is halved when used for damage.
+
+`object` indicates which Object's proficiency bonus is used for damage.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "damage_formula": "level",
+  "damage_type": "...",
+  "class": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`damage_type` indicates the type of the damage.
+
+`class` indicates which class's level should be used for damage.
+
+`object` indicates which Object's class level is used for damage.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+<br/>
+</details><!--damage instructions-->
+
+<details>
+<summary>Healing Instructions</summary>
+
+```
+{
+  "healing_formula": "range",
+  "dice": [
+    {
+      "count": #,
+      "size": #
+    }
+  ],
+  "bonus": #,
+}
+```
+
+`dice` is an array of dice to be rolled to determine the amount of healing to add. This field defaults to `[]` if not
+specified.
+
+`dice[#]` is a collection of dice of a common size.
+
+`dice[#].count` is the number of dice of a given size to be included in the healing roll.
+
+`dice[#].size` is the size of dice being rolled.
+
+`bonus` is a numerical bonus to be added to the results of the dice. This field defaults to `0` if not specified.
+
+```
+{
+  "healing_formula": "modifier",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability's modifier will be used for healing.
+
+`object` indicates which Object's ability score modifier is used for healing.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "healing_formula": "ability",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability score will be used for healing.
+
+`object` indicates which Object's ability score is used for healing.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "healing_formula": "proficiency",
+  "half": t/f,
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`half` indicates whether te proficiency bonus is halved when used for healing.
+
+`object` indicates which Object's proficiency bonus is used for healing.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "healing_formula": "level",
+  "class": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`class` indicates which class's level should be used for healing.
+
+`object` indicates which Object's class level is used for healing.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+<br/>
+</details><!--healing instructions-->
+
+<details>
+<summary>Minimum Instructions</summary>
+
+```
+{
+  "minimum_formula": "number",
+  "number": #
+}
+```
+
+`number` is the value to be used for the minimum.
+
+```
+{
+  "minimum_formula": "modifier",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability's modifier will be used for the minimum.
+
+`object` indicates which Object's ability score modifier is used for the minimum.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "minimum_formula": "ability",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability score will be used for the minimum.
+
+`object` indicates which Object's ability score is used for the minimum.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "minimum_formula": "proficiency",
+  "half": t/f,
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`half` indicates whether te proficiency bonus is halved when used for the minimum.
+
+`object` indicates which Object's proficiency bonus is used for the minimum.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "minimum_formula": "level",
+  "class": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`class` indicates which class's level should be used for the minimum.
+
+`object` indicates which Object's class level is used for the minimum.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+<br/>
+</details><!--minimum instructions-->
+
+<details>
+<summary>Temporary Hit Point Instructions</summary>
+
+```
+{
+  "temporary_hit_point_formula": "range",
+  "dice": [
+    {
+      "count": #,
+      "size": #
+    }
+  ],
+  "bonus": #,
+}
+```
+
+`dice` is an array of dice to be rolled to determine the amount of temporary hit points to add. This field defaults to
+`[]` if not specified.
+
+`dice[#]` is a collection of dice of a common size.
+
+`dice[#].count` is the number of dice of a given size to be included in the temporary hit points roll.
+
+`dice[#].size` is the size of dice being rolled.
+
+`bonus` is a numerical bonus to be added to the results of the dice. This field defaults to `0` if not specified.
+
+```
+{
+  "temporary_hit_point_formula": "modifier",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability's modifier will be used for temporary hit points.
+
+`object` indicates which Object's ability score modifier is used for temporary hit points.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "temporary_hit_point_formula": "ability",
+  "ability": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`ability` indicates which ability score will be used for temporary hit points.
+
+`object` indicates which Object's ability score is used for temporary hit points.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "temporary_hit_point_formula": "proficiency",
+  "half": t/f,
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`half` indicates whether te proficiency bonus is halved when used for temporary hit points.
+
+`object` indicates which Object's proficiency bonus is used for temporary hit points.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+```
+{
+  "temporary_hit_point_formula": "level",
+  "class": "...",
+  "object": {
+    "from": "subevent" | "effect",
+    "object": "source" | "target"
+  }
+}
+```
+
+`class` indicates which class's level should be used for temporary hit points.
+
+`object` indicates which Object's class level is used for temporary hit points.
+
+`object.from` indicates whether the Object is taken from the perspective of the Subevent or the Effect (if applicable).
+
+`object.object` indicates whether the Object is the source or the target from the indicated perspective.
+
+<br/>
+</details><!--temporary hit point instructions-->
+<br/>
