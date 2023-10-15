@@ -49,8 +49,7 @@ public class AttackRoll extends Roll {
         this.json.asMap().putIfAbsent("withhold_damage_modifier", false);
 
         // Add tags so nested subevents such as DamageCollection can know they
-        // hail from an attack roll made using a particular attack ability.
-        this.addTag("attack_roll");
+        // hail from a Subevent which used a particular attack ability.
         this.addTag(this.getAbility(context));
 
         // Proficiency is added by effects during subevent processing

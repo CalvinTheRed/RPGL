@@ -5264,3 +5264,53 @@ files in the indicated save directory.
 To load saved data, you can use the `UUIDTable.loadFromDirectory()` method and point it to the save directory from which
 you wish to load. This will read all of the JSON files contained within the directory and copy their content into the
 UUIDTable. RPGL will then be aware of that content and will be able to process it from the state in which it was saved.
+
+# Tags
+RPGL makes use of tags - strings which can be assigned in many places in order to help RPGL identify data and where that
+data came from.
+
+### Subevent ID Tags
+All Subevents are assigned their own Subevent ID as a tag upon creation, and any time a Subevent is created within
+another Subevent, the nested Subevent inherits all tags assigned to the containing Subevent. For example, a
+DamageDelivery created within an AttackRoll will inherit the `attack_roll` tag from the AttackRoll Subevent, among
+other tags. This makes it possible for Datapack developers to distinguish between damage hailing from different sources,
+despite being the same type of Subevent.
+
+### Base and Target Collection Tags
+Certain Subevents have their behavior split up into multiple copies of themselves. Namely, DamageCollection,
+HealingCollection, and TemporaryHitPointCollection have their responsibilities split between two copies of themselves:
+one for determining the amount of damage, healing, or temporary hit points collected as a base to be applied to all
+targets, and one for determining the amount of damage, healing, or temporary hit points collected for individual targets
+which doesn't carry over to the other targets. These can be distinguished from one another by checking for the following
+tags: `base_damage_collection` and `target_damage_collection` for DamageCollection Subevents, `base_healing_collection`
+and `target_healing_collection` for HealingCollection Subevents, and `base_temporary_hit_point_collection` and
+`target_temporary_hit_point_collection` for TemporaryHitPointCollection Subevents.
+
+### Ability Tags
+Certain Subevents which associate with a particular ability score are assigned that ability score as a tag. Namely,
+AbilityCheck, AbilitySave, AttackRoll, CalculateAbilityScore, and SavingThrow Subevents receive this special tag. This
+allows Datapack developers to distinguish between, for example, a Strength-based AttackRoll Subevent and a
+Dexterity-based AttackRoll Subevent.
+
+### Temporary Tag
+Whenever an Effect or Resource is granted to an Object which is not innate to that object, it is given the `temporary`
+tag. Only Effects and Resources with this tag can be removed via RemoveEffect or TakeResource.
+
+### InfoSubevent Tags
+Certain tags are reserved for specific behaviors by RPGL when assigned to InfoSubevent Subevents. The following is a
+list of these tags and what they represent.
+
+`start_turn` means that the InfoSubevent indicates the beginning of a turn.
+
+`end_turn` means that the InfoSubevent indicates the ending of a turn.
+
+`short_rest` means that the InfoSubevent represents a short rest being completed.
+
+`long_rest` means that the InfoSubevent represents a long rest being completed.
+
+`reduced_to_zero_hit_points` means that the InfoSubevent represents an Object falling to 0 hit points.
+
+`reduced_to_zero_temporary_hit_points` means that the InfoSubevent represents an Object falling to 0 temporary hit
+points.
+
+`killed` means that the InfoSubevent represents an Object being killed/dying.

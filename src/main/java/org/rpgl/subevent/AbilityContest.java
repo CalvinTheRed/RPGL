@@ -40,13 +40,6 @@ public class AbilityContest extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
-        // Add tag so nested subevents such as DamageCollection can know they hail from an ability save.
-        this.addTag("ability_contest");
-    }
-
-    @Override
     public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
         int sourceAbilityCheck = this.getSourceAbilityCheck(context, resources);
         int targetAbilityCheck = this.getTargetAbilityCheck(context, resources);

@@ -79,6 +79,7 @@ public abstract class Subevent {
         this.subeventId = subeventId;
         this.json.putString("subevent", subeventId);
         this.json.asMap().putIfAbsent("tags", new ArrayList<>());
+        this.addTag(subeventId);
     }
 
     /**

@@ -55,8 +55,6 @@ public class AbilitySave extends Subevent implements AbilitySubevent, Cancelable
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
         this.json.putBoolean("cancel", false);
-        // Add tag so nested subevents such as DamageCollection can know they hail from an ability save.
-        this.addTag("ability_save");
         this.calculateDifficultyClass(context, resources);
     }
 
