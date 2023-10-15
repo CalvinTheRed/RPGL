@@ -5314,3 +5314,17 @@ list of these tags and what they represent.
 points.
 
 `killed` means that the InfoSubevent represents an Object being killed/dying.
+
+### Item Tags
+In the case that an RPGLItem is used to perform an Event, such as a longsword being swung to perform a melee attack, all
+tags from the Item are copied to the Subevents involved in the Event.
+
+_Note that this feature is going to be removed in a later update. The referred means of checking for a tag on the origin
+item is to use the OriginItemHasTag Condition._
+
+# Origin Items
+Some Events are granted to an Object by Items they have equipped. When this is the case, the Item granting the Event is
+referred to as an origin item. All Subevents invoked by an Event granted by an origin item are given a reference to the
+origin item, and any Subevents created by other Subevents which contain a reference to an origin item are assigned that
+same origin item reference. This allows for low-level Subevents to maintain a connection to whatever Item is used to
+produce them, if one exists.
