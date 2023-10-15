@@ -1059,6 +1059,11 @@ must be refreshed
 
 </details>
 
+## Loading Datapacks
+A Datapack must be loaded into RPGL in order for RPGL to be able to reference the templates defined therein. To do this,
+lace all Datapacks you wish to load into a common directory. Then use the `DatapackLoader.loadDatapacks()` method to
+point RPGL to that directory, and all Datapacks contained within will be loaded into RPGL.
+
 # Subevents
 RPGL makes use of many different Subevents, all with their own unique purpose and a unique set of Conditions and
 Functions which they can synergize with. Fortunately for new datapack developers, not every Subevent is
@@ -5219,4 +5224,43 @@ specified.
 
 <br/>
 </details><!--temporary hit point instructions-->
-<br/>
+
+# Using RPGL
+This section is designed to inform you of important steps you will have to take in order to properly use RPGL ini your
+program.
+
+### 1. Creating a RPGLContext
+RPGLContext is an abstract class provided by RPGL, and it is necessary for RPGL to work. However, every client is
+responsible for implementing their own version of this class to use in their program. This gives the client program
+control over certain important data whose implementation can vary greatly between client programs, such as knowing if it
+is currently an Object's turn.
+
+Client programs can override any methods of the class, but only two are likely worth consideration: `isObjectsTurn()`
+and `viewCompletedSubevent()`. The former allows RPGL a means of establishing whether it is an object's turn, and the
+latter allows the client to view a Subevent's JSON data once it is finished running. Strictly speaking, only the former
+method must be implemented by the client in order for RPGL to function properly, as the latter will by default do
+nothing.
+
+### 2. Initializing RPGL
+RPGL must be initialized before it can be used. This is when the Conditions, Functions, and Subevents are loaded, and
+informs RPGL whether it should honor any determined rolls while rolling dice. RPGL can be initialized via
+`RPGLCore.initialize()`, which will not load any testing-only Conditions, Functions, or Subevents, and will cause RPGL
+to not honor determined dice rolls, or it may be initialized via `RPGLCore.initializeTesting()`, which will include
+testing-only Conditions, Functions, and Subevents and will cause RPGL to honor any determined die rolls. Clients will
+likely not need to use the latter initialization method, however, except for the purposes of running their own tests.
+
+Once RPGL has been initialized with one of these two methods, RPGL is ready for use and will operate as intended.
+
+# Saving and Loading
+RPGL supports saving the state of the program to a save directory, as well as loading data from that directory to resume
+where the client left off at a later time. This section explains how to use these features.
+
+### Saving
+To save, you can use the `UUIDTable.saveToDIrectory()` method and point it to the desired save directory. This will
+cause all RPGLEffects, RPGLItems, RPGLObjects, and RPGLResources currently stored in the UUIDTable to be saved into JSON
+files in the indicated save directory. 
+
+### Loading
+To load saved data, you can use the `UUIDTable.loadFromDIrectory()` method and point it to the save directory from which
+you wish to load. This will read all of the JSON files contained within the directory and copy their content into the
+UUIDTable. RPGL will then be aware of that content and will be able to process it from the state in which it was saved.
