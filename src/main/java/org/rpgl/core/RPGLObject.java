@@ -241,7 +241,7 @@ public class RPGLObject extends RPGLTaggable {
     }
 
     /**
-     * Setter for the user id
+     * Setter for the user id.
      *
      * @param userId a new user id (this is the user id for the new user which will control this object)
      */
