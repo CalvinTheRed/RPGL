@@ -231,6 +231,24 @@ public class RPGLObject extends RPGLTaggable {
         this.putDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS, challengeRating);
     }
 
+    /**
+     * Getter for the user id (this is the user id for the user which controls this object).
+     *
+     * @return a user id
+     */
+    public String getUserId() {
+        return this.getString(RPGLObjectTO.USER_ID);
+    }
+
+    /**
+     * Setter for the user id
+     *
+     * @param userId a new user id (this is the user id for the new user which will control this object)
+     */
+    public void setUserId(String userId) {
+        this.putString(RPGLObjectTO.USER_ID, userId);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================

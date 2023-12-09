@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -62,7 +63,7 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getOneHandedEventObjects returns correct event objects")
     void getOneHandedEventObjects_returnsCorrectEventObjects() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
@@ -101,7 +102,7 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getMultiHandedEventObjects returns correct event objects")
     void getMultiHandedEventObjects_returnsCorrectEventObjects() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
@@ -167,7 +168,7 @@ public class RPGLItemTest {
     @Test
     @DisplayName("getDerivedEvents derives events correctly")
     void getDerivedEvents_derivesEventsCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 

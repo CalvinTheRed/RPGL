@@ -13,6 +13,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -68,8 +69,8 @@ public class CheckSkillTest {
     @Test
     @DisplayName("evaluate returns true when Subevent uses indicated skill")
     void evaluate_returnsTrueWhenSubeventUsesIndicatedSkill() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -97,8 +98,8 @@ public class CheckSkillTest {
     @Test
     @DisplayName("evaluate returns false when Subevent uses indicated skill")
     void evaluate_returnsFalseWhenSubeventDoesNotUseIndicatedSkill() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

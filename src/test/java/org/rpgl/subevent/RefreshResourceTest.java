@@ -13,6 +13,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -68,8 +69,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can be met)")
     void runLowFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -118,8 +119,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can not be met)")
     void runLowFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -170,8 +171,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runLowFirst refreshes resources correctly skipping refreshed resources")
     void runLowFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -208,8 +209,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can be met)")
     void runHighFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -258,8 +259,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can not be met)")
     void runHighFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -313,8 +314,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("runHighFirst refreshes resources correctly skipping refreshed resources")
     void runHighFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -351,8 +352,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes resources correctly (low first)")
     void invoke_refreshesResourcesCorrectly_lowFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -404,8 +405,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes resources correctly (high first)")
     void invoke_refreshesResourcesCorrectly_highFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -457,8 +458,8 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("invoke refreshes only matching resources")
     void invoke_refreshesOnlyMatchingResources() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

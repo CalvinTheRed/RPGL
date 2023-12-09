@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -68,8 +69,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("deliverDamage damage is delivered")
     void deliverDamage_damageIsDelivered() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -114,8 +115,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("getTargetDamage no target damage by default")
     void getTargetDamage_noTargetDamageByDefault() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -142,8 +143,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("getBaseDamage base damage calculated correctly")
     void getBaseDamage_baseDamageCalculatedProperly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -196,8 +197,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("invoke deals correct damage")
     void invoke_dealsCorrectDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -247,8 +248,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("invoke accommodates vampirism")
     void invoke_accommodatesVampirism() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -66,8 +67,8 @@ public class HealTest {
     @Test
     @DisplayName("deliverHealing conveys healing to target")
     void deliverHealing_conveysHealingToTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -110,8 +111,8 @@ public class HealTest {
     @Test
     @DisplayName("getTargetHealing contains no dice and no bonus (default)")
     void getTargetHealing_containsNoDiceAndNoBonus_default() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -132,8 +133,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing returns correct base healing")
     void getBaseHealing_returnsCorrectBaseHealing() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -181,8 +182,8 @@ public class HealTest {
     @Test
     @DisplayName("invoke target is healed correctly")
     void invoke_targetIsHealedCorrectly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -232,7 +233,7 @@ public class HealTest {
     @Test
     @DisplayName("prepare base healing is rolled and stored")
     void prepare_baseHealingIsRolledAndStored() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -279,8 +280,8 @@ public class HealTest {
     @Test
     @DisplayName("invoke comprehensive test")
     void invoke_comprehensiveTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -330,8 +331,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing calculates correct healing (modifier)")
     void getBaseHealing_calculatesCorrectHealing_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -377,8 +378,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing calculates correct healing (ability)")
     void getBaseHealing_calculatesCorrectHealing_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -424,8 +425,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing calculates correct healing (proficiency)")
     void getBaseHealing_calculatesCorrectHealing_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

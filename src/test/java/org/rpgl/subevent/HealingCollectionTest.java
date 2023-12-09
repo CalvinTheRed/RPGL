@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -156,7 +157,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepare sets default values")
     void prepare_setsDefaultValues() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -174,7 +175,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (range)")
     void prepareHealing_interpretsHealing_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -211,7 +212,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (modifier)")
     void prepareHealing_interpretsHealing_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -256,7 +257,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (ability)")
     void prepareHealing_interpretsHealing_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -301,7 +302,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepareHealing interprets healing (proficiency)")
     void prepareHealing_interpretsHealing_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 

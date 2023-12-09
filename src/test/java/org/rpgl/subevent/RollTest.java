@@ -14,6 +14,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -76,8 +77,8 @@ public class RollTest {
     @Test
     @DisplayName("default behavior should yield only a normal roll")
     void default_yieldOnlyNormalRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -99,8 +100,8 @@ public class RollTest {
     @Test
     @DisplayName("grantAdvantage should yield only an advantage roll")
     void grantAdvantage_yieldOnlyAdvantageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -123,8 +124,8 @@ public class RollTest {
     @Test
     @DisplayName("grantDisadvantage should yield only a disadvantage roll")
     void grantDisadvantage_yieldOnlyDisadvantageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -164,8 +165,8 @@ public class RollTest {
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll higher)")
     void roll_defaultBehavior_secondRollHigher() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -192,8 +193,8 @@ public class RollTest {
     @Test
     @DisplayName("roll default behavior rolls the first value (second roll lower)")
     void roll_defaultBehavior_secondRollLower() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -220,8 +221,8 @@ public class RollTest {
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll higher)")
     void roll_withAdvantage_secondRollHigher() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -249,8 +250,8 @@ public class RollTest {
     @Test
     @DisplayName("roll advantage behavior rolls the higher value (second roll lower)")
     void roll_withAdvantage_secondRollLower() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -278,8 +279,8 @@ public class RollTest {
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll higher)")
     void roll_withDisadvantage_firstRollHigher() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -306,8 +307,8 @@ public class RollTest {
     @Test
     @DisplayName("roll disadvantage behavior rolls the higher value (first roll lower)")
     void roll_withDisadvantage_firstRollLower() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

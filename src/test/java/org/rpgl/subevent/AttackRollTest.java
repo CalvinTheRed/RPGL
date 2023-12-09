@@ -16,6 +16,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -112,8 +113,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns true (base roll of 20)")
     void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -141,8 +142,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns false (base roll below 20)")
     void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -170,8 +171,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on hit)")
     void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -204,8 +205,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on miss)")
     void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -238,8 +239,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("deliverDamage object loses health")
     void deliverDamage_objectLosesHealth() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -282,8 +283,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("deliverDamage source heals from vampirism")
     void deliverDamage_sourceHealsFromVampirism() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -332,8 +333,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getTargetArmorClass calculate 20 armor class")
     void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -350,8 +351,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (modifier)")
     void getBaseDamage_calculatesCorrectDamage_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -404,8 +405,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (ability)")
     void getBaseDamage_calculatesCorrectDamage_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -458,8 +459,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (proficiency)")
     void getBaseDamage_calculatesCorrectDamage_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -510,8 +511,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getCriticalHitDamage correctly gathers critical hit damage")
     void getCriticalHitDamage_correctlyGathersCriticalHitDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -586,8 +587,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage gets correct base damage (damage modifier not withheld)")
     void getBaseDamage_getsCorrectBaseDamage_damageModifierNotWithheld() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -644,8 +645,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage gets correct base damage (damage modifier withheld)")
     void getBaseDamage_getsCorrectBaseDamage_damageModifierWithheld() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -702,8 +703,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage gets correct base damage (origin item damage bonus)")
     void getBaseDamage_getsCorrectBaseDamage_originItemDamageBonus() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -764,7 +765,7 @@ public class AttackRollTest {
     @Test
     @DisplayName("prepare adds origin item attack bonus")
     void prepare_addsOriginItemAttackBonus() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -793,7 +794,7 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveDamage delivers correct damage values")
     void resolveDamage_deliversCorrectDamageValues() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -850,8 +851,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (critical miss always misses)")
     void run_resolvesCorrectly_criticalMissAlwaysMisses() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -904,8 +905,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (normal miss)")
     void run_resolvesCorrectly_normalMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -964,8 +965,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (normal hit)")
     void run_resolvesCorrectly_normalHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1033,8 +1034,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (critical hit)")
     void run_resolvesCorrectly_criticalHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1104,8 +1105,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("handleVampirism heals source for half damage (specific damage type)")
     void handleVampirism_healsSourceForHalfDamage_specificDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1151,8 +1152,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("confirmCriticalDamage returns true if not canceled")
     void confirmCriticalDamage_returnsTrueIfNotCanceled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1167,8 +1168,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("confirmCriticalDamage returns false if canceled")
     void confirmCriticalDamage_returnsFalseIfCanceled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1190,8 +1191,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (critical damage not confirmed)")
     void run_resolvesCorrectly_criticalDamageNotConfirmed() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);

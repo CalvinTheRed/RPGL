@@ -102,15 +102,16 @@ public final class RPGLFactory {
      * This method creates a new RPGLObject instance according to template data stored at the given object ID.
      *
      * @param objectId an object ID <code>(namespace:name)</code>
+     * @param userId the id for the user controlling the new object
      * @return a new RPGLObject object
      */
-    public static RPGLObject newObject(String objectId) {
+    public static RPGLObject newObject(String objectId, String userId) {
         String[] objectIdSplit = objectId.split(":");
         try {
             return DatapackLoader.DATAPACKS
                     .get(objectIdSplit[0])
                     .getObjectTemplate(objectIdSplit[1])
-                    .newInstance();
+                    .newInstance(userId);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLObject: " + objectId);
             throw new RuntimeException("Encountered an error building a new RPGLObject", e);

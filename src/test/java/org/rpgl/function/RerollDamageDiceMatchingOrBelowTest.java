@@ -15,6 +15,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageRoll;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -172,8 +173,8 @@ public class RerollDamageDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute re-rolls all dice at or below two (fire only)")
     void execute_rerollsAllDiceAtOrBelowTwo_fireOnly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -206,8 +207,8 @@ public class RerollDamageDiceMatchingOrBelowTest {
     @Test
     @DisplayName("execute re-rolls all dice at or below two (all damage types)")
     void execute_rerollsAllDiceAtOrBelowTwo_allDamageTypes() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

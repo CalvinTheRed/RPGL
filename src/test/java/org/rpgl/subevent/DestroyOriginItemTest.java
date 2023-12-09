@@ -68,7 +68,7 @@ public class DestroyOriginItemTest {
     @Test
     @DisplayName("execute removes effect from object")
     void execute_removesEffectFromObject() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(knight);
 

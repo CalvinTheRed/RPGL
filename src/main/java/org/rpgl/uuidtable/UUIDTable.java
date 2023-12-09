@@ -14,6 +14,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -77,7 +79,13 @@ public final class UUIDTable {
      * @return a RPGLEffect, or null if the uuid is null or if the uuid does not map to an effect
      */
     public static RPGLEffect getEffect(String uuid) {
-        return uuid == null ? null : (RPGLEffect) UUID_TABLE.get(uuid);
+        if (uuid != null) {
+            UUIDTableElement element = UUID_TABLE.get(uuid);
+            if (element instanceof RPGLEffect effect) {
+                return effect;
+            }
+        }
+        return null;
     }
 
     /**
@@ -88,7 +96,13 @@ public final class UUIDTable {
      * @return a RPGLItem, or null if the uuid is null or if the uuid does not map to an item
      */
     public static RPGLItem getItem(String uuid) {
-        return uuid == null ? null : (RPGLItem) UUID_TABLE.get(uuid);
+        if (uuid != null) {
+            UUIDTableElement element = UUID_TABLE.get(uuid);
+            if (element instanceof RPGLItem item) {
+                return item;
+            }
+        }
+        return null;
     }
 
     /**
@@ -99,7 +113,13 @@ public final class UUIDTable {
      * @return a RPGLObject, or null if the uuid is null or if the uuid does not map to an object
      */
     public static RPGLObject getObject(String uuid) {
-        return uuid == null ? null : (RPGLObject) UUID_TABLE.get(uuid);
+        if (uuid != null) {
+            UUIDTableElement element = UUID_TABLE.get(uuid);
+            if (element instanceof RPGLObject object) {
+                return object;
+            }
+        }
+        return null;
     }
 
     /**
@@ -110,7 +130,13 @@ public final class UUIDTable {
      * @return a RPGLResource, or null if the uuid is null or if the uuid does not map to a resource
      */
     public static RPGLResource getResource(String uuid) {
-        return uuid == null ? null : (RPGLResource) UUID_TABLE.get(uuid);
+        if (uuid != null) {
+            UUIDTableElement element = UUID_TABLE.get(uuid);
+            if (element instanceof RPGLResource resource) {
+                return resource;
+            }
+        }
+        return null;
     }
 
     /**
@@ -203,6 +229,23 @@ public final class UUIDTable {
         for (File file : Objects.requireNonNull(new File(directory.getAbsolutePath() + File.separator + "resources").listFiles())) {
             UUIDTable.register(JsonObject.MAPPER.readValue(file, RPGLResourceTO.class).toRPGLResource());
         }
+    }
+
+    /**
+     * Returns a list of RPGLObjects under the control of a specified user.
+     *
+     * @param userId a user id
+     * @return a list of RPGLObjects
+     */
+    public static List<RPGLObject> getObjectsByUserId(String userId) {
+        List<RPGLObject> objects = new ArrayList<>();
+        for (String uuid : UUID_TABLE.keySet()) {
+            RPGLObject object = getObject(uuid);
+            if (object != null && object.getUserId().equals(userId)) {
+                objects.add(object);
+            }
+        }
+        return objects;
     }
 
 }

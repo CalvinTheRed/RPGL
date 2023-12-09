@@ -14,6 +14,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -69,8 +70,8 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("resolveNestedSubevents invokes pass subevents (on pass)")
     void resolveNestedSubevents_invokesPassSubevents_onPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -96,8 +97,8 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("resolveNestedSubevents does not invoke fail subevents (on pass)")
     void resolveNestedSubevents_doesNotInvokeFailSubevents_onPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -123,8 +124,8 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("resolveNestedSubevents invokes fail subevents (on fail)")
     void resolveNestedSubevents_invokesFailSubevents_onFail() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -150,8 +151,8 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("resolveNestedSubevents does not invoke pass subevents (on fail)")
     void resolveNestedSubevents_doesNotInvokePassSubevents_onFail() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -177,8 +178,8 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("calculateDifficultyClass calculates difficulty class")
     void calculateDifficultyClass_calculatesDifficultyClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -203,7 +204,7 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("prepare prepares subevent")
     void prepare_preparesSubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
 
@@ -231,8 +232,8 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("invoke executes correctly (on pass)")
     void invoke_executesCorrectly_onPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -273,8 +274,8 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("invoke executes correctly (on fail)")
     void invoke_executesCorrectly_onFail() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);

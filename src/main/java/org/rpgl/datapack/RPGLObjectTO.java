@@ -28,6 +28,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     public static final String CLASSES_ALIAS           = "classes";
     public static final String RACES_ALIAS             = "races";
     public static final String CHALLENGE_RATING_ALIAS  = "challenge_rating";
+    public static final String USER_ID                 = "user_id";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
     HashMap<String, Object> abilityScores;
@@ -51,6 +52,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     ArrayList<Object> races;
     @JsonProperty(CHALLENGE_RATING_ALIAS)
     Double challengeRating;
+    @JsonProperty(USER_ID)
+    String userId;
 
     /**
      * Default constructor for RPGLObjectTO class.
@@ -121,6 +124,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.setClasses(new JsonArray(classes));
             this.setRaces(new JsonArray(races));
             this.setChallengeRating(challengeRating);
+            this.setUserId(userId);
         }};
         rpglObject.join(super.getTemplateData());
         rpglObject.join(super.getUUIDTableElementData());

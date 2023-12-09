@@ -12,6 +12,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -64,7 +65,7 @@ public class RemoveOriginItemTagTest {
     @Test
     @DisplayName("invoke removes tag")
     void invoke_removesTag() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         item.addTag("test_tag");
         DummyContext context = new DummyContext();

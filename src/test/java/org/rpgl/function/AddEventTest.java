@@ -14,6 +14,7 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.GetEvents;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -69,7 +70,7 @@ public class AddEventTest {
     @Test
     @DisplayName("execute adds event correctly")
     void execute_addsEventCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(object);
 

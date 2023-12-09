@@ -13,6 +13,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -66,7 +67,7 @@ public class GetEventsTest {
     @Test
     @DisplayName("getEvents is empty by default")
     void getEvents_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -83,7 +84,7 @@ public class GetEventsTest {
     @DisplayName("getEvents returns the correct events")
     void getEvents_returnsCorrectEvents() throws Exception {
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(object);
 

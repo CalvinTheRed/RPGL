@@ -13,6 +13,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -68,8 +69,8 @@ public class ObjectHasTagTest {
     @Test
     @DisplayName("evaluate returns true when object has desired tag")
     void evaluate_returnsTrueWhenObjectHasDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -106,8 +107,8 @@ public class ObjectHasTagTest {
     @Test
     @DisplayName("evaluate returns false when object does not have desired tag")
     void evaluate_returnsFalseWhenObjectDoesNotHaveDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

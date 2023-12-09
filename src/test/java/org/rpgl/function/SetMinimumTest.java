@@ -16,6 +16,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -88,8 +89,8 @@ public class SetMinimumTest {
     @Test
     @DisplayName("execute sets calculation minimum to new value (number)")
     void execute_setsCalculationMinimumToNewValue_number() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -127,8 +128,8 @@ public class SetMinimumTest {
     @Test
     @DisplayName("execute sets calculation minimum to new value (modifier)")
     void execute_setsCalculationMinimumToNewValue_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -178,8 +179,8 @@ public class SetMinimumTest {
     @Test
     @DisplayName("execute sets calculation minimum to new value (ability)")
     void execute_setsCalculationMinimumToNewValue_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -229,8 +230,8 @@ public class SetMinimumTest {
     @Test
     @DisplayName("execute sets calculation minimum to new value (proficiency)")
     void execute_setsCalculationMinimumToNewValue_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -276,8 +277,8 @@ public class SetMinimumTest {
     @Test
     @DisplayName("execute sets calculation minimum to new value only if new minimum is larger")
     void execute_setsCalculationMinimumToNewValueOnlyIfNewMinimumIsLarger() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

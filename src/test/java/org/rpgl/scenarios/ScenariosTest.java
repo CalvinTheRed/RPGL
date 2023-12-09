@@ -55,8 +55,8 @@ public class ScenariosTest {
     @Test
     @DisplayName("flametongue test")
     void flametongueTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -174,8 +174,8 @@ public class ScenariosTest {
     @Test
     @DisplayName("wrathful smite test")
     void wrathfulSmiteTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);

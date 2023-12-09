@@ -10,6 +10,7 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class LoopDetectionTest {
     @Test
     @DisplayName("Detect loop from single self-calling condition")
     void test_singleton() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy");
+        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_singleton"));
 
         DummyContext context = new DummyContext();
@@ -60,7 +61,7 @@ public class LoopDetectionTest {
     @Test
     @DisplayName("Detect loop from condition chain")
     void test_chain() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy");
+        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_1"));
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_2"));
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_3"));
@@ -76,7 +77,7 @@ public class LoopDetectionTest {
     @Test
     @DisplayName("Detect loop from condition chain with independent first condition")
     void test_chain_independentFirstCondition() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy");
+        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_0"));
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_1"));
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_2"));
@@ -93,7 +94,7 @@ public class LoopDetectionTest {
     @Test
     @DisplayName("Detect loop from condition chain with inverted independent first condition")
     void test_chain_independentFirstCondition_inverted() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy");
+        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_0_inverted"));
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_1"));
         dummy.addEffect(RPGLFactory.newEffect("debug:loop_detection_chain_2"));

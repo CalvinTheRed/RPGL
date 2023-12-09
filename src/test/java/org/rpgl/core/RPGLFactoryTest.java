@@ -14,6 +14,7 @@ import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -167,7 +168,7 @@ public class RPGLFactoryTest {
     @Test
     @DisplayName("newObject using std:dragon/red/young")
     void newObject_youngRedDragon() {
-        RPGLObject object = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject object = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         String expected;
 
         expected = """

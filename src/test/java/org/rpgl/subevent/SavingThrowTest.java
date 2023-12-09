@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -67,8 +68,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("deliverDamage delivers damage to target")
     void deliverDamage_deliversDamageToTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -111,8 +112,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveNestedSubevents increments counter on pass (DummySubevent)")
     void resolveNestedSubevents_incrementsCounterOnPass_dummySubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -145,8 +146,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveNestedSubevents increments counter on fail (DummySubevent)")
     void resolveNestedSubevents_incrementsCounterOnFail_dummySubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -179,8 +180,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("getTargetDamage returns empty object (default)")
     void getTargetDamage_returnsEmptyObject_default() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -203,8 +204,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("getBaseDamage stores base damage value")
     void getBaseDamage_storesBaseDamageValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -256,8 +257,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("calculateDifficultyClass calculates 17 (young red dragon using con)")
     void calculateDifficultyClass_calculatesSeventeen_youngRedDragonUsingCon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -278,8 +279,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("prepare calculates save DC and stores base damage")
     void prepare_calculatesSaveDifficultyClassAndStoresBaseDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -334,8 +335,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke deals proper damage on fail")
     void invoke_dealsProperDamageOnFail() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -395,8 +396,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke deals half damage on pass")
     void invoke_dealsHalfDamageOnPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -455,8 +456,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke accommodates vampirism")
     void invoke_accommodatesVampirism() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

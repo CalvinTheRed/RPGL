@@ -16,6 +16,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.DamageRoll;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -191,8 +192,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes specific damage type for DamageRoll")
     void execute_maximizesSpecificDamageTypeForDamageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -223,8 +224,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes every damage type for DamageRoll")
     void execute_maximizesEveryDamageTypeForDamageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -253,8 +254,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes specific damage type for DamageDelivery")
     void execute_maximizesSpecificDamageTypeForDamageDelivery() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -285,8 +286,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes every damage type for DamageDelivery")
     void execute_maximizesEveryDamageTypeForDamageDelivery() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

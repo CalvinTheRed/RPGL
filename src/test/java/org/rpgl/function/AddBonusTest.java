@@ -17,6 +17,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -89,8 +90,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (range)")
     void execute_addsCorrectBonusToCalculation_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -134,8 +135,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (modifier)")
     void execute_addsCorrectBonusToCalculation_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -189,8 +190,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (ability)")
     void execute_addsCorrectBonusToCalculation_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -244,8 +245,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (proficiency)")
     void execute_addsCorrectBonusToCalculation_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -295,8 +296,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (level with specified class)")
     void execute_addsCorrectBonusToCalculation_levelWithSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -348,8 +349,8 @@ public class AddBonusTest {
     @Test
     @DisplayName("execute adds correct bonus to calculation (level without specified class)")
     void execute_addsCorrectBonusToCalculation_levelWithoutSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

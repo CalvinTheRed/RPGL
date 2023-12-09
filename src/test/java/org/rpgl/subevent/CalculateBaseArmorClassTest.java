@@ -12,6 +12,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -64,7 +65,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("getShieldBonus returns 0 (commoner not wielding a shield)")
     void getShieldBonus_returnsZero_commoner() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -80,7 +81,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("getShieldBonus returns 2 (knight wielding a shield)")
     void getShieldBonus_returnsTwo_knight() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -96,7 +97,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareUnarmored returns 10 (commoner)")
     void prepareUnarmored_returnsTen_commoner() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -112,7 +113,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareArmored returns 18 (knight wearing plate armor)")
     void prepareArmored_returnsEighteen_knightPlateArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -128,7 +129,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareArmored returns 14 (knight wearing breastplate armor)")
     void prepareArmored_returnsFourteen_knightBreastplateArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -147,7 +148,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepareArmored returns 11 (knight wearing leather armor)")
     void prepareArmored_returnsEleven_knightLeatherArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -166,7 +167,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepare returns 10 (commoner with no armor or shield)")
     void prepare_returnsTen_commonerNoArmorNoShield() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -183,7 +184,7 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("prepare returns 18 (knight wearing plate armor and shield)")
     void prepare_returnsTwenty_knightPlateArmorShield() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 

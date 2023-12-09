@@ -10,6 +10,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -50,7 +51,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("equipItem item successfully equipped (mainhand, item in inventory)")
     void equipItem_itemSuccessfullyEquipped_mainhandItemInInventory() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         String crossbowUuid = knight.getInventory().getString(0);
         knight.equipItem(crossbowUuid, "mainhand");
 
@@ -62,7 +63,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("equipItem item not equipped (mainhand, item absent from inventory)")
     void equipItem_itemNotEquipped_mainhandItemAbsentFromInventory() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         String daggerUuid = RPGLFactory.newItem("std:weapon/melee/simple/dagger").getUuid();
         knight.equipItem(daggerUuid, "mainhand");
 
@@ -74,7 +75,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("giveItem item added to inventory (item not already present)")
     void giveItem_itemAddedToInventory_itemNotAlreadyPresent() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         String daggerUuid = RPGLFactory.newItem("std:weapon/melee/simple/dagger").getUuid();
         knight.giveItem(daggerUuid);
 
@@ -86,7 +87,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("giveItem item added to inventory (item already present)")
     void giveItem_itemAddedToInventory_itemAlreadyPresent() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         JsonArray inventory = knight.getInventory();
         String alreadyHeldItemUuid = inventory.getString(0);
         knight.giveItem(alreadyHeldItemUuid);
@@ -106,7 +107,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getBaseArmorClass calculates 20")
     void getBaseArmorClass_calculatesTwenty() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(knight);
 
@@ -118,7 +119,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (no temporary hit points)")
     void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         youngRedDragon.reduceHitPoints(10, context);
@@ -131,7 +132,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (few temporary hit points)")
     void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 10);
@@ -145,7 +146,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("reduceHitPoints deducts correct number of hit points (many temporary hit points)")
     void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         youngRedDragon.getHealthData().putInteger("temporary", 20);
@@ -180,7 +181,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getAbilityModifierFromAbilityName returns correct modifier")
     void getAbilityModifierFromAbilityName_returnsCorrectModifier() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(knight);
 
@@ -207,7 +208,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getProficiencyBonus returns correct bonus")
     void getProficiencyBonus_returnsCorrectValue() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(knight);
 
@@ -219,7 +220,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getEvents returns an array of the correct events")
     void getEvents_returnsArrayOfCorrectEvents() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(youngRedDragon);
 
@@ -245,7 +246,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getEffects returns an array of the correct effects")
     void getEffects_returnsArrayOfCorrectEffects() {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(youngRedDragon);
 
@@ -286,7 +287,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("addRemoveEffect effects can be added and removed")
     void addRemoveEffect_effectsCanBeAddedAndRemoved() {
-        RPGLObject knight = RPGLFactory.newObject("debug:dummy");
+        RPGLObject knight = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(knight);
 
@@ -314,8 +315,8 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("invokeEvent event behaves properly")
     void invokeEvent_eventBehavesProperly() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(youngRedDragon);
         context.add(knight);
@@ -344,8 +345,8 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("receiveHealing missing hit points are restored")
     void receiveHealing_missingHitPointsAreRestored() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -385,8 +386,8 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("receiveHealing hit point maximum is not exceeded")
     void receiveHealing_mitPointMaximumIsNotExceeded() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -426,8 +427,8 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("processSubevent handles resources appropriately")
     void processSubevent_handlesResourcesAppropriately() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -446,7 +447,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getResourceObjects returns resources provided by equipped items")
     void getResourceObjects_returnsResourcesProvidedByEquippedItems() {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -469,7 +470,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getLevel returns correct level (with class parameter)")
     void getLevel_returnsCorrectLevel_withClassParameter() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -495,7 +496,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getLevel returns correct level (no parameter, no nested classes)")
     void getLevel_returnsCorrectLevel_noParameterNoNestedClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -521,7 +522,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getLevel returns correct level (no parameter, with nested classes)")
     void getLevel_returnsCorrectLevel_noParameterWithNestedClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -559,7 +560,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getLevel returns correct level (no parameter, with additional nested classes)")
     void getLevel_returnsCorrectLevel_noParameterWithAdditionalNestedClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -619,7 +620,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("calculateLevelForNestedClass calculates correct level (no additional nested classes)")
     void calculateLevelForNestedClass_calculatesCorrectLevel_noAdditionalNestedClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -657,7 +658,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes)")
     void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -705,7 +706,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes and partial scaling rounded down)")
     void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClassesAndPartialScalingRoundedDown() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -753,7 +754,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes and partial scaling rounded up)")
     void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClassesAndPartialScalingRoundedUp() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -801,7 +802,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("getNestedClassIds returns correct nested classes")
     void getNestedClassIds_returnsCorrectNestedClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -847,7 +848,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("levelUpNestedClasses levels up nested classes correctly")
     void levelUpNestedClasses_levelsUpNestedClassesCorrectly() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -927,7 +928,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("levelUp levels up all classes correctly (no new classes)")
     void levelUp_levelsUpAllClassesCorrectly_noNewClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
                 {
@@ -1010,7 +1011,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("levelUp levels up all classes correctly (first class level)")
     void levelUp_levelsUpAllClassesCorrectly_firstClassLevel() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         object.levelUp("std:fighter", new JsonObject() {{
             this.putJsonArray("Skill Proficiencies", new JsonArray() {{
@@ -1033,7 +1034,7 @@ public class RPGLObjectTest {
     @Test
     @DisplayName("abilityCheck evaluates correctly")
     void abilityCheck_evaluatesCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 

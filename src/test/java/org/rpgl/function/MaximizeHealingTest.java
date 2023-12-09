@@ -16,6 +16,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.subevent.HealingRoll;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -76,8 +77,8 @@ public class MaximizeHealingTest {
     @Test
     @DisplayName("execute maximizes healing for HealingRoll subevents")
     void execute_maximizesHealingForHealingRollSubevents() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -140,8 +141,8 @@ public class MaximizeHealingTest {
     @Test
     @DisplayName("execute maximizes healing for HealingDelivery subevents")
     void execute_maximizesHealingForHealingDeliverySubevents() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

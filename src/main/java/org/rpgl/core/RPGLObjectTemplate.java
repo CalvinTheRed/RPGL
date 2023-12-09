@@ -22,9 +22,11 @@ public class RPGLObjectTemplate extends JsonObject {
      * Constructs a new RPGLObject object corresponding to the contents of the RPGLObjectTemplate object. The new
      * object is registered to the UUIDTable class when it is constructed.
      *
+     * @param userId the ID for the user controlling the new object.
+     *
      * @return a new RPGLObject object
      */
-    public RPGLObject newInstance() {
+    public RPGLObject newInstance(String userId) {
         RPGLObject object = new RPGLObject();
         object.join(this);
         this.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());
@@ -41,6 +43,7 @@ public class RPGLObjectTemplate extends JsonObject {
         processEquippedItems(object);
         processResources(object);
         processClasses(object);
+        object.setUserId(userId);
         return object;
     }
 

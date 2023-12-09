@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.subevent.InfoSubevent;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -167,8 +168,8 @@ public class RPGLResourceTest {
         RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -192,8 +193,8 @@ public class RPGLResourceTest {
         // manually edit resource criterion for testing
         resource.getRefreshCriterion().getJsonObject(0).putString("actor", "target");
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -214,8 +215,8 @@ public class RPGLResourceTest {
     void processSubevent_doesNothingWhenResourceNotExhausted() {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -236,8 +237,8 @@ public class RPGLResourceTest {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
