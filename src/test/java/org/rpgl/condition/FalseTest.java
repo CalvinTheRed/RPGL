@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class FalseTest {
 
     @BeforeAll
-    static void beforeFalse() {
+    static void beforeAll() {
         RPGLCore.initializeTesting();
     }
 
