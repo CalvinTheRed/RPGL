@@ -46,7 +46,6 @@ public class UserIdsMatchTest {
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
-        DummySubevent.resetCounter();
     }
 
     @Test
