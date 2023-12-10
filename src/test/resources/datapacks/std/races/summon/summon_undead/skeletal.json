@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Summon Undead (Skeletal)",
+  "description": "The Skeletal race of undead summoned via Summon Undead.",
+  "ability_score_increases": { },
+  "features": {
+    "1": {
+      "gain": {
+        "events": [
+          "std:spell/summon_undead/grave_bolt"
+        ]
+      }
+    }
+  }
+}

@@ -285,4 +285,28 @@ public class ScenariosTest {
         );
     }
 
+    @Test
+    @DisplayName("summon undead test")
+    void summonUndeadTest() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLContext context = new DummyContext();
+        context.add(summoner);
+
+        summoner.getEvents().addString("std:spell/summon_undead/skeletal");
+        summoner.addResource(RPGLFactory.newResource("std:common/action/01"));
+        summoner.addResource(RPGLFactory.newResource("std:common/spell_slot/03"));
+
+        summoner.invokeEvent(
+                new RPGLObject[] {
+                        summoner
+                },
+                TestUtils.getEventById(summoner.getEventObjects(context), "std:spell/summon_undead/skeletal"),
+                new ArrayList<>() {{
+                    this.add(summoner.getResourcesWithTag("action").get(0));
+                    this.add(summoner.getResourcesWithTag("spell_slot").get(0));
+                }},
+                context
+        );
+    }
+
 }
