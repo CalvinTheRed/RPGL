@@ -19,8 +19,8 @@
     "xxx": 10
   },
   "health_data": {
-    "base": 20,
-    "current": 20,
+    "base": 14,
+    "current": 14,
     "temporary": 0
   },
   "classes": [

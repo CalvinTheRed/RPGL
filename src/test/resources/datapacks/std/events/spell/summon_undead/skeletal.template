@@ -18,6 +18,14 @@
         {
           "field": "subevents[0].object_bonuses[0].bonus",
           "magnitude": 1
+        },
+        {
+          "field": "subevents[0].object_bonuses[1].bonus",
+          "magnitude": 8
+        },
+        {
+          "field": "subevents[0].object_bonuses[2].bonus",
+          "magnitude": 10
         }
       ]
     }
@@ -31,6 +39,14 @@
       "object_bonuses": [
         {
           "field": "classes[0].level",
+          "bonus": 0
+        },
+        {
+          "field": "health_data.base",
+          "bonus": 0
+        },
+        {
+          "field": "health_data.current",
           "bonus": 0
         }
       ],

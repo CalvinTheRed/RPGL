@@ -178,22 +178,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            /*{
-              "tags": [ "spell" ],
-              "object_id": "std:summon/summon_undead/skeletal",
-              "controlled_by": "source",
-              "object_bonuses": [
-                {
-                  "field": "classes[0].level",
-                  "bonus": 1
-                }
-              ]
-            }*/
-            this.putJsonArray("tags", new JsonArray() {{
-                this.addString("spell");
-            }});
             this.putString("object_id", "std:summon/summon_undead/skeletal");
-            this.putString("controlled_by", "source");
             this.putJsonArray("object_bonuses", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("field", "classes[0].level");

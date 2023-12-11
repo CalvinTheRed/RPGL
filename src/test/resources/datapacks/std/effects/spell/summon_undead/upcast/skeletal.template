@@ -55,6 +55,39 @@
           }
         ]
       }
+    ],
+    "calculate_base_armor_class": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "target"
+          }
+        ],
+        "functions": [
+          {
+            "function": "set_base",
+            "base": {
+              "base_formula": "number",
+              "number": 11
+            }
+          },
+          {
+            "function": "add_bonus",
+            "bonus": [
+              {
+                "bonus_formula": "level",
+                "class": "std:summon/summon_undead",
+                "object": {
+                  "from": "subevent",
+                  "object": "target"
+                }
+              }
+            ]
+          }
+        ]
+      }
     ]
   }
 }

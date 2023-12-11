@@ -294,7 +294,7 @@ public class ScenariosTest {
 
         summoner.getEvents().addString("std:spell/summon_undead/skeletal");
         summoner.addResource(RPGLFactory.newResource("std:common/action/01"));
-        summoner.addResource(RPGLFactory.newResource("std:common/spell_slot/03"));
+        summoner.addResource(RPGLFactory.newResource("std:common/spell_slot/04"));
 
         summoner.invokeEvent(
                 new RPGLObject[] {
@@ -306,6 +306,17 @@ public class ScenariosTest {
                     this.add(summoner.getResourcesWithTag("spell_slot").get(0));
                 }},
                 context
+        );
+
+        context.remove(summoner);
+        RPGLObject summonedUndead = context.getContextObjects().get(0);
+        context.add(summoner);
+
+        assertEquals(30, summonedUndead.getMaximumHitPoints(context),
+                "30 hit points with level 4 spell slot"
+        );
+        assertEquals(15, summonedUndead.getBaseArmorClass(context),
+                "AC 15 with level 4 spell slot"
         );
     }
 
