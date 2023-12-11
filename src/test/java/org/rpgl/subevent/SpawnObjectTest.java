@@ -158,10 +158,12 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        assertTrue(context.getContextObjects().get(2).getTags().asList().contains("extra-tag-1"),
+        context.remove(summoner);
+
+        assertTrue(context.getContextObjects().get(0).getTags().asList().contains("extra-tag-1"),
                 "new object should have an extra tag"
         );
-        assertTrue(context.getContextObjects().get(2).getTags().asList().contains("extra-tag-2"),
+        assertTrue(context.getContextObjects().get(0).getTags().asList().contains("extra-tag-2"),
                 "new object should be given all extra tags"
         );
     }
@@ -203,7 +205,9 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        assertEquals(4, context.getContextObjects().get(1).getLevel("std:summon/summon_undead"),
+        context.remove(summoner);
+
+        assertEquals(4, context.getContextObjects().get(0).getLevel("std:summon/summon_undead"),
                 "object should receive a +1 bonus to level"
         );
     }

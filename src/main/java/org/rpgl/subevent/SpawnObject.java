@@ -52,7 +52,7 @@ public class SpawnObject extends Subevent {
                     this.putString("from", "subevent");
                     this.putString("object", Objects.requireNonNullElse(json.getString("controlled_by"), "source"));
                 }}).getUserId(),
-                this.json.getJsonArray("object_bonuses")
+                Objects.requireNonNullElse(this.json.getJsonArray("object_bonuses"), new JsonArray())
         );
 
         JsonArray extraTags = Objects.requireNonNullElse(this.json.getJsonArray("extra_tags"), new JsonArray());
