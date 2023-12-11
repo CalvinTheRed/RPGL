@@ -60,8 +60,9 @@ public class SpawnObject extends Subevent {
             spawnedObject.addTag(extraTags.getString(i));
         }
 
-        // assign proficiency?
-        // modify base stats?
+        if (Objects.requireNonNullElse(this.json.getBoolean("extend_proficiency_bonus"), false)) {
+            spawnedObject.setProficiencyBonus(this.getSource().getEffectiveProficiencyBonus(context));
+        }
 
         context.add(spawnedObject);
     }

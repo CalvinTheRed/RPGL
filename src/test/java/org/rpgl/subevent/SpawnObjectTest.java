@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -209,6 +210,57 @@ public class SpawnObjectTest {
 
         assertEquals(4, context.getContextObjects().get(0).getLevel("std:summon/summon_undead"),
                 "object should receive a +1 bonus to level"
+        );
+    }
+
+    @Test
+    @DisplayName("invoke does not extend proficiency bonus by default")
+    void invoke_doesNotExtendProficiencyBonusByDefault() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(summoner);
+
+        summoner.setProficiencyBonus(1);
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "std:dragon/red/young");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context, List.of());
+
+        context.remove(summoner);
+
+        assertNotEquals(1, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
+                "new object should not extend source proficiency bonus by default"
+        );
+    }
+
+    @Test
+    @DisplayName("invoke extends proficiency bonus")
+    void invoke_extendsProficiencyBonus() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(summoner);
+
+        summoner.setProficiencyBonus(1);
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "std:dragon/red/young");
+            this.putBoolean("extend_proficiency_bonus", true);
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context, List.of());
+
+        context.remove(summoner);
+
+        assertEquals(1, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
+                "new object should extend source proficiency bonus"
         );
     }
 

@@ -2,8 +2,8 @@
   "metadata": {
     "author": "Calvin Withun"
   },
-  "name": "Bonus Manager",
-  "description": "The creature has advantage on the next attack roll it makes.",
+  "name": "Upcasting Manager",
+  "description": "The creature is more powerful when summoned with higher level spell slots.",
   "subevent_filters": {
     "attack_roll": [
       {
