@@ -15,8 +15,7 @@
     "con": 15,
     "int": 4,
     "wis": 10,
-    "cha": 9,
-    "xxx": 10
+    "cha": 9
   },
   "health_data": {
     "base": 14,
