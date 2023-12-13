@@ -255,13 +255,16 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("calculateDifficultyClass calculates 17 (young red dragon using con)")
-    void calculateDifficultyClass_calculatesSeventeen_youngRedDragonUsingCon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+    @DisplayName("calculateDifficultyClass calculates correctly")
+    void calculateDifficultyClass_calculatesCorrectly() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
+
+        source.getAbilityScores().putInteger("con", 20);
+        source.setProficiencyBonus(2);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -271,8 +274,36 @@ public class SavingThrowTest {
         savingThrow.setSource(source);
         savingThrow.calculateDifficultyClass(context, List.of());
 
-        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
-                "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+                "save DC should calculate according to the formula DC = 8 + proficiency + modifier"
+        );
+    }
+
+    @Test
+    @DisplayName("calculateDifficultyClass uses origin difficulty class ability")
+    void calculateDifficultyClass_usesOriginDifficultyClassAbility() throws Exception {
+        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        origin.getAbilityScores().putInteger("int", 20);
+        source.setOriginObject(origin.getUuid());
+        source.setProficiencyBonus(2);
+
+        SavingThrow savingThrow = new SavingThrow();
+        savingThrow.joinSubeventData(new JsonObject() {{
+            this.putString("difficulty_class_ability", "int");
+            this.putBoolean("use_origin_difficulty_class_ability", true);
+        }});
+
+        savingThrow.setSource(source);
+        savingThrow.calculateDifficultyClass(context, List.of());
+
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+                "save DC should calculate using origin object's ability scores"
         );
     }
 
@@ -351,7 +382,7 @@ public class SavingThrowTest {
                         "damage_formula": "range",
                         "damage_type": "cold",
                         "dice": [
-                        { "count": 2, "size": 10, "determined": [ 5 ] }
+                            { "count": 2, "size": 10, "determined": [ 5 ] }
                         ],
                         "bonus": 0
                     }

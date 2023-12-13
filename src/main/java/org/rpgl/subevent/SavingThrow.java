@@ -5,9 +5,11 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This Subevent is dedicated to making a saving throw and resolving all fallout from making the save. This is a
@@ -108,7 +110,11 @@ public class SavingThrow extends Roll {
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
-        calculateSaveDifficultyClass.setSource(this.getSource());
+        calculateSaveDifficultyClass.setSource(Objects.requireNonNullElse(
+                this.json.getBoolean("use_origin_difficulty_class_ability"), false)
+                ? UUIDTable.getObject(this.getSource().getOriginObject())
+                : this.getSource()
+        );
         calculateSaveDifficultyClass.prepare(context, resources);
         calculateSaveDifficultyClass.setTarget(this.getSource());
         calculateSaveDifficultyClass.invoke(context, resources);
