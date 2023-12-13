@@ -70,7 +70,7 @@ public class AttackRoll extends Roll {
             this.roll();
             this.json.asMap().putIfAbsent("damage", new ArrayList<>());
             this.addBonus(new JsonObject() {{
-                this.putInteger("bonus", Objects.requireNonNullElse(json.getBoolean("use_origin_ability"), false)
+                this.putInteger("bonus", Objects.requireNonNullElse(json.getBoolean("use_origin_attack_ability"), false)
                         ? UUIDTable.getObject(getSource().getOriginObject()).getAbilityModifierFromAbilityName(getAbility(context), context)
                         : getSource().getAbilityModifierFromAbilityName(getAbility(context), context)
                 );
@@ -130,7 +130,7 @@ public class AttackRoll extends Roll {
 
         // Add damage modifier from attack ability, if applicable
         if (!this.json.getBoolean("withhold_damage_modifier")) { // TODO make a function ond condition for this stuff...
-            int attackAbilityModifier = Objects.requireNonNullElse(json.getBoolean("use_origin_ability"), false)
+            int attackAbilityModifier = Objects.requireNonNullElse(json.getBoolean("use_origin_attack_ability"), false)
                     ? UUIDTable.getObject(getSource().getOriginObject()).getAbilityModifierFromAbilityName(getAbility(context), context)
                     : getSource().getAbilityModifierFromAbilityName(getAbility(context), context);
             baseDamageCollection.addDamage(new JsonObject() {{

@@ -763,6 +763,70 @@ public class AttackRollTest {
     }
 
     @Test
+    @DisplayName("getBaseDamage gets correct base damage (damage modifier not withheld)")
+    void getBaseDamage_getsCorrectBaseDamage_usingOriginAttackAbility() throws Exception {
+        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        origin.getAbilityScores().putInteger("int", 20);
+        source.setOriginObject(origin.getUuid());
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "int",
+                "use_origin_attack_ability": true,
+                "damage": [
+                    {
+                        "damage_formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "withhold_damage_modifier": false
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "int");
+            this.putBoolean("use_origin_attack_ability", true);
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_formula", "range");
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("withhold_damage_modifier", false);
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.setTarget(target);
+        attackRoll.getBaseDamage(context, List.of());
+
+        String expected = """
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":5,"damage_type":"slashing","dice":[]}]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
+                "base damage should be calculated including ability modifier bonus"
+        );
+    }
+
+    @Test
     @DisplayName("prepare adds origin item attack bonus")
     void prepare_addsOriginItemAttackBonus() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
