@@ -74,7 +74,8 @@ public class AddDamage extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -83,7 +84,8 @@ public class AddDamage extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -92,7 +94,8 @@ public class AddDamage extends Function {
                 "half": boolean,
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -101,7 +104,8 @@ public class AddDamage extends Function {
                 "class": "...",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             }
         ]*/

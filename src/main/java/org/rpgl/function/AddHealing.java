@@ -68,7 +68,8 @@ public class AddHealing extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -76,7 +77,8 @@ public class AddHealing extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -84,7 +86,8 @@ public class AddHealing extends Function {
                 "half": boolean,
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -92,7 +95,8 @@ public class AddHealing extends Function {
                 "class": "...",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             }
         ]*/

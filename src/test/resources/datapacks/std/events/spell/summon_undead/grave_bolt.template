@@ -16,7 +16,7 @@
     {
       "subevent": "attack_roll",
       "attack_type": "ranged",
-      "attack_ability": "xxx",
+      "attack_ability": "int",
       "tags": [ "grave_bolt" ],
       "damage": [
         {

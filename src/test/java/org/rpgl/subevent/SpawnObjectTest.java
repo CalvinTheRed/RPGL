@@ -249,4 +249,29 @@ public class SpawnObjectTest {
         );
     }
 
+    @Test
+    @DisplayName("invoke sets origin object")
+    void invoke_setsOriginObject() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(summoner);
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "std:dragon/red/young");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context, List.of());
+
+        context.remove(summoner);
+
+        assertEquals(summoner.getUuid(), context.getContextObjects().get(0).getOriginObject(),
+                "new object should have summoner as origin object"
+        );
+    }
+
+    // TODO unit test needed for the as_origin field of an object specifier object: { from..., object..., as_origin... }
+
 }

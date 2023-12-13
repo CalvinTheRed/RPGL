@@ -55,6 +55,8 @@ public class SpawnObject extends Subevent {
                 Objects.requireNonNullElse(this.json.getJsonArray("object_bonuses"), new JsonArray())
         );
 
+        spawnedObject.setOriginObject(this.getSource().getUuid());
+
         JsonArray extraTags = Objects.requireNonNullElse(this.json.getJsonArray("extra_tags"), new JsonArray());
         for (int i = 0; i < extraTags.size(); i++) {
             spawnedObject.addTag(extraTags.getString(i));

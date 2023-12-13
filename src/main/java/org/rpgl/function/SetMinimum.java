@@ -59,7 +59,8 @@ public class SetMinimum extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -67,7 +68,8 @@ public class SetMinimum extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -75,7 +77,8 @@ public class SetMinimum extends Function {
                 "half": boolean,
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -83,7 +86,8 @@ public class SetMinimum extends Function {
                 "class": "...",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             }
         ]*/

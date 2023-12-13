@@ -29,6 +29,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     public static final String RACES_ALIAS             = "races";
     public static final String CHALLENGE_RATING_ALIAS  = "challenge_rating";
     public static final String USER_ID                 = "user_id";
+    public static final String ORIGIN_OBJECT_ALIAS     = "origin_object";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
     HashMap<String, Object> abilityScores;
@@ -54,6 +55,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     Double challengeRating;
     @JsonProperty(USER_ID)
     String userId;
+    @JsonProperty(ORIGIN_OBJECT_ALIAS)
+    String originObject;
 
     /**
      * Default constructor for RPGLObjectTO class.
@@ -81,6 +84,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
         this.classes = rpglObject.getClasses().asList();
         this.races = rpglObject.getRaces().asList();
         this.challengeRating = rpglObject.getChallengeRating();
+        this.originObject = rpglObject.getOriginObject();
     }
 
     /**
@@ -101,6 +105,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.putJsonArray(CLASSES_ALIAS, new JsonArray(classes));
             this.putJsonArray(RACES_ALIAS, new JsonArray(races));
             this.putDouble(CHALLENGE_RATING_ALIAS, challengeRating);
+            // origin object not needed for template
         }};
         rpglObjectTemplate.join(super.getTemplateData());
         return rpglObjectTemplate;
@@ -125,6 +130,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.setRaces(new JsonArray(races));
             this.setChallengeRating(challengeRating);
             this.setUserId(userId);
+            this.setOriginObject(originObject);
         }};
         rpglObject.join(super.getTemplateData());
         rpglObject.join(super.getUUIDTableElementData());

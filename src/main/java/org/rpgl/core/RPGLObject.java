@@ -249,6 +249,24 @@ public class RPGLObject extends RPGLTaggable {
         this.putString(RPGLObjectTO.USER_ID, userId);
     }
 
+    /**
+     * Getter for origin object.
+     *
+     * @return the object's origin object id
+     */
+    public String getOriginObject() {
+        return this.getString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS);
+    }
+
+    /**
+     * Setter for origin object.
+     *
+     * @param originObject a new origin object id
+     */
+    public void setOriginObject(String originObject) {
+        this.putString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS, originObject);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================

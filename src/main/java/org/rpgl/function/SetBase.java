@@ -58,7 +58,8 @@ public class SetBase extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -66,7 +67,8 @@ public class SetBase extends Function {
                 "ability": "dex",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -74,7 +76,8 @@ public class SetBase extends Function {
                 "half": boolean,
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             },{
                 "name": "...",
@@ -82,7 +85,8 @@ public class SetBase extends Function {
                 "class": "...",
                 "object": {
                     "from": "...",
-                    "object": "..."
+                    "object": "...",
+                    "as_origin": t/f
                 }
             }
         ]*/
