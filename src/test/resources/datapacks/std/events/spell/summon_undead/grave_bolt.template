@@ -17,6 +17,16 @@
       "subevent": "attack_roll",
       "attack_type": "ranged",
       "attack_ability": "int",
+      "use_origin_ability": true,
+      "bonuses": [
+        {
+          "bonus_formula": "proficiency",
+          "object": {
+            "from": "subevent",
+            "object": "source"
+          }
+        }
+      ],
       "tags": [ "grave_bolt" ],
       "damage": [
         {

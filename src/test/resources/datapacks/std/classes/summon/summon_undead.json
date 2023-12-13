@@ -23,31 +23,31 @@
     "4": {
       "gain": {
         "events": [
-          "std:classes/common/extra_attack/1"
+          "std:class/common/extra_attack/1"
         ]
       }
     },
     "6": {
       "lose": {
         "events": [
-          "std:classes/common/extra_attack/1"
+          "std:class/common/extra_attack/1"
         ]
       },
       "gain": {
         "events": [
-          "std:classes/common/extra_attack/2"
+          "std:class/common/extra_attack/2"
         ]
       }
     },
     "8": {
       "lose": {
         "events": [
-          "std:classes/common/extra_attack/2"
+          "std:class/common/extra_attack/2"
         ]
       },
       "gain": {
         "events": [
-          "std:classes/common/extra_attack/3"
+          "std:class/common/extra_attack/3"
         ]
       }
     }
