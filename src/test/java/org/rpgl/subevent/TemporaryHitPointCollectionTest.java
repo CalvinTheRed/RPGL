@@ -184,7 +184,7 @@ public class TemporaryHitPointCollectionTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -192,7 +192,7 @@ public class TemporaryHitPointCollectionTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -223,7 +223,7 @@ public class TemporaryHitPointCollectionTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "modifier",
+                        "formula": "modifier",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -234,7 +234,7 @@ public class TemporaryHitPointCollectionTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "modifier");
+                    this.putString("formula", "modifier");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -268,7 +268,7 @@ public class TemporaryHitPointCollectionTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "ability",
+                        "formula": "ability",
                         "ability": "dex",
                         "object": {
                             "from": "subevent",
@@ -279,7 +279,7 @@ public class TemporaryHitPointCollectionTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "ability");
+                    this.putString("formula", "ability");
                     this.putString("ability", "dex");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -311,7 +311,7 @@ public class TemporaryHitPointCollectionTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "proficiency",
+                        "formula": "proficiency",
                         "object": {
                             "from": "subevent",
                             "object": "source"
@@ -321,7 +321,7 @@ public class TemporaryHitPointCollectionTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "proficiency");
+                    this.putString("formula", "proficiency");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
                         this.putString("object", "source");

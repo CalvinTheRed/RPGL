@@ -3,7 +3,6 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLResource;
-import org.rpgl.function.AddTemporaryHitPoints;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -64,7 +63,7 @@ public class TemporaryHitPointCollection extends Subevent {
             effect.setTarget(this.getSource());
             for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
                 JsonObject temporaryHitPointsJson = temporaryHitPointsArray.getJsonObject(i);
-                this.addTemporaryHitPoints(AddTemporaryHitPoints.processJson(effect, this, temporaryHitPointsJson, context));
+                this.addTemporaryHitPoints(Calculation.processBonusJson(effect, this, temporaryHitPointsJson, context));
             }
         }
     }

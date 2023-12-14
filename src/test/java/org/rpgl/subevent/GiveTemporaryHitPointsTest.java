@@ -79,7 +79,7 @@ public class GiveTemporaryHitPointsTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -90,7 +90,7 @@ public class GiveTemporaryHitPointsTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -132,7 +132,7 @@ public class GiveTemporaryHitPointsTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -143,7 +143,7 @@ public class GiveTemporaryHitPointsTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -185,7 +185,7 @@ public class GiveTemporaryHitPointsTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -196,7 +196,7 @@ public class GiveTemporaryHitPointsTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});

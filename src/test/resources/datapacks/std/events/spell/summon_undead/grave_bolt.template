@@ -20,7 +20,7 @@
       "use_origin_attack_ability": true,
       "bonuses": [
         {
-          "bonus_formula": "proficiency",
+          "formula": "proficiency",
           "object": {
             "from": "subevent",
             "object": "source"
@@ -30,7 +30,7 @@
       "tags": [ "grave_bolt" ],
       "damage": [
         {
-          "damage_formula": "range",
+          "formula": "range",
           "damage_type": "necrotic",
           "dice": [
             { "count": 2, "size": 4, "determined": [ 2 ] }

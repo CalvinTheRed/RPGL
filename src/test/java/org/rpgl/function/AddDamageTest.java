@@ -87,7 +87,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [
                             { "count": 1, "size": 6, "determined": [ 3 ] }
@@ -99,7 +99,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -120,7 +120,7 @@ public class AddDamageTest {
 
         addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
-        [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}]}]""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add appropriate damage range to collection"
         );
@@ -147,7 +147,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "damage_formula": "modifier",
+                        "formula": "modifier",
                         "ability": "str",
                         "damage_type": "fire",
                         "object": {
@@ -160,7 +160,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "modifier");
+                    this.putString("formula", "modifier");
                     this.putString("ability", "str");
                     this.putString("damage_type", "fire");
                     this.putJsonObject("object", new JsonObject() {{
@@ -176,7 +176,7 @@ public class AddDamageTest {
 
         addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
-        [{"bonus":5,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":5,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add appropriate damage modifier to collection"
         );
@@ -203,7 +203,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "damage_formula": "ability",
+                        "formula": "ability",
                         "ability": "str",
                         "damage_type": "fire",
                         "object": {
@@ -216,7 +216,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "ability");
+                    this.putString("formula", "ability");
                     this.putString("ability", "str");
                     this.putString("damage_type", "fire");
                     this.putJsonObject("object", new JsonObject() {{
@@ -232,7 +232,7 @@ public class AddDamageTest {
 
         addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
-        [{"bonus":20,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":20,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add appropriate damage ability to collection"
         );
@@ -259,7 +259,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "damage_formula": "proficiency",
+                        "formula": "proficiency",
                         "damage_type": "fire",
                         "object": {
                             "from": "subevent",
@@ -271,7 +271,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "proficiency");
+                    this.putString("formula", "proficiency");
                     this.putString("damage_type", "fire");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -286,7 +286,7 @@ public class AddDamageTest {
 
         addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
-        [{"bonus":3,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":3,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add appropriate damage proficiency to collection"
         );
@@ -311,7 +311,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "damage_formula": "level",
+                        "formula": "level",
                         "class": "std:common/base",
                         "damage_type": "fire",
                         "object": {
@@ -324,7 +324,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "level");
+                    this.putString("formula", "level");
                     this.putString("class", "std:common/base");
                     this.putString("damage_type", "fire");
                     this.putJsonObject("object", new JsonObject() {{
@@ -340,7 +340,7 @@ public class AddDamageTest {
 
         addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
-        [{"bonus":1,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":1,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add appropriate damage level to collection"
         );
@@ -365,7 +365,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "damage_formula": "level",
+                        "formula": "level",
                         "damage_type": "fire",
                         "object": {
                             "from": "subevent",
@@ -377,7 +377,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "level");
+                    this.putString("formula", "level");
                     this.putString("damage_type", "fire");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -392,7 +392,7 @@ public class AddDamageTest {
 
         addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
-        [{"bonus":9,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":9,"damage_type":"fire","dice":[]}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add appropriate damage level to collection"
         );

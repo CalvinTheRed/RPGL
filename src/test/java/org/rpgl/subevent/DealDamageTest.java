@@ -155,7 +155,7 @@ public class DealDamageTest {
                 "tags": [ ],
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
@@ -167,7 +167,7 @@ public class DealDamageTest {
             this.putJsonArray("tags", new JsonArray());
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -208,7 +208,7 @@ public class DealDamageTest {
             /*{
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
@@ -219,7 +219,7 @@ public class DealDamageTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -262,7 +262,7 @@ public class DealDamageTest {
             /*{
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "necrotic",
                         "dice": [
                             { "count": 2, "size": 10, "determined": [ 5 ] }
@@ -279,7 +279,7 @@ public class DealDamageTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "necrotic");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{

@@ -144,7 +144,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count":2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -154,7 +154,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -195,7 +195,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -205,7 +205,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -242,7 +242,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -252,7 +252,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -293,7 +293,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -303,7 +303,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -344,7 +344,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "modifier",
+                        "formula": "modifier",
                         "ability": "str",
                         "object": {
                             "from": "subevent",
@@ -355,7 +355,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "modifier");
+                    this.putString("formula", "modifier");
                     this.putString("ability", "str");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -391,7 +391,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "ability",
+                        "formula": "ability",
                         "ability": "str",
                         "object": {
                             "from": "subevent",
@@ -402,7 +402,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "ability");
+                    this.putString("formula", "ability");
                     this.putString("ability", "str");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -438,7 +438,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "proficiency",
+                        "formula": "proficiency",
                         "object": {
                             "from": "subevent",
                             "object": "source"
@@ -448,7 +448,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "proficiency");
+                    this.putString("formula", "proficiency");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
                         this.putString("object", "source");

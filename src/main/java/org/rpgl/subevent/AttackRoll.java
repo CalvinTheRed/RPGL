@@ -195,7 +195,7 @@ public class AttackRoll extends Roll {
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = new CalculateEffectiveArmorClass();
         calculateEffectiveArmorClass.joinSubeventData(new JsonObject() {{
             this.putJsonObject("base", new JsonObject() {{
-                this.putString("base_formula", "number");
+                this.putString("formula", "number");
                 this.putInteger("number", getTarget().getBaseArmorClass(context));
             }});
         }});
