@@ -83,7 +83,12 @@ public class SavingThrowTest {
                         "dice": [
                             { "roll": 5 }
                         ],
-                        "bonus": 5
+                        "bonus": 5,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -96,6 +101,11 @@ public class SavingThrowTest {
                         }});
                     }});
                     this.putInteger("bonus", 5);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -204,8 +214,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("getBaseDamage stores base damage value")
     void getBaseDamage_storesBaseDamageValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -248,7 +258,7 @@ public class SavingThrowTest {
         savingThrow.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}]}]""";
+                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, savingThrow.json.getJsonArray("damage").toString(),
                 "getBaseDamage should store 10 cold damage"
         );
@@ -310,16 +320,19 @@ public class SavingThrowTest {
     @Test
     @DisplayName("prepare calculates save DC and stores base damage")
     void prepare_calculatesSaveDifficultyClassAndStoresBaseDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        source.getAbilityScores().putInteger("int", 20);
+        source.setProficiencyBonus(2);
+
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
-                "difficulty_class_ability": "con",
+                "difficulty_class_ability": "int",
                 "damage": [
                     {
                         :formula": "range",
@@ -331,7 +344,7 @@ public class SavingThrowTest {
                     }
                 ]
             }*/
-            this.putString("difficulty_class_ability", "con");
+            this.putString("difficulty_class_ability", "int");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
                     this.putString("formula", "range");
@@ -353,11 +366,11 @@ public class SavingThrowTest {
         savingThrow.setSource(source);
         savingThrow.prepare(context, List.of());
 
-        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
-                "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+                "save DC was calculated incorrectly"
         );
         String expected = """
-                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}]}]""";
+                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, savingThrow.json.getJsonArray("damage").toString(),
                 "prepare should store 10 cold damage"
         );

@@ -173,7 +173,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "base healing should be rolled and in accordance with subevent-specified healing"
         );
@@ -271,7 +271,7 @@ public class HealTest {
         heal.prepare(context, List.of());
 
         String expected = """
-                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "base healing should be rolled and stored after calling prepare"
         );
@@ -369,7 +369,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":6,"dice":[]}]""";
+                [{"bonus":6,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "healing should equal str mod"
         );
@@ -416,7 +416,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":23,"dice":[]}]""";
+                [{"bonus":23,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "healing should equal str score (23)"
         );
@@ -461,7 +461,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":4,"dice":[]}]""";
+                [{"bonus":4,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "healing should equal proficiency bonus"
         );

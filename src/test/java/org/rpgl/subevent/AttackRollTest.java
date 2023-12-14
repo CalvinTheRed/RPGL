@@ -254,7 +254,12 @@ public class AttackRollTest {
                         "dice": [
                             { "roll": 5 }
                         ],
-                        "bonus": 5
+                        "bonus": 5,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -267,6 +272,11 @@ public class AttackRollTest {
                         }});
                     }});
                     this.putInteger("bonus", 5);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -299,7 +309,12 @@ public class AttackRollTest {
                     {
                         "damage_type": "necrotic",
                         "dice": [ ],
-                        "bonus": 10
+                        "bonus": 10,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ],
                 "vampirism": {
@@ -311,6 +326,11 @@ public class AttackRollTest {
                     this.putString("damage_type", "necrotic");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
             this.putJsonObject("vampirism", new JsonObject() {{
@@ -396,7 +416,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":6,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":6,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "damage should include str mod (+6)"
         );
@@ -450,7 +470,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":23,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":23,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "damage should include str score (23)"
         );
@@ -502,7 +522,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":4,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":4,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "damage should include proficiency bonus (+4)"
         );
@@ -636,7 +656,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":3,"damage_type":"slashing","dice":[]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":3,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated including ability modifier bonus"
         );
@@ -694,7 +714,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated not including ability modifier bonus"
         );
@@ -756,7 +776,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":1,"damage_type":"slashing","dice":[]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":1,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated including item damage bonus"
         );
@@ -816,11 +836,12 @@ public class AttackRollTest {
         }});
 
         attackRoll.setSource(source);
+        attackRoll.prepare(context, List.of());
         attackRoll.setTarget(target);
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":5,"damage_type":"slashing","dice":[]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated including ability modifier bonus"
         );
@@ -875,7 +896,12 @@ public class AttackRollTest {
                             { "size": 6, "determined": [ 3 ] },
                             { "size": 6, "determined": [ 3 ] }
                         ],
-                        "bonus": 0
+                        "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -899,6 +925,11 @@ public class AttackRollTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});

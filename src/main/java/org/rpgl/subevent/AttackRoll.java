@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.function.AddDamage;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -130,23 +131,65 @@ public class AttackRoll extends Roll {
 
         // Add damage modifier from attack ability, if applicable
         if (!this.json.getBoolean("withhold_damage_modifier")) { // TODO make a function ond condition for this stuff...
-            int attackAbilityModifier = Objects.requireNonNullElse(json.getBoolean("use_origin_attack_ability"), false)
-                    ? UUIDTable.getObject(getSource().getOriginObject()).getAbilityModifierFromAbilityName(getAbility(context), context)
-                    : getSource().getAbilityModifierFromAbilityName(getAbility(context), context);
-            baseDamageCollection.addDamage(new JsonObject() {{
-                this.putString("damage_type", damageType);
-                this.putJsonArray("dice", new JsonArray());
-                this.putInteger("bonus", attackAbilityModifier);
-            }});
+            new AddDamage().execute(null, baseDamageCollection, new JsonObject() {{
+                /*{
+                    "function": "add_damage",
+                    "damage": [
+                        {
+                            "formula": "modifier",
+                            "damage_type": damageType
+                            "ability": getAbility(context),
+                            "object": {
+                                "from": "subevent",
+                                "object": "source",
+                                "as_origin": if origin ability is used for the attack
+                            }
+                        }
+                    ]
+                }*/
+                this.putString("function", "add_damage");
+                this.putJsonArray("damage", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "modifier");
+                        this.putString("damage_type", damageType);
+                        this.putString("ability", getAbility(context));
+                        this.putJsonObject("object", new JsonObject() {{
+                            this.putString("from", "subevent");
+                            this.putString("object", "source");
+                            this.putBoolean("as_origin", Objects.requireNonNullElse(
+                                    json.getBoolean("use_origin_attack_ability"),
+                                    false
+                            ));
+                        }});
+                    }});
+                }});
+            }}, context, List.of());
         }
 
         // Add origin item damage bonus, if applicable
         if (this.getOriginItem() != null) {
-            baseDamageCollection.addDamage(new JsonObject() {{
-                this.putString("damage_type", damageType);
-                this.putJsonArray("dice", new JsonArray());
-                this.putInteger("bonus", UUIDTable.getItem(getOriginItem()).getDamageBonus());
-            }});
+            new AddDamage().execute(null, baseDamageCollection, new JsonObject() {{
+                /*{
+                    "function": "add_damage",
+                    "damage": [
+                        {
+                            "formula": "range",
+                            "damage_type": damageType
+                            "dice": [ ],
+                            "bonus": origin item damage bonus
+                        }
+                    ]
+                }*/
+                this.putString("function", "add_damage");
+                this.putJsonArray("damage", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "range");
+                        this.putString("damage_type", damageType);
+                        this.putJsonArray("dice", new JsonArray());
+                        this.putInteger("bonus", UUIDTable.getItem(getOriginItem()).getDamageBonus());
+                    }});
+                }});
+            }}, context, List.of());
         }
 
         // Replace damage key with base damage collection

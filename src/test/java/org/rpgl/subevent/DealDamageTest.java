@@ -85,7 +85,12 @@ public class DealDamageTest {
                         "dice": [
                             { "roll": 5 }
                         ],
-                        "bonus": 5
+                        "bonus": 5,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -99,6 +104,11 @@ public class DealDamageTest {
                         }});
                     }});
                     this.putInteger("bonus", 5);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -188,7 +198,7 @@ public class DealDamageTest {
         dealDamage.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}]}]""";
+                [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, dealDamage.json.getJsonArray("damage").toString(),
                 "base damage should be 3 force damage"
         );

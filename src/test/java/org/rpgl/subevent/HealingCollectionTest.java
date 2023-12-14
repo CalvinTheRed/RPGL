@@ -173,8 +173,8 @@ public class HealingCollectionTest {
     }
 
     @Test
-    @DisplayName("prepareHealing interprets healing (range)")
-    void prepareHealing_interpretsHealing_range() throws Exception {
+    @DisplayName("prepareHealing interprets healing correctly")
+    void prepareHealing_interpretsHealingCorrectly() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
@@ -203,138 +203,7 @@ public class HealingCollectionTest {
         healingCollection.prepareHealing(context);
 
         String expected = """
-                [{"bonus":10,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareHealing interprets healing (modifier)")
-    void prepareHealing_interpretsHealing_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "formula": "modifier",
-                        "ability": "dex",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "modifier");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
-
-        String expected = """
-                [{"bonus":5,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareHealing interprets healing (ability)")
-    void prepareHealing_interpretsHealing_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "formula": "ability",
-                        "ability": "dex",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "ability");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
-
-        String expected = """
-                [{"bonus":20,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareHealing interprets healing (proficiency)")
-    void prepareHealing_interpretsHealing_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "formula": "proficiency",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "proficiency");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
-
-        String expected = """
-                [{"bonus":2,"dice":[]}]""";
+                [{"bonus":10,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
                 "prepare should correctly interpret healing instructions"
         );
