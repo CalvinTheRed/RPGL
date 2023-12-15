@@ -68,9 +68,8 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("invoke spawns correct object and adds to context and UUIDTable")
     void invoke_spawnsCorrectObjectAndAddsToContextAndUUIDTable() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(summoner);
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
@@ -81,8 +80,8 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        assertEquals(2, context.getContextObjects().size(),
-                "There should be 2 context objects in context following spawn"
+        assertEquals(1, context.getContextObjects().size(),
+                "There should be 1 new object in context following spawn"
         );
 
         for (RPGLObject object : context.getContextObjects()) {
@@ -95,11 +94,9 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("invoke defaults to source user id")
     void invoke_defaultsToSourceUserId() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", "user-one");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", "user-two");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", "user-one");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", "user-two");
         DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
@@ -118,11 +115,9 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("invoke uses target user id")
     void invoke_usesTargetUserId() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", "user-one");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", "user-two");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", "user-one");
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", "user-two");
         DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
@@ -142,9 +137,8 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("invoke adds extra tags")
     void invoke_addsExtraTags() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(summoner);
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
@@ -159,8 +153,6 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        context.remove(summoner);
-
         assertTrue(context.getContextObjects().get(0).getTags().asList().contains("extra-tag-1"),
                 "new object should have an extra tag"
         );
@@ -174,7 +166,6 @@ public class SpawnObjectTest {
     void invoke_objectReceivesCorrectBonuses() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(summoner);
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
@@ -191,8 +182,6 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        context.remove(summoner);
-
         assertEquals(4, context.getContextObjects().get(0).getLevel("std:summon/summon_undead"),
                 "object should receive a +1 bonus to level"
         );
@@ -201,9 +190,8 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("invoke does not extend proficiency bonus by default")
     void invoke_doesNotExtendProficiencyBonusByDefault() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(summoner);
 
         summoner.setProficiencyBonus(1);
 
@@ -216,8 +204,6 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        context.remove(summoner);
-
         assertNotEquals(1, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should not extend source proficiency bonus by default"
         );
@@ -226,11 +212,10 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("invoke extends proficiency bonus")
     void invoke_extendsProficiencyBonus() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(summoner);
 
-        summoner.setProficiencyBonus(1);
+        summoner.setProficiencyBonus(5);
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
@@ -242,9 +227,7 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        context.remove(summoner);
-
-        assertEquals(1, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
+        assertEquals(5, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should extend source proficiency bonus"
         );
     }
@@ -252,9 +235,8 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("invoke sets origin object")
     void invoke_setsOriginObject() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(summoner);
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
@@ -265,13 +247,37 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        context.remove(summoner);
-
         assertEquals(summoner.getUuid(), context.getContextObjects().get(0).getOriginObject(),
                 "new object should have summoner as origin object"
         );
     }
 
-    // TODO unit test needed for the as_origin field of an object specifier object: { from..., object..., as_origin... }
+    @Test
+    @DisplayName("addSpawnObjectBonus adds bonuses")
+    void addSpawnObjectBonus_addsBonuses() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.addSpawnObjectBonus(new JsonObject() {{
+            /*{
+              "field": "health_data.temporary",
+              "bonus": 10
+            }*/
+            this.putString("field", "health_data.temporary");
+            this.putInteger("bonus", 10);
+        }});
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context, List.of());
+
+        assertEquals(10, context.getContextObjects().get(0).getHealthData().getInteger("temporary"),
+                "new object should have correct bonus temporary hit points"
+        );
+    }
 
 }

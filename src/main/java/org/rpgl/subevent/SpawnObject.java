@@ -8,6 +8,7 @@ import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +46,12 @@ public class SpawnObject extends Subevent {
     }
 
     @Override
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
+        this.json.asMap().putIfAbsent("object_bonuses", new ArrayList<>());
+    }
+
+    @Override
     public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
         RPGLObject spawnedObject = RPGLFactory.newObject(
                 this.json.getString("object_id"),
@@ -67,5 +74,14 @@ public class SpawnObject extends Subevent {
         }
 
         context.add(spawnedObject);
+    }
+
+    /**
+     * This method adds a custom bonus to the object spawned by this subevent.
+     *
+     * @param bonus an array of bonuses to be applied to the object
+     */
+    public void addSpawnObjectBonus(JsonObject bonus) {
+        this.json.getJsonArray("object_bonuses").addJsonObject(bonus);
     }
 }
