@@ -36,7 +36,15 @@ public abstract class Calculation extends Subevent {
         this.prepareMinimum(context);
     }
 
-    static int scale(int value, JsonObject scaleJson) {
+    /**
+     * This helper method scales a given value according to a provided factor.
+     *
+     * @param value the value to be scaled
+     * @param scaleJson a JSON object indicating the factor by which the value will be scaled, in the form of <code>
+     *                  { "numerator": int, "denominator": int, "round_up": boolean }</code>
+     * @return the scaled value
+     */
+    public static int scale(int value, JsonObject scaleJson) {
         return Objects.requireNonNullElse(scaleJson.getBoolean("round_up"), false)
                 ? (int) Math.ceil((double) value
                 * (double) Objects.requireNonNullElse(scaleJson.getInteger("numerator"), 1)
@@ -207,7 +215,12 @@ public abstract class Calculation extends Subevent {
         /*[
             {
                 "formula": "number",
-                "number": #
+                "number": #,
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
             },{
                 "formula": "modifier",
                 "ability": "dex",
@@ -261,7 +274,6 @@ public abstract class Calculation extends Subevent {
                     "round_up": t/f
                 }
             }
-            // TODO allow set values to have a scale: { numerator, denominator, round_up }
         ]*/
         return switch (formulaData.getString("formula")) {
             case "number" -> formulaData.getInteger("number");

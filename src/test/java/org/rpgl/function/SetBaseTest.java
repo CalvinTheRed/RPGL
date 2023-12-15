@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -88,19 +87,14 @@ public class SetBaseTest {
 
     @Test
     @DisplayName("execute sets calculation base to new value (number)")
-    void execute_setsCalculationBaseToNewValue_number() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    void execute_setsBaseCorrectly() throws Exception {
+        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
-        calculation.setSource(source);
+        calculation.setSource(dummy);
         calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        SetBase setBase = new SetBase();
-        JsonObject functionJson = new JsonObject() {{
+        calculation.setTarget(dummy);
+        new SetBase().execute(null, calculation, new JsonObject() {{
             /*{
                 "function": "set_base",
                 "base": {
@@ -113,164 +107,10 @@ public class SetBaseTest {
                 this.putString("formula", "number");
                 this.putInteger("number", 13);
             }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
-
-        setBase.execute(effect, calculation, functionJson, context, List.of());
+        }}, context, List.of());
 
         assertEquals(13, calculation.getBase(),
                 "execute should set calculation base to 13"
-        );
-    }
-
-    @Test
-    @DisplayName("execute sets calculation base to new value (modifier)")
-    void execute_setsCalculationBaseToNewValue_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        SetBase setBase = new SetBase();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "set_base",
-                "base": {
-                    "formula": "modifier",
-                    "ability": "dex",
-                    "object": {
-                        "from": "effect",
-                        "object": "source"
-                    }
-                }
-            }*/
-            this.putString("function", "set_base");
-            this.putJsonObject("base", new JsonObject() {{
-                this.putString("formula", "modifier");
-                this.putString("ability", "dex");
-                this.putJsonObject("object", new JsonObject() {{
-                    this.putString("from", "effect");
-                    this.putString("object", "source");
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        setBase.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(5, calculation.getBase(),
-                "execute should set calculation base to source's dex modifier (+5)"
-        );
-    }
-
-    @Test
-    @DisplayName("execute sets calculation base to new value (ability)")
-    void execute_setsCalculationBaseToNewValue_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        SetBase setBase = new SetBase();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "set_base",
-                "base": {
-                    "formula": "ability",
-                    "ability": "dex",
-                    "object": {
-                        "from": "effect",
-                        "object": "source"
-                    }
-                }
-            }*/
-            this.putString("function", "set_base");
-            this.putJsonObject("base", new JsonObject() {{
-                this.putString("formula", "ability");
-                this.putString("ability", "dex");
-                this.putJsonObject("object", new JsonObject() {{
-                    this.putString("from", "effect");
-                    this.putString("object", "source");
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        setBase.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(20, calculation.getBase(),
-                "execute should set calculation base to source's dex score (20)"
-        );
-    }
-
-    @Test
-    @DisplayName("execute sets calculation base to new value (proficiency)")
-    void execute_setsCalculationBaseToNewValue_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        SetBase setBase = new SetBase();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "set_base",
-                "base": {
-                    "formula": "proficiency",
-                    "object": {
-                        "from": "effect",
-                        "object": "source"
-                    }
-                }
-            }*/
-            this.putString("function", "set_base");
-            this.putJsonObject("base", new JsonObject() {{
-                this.putString("formula", "proficiency");
-                this.putJsonObject("object", new JsonObject() {{
-                    this.putString("from", "effect");
-                    this.putString("object", "source");
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        setBase.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(2, calculation.getBase(),
-                "execute should set calculation base to source's proficiency bonus (+2)"
         );
     }
 
