@@ -102,7 +102,7 @@ public class ApplyVampirismTest {
         applyVampirism.execute(null, attackRoll, functionJson, context, List.of());
 
         String expected = """
-                {"subevent":"attack_roll","tags":[],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
+                {"subevent":"attack_roll","tags":["attack_roll"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
         assertEquals(expected, attackRoll.toString(),
                 "vampirism should be applied to attack roll"
         );
@@ -142,7 +142,7 @@ public class ApplyVampirismTest {
         applyVampirism.execute(null, dealDamage, functionJson, context, List.of());
 
         String expected = """
-                {"subevent":"deal_damage","tags":[],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
+                {"subevent":"deal_damage","tags":["deal_damage"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
         assertEquals(expected, dealDamage.toString(),
                 "vampirism should be applied to subevent"
         );
@@ -182,7 +182,7 @@ public class ApplyVampirismTest {
         applyVampirism.execute(null, savingThrow, functionJson, context, List.of());
 
         String expected = """
-                {"subevent":"saving_throw","tags":[],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
+                {"subevent":"saving_throw","tags":["saving_throw"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
         assertEquals(expected, savingThrow.toString(),
                 "vampirism should be applied at attack roll"
         );

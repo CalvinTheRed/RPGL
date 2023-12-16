@@ -969,7 +969,9 @@ public class AttackRollTest {
                 "has_advantage": false,
                 "has_disadvantage": false,
                 "bonuses": [ ],
-                "determined": [ 1 ]
+                "determined": [ 1 ],
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -986,6 +988,8 @@ public class AttackRollTest {
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(1);
             }});
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -1026,7 +1030,9 @@ public class AttackRollTest {
                 "minimum": {
                     "value": Integer.MIN_VALUE
                 },
-                "determined": [ 2 ]
+                "determined": [ 2 ],
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -1046,6 +1052,8 @@ public class AttackRollTest {
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(2);
             }});
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -1087,7 +1095,9 @@ public class AttackRollTest {
                     "value": Integer.MIN_VALUE
                 },
                 "determined": [ 19 ],
-                "withhold_damage_modifier": true
+                "withhold_damage_modifier": true,
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -1115,6 +1125,8 @@ public class AttackRollTest {
                 this.addInteger(19);
             }});
             this.putBoolean("withhold_damage_modifier", true);
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -1158,7 +1170,9 @@ public class AttackRollTest {
                     "value": Integer.MIN_VALUE
                 },
                 "determined": [ 20 ],
-                "withhold_damage_modifier": true
+                "withhold_damage_modifier": true,
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -1186,6 +1200,8 @@ public class AttackRollTest {
                 this.addInteger(20);
             }});
             this.putBoolean("withhold_damage_modifier", true);
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -1320,7 +1336,9 @@ public class AttackRollTest {
                     "value": Integer.MIN_VALUE
                 },
                 "determined": [ 20 ],
-                "withhold_damage_modifier": true
+                "withhold_damage_modifier": true,
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
@@ -1348,6 +1366,8 @@ public class AttackRollTest {
                 this.addInteger(20);
             }});
             this.putBoolean("withhold_damage_modifier", true);
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);

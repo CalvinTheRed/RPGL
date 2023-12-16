@@ -84,6 +84,7 @@ public class TakeResourceTest {
             this.putString("resource_tag", "necrotic_husk");
         }});
         takeResource.setSource(source);
+        takeResource.prepare(context, List.of());
         takeResource.setTarget(target);
 
         takeResource.invoke(context, List.of());
@@ -123,6 +124,7 @@ public class TakeResourceTest {
             this.putString("resource_tag", "necrotic_husk");
         }});
         takeResource.setSource(source);
+        takeResource.prepare(context, List.of());
         takeResource.setTarget(target);
 
         takeResource.invoke(context, List.of());

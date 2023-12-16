@@ -279,6 +279,7 @@ public class SavingThrowTest {
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             this.putString("difficulty_class_ability", "con");
+            this.putBoolean("use_origin_difficulty_class_ability", false);
         }});
 
         savingThrow.setSource(source);

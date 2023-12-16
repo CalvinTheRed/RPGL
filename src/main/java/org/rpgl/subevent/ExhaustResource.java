@@ -50,8 +50,8 @@ public class ExhaustResource extends Subevent {
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
         this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
-        this.json.asMap().putIfAbsent("minimum_potency", 0);
         this.json.asMap().putIfAbsent("maximum_potency", Integer.MAX_VALUE);
+        this.json.asMap().putIfAbsent("minimum_potency", 0);
         this.json.asMap().putIfAbsent("selection_mode", "low_first");
     }
 

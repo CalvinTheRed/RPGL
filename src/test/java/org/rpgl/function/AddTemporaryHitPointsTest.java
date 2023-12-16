@@ -83,7 +83,7 @@ public class AddTemporaryHitPointsTest {
 
         AddTemporaryHitPoints addTemporaryHitPoints = new AddTemporaryHitPoints();
         JsonObject functionJson = new JsonObject() {{
-           /*{
+            /*{
                 "function": "add_temporary_hit_points",
                 "temporary_hit_points": [
                     {
@@ -94,7 +94,7 @@ public class AddTemporaryHitPointsTest {
                         "bonus": 2
                     }
                 ]
-           }*/
+            }*/
             this.putString("function", "add_temporary_hit_points");
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{

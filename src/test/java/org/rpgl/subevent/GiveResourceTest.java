@@ -83,8 +83,8 @@ public class GiveResourceTest {
             this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
         }});
         giveResource.setSource(source);
+        giveResource.prepare(context, List.of());
         giveResource.setTarget(target);
-
         giveResource.invoke(context, List.of());
 
         assertEquals(1, target.getResourceObjects().size(),

@@ -68,9 +68,12 @@ public class RefreshResourceTest {
 
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can be met)")
-    void runLowFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
+    void runLowFirst_refreshesResourcesCorrectly_fullCountCanBeMet() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -91,6 +94,7 @@ public class RefreshResourceTest {
             this.putInteger("minimum_potency", 3);
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.runLowFirst();
@@ -118,9 +122,12 @@ public class RefreshResourceTest {
 
     @Test
     @DisplayName("runLowFirst refreshes resources correctly (full count can not be met)")
-    void runLowFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
+    void runLowFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -143,6 +150,7 @@ public class RefreshResourceTest {
             this.putInteger("maximum_potency", 5);
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.runLowFirst();
@@ -170,9 +178,12 @@ public class RefreshResourceTest {
 
     @Test
     @DisplayName("runLowFirst refreshes resources correctly skipping refreshed resources")
-    void runLowFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
+    void runLowFirst_refreshesResourcesCorrectlySkippingRefreshedResources() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -195,6 +206,7 @@ public class RefreshResourceTest {
             this.putInteger("minimum_potency", 3);
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.runLowFirst();
@@ -208,9 +220,12 @@ public class RefreshResourceTest {
 
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can be met)")
-    void runHighFirst_refreshesResourcesCorrectly_fullCountCanBeMet() {
+    void runHighFirst_refreshesResourcesCorrectly_fullCountCanBeMet() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -231,6 +246,7 @@ public class RefreshResourceTest {
             this.putInteger("maximum_potency", 7);
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.runHighFirst();
@@ -258,7 +274,7 @@ public class RefreshResourceTest {
 
     @Test
     @DisplayName("runHighFirst refreshes resources correctly (full count can not be met)")
-    void runHighFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() {
+    void runHighFirst_refreshesResourcesCorrectly_fullCountCanNotBeMet() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
@@ -286,6 +302,7 @@ public class RefreshResourceTest {
             this.putInteger("maximum_potency", 7);
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.runHighFirst();
@@ -313,9 +330,12 @@ public class RefreshResourceTest {
 
     @Test
     @DisplayName("runHighFirst refreshes resources correctly skipping refreshed resources")
-    void runHighFirst_refreshesResourcesCorrectlySkippingRefreshedResources() {
+    void runHighFirst_refreshesResourcesCorrectlySkippingRefreshedResources() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -338,6 +358,7 @@ public class RefreshResourceTest {
             this.putInteger("maximum_potency", 5);
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.runHighFirst();
@@ -377,6 +398,7 @@ public class RefreshResourceTest {
             this.putString("selection_mode", "low_first");
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.invoke(context, List.of());
@@ -430,6 +452,7 @@ public class RefreshResourceTest {
             this.putString("selection_mode", "high_first");
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.invoke(context, List.of());
@@ -484,6 +507,7 @@ public class RefreshResourceTest {
             this.putInteger("count", 2);
         }});
         refreshResource.setSource(source);
+        refreshResource.prepare(context, List.of());
         refreshResource.setTarget(target);
 
         refreshResource.invoke(context, List.of());

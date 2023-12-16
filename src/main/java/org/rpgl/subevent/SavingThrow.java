@@ -46,9 +46,9 @@ public class SavingThrow extends Roll {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        this.calculateDifficultyClass(context, resources);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
         this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
+        this.calculateDifficultyClass(context, resources);
         this.getBaseDamage(context, resources);
     }
 
