@@ -23,7 +23,6 @@ public class RPGLObjectTemplate extends JsonObject {
      * object is registered to the UUIDTable class when it is constructed.
      *
      * @param userId the ID for the user controlling the new object
-     *
      * @return a new RPGLObject object
      */
     public RPGLObject newInstance(String userId) {

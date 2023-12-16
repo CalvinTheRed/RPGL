@@ -85,6 +85,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
         this.races = rpglObject.getRaces().asList();
         this.challengeRating = rpglObject.getChallengeRating();
         this.originObject = rpglObject.getOriginObject();
+        this.userId = rpglObject.getUserId();
     }
 
     /**
@@ -106,6 +107,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.putJsonArray(RACES_ALIAS, new JsonArray(races));
             this.putDouble(CHALLENGE_RATING_ALIAS, challengeRating);
             // origin object not needed for template
+            // user id not needed for template
         }};
         rpglObjectTemplate.join(super.getTemplateData());
         return rpglObjectTemplate;

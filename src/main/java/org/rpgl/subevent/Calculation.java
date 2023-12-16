@@ -201,7 +201,7 @@ public abstract class Calculation extends Subevent {
     }
 
     /**
-     * This helper method processes JSON formula data and translates it to a numerical value.
+     * This helper method processes JSON set data and translates it to a numerical value.
      *
      * @param effect the RPGLEffect setting a value
      * @param subevent the Calculation having a value set
