@@ -5,7 +5,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
@@ -73,7 +75,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:dragon/red/young");
+            this.putString("object_id", "debug:dummy");
         }});
         spawnObject.setSource(summoner);
         spawnObject.prepare(context, List.of());
@@ -100,7 +102,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:dragon/red/young");
+            this.putString("object_id", "debug:dummy");
         }});
         spawnObject.setSource(source);
         spawnObject.prepare(context, List.of());
@@ -121,7 +123,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:dragon/red/young");
+            this.putString("object_id", "debug:dummy");
             this.putString("controlled_by", "target");
         }});
         spawnObject.setSource(source);
@@ -135,6 +137,95 @@ public class SpawnObjectTest {
     }
 
     @Test
+    @DisplayName("invoke adds extra effects")
+    void invoke_addsExtraEffects() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        RPGLItem originItem = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+            this.putJsonArray("extra_effects", new JsonArray() {{
+                this.addString("std:common/damage/immunity/fire");
+                this.addString("std:common/damage/immunity/poison");
+            }});
+        }});
+        spawnObject.setOriginItem(originItem.getUuid());
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context, List.of());
+
+        RPGLObject spawnedObject = context.getContextObjects().get(0);
+        RPGLEffect effect;
+
+        assertEquals(2, spawnedObject.getEffects().size(),
+                "new object should have 2 effects"
+        );
+
+        effect = UUIDTable.getEffect(spawnedObject.getEffects().getString(0));
+        assertEquals("std:common/damage/immunity/fire", effect.getId(),
+                "new effect has the wrong id"
+        );
+        assertEquals(summoner, effect.getSource(),
+                "effect source should be the summoner"
+        );
+        assertEquals(spawnedObject, effect.getTarget(),
+                "effect target should be the spawned object"
+        );
+        assertEquals(originItem.getUuid(), effect.getOriginItem(),
+                "effect should share origin item with SpawnObject subevent"
+        );
+
+        effect = UUIDTable.getEffect(spawnedObject.getEffects().getString(1));
+        assertEquals("std:common/damage/immunity/poison", effect.getId(),
+                "new effect has the wrong id"
+        );
+        assertEquals(summoner, effect.getSource(),
+                "effect source should be the summoner"
+        );
+        assertEquals(spawnedObject, effect.getTarget(),
+                "effect target should be the spawned object"
+        );
+        assertEquals(originItem.getUuid(), effect.getOriginItem(),
+                "effect should share origin item with SpawnObject subevent"
+        );
+    }
+
+    @Test
+    @DisplayName("invoke adds extra events")
+    void invoke_addsExtraEvents() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+            this.putJsonArray("extra_events", new JsonArray() {{
+                this.addString("std:spell/fire_bolt");
+                this.addString("std:common/dodge");
+            }});
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context, List.of());
+
+        JsonArray events = context.getContextObjects().get(0).getEvents();
+
+        assertEquals(2, events.size(),
+                "new object should have 2 events"
+        );
+        assertEquals("std:spell/fire_bolt", events.getString(0),
+                "new object missing event"
+        );
+        assertEquals("std:common/dodge", events.getString(1),
+                "new object missing event"
+        );
+    }
+
+    @Test
     @DisplayName("invoke adds extra tags")
     void invoke_addsExtraTags() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
@@ -142,7 +233,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:dragon/red/young");
+            this.putString("object_id", "debug:dummy");
             this.putJsonArray("extra_tags", new JsonArray() {{
                 this.addString("extra-tag-1");
                 this.addString("extra-tag-2");
@@ -169,11 +260,11 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:summon/summon_undead/skeletal");
+            this.putString("object_id", "debug:dummy");
             this.putJsonArray("object_bonuses", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("field", "classes[0].level");
-                    this.putInteger("bonus", 1);
+                    this.putString("field", "health_data.temporary");
+                    this.putInteger("bonus", 10);
                 }});
             }});
         }});
@@ -182,8 +273,8 @@ public class SpawnObjectTest {
         spawnObject.setTarget(summoner);
         spawnObject.invoke(context, List.of());
 
-        assertEquals(4, context.getContextObjects().get(0).getLevel("std:summon/summon_undead"),
-                "object should receive a +1 bonus to level"
+        assertEquals(10, context.getContextObjects().get(0).getHealthData().getInteger("temporary"),
+                "object should receive a +10 bonus to temporary hit points"
         );
     }
 
@@ -197,7 +288,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:dragon/red/young");
+            this.putString("object_id", "debug:dummy");
         }});
         spawnObject.setSource(summoner);
         spawnObject.prepare(context, List.of());
@@ -219,7 +310,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:dragon/red/young");
+            this.putString("object_id", "debug:dummy");
             this.putBoolean("extend_proficiency_bonus", true);
         }});
         spawnObject.setSource(summoner);
@@ -272,11 +363,74 @@ public class SpawnObjectTest {
             this.putString("field", "health_data.temporary");
             this.putInteger("bonus", 10);
         }});
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
 
-        assertEquals(10, context.getContextObjects().get(0).getHealthData().getInteger("temporary"),
-                "new object should have correct bonus temporary hit points"
+        String expected = """
+                [{"bonus":10,"field":"health_data.temporary"}]""";
+        assertEquals(expected, spawnObject.json.getJsonArray("object_bonuses").toString(),
+                "new object should have provided bonus"
+        );
+    }
+
+    @Test
+    @DisplayName("addSpawnObjectTags adds effect")
+    void addSpawnObjectEffect_addsEffect() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.addSpawnObjectEffect("std:common/damage/immunity/fire");
+
+        String expected = """
+                ["std:common/damage/immunity/fire"]""";
+        assertEquals(expected, spawnObject.json.getJsonArray("extra_effects").toString(),
+                "new object should have provided effect"
+        );
+    }
+
+    @Test
+    @DisplayName("addSpawnObjectEvent adds event")
+    void addSpawnObjectEvent_addsEvent() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.addSpawnObjectEvent("std:spell/fire_bolt");
+
+        String expected = """
+                ["std:spell/fire_bolt"]""";
+        assertEquals(expected, spawnObject.json.getJsonArray("extra_events").toString(),
+                "new object should have provided event"
+        );
+    }
+
+    @Test
+    @DisplayName("addSpawnObjectTags adds tags")
+    void addSpawnObjectTag_addsTag() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context, List.of());
+        spawnObject.addSpawnObjectTag("test-tag");
+
+        String expected = """
+                ["test-tag"]""";
+        assertEquals(expected, spawnObject.json.getJsonArray("extra_tags").toString(),
+                "new object should have provided tag"
         );
     }
 

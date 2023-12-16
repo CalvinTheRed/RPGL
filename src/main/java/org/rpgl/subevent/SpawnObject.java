@@ -10,7 +10,6 @@ import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to spawning a new RPGLObject into the game.
@@ -48,7 +47,12 @@ public class SpawnObject extends Subevent {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
+        this.json.asMap().putIfAbsent("controlled_by", "source");
         this.json.asMap().putIfAbsent("object_bonuses", new ArrayList<>());
+        this.json.asMap().putIfAbsent("extra_effects", new ArrayList<>());
+        this.json.asMap().putIfAbsent("extra_events", new ArrayList<>());
+        this.json.asMap().putIfAbsent("extra_tags", new ArrayList<>());
+        this.json.asMap().putIfAbsent("extend_proficiency_bonus", false);
     }
 
     @Override
@@ -57,19 +61,29 @@ public class SpawnObject extends Subevent {
                 this.json.getString("object_id"),
                 RPGLEffect.getObject(null, this, new JsonObject() {{
                     this.putString("from", "subevent");
-                    this.putString("object", Objects.requireNonNullElse(json.getString("controlled_by"), "source"));
+                    this.putString("object", json.getString("controlled_by"));
                 }}).getUserId(),
-                Objects.requireNonNullElse(this.json.getJsonArray("object_bonuses"), new JsonArray())
+                this.json.getJsonArray("object_bonuses")
         );
 
         spawnedObject.setOriginObject(this.getSource().getUuid());
 
-        JsonArray extraTags = Objects.requireNonNullElse(this.json.getJsonArray("extra_tags"), new JsonArray());
+        JsonArray extraEffects = this.json.getJsonArray("extra_effects");
+        for (int i = 0; i < extraEffects.size(); i++) {
+            RPGLEffect effect = RPGLFactory.newEffect(extraEffects.getString(i), this.getOriginItem(), resources);
+            effect.setSource(this.getSource());
+            effect.setTarget(spawnedObject);
+            spawnedObject.addEffect(effect);
+        }
+
+        spawnedObject.getEvents().asList().addAll(this.json.getJsonArray("extra_events").asList());
+
+        JsonArray extraTags = this.json.getJsonArray("extra_tags");
         for (int i = 0; i < extraTags.size(); i++) {
             spawnedObject.addTag(extraTags.getString(i));
         }
 
-        if (Objects.requireNonNullElse(this.json.getBoolean("extend_proficiency_bonus"), false)) {
+        if (this.json.getBoolean("extend_proficiency_bonus")) {
             spawnedObject.setProficiencyBonus(this.getSource().getEffectiveProficiencyBonus(context));
         }
 
@@ -83,5 +97,32 @@ public class SpawnObject extends Subevent {
      */
     public void addSpawnObjectBonus(JsonObject bonus) {
         this.json.getJsonArray("object_bonuses").addJsonObject(bonus);
+    }
+
+    /**
+     * This method adds a custom effect to the object spawned by this subevent.
+     *
+     * @param effectId the datapack ID of an effect to be added to the spawned object
+     */
+    public void addSpawnObjectEffect(String effectId) {
+        this.json.getJsonArray("extra_effects").addString(effectId);
+    }
+
+    /**
+     * This method adds a custom event to the object spawned by this subevent.
+     *
+     * @param eventId the datapack ID of an event to be added to the spawned object
+     */
+    public void addSpawnObjectEvent(String eventId) {
+        this.json.getJsonArray("extra_events").addString(eventId);
+    }
+
+    /**
+     * This method adds a custom tag to the object spawned by this subevent.
+     *
+     * @param tag a tag to be added to the spawned object
+     */
+    public void addSpawnObjectTag(String tag) {
+        this.json.getJsonArray("extra_tags").addString(tag);
     }
 }

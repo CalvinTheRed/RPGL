@@ -45,6 +45,9 @@ public abstract class Function {
         Function.FUNCTIONS.put("add_healing", new AddHealing());
         Function.FUNCTIONS.put("add_object_tag", new AddObjectTag());
         Function.FUNCTIONS.put("add_spawn_object_bonus", new AddSpawnObjectBonus());
+        Function.FUNCTIONS.put("add_spawn_object_effects", new AddSpawnObjectEffects());
+        Function.FUNCTIONS.put("add_spawn_object_events", new AddSpawnObjectEvents());
+        Function.FUNCTIONS.put("add_spawn_object_tags", new AddSpawnObjectTags());
         Function.FUNCTIONS.put("add_subevent_tag", new AddSubeventTag());
         Function.FUNCTIONS.put("add_temporary_hit_points", new AddTemporaryHitPoints());
         Function.FUNCTIONS.put("apply_vampirism", new ApplyVampirism());
