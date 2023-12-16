@@ -5,7 +5,6 @@ import org.rpgl.json.JsonObject;
 
 /**
  * This Subevent is dedicated to delivering a quantity of healing to an RPGLObject.
- * TODO is this Subevent really necessary?
  * <br>
  * <br>
  * Source: an RPGLObject performing healing

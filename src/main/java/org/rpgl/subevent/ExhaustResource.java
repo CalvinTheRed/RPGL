@@ -47,8 +47,17 @@ public class ExhaustResource extends Subevent {
     }
 
     @Override
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
+        this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
+        this.json.asMap().putIfAbsent("minimum_potency", 0);
+        this.json.asMap().putIfAbsent("maximum_potency", Integer.MAX_VALUE);
+        this.json.asMap().putIfAbsent("selection_mode", "low_first");
+    }
+
+    @Override
     public void run(RPGLContext context, List<RPGLResource> resources) {
-        switch (Objects.requireNonNullElse(this.json.getString("selection_mode"), "low_first")) {
+        switch (this.json.getString("selection_mode")) {
             case "low_first" -> this.runLowFirst();
             case "high_first" -> this.runHighFirst();
             case "random" -> this.runRandom();
@@ -61,9 +70,9 @@ public class ExhaustResource extends Subevent {
      */
     void runLowFirst() {
         String resourceId = this.json.getString("resource");
-        final int[] count = { Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE) };
-        final int minimumPotency = Objects.requireNonNullElse(this.json.getInteger("minimum_potency"), 0);
-        final int maximumPotency = Objects.requireNonNullElse(this.json.getInteger("maximum_potency"), Integer.MAX_VALUE);
+        final int[] count = { this.json.getInteger("count") };
+        final int minimumPotency = this.json.getInteger("minimum_potency");
+        final int maximumPotency = this.json.getInteger("maximum_potency");
 
         this.getTarget().getResourceObjects().stream().sorted(Comparator.comparing(RPGLResource::getPotency)).forEach(resource -> {
             if (count[0] > 0
@@ -83,9 +92,9 @@ public class ExhaustResource extends Subevent {
      */
     void runHighFirst() {
         String resourceId = this.json.getString("resource");
-        final int[] count = { Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE) };
-        final int minimumPotency = Objects.requireNonNullElse(this.json.getInteger("minimum_potency"), 0);
-        final int maximumPotency = Objects.requireNonNullElse(this.json.getInteger("maximum_potency"), Integer.MAX_VALUE);
+        final int[] count = { this.json.getInteger("count") };
+        final int minimumPotency = this.json.getInteger("minimum_potency");
+        final int maximumPotency = this.json.getInteger("maximum_potency");
 
         this.getTarget().getResourceObjects().stream().sorted(Collections.reverseOrder(Comparator.comparing(RPGLResource::getPotency))).forEach(resource -> {
             if (count[0] > 0
@@ -105,9 +114,9 @@ public class ExhaustResource extends Subevent {
      */
     void runRandom() {
         String resourceId = this.json.getString("resource");
-        int count = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);
-        int minimumPotency = Objects.requireNonNullElse(this.json.getInteger("minimum_potency"), 0);
-        int maximumPotency = Objects.requireNonNullElse(this.json.getInteger("maximum_potency"), Integer.MAX_VALUE);
+        int count = this.json.getInteger("count");
+        int minimumPotency = this.json.getInteger("minimum_potency");
+        int maximumPotency = this.json.getInteger("maximum_potency");
 
         List<RPGLResource> resources = this.getTarget().getResourceObjects();
         ArrayList<Integer> indices = new ArrayList<>();

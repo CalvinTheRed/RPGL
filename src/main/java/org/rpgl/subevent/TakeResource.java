@@ -6,7 +6,6 @@ import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to taking one or more RPGLResource objects away from the target according to their
@@ -45,9 +44,15 @@ public class TakeResource extends Subevent {
     }
 
     @Override
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
+        this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
+    }
+
+    @Override
     public void run(RPGLContext context, List<RPGLResource> resources) {
         String resourceTag = this.json.getString("resource_tag");
-        int count = Objects.requireNonNullElse(this.json.getInteger("count"), Integer.MAX_VALUE);
+        int count = this.json.getInteger("count");
         RPGLObject target = this.getTarget();
 
         for (RPGLResource resource : target.getResourceObjects()) {

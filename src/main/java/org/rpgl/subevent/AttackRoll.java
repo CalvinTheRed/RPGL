@@ -48,13 +48,11 @@ public class AttackRoll extends Roll {
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
         this.json.asMap().putIfAbsent("withhold_damage_modifier", false);
+        this.json.asMap().putIfAbsent("use_origin_attack_ability", false);
 
-        // Add tags so nested subevents such as DamageCollection can know they
+        // Add tag so nested subevents such as DamageCollection can know they
         // hail from an attack roll made using a particular attack ability.
-        this.addTag("attack_roll");
         this.addTag(this.getAbility(context));
-
-        // Proficiency is added by effects during subevent processing
 
         // Add weapon attack bonus, if applicable
         if (this.getOriginItem() != null) {
@@ -71,7 +69,7 @@ public class AttackRoll extends Roll {
             this.roll();
             this.json.asMap().putIfAbsent("damage", new ArrayList<>());
             this.addBonus(new JsonObject() {{
-                this.putInteger("bonus", Objects.requireNonNullElse(json.getBoolean("use_origin_attack_ability"), false)
+                this.putInteger("bonus", json.getBoolean("use_origin_attack_ability")
                         ? UUIDTable.getObject(getSource().getOriginObject()).getAbilityModifierFromAbilityName(getAbility(context), context)
                         : getSource().getAbilityModifierFromAbilityName(getAbility(context), context)
                 );
@@ -156,10 +154,7 @@ public class AttackRoll extends Roll {
                         this.putJsonObject("object", new JsonObject() {{
                             this.putString("from", "subevent");
                             this.putString("object", "source");
-                            this.putBoolean("as_origin", Objects.requireNonNullElse(
-                                    json.getBoolean("use_origin_attack_ability"),
-                                    false
-                            ));
+                            this.putBoolean("as_origin", json.getBoolean("use_origin_attack_ability"));
                         }});
                     }});
                 }});

@@ -5,7 +5,6 @@ import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to confirming that a critical hit deals critical damage.
@@ -42,16 +41,16 @@ public class CriticalDamageConfirmation extends Subevent implements CancelableSu
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        this.json.putBoolean("cancel", false);
+        this.json.putBoolean("canceled", false);
     }
 
     @Override
     public void cancel() {
-        this.json.putBoolean("cancel", true);
+        this.json.putBoolean("canceled", true);
     }
 
     @Override
     public boolean isNotCanceled() {
-        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
+        return !this.json.getBoolean("canceled");
     }
 }

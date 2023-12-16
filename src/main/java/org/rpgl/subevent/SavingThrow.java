@@ -9,7 +9,6 @@ import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to making a saving throw and resolving all fallout from making the save. This is a
@@ -47,12 +46,9 @@ public class SavingThrow extends Roll {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-
-        // Add tag so nested subevents such as DamageCollection can know they hail from a saving throw.
-        this.addTag("saving_throw");
-
         this.calculateDifficultyClass(context, resources);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
         this.getBaseDamage(context, resources);
     }
 
@@ -110,8 +106,7 @@ public class SavingThrow extends Roll {
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
-        calculateSaveDifficultyClass.setSource(Objects.requireNonNullElse(
-                this.json.getBoolean("use_origin_difficulty_class_ability"), false)
+        calculateSaveDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
                 ? UUIDTable.getObject(this.getSource().getOriginObject())
                 : this.getSource()
         );

@@ -22,7 +22,6 @@ public class RemoveOriginItemTag extends Subevent {
 
     public RemoveOriginItemTag() {
         super("remove_origin_item_tag");
-        this.addTag("remove_origin_item_tag");
     }
 
     @Override

@@ -25,7 +25,6 @@ public class SpawnObject extends Subevent {
 
     public SpawnObject() {
         super("spawn_object");
-        this.addTag("spawn_object");
     }
 
     @Override

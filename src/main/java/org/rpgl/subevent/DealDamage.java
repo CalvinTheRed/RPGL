@@ -39,8 +39,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        this.json.putBoolean("cancel", false);
-        this.addTag("deal_damage");
+        this.json.putBoolean("canceled", false);
         this.getBaseDamage(context, resources);
     }
 
@@ -54,12 +53,12 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
 
     @Override
     public void cancel() {
-        this.json.putBoolean("cancel", true);
+        this.json.putBoolean("canceled", true);
     }
 
     @Override
     public boolean isNotCanceled() {
-        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
+        return !this.json.getBoolean("canceled");
     }
 
     @Override
