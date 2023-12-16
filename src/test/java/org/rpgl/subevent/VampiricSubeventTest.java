@@ -12,6 +12,7 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -46,41 +47,10 @@ public class VampiricSubeventTest {
     }
 
     @Test
-    @DisplayName("calculateVampiricHealing should calculate half rounded down (default behavior)")
-    void calculateVampiricHealing_shouldCalculateHalfRoundedDown_defaultBehavior() {
-        int vampiricDamage = 11;
-        int vampiricHealing = VampiricSubevent.calculateVampiricHealing(vampiricDamage, new JsonObject());
-
-        assertEquals(5, vampiricHealing,
-                "vampiric healing should be half (of 11) rounded down"
-        );
-    }
-
-    @Test
-    @DisplayName("calculateVampiricHealing should calculate according to specified ratio and rounding")
-    void calculateVampiricHealing_shouldCalculateAccordingToSpecifiedRatioAndRounding() {
-        int vampiricDamage = 11;
-        int vampiricHealing = VampiricSubevent.calculateVampiricHealing(vampiricDamage, new JsonObject() {{
-            /*{
-                "numerator": 1,
-                "denominator": 3,
-                "round_up": true
-            }*/
-            this.putInteger("numerator", 1);
-            this.putInteger("denominator", 3);
-            this.putBoolean("round_up", true);
-        }});
-
-        assertEquals(4, vampiricHealing,
-                "vampiric healing should be one third (of 11) rounded up"
-        );
-    }
-
-    @Test
     @DisplayName("handleVampirism heals source for half damage (specific damage type)")
     void handleVampirism_healsSourceForHalfDamage_specificDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -126,8 +96,8 @@ public class VampiricSubeventTest {
     @Test
     @DisplayName("handleVampirism heals source for half damage (no specific damage type)")
     void handleVampirism_healsSourceForHalfDamage_noSpecificDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);

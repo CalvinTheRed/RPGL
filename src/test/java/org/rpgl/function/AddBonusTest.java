@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -17,6 +17,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -87,17 +88,14 @@ public class AddBonusTest {
     }
 
     @Test
-    @DisplayName("execute adds correct bonus to calculation (range)")
-    void execute_addsCorrectBonusToCalculation_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
+    @DisplayName("execute adds bonus to calculation")
+    void execute_addsDamageToCollection() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLContext context = new DummyContext();
         context.add(source);
-        context.add(target);
 
         calculation.setSource(source);
         calculation.prepare(context, List.of());
-        calculation.setTarget(target);
 
         AddBonus addBonus = new AddBonus();
         JsonObject functionJson = new JsonObject() {{
@@ -105,294 +103,40 @@ public class AddBonusTest {
                 "function": "add_bonus",
                 "bonus": [
                     {
-                        "bonus_formula": "range",
-                        "bonus": 2,
-                        "dice": [ ]
+                        "formula": "range",
+                        "damage_type": "fire",
+                        "dice": [
+                            { "count": 1, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 2
                     }
                 ]
-            }*/
+           }*/
             this.putString("function", "add_bonus");
             this.putJsonArray("bonus", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("bonus_formula", "range");
+                    this.putString("formula", "range");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 1);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
                     this.putInteger("bonus", 2);
-                    this.putJsonArray("dice", new JsonArray());
                 }});
             }});
         }};
 
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
+        addBonus.execute(null, calculation, functionJson, context, List.of());
 
-        addBonus.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(2, calculation.getBonus(),
-                "bonus of 2 should be applied to the calculation following execution"
+        String expected = """
+                [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
+        assertEquals(expected, calculation.getBonuses().toString(),
+                "execute should add appropriate damage range to collection"
         );
     }
 
-    @Test
-    @DisplayName("execute adds correct bonus to calculation (modifier)")
-    void execute_addsCorrectBonusToCalculation_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        AddBonus addBonus = new AddBonus();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_bonus",
-                "bonus": [
-                    {
-                        "bonus_formula": "modifier",
-                        "ability": "dex",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putString("function", "add_bonus");
-            this.putJsonArray("bonus", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("bonus_formula", "modifier");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        addBonus.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(5, calculation.getBonus(),
-                "source's dex modifier should be added as bonus to calculation (+5)"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to calculation (ability)")
-    void execute_addsCorrectBonusToCalculation_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        AddBonus addBonus = new AddBonus();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_bonus",
-                "bonus": [
-                    {
-                        "bonus_formula": "ability",
-                        "ability": "dex",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putString("function", "add_bonus");
-            this.putJsonArray("bonus", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("bonus_formula", "ability");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        addBonus.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(20, calculation.getBonus(),
-                "source's dex score should be added as bonus to calculation (20)"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to calculation (proficiency)")
-    void execute_addsCorrectBonusToCalculation_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        AddBonus addBonus = new AddBonus();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_bonus",
-                "bonus": [
-                    ]
-                        "bonus_formula": "proficiency",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putString("function", "add_bonus");
-            this.putJsonArray("bonus", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("bonus_formula", "proficiency");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        addBonus.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(2, calculation.getBonus(),
-                "source's proficiency bonus should be added as bonus to calculation (+2)"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to calculation (level with specified class)")
-    void execute_addsCorrectBonusToCalculation_levelWithSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        AddBonus addBonus = new AddBonus();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_bonus",
-                "bonus": [
-                    ]
-                        "bonus_formula": "level",
-                        "class": "std:common/base",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putString("function", "add_bonus");
-            this.putJsonArray("bonus", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("bonus_formula", "level");
-                    this.putString("class", "std:common/base");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        addBonus.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(1, calculation.getBonus(),
-                "source's level should be added as bonus to calculation (+17)"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to calculation (level without specified class)")
-    void execute_addsCorrectBonusToCalculation_levelWithoutSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(target);
-
-        AddBonus addBonus = new AddBonus();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_bonus",
-                "bonus": [
-                    {
-                        "bonus_formula": "level",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putString("function", "add_bonus");
-            this.putJsonArray("bonus", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("bonus_formula", "level");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-        effect.setName("TEST");
-
-        addBonus.execute(effect, calculation, functionJson, context, List.of());
-
-        assertEquals(9, calculation.getBonus(),
-                "source's level should be added as bonus to calculation (+17)"
-        );
-    }
 }

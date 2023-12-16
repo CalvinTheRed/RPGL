@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -68,8 +69,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("deliverDamage damage is delivered")
     void deliverDamage_damageIsDelivered() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -84,7 +85,12 @@ public class DealDamageTest {
                         "dice": [
                             { "roll": 5 }
                         ],
-                        "bonus": 5
+                        "bonus": 5,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -98,6 +104,11 @@ public class DealDamageTest {
                         }});
                     }});
                     this.putInteger("bonus", 5);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -114,8 +125,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("getTargetDamage no target damage by default")
     void getTargetDamage_noTargetDamageByDefault() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -142,8 +153,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("getBaseDamage base damage calculated correctly")
     void getBaseDamage_baseDamageCalculatedProperly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -154,7 +165,7 @@ public class DealDamageTest {
                 "tags": [ ],
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
@@ -166,7 +177,7 @@ public class DealDamageTest {
             this.putJsonArray("tags", new JsonArray());
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -187,7 +198,7 @@ public class DealDamageTest {
         dealDamage.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}]}]""";
+                [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, dealDamage.json.getJsonArray("damage").toString(),
                 "base damage should be 3 force damage"
         );
@@ -196,8 +207,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("invoke deals correct damage")
     void invoke_dealsCorrectDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -207,7 +218,7 @@ public class DealDamageTest {
             /*{
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "force",
                         "dice": [
                             { "count": 1, "size": 4, "determined": [ 2 ] }
@@ -218,7 +229,7 @@ public class DealDamageTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "force");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -247,8 +258,8 @@ public class DealDamageTest {
     @Test
     @DisplayName("invoke accommodates vampirism")
     void invoke_accommodatesVampirism() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -261,7 +272,7 @@ public class DealDamageTest {
             /*{
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "necrotic",
                         "dice": [
                             { "count": 2, "size": 10, "determined": [ 5 ] }
@@ -278,7 +289,7 @@ public class DealDamageTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "necrotic");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{

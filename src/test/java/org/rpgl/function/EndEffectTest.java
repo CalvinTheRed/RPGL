@@ -15,6 +15,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -71,7 +72,7 @@ public class EndEffectTest {
     @Test
     @DisplayName("execute removes effect from object")
     void execute_removesEffectFromObject() throws Exception {
-        RPGLObject commoner = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject commoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(commoner);
 

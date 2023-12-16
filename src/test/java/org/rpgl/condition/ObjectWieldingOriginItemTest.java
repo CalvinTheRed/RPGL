@@ -15,6 +15,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -71,7 +72,7 @@ public class ObjectWieldingOriginItemTest {
     @Test
     @DisplayName("evaluate returns false when origin item is null")
     void evaluate_returnsFalseWhenOriginItemIsNull() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -103,7 +104,7 @@ public class ObjectWieldingOriginItemTest {
     @Test
     @DisplayName("evaluate returns false when origin item is not being wielded")
     void evaluate_returnsFalseWhenOriginItemIsNotBeingWielded() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(object);
 
@@ -139,7 +140,7 @@ public class ObjectWieldingOriginItemTest {
     @Test
     @DisplayName("evaluate returns true when origin item is being wielded")
     void evaluate_returnsTrueWhenOriginItemIsBeingWielded() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(object);
 

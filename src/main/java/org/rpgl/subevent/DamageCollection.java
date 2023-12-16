@@ -3,7 +3,6 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLResource;
-import org.rpgl.function.AddDamage;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -77,8 +76,10 @@ public class DamageCollection extends Subevent implements DamageTypeSubevent {
         effect.setSource(this.getSource());
         effect.setTarget(this.getSource());
         for (int i = 0; i < damageArray.size(); i++) {
-            JsonObject damageJson = damageArray.getJsonObject(i);
-            this.addDamage(AddDamage.processJson(effect, this, damageJson, context));
+            JsonObject damageElement = damageArray.getJsonObject(i);
+            JsonObject damage = Calculation.processBonusJson(effect, this, damageElement, context);
+            damage.putString("damage_type", damageElement.getString("damage_type"));
+            this.addDamage(damage);
         }
     }
 

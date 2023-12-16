@@ -71,12 +71,22 @@ public class DamageDeliveryTest {
                     {
                         "damage_type": "fire",
                         "bonus": 10,
-                        "dice": [ ]
+                        "dice": [ ],
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     },
                     {
                         "damage_type": "cold",
                         "bonus": 10,
-                        "dice": [ ]
+                        "dice": [ ],
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -85,11 +95,21 @@ public class DamageDeliveryTest {
                     this.putString("damage_type", "fire");
                     this.putInteger("bonus", 10);
                     this.putJsonArray("dice", new JsonArray());
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_type", "cold");
                     this.putInteger("bonus", 10);
                     this.putJsonArray("dice", new JsonArray());
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -98,6 +118,126 @@ public class DamageDeliveryTest {
                 {"cold":10,"fire":10}""";
         assertEquals(expected, damageDelivery.getDamage().toString(),
                 "getDamage should report final damage quantities of each damage type being dealt at once"
+        );
+    }
+
+    @Test
+    @DisplayName("getDamage returns stored damage values (scaled damage)")
+    void getDamage_returnsStoredDamageValues_scaledDamage() {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire",
+                        "bonus": 11,
+                        "dice": [ ],
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 2,
+                            "round_up": false
+                        }
+                    },
+                    {
+                        "damage_type": "cold",
+                        "bonus": 10,
+                        "dice": [ ],
+                        "scale": {
+                            "numerator": 2,
+                            "denominator": 1,
+                            "round_up": false
+                        }
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                    this.putInteger("bonus", 11);
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 2);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "cold");
+                    this.putInteger("bonus", 10);
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 2);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
+        }});
+
+        String expected = """
+                {"cold":20,"fire":5}""";
+        assertEquals(expected, damageDelivery.getDamage().toString(),
+                "getDamage should report correctly scaled damage"
+        );
+    }
+
+    @Test
+    @DisplayName("getDamage returns stored damage values (scaled damage) (rounded up)")
+    void getDamage_returnsStoredDamageValues_scaledDamage_roundedUp() {
+        DamageDelivery damageDelivery = new DamageDelivery();
+        damageDelivery.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "damage_type": "fire",
+                        "bonus": 11,
+                        "dice": [ ],
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 2,
+                            "round_up": true
+                        }
+                    },
+                    {
+                        "damage_type": "cold",
+                        "bonus": 10,
+                        "dice": [ ],
+                        "scale": {
+                            "numerator": 2,
+                            "denominator": 1,
+                            "round_up": true
+                        }
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "fire");
+                    this.putInteger("bonus", 11);
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 2);
+                        this.putBoolean("round_up", true);
+                    }});
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "cold");
+                    this.putInteger("bonus", 10);
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 2);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", true);
+                    }});
+                }});
+            }});
+        }});
+
+        String expected = """
+                {"cold":20,"fire":6}""";
+        assertEquals(expected, damageDelivery.getDamage().toString(),
+                "getDamage should report correctly scaled damage"
         );
     }
 
@@ -114,6 +254,11 @@ public class DamageDeliveryTest {
                             { "roll": 1, "size": 4 }
                         ],
                         "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     },
                     {
                         "damage_type": "cold",
@@ -121,6 +266,11 @@ public class DamageDeliveryTest {
                             { "roll": 1, "size": 4 }
                         ],
                         "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -134,6 +284,11 @@ public class DamageDeliveryTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_type", "cold");
@@ -144,6 +299,11 @@ public class DamageDeliveryTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -170,6 +330,11 @@ public class DamageDeliveryTest {
                             { "roll": 1, "size": 4 }
                         ],
                         "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     },
                     {
                         "damage_type": "cold",
@@ -177,6 +342,11 @@ public class DamageDeliveryTest {
                             { "roll": 1, "size": 4 }
                         ],
                         "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -190,6 +360,11 @@ public class DamageDeliveryTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_type", "cold");
@@ -200,6 +375,11 @@ public class DamageDeliveryTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});

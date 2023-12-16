@@ -16,6 +16,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -112,8 +113,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns true (base roll of 20)")
     void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -141,8 +142,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("isCriticalHit returns false (base roll below 20)")
     void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -170,8 +171,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on hit)")
     void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -204,8 +205,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveNestedSubevents invoked DummySubevent (on miss)")
     void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -238,8 +239,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("deliverDamage object loses health")
     void deliverDamage_objectLosesHealth() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -253,7 +254,12 @@ public class AttackRollTest {
                         "dice": [
                             { "roll": 5 }
                         ],
-                        "bonus": 5
+                        "bonus": 5,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -266,6 +272,11 @@ public class AttackRollTest {
                         }});
                     }});
                     this.putInteger("bonus", 5);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -282,8 +293,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("deliverDamage source heals from vampirism")
     void deliverDamage_sourceHealsFromVampirism() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -298,7 +309,12 @@ public class AttackRollTest {
                     {
                         "damage_type": "necrotic",
                         "dice": [ ],
-                        "bonus": 10
+                        "bonus": 10,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ],
                 "vampirism": {
@@ -310,6 +326,11 @@ public class AttackRollTest {
                     this.putString("damage_type", "necrotic");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
             this.putJsonObject("vampirism", new JsonObject() {{
@@ -332,8 +353,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getTargetArmorClass calculate 20 armor class")
     void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -350,8 +371,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (modifier)")
     void getBaseDamage_calculatesCorrectDamage_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -363,7 +384,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "modifier",
+                        "formula": "modifier",
                         "damage_type": "fire",
                         "ability": "str",
                         "object": {
@@ -378,7 +399,7 @@ public class AttackRollTest {
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "modifier");
+                    this.putString("formula", "modifier");
                     this.putString("damage_type", "fire");
                     this.putString("ability", "str");
                     this.putJsonObject("object", new JsonObject() {{
@@ -395,7 +416,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":6,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":6,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "damage should include str mod (+6)"
         );
@@ -404,8 +425,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (ability)")
     void getBaseDamage_calculatesCorrectDamage_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -417,7 +438,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "ability",
+                        "formula": "ability",
                         "damage_type": "fire",
                         "ability": "str",
                         "object": {
@@ -432,7 +453,7 @@ public class AttackRollTest {
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "ability");
+                    this.putString("formula", "ability");
                     this.putString("damage_type", "fire");
                     this.putString("ability", "str");
                     this.putJsonObject("object", new JsonObject() {{
@@ -449,7 +470,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":23,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":23,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "damage should include str score (23)"
         );
@@ -458,8 +479,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage calculates correct damage (proficiency)")
     void getBaseDamage_calculatesCorrectDamage_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -471,7 +492,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "proficiency",
+                        "formula": "proficiency",
                         "damage_type": "fire",
                         "object": {
                             "from": "subevent",
@@ -485,7 +506,7 @@ public class AttackRollTest {
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "proficiency");
+                    this.putString("formula", "proficiency");
                     this.putString("damage_type", "fire");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -501,7 +522,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":4,"damage_type":"fire","dice":[]}]""";
+                [{"bonus":4,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "damage should include proficiency bonus (+4)"
         );
@@ -510,8 +531,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getCriticalHitDamage correctly gathers critical hit damage")
     void getCriticalHitDamage_correctlyGathersCriticalHitDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -523,7 +544,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "slashing",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 3 ] }
@@ -531,7 +552,7 @@ public class AttackRollTest {
                         "bonus": 0
                     },
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 3 ] }
@@ -544,7 +565,7 @@ public class AttackRollTest {
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "slashing");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -558,7 +579,7 @@ public class AttackRollTest {
                     this.putInteger("bonus", 0);
                 }});
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -577,7 +598,7 @@ public class AttackRollTest {
         attackRoll.getCriticalHitDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_formula":"range","damage_type":"slashing","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}]},{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"},{"bonus":0,"damage_type":"fire","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "critical hit damage should double the number of dice"
         );
@@ -586,8 +607,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage gets correct base damage (damage modifier not withheld)")
     void getBaseDamage_getsCorrectBaseDamage_damageModifierNotWithheld() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -599,7 +620,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "slashing",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 3 ] }
@@ -613,7 +634,7 @@ public class AttackRollTest {
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "slashing");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -635,7 +656,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":3,"damage_type":"slashing","dice":[]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":3,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated including ability modifier bonus"
         );
@@ -644,8 +665,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage gets correct base damage (damage modifier withheld)")
     void getBaseDamage_getsCorrectBaseDamage_damageModifierWithheld() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -657,7 +678,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "slashing",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 3 ] }
@@ -671,7 +692,7 @@ public class AttackRollTest {
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "slashing");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -693,7 +714,7 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated not including ability modifier bonus"
         );
@@ -702,8 +723,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("getBaseDamage gets correct base damage (origin item damage bonus)")
     void getBaseDamage_getsCorrectBaseDamage_originItemDamageBonus() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -718,7 +739,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "slashing",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 3 ] }
@@ -732,7 +753,7 @@ public class AttackRollTest {
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "slashing");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -755,16 +776,81 @@ public class AttackRollTest {
         attackRoll.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}]},{"bonus":1,"damage_type":"slashing","dice":[]}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":1,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated including item damage bonus"
         );
     }
 
     @Test
+    @DisplayName("getBaseDamage gets correct base damage (damage modifier not withheld)")
+    void getBaseDamage_getsCorrectBaseDamage_usingOriginAttackAbility() throws Exception {
+        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        origin.getAbilityScores().putInteger("int", 20);
+        source.setOriginObject(origin.getUuid());
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_type": "melee",
+                "attack_ability": "int",
+                "use_origin_attack_ability": true,
+                "damage": [
+                    {
+                        "formula": "range",
+                        "damage_type": "slashing",
+                        "dice": [
+                            { "count": 2, "size": 6, "determined": [ 3 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "withhold_damage_modifier": false
+            }*/
+            this.putString("attack_type", "melee");
+            this.putString("attack_ability", "int");
+            this.putBoolean("use_origin_attack_ability", true);
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("formula", "range");
+                    this.putString("damage_type", "slashing");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 6);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(3);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putBoolean("withhold_damage_modifier", false);
+        }});
+
+        attackRoll.setSource(source);
+        attackRoll.prepare(context, List.of());
+        attackRoll.setTarget(target);
+        attackRoll.getBaseDamage(context, List.of());
+
+        String expected = """
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
+        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
+                "base damage should be calculated including ability modifier bonus"
+        );
+    }
+
+    @Test
     @DisplayName("prepare adds origin item attack bonus")
     void prepare_addsOriginItemAttackBonus() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -793,7 +879,7 @@ public class AttackRollTest {
     @Test
     @DisplayName("resolveDamage delivers correct damage values")
     void resolveDamage_deliversCorrectDamageValues() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -804,13 +890,18 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "slashing",
                         "dice": [
                             { "size": 6, "determined": [ 3 ] },
                             { "size": 6, "determined": [ 3 ] }
                         ],
-                        "bonus": 0
+                        "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -834,6 +925,11 @@ public class AttackRollTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -850,8 +946,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (critical miss always misses)")
     void run_resolvesCorrectly_criticalMissAlwaysMisses() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -864,7 +960,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [ ],
                         "bonus": 10
@@ -873,12 +969,14 @@ public class AttackRollTest {
                 "has_advantage": false,
                 "has_disadvantage": false,
                 "bonuses": [ ],
-                "determined": [ 1 ]
+                "determined": [ 1 ],
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
@@ -890,6 +988,8 @@ public class AttackRollTest {
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(1);
             }});
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -904,8 +1004,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (normal miss)")
     void run_resolvesCorrectly_normalMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -918,7 +1018,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [ ],
                         "bonus": 10
@@ -930,12 +1030,14 @@ public class AttackRollTest {
                 "minimum": {
                     "value": Integer.MIN_VALUE
                 },
-                "determined": [ 2 ]
+                "determined": [ 2 ],
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
@@ -950,6 +1052,8 @@ public class AttackRollTest {
             this.putJsonArray("determined", new JsonArray() {{
                 this.addInteger(2);
             }});
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -964,8 +1068,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (normal hit)")
     void run_resolvesCorrectly_normalHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -976,7 +1080,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 3 ] }
@@ -991,12 +1095,14 @@ public class AttackRollTest {
                     "value": Integer.MIN_VALUE
                 },
                 "determined": [ 19 ],
-                "withhold_damage_modifier": true
+                "withhold_damage_modifier": true,
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -1019,6 +1125,8 @@ public class AttackRollTest {
                 this.addInteger(19);
             }});
             this.putBoolean("withhold_damage_modifier", true);
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -1033,8 +1141,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (critical hit)")
     void run_resolvesCorrectly_criticalHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1047,7 +1155,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 3 ] }
@@ -1062,12 +1170,14 @@ public class AttackRollTest {
                     "value": Integer.MIN_VALUE
                 },
                 "determined": [ 20 ],
-                "withhold_damage_modifier": true
+                "withhold_damage_modifier": true,
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -1090,6 +1200,8 @@ public class AttackRollTest {
                 this.addInteger(20);
             }});
             this.putBoolean("withhold_damage_modifier", true);
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);
@@ -1104,8 +1216,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("handleVampirism heals source for half damage (specific damage type)")
     void handleVampirism_healsSourceForHalfDamage_specificDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1151,8 +1263,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("confirmCriticalDamage returns true if not canceled")
     void confirmCriticalDamage_returnsTrueIfNotCanceled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1167,8 +1279,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("confirmCriticalDamage returns false if canceled")
     void confirmCriticalDamage_returnsFalseIfCanceled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1190,8 +1302,8 @@ public class AttackRollTest {
     @Test
     @DisplayName("run resolves correctly (critical damage not confirmed)")
     void run_resolvesCorrectly_criticalDamageNotConfirmed() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -1209,7 +1321,7 @@ public class AttackRollTest {
                 "attack_ability": "str",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [
                             { "size": 6, "determined": [ 3 ] }
@@ -1224,12 +1336,14 @@ public class AttackRollTest {
                     "value": Integer.MIN_VALUE
                 },
                 "determined": [ 20 ],
-                "withhold_damage_modifier": true
+                "withhold_damage_modifier": true,
+                "canceled": false,
+                "use_origin_attack_ability": false
             }*/
             this.putString("attack_ability", "str");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -1252,6 +1366,8 @@ public class AttackRollTest {
                 this.addInteger(20);
             }});
             this.putBoolean("withhold_damage_modifier", true);
+            this.putBoolean("canceled", false);
+            this.putBoolean("use_origin_attack_ability", false);
         }});
 
         attackRoll.setSource(source);

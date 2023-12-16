@@ -5,7 +5,6 @@ import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to communicating the occurrence of some non-functional but informative change, such as
@@ -44,7 +43,7 @@ public class InfoSubevent extends Subevent implements CancelableSubevent {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        this.json.putBoolean("cancel", false);
+        this.json.putBoolean("canceled", false);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class InfoSubevent extends Subevent implements CancelableSubevent {
 
     @Override
     public boolean isNotCanceled() {
-        return !Objects.requireNonNullElse(this.json.getBoolean("canceled"), false);
+        return !this.json.getBoolean("canceled");
     }
 
 }

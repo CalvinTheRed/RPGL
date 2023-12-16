@@ -7,7 +7,6 @@ import org.rpgl.json.JsonObject;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * This final class provides helper methods for subevents which deal vampiric damage.
@@ -15,6 +14,8 @@ import java.util.Objects;
  * @author Calvin Withun
  */
 public final class VampiricSubevent {
+
+    // TODO allow multiple instances of vampirism to exist on the same Subevent?
 
     /**
      * This helper method precipitates all healing performed from vampirism.
@@ -30,7 +31,7 @@ public final class VampiricSubevent {
         JsonObject vampirismJson = subevent.json.getJsonObject("vampirism");
         String vampiricDamageType = vampirismJson.getString("damage_type");
 
-        final int vampiricHealing = calculateVampiricHealing(
+        final int vampiricHealing = Calculation.scale(
                 getVampiricDamage(damageByType, vampiricDamageType),
                 vampirismJson
         );
@@ -102,23 +103,6 @@ public final class VampiricSubevent {
             return vampiricDamage;
         }
         return damageByType.getInteger(vampiricDamageType);
-    }
-
-    /**
-     * This helper method determines how much healing is granted by the vampiric subevent.
-     *
-     * @param vampiricDamage a JSON object indicating damage dealt by the subevent by damage type
-     * @param vampirismJson the JSON object defining how much healing to grant from vampirism
-     * @return the total healing granted by the vampiric subevent
-     */
-    static int calculateVampiricHealing(int vampiricDamage, JsonObject vampirismJson) {
-        return Objects.requireNonNullElse(vampirismJson.getBoolean("round_up"), false)
-                ? (int) Math.ceil((double) vampiricDamage
-                * (double) Objects.requireNonNullElse(vampirismJson.getInteger("numerator"), 1)
-                / (double) Objects.requireNonNullElse(vampirismJson.getInteger("denominator"), 2))
-                : vampiricDamage
-                * Objects.requireNonNullElse(vampirismJson.getInteger("numerator"), 1)
-                / Objects.requireNonNullElse(vampirismJson.getInteger("denominator"), 2);
     }
 
 }

@@ -56,6 +56,7 @@ public abstract class Condition {
         Condition.CONDITIONS.put("origin_item_has_tag", new OriginItemHasTag());
         Condition.CONDITIONS.put("origin_items_match", new OriginItemsMatch());
         Condition.CONDITIONS.put("subevent_has_tag", new SubeventHasTag());
+        Condition.CONDITIONS.put("user_ids_match", new UserIdsMatch());
 
         if (includeTestingConditions) {
             Condition.CONDITIONS.put("false", new False());

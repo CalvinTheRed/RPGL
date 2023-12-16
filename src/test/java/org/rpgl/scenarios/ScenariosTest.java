@@ -55,8 +55,8 @@ public class ScenariosTest {
     @Test
     @DisplayName("flametongue test")
     void flametongueTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -174,8 +174,8 @@ public class ScenariosTest {
     @Test
     @DisplayName("wrathful smite test")
     void wrathfulSmiteTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -282,6 +282,71 @@ public class ScenariosTest {
 
         assertNull(TestUtils.getEffectById(target.getEffectObjects(), "std:spell/wrathful_smite/fear"),
                 "target should not still have the wrathful smite fear applied after a successful save"
+        );
+    }
+
+    @Test
+    @DisplayName("summon undead test")
+    void summonUndeadTest() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLContext context = new DummyContext();
+        context.add(summoner);
+
+        summoner.getEvents().addString("std:spell/summon_undead/skeletal");
+        summoner.addResource(RPGLFactory.newResource("std:common/action/01"));
+        summoner.addResource(RPGLFactory.newResource("std:common/spell_slot/04"));
+        summoner.getAbilityScores().putInteger("int", 20);
+        summoner.setProficiencyBonus(3);
+
+        summoner.invokeEvent(
+                new RPGLObject[] {
+                        summoner
+                },
+                TestUtils.getEventById(summoner.getEventObjects(context), "std:spell/summon_undead/skeletal"),
+                new ArrayList<>() {{
+                    this.add(summoner.getResourcesWithTag("action").get(0));
+                    this.add(summoner.getResourcesWithTag("spell_slot").get(0));
+                }},
+                context
+        );
+
+        context.remove(summoner);
+        RPGLObject summonedUndead = context.getContextObjects().get(0);
+        context.add(summoner);
+
+        assertEquals(4, summonedUndead.getLevel("std:summon/summon_undead"),
+                "level 4 with level 4 spell slot"
+        );
+        assertEquals(30, summonedUndead.getMaximumHitPoints(context),
+                "30 hit points with level 4 spell slot"
+        );
+        assertEquals(15, summonedUndead.getBaseArmorClass(context),
+                "AC 15 with level 4 spell slot"
+        );
+
+        summoner.getAbilityScores().putInteger("dex", 28); // set AC to 19 to avoid hit
+        summonedUndead.invokeEvent(
+                new RPGLObject[] { summoner },
+                TestUtils.getEventById(summonedUndead.getEventObjects(context), "std:spell/summon_undead/grave_bolt"),
+                List.of(summonedUndead.getResourcesWithTag("action").get(0)),
+                context
+        );
+        assertEquals(1000, summoner.getHealthData().getInteger("current"),
+                "dummy should have been missed and taken no damage"
+        );
+
+        summonedUndead.invokeInfoSubevent(context, "end_turn");
+        summonedUndead.invokeInfoSubevent(context, "start_turn");
+
+        summoner.getAbilityScores().putInteger("dex", 26); // set AC to 18 to suffer hit
+        summonedUndead.invokeEvent(
+                new RPGLObject[] { summoner },
+                TestUtils.getEventById(summonedUndead.getEventObjects(context), "std:spell/summon_undead/grave_bolt"),
+                List.of(summonedUndead.getResourcesWithTag("action").get(0)),
+                context
+        );
+        assertEquals(1000-2-2-3-4, summoner.getHealthData().getInteger("current"),
+                "dummy should have been hit and damaged"
         );
     }
 

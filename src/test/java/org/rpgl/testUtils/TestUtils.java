@@ -16,6 +16,8 @@ import java.util.Objects;
  */
 public final class TestUtils {
 
+    public static final String TEST_USER = "test-user";
+
     /**
      * Returns an effect by ID from a list (first match)
      *

@@ -9,7 +9,6 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to removing an RPGLEffect from an RPGLObject.
@@ -46,7 +45,7 @@ public class RemoveEffect extends Subevent implements CancelableSubevent {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        this.json.putBoolean("cancel", false);
+        this.json.asMap().putIfAbsent("canceled", false);
     }
 
     @Override
@@ -67,12 +66,12 @@ public class RemoveEffect extends Subevent implements CancelableSubevent {
 
     @Override
     public void cancel() {
-        this.json.putBoolean("cancel", true);
+        this.json.putBoolean("canceled", true);
     }
 
     @Override
     public boolean isNotCanceled() {
-        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
+        return !this.json.getBoolean("canceled");
     }
 
 }

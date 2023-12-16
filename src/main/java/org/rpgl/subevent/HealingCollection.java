@@ -3,7 +3,6 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLResource;
-import org.rpgl.function.AddHealing;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -65,7 +64,7 @@ public class HealingCollection extends Subevent {
             effect.setTarget(this.getSource());
             for (int i = 0; i < healingArray.size(); i++) {
                 JsonObject healingJson = healingArray.getJsonObject(i);
-                this.addHealing(AddHealing.processJson(effect, this, healingJson, context));
+                this.addHealing(Calculation.processBonusJson(effect, this, healingJson, context));
             }
         }
     }

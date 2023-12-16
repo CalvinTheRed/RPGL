@@ -7,7 +7,6 @@ import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to performing healing on an RPGLObject.
@@ -44,7 +43,7 @@ public class Heal extends Subevent implements CancelableSubevent {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        this.json.putBoolean("cancel", false);
+        this.json.putBoolean("canceled", false);
         this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.getBaseHealing(context, resources);
     }
@@ -59,12 +58,12 @@ public class Heal extends Subevent implements CancelableSubevent {
 
     @Override
     public void cancel() {
-        this.json.putBoolean("cancel", true);
+        this.json.putBoolean("canceled", true);
     }
 
     @Override
     public boolean isNotCanceled() {
-        return !Objects.requireNonNullElse(this.json.getBoolean("cancel"), false);
+        return !this.json.getBoolean("canceled");
     }
 
     /**

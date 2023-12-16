@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -66,8 +67,8 @@ public class HealTest {
     @Test
     @DisplayName("deliverHealing conveys healing to target")
     void deliverHealing_conveysHealingToTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -110,8 +111,8 @@ public class HealTest {
     @Test
     @DisplayName("getTargetHealing contains no dice and no bonus (default)")
     void getTargetHealing_containsNoDiceAndNoBonus_default() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -132,8 +133,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing returns correct base healing")
     void getBaseHealing_returnsCorrectBaseHealing() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -143,7 +144,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count":2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -153,7 +154,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -172,7 +173,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "base healing should be rolled and in accordance with subevent-specified healing"
         );
@@ -181,8 +182,8 @@ public class HealTest {
     @Test
     @DisplayName("invoke target is healed correctly")
     void invoke_targetIsHealedCorrectly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -194,7 +195,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -204,7 +205,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -232,7 +233,7 @@ public class HealTest {
     @Test
     @DisplayName("prepare base healing is rolled and stored")
     void prepare_baseHealingIsRolledAndStored() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -241,7 +242,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -251,7 +252,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -270,7 +271,7 @@ public class HealTest {
         heal.prepare(context, List.of());
 
         String expected = """
-                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "base healing should be rolled and stored after calling prepare"
         );
@@ -279,8 +280,8 @@ public class HealTest {
     @Test
     @DisplayName("invoke comprehensive test")
     void invoke_comprehensiveTest() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -292,7 +293,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count": 2, "size": 6, "determined": [ 1 ] }
                         ],
@@ -302,7 +303,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 2);
@@ -330,8 +331,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing calculates correct healing (modifier)")
     void getBaseHealing_calculatesCorrectHealing_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -343,7 +344,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "modifier",
+                        "formula": "modifier",
                         "ability": "str",
                         "object": {
                             "from": "subevent",
@@ -354,7 +355,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "modifier");
+                    this.putString("formula", "modifier");
                     this.putString("ability", "str");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -368,7 +369,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":6,"dice":[]}]""";
+                [{"bonus":6,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "healing should equal str mod"
         );
@@ -377,8 +378,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing calculates correct healing (ability)")
     void getBaseHealing_calculatesCorrectHealing_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -390,7 +391,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "ability",
+                        "formula": "ability",
                         "ability": "str",
                         "object": {
                             "from": "subevent",
@@ -401,7 +402,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "ability");
+                    this.putString("formula", "ability");
                     this.putString("ability", "str");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
@@ -415,7 +416,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":23,"dice":[]}]""";
+                [{"bonus":23,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "healing should equal str score (23)"
         );
@@ -424,8 +425,8 @@ public class HealTest {
     @Test
     @DisplayName("getBaseHealing calculates correct healing (proficiency)")
     void getBaseHealing_calculatesCorrectHealing_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -437,7 +438,7 @@ public class HealTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "proficiency",
+                        "formula": "proficiency",
                         "object": {
                             "from": "subevent",
                             "object": "source"
@@ -447,7 +448,7 @@ public class HealTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "proficiency");
+                    this.putString("formula", "proficiency");
                     this.putJsonObject("object", new JsonObject() {{
                         this.putString("from", "subevent");
                         this.putString("object", "source");
@@ -460,7 +461,7 @@ public class HealTest {
         heal.getBaseHealing(context, List.of());
 
         String expected = """
-                [{"bonus":4,"dice":[]}]""";
+                [{"bonus":4,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, heal.json.getJsonArray("healing").toString(),
                 "healing should equal proficiency bonus"
         );

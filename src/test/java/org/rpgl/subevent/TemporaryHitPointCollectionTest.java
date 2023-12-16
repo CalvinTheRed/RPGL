@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -156,7 +157,7 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("prepare sets default values")
     void prepare_setsDefaultValues() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -172,9 +173,9 @@ public class TemporaryHitPointCollectionTest {
     }
 
     @Test
-    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (range)")
-    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points")
+    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -183,7 +184,7 @@ public class TemporaryHitPointCollectionTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -191,7 +192,7 @@ public class TemporaryHitPointCollectionTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -202,138 +203,7 @@ public class TemporaryHitPointCollectionTest {
         temporaryHitPointCollection.prepareTemporaryHitPoints(context);
 
         String expected = """
-                [{"bonus":10,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
-                "prepare should correctly interpret temporary hit points instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (modifier)")
-    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "temporary_hit_point_formula": "modifier",
-                        "ability": "dex",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "modifier");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
-
-        String expected = """
-                [{"bonus":5,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
-                "prepare should correctly interpret temporary hit points instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (ability)")
-    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "temporary_hit_point_formula": "ability",
-                        "ability": "dex",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "ability");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
-
-        String expected = """
-                [{"bonus":20,"dice":[]}]""";
-        assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
-                "prepare should correctly interpret temporary hit points instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points (proficiency)")
-    void prepareTemporaryHitPoints_interpretsTemporaryHitPoints_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "temporary_hit_point_formula": "proficiency",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "proficiency");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
-
-        String expected = """
-                [{"bonus":2,"dice":[]}]""";
+                [{"bonus":10,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, temporaryHitPointCollection.getTemporaryHitPointsCollection().toString(),
                 "prepare should correctly interpret temporary hit points instructions"
         );

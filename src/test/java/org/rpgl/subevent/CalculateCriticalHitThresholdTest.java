@@ -13,6 +13,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -67,7 +68,7 @@ public class CalculateCriticalHitThresholdTest {
     @Test
     @DisplayName("prepare sets the base of the calculation to 20")
     void prepare_setsBaseToTwenty() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 

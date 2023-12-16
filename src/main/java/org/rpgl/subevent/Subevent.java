@@ -63,6 +63,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("remove_origin_item_tag", new RemoveOriginItemTag());
         Subevent.SUBEVENTS.put("saving_throw", new SavingThrow());
+        Subevent.SUBEVENTS.put("spawn_object", new SpawnObject());
         Subevent.SUBEVENTS.put("take_resource", new TakeResource());
 
         if (includeTestingSubevents) {
@@ -80,6 +81,7 @@ public abstract class Subevent {
         this.subeventId = subeventId;
         this.json.putString("subevent", subeventId);
         this.json.asMap().putIfAbsent("tags", new ArrayList<>());
+        this.addTag(subeventId);
     }
 
     /**

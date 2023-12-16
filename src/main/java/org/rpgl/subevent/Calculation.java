@@ -2,10 +2,8 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
-import org.rpgl.function.AddBonus;
-import org.rpgl.function.SetBase;
-import org.rpgl.function.SetMinimum;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -39,6 +37,260 @@ public abstract class Calculation extends Subevent {
     }
 
     /**
+     * This helper method scales a given value according to a provided factor.
+     *
+     * @param value the value to be scaled
+     * @param scaleJson a JSON object indicating the factor by which the value will be scaled, in the form of <code>
+     *                  { "numerator": int, "denominator": int, "round_up": boolean }</code>
+     * @return the scaled value
+     */
+    public static int scale(int value, JsonObject scaleJson) {
+        return Objects.requireNonNullElse(scaleJson.getBoolean("round_up"), false)
+                ? (int) Math.ceil((double) value
+                * (double) Objects.requireNonNullElse(scaleJson.getInteger("numerator"), 1)
+                / (double) Objects.requireNonNullElse(scaleJson.getInteger("denominator"), 2))
+                : value
+                * Objects.requireNonNullElse(scaleJson.getInteger("numerator"), 1)
+                / Objects.requireNonNullElse(scaleJson.getInteger("denominator"), 2);
+    }
+
+    /**
+     * This helper method processes JSON bonus data and translates it to a numerical value.
+     *
+     * @param effect the RPGLEffect applying this bonus
+     * @param subevent the Calculation receiving this bonus
+     * @param formulaData the bonus formula data
+     * @param context the context in which this bonus is being applied
+     * @return a JsonObject representing the evaluated bonus
+     *
+     * @throws Exception if an exception occurs
+     */
+    public static JsonObject processBonusJson(RPGLEffect effect, Subevent subevent, JsonObject formulaData, RPGLContext context) throws Exception {
+        /*[
+            {
+                "formula": "range",
+                "bonus": #,
+                "dice": [
+                    { "count": #, "size": #, "determined": [ # ] },
+                    ...
+                ],
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "modifier",
+                "ability": "dex",
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "ability",
+                "ability": "dex",
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "proficiency",
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "level",
+                "class": "...",
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            }
+        ]*/
+        return switch (formulaData.getString("formula")) {
+            case "range" -> new JsonObject() {{
+                this.putInteger("bonus", Objects.requireNonNullElse(formulaData.getInteger("bonus"), 0));
+                this.putJsonArray("dice", Objects.requireNonNullElse(Die.unpack(formulaData.getJsonArray("dice")), new JsonArray()));
+                this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
+                    this.putInteger("numerator", 1);
+                    this.putInteger("denominator", 1);
+                    this.putBoolean("round_up", false);
+                }}));
+            }};
+            case "modifier" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
+                this.putInteger("bonus", object.getAbilityModifierFromAbilityName(formulaData.getString("ability"), context));
+                this.putJsonArray("dice", new JsonArray());
+                this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
+                    this.putInteger("numerator", 1);
+                    this.putInteger("denominator", 1);
+                    this.putBoolean("round_up", false);
+                }}));
+            }};
+            case "ability" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
+                this.putInteger("bonus", object.getAbilityScoreFromAbilityName(formulaData.getString("ability"), context));
+                this.putJsonArray("dice", new JsonArray());
+                this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
+                    this.putInteger("numerator", 1);
+                    this.putInteger("denominator", 1);
+                    this.putBoolean("round_up", false);
+                }}));
+            }};
+            case "proficiency" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
+                this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                this.putJsonArray("dice", new JsonArray());
+                this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
+                    this.putInteger("numerator", 1);
+                    this.putInteger("denominator", 1);
+                    this.putBoolean("round_up", false);
+                }}));
+            }};
+            case "level" -> new JsonObject() {{
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
+                String classId = formulaData.getString("class");
+                if (classId == null) {
+                    this.putInteger("bonus", object.getLevel());
+                } else {
+                    this.putInteger("bonus", object.getLevel(classId));
+                }
+                this.putJsonArray("dice", new JsonArray());
+                this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
+                    this.putInteger("numerator", 1);
+                    this.putInteger("denominator", 1);
+                    this.putBoolean("round_up", false);
+                }}));
+            }};
+            default -> new JsonObject() {{
+                // TODO log a warning here concerning an unexpected formula value
+                this.putInteger("bonus", 0);
+                this.putJsonArray("dice", new JsonArray());
+                this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
+                    this.putInteger("numerator", 1);
+                    this.putInteger("denominator", 1);
+                    this.putBoolean("round_up", false);
+                }}));
+            }};
+        };
+    }
+
+    /**
+     * This helper method processes JSON set data and translates it to a numerical value.
+     *
+     * @param effect the RPGLEffect setting a value
+     * @param subevent the Calculation having a value set
+     * @param formulaData the formula data
+     * @param context the context in which the value is being set
+     * @return a JsonObject representing the evaluated value to be set
+     *
+     * @throws Exception if an exception occurs
+     */
+    public static int processSetJson(RPGLEffect effect, Subevent subevent, JsonObject formulaData, RPGLContext context) throws Exception {
+        /*[
+            {
+                "formula": "number",
+                "number": #,
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "modifier",
+                "ability": "dex",
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "ability",
+                "ability": "dex",
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "proficiency",
+                "half": boolean,
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            },{
+                "formula": "level",
+                "class": "...",
+                "object": {
+                    "from": "...",
+                    "object": "...",
+                    "as_origin": t/f
+                },
+                "scale": {
+                    "numerator": #,
+                    "denominator": #,
+                    "round_up": t/f
+                }
+            }
+        ]*/
+        return switch (formulaData.getString("formula")) {
+            case "number" -> formulaData.getInteger("number");
+            case "modifier" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
+                    .getAbilityModifierFromAbilityName(formulaData.getString("ability"), context);
+            case "ability" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
+                    .getAbilityScoreFromAbilityName(formulaData.getString("ability"), context);
+            case "proficiency" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
+                    .getEffectiveProficiencyBonus(context);
+            case "level" -> formulaData.getString("class") == null
+                    ? RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object")).getLevel()
+                    : RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object")).getLevel(formulaData.getString("class"));
+            default -> 0; // TODO log a warning here concerning an unexpected formula value
+        };
+    }
+
+    /**
      * This helper method interprets the base formula provided in the Subevent JSON, if it exists, and stores it as the
      * base of the Calculation.
      *
@@ -53,7 +305,7 @@ public abstract class Calculation extends Subevent {
             RPGLEffect effect = new RPGLEffect();
             effect.setSource(this.getSource());
             effect.setTarget(this.getSource());
-            this.setBase(SetBase.processJson(effect, this, baseJson, context));
+            this.setBase(processSetJson(effect, this, baseJson, context));
         }
     }
 
@@ -74,7 +326,7 @@ public abstract class Calculation extends Subevent {
             effect.setTarget(this.getSource());
             for (int i = 0; i < bonuses.size(); i++) {
                 JsonObject bonus = bonuses.getJsonObject(i);
-                this.addBonus(AddBonus.processJson(effect, this, bonus, context));
+                this.addBonus(Calculation.processBonusJson(effect, this, bonus, context));
             }
         }
     }
@@ -94,7 +346,7 @@ public abstract class Calculation extends Subevent {
             RPGLEffect effect = new RPGLEffect();
             effect.setSource(this.getSource());
             effect.setTarget(this.getSource());
-            this.setMinimum(SetMinimum.processJson(effect, this, minimumJson, context));
+            this.setMinimum(Calculation.processSetJson(effect, this, minimumJson, context));
         }
     }
 
@@ -178,13 +430,7 @@ public abstract class Calculation extends Subevent {
      * @return the final value of the Calculation
      */
     public int get() {
-        int total = this.getBase();
-        total += this.getBonus();
-        int minimum = this.getMinimum();
-        if (total < minimum) {
-            total = minimum;
-        }
-        return total;
+        return Math.max(this.getBase() + this.getBonus(), this.getMinimum());
     }
 
     /**

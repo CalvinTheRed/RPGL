@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -67,8 +68,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("deliverDamage delivers damage to target")
     void deliverDamage_deliversDamageToTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -82,7 +83,12 @@ public class SavingThrowTest {
                         "dice": [
                             { "roll": 5 }
                         ],
-                        "bonus": 5
+                        "bonus": 5,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -95,6 +101,11 @@ public class SavingThrowTest {
                         }});
                     }});
                     this.putInteger("bonus", 5);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -111,8 +122,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveNestedSubevents increments counter on pass (DummySubevent)")
     void resolveNestedSubevents_incrementsCounterOnPass_dummySubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -145,8 +156,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("resolveNestedSubevents increments counter on fail (DummySubevent)")
     void resolveNestedSubevents_incrementsCounterOnFail_dummySubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -179,8 +190,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("getTargetDamage returns empty object (default)")
     void getTargetDamage_returnsEmptyObject_default() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -203,8 +214,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("getBaseDamage stores base damage value")
     void getBaseDamage_storesBaseDamageValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -214,7 +225,7 @@ public class SavingThrowTest {
             /*{
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "cold",
                         "dice": [
                             { "count": 2, "size": 10, "determined": [ 5 ] }
@@ -226,7 +237,7 @@ public class SavingThrowTest {
             }*/
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -247,50 +258,85 @@ public class SavingThrowTest {
         savingThrow.getBaseDamage(context, List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}]}]""";
+                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, savingThrow.json.getJsonArray("damage").toString(),
                 "getBaseDamage should store 10 cold damage"
         );
     }
 
     @Test
-    @DisplayName("calculateDifficultyClass calculates 17 (young red dragon using con)")
-    void calculateDifficultyClass_calculatesSeventeen_youngRedDragonUsingCon() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+    @DisplayName("calculateDifficultyClass calculates correctly")
+    void calculateDifficultyClass_calculatesCorrectly() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        source.getAbilityScores().putInteger("con", 20);
+        source.setProficiencyBonus(2);
+
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             this.putString("difficulty_class_ability", "con");
+            this.putBoolean("use_origin_difficulty_class_ability", false);
         }});
 
         savingThrow.setSource(source);
         savingThrow.calculateDifficultyClass(context, List.of());
 
-        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
-                "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+                "save DC should calculate according to the formula DC = 8 + proficiency + modifier"
+        );
+    }
+
+    @Test
+    @DisplayName("calculateDifficultyClass uses origin difficulty class ability")
+    void calculateDifficultyClass_usesOriginDifficultyClassAbility() throws Exception {
+        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+        context.add(source);
+        context.add(target);
+
+        origin.getAbilityScores().putInteger("int", 20);
+        source.setOriginObject(origin.getUuid());
+        source.setProficiencyBonus(2);
+
+        SavingThrow savingThrow = new SavingThrow();
+        savingThrow.joinSubeventData(new JsonObject() {{
+            this.putString("difficulty_class_ability", "int");
+            this.putBoolean("use_origin_difficulty_class_ability", true);
+        }});
+
+        savingThrow.setSource(source);
+        savingThrow.calculateDifficultyClass(context, List.of());
+
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+                "save DC should calculate using origin object's ability scores"
         );
     }
 
     @Test
     @DisplayName("prepare calculates save DC and stores base damage")
     void prepare_calculatesSaveDifficultyClassAndStoresBaseDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
 
+        source.getAbilityScores().putInteger("int", 20);
+        source.setProficiencyBonus(2);
+
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
             /*{
-                "difficulty_class_ability": "con",
+                "difficulty_class_ability": "int",
                 "damage": [
                     {
-                        :damage_formula": "range",
+                        :formula": "range",
                         "damage_type": "cold",
                         "dice": [
                             { "count": 2, "size": 10, "determined": [ 5 ] }
@@ -299,10 +345,10 @@ public class SavingThrowTest {
                     }
                 ]
             }*/
-            this.putString("difficulty_class_ability", "con");
+            this.putString("difficulty_class_ability", "int");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -321,11 +367,11 @@ public class SavingThrowTest {
         savingThrow.setSource(source);
         savingThrow.prepare(context, List.of());
 
-        assertEquals(17, savingThrow.json.getInteger("save_difficulty_class"),
-                "young red dragon should produce a con-based save DC of 17 (8+4+5=17)"
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+                "save DC was calculated incorrectly"
         );
         String expected = """
-                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}]}]""";
+                [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, savingThrow.json.getJsonArray("damage").toString(),
                 "prepare should store 10 cold damage"
         );
@@ -334,8 +380,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke deals proper damage on fail")
     void invoke_dealsProperDamageOnFail() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -347,10 +393,10 @@ public class SavingThrowTest {
                 "save_ability": "dex",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "cold",
                         "dice": [
-                        { "count": 2, "size": 10, "determined": [ 5 ] }
+                            { "count": 2, "size": 10, "determined": [ 5 ] }
                         ],
                         "bonus": 0
                     }
@@ -362,7 +408,7 @@ public class SavingThrowTest {
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -395,8 +441,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke deals half damage on pass")
     void invoke_dealsHalfDamageOnPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -408,7 +454,7 @@ public class SavingThrowTest {
                 "save_ability": "dex",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "cold",
                         "dice": [
                         { "count": 2, "size": 10, "determined": [ 5 ] }
@@ -423,7 +469,7 @@ public class SavingThrowTest {
             this.putString("save_ability", "dex");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "cold");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -455,8 +501,8 @@ public class SavingThrowTest {
     @Test
     @DisplayName("invoke accommodates vampirism")
     void invoke_accommodatesVampirism() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy");
-        RPGLObject target = RPGLFactory.newObject("debug:dummy");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -471,7 +517,7 @@ public class SavingThrowTest {
                 "save_ability": "con",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "necrotic",
                         "dice": [
                         { "count": 2, "size": 10, "determined": [ 5 ] }
@@ -492,7 +538,7 @@ public class SavingThrowTest {
             this.putString("save_ability", "con");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "necrotic");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{

@@ -17,6 +17,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -72,7 +73,7 @@ public class OriginItemHasTagTest {
     @Test
     @DisplayName("evaluate returns true when origin item has tag (subevent origin item)")
     void evaluate_returnsTrueWhenOriginItemHasTag_subeventOriginItem() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -108,7 +109,7 @@ public class OriginItemHasTagTest {
     @Test
     @DisplayName("evaluate returns true when origin item has tag (effect origin item)")
     void evaluate_returnsTrueWhenOriginItemHasTag_effectOriginItem() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -144,7 +145,7 @@ public class OriginItemHasTagTest {
     @Test
     @DisplayName("evaluate returns false when origin item does not have tag (subevent origin item)")
     void evaluate_returnsFalseWhenOriginItemDoesNotHaveTag_subeventOriginItem() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -179,7 +180,7 @@ public class OriginItemHasTagTest {
     @Test
     @DisplayName("evaluate returns false when origin item does not have tag (effect origin item)")
     void evaluate_returnsFalseWhenOriginItemDoesNotHaveTag_effectOriginItem() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 

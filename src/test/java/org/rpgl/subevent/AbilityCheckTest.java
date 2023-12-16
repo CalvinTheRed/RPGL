@@ -15,6 +15,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -96,7 +97,7 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("giveHalfProficiency gives only half proficiency")
     void giveHalfProficiency_givesOnlyHalfProficiency() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -123,7 +124,7 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("giveProficiency gives proficiency and overrides half proficiency")
     void giveProficiency_givesProficiencyAndOverridesHalfProficiency() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -151,7 +152,7 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("giveProficiency gives expertise and overrides half proficiency and proficiency")
     void giveExpertise_givesExpertiseAndOverridesHalfProficiencyAndProficiency() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -180,7 +181,7 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("getProficiencyBonus returns zero when no proficiency is given")
     void getProficiencyBonus_returnsZeroWhenNoProficiencyIsGiven() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -205,7 +206,7 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("invoke rolls die correctly")
     void invoke_rollsDieCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -236,7 +237,7 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("invoke adds ability bonus")
     void invoke_addsAbilityBonus() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -269,7 +270,7 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("invoke adds proficiency (is proficient)")
     void invoke_addsProficiency_isProficient() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 

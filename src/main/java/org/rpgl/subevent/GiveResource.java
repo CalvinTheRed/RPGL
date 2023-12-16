@@ -6,7 +6,6 @@ import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * This Subevent is dedicated to giving a new RPGLResource to a RPGLObject. This Subevent allows for the specification
@@ -42,8 +41,14 @@ public class GiveResource extends Subevent {
     }
 
     @Override
+    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        super.prepare(context, resources);
+        this.json.asMap().putIfAbsent("count", 1);
+    }
+
+    @Override
     public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        int count = Objects.requireNonNullElse(this.json.getInteger("count"), 1);
+        int count = this.json.getInteger("count");
         String resourceId = this.json.getString("resource");
         for (int i = 0; i < count; i++) {
             RPGLResource resource = RPGLFactory.newResource(resourceId);

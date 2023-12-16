@@ -14,6 +14,7 @@ import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -100,7 +101,7 @@ public class RPGLFactoryTest {
                 "incorrect field value: " + RPGLEventTO.AREA_OF_EFFECT_ALIAS
         );
         expected = """
-                [{"damage":[{"bonus":0,"damage_formula":"range","damage_type":"fire","dice":[{"count":16,"determined":[3],"size":6}]}],"damage_on_pass":"half","determined":[1],"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
+                [{"damage":[{"bonus":0,"damage_type":"fire","dice":[{"count":16,"determined":[3],"size":6}],"formula":"range"}],"damage_on_pass":"half","determined":[1],"difficulty_class_ability":"con","save_ability":"dex","subevent":"saving_throw"}]""";
         assertEquals(expected, event.getSubevents().toString(),
                 "incorrect field value: " + RPGLEventTO.SUBEVENTS_ALIAS
         );
@@ -167,7 +168,7 @@ public class RPGLFactoryTest {
     @Test
     @DisplayName("newObject using std:dragon/red/young")
     void newObject_youngRedDragon() {
-        RPGLObject object = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject object = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         String expected;
 
         expected = """

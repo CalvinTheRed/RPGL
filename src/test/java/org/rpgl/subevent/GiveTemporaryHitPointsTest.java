@@ -14,6 +14,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -67,8 +68,8 @@ public class GiveTemporaryHitPointsTest {
     @Test
     @DisplayName("invoke gives temporary hit points and applies rider effect (no prior temporary hit points)")
     void invoke_givesTemporaryHitPointsAndAppliesRiderEffect_noPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -78,7 +79,7 @@ public class GiveTemporaryHitPointsTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -89,7 +90,7 @@ public class GiveTemporaryHitPointsTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -118,8 +119,8 @@ public class GiveTemporaryHitPointsTest {
     @Test
     @DisplayName("invoke gives temporary hit points and applies rider effect (few prior temporary hit points)")
     void invoke_givesTemporaryHitPointsAndAppliesRiderEffect_fewPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -131,7 +132,7 @@ public class GiveTemporaryHitPointsTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -142,7 +143,7 @@ public class GiveTemporaryHitPointsTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -171,8 +172,8 @@ public class GiveTemporaryHitPointsTest {
     @Test
     @DisplayName("invoke does not give temporary hit points or apply rider effect (many prior temporary hit points)")
     void invoke_doesNotGiveTemporaryHitPointsOrApplyRiderEffect_manyPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -184,7 +185,7 @@ public class GiveTemporaryHitPointsTest {
             /*{
                 "temporary_hit_points": [
                     {
-                        "temporary_hit_point_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -195,7 +196,7 @@ public class GiveTemporaryHitPointsTest {
             }*/
             this.putJsonArray("temporary_hit_points", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("temporary_hit_point_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});

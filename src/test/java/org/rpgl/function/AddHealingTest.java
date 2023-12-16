@@ -15,6 +15,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingCollection;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -68,10 +69,10 @@ public class AddHealingTest {
     }
 
     @Test
-    @DisplayName("execute adds healing to subevent (range)")
-    void execute_addsHealingToSubevent_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+    @DisplayName("execute adds healing to subevent")
+    void execute_addsHealingToSubevent() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -86,7 +87,7 @@ public class AddHealingTest {
                 "function": "add_healing",
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [
                             { "count": 1, "size": 6, "determined": [ 3 ] }
                         ],
@@ -97,7 +98,7 @@ public class AddHealingTest {
             this.putString("function", "add_healing");
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
                             this.putInteger("count", 1);
@@ -119,279 +120,10 @@ public class AddHealingTest {
         addHealing.execute(effect, healingCollection, functionJson, context, List.of());
 
         String expected = """
-                [{"bonus":2,"dice":[{"determined":[3],"size":6}]}]""";
+                [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
                 "execute should add healing to HealingCollection subevent"
         );
     }
 
-    @Test
-    @DisplayName("execute adds healing to subevent (modifier)")
-    void execute_addsHealingToSubevent_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.setSource(source);
-        healingCollection.prepare(context, List.of());
-
-        AddHealing addHealing = new AddHealing();
-        JsonObject functionJson = new JsonObject() {{
-           /*{
-                "function": "add_healing",
-                "healing": [
-                    {
-                        "healing_formula": "modifier",
-                        "ability": "dex",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_healing");
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "modifier");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-
-        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
-
-        String expected = """
-                [{"bonus":5,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "execute should add source's dex modifier to HealingCollection subevent"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds healing to subevent (ability)")
-    void execute_addsHealingToSubevent_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.setSource(source);
-        healingCollection.prepare(context, List.of());
-
-        AddHealing addHealing = new AddHealing();
-        JsonObject functionJson = new JsonObject() {{
-           /*{
-                "function": "add_healing",
-                "healing": [
-                    {
-                        "healing_formula": "ability",
-                        "ability": "dex",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_healing");
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "ability");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-
-        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
-
-        String expected = """
-                [{"bonus":20,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "execute should add source's dex score to HealingCollection subevent"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds healing to subevent (proficiency)")
-    void execute_addsHealingToSubevent_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.setSource(source);
-        healingCollection.prepare(context, List.of());
-
-        AddHealing addHealing = new AddHealing();
-        JsonObject functionJson = new JsonObject() {{
-           /*{
-                "function": "add_healing",
-                "healing": [
-                    {
-                        "healing_formula": "proficiency",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_healing");
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "proficiency");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-
-        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
-
-        String expected = """
-                [{"bonus":2,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "execute should add source's proficiency modifier to HealingCollection subevent"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds healing to subevent (level with specified class)")
-    void execute_addsHealingToSubevent_levelWithSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.setSource(source);
-        healingCollection.prepare(context, List.of());
-
-        AddHealing addHealing = new AddHealing();
-        JsonObject functionJson = new JsonObject() {{
-           /*{
-                "function": "add_healing",
-                "healing": [
-                    {
-                        "healing_formula": "level",
-                        "class": "std:common/base",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_healing");
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "level");
-                    this.putString("class", "std:common/base");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-
-        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
-
-        String expected = """
-                [{"bonus":1,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "execute should add source's level to HealingCollection subevent"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds healing to subevent (level without specified class)")
-    void execute_addsHealingToSubevent_levelWithoutSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.setSource(source);
-        healingCollection.prepare(context, List.of());
-
-        AddHealing addHealing = new AddHealing();
-        JsonObject functionJson = new JsonObject() {{
-           /*{
-                "function": "add_healing",
-                "healing": [
-                    {
-                        "healing_formula": "level",
-                        "object": {
-                            "from": "effect",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_healing");
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "level");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "effect");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-
-        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
-
-        String expected = """
-                [{"bonus":9,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "execute should add source's level to HealingCollection subevent"
-        );
-    }
 }

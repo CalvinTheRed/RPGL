@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TrueTest {
 
     @BeforeAll
-    static void beforeFalse() {
+    static void beforeAll() {
         RPGLCore.initializeTesting();
     }
 

@@ -1,6 +1,8 @@
 package org.rpgl.core;
 
 import org.rpgl.datapack.DatapackLoader;
+import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,15 +104,33 @@ public final class RPGLFactory {
      * This method creates a new RPGLObject instance according to template data stored at the given object ID.
      *
      * @param objectId an object ID <code>(namespace:name)</code>
+     * @param userId the id for the user controlling the new object
      * @return a new RPGLObject object
      */
-    public static RPGLObject newObject(String objectId) {
+    public static RPGLObject newObject(String objectId, String userId) {
+        return newObject(objectId, userId, new JsonArray());
+    }
+
+    /**
+     * This method creates a new RPGLObject instance according to template data stored at the given object ID. This
+     * method allows for bonuses to be applied to that template.
+     *
+     * @param objectId an object ID <code>(namespace:name)</code>
+     * @param userId the id for the user controlling the new object
+     * @param fieldBonuses an array of bonuses to be applied to specified fields in the template
+     * @return a new RPGLObject object
+     */
+    public static RPGLObject newObject(String objectId, String userId, JsonArray fieldBonuses) {
         String[] objectIdSplit = objectId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
-                    .get(objectIdSplit[0])
-                    .getObjectTemplate(objectIdSplit[1])
-                    .newInstance();
+            RPGLObjectTemplate template = new RPGLObjectTemplate();
+            template.join(DatapackLoader.DATAPACKS.get(objectIdSplit[0]).getObjectTemplate(objectIdSplit[1]));
+            for (int i = 0; i < fieldBonuses.size(); i++) {
+                JsonObject fieldBonus = fieldBonuses.getJsonObject(i);
+                String field = fieldBonus.getString("field");
+                template.insertInteger(field, template.seekInteger(field) + fieldBonus.getInteger("bonus"));
+            }
+            return template.newInstance(userId);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLObject: " + objectId);
             throw new RuntimeException("Encountered an error building a new RPGLObject", e);

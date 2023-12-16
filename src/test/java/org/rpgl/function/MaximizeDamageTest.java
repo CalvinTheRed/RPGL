@@ -16,6 +16,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.DamageRoll;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -59,14 +60,24 @@ public class MaximizeDamageTest {
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 1 ] }
                         ],
-                        "bonus": 2
+                        "bonus": 2,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     },{
                         "damage_type": "cold",
                         "dice": [
                             { "size": 6, "determined": [ 1 ] },
                             { "size": 6, "determined": [ 1 ] }
                         ],
-                        "bonus": 2
+                        "bonus": 2,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -88,6 +99,11 @@ public class MaximizeDamageTest {
                         }});
                     }});
                     this.putInteger("bonus", 2);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_type", "cold");
@@ -106,6 +122,11 @@ public class MaximizeDamageTest {
                         }});
                     }});
                     this.putInteger("bonus", 2);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -120,14 +141,24 @@ public class MaximizeDamageTest {
                             { "roll": 1, "size": 6 },
                             { "roll": 1, "size": 6 },
                         ],
-                        "bonus": 0
+                        "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     },{
                         "damage_type": "cold",
                         "dice": [
                             { "roll": 1, "size": 6 },
                             { "roll": 1, "size": 6 },
                         ],
-                        "bonus": 0
+                        "bonus": 0,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
                     }
                 ]
             }*/
@@ -145,6 +176,11 @@ public class MaximizeDamageTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
                 this.addJsonObject(new JsonObject() {{
                     this.putString("damage_type", "cold");
@@ -159,6 +195,11 @@ public class MaximizeDamageTest {
                         }});
                     }});
                     this.putInteger("bonus", 0);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
                 }});
             }});
         }});
@@ -191,8 +232,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes specific damage type for DamageRoll")
     void execute_maximizesSpecificDamageTypeForDamageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -214,7 +255,7 @@ public class MaximizeDamageTest {
         maximizeDamage.execute(null, damageRoll, functionJson, context, List.of());
 
         String expected = """
-                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}]}]""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should maximize fire damage (cold 1+1+2=4 fire 6+6+2=14)"
         );
@@ -223,8 +264,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes every damage type for DamageRoll")
     void execute_maximizesEveryDamageTypeForDamageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -244,7 +285,7 @@ public class MaximizeDamageTest {
         maximizeDamage.execute(null, damageRoll, functionJson, context, List.of());
 
         String expected = """
-                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
                 "execute should maximize all damage (cold 6+6+2=14 fire 6+6+2=14)"
         );
@@ -253,8 +294,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes specific damage type for DamageDelivery")
     void execute_maximizesSpecificDamageTypeForDamageDelivery() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -285,8 +326,8 @@ public class MaximizeDamageTest {
     @Test
     @DisplayName("execute maximizes every damage type for DamageDelivery")
     void execute_maximizesEveryDamageTypeForDamageDelivery() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

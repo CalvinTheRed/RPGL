@@ -203,19 +203,27 @@ public class RPGLEffect extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public static RPGLObject getObject(RPGLEffect effect, Subevent subevent, JsonObject instructions) throws Exception {
-        String from = instructions.getString("from");
-        String object = instructions.getString("object");
-        if ("subevent".equals(from)) {
-            if ("source".equals(object)) {
-                return subevent.getSource();
-            } else if ("target".equals(object)) {
-                return subevent.getTarget();
+        String fromAlias = instructions.getString("from");
+        String objectAlias = instructions.getString("object");
+        RPGLObject object = null;
+        if ("subevent".equals(fromAlias)) {
+            if ("source".equals(objectAlias)) {
+                object = subevent.getSource();
+            } else if ("target".equals(objectAlias)) {
+                object = subevent.getTarget();
             }
-        } else if ("effect".equals(from)) {
-            if ("source".equals(object)) {
-                return effect.getSource();
-            } else if ("target".equals(object)) {
-                return effect.getTarget();
+        } else if ("effect".equals(fromAlias)) {
+            if ("source".equals(objectAlias)) {
+                object = effect.getSource();
+            } else if ("target".equals(objectAlias)) {
+                object = effect.getTarget();
+            }
+        }
+        if (object != null) {
+            if (Objects.requireNonNullElse(instructions.getBoolean("as_origin"), false)) {
+                return UUIDTable.getObject(object.getOriginObject());
+            } else {
+                return object;
             }
         }
         Exception e = new Exception("could not isolate an RPGLObject: " + instructions);

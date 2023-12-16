@@ -14,6 +14,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -69,10 +70,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect source same as subevent source)")
     void evaluate_returnsTrue_effectSourceSameAsSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject subeventSource = effectSource;
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -107,10 +108,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect source different than subevent source)")
     void evaluate_returnsFalse_effectSourceDifferentThanSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -145,9 +146,9 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect source same as subevent target)")
     void evaluate_returnsTrue_effectSourceSameAsSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject subeventTarget = effectSource;
         DummyContext context = new DummyContext();
         context.add(effectSource);
@@ -183,10 +184,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect source different than subevent target)")
     void evaluate_returnsFalse_effectSourceDifferentThanSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -221,10 +222,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect target same as subevent source)")
     void evaluate_returnsTrue_effectTargetSameAsSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject subeventSource = effectTarget;
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -259,10 +260,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect target different than subevent source)")
     void evaluate_returnsFalse_effectTargetDifferentThanSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);
@@ -297,9 +298,9 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns true (effect target same as subevent target)")
     void evaluate_returnsTrue_effectTargetSameAsSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         RPGLObject subeventTarget = effectTarget;
         DummyContext context = new DummyContext();
         context.add(effectSource);
@@ -335,10 +336,10 @@ public class ObjectsMatchTest {
     @Test
     @DisplayName("evaluate returns false (effect target different than subevent target)")
     void evaluate_returnsFalse_effectTargetDifferentThanSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(effectSource);
         context.add(effectTarget);

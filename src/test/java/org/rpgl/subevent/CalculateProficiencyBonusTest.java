@@ -11,6 +11,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -63,7 +64,7 @@ public class CalculateProficiencyBonusTest {
     @Test
     @DisplayName("prepare sets base proficiency bonus from source json")
     void prepare_setsBaseProficiencyBonusFromSourceJson() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young");
+        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 

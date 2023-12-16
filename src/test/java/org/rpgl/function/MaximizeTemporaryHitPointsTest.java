@@ -15,6 +15,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.TemporaryHitPointRoll;
 import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -70,8 +71,8 @@ public class MaximizeTemporaryHitPointsTest {
     @Test
     @DisplayName("execute maximizes temporary hit points for TemporaryHitPointRoll")
     void execute_maximizesTemporaryHitPointsForTemporaryHitPointRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -134,8 +135,8 @@ public class MaximizeTemporaryHitPointsTest {
     @Test
     @DisplayName("execute maximizes temporary hit points for TemporaryHitPointsDelivery")
     void execute_maximizesTemporaryHitPointsForTemporaryHitPointDelivery() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

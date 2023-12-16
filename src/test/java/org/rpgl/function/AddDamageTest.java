@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -15,6 +14,7 @@ import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageCollection;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -68,10 +68,10 @@ public class AddDamageTest {
     }
 
     @Test
-    @DisplayName("execute adds correct bonus to collection (range)")
-    void execute_addsCorrectBonusToCollection_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
+    @DisplayName("execute adds damage to collection")
+    void execute_addsDamageToCollection() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -86,7 +86,7 @@ public class AddDamageTest {
                 "function": "add_damage",
                 "damage": [
                     {
-                        "damage_formula": "range",
+                        "formula": "range",
                         "damage_type": "fire",
                         "dice": [
                             { "count": 1, "size": 6, "determined": [ 3 ] }
@@ -98,7 +98,7 @@ public class AddDamageTest {
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "range");
+                    this.putString("formula", "range");
                     this.putString("damage_type", "fire");
                     this.putJsonArray("dice", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
@@ -114,286 +114,13 @@ public class AddDamageTest {
             }});
         }};
 
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
+        addDamage.execute(null, damageCollection, functionJson, context, List.of());
 
-        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
         String expected = """
-        [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}]}]""";
+                [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, damageCollection.getDamageCollection().toString(),
                 "execute should add appropriate damage range to collection"
         );
     }
 
-    @Test
-    @DisplayName("execute adds correct bonus to collection (modifier)")
-    void execute_addsCorrectBonusToCollection_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("str", 20);
-
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.setSource(source);
-        damageCollection.prepare(context, List.of());
-
-        AddDamage addDamage = new AddDamage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_damage",
-                "damage": [
-                    {
-                        "damage_formula": "modifier",
-                        "ability": "str",
-                        "damage_type": "fire",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_damage");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "modifier");
-                    this.putString("ability", "str");
-                    this.putString("damage_type", "fire");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
-
-        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
-        String expected = """
-        [{"bonus":5,"damage_type":"fire","dice":[]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "execute should add appropriate damage modifier to collection"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to collection (ability)")
-    void execute_addsCorrectBonusToCollection_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("str", 20);
-
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.setSource(source);
-        damageCollection.prepare(context, List.of());
-
-        AddDamage addDamage = new AddDamage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_damage",
-                "damage": [
-                    {
-                        "damage_formula": "ability",
-                        "ability": "str",
-                        "damage_type": "fire",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_damage");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "ability");
-                    this.putString("ability", "str");
-                    this.putString("damage_type", "fire");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
-
-        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
-        String expected = """
-        [{"bonus":20,"damage_type":"fire","dice":[]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "execute should add appropriate damage ability to collection"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to collection (proficiency)")
-    void execute_addsCorrectBonusToCollection_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.setProficiencyBonus(3);
-
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.setSource(source);
-        damageCollection.prepare(context, List.of());
-
-        AddDamage addDamage = new AddDamage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_damage",
-                "damage": [
-                    {
-                        "damage_formula": "proficiency",
-                        "damage_type": "fire",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_damage");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "proficiency");
-                    this.putString("damage_type", "fire");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
-
-        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
-        String expected = """
-        [{"bonus":3,"damage_type":"fire","dice":[]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "execute should add appropriate damage proficiency to collection"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to collection (level with specified class)")
-    void execute_addsCorrectBonusToCollection_levelWithSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.setSource(source);
-        damageCollection.prepare(context, List.of());
-
-        AddDamage addDamage = new AddDamage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_damage",
-                "damage": [
-                    {
-                        "damage_formula": "level",
-                        "class": "std:common/base",
-                        "damage_type": "fire",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_damage");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "level");
-                    this.putString("class", "std:common/base");
-                    this.putString("damage_type", "fire");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
-
-        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
-        String expected = """
-        [{"bonus":1,"damage_type":"fire","dice":[]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "execute should add appropriate damage level to collection"
-        );
-    }
-
-    @Test
-    @DisplayName("execute adds correct bonus to collection (level without specified class)")
-    void execute_addsCorrectBonusToCollection_levelWithoutSpecifiedClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight");
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight");
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.setSource(source);
-        damageCollection.prepare(context, List.of());
-
-        AddDamage addDamage = new AddDamage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "add_damage",
-                "damage": [
-                    {
-                        "damage_formula": "level",
-                        "damage_type": "fire",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-           }*/
-            this.putString("function", "add_damage");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_formula", "level");
-                    this.putString("damage_type", "fire");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setName("TEST");
-
-        addDamage.execute(effect, damageCollection, functionJson, context, List.of());
-        String expected = """
-        [{"bonus":9,"damage_type":"fire","dice":[]}]""";
-        assertEquals(expected, damageCollection.getDamageCollection().toString(),
-                "execute should add appropriate damage level to collection"
-        );
-    }
 }

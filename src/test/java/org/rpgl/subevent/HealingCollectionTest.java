@@ -13,6 +13,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -156,7 +157,7 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("prepare sets default values")
     void prepare_setsDefaultValues() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -172,9 +173,9 @@ public class HealingCollectionTest {
     }
 
     @Test
-    @DisplayName("prepareHealing interprets healing (range)")
-    void prepareHealing_interpretsHealing_range() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
+    @DisplayName("prepareHealing interprets healing correctly")
+    void prepareHealing_interpretsHealingCorrectly() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 
@@ -183,7 +184,7 @@ public class HealingCollectionTest {
             /*{
                 "healing": [
                     {
-                        "healing_formula": "range",
+                        "formula": "range",
                         "dice": [ ],
                         "bonus": 10
                     }
@@ -191,7 +192,7 @@ public class HealingCollectionTest {
             }*/
             this.putJsonArray("healing", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "range");
+                    this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
                     this.putInteger("bonus", 10);
                 }});
@@ -202,138 +203,7 @@ public class HealingCollectionTest {
         healingCollection.prepareHealing(context);
 
         String expected = """
-                [{"bonus":10,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareHealing interprets healing (modifier)")
-    void prepareHealing_interpretsHealing_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "healing_formula": "modifier",
-                        "ability": "dex",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "modifier");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
-
-        String expected = """
-                [{"bonus":5,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareHealing interprets healing (ability)")
-    void prepareHealing_interpretsHealing_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        source.getAbilityScores().putInteger("dex", 20);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "healing_formula": "ability",
-                        "ability": "dex",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "ability");
-                    this.putString("ability", "dex");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
-
-        String expected = """
-                [{"bonus":20,"dice":[]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "prepare should correctly interpret healing instructions"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareHealing interprets healing (proficiency)")
-    void prepareHealing_interpretsHealing_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner");
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "healing_formula": "proficiency",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("healing_formula", "proficiency");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }});
-
-        healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
-
-        String expected = """
-                [{"bonus":2,"dice":[]}]""";
+                [{"bonus":10,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
                 "prepare should correctly interpret healing instructions"
         );

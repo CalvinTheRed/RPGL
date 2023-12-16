@@ -17,6 +17,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -72,7 +73,7 @@ public class EquippedItemHasTagTest {
     @Test
     @DisplayName("evaluate returns false when slot is empty")
     void evaluate_returnsFalseWhenSlotIsEmpty() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -112,7 +113,7 @@ public class EquippedItemHasTagTest {
     @Test
     @DisplayName("evaluate returns true when equipped item has tag")
     void evaluate_returnsTrueWhenEquippedItemHasTag() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -157,7 +158,7 @@ public class EquippedItemHasTagTest {
     @Test
     @DisplayName("evaluate returns false when equipped item does not have tag")
     void evaluate_returnsFalseWhenEquippedItemDoesNotHaveTag() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 

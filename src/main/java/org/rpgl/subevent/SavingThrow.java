@@ -5,6 +5,7 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,9 @@ public class SavingThrow extends Roll {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-
-        // Add tag so nested subevents such as DamageCollection can know they hail from a saving throw.
-        this.addTag("saving_throw");
-
-        this.calculateDifficultyClass(context, resources);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
+        this.calculateDifficultyClass(context, resources);
         this.getBaseDamage(context, resources);
     }
 
@@ -108,7 +106,10 @@ public class SavingThrow extends Roll {
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
-        calculateSaveDifficultyClass.setSource(this.getSource());
+        calculateSaveDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
+                ? UUIDTable.getObject(this.getSource().getOriginObject())
+                : this.getSource()
+        );
         calculateSaveDifficultyClass.prepare(context, resources);
         calculateSaveDifficultyClass.setTarget(this.getSource());
         calculateSaveDifficultyClass.invoke(context, resources);

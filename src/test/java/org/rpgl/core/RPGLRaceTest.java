@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -45,7 +46,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("revokeLostResources revokes and unregisters resources")
     void revokeLostResources_revokesAndUnregistersResource() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         String resourceUuid = resource.getUuid();
         object.addResource(resource);
@@ -71,7 +72,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("revokeLostEvents revokes events")
     void revokeLostEvents_revokesEvents() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.getEvents().addString("std:test");
 
         assertEquals(1, object.getEvents().size(),
@@ -92,7 +93,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("revokeLostEffects revokes and unregisters effects")
     void revokeLostEffects_revokesAndUnregistersEffects() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLEffect effect = RPGLFactory.newEffect("std:common/dodge");
         String effectUuid = effect.getUuid();
         object.addEffect(effect);
@@ -118,7 +119,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("grantGainedResources grants resources")
     void grantGainedResources_grantsResources() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         new RPGLRace().grantGainedResources(object, new JsonObject() {{
             this.putJsonArray("resources", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -136,7 +137,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("grantGainedEvents grants events")
     void grantGainedEvents_grantsEvents() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         new RPGLRace().grantGainedEvents(object, new JsonObject() {{
             this.putJsonArray("events", new JsonArray() {{
                 this.addString("std:object/dragon/red/young/breath");
@@ -151,7 +152,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("grantGainedEffects grants effects (no choices needed)")
     void grantGainedEffects_grantsEffects_noChoicesNeeded() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         JsonObject features = new JsonObject() {{
             this.putJsonArray("effects", new JsonArray() {{
                 this.addString("std:common/damage/immunity/fire");
@@ -168,7 +169,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("grantGainedEffects grants effects (choices needed)")
     void grantGainedEffects_grantsEffects_choicesNeeded() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         JsonObject features = new JsonObject() {{
             this.putJsonArray("effects", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -206,7 +207,7 @@ public class RPGLRaceTest {
     @Test
     @DisplayName("levelUpRPGLObject grants correct features on level up")
     void levelUpRPGLObject_grantsCorrectFeaturesOnLevelUp() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLFactory.getRace("std:human").levelUpRPGLObject(object, new JsonObject(), 1);
 

@@ -96,7 +96,10 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
                     total += dice.getJsonObject(j).getInteger("roll");
                 }
                 String damageType = damageJson.getString("damage_type");
-                damage.putInteger(damageType, Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total);
+                damage.putInteger(damageType, Calculation.scale(
+                        Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total,
+                        damageJson.removeJsonObject("scale")
+                ));
             }
             if ("half".equals(damageProportion)) {
                 for (Map.Entry<String, ?> damageEntry : damage.asMap().entrySet()) {
