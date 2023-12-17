@@ -24,39 +24,29 @@ public class TrueTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new True();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new True().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate default behavior")
-    void evaluate_default_true() throws Exception {
-        Condition condition = new True();
-        JsonObject conditionJson = new JsonObject() {{
+    @DisplayName("evaluates true")
+    void evaluatesTrue() throws Exception {
+        assertTrue(new True().evaluate(null, null, new JsonObject() {{
             /*{
                 "condition": "true"
             }*/
             this.putString("condition", "true");
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertTrue(condition.evaluate(null, null, conditionJson, context),
-                "True condition should always evaluate true"
+        }}, new DummyContext()),
+                "should evaluate true"
         );
     }
 

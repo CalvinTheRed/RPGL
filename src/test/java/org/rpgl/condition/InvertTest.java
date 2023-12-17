@@ -25,53 +25,23 @@ public class InvertTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new Invert();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new Invert().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate inverting true condition")
-    void evaluate_true_false() throws Exception {
-        Condition condition = new Invert();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "invert",
-                "invert": {
-                    "condition": "true"
-                }
-            }*/
-            this.putString("condition", "invert");
-            this.putJsonObject("invert", new JsonObject() {{
-                this.putString("condition", "true");
-            }});
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertFalse(condition.evaluate(null, null, conditionJson, context),
-                "Invert condition should evaluate false when provided a true sub-condition"
-        );
-    }
-
-    @Test
-    @DisplayName("evaluate inverting false condition")
-    void evaluate_false_true() throws Exception {
-        Condition condition = new Invert();
-        JsonObject conditionJson = new JsonObject() {{
+    @DisplayName("evaluates true")
+    void evaluatesTrue() throws Exception {
+        assertTrue(new Invert().evaluate(null, null, new JsonObject() {{
             /*{
                 "condition": "invert",
                 "invert": {
@@ -82,12 +52,27 @@ public class InvertTest {
             this.putJsonObject("invert", new JsonObject() {{
                 this.putString("condition", "false");
             }});
-        }};
+        }}, new DummyContext()),
+                "evaluate should return true for false condition"
+        );
+    }
 
-        DummyContext context = new DummyContext();
-
-        assertTrue(condition.evaluate(null, null, conditionJson, context),
-                "Invert condition should evaluate true when provided a false sub-condition"
+    @Test
+    @DisplayName("evaluates false")
+    void evaluatesFalse() throws Exception {
+        assertFalse(new Invert().evaluate(null, null, new JsonObject() {{
+            /*{
+                "condition": "invert",
+                "invert": {
+                    "condition": "true"
+                }
+            }*/
+            this.putString("condition", "invert");
+            this.putJsonObject("invert", new JsonObject() {{
+                this.putString("condition", "true");
+            }});
+        }}, new DummyContext()),
+                "evaluate should return false for true condition"
         );
     }
 

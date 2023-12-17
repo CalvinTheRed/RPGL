@@ -24,39 +24,29 @@ public class FalseTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new False();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new False().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate default behavior")
-    void evaluate_default_false() throws Exception {
-        Condition condition = new False();
-        JsonObject conditionJson = new JsonObject() {{
+    @DisplayName("evaluates false")
+    void evaluatesFalse() throws Exception {
+        assertFalse(new False().evaluate(null, null, new JsonObject() {{
             /*{
                 "condition": "false"
             }*/
             this.putString("condition", "false");
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertFalse(condition.evaluate(null, null, conditionJson, context),
-                "False condition should always evaluate false"
+        }}, new DummyContext()),
+                "should evaluate false"
         );
     }
 
