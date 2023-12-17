@@ -248,4 +248,20 @@ public final class UUIDTable {
         return objects;
     }
 
+    /**
+     * Returns a list of all RPGLObjects stored in UUIDTable.
+     *
+     * @return a list of RPGLObjects
+     */
+    public static List<RPGLObject> getObjects() {
+        List<RPGLObject> objects = new ArrayList<>();
+        for (String uuid : UUID_TABLE.keySet()) {
+            RPGLObject object = getObject(uuid);
+            if (object != null) {
+                objects.add(object);
+            }
+        }
+        return objects;
+    }
+
 }
