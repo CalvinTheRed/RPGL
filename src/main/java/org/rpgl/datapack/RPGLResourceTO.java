@@ -59,9 +59,9 @@ public class RPGLResourceTO extends RPGLTaggableTO {
     public RPGLResourceTemplate toRPGLResourceTemplate() {
         RPGLResourceTemplate rpglResourceTemplate = new RPGLResourceTemplate() {{
             this.putInteger(POTENCY_ALIAS, potency);
-            this.putBoolean(EXHAUSTED_ALIAS, exhausted);
             this.putJsonArray(REFRESH_CRITERION_ALIAS, new JsonArray(refreshCriterion));
-            //origin item is not needed for template
+            // origin item is not needed for template
+            // exhausted is not needed for template
         }};
         rpglResourceTemplate.join(super.getTemplateData());
         return rpglResourceTemplate;
