@@ -49,32 +49,23 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new SetTemporaryHitPointDiceMatchingOrBelow();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new SetTemporaryHitPointDiceMatchingOrBelow().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute sets all dice at or below two to three")
-    void execute_setsAllDiceAtOrBelowTwoToThree() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("sets dice at or below value")
+    void setsDiceAtOrBelowValue() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         TemporaryHitPointRoll temporaryHitPointRoll = new TemporaryHitPointRoll();
         temporaryHitPointRoll.joinSubeventData(new JsonObject() {{
@@ -153,12 +144,10 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
                 }});
             }});
         }});
-        temporaryHitPointRoll.setSource(source);
-        temporaryHitPointRoll.prepare(context, List.of());
-        temporaryHitPointRoll.setTarget(target);
+        temporaryHitPointRoll.setSource(object);
+        temporaryHitPointRoll.prepare(new DummyContext(), List.of());
 
-        SetTemporaryHitPointDiceMatchingOrBelow setTemporaryHitPointDiceMatchingOrBelow = new SetTemporaryHitPointDiceMatchingOrBelow();
-        JsonObject functionJson = new JsonObject() {{
+        new SetTemporaryHitPointDiceMatchingOrBelow().execute(null, temporaryHitPointRoll, new JsonObject() {{
             /*{
                 "function": "set_temporary_hit_point_dice_matching_or_below",
                 "threshold": 2,
@@ -167,9 +156,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
             this.putString("function", "set_temporary_hit_point_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-        }};
-
-        setTemporaryHitPointDiceMatchingOrBelow.execute(null, temporaryHitPointRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":4,"size":6}]}]""";

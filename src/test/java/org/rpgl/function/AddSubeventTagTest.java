@@ -6,14 +6,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLFactory;
-import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
-import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -48,48 +45,32 @@ public class AddSubeventTagTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddSubeventTag();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddSubeventTag().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds tag to subevent")
-    void execute_addsTagToSubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("adds tag to subevent")
+    void addsTagToSubevent() throws Exception {
         DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        AddSubeventTag addSubeventTag = new AddSubeventTag();
-        JsonObject functionJson = new JsonObject() {{
+        new AddSubeventTag().execute(null, dummySubevent, new JsonObject() {{
             /*{
                 "function": "add_subevent_tag",
                 "tag": "test_tag"
             }*/
             this.putString("function", "add_subevent_tag");
             this.putString("tag", "test_tag");
-        }};
-
-        addSubeventTag.execute(null, dummySubevent, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         assertTrue(dummySubevent.hasTag("test_tag"),
                 "execute should add tag to subevent"

@@ -49,49 +49,40 @@ public class AddEventTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddEvent();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddEvent().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds event correctly")
-    void execute_addsEventCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("adds event")
+    void addsEvent() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(object);
-        getEvents.prepare(context, List.of());
+        getEvents.prepare(new DummyContext(), List.of());
 
-        AddEvent addEvent = new AddEvent();
-        JsonObject functionJson = new JsonObject() {{
+        new AddEvent().execute(new RPGLEffect(), getEvents, new JsonObject() {{
             /*{
                 "function": "add_event",
                 "event": "std:common/dodge"
             }*/
             this.putString("function", "add_event");
             this.putString("event", "std:common/dodge");
-        }};
-
-        addEvent.execute(new RPGLEffect(), getEvents, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         assertEquals("std:common/dodge", getEvents.getEvents().get(0).getId(),
                 "execute should add the correct event to the subevent"
         );
     }
+
 }

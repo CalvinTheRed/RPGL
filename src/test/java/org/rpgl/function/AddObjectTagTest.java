@@ -48,46 +48,36 @@ public class AddObjectTagTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddObjectTag();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddObjectTag().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds object tag to subevent")
-    void execute_addsObjectTagToSubevent() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("adds object tag")
+    void addsObjectTag() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(context, List.of());
+        getObjectTags.prepare(new DummyContext(), List.of());
 
-        AddObjectTag addObjectTag = new AddObjectTag();
-        JsonObject functionJson = new JsonObject() {{
+        new AddObjectTag().execute(null, getObjectTags, new JsonObject() {{
             /*{
                 "function": "add_object_tag",
                 "tag": "test_tag"
             }*/
             this.putString("function", "add_object_tag");
             this.putString("tag", "test_tag");
-        }};
-
-        addObjectTag.execute(null, getObjectTags, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 ["test_tag"]""";

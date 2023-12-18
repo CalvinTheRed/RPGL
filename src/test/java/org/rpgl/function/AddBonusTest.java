@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -69,36 +68,28 @@ public class AddBonusTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddBonus();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddBonus().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds bonus to calculation")
-    void execute_addsDamageToCollection() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("adds bonus")
+    void addsBonus() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        calculation.setSource(source);
-        calculation.prepare(context, List.of());
+        calculation.setSource(object);
+        calculation.prepare(new DummyContext(), List.of());
 
-        AddBonus addBonus = new AddBonus();
-        JsonObject functionJson = new JsonObject() {{
+        new AddBonus().execute(null, calculation, new JsonObject() {{
             /*{
                 "function": "add_bonus",
                 "bonus": [
@@ -111,7 +102,7 @@ public class AddBonusTest {
                         "bonus": 2
                     }
                 ]
-           }*/
+            }*/
             this.putString("function", "add_bonus");
             this.putJsonArray("bonus", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -128,9 +119,7 @@ public class AddBonusTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }};
-
-        addBonus.execute(null, calculation, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

@@ -73,46 +73,33 @@ public class GrantDisadvantageTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new GrantDisadvantage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new GrantDisadvantage().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute grants disadvantage to roll")
-    void execute_grantsDisadvantageToRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("grants disadvantage")
+    void grantsDisadvantage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        roll.setSource(source);
-        roll.prepare(context, List.of());
-        roll.setTarget(target);
+        roll.setSource(object);
+        roll.prepare(new DummyContext(), List.of());
 
-        GrantDisadvantage grantDisadvantage = new GrantDisadvantage();
-        JsonObject functionJson = new JsonObject() {{
+        new GrantDisadvantage().execute(null, roll, new JsonObject() {{
             /*{
                 "function": "grant_disadvantage"
             }*/
             this.putString("function", "grant_disadvantage");
-        }};
-
-        grantDisadvantage.execute(null, roll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         assertTrue(roll.isDisadvantageRoll(),
                 "execute should grant disadvantage to roll"

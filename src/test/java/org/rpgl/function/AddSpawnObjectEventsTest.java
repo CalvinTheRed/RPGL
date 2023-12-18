@@ -49,33 +49,27 @@ public class AddSpawnObjectEventsTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddSpawnObjectEvents();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddSpawnObjectEvents().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds spawn object events correctly")
-    void execute_addsEventsCorrectly() throws Exception {
+    @DisplayName("adds events to spawned object")
+    void addsEventsToSpawnedObject() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(new DummyContext(), List.of());
 
         new AddSpawnObjectEvents().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -90,7 +84,7 @@ public class AddSpawnObjectEventsTest {
                 this.addString("std:spell/fire_bolt");
                 this.addString("std:common/dodge");
             }});
-        }}, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 ["std:spell/fire_bolt","std:common/dodge"]""";

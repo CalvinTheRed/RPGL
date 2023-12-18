@@ -33,38 +33,29 @@ public class DummyFunctionTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new DummyFunction();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new DummyFunction().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute default behavior")
-    void execute_default_increasesStaticCounter() throws Exception {
-        Function function = new DummyFunction();
-        JsonObject functionJson = new JsonObject() {{
+    @DisplayName("increments test counter")
+    void incrementsTestCounter() throws Exception {
+        new DummyFunction().execute(null, null, new JsonObject() {{
             /*{
                 "function": "dummy_function"
             }*/
-           this.putString("function", "dummy_function");
-        }};
+            this.putString("function", "dummy_function");
+        }}, new DummyContext(), List.of());
 
-        DummyContext context = new DummyContext();
-
-        function.execute(null, null, functionJson, context, List.of());
         assertEquals(1, DummyFunction.counter,
                 "DummyFunction function should increment static counter variable upon execution"
         );

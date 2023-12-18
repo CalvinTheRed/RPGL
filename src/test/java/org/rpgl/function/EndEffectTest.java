@@ -12,8 +12,6 @@ import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
-import org.rpgl.subevent.DummySubevent;
-import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
@@ -51,54 +49,42 @@ public class EndEffectTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new EndEffect();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new EndEffect().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute removes effect from object")
-    void execute_removesEffectFromObject() throws Exception {
-        RPGLObject commoner = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(commoner);
+    @DisplayName("removes effect from object")
+    void removesEffectFromObject() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLEffect fireImmunity = RPGLFactory.newEffect("std:common/damage/immunity/fire");
-        fireImmunity.setSource(commoner);
-        fireImmunity.setTarget(commoner);
+        fireImmunity.setSource(object);
+        fireImmunity.setTarget(object);
 
-        commoner.addEffect(fireImmunity);
-        assertTrue(commoner.getEffects().asList().contains(fireImmunity.getUuid()),
+        object.addEffect(fireImmunity);
+        assertTrue(object.getEffects().asList().contains(fireImmunity.getUuid()),
                 "condition should be successfully assigned to commoner before it is ended"
         );
 
-        Subevent subevent = new DummySubevent();
-
-        EndEffect endEffect = new EndEffect();
-        JsonObject functionJson = new JsonObject() {{
+        new EndEffect().execute(fireImmunity, null, new JsonObject() {{
             /*{
                 "function": "end_effect"
             }*/
             this.putString("function", "end_effect");
-        }};
+        }}, new DummyContext(), List.of());
 
-        endEffect.execute(fireImmunity, subevent, functionJson, context, List.of());
-
-        assertFalse(commoner.getEffects().asList().contains(fireImmunity.getUuid()),
-                "commoner should no longer have effect after it is ended"
+        assertFalse(object.getEffects().asList().contains(fireImmunity.getUuid()),
+                "object should no longer have effect after it is ended"
         );
     }
 

@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLFactory;
-import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
@@ -15,7 +13,6 @@ import org.rpgl.subevent.AttackRoll;
 import org.rpgl.subevent.DealDamage;
 import org.rpgl.subevent.SavingThrow;
 import org.rpgl.testUtils.DummyContext;
-import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -50,37 +47,25 @@ public class ApplyVampirismTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new ApplyVampirism();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new ApplyVampirism().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute applies vampirism (attack roll)")
-    void execute_appliesVampirism_attackRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("applies vampirism (attack roll)")
+    void appliesVampirism_attackRoll() throws Exception {
         AttackRoll attackRoll = new AttackRoll();
 
-        ApplyVampirism applyVampirism = new ApplyVampirism();
-        JsonObject functionJson = new JsonObject() {{
+        new ApplyVampirism().execute(null, attackRoll, new JsonObject() {{
             /*{
                 "function": "apply_vampirism",
                 "vampirism": {
@@ -97,9 +82,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }};
-
-        applyVampirism.execute(null, attackRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 {"subevent":"attack_roll","tags":["attack_roll"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -109,18 +92,11 @@ public class ApplyVampirismTest {
     }
 
     @Test
-    @DisplayName("execute applies vampirism (deal damage)")
-    void execute_appliesVampirism_dealDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("applies vampirism (deal damage)")
+    void appliesVampirism_dealDamage() throws Exception {
         DealDamage dealDamage = new DealDamage();
 
-        ApplyVampirism applyVampirism = new ApplyVampirism();
-        JsonObject functionJson = new JsonObject() {{
+        new ApplyVampirism().execute(null, dealDamage, new JsonObject() {{
             /*{
                 "function": "apply_vampirism",
                 "vampirism": {
@@ -137,9 +113,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }};
-
-        applyVampirism.execute(null, dealDamage, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 {"subevent":"deal_damage","tags":["deal_damage"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -149,18 +123,11 @@ public class ApplyVampirismTest {
     }
 
     @Test
-    @DisplayName("execute applies vampirism (saving throw)")
-    void execute_appliesVampirism_savingThrow() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("applies vampirism (saving throw)")
+    void appliesVampirism_savingThrow() throws Exception {
         SavingThrow savingThrow = new SavingThrow();
 
-        ApplyVampirism applyVampirism = new ApplyVampirism();
-        JsonObject functionJson = new JsonObject() {{
+        new ApplyVampirism().execute(null, savingThrow, new JsonObject() {{
             /*{
                 "function": "apply_vampirism",
                 "vampirism": {
@@ -177,9 +144,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }};
-
-        applyVampirism.execute(null, savingThrow, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 {"subevent":"saving_throw","tags":["saving_throw"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";

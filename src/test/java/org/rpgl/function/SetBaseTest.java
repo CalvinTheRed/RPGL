@@ -67,33 +67,27 @@ public class SetBaseTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new SetBase();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new SetBase().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute sets calculation base to new value (number)")
-    void execute_setsBaseCorrectly() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
+    @DisplayName("sets base")
+    void setsBase() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        calculation.setSource(dummy);
-        calculation.prepare(context, List.of());
-        calculation.setTarget(dummy);
+        calculation.setSource(object);
+        calculation.prepare(new DummyContext(), List.of());
+
         new SetBase().execute(null, calculation, new JsonObject() {{
             /*{
                 "function": "set_base",
@@ -107,7 +101,7 @@ public class SetBaseTest {
                 this.putString("formula", "number");
                 this.putInteger("number", 13);
             }});
-        }}, context, List.of());
+        }}, new DummyContext(), List.of());
 
         assertEquals(13, calculation.getBase(),
                 "execute should set calculation base to 13"

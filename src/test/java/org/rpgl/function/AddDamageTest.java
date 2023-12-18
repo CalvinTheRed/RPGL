@@ -49,39 +49,29 @@ public class AddDamageTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddDamage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddDamage().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds damage to collection")
-    void execute_addsDamageToCollection() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("adds damage")
+    void addsDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DamageCollection damageCollection = new DamageCollection();
-        damageCollection.setSource(source);
-        damageCollection.prepare(context, List.of());
+        damageCollection.setSource(object);
+        damageCollection.prepare(new DummyContext(), List.of());
 
-        AddDamage addDamage = new AddDamage();
-        JsonObject functionJson = new JsonObject() {{
+        new AddDamage().execute(null, damageCollection, new JsonObject() {{
             /*{
                 "function": "add_damage",
                 "damage": [
@@ -94,7 +84,7 @@ public class AddDamageTest {
                         "bonus": 2
                     }
                 ]
-           }*/
+            }*/
             this.putString("function", "add_damage");
             this.putJsonArray("damage", new JsonArray() {{
                 this.addJsonObject(new JsonObject() {{
@@ -112,9 +102,7 @@ public class AddDamageTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }};
-
-        addDamage.execute(null, damageCollection, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

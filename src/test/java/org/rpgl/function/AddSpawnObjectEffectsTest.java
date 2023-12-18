@@ -49,33 +49,27 @@ public class AddSpawnObjectEffectsTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddSpawnObjectEffects();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddSpawnObjectEffects().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds spawn object effects correctly")
-    void execute_addsEffectsCorrectly() throws Exception {
+    @DisplayName("adds effects to spawned object")
+    void addsEffectsToSpawnedObject() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(new DummyContext(), List.of());
 
         new AddSpawnObjectEffects().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -90,7 +84,7 @@ public class AddSpawnObjectEffectsTest {
                 this.addString("std:common/damage/immunity/fire");
                 this.addString("std:common/damage/immunity/poison");
             }});
-        }}, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 ["std:common/damage/immunity/fire","std:common/damage/immunity/poison"]""";

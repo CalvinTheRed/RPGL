@@ -49,33 +49,27 @@ public class AddSpawnObjectTagsTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddSpawnObjectTags();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddSpawnObjectTags().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds spawn object tags correctly")
-    void execute_addsTagsCorrectly() throws Exception {
+    @DisplayName("adds tags to spawned object")
+    void addsTagsToSpawnedObjects() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(new DummyContext(), List.of());
 
         new AddSpawnObjectTags().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -90,7 +84,7 @@ public class AddSpawnObjectTagsTest {
                 this.addString("test-tag-1");
                 this.addString("test-tag-2");
             }});
-        }}, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 ["test-tag-1","test-tag-2"]""";

@@ -211,48 +211,35 @@ public class MaximizeDamageTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new MaximizeDamage();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new MaximizeDamage().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute maximizes specific damage type for DamageRoll")
-    void execute_maximizesSpecificDamageTypeForDamageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("maximizes specific damage type (damage roll)")
+    void maximizesSpecificDamageType_damageRoll() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        damageRoll.setSource(source);
-        damageRoll.prepare(context, List.of());
-        damageRoll.setTarget(target);
+        damageRoll.setSource(object);
+        damageRoll.prepare(new DummyContext(), List.of());
 
-        MaximizeDamage maximizeDamage = new MaximizeDamage();
-        JsonObject functionJson = new JsonObject() {{
+        new MaximizeDamage().execute(null, damageRoll, new JsonObject() {{
             /*{
                 "function": "maximize_damage",
                 "damage_type": "fire"
             }*/
             this.putString("function", "maximize_damage");
             this.putString("damage_type", "fire");
-        }};
-
-        maximizeDamage.execute(null, damageRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -262,27 +249,19 @@ public class MaximizeDamageTest {
     }
 
     @Test
-    @DisplayName("execute maximizes every damage type for DamageRoll")
-    void execute_maximizesEveryDamageTypeForDamageRoll() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("maximizes every damage type (damage roll)")
+    void maximizesEveryDamageType_damageRoll() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        damageRoll.setSource(source);
-        damageRoll.prepare(context, List.of());
-        damageRoll.setTarget(target);
+        damageRoll.setSource(object);
+        damageRoll.prepare(new DummyContext(), List.of());
 
-        MaximizeDamage maximizeDamage = new MaximizeDamage();
-        JsonObject functionJson = new JsonObject() {{
+        new MaximizeDamage().execute(null, damageRoll, new JsonObject() {{
             /*{
                 "function": "maximize_damage"
             }*/
             this.putString("function", "maximize_damage");
-        }};
-
-        maximizeDamage.execute(null, damageRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -292,29 +271,21 @@ public class MaximizeDamageTest {
     }
 
     @Test
-    @DisplayName("execute maximizes specific damage type for DamageDelivery")
-    void execute_maximizesSpecificDamageTypeForDamageDelivery() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("maximizes specific damage type (damage delivery)")
+    void maximizesSpecificDamageType_damageDelivery() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        damageDelivery.setSource(source);
-        damageDelivery.prepare(context, List.of());
-        damageDelivery.setTarget(target);
+        damageDelivery.setSource(object);
+        damageDelivery.prepare(new DummyContext(), List.of());
 
-        MaximizeDamage maximizeDamage = new MaximizeDamage();
-        JsonObject functionJson = new JsonObject() {{
+        new MaximizeDamage().execute(null, damageDelivery, new JsonObject() {{
             /*{
                 "function": "maximize_damage",
                 "damage_type": "fire"
             }*/
             this.putString("function", "maximize_damage");
             this.putString("damage_type", "fire");
-        }};
-
-        maximizeDamage.execute(null, damageDelivery, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 {"cold":2,"fire":12}""";
@@ -324,27 +295,19 @@ public class MaximizeDamageTest {
     }
 
     @Test
-    @DisplayName("execute maximizes every damage type for DamageDelivery")
-    void execute_maximizesEveryDamageTypeForDamageDelivery() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("maximizes every damage type (damage delivery)")
+    void maximizesEveryDamageType_damageDelivery() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        damageDelivery.setSource(source);
-        damageDelivery.prepare(context, List.of());
-        damageDelivery.setTarget(target);
+        damageDelivery.setSource(object);
+        damageDelivery.prepare(new DummyContext(), List.of());
 
-        MaximizeDamage maximizeDamage = new MaximizeDamage();
-        JsonObject functionJson = new JsonObject() {{
+        new MaximizeDamage().execute(null, damageDelivery, new JsonObject() {{
             /*{
                 "function": "maximize_damage"
             }*/
             this.putString("function", "maximize_damage");
-        }};
-
-        maximizeDamage.execute(null, damageDelivery, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 {"cold":12,"fire":12}""";
