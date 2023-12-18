@@ -140,12 +140,6 @@ public class RPGLObjectTest {
         );
     }
 
-    // TODO tests for taking damage
-
-    // TODO tests for getting weapon proficiency
-
-    // TODO tests for getting saving throw proficiency
-
     @Test
     @DisplayName("gets ability score modifier from ability score")
     void getsAbilityScoreModifierFromAbilityScore() {
