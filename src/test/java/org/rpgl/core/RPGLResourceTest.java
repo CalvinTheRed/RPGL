@@ -42,8 +42,8 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("generateRequired generates correct required count")
-    void generateRequired_generatesCorrectRequiredCount() {
+    @DisplayName("generates required count")
+    void generatesRequiredCount() {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
 
         assertEquals(4, RPGLResource.generateRequired(resource.getRefreshCriterion().getJsonObject(0).getJsonObject("required_generator")),
@@ -52,34 +52,28 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("exhaust exhausts resource properly")
-    void exhaust_exhaustsResourceProperly() {
+    @DisplayName("exhausts and refreshes")
+    void exhaustsAndRefreshes() {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
-        resource.exhaust();
+        String expected;
 
+        resource.exhaust();
         assertTrue(resource.getExhausted(),
                 "resource should be exhausted"
         );
 
-        String expected = """
+        expected = """
                 [{"actor":"source","chance":100,"completed":0,"required":4,"required_generator":{"bonus":0,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]},"subevent":"info_subevent","tags":["long_rest"]}]""";
         assertEquals(expected, resource.getRefreshCriterion().toString(),
                 "Refresh criterion should generate a required amount with 0 completed"
         );
-    }
 
-    @Test
-    @DisplayName("refresh refreshes resource properly")
-    void refresh_refreshesResourceProperly() {
-        RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
-        resource.exhaust();
         resource.refresh();
-
         assertFalse(resource.getExhausted(),
                 "resource should not be exhausted"
         );
 
-        String expected = """
+        expected = """
                 [{"actor":"source","chance":100,"completed":0,"required":0,"required_generator":{"bonus":0,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]},"subevent":"info_subevent","tags":["long_rest"]}]""";
         assertEquals(expected, resource.getRefreshCriterion().toString(),
                 "Resource should have 0 completed and 0 required"
@@ -87,8 +81,8 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("checkCriterion partial criterion satisfaction")
-    void checkCriterion_partialCriterionSatisfaction() {
+    @DisplayName("increments completed count")
+    void incrementsCompletedCount() {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
         resource.exhaust();
 
@@ -107,8 +101,8 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("checkCriterion criterion satisfaction (single requirement)")
-    void checkCriterion_criterionSatisfaction_singleRequirement() {
+    @DisplayName("refreshes when all completions are done")
+    void refreshesWhenAllCompletionsAreDone() {
         RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/pact_magic/01");
         resource.exhaust();
 
@@ -127,8 +121,8 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("checkCriterion criterion satisfaction (multiple requirements)")
-    void checkCriterion_criterionSatisfaction_multipleRequirements() {
+    @DisplayName("resets completions upon refresh")
+    void resetsCompletionsUponRefresh() {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
         resource.exhaust();
 
@@ -152,7 +146,7 @@ public class RPGLResourceTest {
                 "Criterion should not yet be met for refreshing resource (3 of 4)"
         );
         assertTrue(resource.checkCriterion(infoSubevent, resource.getRefreshCriterion().getJsonObject(0), null),
-                "Criterion should not yet be met for refreshing resource (1 of 4)"
+                "Criterion should be met for refreshing resource (4 of 4)"
         );
         assertFalse(resource.getExhausted(),
                 "Resource should not be exhausted"
@@ -163,13 +157,13 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("checkCriterion resolves successfully for source actor")
-    void checkCriterion_resolvesSuccessfullyForSourceActor() {
+    @DisplayName("checks criterion (source actor)")
+    void checksCriterion_sourceActor() {
         RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -186,15 +180,15 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("checkCriterion resolves successfully for target actor")
-    void checkCriterion_resolvesSuccessfullyForTargetActor() {
+    @DisplayName("checks criterion (target actor)")
+    void checksCriterion_targetActor() {
         RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         resource.exhaust();
         // manually edit resource criterion for testing
         resource.getRefreshCriterion().getJsonObject(0).putString("actor", "target");
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
@@ -211,20 +205,19 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("processSubevent does nothing when resource not exhausted")
-    void processSubevent_doesNothingWhenResourceNotExhausted() {
+    @DisplayName("only updates completed counter while exhausted")
+    void onlyUpdatesCompletedCounterWhileExhausted() {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        source.addResource(resource);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.addTag("long_rest");
-        infoSubevent.setSource(source);
-        infoSubevent.setTarget(target);
+        infoSubevent.setSource(object);
+        infoSubevent.setTarget(object);
 
-        resource.processSubevent(infoSubevent, source);
+        resource.processSubevent(infoSubevent, object);
 
         assertEquals(0, resource.getRefreshCriterion().getJsonObject(0).getInteger("completed"),
                 "resource should not increment completed counter on criterion if it is not exhausted"
@@ -232,21 +225,20 @@ public class RPGLResourceTest {
     }
 
     @Test
-    @DisplayName("processSubevent increments completed counter when resource exhausted")
-    void processSubevent_incrementsCompletedCounterWhenResourceExhausted() {
+    @DisplayName("increments completed counter when processing subevent")
+    void incrementsCompletedCounterWhenProcessingSubevent() {
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
         resource.exhaust();
 
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        source.addResource(resource);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.addResource(resource);
 
         InfoSubevent infoSubevent = new InfoSubevent();
         infoSubevent.addTag("long_rest");
-        infoSubevent.setSource(source);
-        infoSubevent.setTarget(target);
+        infoSubevent.setSource(object);
+        infoSubevent.setTarget(object);
 
-        resource.processSubevent(infoSubevent, source);
+        resource.processSubevent(infoSubevent, object);
 
         assertEquals(1, resource.getRefreshCriterion().getJsonObject(0).getInteger("completed"),
                 "resource should increment completed counter on criterion if it is exhausted"

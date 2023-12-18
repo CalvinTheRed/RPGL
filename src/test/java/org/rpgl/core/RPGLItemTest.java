@@ -41,8 +41,8 @@ public class RPGLItemTest {
     }
 
     @Test
-    @DisplayName("getEquippedEffectsObjects returns correct effects as objects")
-    void getEquippedEffectObjects_returnsCorrectEffectsAsObjects() {
+    @DisplayName("gets equipped effects")
+    void getsEquippedEffects() {
         RPGLItem item = RPGLFactory.newItem("std:ring/ring_of_protection");
 
         List<RPGLEffect> equippedEffects = item.getEquippedEffectsObjects();
@@ -50,26 +50,24 @@ public class RPGLItemTest {
                 "1 effect should be present"
         );
         assertEquals("std:item/ring/ring_of_protection", equippedEffects.get(0).getId(),
-                "First effect should be std:item/ring/ring_of_protection"
+                "first effect should be std:item/ring/ring_of_protection"
         );
 
         for (RPGLEffect effect: equippedEffects) {
             assertEquals(item.getUuid(), effect.getOriginItem(),
-                    "item-based events should indicate the item providing the event as the origin item"
+                    "effects should have item as origin item"
             );
         }
     }
 
     @Test
-    @DisplayName("getOneHandedEventObjects returns correct event objects")
-    void getOneHandedEventObjects_returnsCorrectEventObjects() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("gets one-handed events")
+    void getsOneHandedEvents() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         String expected;
 
-        List<RPGLEvent> events = item.getOneHandedEventObjects(object, context);
+        List<RPGLEvent> events = item.getOneHandedEventObjects(object, new DummyContext());
         assertEquals(2, events.size(),
                 "longswords should provide 2 one-handed events"
         );
@@ -94,15 +92,15 @@ public class RPGLItemTest {
 
         for (RPGLEvent event : events) {
             assertEquals(item.getUuid(), event.getOriginItem(),
-                    "item-based events should indicate the item providing the event as the origin item"
+                    "events should have item as origin item"
             );
         }
     }
 
     @Test
-    @DisplayName("getMultiHandedEventObjects returns correct event objects")
-    void getMultiHandedEventObjects_returnsCorrectEventObjects() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("gets multi-handed events")
+    void getsMultiHandedEvents() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
@@ -133,14 +131,14 @@ public class RPGLItemTest {
 
         for (RPGLEvent event : events) {
             assertEquals(item.getUuid(), event.getOriginItem(),
-                    "item-based events should indicate the item providing the event as the origin item"
+                    "events should have item as origin item"
             );
         }
     }
 
     @Test
-    @DisplayName("getSpecialEventObjects returns correct event objects")
-    void getSpecialEventObjects_returnsCorrectEventObjects() {
+    @DisplayName("gets special events")
+    void getsSpecialEvents() {
         RPGLItem item = RPGLFactory.newItem("std:cloak/robe_of_stars");
         String expected;
 
@@ -160,15 +158,15 @@ public class RPGLItemTest {
 
         for (RPGLEvent event : events) {
             assertEquals(item.getUuid(), event.getOriginItem(),
-                    "item-based events should indicate the item providing the event as the origin item"
+                    "events should have item as origin item"
             );
         }
     }
 
     @Test
-    @DisplayName("getDerivedEvents derives events correctly")
-    void getDerivedEvents_derivesEventsCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("gets derived events")
+    void getsDerivedEvents() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(object);
 
@@ -182,7 +180,11 @@ public class RPGLItemTest {
         object.giveItem(item.getUuid());
         object.equipItem(item.getUuid(), "mainhand");
 
-        List<RPGLEvent> derivedEvents = item.getDerivedEvents(RPGLFactory.newEvent("std:item/weapon/melee/martial/scimitar/melee"), object, context);
+        List<RPGLEvent> derivedEvents = item.getDerivedEvents(
+                RPGLFactory.newEvent("std:item/weapon/melee/martial/scimitar/melee"),
+                object,
+                context
+        );
         assertEquals(2, derivedEvents.size(),
                 "there should be 2 derived events, for dex and int"
         );

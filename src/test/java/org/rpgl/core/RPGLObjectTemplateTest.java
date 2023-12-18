@@ -46,8 +46,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processEffects effects are constructed")
-    void processEffects_effectsAreConstructed() {
+    @DisplayName("creates effects")
+    void createsEffects() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("test");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
@@ -68,8 +68,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processInventory items are constructed")
-    void processInventory_itemsAreConstructed() {
+    @DisplayName("creates inventory items")
+    void createsInventoryItems() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
@@ -90,8 +90,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processEquippedItems items are constructed and added to inventory")
-    void processEquippedItems_itemsAreConstructedAndAddedToInventory() {
+    @DisplayName("creates equipped items")
+    void createsEquippedItems() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
@@ -113,8 +113,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processResources resources are constructed correctly")
-    void processResources_resourcesAreConstructedCorrectly() {
+    @DisplayName("creates resources")
+    void createsResources() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("test");
         RPGLObject object = new RPGLObject();
         object.join(objectTemplate);
@@ -133,8 +133,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processClasses classes are applied correctly (no nested classes)")
-    void processClasses_classesAreAppliedCorrectly_noNestedClasses() {
+    @DisplayName("applies classes")
+    void appliesClasses() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
         objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
             /*[
@@ -164,8 +164,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processClasses classes are applied correctly (with nested classes)")
-    void processClasses_classesAreAppliedCorrectly_withNestedClasses() {
+    @DisplayName("applies classes (with nested classes)")
+    void appliesClasses_withNestedClasses() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
         objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
             /*[
@@ -204,8 +204,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processClasses classes are applied correctly (with additional nested classes)")
-    void processClasses_classesAreAppliedCorrectly_withAdditionalNestedClasses() {
+    @DisplayName("applies classes (with additional nested classes)")
+    void appliesClasses_withAdditionalNestedClasses() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
         objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
             /*[
@@ -264,8 +264,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("processClasses classes are applied correctly (with race)")
-    void processClasses_classesAreAppliedCorrectly_withRace() {
+    @DisplayName("applies races")
+    void appliesRaces() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("dummy");
         objectTemplate.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, new JsonArray() {{
             /*[
@@ -300,8 +300,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:humanoid/knight template")
-    void newInstance_knightTemplate() {
+    @DisplayName("creates new objects (knight)")
+    void createsNewObjects_knight() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = objectTemplate.newInstance(TestUtils.TEST_USER);
         String expected;
@@ -366,8 +366,8 @@ public class RPGLObjectTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:dragon/red/young template")
-    void newInstance_youngRedDragonTemplate() throws Exception {
+    @DisplayName("creates new objects (young red dragon)")
+    void createsNewObjects_youngRedDragon() throws Exception {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
         RPGLObject object = objectTemplate.newInstance(TestUtils.TEST_USER);
         String expected;

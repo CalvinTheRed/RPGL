@@ -42,8 +42,8 @@ public class RPGLEffectTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:common/damage/immunity/fire template")
-    void newInstance_fireImmunity() {
+    @DisplayName("creates new instances")
+    void createsNewInstances() {
         RPGLEffectTemplate effectTemplate = DatapackLoader.DATAPACKS.get("std")
                 .getEffectTemplate("common/damage/immunity/fire");
         RPGLEffect effect = effectTemplate.newInstance();
@@ -72,8 +72,8 @@ public class RPGLEffectTemplateTest {
     }
 
     @Test
-    @DisplayName("processScale scales effect data according to resource potency")
-    void processScale_scalesEffectDataAccordingToResourcePotency() {
+    @DisplayName("scales effects")
+    void scalesEffects() {
         RPGLEffect effect = new RPGLEffect();
         effect.join(new JsonObject() {{
             /*{

@@ -13,7 +13,6 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
-import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -94,26 +93,15 @@ public class RPGLEffectTest {
     }
 
     @Test
-    @DisplayName("executeFunctions executes correct functions")
-    void executeFunctions_executesCorrectFunctions() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        effect.setSource(source);
-        effect.setTarget(target);
-
+    @DisplayName("executes functions")
+    void executesFunctions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.setSource(source);
-        subevent.prepare(context, List.of());
-        subevent.setTarget(target);
+        subevent.prepare(new DummyContext(), List.of());
 
         effect.executeFunctions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("functions"),
-                context,
+                new DummyContext(),
                 List.of()
         );
 
@@ -123,51 +111,29 @@ public class RPGLEffectTest {
     }
 
     @Test
-    @DisplayName("evaluateConditions evaluates true as appropriate")
-    void evaluateConditions_evaluatesTrueAsAppropriate() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        effect.setSource(source);
-        effect.setTarget(target);
-
+    @DisplayName("evaluates conditions")
+    void evaluatesConditions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.setSource(source);
-        subevent.prepare(context, List.of());
-        subevent.setTarget(target);
+        subevent.prepare(new DummyContext(), List.of());
 
         boolean evaluation = effect.evaluateConditions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("conditions"),
-                context
+                new DummyContext()
         );
 
         assertTrue(evaluation,
-                "evaluateConditions() should return true for the provided Subevent"
+                "conditions should evaluate to true for provided effect"
         );
     }
 
     @Test
-    @DisplayName("processSubevent executes functions")
-    void processSubevent_executesFunctions() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        effect.setSource(source);
-        effect.setTarget(target);
-
+    @DisplayName("processes subevents")
+    void processesSubevents() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.setSource(source);
-        subevent.prepare(context, List.of());
-        subevent.setTarget(target);
+        subevent.prepare(new DummyContext(), List.of());
 
-        effect.processSubevent(subevent, context, List.of());
+        effect.processSubevent(subevent, new DummyContext(), List.of());
 
         assertEquals(2, DummyFunction.counter,
                 "both instances of dummy_function should be executed"

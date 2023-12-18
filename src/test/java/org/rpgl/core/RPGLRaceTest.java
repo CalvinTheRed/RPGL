@@ -44,8 +44,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("revokeLostResources revokes and unregisters resources")
-    void revokeLostResources_revokesAndUnregistersResource() {
+    @DisplayName("revokes old resources")
+    void revokesOldResources() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         String resourceUuid = resource.getUuid();
@@ -70,8 +70,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("revokeLostEvents revokes events")
-    void revokeLostEvents_revokesEvents() {
+    @DisplayName("revokes old events")
+    void revokesOldEvents() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.getEvents().addString("std:test");
 
@@ -91,8 +91,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("revokeLostEffects revokes and unregisters effects")
-    void revokeLostEffects_revokesAndUnregistersEffects() {
+    @DisplayName("revokes old effects")
+    void revokesOldEffects() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLEffect effect = RPGLFactory.newEffect("std:common/dodge");
         String effectUuid = effect.getUuid();
@@ -117,8 +117,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("grantGainedResources grants resources")
-    void grantGainedResources_grantsResources() {
+    @DisplayName("gains new resources")
+    void gainsNewResources() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         new RPGLRace().grantGainedResources(object, new JsonObject() {{
             this.putJsonArray("resources", new JsonArray() {{
@@ -135,8 +135,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("grantGainedEvents grants events")
-    void grantGainedEvents_grantsEvents() {
+    @DisplayName("gains new events")
+    void gainsNewEvents() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         new RPGLRace().grantGainedEvents(object, new JsonObject() {{
             this.putJsonArray("events", new JsonArray() {{
@@ -150,8 +150,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("grantGainedEffects grants effects (no choices needed)")
-    void grantGainedEffects_grantsEffects_noChoicesNeeded() {
+    @DisplayName("gains new effects")
+    void gainsNewEffects() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         JsonObject features = new JsonObject() {{
             this.putJsonArray("effects", new JsonArray() {{
@@ -167,8 +167,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("grantGainedEffects grants effects (choices needed)")
-    void grantGainedEffects_grantsEffects_choicesNeeded() {
+    @DisplayName("gains new effects (choices needed)")
+    void gainsNewEffects_choicesNeeded() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         JsonObject features = new JsonObject() {{
             this.putJsonArray("effects", new JsonArray() {{
@@ -205,8 +205,8 @@ public class RPGLRaceTest {
     }
 
     @Test
-    @DisplayName("levelUpRPGLObject grants correct features on level up")
-    void levelUpRPGLObject_grantsCorrectFeaturesOnLevelUp() {
+    @DisplayName("levels up objects")
+    void levelsUpObjects() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLFactory.getRace("std:human").levelUpRPGLObject(object, new JsonObject(), 1);
