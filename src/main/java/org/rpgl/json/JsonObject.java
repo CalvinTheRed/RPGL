@@ -1,6 +1,9 @@
 package org.rpgl.json;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +16,8 @@ import java.util.Objects;
  * @author Calvin Withun
  */
 public class JsonObject {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonObject.class);
 
     public static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -557,6 +562,18 @@ public class JsonObject {
             object.putBoolean(key, b);
         } else {
             this.putBoolean(path, b);
+        }
+    }
+
+    public String prettyPrint() {
+        try {
+            return JsonObject.MAPPER
+                    .writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(this.asMap())
+                    .replaceAll("\\r", "");
+        } catch (JsonProcessingException ex) {
+            LOGGER.error(ex.toString());
+            return "{}";
         }
     }
 

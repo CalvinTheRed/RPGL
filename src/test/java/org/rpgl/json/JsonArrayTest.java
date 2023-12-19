@@ -358,4 +358,48 @@ public class JsonArrayTest {
         );
     }
 
+    @Test
+    @DisplayName("pretty prints (primitives)")
+    void prettyPrints_primitives() {
+        JsonArray json = new JsonArray() {{
+            this.addString("element");
+            this.addInteger(10);
+            this.addDouble(123.456);
+            this.addBoolean(false);
+        }};
+
+        String expected = """
+                [ "element", 10, 123.456, false ]""";
+        assertEquals(expected, json.prettyPrint(),
+                ""
+        );
+    }
+
+    @Test
+    @DisplayName("pretty prints (objects)")
+    void prettyPrints_objects() {
+        JsonArray json = new JsonArray() {{
+            this.addJsonObject(new JsonObject() {{
+                this.putString("key1", "value1");
+                this.putString("key2", "value2");
+            }});
+            this.addJsonObject(new JsonObject() {{
+                this.putString("key1", "value1");
+                this.putString("key2", "value2");
+            }});
+        }};
+
+        String expected = """
+                [ {
+                  "key1" : "value1",
+                  "key2" : "value2"
+                }, {
+                  "key1" : "value1",
+                  "key2" : "value2"
+                } ]""";
+        assertEquals(expected, json.prettyPrint(),
+                ""
+        );
+    }
+
 }

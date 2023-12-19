@@ -46,8 +46,8 @@ public class JsonObjectTest {
     }
 
     @Test
-    @DisplayName("toString: comprehensive unit test")
-    void toString_test() {
+    @DisplayName("prints as string")
+    void printsAsString() {
         JsonObject toStringJsonObject = new JsonObject() {{
             /*{
                 "empty_object": { },
@@ -1009,6 +1009,39 @@ public class JsonObjectTest {
         json.insertBoolean("key.nestedKey", true);
         assertTrue(json.seekBoolean("key.nestedKey"),
                 "key 'key.nestedKey' should have value of true"
+        );
+    }
+
+    @Test
+    @DisplayName("pretty prints")
+    void prettyPrints() {
+        JsonObject json = new JsonObject() {{
+            this.putJsonObject("object", new JsonObject() {{
+                this.putString("key", "value");
+            }});
+            this.putJsonArray("array", new JsonArray() {{
+                this.addString("element");
+            }});
+            this.putString("string", "value");
+            this.putInteger("integer", 10);
+            this.putDouble("double", 123.456);
+            this.putBoolean("boolean", false);
+        }};
+
+        String expected = """
+                {
+                  "boolean" : false,
+                  "string" : "value",
+                  "array" : [ "element" ],
+                  "double" : 123.456,
+                  "integer" : 10,
+                  "object" : {
+                    "key" : "value"
+                  }
+                }""";
+
+        assertEquals(expected, json.prettyPrint(),
+                ""
         );
     }
 
