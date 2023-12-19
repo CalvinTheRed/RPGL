@@ -46,8 +46,8 @@ public class CalculateBaseArmorClassTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CalculateBaseArmorClass();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -63,138 +63,79 @@ public class CalculateBaseArmorClassTest {
     }
 
     @Test
-    @DisplayName("getShieldBonus returns 0 (commoner not wielding a shield)")
-    void getShieldBonus_returnsZero_commoner() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("gets shield bonus")
+    void getsShieldBonus() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-
-        calculateBaseArmorClass.setSource(source);
+        calculateBaseArmorClass.setSource(object);
 
         assertEquals(0, calculateBaseArmorClass.getShieldBonus(),
-                "prepareUnarmored should return 0 for a commoner wielding no shield"
+                "prepareUnarmored should return 0 when shield is not wielded"
         );
-    }
 
-    @Test
-    @DisplayName("getShieldBonus returns 2 (knight wielding a shield)")
-    void getShieldBonus_returnsTwo_knight() {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-
-        calculateBaseArmorClass.setSource(source);
+        RPGLItem shield = RPGLFactory.newItem("std:armor/shield/metal");
+        object.giveItem(shield.getUuid());
+        object.equipItem(shield.getUuid(), "offhand");
 
         assertEquals(2, calculateBaseArmorClass.getShieldBonus(),
-                "prepareUnarmored should return 2 for a knight wielding a shield"
+                "prepareUnarmored should return >0 when shield is wielded"
         );
     }
 
     @Test
-    @DisplayName("prepareUnarmored returns 10 (commoner)")
-    void prepareUnarmored_returnsTen_commoner() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("prepares base armor")
+    void preparesBaseArmor() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("dex", 16);
 
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
+        calculateBaseArmorClass.setSource(object);
 
-        calculateBaseArmorClass.setSource(source);
+        assertEquals(13, calculateBaseArmorClass.prepareUnarmored(new DummyContext()),
+                "should have 13 AC when unarmored"
+        );
 
-        assertEquals(10, calculateBaseArmorClass.prepareUnarmored(context),
-                "prepareUnarmored should return 10 for a commoner"
+        assertEquals(11 /*base*/ +3 /*dex bonus*/,
+                calculateBaseArmorClass.prepareArmored(
+                        RPGLFactory.newItem("std:armor/light/leather"),
+                        new DummyContext()
+                ),
+                "should have 14 AC when armored with leather armor"
+        );
+
+        assertEquals(14 /*base*/ +2 /*limited dex bonus*/,
+                calculateBaseArmorClass.prepareArmored(
+                        RPGLFactory.newItem("std:armor/medium/breastplate"),
+                        new DummyContext()
+                ),
+                "should have 16 AC when armored with breastplate armor"
+        );
+
+        assertEquals(18 /*base*/,
+                calculateBaseArmorClass.prepareArmored(
+                        RPGLFactory.newItem("std:armor/heavy/plate"),
+                        new DummyContext()
+                ),
+                "should have 18 AC when armored with plate armor"
         );
     }
 
     @Test
-    @DisplayName("prepareArmored returns 18 (knight wearing plate armor)")
-    void prepareArmored_returnsEighteen_knightPlateArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("adds shield bonus to AC")
+    void addsShieldBonusToAC() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLItem shield = RPGLFactory.newItem("std:armor/shield/metal");
+        source.giveItem(shield.getUuid());
+        source.equipItem(shield.getUuid(), "offhand");
 
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
 
         calculateBaseArmorClass.setSource(source);
+        calculateBaseArmorClass.prepare(new DummyContext(), List.of());
 
-        assertEquals(18, calculateBaseArmorClass.prepareArmored(UUIDTable.getItem(source.getEquippedItems().getString("armor")), context),
-                "prepareUnarmored should return 18 for a knight wearing plate armor"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareArmored returns 14 (knight wearing breastplate armor)")
-    void prepareArmored_returnsFourteen_knightBreastplateArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-
-        RPGLItem breastplateArmor = RPGLFactory.newItem("std:armor/medium/breastplate");
-        source.giveItem(breastplateArmor.getUuid());
-        source.equipItem(breastplateArmor.getUuid(), "armor");
-        calculateBaseArmorClass.setSource(source);
-
-        assertEquals(14, calculateBaseArmorClass.prepareArmored(UUIDTable.getItem(source.getEquippedItems().getString("armor")), context),
-                "prepareUnarmored should return 18 for a knight wearing breastplate armor"
-        );
-    }
-
-    @Test
-    @DisplayName("prepareArmored returns 11 (knight wearing leather armor)")
-    void prepareArmored_returnsEleven_knightLeatherArmor() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-
-        RPGLItem leatherArmor = RPGLFactory.newItem("std:armor/light/leather");
-        source.giveItem(leatherArmor.getUuid());
-        source.equipItem(leatherArmor.getUuid(), "armor");
-        calculateBaseArmorClass.setSource(source);
-
-        assertEquals(11, calculateBaseArmorClass.prepareArmored(UUIDTable.getItem(source.getEquippedItems().getString("armor")), context),
-                "prepareUnarmored should return 11 for a knight wearing leather armor"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare returns 10 (commoner with no armor or shield)")
-    void prepare_returnsTen_commonerNoArmorNoShield() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-
-        calculateBaseArmorClass.setSource(source);
-        calculateBaseArmorClass.prepare(context, List.of());
-
-        assertEquals(10, calculateBaseArmorClass.get(),
-                "commoner with no armor or shield should have a base armor class of 10"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare returns 18 (knight wearing plate armor and shield)")
-    void prepare_returnsTwenty_knightPlateArmorShield() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-
-        calculateBaseArmorClass.setSource(source);
-        calculateBaseArmorClass.prepare(context, List.of());
-
-        assertEquals(20, calculateBaseArmorClass.get(),
-                "knight with plate armor and shield should have a base armor class of 20"
+        assertEquals(10 /*base*/ +2 /*shield*/, calculateBaseArmorClass.get(),
+                "shield should raise AC to 12"
         );
     }
 

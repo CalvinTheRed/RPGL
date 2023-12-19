@@ -51,8 +51,8 @@ public class ExhaustResourceTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new TakeResource();
         subevent.joinSubeventData(new JsonObject() {{
             /*{

@@ -48,8 +48,8 @@ public class HealTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new Heal();
         subevent.joinSubeventData(new JsonObject() {{
             /*{

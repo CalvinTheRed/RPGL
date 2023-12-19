@@ -45,8 +45,8 @@ public class CalculateAbilityScoreTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CalculateAbilityScore();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -62,22 +62,20 @@ public class CalculateAbilityScoreTest {
     }
 
     @Test
-    @DisplayName("prepare sets base of calculation to template ability score")
-    void prepare_setsBaseToTemplateAbilityScore() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("defaults to raw object ability score")
+    void defaultsToRawObjectAbilityScore() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
         calculateAbilityScore.joinSubeventData(new JsonObject() {{
             this.putString("ability", "str");
         }});
 
-        calculateAbilityScore.setSource(source);
-        calculateAbilityScore.prepare(context, List.of());
+        calculateAbilityScore.setSource(object);
+        calculateAbilityScore.prepare(new DummyContext(), List.of());
 
-        assertEquals(23, calculateAbilityScore.get(),
-                "base str score for std:young_red_dragon should be 23 after prepare()"
+        assertEquals(10, calculateAbilityScore.get(),
+                "base str score should be 10 after prepare()"
         );
     }
 

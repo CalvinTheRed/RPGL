@@ -46,8 +46,8 @@ public class AddOriginItemTagTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new AddOriginItemTag();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -63,9 +63,9 @@ public class AddOriginItemTagTest {
     }
 
     @Test
-    @DisplayName("invoke adds tag")
-    void invoke_addsTag() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("adds tag to item")
+    void addsTagToItem() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         DummyContext context = new DummyContext();
         context.add(object);

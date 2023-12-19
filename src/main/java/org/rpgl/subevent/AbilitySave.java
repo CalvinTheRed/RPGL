@@ -20,6 +20,9 @@ import java.util.List;
  */
 public class AbilitySave extends Subevent {
 
+    // TODO base and target damage collections?
+    // TODO use_origin_difficulty_class_ability support?
+
     public AbilitySave() {
         super("ability_save");
     }

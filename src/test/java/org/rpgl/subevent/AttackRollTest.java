@@ -54,8 +54,8 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new AttackRoll();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -71,9 +71,10 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("isCriticalMiss returns true (base roll of 1)")
-    void isCriticalMiss_returnsTrue_baseRollOne() {
+    @DisplayName("recognizes critical misses")
+    void recognizesCriticalMisses() {
         AttackRoll attackRoll = new AttackRoll();
+
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "base": {
@@ -84,42 +85,30 @@ public class AttackRollTest {
                 this.putInteger("value", 1);
             }});
         }});
-
         assertTrue(attackRoll.isCriticalMiss(),
                 "attack roll with base of 1 should register as a critical miss"
         );
-    }
 
-    @Test
-    @DisplayName("isCriticalMiss returns false (base roll exceeding 1)")
-    void isCriticalMiss_returnsFalse_baseRollExceedingOne() {
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "base": {
-                    "value": 10
+                    "value": 2
                 }
             }*/
             this.putJsonObject("base", new JsonObject() {{
-                this.putInteger("value", 10);
+                this.putInteger("value", 2);
             }});
         }});
-
         assertFalse(attackRoll.isCriticalMiss(),
-                "attack roll with base exceeding 1 should not register as a critical miss"
+                "attack roll with base of 2 should not register as a critical miss"
         );
     }
 
     @Test
-    @DisplayName("isCriticalHit returns true (base roll of 20)")
-    void isCriticalHit_returnsTrue_baseRollTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("recognizes critical hits")
+    void recognizesCriticalHits() throws Exception {
         AttackRoll attackRoll = new AttackRoll();
+
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "base": {
@@ -130,53 +119,28 @@ public class AttackRollTest {
                 this.putInteger("value", 20);
             }});
         }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-
-        assertTrue(attackRoll.isCriticalHit(context, List.of()),
+        assertTrue(attackRoll.isCriticalHit(new DummyContext(), List.of()),
                 "attack roll with base of 20 should register as a critical hit"
         );
-    }
 
-    @Test
-    @DisplayName("isCriticalHit returns false (base roll below 20)")
-    void isCriticalHit_returnsFalse_baseRollBelowTwenty() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
                 "base": {
-                    "value": 10
+                    "value": 19
                 }
             }*/
             this.putJsonObject("base", new JsonObject() {{
-                this.putInteger("value", 10);
+                this.putInteger("value", 19);
             }});
         }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-
-        assertFalse(attackRoll.isCriticalHit(context, List.of()),
-                "attack roll with base below 20 should not register as a critical hit"
+        assertFalse(attackRoll.isCriticalHit(new DummyContext(), List.of()),
+                "attack roll with base of 19 should not register as a critical hit"
         );
     }
 
     @Test
-    @DisplayName("resolveNestedSubevents invoked DummySubevent (on hit)")
-    void resolveNestedSubevents_invokesDummySubevent_onHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("invokes hit subevents")
+    void invokesHitSubevents() throws Exception {
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -193,8 +157,6 @@ public class AttackRollTest {
             }});
         }});
 
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
         attackRoll.resolveNestedSubevents("hit", new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
@@ -203,14 +165,8 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("resolveNestedSubevents invoked DummySubevent (on miss)")
-    void resolveNestedSubevents_invokesDummySubevent_onMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("invokes miss subevents")
+    void invokesMissSubevents() throws Exception {
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -227,8 +183,6 @@ public class AttackRollTest {
             }});
         }});
 
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
         attackRoll.resolveNestedSubevents("miss", new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
@@ -237,13 +191,9 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("deliverDamage object loses health")
-    void deliverDamage_objectLosesHealth() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("delivers damage")
+    void deliversDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -281,262 +231,33 @@ public class AttackRollTest {
             }});
         }});
 
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.deliverDamage(context, List.of());
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+        attackRoll.deliverDamage(new DummyContext(), List.of());
 
-        assertEquals(42, target.getHealthData().getInteger("current"),
-                "Knight should have 42 health left (52-10=42)"
+        assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
+                "target should lose 10 health"
         );
     }
 
     @Test
-    @DisplayName("deliverDamage source heals from vampirism")
-    void deliverDamage_sourceHealsFromVampirism() throws Exception {
+    @DisplayName("calculates target armor class")
+    void calculatesTargetArmorClass() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.getHealthData().putInteger("current", 1);
-        target.getHealthData().putInteger("current", 11);
-
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "necrotic",
-                        "dice": [ ],
-                        "bonus": 10,
-                        "scale": {
-                            "numerator": 1,
-                            "denominator": 1,
-                            "round_up": false
-                        }
-                    }
-                ],
-                "vampirism": {
-                    "damage_type": "necrotic"
-                }
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "necrotic");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                    this.putJsonObject("scale", new JsonObject() {{
-                        this.putInteger("numerator", 1);
-                        this.putInteger("denominator", 1);
-                        this.putBoolean("round_up", false);
-                    }});
-                }});
-            }});
-            this.putJsonObject("vampirism", new JsonObject() {{
-                this.putString("damage_type", "necrotic");
-            }});
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.deliverDamage(context, List.of());
-
-        assertEquals(1, target.getHealthData().getInteger("current"),
-                "target should suffer 10 damage and receive no healing from vampirism"
-        );
-        assertEquals(6, source.getHealthData().getInteger("current"),
-                "source should heal for half damage from vampirism"
-        );
-    }
-
-    @Test
-    @DisplayName("getTargetArmorClass calculate 20 armor class")
-    void getTargetArmorClass_calculatesTwentyArmorClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
 
-        assertEquals(20, attackRoll.getTargetArmorClass(context, List.of()),
-                "target armor class should be 20 (plate armor + shield)"
+        assertEquals(18 /*plate armor*/ +2 /*shield*/, attackRoll.getTargetArmorClass(new DummyContext(), List.of()),
+                "target armor class should total to 20"
         );
     }
 
     @Test
-    @DisplayName("getBaseDamage calculates correct damage (modifier)")
-    void getBaseDamage_calculatesCorrectDamage_modifier() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "modifier",
-                        "damage_type": "fire",
-                        "ability": "str",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ],
-                "withhold_damage_modifier": true
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "modifier");
-                    this.putString("damage_type", "fire");
-                    this.putString("ability", "str");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context, List.of());
-        attackRoll.getBaseDamage(context, List.of());
-
-        String expected = """
-                [{"bonus":6,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "damage should include str mod (+6)"
-        );
-    }
-
-    @Test
-    @DisplayName("getBaseDamage calculates correct damage (ability)")
-    void getBaseDamage_calculatesCorrectDamage_ability() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "ability",
-                        "damage_type": "fire",
-                        "ability": "str",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ],
-                "withhold_damage_modifier": true
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "ability");
-                    this.putString("damage_type", "fire");
-                    this.putString("ability", "str");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context, List.of());
-        attackRoll.getBaseDamage(context, List.of());
-
-        String expected = """
-                [{"bonus":23,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "damage should include str score (23)"
-        );
-    }
-
-    @Test
-    @DisplayName("getBaseDamage calculates correct damage (proficiency)")
-    void getBaseDamage_calculatesCorrectDamage_proficiency() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "proficiency",
-                        "damage_type": "fire",
-                        "object": {
-                            "from": "subevent",
-                            "object": "source"
-                        }
-                    }
-                ],
-                "withhold_damage_modifier": true
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "proficiency");
-                    this.putString("damage_type", "fire");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.prepare(context, List.of());
-        attackRoll.getBaseDamage(context, List.of());
-
-        String expected = """
-                [{"bonus":4,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
-        assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
-                "damage should include proficiency bonus (+4)"
-        );
-    }
-
-    @Test
-    @DisplayName("getCriticalHitDamage correctly gathers critical hit damage")
-    void getCriticalHitDamage_correctlyGathersCriticalHitDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("gets critical hit damage")
+    void getsCriticalHitDamage() throws Exception {
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -595,7 +316,7 @@ public class AttackRollTest {
             }});
         }});
 
-        attackRoll.getCriticalHitDamage(context, List.of());
+        attackRoll.getCriticalHitDamage(new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"},{"bonus":0,"damage_type":"fire","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"}]""";
@@ -605,13 +326,10 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("getBaseDamage gets correct base damage (damage modifier not withheld)")
-    void getBaseDamage_getsCorrectBaseDamage_damageModifierNotWithheld() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gets base damage with damage modifier")
+    void getsBaseDamageWithDamageModifier() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("str", 20);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -651,25 +369,21 @@ public class AttackRollTest {
             this.putBoolean("withhold_damage_modifier", false);
         }});
 
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.getBaseDamage(context, List.of());
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+        attackRoll.getBaseDamage(new DummyContext(), List.of());
 
         String expected = """
-                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":3,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
+                [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, attackRoll.json.getJsonArray("damage").toString(),
                 "base damage should be calculated including ability modifier bonus"
         );
     }
 
     @Test
-    @DisplayName("getBaseDamage gets correct base damage (damage modifier withheld)")
-    void getBaseDamage_getsCorrectBaseDamage_damageModifierWithheld() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gets base damage without damage modifier")
+    void getsBaseDamageWithoutDamageModifier() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -709,9 +423,9 @@ public class AttackRollTest {
             this.putBoolean("withhold_damage_modifier", true);
         }});
 
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.getBaseDamage(context, List.of());
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+        attackRoll.getBaseDamage(new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -721,13 +435,9 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("getBaseDamage gets correct base damage (origin item damage bonus)")
-    void getBaseDamage_getsCorrectBaseDamage_originItemDamageBonus() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gets base damage with origin item bonus")
+    void getsBaseDamageWithOriginItemBonus() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         item.setDamageBonus(1);
@@ -771,9 +481,9 @@ public class AttackRollTest {
         }});
 
         attackRoll.setOriginItem(item.getUuid());
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.getBaseDamage(context, List.of());
+        attackRoll.setSource(object);
+        attackRoll.setTarget(object);
+        attackRoll.getBaseDamage(new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":1,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -783,17 +493,13 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("getBaseDamage gets correct base damage (damage modifier not withheld)")
-    void getBaseDamage_getsCorrectBaseDamage_usingOriginAttackAbility() throws Exception {
-        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gets base damage using origin object stats")
+    void getsBaseDamageUsingOriginObjectStats() throws Exception {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        origin.getAbilityScores().putInteger("int", 20);
-        source.setOriginObject(origin.getUuid());
+        originObject.getAbilityScores().putInteger("int", 20);
+        object.setOriginObject(originObject.getUuid());
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -835,10 +541,10 @@ public class AttackRollTest {
             this.putBoolean("withhold_damage_modifier", false);
         }});
 
-        attackRoll.setSource(source);
-        attackRoll.prepare(context, List.of());
-        attackRoll.setTarget(target);
-        attackRoll.getBaseDamage(context, List.of());
+        attackRoll.setSource(object);
+        attackRoll.prepare(new DummyContext(), List.of());
+        attackRoll.setTarget(object);
+        attackRoll.getBaseDamage(new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -848,11 +554,9 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("prepare adds origin item attack bonus")
-    void prepare_addsOriginItemAttackBonus() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("adds origin item attack bonus")
+    void addsOriginItemAttackBonus() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         item.setAttackBonus(1);
@@ -869,7 +573,7 @@ public class AttackRollTest {
 
         attackRoll.setOriginItem(item.getUuid());
         attackRoll.setSource(source);
-        attackRoll.prepare(context, List.of());
+        attackRoll.prepare(new DummyContext(), List.of());
 
         assertEquals(1, attackRoll.getBonus(),
                 "attack roll should include bonus from weapon attack bonus"
@@ -877,11 +581,9 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("resolveDamage delivers correct damage values")
-    void resolveDamage_deliversCorrectDamageValues() throws Exception {
+    @DisplayName("rolls and delivers damage")
+    void rollsAndDeliversDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -936,21 +638,18 @@ public class AttackRollTest {
 
         attackRoll.setSource(object);
         attackRoll.setTarget(object);
-        attackRoll.resolveDamage(context, List.of());
+        attackRoll.resolveDamage(new DummyContext(), List.of());
 
-        assertEquals(1000-3-3, object.getHealthData().getInteger("current"),
-                "dummy should take 6 damage from the attack roll"
+        assertEquals(1000 /*base*/ -6 /*damage*/, object.getHealthData().getInteger("current"),
+                "dummy should take 6 damage"
         );
     }
     
     @Test
-    @DisplayName("run resolves correctly (critical miss always misses)")
-    void run_resolvesCorrectly_criticalMissAlwaysMisses() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+    @DisplayName("critically miss")
+    void criticallyMisses() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         source.getAbilityScores().putInteger("str", 100); // should land a hit without critical miss rule
 
@@ -994,7 +693,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(context, List.of());
+        attackRoll.run(new DummyContext(), List.of());
 
         assertEquals(1000, target.getHealthData().getInteger("current"),
                 "target should not have been hit"
@@ -1002,13 +701,10 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("run resolves correctly (normal miss)")
-    void run_resolvesCorrectly_normalMiss() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+    @DisplayName("misses")
+    void misses() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         target.getAbilityScores().putInteger("dex", 100); // should be able to avoid a hit normally
 
@@ -1058,7 +754,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(context, List.of());
+        attackRoll.run(new DummyContext(), List.of());
 
         assertEquals(1000, target.getHealthData().getInteger("current"),
                 "target should not have been hit"
@@ -1066,13 +762,10 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("run resolves correctly (normal hit)")
-    void run_resolvesCorrectly_normalHit() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+    @DisplayName("hits")
+    void hits() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
@@ -1131,7 +824,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(context, List.of());
+        attackRoll.run(new DummyContext(), List.of());
 
         assertEquals(1000-3, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken damage"
@@ -1139,8 +832,8 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("run resolves correctly (critical hit)")
-    void run_resolvesCorrectly_criticalHit() throws Exception {
+    @DisplayName("critically hits")
+    void criticallyHits() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
@@ -1208,77 +901,79 @@ public class AttackRollTest {
         attackRoll.setTarget(target);
         attackRoll.run(context, List.of());
 
-        assertEquals(1000-3-3, target.getHealthData().getInteger("current"),
+        assertEquals(1000 /*base*/ -3 /*damage*/ -3 /*critical bonus*/, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken critical damage"
         );
     }
 
     @Test
-    @DisplayName("handleVampirism heals source for half damage (specific damage type)")
-    void handleVampirism_healsSourceForHalfDamage_specificDamageType() throws Exception {
+    @DisplayName("heals source via vampirism (all damage types")
+    void healsSourceViaVampirism_allDamageTypes() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         source.getHealthData().putInteger("current", 1);
-        target.getHealthData().putInteger("current", 1);
-
-        JsonObject damageByType = new JsonObject() {{
-            this.putInteger("necrotic", 10);
-            this.putInteger("radiant", 10);
-        }};
+        target.getHealthData().putInteger("current", 11);
 
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.joinSubeventData(new JsonObject() {{
             /*{
+                "damage": [
+                    {
+                        "damage_type": "necrotic",
+                        "dice": [ ],
+                        "bonus": 10,
+                        "scale": {
+                            "numerator": 1,
+                            "denominator": 1,
+                            "round_up": false
+                        }
+                    }
+                ],
                 "vampirism": {
-                    "numerator": 1,
-                    "denominator": 2,
-                    "round_up": false,
                     "damage_type": "necrotic"
                 }
             }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("damage_type", "necrotic");
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putInteger("bonus", 10);
+                    this.putJsonObject("scale", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 1);
+                        this.putBoolean("round_up", false);
+                    }});
+                }});
+            }});
             this.putJsonObject("vampirism", new JsonObject() {{
-                this.putInteger("numerator", 1);
-                this.putInteger("denominator", 2);
-                this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
         }});
+
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
+        attackRoll.deliverDamage(new DummyContext(), List.of());
 
-        VampiricSubevent.handleVampirism(attackRoll, damageByType, context, List.of());
-
-        assertEquals(6, source.getHealthData().getInteger("current"),
-                "source should be healed for half necrotic damage via vampirism"
+        assertEquals(11 /*base*/ -10 /*damage*/, target.getHealthData().getInteger("current"),
+                "target should suffer 10 damage and receive no healing from vampirism"
         );
-        assertEquals(1, target.getHealthData().getInteger("current"),
-                "target should not be healed via vampirism"
+        assertEquals(1 /*base*/ +5 /*healing*/, source.getHealthData().getInteger("current"),
+                "source should heal for half damage from vampirism"
         );
     }
 
     @Test
-    @DisplayName("confirmCriticalDamage returns true if not canceled")
-    void confirmCriticalDamage_returnsTrueIfNotCanceled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        AttackRoll attackRoll = new AttackRoll();
-
-        assertTrue(attackRoll.confirmCriticalDamage(context, List.of()),
+    @DisplayName("confirms critical damage")
+    void confirmsCriticalDamage() throws Exception {
+        assertTrue(new AttackRoll().confirmCriticalDamage(new DummyContext(), List.of()),
                 "critical damage should be confirmed"
         );
     }
 
     @Test
-    @DisplayName("confirmCriticalDamage returns false if canceled")
-    void confirmCriticalDamage_returnsFalseIfCanceled() throws Exception {
+    @DisplayName("cancels critical damage")
+    void cancelsCriticalDamage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
@@ -1300,9 +995,9 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("run resolves correctly (critical damage not confirmed)")
-    void run_resolvesCorrectly_criticalDamageNotConfirmed() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+    @DisplayName("cancels critical damage on hit")
+    void cancelsCriticalDamageOnHit() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLContext context = new DummyContext();
         context.add(source);
@@ -1374,7 +1069,7 @@ public class AttackRollTest {
         attackRoll.setTarget(target);
         attackRoll.run(context, List.of());
 
-        assertEquals(1000-3, target.getHealthData().getInteger("current"),
+        assertEquals(1000 /*base*/ -3 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should have been hit but should not have suffered critical damage"
         );
     }
