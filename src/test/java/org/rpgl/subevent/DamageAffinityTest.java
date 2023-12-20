@@ -44,26 +44,94 @@ public class DamageAffinityTest {
     }
 
     @Test
-    @DisplayName("getAffinity reports not immune, not resistant, not vulnerable (default behavior)")
-    void getAffinity_notImmuneNotResistantNotVulnerable_defaultBehavior() {
+    @DisplayName("indicates normal damage")
+    void indicatesNormalDamage() {
         DamageAffinity damageAffinity = new DamageAffinity();
-        String damageType = "fire";
-        damageAffinity.addDamageType(damageType);
+        damageAffinity.addDamageType("fire");
 
-        assertFalse(damageAffinity.isImmune(damageType),
+        assertFalse(damageAffinity.isImmune("fire"),
                 "damageAffinity should not report immune by default"
         );
-        assertFalse(damageAffinity.isResistant(damageType),
+        assertFalse(damageAffinity.isResistant("fire"),
                 "damageAffinity should not report resistant by default"
         );
-        assertFalse(damageAffinity.isVulnerable(damageType),
+        assertFalse(damageAffinity.isVulnerable("fire"),
                 "damageAffinity should not report vulnerable by default"
         );
     }
 
     @Test
-    @DisplayName("includesDamageType returns true (damage type included)")
-    void includesDamageType_returnsTrue_damageTypeIncluded() {
+    @DisplayName("indicates and revokes resistance")
+    void indicatesAndRevokesResistance() {
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType("fire");
+        damageAffinity.grantResistance("fire");
+
+        assertFalse(damageAffinity.isImmune("fire"),
+                "damageAffinity should not report immune to fire"
+        );
+        assertTrue(damageAffinity.isResistant("fire"),
+                "damageAffinity should report resistant to fire"
+        );
+        assertFalse(damageAffinity.isVulnerable("fire"),
+                "damageAffinity should not report vulnerable to fire"
+        );
+
+        damageAffinity.revokeResistance("fire");
+        assertFalse(damageAffinity.isResistant("fire"),
+                "damageAffinity should not report resistant to fire"
+        );
+    }
+
+    @Test
+    @DisplayName("indicates and revokes immunity")
+    void indicatesAndRevokesImmunity() {
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType("fire");
+        damageAffinity.grantImmunity("fire");
+
+        assertTrue(damageAffinity.isImmune("fire"),
+                "damageAffinity should report immune to fire"
+        );
+        assertFalse(damageAffinity.isResistant("fire"),
+                "damageAffinity should not report resistant to fire"
+        );
+        assertFalse(damageAffinity.isVulnerable("fire"),
+                "damageAffinity should not report vulnerable to fire"
+        );
+
+        damageAffinity.revokeImmunity("fire");
+        assertFalse(damageAffinity.isImmune("fire"),
+                "damageAffinity should not report immune to fire"
+        );
+    }
+
+    @Test
+    @DisplayName("indicates and revokes vulnerability")
+    void indicatesAndRevokesVulnerability() {
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.addDamageType("fire");
+        damageAffinity.grantVulnerability("fire");
+
+        assertFalse(damageAffinity.isImmune("fire"),
+                "damageAffinity should not report immune to fire"
+        );
+        assertFalse(damageAffinity.isResistant("fire"),
+                "damageAffinity should not report resistant to fire"
+        );
+        assertTrue(damageAffinity.isVulnerable("fire"),
+                "damageAffinity should report vulnerable to fire"
+        );
+
+        damageAffinity.revokeVulnerability("fire");
+        assertFalse(damageAffinity.isVulnerable("fire"),
+                "damageAffinity should not report vulnerable to fire"
+        );
+    }
+
+    @Test
+    @DisplayName("recognizes included damage type")
+    void recognizesIncludedDamageType() {
         DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.addDamageType("fire");
 
@@ -73,8 +141,8 @@ public class DamageAffinityTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns false (damage type not included)")
-    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+    @DisplayName("recognizes absent damage type")
+    void recognizesAbsentDamageType() {
         DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.addDamageType("cold");
 

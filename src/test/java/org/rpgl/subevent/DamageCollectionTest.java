@@ -46,8 +46,8 @@ public class DamageCollectionTest {
     }
 
     @Test
-    @DisplayName("addDamage new damage values are added")
-    void addDamage_newDamageValuesAdded() {
+    @DisplayName("adds damage")
+    void addsDamage() {
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());
@@ -88,8 +88,8 @@ public class DamageCollectionTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns tue (type is present)")
-    void includesDamageType_returnsTrue_typePresent() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             /*{
@@ -116,8 +116,8 @@ public class DamageCollectionTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns tue (type is present)")
-    void includesDamageType_returnsFalse_typeAbsent() {
+    @DisplayName("recognizes absent damage type")
+    void recognizesAbsentDamageType() {
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());

@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.function.AddBonus;
 import org.rpgl.function.AddDamage;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -56,10 +57,26 @@ public class AttackRoll extends Roll {
 
         // Add weapon attack bonus, if applicable
         if (this.getOriginItem() != null) {
-            this.addBonus(new JsonObject() {{
-                this.putInteger("bonus", UUIDTable.getItem(getOriginItem()).getAttackBonus());
-                this.putJsonArray("dice", new JsonArray());
-            }});
+            new AddBonus().execute(null, this, new JsonObject() {{
+                /*{
+                    "function": "add_bonus",
+                    "bonus": [
+                        {
+                            "formula": "range",
+                            "dice": [ ],
+                            "bonus": <origin item attack bonus>
+                        }
+                    ]
+                }*/
+                this.putString("function", "add_bonus");
+                this.putJsonArray("bonus", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "range");
+                        this.putJsonArray("dice", new JsonArray());
+                        this.putInteger("bonus", UUIDTable.getItem(getOriginItem()).getAttackBonus());
+                    }});
+                }});
+            }}, context, resources);
         }
     }
 
@@ -68,13 +85,34 @@ public class AttackRoll extends Roll {
         if (this.isNotCanceled()) {
             this.roll();
             this.json.asMap().putIfAbsent("damage", new ArrayList<>());
-            this.addBonus(new JsonObject() {{
-                this.putInteger("bonus", json.getBoolean("use_origin_attack_ability")
-                        ? UUIDTable.getObject(getSource().getOriginObject()).getAbilityModifierFromAbilityName(getAbility(context), context)
-                        : getSource().getAbilityModifierFromAbilityName(getAbility(context), context)
-                );
-                this.putJsonArray("dice", new JsonArray());
-            }});
+            new AddBonus().execute(null, this, new JsonObject() {{
+                /*{
+                    "function": "add_bonus",
+                    "bonus": [
+                        {
+                            "formula": "modifier",
+                            "ability": <getAbility>
+                            "object": {
+                                "from": "subevent",
+                                "object": "source",
+                                "as_origin": <use_origin_attack_ability>
+                            }
+                        }
+                    ]
+                }*/
+                this.putString("function", "add_bonus");
+                this.putJsonArray("bonus", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "modifier");
+                        this.putString("ability", getAbility(context));
+                        this.putJsonObject("object", new JsonObject() {{
+                            this.putString("from", "subevent");
+                            this.putString("object", "source");
+                            this.putBoolean("as_origin", json.getBoolean("use_origin_attack_ability"));
+                        }});
+                    }});
+                }});
+            }}, context, resources);
 
             int armorClass = this.getTargetArmorClass(context, resources);
             if (this.isCriticalHit(context, resources)) {

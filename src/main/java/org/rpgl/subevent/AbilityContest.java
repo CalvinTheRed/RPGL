@@ -68,9 +68,9 @@ public class AbilityContest extends Subevent {
             this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.seekJsonArray("source_check.determined"));
         }});
-        abilityCheck.setSource(this.getTarget());
+        abilityCheck.setSource(this.getSource());
         abilityCheck.prepare(context, resources);
-        abilityCheck.setTarget(this.getSource());
+        abilityCheck.setTarget(this.getTarget());
         abilityCheck.invoke(context, resources);
         return abilityCheck.get();
     }
@@ -92,9 +92,9 @@ public class AbilityContest extends Subevent {
             this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.seekJsonArray("target_check.determined"));
         }});
-        abilityCheck.setSource(this.getSource());
+        abilityCheck.setSource(this.getTarget());
         abilityCheck.prepare(context, resources);
-        abilityCheck.setTarget(this.getTarget());
+        abilityCheck.setTarget(this.getSource());
         abilityCheck.invoke(context, resources);
         return abilityCheck.get();
     }

@@ -62,8 +62,8 @@ public class DamageDeliveryTest {
     }
 
     @Test
-    @DisplayName("getDamage returns stored damage values")
-    void getDamage_returnsStoredDamageValues() {
+    @DisplayName("returns damage")
+    void returnsDamage() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -122,8 +122,8 @@ public class DamageDeliveryTest {
     }
 
     @Test
-    @DisplayName("getDamage returns stored damage values (scaled damage)")
-    void getDamage_returnsStoredDamageValues_scaledDamage() {
+    @DisplayName("returns scaled damage")
+    void returnsScaledDamage() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -182,8 +182,8 @@ public class DamageDeliveryTest {
     }
 
     @Test
-    @DisplayName("getDamage returns stored damage values (scaled damage) (rounded up)")
-    void getDamage_returnsStoredDamageValues_scaledDamage_roundedUp() {
+    @DisplayName("rounds damage up")
+    void roundsDamageUp() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -242,8 +242,8 @@ public class DamageDeliveryTest {
     }
 
     @Test
-    @DisplayName("maximizeTypedDamageDice maximizes damage for specified damage type")
-    void maximizeTypedDamageDice_maximizesDamageForSpecifiedDamageType() {
+    @DisplayName("maximizes damage (specific damage type)")
+    void maximizesDamage_specificDamageType() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -318,8 +318,8 @@ public class DamageDeliveryTest {
     }
 
     @Test
-    @DisplayName("maximizeTypedDamageDice maximizes damage for unspecified damage type")
-    void maximizeTypedDamageDice_maximizesDamageForUnspecifiedDamageType() {
+    @DisplayName("maximizes damage (all damage types)")
+    void maximizesDamage_allDamageTypes() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -394,8 +394,8 @@ public class DamageDeliveryTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns true (damage type included)")
-    void includesDamageType_returnsTrue_damageTypeIncluded() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -418,8 +418,8 @@ public class DamageDeliveryTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns false (damage type not included)")
-    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+    @DisplayName("recognizes absent damage type")
+    void recognizesAbsentDamageType() {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{

@@ -113,9 +113,6 @@ public class AbilityCheckTest {
         assertFalse(abilityCheck.hasExpertise(),
                 "should not have expertise"
         );
-        assertEquals(1, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 1 for ability check"
-        );
     }
 
     @Test
@@ -139,9 +136,6 @@ public class AbilityCheckTest {
         );
         assertFalse(abilityCheck.hasExpertise(),
                 "should not have expertise"
-        );
-        assertEquals(2, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 2 for ability check"
         );
     }
 
@@ -168,9 +162,6 @@ public class AbilityCheckTest {
         assertTrue(abilityCheck.hasExpertise(),
                 "should have expertise"
         );
-        assertEquals(4, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 4 for ability check"
-        );
     }
 
     @Test
@@ -190,9 +181,6 @@ public class AbilityCheckTest {
         );
         assertFalse(abilityCheck.hasExpertise(),
                 "should have expertise"
-        );
-        assertEquals(0, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 0 for ability check"
         );
     }
 

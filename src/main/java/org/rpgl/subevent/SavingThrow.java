@@ -1,8 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -57,12 +57,32 @@ public class SavingThrow extends Roll {
         this.verifySubevent(this.subeventId);
 
         // Override invoke() code to insert additional post-preparatory logic
-        RPGLObject target = this.getTarget();
-        String saveAbility = this.getAbility(context);
-        super.addBonus(new JsonObject() {{
-            this.putInteger("bonus", target.getAbilityModifierFromAbilityName(saveAbility, context));
-            this.putJsonArray("dice", new JsonArray());
-        }});
+        new AddBonus().execute(null, this, new JsonObject() {{
+                /*{
+                    "function": "add_bonus",
+                    "bonus": [
+                        {
+                            "formula": "modifier",
+                            "ability": <getAbility>,
+                            "object": {
+                                "from": "subevent",
+                                "object", "target"
+                            }
+                        }
+                    ]
+                }*/
+            this.putString("function", "add_bonus");
+            this.putJsonArray("bonus", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("formula", "modifier");
+                    this.putString("ability", getAbility(context));
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "target");
+                    }});
+                }});
+            }});
+        }}, context, resources);
 
         context.processSubevent(this, context, resources);
         this.run(context, resources);

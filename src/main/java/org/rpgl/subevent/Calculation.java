@@ -441,18 +441,19 @@ public abstract class Calculation extends Subevent {
      * @return the bonus to be applied to the Calculation.
      */
     public int getBonus() {
-        int bonus = 0;
+        int totalBonus = 0;
         JsonArray bonuses = this.getBonuses();
         for (int i = 0; i < bonuses.size(); i++) {
             JsonObject bonusJson = bonuses.getJsonObject(i);
-            bonus += bonusJson.getInteger("bonus");
+            int bonus = bonusJson.getInteger("bonus");
             JsonArray dice = bonusJson.getJsonArray("dice");
             for (int j = 0; j < dice.size(); j++) {
                 JsonObject die = dice.getJsonObject(i);
                 bonus += Objects.requireNonNullElseGet(die.getInteger("roll"), () -> Die.roll(die));
             }
+            totalBonus += scale(bonus, bonusJson.getJsonObject("scale"));
         }
-        return bonus;
+        return totalBonus;
     }
 
 }

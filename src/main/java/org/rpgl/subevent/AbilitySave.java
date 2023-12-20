@@ -58,9 +58,9 @@ public class AbilitySave extends Subevent {
             this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.getJsonArray("determined"));
         }});
-        abilityCheck.setSource(this.getSource());
+        abilityCheck.setSource(this.getTarget());
         abilityCheck.prepare(context, resources);
-        abilityCheck.setTarget(this.getTarget());
+        abilityCheck.setTarget(this.getSource());
         abilityCheck.invoke(context, resources);
 
         if (abilityCheck.get() < this.json.getInteger("save_difficulty_class")) {
@@ -80,9 +80,8 @@ public class AbilitySave extends Subevent {
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
-        String difficultyClassAbility = this.json.getString("difficulty_class_ability");
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", difficultyClassAbility);
+            this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
