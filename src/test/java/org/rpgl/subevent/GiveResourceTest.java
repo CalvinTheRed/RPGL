@@ -67,13 +67,10 @@ public class GiveResourceTest {
     }
 
     @Test
-    @DisplayName("invoke gives one resource of potency one when no count specified")
-    void invoke_givesOneResourceOfPotencyOneWhenNoCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gives single resource by default")
+    void givesSingleResourceByDefault() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GiveResource giveResource = new GiveResource();
         giveResource.joinSubeventData(new JsonObject() {{
@@ -83,9 +80,9 @@ public class GiveResourceTest {
             this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
         }});
         giveResource.setSource(source);
-        giveResource.prepare(context, List.of());
+        giveResource.prepare(new DummyContext(), List.of());
         giveResource.setTarget(target);
-        giveResource.invoke(context, List.of());
+        giveResource.invoke(new DummyContext(), List.of());
 
         assertEquals(1, target.getResourceObjects().size(),
                 "target should be given one resource"
@@ -105,27 +102,26 @@ public class GiveResourceTest {
     }
 
     @Test
-    @DisplayName("invoke gives correct number of resources when count specified")
-    void invoke_givesCorrectNumberOfResourcesWhenCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("overrides count and potency")
+    void overridesCountAndPotency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GiveResource giveResource = new GiveResource();
         giveResource.joinSubeventData(new JsonObject() {{
             /*{
                 "resource":"std:class/warlock/the_undead_patron/necrotic_husk",
-                "count": 2
+                "count": 2,
+                "potency": 2
             }*/
             this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
             this.putInteger("count", 2);
+            this.putInteger("potency", 2);
         }});
         giveResource.setSource(source);
         giveResource.setTarget(target);
 
-        giveResource.invoke(context, List.of());
+        giveResource.invoke(new DummyContext(), List.of());
 
         assertEquals(2, target.getResourceObjects().size(),
                 "target should be given two resources"

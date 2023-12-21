@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -68,13 +67,10 @@ public class ExhaustResourceTest {
     }
 
     @Test
-    @DisplayName("runLowFirst exhausts resources correctly (full count can be met)")
-    void runLowFirst_exhaustsResourcesCorrectly_fullCountCanBeMet() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("exhausts resources (prioritize low potency)")
+    void exhaustsResources_prioritizeLowPotency() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -86,324 +82,27 @@ public class ExhaustResourceTest {
         exhaustResource.joinSubeventData(new JsonObject() {{
             /*{
                 "resource":"std:common/spell_slot/01",
-                "count": 5,
-                "minimum_potency": 3
-            }*/
-            this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 5);
-            this.putInteger("minimum_potency", 3);
-        }});
-        exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
-        exhaustResource.setTarget(target);
-
-        exhaustResource.runLowFirst();
-
-        boolean[] expectedExhaustValues = {
-                false,
-                false,
-                true,
-                true,
-                true,
-                true,
-                true,
-                false,
-                false,
-        };
-
-        for (RPGLResource resource : target.getResourceObjects()) {
-            int potency = resource.getPotency();
-            boolean expected = expectedExhaustValues[potency - 1];
-            assertEquals(expected, resource.getExhausted(),
-                    "resource with potency " + potency + " should " + (expected ? "" : "not ") + "be exhausted"
-            );
-        }
-    }
-
-    @Test
-    @DisplayName("runLowFirst exhausts resources correctly (full count can not be met)")
-    void runLowFirst_exhaustsResourcesCorrectly_fullCountCanNotBeMet() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            target.addResource(resource);
-        }
-
-        ExhaustResource exhaustResource = new ExhaustResource();
-        exhaustResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:common/spell_slot/01",
-                "count": 5,
+                "count": 4,
                 "minimum_potency": 3,
-                "maximum_potency": 5
-            }*/
-            this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 5);
-            this.putInteger("minimum_potency", 3);
-            this.putInteger("maximum_potency", 5);
-        }});
-        exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
-        exhaustResource.setTarget(target);
-
-        exhaustResource.runLowFirst();
-
-        boolean[] expectedExhaustValues = {
-                false,
-                false,
-                true,
-                true,
-                true,
-                false,
-                false,
-                false,
-                false,
-        };
-
-        for (RPGLResource resource : target.getResourceObjects()) {
-            int potency = resource.getPotency();
-            boolean expected = expectedExhaustValues[potency - 1];
-            assertEquals(expected, resource.getExhausted(),
-                    "resource with potency " + potency + " should " + (expected ? "" : "not ") + "be exhausted"
-            );
-        }
-    }
-
-    @Test
-    @DisplayName("runLowFirst exhausts resources correctly skipping exhausted resources")
-    void runLowFirst_exhaustsResourcesCorrectlySkippingExhaustedResources() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            if (i < 5) {
-                resource.exhaust();
-            }
-            target.addResource(resource);
-        }
-
-        ExhaustResource exhaustResource = new ExhaustResource();
-        exhaustResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:common/spell_slot/01",
-                "count": 5
-            }*/
-            this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 5);
-        }});
-        exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
-        exhaustResource.setTarget(target);
-
-        exhaustResource.runLowFirst();
-
-        for (RPGLResource resource : target.getResourceObjects()) {
-            assertTrue(resource.getExhausted(),
-                    "resource with potency " + resource.getPotency() + " should be exhausted"
-            );
-        }
-    }
-
-    @Test
-    @DisplayName("runHighFirst exhausts resources correctly (full count can be met)")
-    void runHighFirst_exhaustsResourcesCorrectly_fullCountCanBeMet() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            target.addResource(resource);
-        }
-
-        ExhaustResource exhaustResource = new ExhaustResource();
-        exhaustResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:common/spell_slot/01",
-                "count": 5,
-                "maximum_potency": 7
-            }*/
-            this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 5);
-            this.putInteger("maximum_potency", 7);
-        }});
-        exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
-        exhaustResource.setTarget(target);
-
-        exhaustResource.runHighFirst();
-
-        boolean[] expectedExhaustValues = {
-                false,
-                false,
-                true,
-                true,
-                true,
-                true,
-                true,
-                false,
-                false,
-        };
-
-        for (RPGLResource resource : target.getResourceObjects()) {
-            int potency = resource.getPotency();
-            boolean expected = expectedExhaustValues[potency - 1];
-            assertEquals(expected, resource.getExhausted(),
-                    "resource with potency " + potency + " should " + (expected ? "" : "not ") + "be exhausted"
-            );
-        }
-    }
-
-    @Test
-    @DisplayName("runHighFirst exhausts resources correctly (full count can not be met)")
-    void runHighFirst_exhaustsResourcesCorrectly_fullCountCanNotBeMet() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            target.addResource(resource);
-        }
-
-        ExhaustResource exhaustResource = new ExhaustResource();
-        exhaustResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:common/spell_slot/01",
-                "count": 5,
-                "minimum_potency": 5,
-                "maximum_potency": 7
-            }*/
-            this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 5);
-            this.putInteger("minimum_potency", 5);
-            this.putInteger("maximum_potency", 7);
-        }});
-        exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
-        exhaustResource.setTarget(target);
-
-        exhaustResource.runHighFirst();
-
-        boolean[] expectedExhaustValues = {
-                false,
-                false,
-                false,
-                false,
-                true,
-                true,
-                true,
-                false,
-                false,
-        };
-
-        for (RPGLResource resource : target.getResourceObjects()) {
-            int potency = resource.getPotency();
-            boolean expected = expectedExhaustValues[potency - 1];
-            assertEquals(expected, resource.getExhausted(),
-                    "resource with potency " + potency + " should " + (expected ? "" : "not ") + "be exhausted"
-            );
-        }
-    }
-
-    @Test
-    @DisplayName("runHighFirst exhausts resources correctly skipping exhausted resources")
-    void runHighFirst_exhaustsResourcesCorrectlySkippingExhaustedResources() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            if (i > 5) {
-                resource.exhaust();
-            }
-            target.addResource(resource);
-        }
-
-        ExhaustResource exhaustResource = new ExhaustResource();
-        exhaustResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:common/spell_slot/01",
-                "count": 5,
-                "maximum_potency": 5
-            }*/
-            this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 5);
-            this.putInteger("maximum_potency", 5);
-        }});
-        exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
-        exhaustResource.setTarget(target);
-
-        exhaustResource.runHighFirst();
-
-        for (RPGLResource resource : target.getResourceObjects()) {
-            assertTrue(resource.getExhausted(),
-                    "resource with potency " + resource.getPotency() + " should be exhausted"
-            );
-        }
-    }
-
-    @Test
-    @DisplayName("invoke exhausts resources correctly (low first)")
-    void invoke_exhaustsResourcesCorrectly_lowFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            target.addResource(resource);
-        }
-
-        ExhaustResource exhaustResource = new ExhaustResource();
-        exhaustResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:common/spell_slot/01",
-                "count": 2,
                 "selection_mode": "low_first"
             }*/
             this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 2);
+            this.putInteger("count", 4);
+            this.putInteger("minimum_potency", 3);
             this.putString("selection_mode", "low_first");
         }});
         exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
+        exhaustResource.prepare(new DummyContext(), List.of());
         exhaustResource.setTarget(target);
-
-        exhaustResource.invoke(context, List.of());
+        exhaustResource.invoke(new DummyContext(), List.of());
 
         boolean[] expectedExhaustValues = {
+                false,
+                false,
                 true,
                 true,
-                false,
-                false,
-                false,
-                false,
+                true,
+                true,
                 false,
                 false,
                 false,
@@ -419,13 +118,10 @@ public class ExhaustResourceTest {
     }
 
     @Test
-    @DisplayName("invoke exhausts resources correctly (high first)")
-    void invoke_exhaustsResourcesCorrectly_highFirst() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("exhausts resources (prioritizes high potency")
+    void runHighFirst_exhaustsResourcesCorrectly_fullCountCanBeMet() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
@@ -437,29 +133,30 @@ public class ExhaustResourceTest {
         exhaustResource.joinSubeventData(new JsonObject() {{
             /*{
                 "resource":"std:common/spell_slot/01",
-                "count": 2,
+                "count": 4,
+                "maximum_potency": 7,
                 "selection_mode": "high_first"
             }*/
             this.putString("resource", "std:common/spell_slot/01");
-            this.putInteger("count", 2);
+            this.putInteger("count", 4);
+            this.putInteger("maximum_potency", 7);
             this.putString("selection_mode", "high_first");
         }});
         exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
+        exhaustResource.prepare(new DummyContext(), List.of());
         exhaustResource.setTarget(target);
-
-        exhaustResource.invoke(context, List.of());
+        exhaustResource.invoke(new DummyContext(), List.of());
 
         boolean[] expectedExhaustValues = {
                 false,
                 false,
                 false,
-                false,
-                false,
-                false,
-                false,
                 true,
                 true,
+                true,
+                true,
+                false,
+                false,
         };
 
         for (RPGLResource resource : target.getResourceObjects()) {
@@ -472,13 +169,10 @@ public class ExhaustResourceTest {
     }
 
     @Test
-    @DisplayName("invoke exhausts only matching resources")
-    void invoke_exhaustsOnlyMatchingResources() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("exhausts resources (default priority)")
+    void exhaustsResources_defaultPriority() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
         spellSlot.setPotency(1);
@@ -498,10 +192,9 @@ public class ExhaustResourceTest {
             this.putInteger("count", 2);
         }});
         exhaustResource.setSource(source);
-        exhaustResource.prepare(context, List.of());
+        exhaustResource.prepare(new DummyContext(), List.of());
         exhaustResource.setTarget(target);
-
-        exhaustResource.invoke(context, List.of());
+        exhaustResource.invoke(new DummyContext(), List.of());
 
         assertTrue(spellSlot.getExhausted(),
                 "matching resource should be exhausted"

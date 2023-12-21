@@ -30,7 +30,7 @@ public class MaximizeDamage extends Function {
     public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
                     List<RPGLResource> resources) {
         if (subevent instanceof DamageRoll damageRoll) {
-            damageRoll.maximizeTypedDamageDice(functionJson.getString("damage_type"));
+            damageRoll.maximizeDamageDice(functionJson.getString("damage_type"));
         } else if (subevent instanceof DamageDelivery damageDelivery) {
             damageDelivery.maximizeTypedDamageDice(functionJson.getString("damage_type"));
         } else {

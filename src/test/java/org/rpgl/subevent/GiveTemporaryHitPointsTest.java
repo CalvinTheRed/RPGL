@@ -66,10 +66,10 @@ public class GiveTemporaryHitPointsTest {
     }
 
     @Test
-    @DisplayName("invoke gives temporary hit points and applies rider effect (no prior temporary hit points)")
-    void invoke_givesTemporaryHitPointsAndAppliesRiderEffect_noPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("gives temporary hit points and rider")
+    void givesTemporaryHitPointsAndRider() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -117,10 +117,10 @@ public class GiveTemporaryHitPointsTest {
     }
 
     @Test
-    @DisplayName("invoke gives temporary hit points and applies rider effect (few prior temporary hit points)")
-    void invoke_givesTemporaryHitPointsAndAppliesRiderEffect_fewPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("replaces fewer temporary hit points and gives rider")
+    void replacesFewerTemporaryHitPointsAndGivesRider() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);
@@ -170,10 +170,10 @@ public class GiveTemporaryHitPointsTest {
     }
 
     @Test
-    @DisplayName("invoke does not give temporary hit points or apply rider effect (many prior temporary hit points)")
-    void invoke_doesNotGiveTemporaryHitPointsOrApplyRiderEffect_manyPriorTemporaryHitPoints() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("fails to replace larger temporary hit points or apply rider")
+    void failsToReplaceLargerTemporaryHitPointsOrApplyRider() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
         context.add(target);

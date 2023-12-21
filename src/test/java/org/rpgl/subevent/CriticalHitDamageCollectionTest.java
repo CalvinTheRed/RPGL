@@ -111,8 +111,8 @@ public class CriticalHitDamageCollectionTest {
     }
 
     @Test
-    @DisplayName("recognizes included damage type")
-    void recognizesIncludedDamageType() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         assertTrue(criticalHitDamageCollection.includesDamageType("fire"),
                 "should return true for present damage type"
         );

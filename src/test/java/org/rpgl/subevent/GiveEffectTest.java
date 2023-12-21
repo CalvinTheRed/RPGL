@@ -63,22 +63,19 @@ public class GiveEffectTest {
     }
 
     @Test
-    @DisplayName("invoke gives effect")
-    void invoke_givesEffect() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gives effect")
+    void givesEffect() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GiveEffect giveEffect = new GiveEffect();
         giveEffect.joinSubeventData(new JsonObject() {{
             this.putString("effect", "std:common/damage/immunity/fire");
         }});
         giveEffect.setSource(source);
-        giveEffect.prepare(context, List.of());
+        giveEffect.prepare(new DummyContext(), List.of());
         giveEffect.setTarget(target);
-        giveEffect.invoke(context, List.of());
+        giveEffect.invoke(new DummyContext(), List.of());
 
         List<RPGLEffect> effects = target.getEffectObjects();
         assertEquals(1, effects.size(),

@@ -65,8 +65,8 @@ public class HealingRollTest {
     }
 
     @Test
-    @DisplayName("getHealing returns correct healing dice and bonus")
-    void getHealing_returnsCorrectHealingDiceAndBonus() {
+    @DisplayName("returns healing")
+    void returnsHealing() {
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -100,8 +100,8 @@ public class HealingRollTest {
     }
 
     @Test
-    @DisplayName("maximizeHealing sets all healing dice to maximum value")
-    void maximizeHealing_setsAllHealingDiceToMaximumValue() {
+    @DisplayName("maximizes healing dice")
+    void maximizesHealingDice() {
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -142,8 +142,8 @@ public class HealingRollTest {
     }
 
     @Test
-    @DisplayName("setHealingDiceMatchingOrBelow correct healing dice are set to new value")
-    void setHealingDiceMatchingOrBelow_correctHealingDiceAreSetToNewValue() {
+    @DisplayName("sets low healing dice")
+    void setsLowHealingDice() {
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -198,8 +198,8 @@ public class HealingRollTest {
     }
 
     @Test
-    @DisplayName("rerollHealingDiceMatchingOrBelow correct healing dice are re-rolled")
-    void rerollHealingDiceMatchingOrBelow_correctHealingDiceAreRerolled() {
+    @DisplayName("re-rolls low healing dice")
+    void rerollsLowHealingDice() {
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -254,62 +254,9 @@ public class HealingRollTest {
     }
 
     @Test
-    @DisplayName("roll healing dice are rolled properly")
-    void roll_healingDiceAreRolledProperly() {
-        HealingRoll healingRoll = new HealingRoll();
-        healingRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "dice": [
-                            { "size": 6, "determined": [ 1 ] },
-                            { "size": 6, "determined": [ 2 ] },
-                            { "size": 6, "determined": [ 3 ] }
-                        ],
-                        "bonus": 2
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(1);
-                            }});
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(2);
-                            }});
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
-                            }});
-                        }});
-                    }});
-                    this.putInteger("bonus", 2);
-                }});
-            }});
-        }});
-
-        healingRoll.roll();
-
-        String expected = """
-                [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6}]}]""";
-        assertEquals(expected, healingRoll.getHealing().toString(),
-                "roll should set the roll field of all healing dice to determined values"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare healing dice are rolled")
-    void prepare_healingDiceAreRolled() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("prepares and rolls")
+    void preparesAndRolls() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(source);
 

@@ -78,7 +78,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
      * @param threshold the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
-    public void rerollTypedDiceMatchingOrBelow(int threshold, String damageType) {
+    public void rerollDamageDiceMatchingOrBelow(int threshold, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
@@ -102,7 +102,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
      * @param threshold the value a die must roll at or below to be changed by this method
      * @param damageType the damage type of dice to be changed by this method
      */
-    public void setTypedDiceMatchingOrBelow(int threshold, int set, String damageType) {
+    public void setDamageDiceMatchingOrBelow(int threshold, int set, String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);
@@ -124,7 +124,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
      *
      * @param damageType the damage type of dice to be changed by this method
      */
-    public void maximizeTypedDamageDice(String damageType) {
+    public void maximizeDamageDice(String damageType) {
         JsonArray typedDamageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < typedDamageArray.size(); i++) {
             JsonObject typedDamage = typedDamageArray.getJsonObject(i);

@@ -109,7 +109,7 @@ public class JsonObject {
             } else if (otherValue instanceof ArrayList otherList) {
                 Object thisValue = this.data.get(otherKey);
                 if (thisValue instanceof ArrayList thisList) {
-                    // union if a list if being joined to a list
+                    // union if a list is being joined to a list
                     for (Object element : otherList) {
                         if (!thisList.contains(element)) {
                             thisList.add(element);

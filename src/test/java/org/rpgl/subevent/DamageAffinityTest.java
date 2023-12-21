@@ -130,8 +130,8 @@ public class DamageAffinityTest {
     }
 
     @Test
-    @DisplayName("recognizes included damage type")
-    void recognizesIncludedDamageType() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.addDamageType("fire");
 

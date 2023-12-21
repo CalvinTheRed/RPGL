@@ -9,6 +9,7 @@ import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.core.RPGLResource;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
@@ -66,33 +67,34 @@ public class DestroyOriginItemTest {
     }
 
     @Test
-    @DisplayName("execute removes effect from object")
-    void execute_removesEffectFromObject() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(knight);
+    @DisplayName("destroys origin item")
+    void destroysOriginItem() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
+        object.addResource(action);
 
         RPGLItem potionOfHealing = RPGLFactory.newItem("std:potion/potion_of_healing");
-        knight.giveItem(potionOfHealing.getUuid());
-        knight.equipItem(potionOfHealing.getUuid(), "left_hand");
-        knight.equipItem(potionOfHealing.getUuid(), "right_hand");
+        object.giveItem(potionOfHealing.getUuid());
+        object.equipItem(potionOfHealing.getUuid(), "left_hand");
+        object.equipItem(potionOfHealing.getUuid(), "right_hand");
 
         String potionOfHealingUuid = potionOfHealing.getUuid();
 
-        knight.invokeEvent(
-                new RPGLObject[]{ knight },
-                TestUtils.getEventById(knight.getEventObjects(context), "std:item/potion/potion_of_healing/drink"),
-                knight.getResourcesWithTag("action"),
-                context
+        object.invokeEvent(
+                new RPGLObject[]{ object },
+                TestUtils.getEventById(object.getEventObjects(new DummyContext()), "std:item/potion/potion_of_healing/drink"),
+                object.getResourcesWithTag("action"),
+                new DummyContext()
         );
 
-        assertNull(knight.getEquippedItems().getString("left_hand"),
+        assertNull(object.getEquippedItems().getString("left_hand"),
                 "left_hand equipment slot should be empty once origin item is destroyed"
         );
-        assertNull(knight.getEquippedItems().getString("right_hand"),
+        assertNull(object.getEquippedItems().getString("right_hand"),
                 "left_hand equipment slot should be empty once origin item is destroyed"
         );
-        assertFalse(knight.getInventory().asList().contains(potionOfHealingUuid),
+        assertFalse(object.getInventory().asList().contains(potionOfHealingUuid),
                 "inventory should not contain origin item uuid once it is destroyed"
         );
         assertNull(UUIDTable.getItem(potionOfHealingUuid),
