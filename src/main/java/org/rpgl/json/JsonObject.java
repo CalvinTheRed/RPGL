@@ -1,13 +1,11 @@
 package org.rpgl.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This class represents a JSON object and provides several utility methods which make it easier to interface with that
@@ -17,9 +15,9 @@ import java.util.Objects;
  */
 public class JsonObject {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonObject.class);
-
     public static final ObjectMapper MAPPER = new ObjectMapper();
+
+    static final String INDENT = "  ";
 
     HashMap<String, Object> data;
 
@@ -566,15 +564,39 @@ public class JsonObject {
     }
 
     public String prettyPrint() {
-        try {
-            return JsonObject.MAPPER
-                    .writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(this.asMap())
-                    .replaceAll("\\r", "");
-        } catch (JsonProcessingException ex) {
-            LOGGER.error(ex.toString());
-            return "{}";
+        return this.prettyPrint(0);
+    }
+
+    String prettyPrint(int indent) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Optional<String> lastElement = this.data.keySet().stream().sorted().reduce((first, second) -> second);
+        if (lastElement.isEmpty()) {
+            stringBuilder.append("{ }");
+        } else {
+            stringBuilder.append("{\n");
+            this.data.keySet().stream().sorted().forEach(key -> {
+                Object value = this.data.get(key);
+                stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent + 1)))
+                        .append('"').append(key).append("\": ");
+                if (value instanceof HashMap) {
+                    stringBuilder.append(this.getJsonObject(key).prettyPrint(indent + 1));
+                } else if (value instanceof ArrayList) {
+                    stringBuilder.append(this.getJsonArray(key).prettyPrint(indent + 1));
+                } else if (value instanceof String string) {
+                    stringBuilder.append('"').append(string).append('"');
+                } else if (value == null) {
+                    stringBuilder.append("null");
+                } else {
+                    stringBuilder.append(value);
+                }
+                if (!Objects.equals(lastElement.get(), key)) {
+                    stringBuilder.append(',');
+                }
+                stringBuilder.append('\n');
+            });
+            stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent))).append('}');
         }
+        return stringBuilder.toString();
     }
 
     // =================================================================================================================

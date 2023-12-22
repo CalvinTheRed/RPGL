@@ -170,21 +170,17 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("refreshes resources (default priority)")
     void refreshesResources_defaultPriority() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
         spellSlot.exhaust();
         spellSlot.setPotency(1);
-        target.addResource(spellSlot);
+        object.addResource(spellSlot);
 
         RPGLResource pactSpellSlot = RPGLFactory.newResource("std:common/spell_slot/pact_magic/01");
         pactSpellSlot.exhaust();
         pactSpellSlot.setPotency(1);
-        target.addResource(pactSpellSlot);
+        object.addResource(pactSpellSlot);
 
         RefreshResource refreshResource = new RefreshResource();
         refreshResource.joinSubeventData(new JsonObject() {{
@@ -195,11 +191,10 @@ public class RefreshResourceTest {
             this.putString("resource_tag", "pact_spell_slot");
             this.putInteger("count", 2);
         }});
-        refreshResource.setSource(source);
-        refreshResource.prepare(context, List.of());
-        refreshResource.setTarget(target);
-
-        refreshResource.invoke(context, List.of());
+        refreshResource.setSource(object);
+        refreshResource.prepare(new DummyContext(), List.of());
+        refreshResource.setTarget(object);
+        refreshResource.invoke(new DummyContext(), List.of());
 
         assertTrue(spellSlot.getExhausted(),
                 "non-matching resource should be exhausted"

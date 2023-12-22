@@ -1,9 +1,5 @@
 package org.rpgl.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +12,6 @@ import java.util.Objects;
  * @author Calvin Withun
  */
 public class JsonArray {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonArray.class);
 
     ArrayList<Object> data;
 
@@ -269,15 +263,39 @@ public class JsonArray {
     }
 
     public String prettyPrint() {
-        try {
-            return JsonObject.MAPPER
-                    .writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(this.asList())
-                    .replaceAll("\\r", "");
-        } catch (JsonProcessingException ex) {
-            LOGGER.error(ex.toString());
-            return "[]";
+        return this.prettyPrint(0);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    String prettyPrint(int indent) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (this.data.isEmpty()) {
+            stringBuilder.append("[ ]");
+        } else {
+            stringBuilder.append("[\n");
+            for (int i = 0; i < this.data.size(); i++) {
+                stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent + 1)));
+                Object element = this.data.get(i);
+                if (element instanceof HashMap map) {
+                    stringBuilder.append(new JsonObject(map).prettyPrint(indent + 1));
+                } else if (element instanceof ArrayList list) {
+                    stringBuilder.append(new JsonArray(list).prettyPrint(indent + 1));
+                } else if (element instanceof String string) {
+                    stringBuilder.append('"').append(string).append('"');
+                } else if (element == null) {
+                    stringBuilder.append("null");
+                } else {
+                    stringBuilder.append(element);
+                }
+                if (i < this.data.size() - 1) {
+                    stringBuilder.append(',');
+                }
+                stringBuilder.append('\n');
+            }
+            stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent))).append(']');
         }
+        return stringBuilder.toString();
     }
 
     // =================================================================================================================

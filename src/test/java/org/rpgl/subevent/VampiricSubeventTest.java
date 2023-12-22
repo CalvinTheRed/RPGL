@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -47,21 +46,13 @@ public class VampiricSubeventTest {
     }
 
     @Test
-    @DisplayName("handleVampirism heals source for half damage (specific damage type)")
-    void handleVampirism_healsSourceForHalfDamage_specificDamageType() throws Exception {
+    @DisplayName("heals partial damage (specific damage type)")
+    void healsPartialDamage_specificDamageType() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         source.getHealthData().putInteger("current", 1);
         target.getHealthData().putInteger("current", 1);
-
-        JsonObject damageByType = new JsonObject() {{
-            this.putInteger("necrotic", 10);
-            this.putInteger("radiant", 10);
-        }};
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.joinSubeventData(new JsonObject() {{
@@ -83,7 +74,10 @@ public class VampiricSubeventTest {
         dummySubevent.setSource(source);
         dummySubevent.setTarget(target);
 
-        VampiricSubevent.handleVampirism(dummySubevent, damageByType, context, List.of());
+        VampiricSubevent.handleVampirism(dummySubevent, new JsonObject() {{
+            this.putInteger("necrotic", 10);
+            this.putInteger("radiant", 10);
+        }}, new DummyContext(), List.of());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half necrotic damage via vampirism"
@@ -94,13 +88,10 @@ public class VampiricSubeventTest {
     }
 
     @Test
-    @DisplayName("handleVampirism heals source for half damage (no specific damage type)")
-    void handleVampirism_healsSourceForHalfDamage_noSpecificDamageType() throws Exception {
+    @DisplayName("heals partial damage (all damage types)")
+    void healsPartialDamage_allDamageTypes() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         source.getHealthData().putInteger("current", 1);
         target.getHealthData().putInteger("current", 1);
@@ -128,7 +119,7 @@ public class VampiricSubeventTest {
         dummySubevent.setSource(source);
         dummySubevent.setTarget(target);
 
-        VampiricSubevent.handleVampirism(dummySubevent, damageByType, context, List.of());
+        VampiricSubevent.handleVampirism(dummySubevent, damageByType, new DummyContext(), List.of());
 
         assertEquals(11, source.getHealthData().getInteger("current"),
                 "source should be healed for half total damage via vampirism"

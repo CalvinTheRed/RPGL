@@ -68,8 +68,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke spawns correct object and adds to context and UUIDTable")
-    void invoke_spawnsCorrectObjectAndAddsToContextAndUUIDTable() throws Exception {
+    @DisplayName("spawns new object")
+    void spawnsNewObject() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
@@ -94,8 +94,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke defaults to source user id")
-    void invoke_defaultsToSourceUserId() throws Exception {
+    @DisplayName("defaults to source user id")
+    void defaultsToSourceUserId() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", "user-one");
         RPGLObject target = RPGLFactory.newObject("debug:dummy", "user-two");
         DummyContext context = new DummyContext();
@@ -115,8 +115,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke uses target user id")
-    void invoke_usesTargetUserId() throws Exception {
+    @DisplayName("uses target user id")
+    void usesTargetUserId() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", "user-one");
         RPGLObject target = RPGLFactory.newObject("debug:dummy", "user-two");
         DummyContext context = new DummyContext();
@@ -137,8 +137,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke adds extra effects")
-    void invoke_addsExtraEffects() throws Exception {
+    @DisplayName("adds extra effects")
+    void addsExtraEffects() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         RPGLItem originItem = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
@@ -194,8 +194,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke adds extra events")
-    void invoke_addsExtraEvents() throws Exception {
+    @DisplayName("adds extra events")
+    void addsExtraEvents() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
@@ -226,8 +226,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke adds extra tags")
-    void invoke_addsExtraTags() throws Exception {
+    @DisplayName("adds extra object tags")
+    void addsExtraObjectTags() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
@@ -253,8 +253,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke object receives correct bonuses")
-    void invoke_objectReceivesCorrectBonuses() throws Exception {
+    @DisplayName("applies bonuses to object")
+    void appliesBonusesToObject() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
@@ -279,8 +279,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke does not extend proficiency bonus by default")
-    void invoke_doesNotExtendProficiencyBonusByDefault() throws Exception {
+    @DisplayName("assigns object default proficiency bonus")
+    void assignsObjectDefaultProficiencyBonus() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
@@ -301,8 +301,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke extends proficiency bonus")
-    void invoke_extendsProficiencyBonus() throws Exception {
+    @DisplayName("extends origin object proficiency bonus")
+    void extendsOriginObjectProficiencyBonus() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
@@ -324,8 +324,8 @@ public class SpawnObjectTest {
     }
 
     @Test
-    @DisplayName("invoke sets origin object")
-    void invoke_setsOriginObject() throws Exception {
+    @DisplayName("sets origin object")
+    void setsOriginObject() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
@@ -340,97 +340,6 @@ public class SpawnObjectTest {
 
         assertEquals(summoner.getUuid(), context.getContextObjects().get(0).getOriginObject(),
                 "new object should have summoner as origin object"
-        );
-    }
-
-    @Test
-    @DisplayName("addSpawnObjectBonus adds bonuses")
-    void addSpawnObjectBonus_addsBonuses() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
-        spawnObject.addSpawnObjectBonus(new JsonObject() {{
-            /*{
-              "field": "health_data.temporary",
-              "bonus": 10
-            }*/
-            this.putString("field", "health_data.temporary");
-            this.putInteger("bonus", 10);
-        }});
-
-        String expected = """
-                [{"bonus":10,"field":"health_data.temporary"}]""";
-        assertEquals(expected, spawnObject.json.getJsonArray("object_bonuses").toString(),
-                "new object should have provided bonus"
-        );
-    }
-
-    @Test
-    @DisplayName("addSpawnObjectTags adds effect")
-    void addSpawnObjectEffect_addsEffect() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
-        spawnObject.addSpawnObjectEffect("std:common/damage/immunity/fire");
-
-        String expected = """
-                ["std:common/damage/immunity/fire"]""";
-        assertEquals(expected, spawnObject.json.getJsonArray("extra_effects").toString(),
-                "new object should have provided effect"
-        );
-    }
-
-    @Test
-    @DisplayName("addSpawnObjectEvent adds event")
-    void addSpawnObjectEvent_addsEvent() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
-        spawnObject.addSpawnObjectEvent("std:spell/fire_bolt");
-
-        String expected = """
-                ["std:spell/fire_bolt"]""";
-        assertEquals(expected, spawnObject.json.getJsonArray("extra_events").toString(),
-                "new object should have provided event"
-        );
-    }
-
-    @Test
-    @DisplayName("addSpawnObjectTags adds tags")
-    void addSpawnObjectTag_addsTag() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
-        spawnObject.addSpawnObjectTag("test-tag");
-
-        String expected = """
-                ["test-tag"]""";
-        assertEquals(expected, spawnObject.json.getJsonArray("extra_tags").toString(),
-                "new object should have provided tag"
         );
     }
 

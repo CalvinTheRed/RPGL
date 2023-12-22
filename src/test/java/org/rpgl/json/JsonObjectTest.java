@@ -1016,28 +1016,54 @@ public class JsonObjectTest {
     @DisplayName("pretty prints")
     void prettyPrints() {
         JsonObject json = new JsonObject() {{
-            this.putJsonObject("object", new JsonObject() {{
-                this.putString("key", "value");
+            /*{
+              "string_key": "string",
+              "integer_key": 10,
+              "double_key": 123.456,
+              "boolean_key": true,
+              "array_key": [ ],
+              "object_key": { },
+              "nested_object_key": {
+                "string_key": "string",
+                "integer_key": 10,
+                "double_key": 123.456,
+                "boolean_key": true,
+                "array_key": [ ],
+                "object_key": { }
+              }
+            }*/
+            this.putString("string_key", "string");
+            this.putInteger("integer_key", 10);
+            this.putDouble("double_key", 123.456);
+            this.putBoolean("boolean_key", true);
+            this.putJsonArray("array_key", new JsonArray());
+            this.putJsonObject("object_key", new JsonObject());
+            this.putJsonObject("nested_object_key", new JsonObject() {{
+                this.putString("string_key", "string");
+                this.putInteger("integer_key", 10);
+                this.putDouble("double_key", 123.456);
+                this.putBoolean("boolean_key", true);
+                this.putJsonArray("array_key", new JsonArray());
+                this.putJsonObject("object_key", new JsonObject());
             }});
-            this.putJsonArray("array", new JsonArray() {{
-                this.addString("element");
-            }});
-            this.putString("string", "value");
-            this.putInteger("integer", 10);
-            this.putDouble("double", 123.456);
-            this.putBoolean("boolean", false);
         }};
 
         String expected = """
                 {
-                  "boolean" : false,
-                  "string" : "value",
-                  "array" : [ "element" ],
-                  "double" : 123.456,
-                  "integer" : 10,
-                  "object" : {
-                    "key" : "value"
-                  }
+                  "array_key": [ ],
+                  "boolean_key": true,
+                  "double_key": 123.456,
+                  "integer_key": 10,
+                  "nested_object_key": {
+                    "array_key": [ ],
+                    "boolean_key": true,
+                    "double_key": 123.456,
+                    "integer_key": 10,
+                    "object_key": { },
+                    "string_key": "string"
+                  },
+                  "object_key": { },
+                  "string_key": "string"
                 }""";
 
         assertEquals(expected, json.prettyPrint(),
