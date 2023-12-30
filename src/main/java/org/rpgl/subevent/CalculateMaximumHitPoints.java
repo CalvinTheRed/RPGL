@@ -44,8 +44,7 @@ public class CalculateMaximumHitPoints extends Calculation {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        RPGLObject source = this.getSource();
-        int sourceConModifier = source.getAbilityModifierFromAbilityName("con", context);
+        RPGLObject source = super.getSource();
         super.setBase(source.getHealthData().getInteger("base"));
         new AddBonus().execute(null, this, new JsonObject() {{
                 /*{
@@ -63,7 +62,7 @@ public class CalculateMaximumHitPoints extends Calculation {
                 this.addJsonObject(new JsonObject() {{
                     this.putString("formula", "range");
                     this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", sourceConModifier * source.getLevel());
+                    this.putInteger("bonus", source.getAbilityModifierFromAbilityName("con", context) * source.getLevel());
                 }});
             }});
         }}, context, resources);

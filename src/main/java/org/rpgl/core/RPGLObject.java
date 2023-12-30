@@ -38,7 +38,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return a JsonObject containing the RPGLObject's ability scores
      */
     public JsonObject getAbilityScores() {
-        return this.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS);
+        return super.getJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS);
     }
 
     /**
@@ -47,7 +47,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param abilityScores a new ability scores JsonObject
      */
     public void setAbilityScores(JsonObject abilityScores) {
-        this.putJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS, abilityScores);
+        super.putJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS, abilityScores);
     }
 
     /**
@@ -57,7 +57,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return a JsonObject containing health data for the RPGLObject
      */
     public JsonObject getHealthData() {
-        return this.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS);
+        return super.getJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS);
     }
 
     /**
@@ -66,7 +66,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param healthData a new health data JsonObject
      */
     public void setHealthData(JsonObject healthData) {
-        this.putJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS, healthData);
+        super.putJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS, healthData);
     }
 
     /**
@@ -75,7 +75,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return a JsonObject containing RPGLItems and their equipment slots
      */
     public JsonObject getEquippedItems() {
-        return this.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        return super.getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
     }
 
     /**
@@ -84,7 +84,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param equippedItems a new equipped items JsonObject
      */
     public void setEquippedItems(JsonObject equippedItems) {
-        this.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItems);
+        super.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItems);
     }
 
     /**
@@ -93,7 +93,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return a JsonArray of RPGLItem UUIDs
      */
     public JsonArray getInventory() {
-        return this.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        return super.getJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
     }
 
     /**
@@ -102,7 +102,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param inventory a new inventory JsonArray
      */
     public void setInventory(JsonArray inventory) {
-        this.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventory);
+        super.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventory);
     }
 
     /**
@@ -111,7 +111,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return a JsonArray of RPGLEffect IDs
      */
     public JsonArray getEvents() {
-        return this.getJsonArray(RPGLObjectTO.EVENTS_ALIAS);
+        return super.getJsonArray(RPGLObjectTO.EVENTS_ALIAS);
     }
 
     /**
@@ -120,7 +120,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param events a new events JsonArray
      */
     public void setEvents(JsonArray events) {
-        this.putJsonArray(RPGLObjectTO.EVENTS_ALIAS, events);
+        super.putJsonArray(RPGLObjectTO.EVENTS_ALIAS, events);
     }
 
     /**
@@ -129,7 +129,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return a JsonArray of RPGLItem UUIDs
      */
     public JsonArray getEffects() {
-        return this.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
+        return super.getJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
     }
 
     /**
@@ -138,7 +138,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param effects a new effects JsonArray
      */
     public void setEffects(JsonArray effects) {
-        this.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effects);
+        super.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effects);
     }
 
     /**
@@ -147,7 +147,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return the RPGLObject's base proficiency bonus
      */
     public Integer getProficiencyBonus() {
-        return this.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS);
+        return super.getInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS);
     }
 
     /**
@@ -156,7 +156,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param proficiencyBonus a new proficiency bonus int
      */
     public void setProficiencyBonus(int proficiencyBonus) {
-        this.putInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        super.putInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
     }
 
     /**
@@ -165,7 +165,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return the RPGLObject's resources array
      */
     public JsonArray getResources() {
-        return this.getJsonArray(RPGLObjectTO.RESOURCES_ALIAS);
+        return super.getJsonArray(RPGLObjectTO.RESOURCES_ALIAS);
     }
 
     /**
@@ -174,7 +174,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param resources a new resources UUID array
      */
     public void setResources(JsonArray resources) {
-        this.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
+        super.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
     }
 
     /**
@@ -183,7 +183,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return an array of class and level data
      */
     public JsonArray getClasses() {
-        return this.getJsonArray(RPGLObjectTO.CLASSES_ALIAS);
+        return super.getJsonArray(RPGLObjectTO.CLASSES_ALIAS);
     }
 
     /**
@@ -192,7 +192,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param classes a new array of class and level data
      */
     public void setClasses(JsonArray classes) {
-        this.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, classes);
+        super.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, classes);
     }
 
     /**
@@ -201,7 +201,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return an array of race IDs
      */
     public JsonArray getRaces() {
-        return this.getJsonArray(RPGLObjectTO.RACES_ALIAS);
+        return super.getJsonArray(RPGLObjectTO.RACES_ALIAS);
     }
 
     /**
@@ -210,7 +210,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param races a new array of race IDs
      */
     public void setRaces(JsonArray races) {
-        this.putJsonArray(RPGLObjectTO.RACES_ALIAS, races);
+        super.putJsonArray(RPGLObjectTO.RACES_ALIAS, races);
     }
 
     /**
@@ -219,7 +219,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return the object's challenge rating
      */
     public Double getChallengeRating() {
-        return this.getDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS);
+        return super.getDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS);
     }
 
     /**
@@ -228,7 +228,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param challengeRating a new challenge rating
      */
     public void setChallengeRating(double challengeRating) {
-        this.putDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS, challengeRating);
+        super.putDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS, challengeRating);
     }
 
     /**
@@ -237,7 +237,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return a user id
      */
     public String getUserId() {
-        return this.getString(RPGLObjectTO.USER_ID);
+        return super.getString(RPGLObjectTO.USER_ID);
     }
 
     /**
@@ -246,7 +246,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param userId a new user id (this is the user id for the new user which will control this object)
      */
     public void setUserId(String userId) {
-        this.putString(RPGLObjectTO.USER_ID, userId);
+        super.putString(RPGLObjectTO.USER_ID, userId);
     }
 
     /**
@@ -255,7 +255,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return the object's origin object id
      */
     public String getOriginObject() {
-        return this.getString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS);
+        return super.getString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS);
     }
 
     /**
@@ -264,7 +264,7 @@ public class RPGLObject extends RPGLTaggable {
      * @param originObject a new origin object id
      */
     public void setOriginObject(String originObject) {
-        this.putString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS, originObject);
+        super.putString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS, originObject);
     }
 
     // =================================================================================================================
@@ -804,7 +804,7 @@ public class RPGLObject extends RPGLTaggable {
         ArrayList<String> tagsList = new ArrayList<>();
         JsonArray tags;
 
-        tags = this.getTags();
+        tags = super.getTags();
         for (int i = 0; i < tags.size(); i++) {
             tagsList.add(tags.getString(i));
         }

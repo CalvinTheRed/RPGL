@@ -42,13 +42,13 @@ public class CheckAbilityTest {
     @Test
     @DisplayName("evaluates true")
     void evaluatesTrue() throws Exception {
-        assertTrue(new CheckAbility().evaluate(null, new DummySubevent(), new JsonObject() {{
+        assertTrue(new CheckAbility().evaluate(null, new DummySubevent().setAbility("str"), new JsonObject() {{
             /*{
                 "condition": "check_ability",
                 "ability": "str"
             }*/
             this.putString("condition", "check_ability");
-            this.putString("ability", "str"); // <-- DummySubevent is a str AbilitySubevent
+            this.putString("ability", "str");
         }}, new DummyContext()),
                 "evaluate should return true when subevent uses indicated ability"
         );

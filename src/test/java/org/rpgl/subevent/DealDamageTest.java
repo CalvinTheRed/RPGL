@@ -67,59 +67,6 @@ public class DealDamageTest {
     }
 
     @Test
-    @DisplayName("delivers damage")
-    void deliversDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "tags": [ ],
-                "damage": [
-                    {
-                        "damage_type": "cold",
-                        "dice": [
-                            { "roll": 5 }
-                        ],
-                        "bonus": 5,
-                        "scale": {
-                            "numerator": 1,
-                            "denominator": 1,
-                            "round_up": false
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("tags", new JsonArray());
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 5);
-                        }});
-                    }});
-                    this.putInteger("bonus", 5);
-                    this.putJsonObject("scale", new JsonObject() {{
-                        this.putInteger("numerator", 1);
-                        this.putInteger("denominator", 1);
-                        this.putBoolean("round_up", false);
-                    }});
-                }});
-            }});
-        }});
-
-        dealDamage.setSource(source);
-        dealDamage.setTarget(target);
-        dealDamage.deliverDamage(new DummyContext(), List.of());
-
-        assertEquals(1000 /*base*/ -10 /*damage*/, target.getHealthData().getInteger("current"),
-                "10 damage should be delivered"
-        );
-    }
-
-    @Test
     @DisplayName("gets base damage")
     void getsBaseDamage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);

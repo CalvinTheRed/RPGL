@@ -27,7 +27,7 @@ public class RPGLResource extends RPGLTaggable {
      * @return a JsonObject containing the RPGLResource's potency
      */
     public Integer getPotency() {
-        return this.getInteger(RPGLResourceTO.POTENCY_ALIAS);
+        return super.getInteger(RPGLResourceTO.POTENCY_ALIAS);
     }
 
     /**
@@ -36,7 +36,7 @@ public class RPGLResource extends RPGLTaggable {
      * @param potency a new potency
      */
     public void setPotency(int potency) {
-        this.putInteger(RPGLResourceTO.POTENCY_ALIAS, potency);
+        super.putInteger(RPGLResourceTO.POTENCY_ALIAS, potency);
     }
 
     /**
@@ -45,7 +45,7 @@ public class RPGLResource extends RPGLTaggable {
      * @return a boolean representing the RPGLResource's exhaustion status
      */
     public Boolean getExhausted() {
-        return this.getBoolean(RPGLResourceTO.EXHAUSTED_ALIAS);
+        return super.getBoolean(RPGLResourceTO.EXHAUSTED_ALIAS);
     }
 
     /**
@@ -58,7 +58,7 @@ public class RPGLResource extends RPGLTaggable {
      * @param exhausted a new exhausted
      */
     public void setExhausted(boolean exhausted) {
-        this.putBoolean(RPGLResourceTO.EXHAUSTED_ALIAS, exhausted);
+        super.putBoolean(RPGLResourceTO.EXHAUSTED_ALIAS, exhausted);
     }
 
     /**
@@ -67,7 +67,7 @@ public class RPGLResource extends RPGLTaggable {
      * @return a JsonArray containing the RPGLResource's refresh criterion
      */
     public JsonArray getRefreshCriterion() {
-        return this.getJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS);
+        return super.getJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS);
     }
 
     /**
@@ -76,7 +76,7 @@ public class RPGLResource extends RPGLTaggable {
      * @param refreshCriterion a new refresh criterion
      */
     public void setRefreshCriterion(JsonArray refreshCriterion) {
-        this.putJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS, refreshCriterion);
+        super.putJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS, refreshCriterion);
     }
 
     /**
@@ -85,7 +85,7 @@ public class RPGLResource extends RPGLTaggable {
      * @return an RPGLItem UUID, or null if the resource was not provided by an item.
      */
     public String getOriginItem() {
-        return this.getString(RPGLEffectTO.ORIGIN_ITEM_ALIAS);
+        return super.getString(RPGLEffectTO.ORIGIN_ITEM_ALIAS);
     }
 
     /**
@@ -94,7 +94,7 @@ public class RPGLResource extends RPGLTaggable {
      * @param originItem a RPGLItem UUID
      */
     public void setOriginItem(String originItem) {
-        this.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
+        super.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
     }
 
     // =================================================================================================================

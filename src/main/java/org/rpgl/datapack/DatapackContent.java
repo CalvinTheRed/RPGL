@@ -16,7 +16,7 @@ public class DatapackContent extends JsonObject {
      * @return a JsonObject storing the DatapackContent's metadata
      */
     public JsonObject getMetadata() {
-        return this.getJsonObject(DatapackContentTO.METADATA_ALIAS);
+        return super.getJsonObject(DatapackContentTO.METADATA_ALIAS);
     }
 
     /**
@@ -25,7 +25,7 @@ public class DatapackContent extends JsonObject {
      * @param metadata a new metadata JsonObject
      */
     public void setMetadata(RPGLObject metadata) {
-        this.putJsonObject(DatapackContentTO.METADATA_ALIAS, metadata);
+        super.putJsonObject(DatapackContentTO.METADATA_ALIAS, metadata);
     }
 
     /**
@@ -34,7 +34,7 @@ public class DatapackContent extends JsonObject {
      * @return the name of the DatapackContent
      */
     public String getName() {
-        return this.getString(DatapackContentTO.NAME_ALIAS);
+        return super.getString(DatapackContentTO.NAME_ALIAS);
     }
 
     /**
@@ -43,7 +43,7 @@ public class DatapackContent extends JsonObject {
      * @param name a new name String
      */
     public void setName(String name) {
-        this.putString(DatapackContentTO.NAME_ALIAS, name);
+        super.putString(DatapackContentTO.NAME_ALIAS, name);
     }
 
     /**
@@ -52,7 +52,7 @@ public class DatapackContent extends JsonObject {
      * @return the description of the DatapackContent
      */
     public String getDescription() {
-        return this.getString(DatapackContentTO.DESCRIPTION_ALIAS);
+        return super.getString(DatapackContentTO.DESCRIPTION_ALIAS);
     }
 
     /**
@@ -61,7 +61,7 @@ public class DatapackContent extends JsonObject {
      * @param description a new description String
      */
     public void setDescription(String description) {
-        this.putString(DatapackContentTO.DESCRIPTION_ALIAS, description);
+        super.putString(DatapackContentTO.DESCRIPTION_ALIAS, description);
     }
 
     /**
@@ -70,7 +70,7 @@ public class DatapackContent extends JsonObject {
      * @return the ID of the DatapackContent
      */
     public String getId() {
-        return this.getString(DatapackContentTO.ID_ALIAS);
+        return super.getString(DatapackContentTO.ID_ALIAS);
     }
 
     /**
@@ -79,7 +79,7 @@ public class DatapackContent extends JsonObject {
      * @param id a new id String
      */
     public void setId(String id) {
-        this.putString(DatapackContentTO.ID_ALIAS, id);
+        super.putString(DatapackContentTO.ID_ALIAS, id);
     }
 
 }

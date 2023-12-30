@@ -646,7 +646,7 @@ public class AttackRollTest {
     }
     
     @Test
-    @DisplayName("critically miss")
+    @DisplayName("critically misses")
     void criticallyMisses() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);

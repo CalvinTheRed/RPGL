@@ -50,7 +50,7 @@ public class DestroyOriginItem extends Subevent {
         String originItemUuid = this.getOriginItem();
         RPGLItem originItem = UUIDTable.getItem(originItemUuid);
         if (originItem != null) {
-            RPGLObject source = this.getSource();
+            RPGLObject source = super.getSource();
             // remove origin item from equipped items
             List<String> originItemEquippedSlots = new ArrayList<>();
             JsonObject equippedItems = source.getEquippedItems();

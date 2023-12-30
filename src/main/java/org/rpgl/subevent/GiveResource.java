@@ -58,7 +58,7 @@ public class GiveResource extends Subevent {
             if (potency != null) {
                 resource.setPotency(potency);
             }
-            this.getTarget().addResource(resource);
+            super.getTarget().addResource(resource);
         }
     }
 

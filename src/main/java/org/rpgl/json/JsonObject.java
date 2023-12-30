@@ -563,10 +563,21 @@ public class JsonObject {
         }
     }
 
+    /**
+     * Generates an easy-to-read String representation of the object.
+     *
+     * @return a String
+     */
     public String prettyPrint() {
         return this.prettyPrint(0);
     }
 
+    /**
+     * This recursive helper method is what generates the return value for the public prettyPrint() method.
+     *
+     * @param indent how deeply indented this iteration of the method is.
+     * @return a String
+     */
     String prettyPrint(int indent) {
         StringBuilder stringBuilder = new StringBuilder();
         Optional<String> lastElement = this.data.keySet().stream().sorted().reduce((first, second) -> second);

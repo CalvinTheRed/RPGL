@@ -88,7 +88,7 @@ public class HealingDeliveryTest {
         }});
 
         assertEquals(5, healingDelivery.getHealing(),
-                "getHealing should return the healing being spuulied by the subevent"
+                "getHealing should return the healing being specified by the subevent"
         );
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
  * <br>
  * Source: an RPGLObject initiating an ability check
  * <br>
- * Target: an RPGLObject being required to make an ability check
+ * Target: same as source, or an RPGLObject against whom the ability check is being made if different
  *
  * @author Calvin Withun
  */

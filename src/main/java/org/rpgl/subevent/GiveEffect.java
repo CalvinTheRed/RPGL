@@ -50,11 +50,11 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     public void run(RPGLContext context, List<RPGLResource> resources) {
         if (this.isNotCanceled()) {
             RPGLEffect effect = RPGLFactory.newEffect(this.json.getString("effect"), this.getOriginItem(), resources);
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getTarget());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getTarget());
             effect.setOriginItem(this.getOriginItem());
             effect.addTag("temporary");
-            this.getTarget().addEffect(effect);
+            super.getTarget().addEffect(effect);
         }
     }
 

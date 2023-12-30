@@ -74,7 +74,7 @@ public class ExhaustResource extends Subevent {
         final int minimumPotency = this.json.getInteger("minimum_potency");
         final int maximumPotency = this.json.getInteger("maximum_potency");
 
-        this.getTarget().getResourceObjects().stream().sorted(Comparator.comparing(RPGLResource::getPotency)).forEach(resource -> {
+        super.getTarget().getResourceObjects().stream().sorted(Comparator.comparing(RPGLResource::getPotency)).forEach(resource -> {
             if (count[0] > 0
                     && !resource.getExhausted()
                     && Objects.equals(resourceId, resource.getId())
@@ -96,7 +96,7 @@ public class ExhaustResource extends Subevent {
         final int minimumPotency = this.json.getInteger("minimum_potency");
         final int maximumPotency = this.json.getInteger("maximum_potency");
 
-        this.getTarget().getResourceObjects().stream().sorted(Collections.reverseOrder(Comparator.comparing(RPGLResource::getPotency))).forEach(resource -> {
+        super.getTarget().getResourceObjects().stream().sorted(Collections.reverseOrder(Comparator.comparing(RPGLResource::getPotency))).forEach(resource -> {
             if (count[0] > 0
                     && !resource.getExhausted()
                     && Objects.equals(resourceId, resource.getId())
@@ -118,7 +118,7 @@ public class ExhaustResource extends Subevent {
         int minimumPotency = this.json.getInteger("minimum_potency");
         int maximumPotency = this.json.getInteger("maximum_potency");
 
-        List<RPGLResource> resources = this.getTarget().getResourceObjects();
+        List<RPGLResource> resources = super.getTarget().getResourceObjects();
         ArrayList<Integer> indices = new ArrayList<>();
         for (int i = 0; i < resources.size(); i++) {
             indices.add(i);

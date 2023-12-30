@@ -68,9 +68,9 @@ public class AbilityContest extends Subevent {
             this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.seekJsonArray("source_check.determined"));
         }});
-        abilityCheck.setSource(this.getSource());
+        abilityCheck.setSource(super.getSource());
         abilityCheck.prepare(context, resources);
-        abilityCheck.setTarget(this.getTarget());
+        abilityCheck.setTarget(super.getTarget());
         abilityCheck.invoke(context, resources);
         return abilityCheck.get();
     }
@@ -92,9 +92,9 @@ public class AbilityContest extends Subevent {
             this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.seekJsonArray("target_check.determined"));
         }});
-        abilityCheck.setSource(this.getTarget());
+        abilityCheck.setSource(super.getTarget());
         abilityCheck.prepare(context, resources);
-        abilityCheck.setTarget(this.getSource());
+        abilityCheck.setTarget(super.getSource());
         abilityCheck.invoke(context, resources);
         return abilityCheck.get();
     }
@@ -115,9 +115,9 @@ public class AbilityContest extends Subevent {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
-                subevent.setSource(this.getSource());
+                subevent.setSource(super.getSource());
                 subevent.prepare(context, resources);
-                subevent.setTarget(this.getTarget());
+                subevent.setTarget(super.getTarget());
                 subevent.invoke(context, resources);
             }
         }

@@ -88,9 +88,9 @@ public class Heal extends Subevent implements CancelableSubevent {
             }});
         }});
         baseHealingCollection.setOriginItem(this.getOriginItem());
-        baseHealingCollection.setSource(this.getSource());
+        baseHealingCollection.setSource(super.getSource());
         baseHealingCollection.prepare(context, resources);
-        baseHealingCollection.setTarget(this.getSource());
+        baseHealingCollection.setTarget(super.getSource());
         baseHealingCollection.invoke(context, resources);
 
         /*
@@ -105,9 +105,9 @@ public class Heal extends Subevent implements CancelableSubevent {
             }});
         }});
         baseHealingRoll.setOriginItem(this.getOriginItem());
-        baseHealingRoll.setSource(this.getSource());
+        baseHealingRoll.setSource(super.getSource());
         baseHealingRoll.prepare(context, resources);
-        baseHealingRoll.setTarget(this.getSource());
+        baseHealingRoll.setTarget(super.getSource());
         baseHealingRoll.invoke(context, resources);
 
         /*
@@ -128,9 +128,9 @@ public class Heal extends Subevent implements CancelableSubevent {
             }});
         }});
         targetHealingCollection.setOriginItem(this.getOriginItem());
-        targetHealingCollection.setSource(this.getSource());
+        targetHealingCollection.setSource(super.getSource());
         targetHealingCollection.prepare(context, resources);
-        targetHealingCollection.setTarget(this.getTarget());
+        targetHealingCollection.setTarget(super.getTarget());
         targetHealingCollection.invoke(context, resources);
 
         /*
@@ -145,9 +145,9 @@ public class Heal extends Subevent implements CancelableSubevent {
             }});
         }});
         targetHealingRoll.setOriginItem(this.getOriginItem());
-        targetHealingRoll.setSource(this.getSource());
+        targetHealingRoll.setSource(super.getSource());
         targetHealingRoll.prepare(context, resources);
-        targetHealingRoll.setTarget(this.getTarget());
+        targetHealingRoll.setTarget(super.getTarget());
         targetHealingRoll.invoke(context, resources);
 
         /*
@@ -171,11 +171,11 @@ public class Heal extends Subevent implements CancelableSubevent {
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         healingDelivery.setOriginItem(this.getOriginItem());
-        healingDelivery.setSource(this.getSource());
+        healingDelivery.setSource(super.getSource());
         healingDelivery.prepare(context, resources);
-        healingDelivery.setTarget(this.getTarget());
+        healingDelivery.setTarget(super.getTarget());
         healingDelivery.invoke(context, resources);
-        this.getTarget().receiveHealing(healingDelivery, context);
+        super.getTarget().receiveHealing(healingDelivery, context);
     }
 
 }

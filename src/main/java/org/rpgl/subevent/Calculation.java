@@ -303,8 +303,8 @@ public abstract class Calculation extends Subevent {
         this.setBase(0);
         if (baseJson != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             this.setBase(processSetJson(effect, this, baseJson, context));
         }
     }
@@ -322,8 +322,8 @@ public abstract class Calculation extends Subevent {
         this.json.putJsonArray("bonuses", new JsonArray());
         if (bonuses != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             for (int i = 0; i < bonuses.size(); i++) {
                 JsonObject bonus = bonuses.getJsonObject(i);
                 this.addBonus(Calculation.processBonusJson(effect, this, bonus, context));
@@ -344,8 +344,8 @@ public abstract class Calculation extends Subevent {
         this.setMinimum(Integer.MIN_VALUE);
         if (minimumJson != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             this.setMinimum(Calculation.processSetJson(effect, this, minimumJson, context));
         }
     }

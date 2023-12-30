@@ -262,10 +262,21 @@ public class JsonArray {
         return false;
     }
 
+    /**
+     * Generates an easy-to-read String representation of the object.
+     *
+     * @return a String
+     */
     public String prettyPrint() {
         return this.prettyPrint(0);
     }
 
+    /**
+     * This recursive helper method is what generates the return value for the public prettyPrint() method.
+     *
+     * @param indent how deeply indented this iteration of the method is.
+     * @return a String
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     String prettyPrint(int indent) {
         StringBuilder stringBuilder = new StringBuilder();

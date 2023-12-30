@@ -113,7 +113,7 @@ public class IsObjectsTurnTest {
                 this.putString("object", "source");
             }});
         }}, context),
-                "evaluate should return true when it is object's turn"
+                "evaluate should return false when it is not object's turn"
         );
     }
 

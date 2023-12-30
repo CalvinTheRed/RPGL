@@ -58,9 +58,9 @@ public class AbilitySave extends Subevent {
             this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.getJsonArray("determined"));
         }});
-        abilityCheck.setSource(this.getTarget());
+        abilityCheck.setSource(super.getTarget());
         abilityCheck.prepare(context, resources);
-        abilityCheck.setTarget(this.getSource());
+        abilityCheck.setTarget(super.getSource());
         abilityCheck.invoke(context, resources);
 
         if (abilityCheck.get() < this.json.getInteger("save_difficulty_class")) {
@@ -85,9 +85,9 @@ public class AbilitySave extends Subevent {
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
-        calculateSaveDifficultyClass.setSource(this.getSource());
+        calculateSaveDifficultyClass.setSource(super.getSource());
         calculateSaveDifficultyClass.prepare(context, resources);
-        calculateSaveDifficultyClass.setTarget(this.getSource());
+        calculateSaveDifficultyClass.setTarget(super.getSource());
         calculateSaveDifficultyClass.invoke(context, resources);
         this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
@@ -108,9 +108,9 @@ public class AbilitySave extends Subevent {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
-                subevent.setSource(this.getSource());
+                subevent.setSource(super.getSource());
                 subevent.prepare(context, resources);
-                subevent.setTarget(this.getTarget());
+                subevent.setTarget(super.getTarget());
                 subevent.invoke(context, resources);
             }
         }

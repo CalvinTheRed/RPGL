@@ -59,8 +59,8 @@ public class TemporaryHitPointCollection extends Subevent {
         this.json.putJsonArray("temporary_hit_points", new JsonArray());
         if (temporaryHitPointsArray != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
                 JsonObject temporaryHitPointsJson = temporaryHitPointsArray.getJsonObject(i);
                 this.addTemporaryHitPoints(Calculation.processBonusJson(effect, this, temporaryHitPointsJson, context));

@@ -123,7 +123,7 @@ public class AttackRoll extends Roll {
                 }
                 this.resolveDamage(context, resources);
                 this.resolveNestedSubevents("hit", context, resources);
-            } else if (this.isCriticalMiss() || this.get() < armorClass) {
+            } else if (this.isCriticalMiss() || super.get() < armorClass) {
                 this.resolveNestedSubevents("miss", context, resources);
             } else {
                 this.getBaseDamage(context, resources);
@@ -158,9 +158,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         baseDamageCollection.setOriginItem(this.getOriginItem());
-        baseDamageCollection.setSource(this.getSource());
+        baseDamageCollection.setSource(super.getSource());
         baseDamageCollection.prepare(context, resources);
-        baseDamageCollection.setTarget(this.getSource());
+        baseDamageCollection.setTarget(super.getSource());
         baseDamageCollection.invoke(context, resources);
 
         String damageType = this.json.getJsonArray("damage").getJsonObject(0).getString("damage_type");
@@ -247,9 +247,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         targetDamageCollection.setOriginItem(this.getOriginItem());
-        targetDamageCollection.setSource(this.getSource());
+        targetDamageCollection.setSource(super.getSource());
         targetDamageCollection.prepare(context, resources);
-        targetDamageCollection.setTarget(this.getTarget());
+        targetDamageCollection.setTarget(super.getTarget());
         targetDamageCollection.invoke(context, resources);
 
         // add target damage collection to base damage collection
@@ -276,9 +276,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         calculateEffectiveArmorClass.setOriginItem(this.getOriginItem());
-        calculateEffectiveArmorClass.setSource(this.getSource());
+        calculateEffectiveArmorClass.setSource(super.getSource());
         calculateEffectiveArmorClass.prepare(context, resources);
-        calculateEffectiveArmorClass.setTarget(this.getTarget());
+        calculateEffectiveArmorClass.setTarget(super.getTarget());
         calculateEffectiveArmorClass.invoke(context, resources);
         return calculateEffectiveArmorClass.get();
     }
@@ -300,9 +300,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         calculateCriticalHitThreshold.setOriginItem(this.getOriginItem());
-        calculateCriticalHitThreshold.setSource(this.getSource());
+        calculateCriticalHitThreshold.setSource(super.getSource());
         calculateCriticalHitThreshold.prepare(context, resources);
-        calculateCriticalHitThreshold.setTarget(this.getTarget());
+        calculateCriticalHitThreshold.setTarget(super.getTarget());
         calculateCriticalHitThreshold.invoke(context, resources);
 
         return this.getBase() >= calculateCriticalHitThreshold.get();
@@ -325,9 +325,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         criticalDamageConfirmation.setOriginItem(this.getOriginItem());
-        criticalDamageConfirmation.setSource(this.getSource());
+        criticalDamageConfirmation.setSource(super.getSource());
         criticalDamageConfirmation.prepare(context, resources);
-        criticalDamageConfirmation.setTarget(this.getTarget());
+        criticalDamageConfirmation.setTarget(super.getTarget());
         criticalDamageConfirmation.invoke(context, resources);
         return criticalDamageConfirmation.isNotCanceled();
     }
@@ -369,9 +369,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         criticalHitDamageCollection.setOriginItem(this.getOriginItem());
-        criticalHitDamageCollection.setSource(this.getSource());
+        criticalHitDamageCollection.setSource(super.getSource());
         criticalHitDamageCollection.prepare(context, resources);
-        criticalHitDamageCollection.setTarget(this.getTarget());
+        criticalHitDamageCollection.setTarget(super.getTarget());
         criticalHitDamageCollection.invoke(context, resources);
 
         // Set the attack damage to the critical hit damage collection
@@ -397,9 +397,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         damageRoll.setOriginItem(this.getOriginItem());
-        damageRoll.setSource(this.getSource());
+        damageRoll.setSource(super.getSource());
         damageRoll.prepare(context, resources);
-        damageRoll.setTarget(this.getTarget());
+        damageRoll.setTarget(super.getTarget());
         damageRoll.invoke(context, resources);
 
         // Store final damage by type to damage key
@@ -424,9 +424,9 @@ public class AttackRoll extends Roll {
             JsonObject nestedSubeventJson = subeventJsonArray.getJsonObject(i);
             Subevent subevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);
             subevent.setOriginItem(this.getOriginItem());
-            subevent.setSource(this.getSource());
+            subevent.setSource(super.getSource());
             subevent.prepare(context, resources);
-            subevent.setTarget(this.getTarget());
+            subevent.setTarget(super.getTarget());
             subevent.invoke(context, resources);
         }
     }
@@ -448,9 +448,9 @@ public class AttackRoll extends Roll {
             }});
         }});
         damageDelivery.setOriginItem(this.getOriginItem());
-        damageDelivery.setSource(this.getSource());
+        damageDelivery.setSource(super.getSource());
         damageDelivery.prepare(context, resources);
-        damageDelivery.setTarget(this.getTarget());
+        damageDelivery.setTarget(super.getTarget());
         damageDelivery.invoke(context, resources);
 
         JsonObject damageByType = damageDelivery.getTarget().receiveDamage(damageDelivery, context);

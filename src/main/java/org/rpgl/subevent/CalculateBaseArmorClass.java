@@ -50,7 +50,7 @@ public class CalculateBaseArmorClass extends Calculation {
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
         // Set base armor class from armor (or no armor)
-        String armorUuid = this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("armor");
+        String armorUuid = super.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("armor");
         int baseArmorClass;
         if (armorUuid == null) {
             // if equipment slot is empty, you are unarmored
@@ -87,11 +87,11 @@ public class CalculateBaseArmorClass extends Calculation {
         Integer dexterityBonusMaximum = armor.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS);
         if (dexterityBonusMaximum == null) {
             // no limit to dexterity bonus
-            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName("dex", context);
+            int dexterityBonus = super.getSource().getAbilityModifierFromAbilityName("dex", context);
             baseArmorClass += dexterityBonus;
         } else if (dexterityBonusMaximum > 0) {
             // non-zero, positive limit to dexterity bonus
-            int dexterityBonus = this.getSource().getAbilityModifierFromAbilityName("dex", context);
+            int dexterityBonus = super.getSource().getAbilityModifierFromAbilityName("dex", context);
             baseArmorClass += Math.min(dexterityBonus, dexterityBonusMaximum);
         }
 
@@ -107,7 +107,7 @@ public class CalculateBaseArmorClass extends Calculation {
      * @throws Exception if an exception occurs.
      */
     int prepareUnarmored(RPGLContext context) throws Exception {
-        return 10 + this.getSource().getAbilityModifierFromAbilityName("dex", context);
+        return 10 + super.getSource().getAbilityModifierFromAbilityName("dex", context);
     }
 
     /**
@@ -117,7 +117,7 @@ public class CalculateBaseArmorClass extends Calculation {
      */
     int getShieldBonus() {
         int shieldBonus = 0;
-        JsonObject equippedItems = this.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        JsonObject equippedItems = super.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
         for (Map.Entry<String, Object> equippedItemsEntry : equippedItems.asMap().entrySet()) {
             String equipmentSlot = equippedItemsEntry.getKey();
             String itemUuid = equippedItems.getString(equipmentSlot);
