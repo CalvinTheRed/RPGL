@@ -3,6 +3,7 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -43,13 +44,28 @@ public class CalculateMaximumHitPoints extends Calculation {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        RPGLObject source = this.getSource();
-        int sourceConModifier = source.getAbilityModifierFromAbilityName("con", context);
+        RPGLObject source = super.getSource();
         super.setBase(source.getHealthData().getInteger("base"));
-        super.addBonus(new JsonObject() {{
-            this.putInteger("bonus", sourceConModifier * source.getLevel());
-            this.putJsonArray("dice", new JsonArray());
-        }});
+        new AddBonus().execute(null, this, new JsonObject() {{
+                /*{
+                    "function": "add_bonus",
+                    "bonus": [
+                        {
+                            "formula": "range",
+                            "dice": [ ],
+                            "bonus": <con health contribution>
+                        }
+                    ]
+                }*/
+            this.putString("function", "add_bonus");
+            this.putJsonArray("bonus", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("formula", "range");
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putInteger("bonus", source.getAbilityModifierFromAbilityName("con", context) * source.getLevel());
+                }});
+            }});
+        }}, context, resources);
     }
 
 }

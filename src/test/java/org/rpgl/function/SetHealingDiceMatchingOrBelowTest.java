@@ -49,32 +49,23 @@ public class SetHealingDiceMatchingOrBelowTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new SetHealingDiceMatchingOrBelow();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new SetHealingDiceMatchingOrBelow().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute sets all dice at or below two to three")
-    void execute_setsAllDiceAtOrBelowTwoToThree() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("sets dice at or below value")
+    void setsAllDiceAtOrBelowValue() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
@@ -153,12 +144,10 @@ public class SetHealingDiceMatchingOrBelowTest {
                 }});
             }});
         }});
-        healingRoll.setSource(source);
-        healingRoll.prepare(context, List.of());
-        healingRoll.setTarget(target);
+        healingRoll.setSource(object);
+        healingRoll.prepare(new DummyContext(), List.of());
 
-        SetHealingDiceMatchingOrBelow setHealingDiceMatchingOrBelow = new SetHealingDiceMatchingOrBelow();
-        JsonObject functionJson = new JsonObject() {{
+        new SetHealingDiceMatchingOrBelow().execute(null, healingRoll, new JsonObject() {{
             /*{
                 "function": "set_healing_dice_matching_or_below",
                 "threshold": 2,
@@ -167,9 +156,7 @@ public class SetHealingDiceMatchingOrBelowTest {
             this.putString("function", "set_healing_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-        }};
-
-        setHealingDiceMatchingOrBelow.execute(null, healingRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":4,"size":6}]}]""";

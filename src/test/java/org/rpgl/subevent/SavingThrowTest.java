@@ -49,8 +49,8 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new SavingThrow();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -66,13 +66,9 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("deliverDamage delivers damage to target")
-    void deliverDamage_deliversDamageToTarget() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("delivers damage")
+    void deliversDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -110,77 +106,47 @@ public class SavingThrowTest {
             }});
         }});
 
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.deliverDamage("all", context, List.of());
+        savingThrow.setSource(object);
+        savingThrow.setTarget(object);
+        savingThrow.deliverDamage("all", new DummyContext(), List.of());
 
-        assertEquals(42, target.getHealthData().getInteger("current"),
+        assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
                 "target should take 10 cold damage (52-10=42)"
         );
     }
 
     @Test
-    @DisplayName("resolveNestedSubevents increments counter on pass (DummySubevent)")
-    void resolveNestedSubevents_incrementsCounterOnPass_dummySubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("resolves nested subevents")
+    void resolvesNestedSubevents() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "pass": [
-                    {
-                        "subevent": "dummy_subevent"
-                    }
-                ]
-            }*/
-            this.putJsonArray("pass", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
+        savingThrow.setSource(object);
+        savingThrow.setTarget(object);
+
+        // resolves nested subevents for passing
+
+        savingThrow.json.insertJsonArray("pass", new JsonArray() {{
+            this.addJsonObject(new JsonObject() {{
+                this.putString("subevent", "dummy_subevent");
             }});
         }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents("pass", context, List.of());
+        savingThrow.resolveNestedSubevents("pass", new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested pass subevent"
         );
-    }
 
-    @Test
-    @DisplayName("resolveNestedSubevents increments counter on fail (DummySubevent)")
-    void resolveNestedSubevents_incrementsCounterOnFail_dummySubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+        // resolves nested subevents for failing
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "fail": [
-                    {
-                        "subevent": "dummy_subevent"
-                    }
-                ]
-            }*/
-            this.putJsonArray("fail", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
+        DummySubevent.resetCounter();
+
+        savingThrow.json.insertJsonArray("fail", new JsonArray() {{
+            this.addJsonObject(new JsonObject() {{
+                this.putString("subevent", "dummy_subevent");
             }});
         }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.resolveNestedSubevents("fail", context, List.of());
+        savingThrow.resolveNestedSubevents("fail", new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested fail subevent"
@@ -188,37 +154,9 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("getTargetDamage returns empty object (default)")
-    void getTargetDamage_returnsEmptyObject_default() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("tags", new JsonArray());
-            this.putJsonArray("damage", new JsonArray());
-        }});
-
-        savingThrow.setSource(source);
-        savingThrow.setTarget(target);
-        savingThrow.getTargetDamage(context, List.of());
-
-        assertEquals("[]", savingThrow.json.getJsonArray("damage").toString(),
-                "target damage should be empty by default"
-        );
-    }
-
-    @Test
-    @DisplayName("getBaseDamage stores base damage value")
-    void getBaseDamage_storesBaseDamageValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gets base damage")
+    void getsBaseDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -254,8 +192,8 @@ public class SavingThrowTest {
             this.putJsonArray("tags", new JsonArray());
         }});
 
-        savingThrow.setSource(source);
-        savingThrow.getBaseDamage(context, List.of());
+        savingThrow.setSource(object);
+        savingThrow.getBaseDamage(new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -267,14 +205,10 @@ public class SavingThrowTest {
     @Test
     @DisplayName("calculateDifficultyClass calculates correctly")
     void calculateDifficultyClass_calculatesCorrectly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        source.getAbilityScores().putInteger("con", 20);
-        source.setProficiencyBonus(2);
+        object.getAbilityScores().putInteger("con", 20);
+        object.setProficiencyBonus(2);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -282,8 +216,8 @@ public class SavingThrowTest {
             this.putBoolean("use_origin_difficulty_class_ability", false);
         }});
 
-        savingThrow.setSource(source);
-        savingThrow.calculateDifficultyClass(context, List.of());
+        savingThrow.setSource(object);
+        savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
                 "save DC should calculate according to the formula DC = 8 + proficiency + modifier"
@@ -291,18 +225,14 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("calculateDifficultyClass uses origin difficulty class ability")
-    void calculateDifficultyClass_usesOriginDifficultyClassAbility() throws Exception {
+    @DisplayName("uses origin object ability for calculating difficulty class")
+    void usesOriginObjectForCalculatingDifficultyClass() throws Exception {
         RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         origin.getAbilityScores().putInteger("int", 20);
-        source.setOriginObject(origin.getUuid());
-        source.setProficiencyBonus(2);
+        object.setOriginObject(origin.getUuid());
+        object.setProficiencyBonus(2);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -310,8 +240,8 @@ public class SavingThrowTest {
             this.putBoolean("use_origin_difficulty_class_ability", true);
         }});
 
-        savingThrow.setSource(source);
-        savingThrow.calculateDifficultyClass(context, List.of());
+        savingThrow.setSource(object);
+        savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
                 "save DC should calculate using origin object's ability scores"
@@ -319,16 +249,12 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("prepare calculates save DC and stores base damage")
-    void prepare_calculatesSaveDifficultyClassAndStoresBaseDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("prepares save DC and base damage")
+    void preparesSaveDCAndBaseDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        source.getAbilityScores().putInteger("int", 20);
-        source.setProficiencyBonus(2);
+        object.getAbilityScores().putInteger("int", 20);
+        object.setProficiencyBonus(2);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -364,8 +290,8 @@ public class SavingThrowTest {
             }});
         }});
 
-        savingThrow.setSource(source);
-        savingThrow.prepare(context, List.of());
+        savingThrow.setSource(object);
+        savingThrow.prepare(new DummyContext(), List.of());
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
                 "save DC was calculated incorrectly"
@@ -378,13 +304,9 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("invoke deals proper damage on fail")
-    void invoke_dealsProperDamageOnFail() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("deals full damage on fail")
+    void dealsFullDamageOnFail() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -428,24 +350,20 @@ public class SavingThrowTest {
             }});
         }});
 
-        savingThrow.setSource(source);
-        savingThrow.prepare(context, List.of());
-        savingThrow.setTarget(target);
-        savingThrow.invoke(context, List.of());
+        savingThrow.setSource(object);
+        savingThrow.prepare(new DummyContext(), List.of());
+        savingThrow.setTarget(object);
+        savingThrow.invoke(new DummyContext(), List.of());
 
-        assertEquals(42, target.getHealthData().getInteger("current"),
-                "invoke should deal full damage on a fail (52-10=42)"
+        assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
+                "invoke should deal full damage on a fail"
         );
     }
 
     @Test
-    @DisplayName("invoke deals half damage on pass")
-    void invoke_dealsHalfDamageOnPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("deals half damage on pass")
+    void dealsHalfDamageOnPass() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         SavingThrow savingThrow = new SavingThrow();
         savingThrow.joinSubeventData(new JsonObject() {{
@@ -488,24 +406,77 @@ public class SavingThrowTest {
                 this.addInteger(20);
             }});
         }});
-        savingThrow.setSource(source);
-        savingThrow.prepare(context, List.of());
-        savingThrow.setTarget(target);
-        savingThrow.invoke(context, List.of());
+        savingThrow.setSource(object);
+        savingThrow.prepare(new DummyContext(), List.of());
+        savingThrow.setTarget(object);
+        savingThrow.invoke(new DummyContext(), List.of());
 
-        assertEquals(47, target.getHealthData().getInteger("current"),
-                "invoke should deal full damage on a fail (52-5=47)"
+        assertEquals(1000 /*base*/ -5 /*damage*/, object.getHealthData().getInteger("current"),
+                "invoke should deal half damage on a pass"
         );
     }
 
     @Test
-    @DisplayName("invoke accommodates vampirism")
-    void invoke_accommodatesVampirism() throws Exception {
+    @DisplayName("deals no damage on pass")
+    void dealsNoDamageOnPass() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        SavingThrow savingThrow = new SavingThrow();
+        savingThrow.joinSubeventData(new JsonObject() {{
+            /*{
+                "difficulty_class_ability": "con",
+                "save_ability": "dex",
+                "damage": [
+                    {
+                        "formula": "range",
+                        "damage_type": "cold",
+                        "dice": [
+                        { "count": 2, "size": 10, "determined": [ 5 ] }
+                        ],
+                        "bonus": 0
+                    }
+                ],
+                "damage_on_pass": "none",
+                "determined": [ 20 ]
+            }*/
+            this.putString("difficulty_class_ability", "con");
+            this.putString("save_ability", "dex");
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("formula", "range");
+                    this.putString("damage_type", "cold");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("count", 2);
+                            this.putInteger("size", 10);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(5);
+                            }});
+                        }});
+                    }});
+                    this.putInteger("bonus", 0);
+                }});
+            }});
+            this.putString("damage_on_pass", "none");
+            this.putJsonArray("determined", new JsonArray() {{
+                this.addInteger(20);
+            }});
+        }});
+        savingThrow.setSource(object);
+        savingThrow.prepare(new DummyContext(), List.of());
+        savingThrow.setTarget(object);
+        savingThrow.invoke(new DummyContext(), List.of());
+
+        assertEquals(1000, object.getHealthData().getInteger("current"),
+                "invoke should deal no damage on a pass"
+        );
+    }
+
+    @Test
+    @DisplayName("deals vampiric damage")
+    void dealsVampiricDamage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         source.getHealthData().putInteger("current", 1);
         target.getHealthData().putInteger("current", 11);
@@ -564,9 +535,9 @@ public class SavingThrowTest {
             }});
         }});
         savingThrow.setSource(source);
-        savingThrow.prepare(context, List.of());
+        savingThrow.prepare(new DummyContext(), List.of());
         savingThrow.setTarget(target);
-        savingThrow.invoke(context, List.of());
+        savingThrow.invoke(new DummyContext(), List.of());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"

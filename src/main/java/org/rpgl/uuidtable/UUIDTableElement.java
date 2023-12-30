@@ -16,7 +16,7 @@ public class UUIDTableElement extends DatapackContent {
      * @return the UUID of this object
      */
     public String getUuid() {
-        return this.getString(UUIDTableElementTO.UUID_ALIAS);
+        return super.getString(UUIDTableElementTO.UUID_ALIAS);
     }
 
 
@@ -26,14 +26,14 @@ public class UUIDTableElement extends DatapackContent {
      * @param uuid the UUID to be assigned to this object
      */
     public void setUuid(String uuid) {
-        this.putString(UUIDTableElementTO.UUID_ALIAS, uuid);
+        super.putString(UUIDTableElementTO.UUID_ALIAS, uuid);
     }
 
     /**
      * Deletes the key-value pair storing this object's UUID.
      */
     public void deleteUuid() {
-        this.asMap().remove(UUIDTableElementTO.UUID_ALIAS);
+        super.asMap().remove(UUIDTableElementTO.UUID_ALIAS);
     }
 
 }

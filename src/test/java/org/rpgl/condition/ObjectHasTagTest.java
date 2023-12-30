@@ -48,41 +48,29 @@ public class ObjectHasTagTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new ObjectHasTag();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new ObjectHasTag().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true when object has desired tag")
-    void evaluate_returnsTrueWhenObjectHasDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates true")
+    void evaluatesTrue() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.addTag("test_tag");
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectHasTag objectHasTag = new ObjectHasTag();
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectHasTag().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_has_tag",
                 "object": {
@@ -97,47 +85,35 @@ public class ObjectHasTagTest {
                 this.putString("object", "source");
             }});
             this.putString("tag", "test_tag");
-        }};
-
-        assertTrue(objectHasTag.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return true when object has desired tag"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false when object does not have desired tag")
-    void evaluate_returnsFalseWhenObjectDoesNotHaveDesiredTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        source.addTag("test_tag");
+    @DisplayName("evaluates false")
+    void evaluatesFalse() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectHasTag objectHasTag = new ObjectHasTag();
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new ObjectHasTag().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_has_tag",
                 "object": {
                     "from": "subevent",
                     "object": "source"
                 },
-                "tag": "wrong_tag"
+                "tag": "missing_tag"
             }*/
             this.putString("condition", "object_has_tag");
             this.putJsonObject("object", new JsonObject() {{
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-            this.putString("tag", "wrong_tag");
-        }};
-
-        assertFalse(objectHasTag.evaluate(null, dummySubevent, conditionJson, context),
+            this.putString("tag", "missing_tag");
+        }}, new DummyContext()),
                 "evaluate should return false when object does not have desired tag"
         );
     }

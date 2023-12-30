@@ -49,33 +49,27 @@ public class AddSpawnObjectBonusTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddSpawnObjectBonus();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddSpawnObjectBonus().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds spawn object bonus correctly")
-    void execute_addsEventCorrectly() throws Exception {
+    @DisplayName("adds bonus to spawned object")
+    void addsBonusToSpawnedObject() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(new DummyContext(), List.of());
 
         new AddSpawnObjectBonus().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -102,7 +96,7 @@ public class AddSpawnObjectBonusTest {
                     this.putInteger("bonus", 10);
                 }});
             }});
-        }}, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":10,"field":"health_data.base"},{"bonus":10,"field":"health_data.current"}]""";
@@ -110,4 +104,5 @@ public class AddSpawnObjectBonusTest {
                 "execute should add the correct object bonuses to the object's spawning instructions"
         );
     }
+
 }

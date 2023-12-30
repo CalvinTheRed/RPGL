@@ -56,32 +56,23 @@ public class MaximizeHealingTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new MaximizeHealing();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new MaximizeHealing().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute maximizes healing for HealingRoll subevents")
-    void execute_maximizesHealingForHealingRollSubevents() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("maximizes healing (healing roll)")
+    void maximizesHealing_healingRoll() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
@@ -117,19 +108,15 @@ public class MaximizeHealingTest {
             }});
         }});
 
-        healingRoll.setSource(source);
-        healingRoll.prepare(context, List.of());
-        healingRoll.setTarget(target);
+        healingRoll.setSource(object);
+        healingRoll.prepare(new DummyContext(), List.of());
 
-        MaximizeHealing maximizeHealing = new MaximizeHealing();
-        JsonObject functionJson = new JsonObject() {{
+        new MaximizeHealing().execute(null, healingRoll, new JsonObject() {{
             /*{
                 "function": "maximize_healing"
             }*/
             this.putString("function", "maximize_healing");
-        }};
-
-        maximizeHealing.execute(null, healingRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
@@ -139,13 +126,9 @@ public class MaximizeHealingTest {
     }
 
     @Test
-    @DisplayName("execute maximizes healing for HealingDelivery subevents")
-    void execute_maximizesHealingForHealingDeliverySubevents() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("maximizes healing (healing delivery)")
+    void maximizesHealing_healingDelivery() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
@@ -182,19 +165,15 @@ public class MaximizeHealingTest {
             }});
         }});
 
-        healingDelivery.setSource(source);
-        healingDelivery.prepare(context, List.of());
-        healingDelivery.setTarget(target);
+        healingDelivery.setSource(object);
+        healingDelivery.prepare(new DummyContext(), List.of());
 
-        MaximizeHealing maximizeHealing = new MaximizeHealing();
-        JsonObject functionJson = new JsonObject() {{
+        new MaximizeHealing().execute(null, healingDelivery, new JsonObject() {{
             /*{
                 "function": "maximize_healing"
             }*/
             this.putString("function", "maximize_healing");
-        }};
-
-        maximizeHealing.execute(null, healingDelivery, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         assertEquals(4+6+8, healingDelivery.getHealing(),
                 "execute should set all healing dice to their maximum face value"

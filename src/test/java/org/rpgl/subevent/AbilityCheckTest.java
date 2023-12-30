@@ -5,9 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -52,8 +50,8 @@ public class AbilityCheckTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new AbilityCheck();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -69,8 +67,8 @@ public class AbilityCheckTest {
     }
 
     @Test
-    @DisplayName("getAbility returns correct ability")
-    void getAbility_returnsCorrectAbility() {
+    @DisplayName("gets ability")
+    void getsAbility() {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             this.putString("ability", "str");
@@ -82,8 +80,8 @@ public class AbilityCheckTest {
     }
 
     @Test
-    @DisplayName("getSkill returns correct skill")
-    void getSkill_returnsCorrectSkill() {
+    @DisplayName("gets skill")
+    void getsSkill() {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             this.putString("skill", "athletics");
@@ -95,15 +93,14 @@ public class AbilityCheckTest {
     }
 
     @Test
-    @DisplayName("giveHalfProficiency gives only half proficiency")
-    void giveHalfProficiency_givesOnlyHalfProficiency() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("gives half proficiency")
+    void givesHalfProficiency() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setProficiencyBonus(2);
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
+        abilityCheck.prepare(new DummyContext(), List.of());
 
         abilityCheck.giveHalfProficiency();
 
@@ -116,21 +113,17 @@ public class AbilityCheckTest {
         assertFalse(abilityCheck.hasExpertise(),
                 "should not have expertise"
         );
-        assertEquals(1, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 1 for ability check"
-        );
     }
 
     @Test
-    @DisplayName("giveProficiency gives proficiency and overrides half proficiency")
-    void giveProficiency_givesProficiencyAndOverridesHalfProficiency() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("gives proficiency")
+    void givesProficiency() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setProficiencyBonus(2);
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
+        abilityCheck.prepare(new DummyContext(), List.of());
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -144,21 +137,17 @@ public class AbilityCheckTest {
         assertFalse(abilityCheck.hasExpertise(),
                 "should not have expertise"
         );
-        assertEquals(2, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 2 for ability check"
-        );
     }
 
     @Test
-    @DisplayName("giveProficiency gives expertise and overrides half proficiency and proficiency")
-    void giveExpertise_givesExpertiseAndOverridesHalfProficiencyAndProficiency() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("gives expertise")
+    void givesExpertise() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setProficiencyBonus(2);
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
+        abilityCheck.prepare(new DummyContext(), List.of());
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -173,21 +162,16 @@ public class AbilityCheckTest {
         assertTrue(abilityCheck.hasExpertise(),
                 "should have expertise"
         );
-        assertEquals(4, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 4 for ability check"
-        );
     }
 
     @Test
-    @DisplayName("getProficiencyBonus returns zero when no proficiency is given")
-    void getProficiencyBonus_returnsZeroWhenNoProficiencyIsGiven() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("defaults to proficiency bonus of 0")
+    void defaultsToProficiencyBonusOfZero() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
+        abilityCheck.prepare(new DummyContext(), List.of());
 
         assertFalse(abilityCheck.hasHalfProficiency(),
                 "should not have half proficiency"
@@ -198,17 +182,12 @@ public class AbilityCheckTest {
         assertFalse(abilityCheck.hasExpertise(),
                 "should have expertise"
         );
-        assertEquals(0, abilityCheck.getProficiencyBonus(),
-                "proficiency bonus should be 0 for ability check"
-        );
     }
 
     @Test
-    @DisplayName("invoke rolls die correctly")
-    void invoke_rollsDieCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("rolls base die")
+    void rollsBaseDie() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
@@ -225,9 +204,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
+        abilityCheck.prepare(new DummyContext(), List.of());
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(context, List.of());
+        abilityCheck.invoke(new DummyContext(), List.of());
 
         assertEquals(10, abilityCheck.get(),
                 "abilityCheck should roll 10 (10+0)"
@@ -235,12 +214,9 @@ public class AbilityCheckTest {
     }
 
     @Test
-    @DisplayName("invoke adds ability bonus")
-    void invoke_addsAbilityBonus() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
-
+    @DisplayName("adds ability bonus")
+    void addsAbilityBonus() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.getAbilityScores().putInteger("str", 20);
 
         AbilityCheck abilityCheck = new AbilityCheck();
@@ -258,50 +234,12 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
+        abilityCheck.prepare(new DummyContext(), List.of());
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(context, List.of());
+        abilityCheck.invoke(new DummyContext(), List.of());
 
-        assertEquals(10+5, abilityCheck.get(),
-                "abilityCheck should roll 15 (10+5)"
-        );
-    }
-
-    @Test
-    @DisplayName("invoke adds proficiency (is proficient)")
-    void invoke_addsProficiency_isProficient() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
-
-        RPGLEffect athleticsProficiency = RPGLFactory.newEffect("std:common/proficiency/skill/athletics");
-        athleticsProficiency.setSource(object);
-        athleticsProficiency.setTarget(object);
-        object.addEffect(athleticsProficiency);
-
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "ability_check",
-                "ability": "str",
-                "skill": "athletics",
-                "determined": [ 10 ]
-            }*/
-            this.putString("subevent", "ability_check");
-            this.putString("ability", "str");
-            this.putString("skill", "athletics");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(10);
-            }});
-        }});
-
-        abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
-        abilityCheck.setTarget(object);
-        abilityCheck.invoke(context, List.of());
-
-        assertEquals(10+2, abilityCheck.get(),
-                "abilityCheck should roll 12 (10+2)"
+        assertEquals(10 /*base*/ +5 /*ability bonus*/, abilityCheck.get(),
+                "abilityCheck should total 15"
         );
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * This Function is dedicated to assigning the minimum field of Calculation Subevents.
- * TODO this is insufficient to support features such as Reliable Talent or Silver Tongue
+ * TODO this is insufficient to support features such as Reliable Talent or Silver Tongue because they require a minimum base
  *
  * @author Calvin Withun
  */

@@ -45,8 +45,8 @@ public class GetObjectTagsTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new GetObjectTags();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -62,15 +62,13 @@ public class GetObjectTagsTest {
     }
 
     @Test
-    @DisplayName("getTags is empty by default")
-    void getTags_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("defaults to empty list")
+    void defaultsToEmptyList() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(context, List.of());
+        getObjectTags.prepare(new DummyContext(), List.of());
 
         assertEquals("[]", getObjectTags.getObjectTags().toString(),
                 "getTags should return an empty array by default"
@@ -78,15 +76,13 @@ public class GetObjectTagsTest {
     }
 
     @Test
-    @DisplayName("getTags returns all granted tags")
-    void getTags_returnsAllGrantedTags() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("returns tags")
+    void returnsTags() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(context, List.of());
+        getObjectTags.prepare(new DummyContext(), List.of());
 
         getObjectTags.addObjectTag("test_tag_1");
         getObjectTags.addObjectTag("test_tag_2");

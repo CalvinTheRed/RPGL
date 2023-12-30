@@ -48,8 +48,8 @@ public class TemporaryHitPointCollectionTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new TemporaryHitPointCollection();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -65,8 +65,8 @@ public class TemporaryHitPointCollectionTest {
     }
 
     @Test
-    @DisplayName("getTemporaryHitPointCollection returns object storing bonus and dice")
-    void getTemporaryHitPointCollection_returnsObjectStoringBonusAndDice(){
+    @DisplayName("returns temporary hit points")
+    void returnsTemporaryHitPoints(){
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
         temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
@@ -103,8 +103,8 @@ public class TemporaryHitPointCollectionTest {
     }
 
     @Test
-    @DisplayName("addTemporaryHitPoints extra temporary hit points are added properly")
-    void addTemporaryHitPoints_extraTemporaryHitPointsAreAddedProperly() {
+    @DisplayName("adds temporary hit points")
+    void addsTemporaryHitPoints() {
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
         temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
             /*{
@@ -155,15 +155,13 @@ public class TemporaryHitPointCollectionTest {
     }
 
     @Test
-    @DisplayName("prepare sets default values")
-    void prepare_setsDefaultValues() throws Exception {
+    @DisplayName("defaults to empty array")
+    void defaultsToEmptyArray() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
         temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepare(context, List.of());
+        temporaryHitPointCollection.prepare(new DummyContext(), List.of());
 
         String expected = """
                 []""";
@@ -173,11 +171,9 @@ public class TemporaryHitPointCollectionTest {
     }
 
     @Test
-    @DisplayName("prepareTemporaryHitPoints interprets temporary hit points")
+    @DisplayName("interprets temporary hit point formulae")
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
         temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
@@ -200,7 +196,7 @@ public class TemporaryHitPointCollectionTest {
         }});
 
         temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepareTemporaryHitPoints(context);
+        temporaryHitPointCollection.prepareTemporaryHitPoints(new DummyContext());
 
         String expected = """
                 [{"bonus":10,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

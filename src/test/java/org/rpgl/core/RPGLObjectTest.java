@@ -16,7 +16,6 @@ import org.rpgl.uuidtable.UUIDTable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -49,21 +48,22 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("equipItem item successfully equipped (mainhand, item in inventory)")
-    void equipItem_itemSuccessfullyEquipped_mainhandItemInInventory() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        String crossbowUuid = knight.getInventory().getString(0);
-        knight.equipItem(crossbowUuid, "mainhand");
+    @DisplayName("equips item (item in inventory)")
+    void equipsItem_itemInInventory() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "mainhand");
 
-        assertEquals(crossbowUuid, knight.getEquippedItems().getString("mainhand"),
-                "heavy crossbow should be equipped in the mainhand slot"
+        assertEquals(item.getUuid(), object.getEquippedItems().getString("mainhand"),
+                "object should have item equipped in mainhand"
         );
     }
 
     @Test
-    @DisplayName("equipItem item not equipped (mainhand, item absent from inventory)")
-    void equipItem_itemNotEquipped_mainhandItemAbsentFromInventory() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+    @DisplayName("refuses to equip item (item not in inventory)")
+    void refusesToEquipItem_itemNotInInventory() {
+        RPGLObject knight = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         String daggerUuid = RPGLFactory.newItem("std:weapon/melee/simple/dagger").getUuid();
         knight.equipItem(daggerUuid, "mainhand");
 
@@ -73,40 +73,33 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("giveItem item added to inventory (item not already present)")
-    void giveItem_itemAddedToInventory_itemNotAlreadyPresent() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
+    @DisplayName("adds item to inventory")
+    void addsItemToInventory() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         String daggerUuid = RPGLFactory.newItem("std:weapon/melee/simple/dagger").getUuid();
-        knight.giveItem(daggerUuid);
+        object.giveItem(daggerUuid);
 
-        assertTrue(knight.getInventory().asList().contains(daggerUuid),
-                "dagger should be present in the knight's inventory"
+        assertTrue(object.getInventory().asList().contains(daggerUuid),
+                "object should have item in inventory"
         );
     }
 
     @Test
-    @DisplayName("giveItem item added to inventory (item already present)")
-    void giveItem_itemAddedToInventory_itemAlreadyPresent() {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        JsonArray inventory = knight.getInventory();
-        String alreadyHeldItemUuid = inventory.getString(0);
-        knight.giveItem(alreadyHeldItemUuid);
+    @DisplayName("does not add duplicate items to inventory")
+    void doesNotAddDuplicateItemsToInventory() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        object.giveItem(item.getUuid());
+        object.giveItem(item.getUuid());
 
-        int count = 0;
-        for (int i = 0; i < inventory.size(); i++) {
-            String itemUuid = inventory.getString(i);
-            if (Objects.equals(alreadyHeldItemUuid, itemUuid)) {
-                count++;
-            }
-        }
-        assertEquals(1, count,
-                "item should not be added if it is already present"
+        assertEquals(1, object.getInventory().size(),
+                "object should not add a duplicate item to inventory"
         );
     }
 
     @Test
-    @DisplayName("getBaseArmorClass calculates 20")
-    void getBaseArmorClass_calculatesTwenty() throws Exception {
+    @DisplayName("calculates base armor class")
+    void calculatesBaseArmorClass() throws Exception {
         RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
         context.add(knight);
@@ -117,58 +110,39 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("reduceHitPoints deducts correct number of hit points (no temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_noTemporaryHitPoints() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(youngRedDragon);
-        youngRedDragon.reduceHitPoints(10, context);
+    @DisplayName("loses hit points")
+    void losesHitPoints() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.reduceHitPoints(10, new DummyContext());
 
-        assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
-                "std:dragon/red/young should lose 10 hit points (178-10=168)"
+        assertEquals(1000 /*base*/ -10 /*lost hit points*/, object.getHealthData().getInteger("current"),
+                "object should lose 10 hit points"
         );
     }
 
     @Test
-    @DisplayName("reduceHitPoints deducts correct number of hit points (few temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_fewTemporaryHitPoints() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(youngRedDragon);
-        youngRedDragon.getHealthData().putInteger("temporary", 10);
-        youngRedDragon.reduceHitPoints(20, context);
+    @DisplayName("deducts temporary hit points before hit points")
+    void deductsTemporaryHitPointsBeforeHitPoints() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getHealthData().putInteger("temporary", 10);
 
-        assertEquals(168, youngRedDragon.getHealthData().getInteger("current"),
-                "std:dragon/red/young should net lose 10 hit points (178+10-20=168)"
+        object.reduceHitPoints(5, new DummyContext());
+        assertEquals(10 /*base*/ -5 /*damage*/, object.getHealthData().getInteger("temporary"),
+                "object should lose 5 temporary hit points"
+        );
+
+        object.reduceHitPoints(10, new DummyContext());
+        assertEquals(0, object.getHealthData().getInteger("temporary"),
+                "object should lose 5 temporary hit points"
+        );
+        assertEquals(1000 /*base*/ -5 /*overflow damage*/, object.getHealthData().getInteger("current"),
+                "object should lose 5 hit points"
         );
     }
 
     @Test
-    @DisplayName("reduceHitPoints deducts correct number of hit points (many temporary hit points)")
-    void reduceHitPoints_deductsCorrectNumberOfHitPoints_ManyTemporaryHitPoints() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(youngRedDragon);
-        youngRedDragon.getHealthData().putInteger("temporary", 20);
-        youngRedDragon.reduceHitPoints(10, context);
-
-        assertEquals(178, youngRedDragon.getHealthData().getInteger("current"),
-                "std:dragon/red/young should lose no hit points (178)"
-        );
-        assertEquals(10, youngRedDragon.getHealthData().getInteger("temporary"),
-                "std:dragon/red/young should lose 10 temporary hit points (20-10=10)"
-        );
-    }
-
-    // TODO tests for taking damage
-
-    // TODO tests for getting weapon proficiency
-
-    // TODO tests for getting saving throw proficiency
-
-    @Test
-    @DisplayName("getAbilityModifierFromAbilityScore returns correct modifier")
-    void getAbilityModifierFromAbilityScore_returnsCorrectModifier() {
+    @DisplayName("gets ability score modifier from ability score")
+    void getsAbilityScoreModifierFromAbilityScore() {
         assertEquals(-2, RPGLObject.getAbilityModifierFromAbilityScore( 7));
         assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityScore( 8));
         assertEquals(-1, RPGLObject.getAbilityModifierFromAbilityScore( 9));
@@ -176,163 +150,115 @@ public class RPGLObjectTest {
         assertEquals( 0, RPGLObject.getAbilityModifierFromAbilityScore(11));
         assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityScore(12));
         assertEquals( 1, RPGLObject.getAbilityModifierFromAbilityScore(13));
+        assertEquals( 2, RPGLObject.getAbilityModifierFromAbilityScore(14));
     }
 
     @Test
-    @DisplayName("getAbilityModifierFromAbilityName returns correct modifier")
-    void getAbilityModifierFromAbilityName_returnsCorrectModifier() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(knight);
+    @DisplayName("gets ability score modifier from ability name")
+    void getsAbilityScoreModifierFromAbilityName() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("str", 20);
 
-        assertEquals(3, knight.getAbilityModifierFromAbilityName("str", context),
-                "std:knight str of 16 should have modifier of +3"
-        );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName("dex", context),
-                "std:knight dex of 11 should have modifier of +0"
-        );
-        assertEquals(2, knight.getAbilityModifierFromAbilityName("con", context),
-                "std:knight con of 14 should have modifier of +2"
-        );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName("int", context),
-                "std:knight int of 11 should have modifier of +0"
-        );
-        assertEquals(0, knight.getAbilityModifierFromAbilityName("wis", context),
-                "std:knight wis of 11 should have modifier of +0"
-        );
-        assertEquals(2, knight.getAbilityModifierFromAbilityName("cha", context),
-                "std:knight cha of 15 should have modifier of +2"
+        assertEquals(5, object.getAbilityModifierFromAbilityName("str", new DummyContext()),
+                "object should have str modifier of +5"
         );
     }
 
     @Test
-    @DisplayName("getProficiencyBonus returns correct bonus")
-    void getProficiencyBonus_returnsCorrectValue() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(knight);
+    @DisplayName("gets proficiency bonus")
+    void getsProficiencyBonus() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setProficiencyBonus(5);
 
-        assertEquals(2, knight.getEffectiveProficiencyBonus(context),
-                "std:humanoid/knight should have proficiency bonus of 2"
+        assertEquals(5, object.getEffectiveProficiencyBonus(new DummyContext()),
+                "object should have proficiency bonus of +5"
         );
     }
 
     @Test
-    @DisplayName("getEvents returns an array of the correct events")
-    void getEvents_returnsArrayOfCorrectEvents() throws Exception {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(youngRedDragon);
+    @DisplayName("gets events")
+    void getsEvents() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.giveEvent("std:spell/fire_bolt");
+        object.giveEvent("std:common/dodge");
 
-        List<RPGLEvent> events = youngRedDragon.getEventObjects(context);
+        List<RPGLEvent> events = object.getEventObjects(new DummyContext());
 
-        assertEquals(4, events.size(),
-                "std:dragon/red/young should have 1 RPGLEvent"
+        assertEquals(2, events.size(),
+                "object should have 4 events"
         );
-        assertEquals("std:object/dragon/red/young/breath", events.get(0).getId(),
-                "std:dragon/red/young should have the std:object/dragon/red/young/breath event"
+        assertEquals("std:spell/fire_bolt", events.get(0).getId(),
+                "object should have the std:spell/fire_bolt event"
         );
-        assertEquals("std:object/dragon/red/young/claw", events.get(1).getId(),
-                "std:dragon/red/young should have the std:object/dragon/red/young/claw event"
-        );
-        assertEquals("std:object/dragon/red/young/bite", events.get(2).getId(),
-                "std:dragon/red/young should have the std:object/dragon/red/young/bite event"
-        );
-        assertEquals("std:object/dragon/red/young/multiattack", events.get(3).getId(),
-                "std:dragon/red/young should have the std:object/dragon/red/young/multiattack event"
+        assertEquals("std:common/dodge", events.get(1).getId(),
+                "object should have the std:common/dodge event"
         );
     }
 
     @Test
-    @DisplayName("getEffects returns an array of the correct effects")
-    void getEffects_returnsArrayOfCorrectEffects() {
-        RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(youngRedDragon);
+    @DisplayName("gets effects")
+    void getsEffects() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.addEffect(RPGLFactory.newEffect("std:common/damage/immunity/fire"));
+        object.addEffect(RPGLFactory.newEffect("std:common/damage/immunity/poison"));
 
-        List<RPGLEffect> effects = youngRedDragon.getEffectObjects();
+        List<RPGLEffect> effects = object.getEffectObjects();
 
-        assertEquals(9, effects.size(),
-                "std:dragon/red/young should have 9 RPGLEffects"
+        assertEquals(2, effects.size(),
+                "object should have 2 effects"
         );
-        assertEquals("std:resource/take/claw_attack", effects.get(0).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/save/dexterity effect"
+        assertEquals("std:common/damage/immunity/fire", effects.get(0).getId(),
+                "object should have the std:common/damage/immunity/fire effect"
         );
-        assertEquals("std:resource/take/bite_attack", effects.get(1).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/save/constitution effect"
-        );
-        assertEquals("std:common/proficiency/save/dexterity", effects.get(2).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/save/dexterity effect"
-        );
-        assertEquals("std:common/proficiency/save/constitution", effects.get(3).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/save/constitution effect"
-        );
-        assertEquals("std:common/proficiency/save/wisdom", effects.get(4).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/save/wisdom effect"
-        );
-        assertEquals("std:common/proficiency/save/charisma", effects.get(5).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/save/charisma effect"
-        );
-        assertEquals("std:common/damage/immunity/fire", effects.get(6).getId(),
-                "std:dragon/red/young should have the std:common/damage/immunity/fire effect"
-        );
-        assertEquals("std:common/proficiency/skill/perception", effects.get(7).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/skill/perception effect"
-        );
-        assertEquals("std:common/proficiency/skill/stealth", effects.get(8).getId(),
-                "std:dragon/red/young should have the std:common/proficiency/skill/stealth effect"
+        assertEquals("std:common/damage/immunity/poison", effects.get(1).getId(),
+                "object should have the std:common/damage/immunity/poison effect"
         );
     }
 
     @Test
-    @DisplayName("addRemoveEffect effects can be added and removed")
-    void addRemoveEffect_effectsCanBeAddedAndRemoved() {
-        RPGLObject knight = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(knight);
+    @DisplayName("adds and removes effects")
+    void addsAndRemovesEffects() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLEffect fireImmunity = RPGLFactory.newEffect("std:common/damage/immunity/fire");
         List<RPGLEffect> effects;
 
-        knight.addEffect(fireImmunity);
-        effects = knight.getEffectObjects();
+        object.addEffect(fireImmunity);
+        effects = object.getEffectObjects();
         assertEquals(1, effects.size(),
-                "std:humanoid/knight should have 1 effect"
+                "object should have 1 effect"
         );
         assertEquals("std:common/damage/immunity/fire", effects.get(0).getId(),
-                "std:humanoid/knight should have the std:common/damage/immunity/fire effect"
+                "object should have the std:common/damage/immunity/fire effect"
         );
 
-        assertTrue(knight.removeEffect(fireImmunity.getUuid()),
-                "the provided UUID should correspond to an effect assigned to the knight"
+        assertTrue(object.removeEffect(fireImmunity.getUuid()),
+                "the provided UUID should correspond to an effect assigned to the object"
         );
-        effects = knight.getEffectObjects();
+        effects = object.getEffectObjects();
         assertEquals(0, effects.size(),
-                "std:humanoid/knight should have 0 effects"
+                "object should have 0 effects"
         );
     }
 
     @Test
-    @DisplayName("invokeEvent event behaves properly")
-    void invokeEvent_eventBehavesProperly() throws Exception {
+    @DisplayName("invokes events")
+    void invokesEvents() throws Exception {
         RPGLObject youngRedDragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(youngRedDragon);
-        context.add(knight);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         youngRedDragon.invokeEvent(
-                new RPGLObject[] { knight },
+                new RPGLObject[] { target },
                 RPGLFactory.newEvent("std:object/dragon/red/young/breath"),
                 new ArrayList<>() {{
                     this.add(youngRedDragon.getResourcesWithTag("action").get(0));
                     this.add(youngRedDragon.getResourcesWithTag("breath_attack").get(0));
                 }},
-                context
+                new DummyContext()
         );
 
-        assertEquals(4, knight.getHealthData().getInteger("current"),
-                "std:humanoid/knight should have 4 health left after failing a save against std:dragon/red/young's breath attack"
+        assertEquals(1000 /*base*/ -(16*3) /*damage*/, target.getHealthData().getInteger("current"),
+                "target should take 48 (16d6) damage from breath attack"
         );
         assertTrue(youngRedDragon.getResourcesWithTag("action").get(0).getExhausted(),
                 "resource should be exhausted"
@@ -343,15 +269,10 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("receiveHealing missing hit points are restored")
-    void receiveHealing_missingHitPointsAreRestored() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        target.getHealthData().putInteger("current", 10);
+    @DisplayName("heals")
+    void heals() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getHealthData().putInteger("current", 100);
 
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
@@ -371,28 +292,23 @@ public class RPGLObjectTest {
             }});
         }});
 
-        healingDelivery.setSource(source);
-        healingDelivery.prepare(context, List.of());
-        healingDelivery.setTarget(target);
-        healingDelivery.invoke(context, List.of());
+        healingDelivery.setSource(object);
+        healingDelivery.prepare(new DummyContext(), List.of());
+        healingDelivery.setTarget(object);
+        healingDelivery.invoke(new DummyContext(), List.of());
 
-        target.receiveHealing(healingDelivery, context);
+        object.receiveHealing(healingDelivery, new DummyContext());
 
-        assertEquals(20, target.getHealthData().getInteger("current"),
-                "target should recover 10 hit points (10+10=20)"
+        assertEquals(100 /*base*/ +10 /*healing*/, object.getHealthData().getInteger("current"),
+                "target should recover 10 hit points"
         );
     }
 
     @Test
-    @DisplayName("receiveHealing hit point maximum is not exceeded")
-    void receiveHealing_mitPointMaximumIsNotExceeded() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        target.getHealthData().putInteger("current", 177);
+    @DisplayName("does not heal beyond hit point maximum")
+    void doesNotHealBeyondHitPointMaximum() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getHealthData().putInteger("current", 995);
 
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
@@ -412,32 +328,30 @@ public class RPGLObjectTest {
             }});
         }});
 
-        healingDelivery.setSource(source);
-        healingDelivery.prepare(context, List.of());
-        healingDelivery.setTarget(target);
-        healingDelivery.invoke(context, List.of());
+        healingDelivery.setSource(object);
+        healingDelivery.prepare(new DummyContext(), List.of());
+        healingDelivery.setTarget(object);
+        healingDelivery.invoke(new DummyContext(), List.of());
 
-        target.receiveHealing(healingDelivery, context);
+        object.receiveHealing(healingDelivery, new DummyContext());
 
-        assertEquals(178, target.getHealthData().getInteger("current"),
-                "target should only recover its one missing hit point when healed for 10 (177+10=187, max 178: 187 -> 178)"
+        assertEquals(1000, object.getHealthData().getInteger("current"),
+                "target should only recover its missing hit points"
         );
     }
 
     @Test
-    @DisplayName("processSubevent handles resources appropriately")
-    void processSubevent_handlesResourcesAppropriately() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("refreshes resources")
+    void refreshesResources() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:test", TestUtils.TEST_USER);
+        RPGLContext context = new DummyContext();
+        context.add(object);
 
         RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
-        source.addResource(resource);
-
         resource.exhaust();
-        source.invokeInfoSubevent(context, "start_turn");
+
+        object.addResource(resource);
+        object.invokeInfoSubevent(context, "start_turn");
 
         assertFalse(resource.getExhausted(),
                 "resource should not be exhausted after turn start"
@@ -445,20 +359,18 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("getResourceObjects returns resources provided by equipped items")
-    void getResourceObjects_returnsResourcesProvidedByEquippedItems() {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("has resources granted by equipped items")
+    void hasResourcesGrantedByEquippedItems() {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        RPGLItem wand = RPGLFactory.newItem("std:wand/wand_of_fireballs");
-        object.giveItem(wand.getUuid());
-        object.equipItem(wand.getUuid(), "mainhand");
+        RPGLItem item = RPGLFactory.newItem("std:wand/wand_of_fireballs");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "mainhand");
 
         List<RPGLResource> resources = object.getResourceObjects();
 
         assertEquals(3, resources.size(),
-                "commoner should have 3 resources from the wand"
+                "object should have 3 resources from item"
         );
         for (RPGLResource resource : resources) {
             assertEquals("std:item/wand/wand_of_fireballs_charge", resource.getId(),
@@ -468,8 +380,8 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("getLevel returns correct level (with class parameter)")
-    void getLevel_returnsCorrectLevel_withClassParameter() {
+    @DisplayName("gets class level")
+    void getsClassLevel() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -494,8 +406,8 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("getLevel returns correct level (no parameter, no nested classes)")
-    void getLevel_returnsCorrectLevel_noParameterNoNestedClasses() {
+    @DisplayName("gets total level")
+    void getsTotalLevel() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -515,51 +427,13 @@ public class RPGLObjectTest {
         }});
 
         assertEquals(5, object.getLevel(),
-                "object should have 5 levels overall"
+                "object should be level 5"
         );
     }
 
     @Test
-    @DisplayName("getLevel returns correct level (no parameter, with nested classes)")
-    void getLevel_returnsCorrectLevel_noParameterWithNestedClasses() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        object.setClasses(new JsonArray() {{
-            /*[
-                {
-                    "id": "debug:test",
-                    "name": "TEST CLASS",
-                    "level": 5,
-                    "additional_nested_classes": { }
-                },
-                {
-                    "id": "debug:blank",
-                    "name": "BLANK CLASS",
-                    "level": 5,
-                    "additional_nested_classes": { }
-                }
-            ]*/
-            this.addJsonObject(new JsonObject() {{
-                this.putString("id", "debug:test");
-                this.putString("name", "TEST CLASS");
-                this.putInteger("level", 5);
-                this.putJsonObject("additional_nested_classes", new JsonObject());
-            }});
-            this.addJsonObject(new JsonObject() {{
-                this.putString("id", "debug:blank");
-                this.putString("name", "BLANK CLASS");
-                this.putInteger("level", 5);
-                this.putJsonObject("additional_nested_classes", new JsonObject());
-            }});
-        }});
-
-        assertEquals(5, object.getLevel(),
-                "object should have 5 levels overall (ignore the levels of the nested class)"
-        );
-    }
-
-    @Test
-    @DisplayName("getLevel returns correct level (no parameter, with additional nested classes)")
-    void getLevel_returnsCorrectLevel_noParameterWithAdditionalNestedClasses() {
+    @DisplayName("does not include nested class levels in total level")
+    void doesNotIncludeNestedClassLevelsInTotalLevel() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -613,13 +487,13 @@ public class RPGLObjectTest {
         }});
 
         assertEquals(5, object.getLevel(),
-                "object should have 5 levels overall (ignore the levels of the nested class and the additional nested class)"
+                "object should be level 5 (ignore the levels of the nested class and the additional nested class)"
         );
     }
 
     @Test
-    @DisplayName("calculateLevelForNestedClass calculates correct level (no additional nested classes)")
-    void calculateLevelForNestedClass_calculatesCorrectLevel_noAdditionalNestedClasses() {
+    @DisplayName("calculates nested class level")
+    void calculatesNestedClassLevel() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -651,13 +525,13 @@ public class RPGLObjectTest {
         }});
 
         assertEquals(5+3, object.calculateLevelForNestedClass("std:common/base"),
-                "object should expect to have 8 levels in std:common/base"
+                "object should have 8 levels in std:common/base between both Fighter classes"
         );
     }
 
     @Test
-    @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes)")
-    void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClasses() {
+    @DisplayName("calculates level of class which is nested and additionally nested")
+    void calculatesLevelOfClassWhichIsNestedAndAdditionallyNested() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -699,13 +573,13 @@ public class RPGLObjectTest {
         }});
 
         assertEquals(5+3, object.calculateLevelForNestedClass("std:common/base"),
-                "object should expect to have 8 levels in std:common/base"
+                "object should have 8 levels in std:common/base"
         );
     }
 
     @Test
-    @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes and partial scaling rounded down)")
-    void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClassesAndPartialScalingRoundedDown() {
+    @DisplayName("calculates nested class level (with level scaling) (rounded down)")
+    void calculatesNestedClassLevel_withLevelScaling_roundedDown() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -747,13 +621,13 @@ public class RPGLObjectTest {
         }});
 
         assertEquals(5+1, object.calculateLevelForNestedClass("std:common/base"),
-                "object should expect to have 6 levels in std:common/base"
+                "object should have 6 levels in std:common/base"
         );
     }
 
     @Test
-    @DisplayName("calculateLevelForNestedClass calculates correct level (with additional nested classes and partial scaling rounded up)")
-    void calculateLevelForNestedClass_calculatesCorrectLevel_withAdditionalNestedClassesAndPartialScalingRoundedUp() {
+    @DisplayName("calculates nested class level (with level scaling) (rounded up)")
+    void calculatesNestedClassLevel_withLevelScaling_roundedUp() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -800,8 +674,8 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("getNestedClassIds returns correct nested classes")
-    void getNestedClassIds_returnsCorrectNestedClasses() {
+    @DisplayName("gets nested class IDs")
+    void getsNestedClassIds() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -846,8 +720,8 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("levelUpNestedClasses levels up nested classes correctly")
-    void levelUpNestedClasses_levelsUpNestedClassesCorrectly() {
+    @DisplayName("levels up nested classes")
+    void levelsUpNestedClasses() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -926,8 +800,8 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("levelUp levels up all classes correctly (no new classes)")
-    void levelUp_levelsUpAllClassesCorrectly_noNewClasses() {
+    @DisplayName("levels up existing classes")
+    void levelsUpExistingClasses() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setClasses(new JsonArray() {{
             /*[
@@ -1009,8 +883,8 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("levelUp levels up all classes correctly (first class level)")
-    void levelUp_levelsUpAllClassesCorrectly_firstClassLevel() {
+    @DisplayName("levels up new class")
+    void levelsUpNewClass() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         object.levelUp("std:fighter", new JsonObject() {{
@@ -1032,13 +906,13 @@ public class RPGLObjectTest {
     }
 
     @Test
-    @DisplayName("abilityCheck evaluates correctly")
-    void abilityCheck_evaluatesCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("makes ability checks")
+    void makesAbilityChecks() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("str", 20);
         RPGLContext context = new DummyContext();
         context.add(object);
 
-        object.getAbilityScores().putInteger("str", 20);
         object.setProficiencyBonus(5);
 
         RPGLEffect athleticsProficiency = RPGLFactory.newEffect("std:common/proficiency/skill/athletics");

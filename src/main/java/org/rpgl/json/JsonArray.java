@@ -262,6 +262,53 @@ public class JsonArray {
         return false;
     }
 
+    /**
+     * Generates an easy-to-read String representation of the object.
+     *
+     * @return a String
+     */
+    public String prettyPrint() {
+        return this.prettyPrint(0);
+    }
+
+    /**
+     * This recursive helper method is what generates the return value for the public prettyPrint() method.
+     *
+     * @param indent how deeply indented this iteration of the method is.
+     * @return a String
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    String prettyPrint(int indent) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (this.data.isEmpty()) {
+            stringBuilder.append("[ ]");
+        } else {
+            stringBuilder.append("[\n");
+            for (int i = 0; i < this.data.size(); i++) {
+                stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent + 1)));
+                Object element = this.data.get(i);
+                if (element instanceof HashMap map) {
+                    stringBuilder.append(new JsonObject(map).prettyPrint(indent + 1));
+                } else if (element instanceof ArrayList list) {
+                    stringBuilder.append(new JsonArray(list).prettyPrint(indent + 1));
+                } else if (element instanceof String string) {
+                    stringBuilder.append('"').append(string).append('"');
+                } else if (element == null) {
+                    stringBuilder.append("null");
+                } else {
+                    stringBuilder.append(element);
+                }
+                if (i < this.data.size() - 1) {
+                    stringBuilder.append(',');
+                }
+                stringBuilder.append('\n');
+            }
+            stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent))).append(']');
+        }
+        return stringBuilder.toString();
+    }
+
     // =================================================================================================================
     //  inherited method overrides
     // =================================================================================================================

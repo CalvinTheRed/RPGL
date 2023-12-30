@@ -20,6 +20,8 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
 
     public static int counter = 0;
 
+    private String ability = "";
+
     public DummySubevent() {
         super("dummy_subevent");
     }
@@ -54,6 +56,17 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
 
     @Override
     public String getAbility(RPGLContext context) {
-        return "str";
+        return ability;
+    }
+
+    /**
+     * Setter for the Subevent's ability
+     *
+     * @param ability a String representing an ability score
+     * @return the Subevent
+     */
+    public DummySubevent setAbility(String ability) {
+        this.ability = ability;
+        return this;
     }
 }

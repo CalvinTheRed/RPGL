@@ -152,39 +152,28 @@ public class RerollDamageDiceMatchingOrBelowTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new RerollDamageDiceMatchingOrBelow();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new RerollDamageDiceMatchingOrBelow().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute re-rolls all dice at or below two (fire only)")
-    void execute_rerollsAllDiceAtOrBelowTwo_fireOnly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("re-rolls dice at or below value (specific damage type)")
+    void rerollsDiceAtOrBelowValue_specificDamageType() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        damageRoll.setSource(source);
-        damageRoll.prepare(context, List.of());
-        damageRoll.setTarget(target);
+        damageRoll.setSource(object);
+        damageRoll.prepare(new DummyContext(), List.of());
 
-        RerollDamageDiceMatchingOrBelow rerollDamageDiceMatchingOrBelow = new RerollDamageDiceMatchingOrBelow();
-        JsonObject functionJson = new JsonObject() {{
+        new RerollDamageDiceMatchingOrBelow().execute(null, damageRoll, new JsonObject() {{
             /*{
                 "function": "reroll_damage_dice_matching_or_below",
                 "threshold": 2,
@@ -193,9 +182,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putString("damage_type", "fire");
-        }};
-
-        rerollDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[6],"roll":1,"size":6},{"determined":[6],"roll":2,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";
@@ -205,20 +192,14 @@ public class RerollDamageDiceMatchingOrBelowTest {
     }
 
     @Test
-    @DisplayName("execute re-rolls all dice at or below two (all damage types)")
-    void execute_rerollsAllDiceAtOrBelowTwo_allDamageTypes() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("re-rolls dice at or below value (all damage types)")
+    void rerollsDiceAtOrBelowValue_allDamageTypes() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        damageRoll.setSource(source);
-        damageRoll.prepare(context, List.of());
-        damageRoll.setTarget(target);
+        damageRoll.setSource(object);
+        damageRoll.prepare(new DummyContext(), List.of());
 
-        RerollDamageDiceMatchingOrBelow rerollDamageDiceMatchingOrBelow = new RerollDamageDiceMatchingOrBelow();
-        JsonObject functionJson = new JsonObject() {{
+        new RerollDamageDiceMatchingOrBelow().execute(null, damageRoll, new JsonObject() {{
             /*{
                 "function": "reroll_damage_dice_matching_or_below",
                 "threshold": 2,
@@ -227,9 +208,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putString("damage_type", "");
-        }};
-
-        rerollDamageDiceMatchingOrBelow.execute(null, damageRoll, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";

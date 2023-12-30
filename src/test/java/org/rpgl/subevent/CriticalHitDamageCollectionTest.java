@@ -25,8 +25,8 @@ public class CriticalHitDamageCollectionTest {
     private CriticalHitDamageCollection criticalHitDamageCollection;
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CriticalHitDamageCollection();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -99,8 +99,8 @@ public class CriticalHitDamageCollectionTest {
     }
 
     @Test
-    @DisplayName("doubleDice number of dice in the damage collection are doubled")
-    void doubleDice_numberOfDiceIsDoubled() {
+    @DisplayName("doubles dice")
+    void doublesDice() {
         criticalHitDamageCollection.doubleDice();
 
         String expected = """
@@ -111,24 +111,24 @@ public class CriticalHitDamageCollectionTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns true for present damage type")
-    void includesDamageType_returnsTrueForPresentDamageType() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         assertTrue(criticalHitDamageCollection.includesDamageType("fire"),
                 "should return true for present damage type"
         );
     }
 
     @Test
-    @DisplayName("includesDamageType returns false for absent damage type")
-    void includesDamageType_returnsFalseForAbsentDamageType() {
+    @DisplayName("recognizes absent damage type")
+    void recognizesAbsentDamageType() {
         assertFalse(criticalHitDamageCollection.includesDamageType("not_a_damage_type"),
                 "should return false for absent damage type"
         );
     }
 
     @Test
-    @DisplayName("addDamage adds damage correctly")
-    void addDamage_addsDamageCorrectly() {
+    @DisplayName("adds damage")
+    void addsDamage() {
         criticalHitDamageCollection.addDamage(new JsonObject() {{
             /*{
                 "damage_type": "acid",

@@ -39,8 +39,8 @@ public class RPGLEventTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:object/dragon/red/young/breath template")
-    void newInstance_youngRedDragonFireBreathTemplate() {
+    @DisplayName("creates new instances")
+    void createsNewInstances() {
         RPGLEventTemplate eventTemplate = DatapackLoader.DATAPACKS.get("std")
                 .getEventTemplate("object/dragon/red/young/breath");
         RPGLEvent event = eventTemplate.newInstance();

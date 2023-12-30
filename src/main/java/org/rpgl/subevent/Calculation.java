@@ -303,8 +303,8 @@ public abstract class Calculation extends Subevent {
         this.setBase(0);
         if (baseJson != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             this.setBase(processSetJson(effect, this, baseJson, context));
         }
     }
@@ -322,8 +322,8 @@ public abstract class Calculation extends Subevent {
         this.json.putJsonArray("bonuses", new JsonArray());
         if (bonuses != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             for (int i = 0; i < bonuses.size(); i++) {
                 JsonObject bonus = bonuses.getJsonObject(i);
                 this.addBonus(Calculation.processBonusJson(effect, this, bonus, context));
@@ -344,8 +344,8 @@ public abstract class Calculation extends Subevent {
         this.setMinimum(Integer.MIN_VALUE);
         if (minimumJson != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             this.setMinimum(Calculation.processSetJson(effect, this, minimumJson, context));
         }
     }
@@ -441,18 +441,19 @@ public abstract class Calculation extends Subevent {
      * @return the bonus to be applied to the Calculation.
      */
     public int getBonus() {
-        int bonus = 0;
+        int totalBonus = 0;
         JsonArray bonuses = this.getBonuses();
         for (int i = 0; i < bonuses.size(); i++) {
             JsonObject bonusJson = bonuses.getJsonObject(i);
-            bonus += bonusJson.getInteger("bonus");
+            int bonus = bonusJson.getInteger("bonus");
             JsonArray dice = bonusJson.getJsonArray("dice");
             for (int j = 0; j < dice.size(); j++) {
                 JsonObject die = dice.getJsonObject(i);
                 bonus += Objects.requireNonNullElseGet(die.getInteger("roll"), () -> Die.roll(die));
             }
+            totalBonus += scale(bonus, bonusJson.getJsonObject("scale"));
         }
-        return bonus;
+        return totalBonus;
     }
 
 }

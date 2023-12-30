@@ -1,14 +1,22 @@
 package org.rpgl.subevent;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
+import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
+import org.rpgl.uuidtable.UUIDTable;
 
+import java.io.File;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,12 +33,25 @@ public class DamageCollectionTest {
 
     @BeforeAll
     static void beforeAll() {
+        DatapackLoader.loadDatapacks(
+                new File("src/test/resources/datapacks".replace("/", File.separator))
+        );
         RPGLCore.initializeTesting();
     }
 
+    @AfterAll
+    static void afterAll() {
+        DatapackLoader.DATAPACKS.clear();
+    }
+
+    @AfterEach
+    void afterEach() {
+        UUIDTable.clear();
+    }
+
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new DamageCollection();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -46,8 +67,8 @@ public class DamageCollectionTest {
     }
 
     @Test
-    @DisplayName("addDamage new damage values are added")
-    void addDamage_newDamageValuesAdded() {
+    @DisplayName("adds damage")
+    void addsDamage() {
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());
@@ -88,8 +109,8 @@ public class DamageCollectionTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns tue (type is present)")
-    void includesDamageType_returnsTrue_typePresent() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             /*{
@@ -116,8 +137,8 @@ public class DamageCollectionTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns tue (type is present)")
-    void includesDamageType_returnsFalse_typeAbsent() {
+    @DisplayName("recognizes absent damage type")
+    void recognizesAbsentDamageType() {
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", new JsonArray());
@@ -125,6 +146,43 @@ public class DamageCollectionTest {
 
         assertFalse(damageCollection.includesDamageType("fire"),
                 "includesDamageType() should return false when type is absent"
+        );
+    }
+
+    @Test
+    @DisplayName("interprets damage formulae")
+    void interpretsDamageFormulae() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        DamageCollection damageCollection = new DamageCollection();
+        damageCollection.joinSubeventData(new JsonObject() {{
+            /*{
+                "damage": [
+                    {
+                        "formula": "range",
+                        "damage_type": "fire",
+                        "dice": [ ],
+                        "bonus": 10
+                    }
+                ]
+            }*/
+            this.putJsonArray("damage", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("formula", "range");
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray());
+                    this.putInteger("bonus", 10);
+                }});
+            }});
+        }});
+
+        damageCollection.setSource(source);
+        damageCollection.prepareDamage(new DummyContext());
+
+        String expected = """
+                [{"bonus":10,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
+        assertEquals(expected, damageCollection.getDamageCollection().toString(),
+                "prepare should correctly interpret damage instructions"
         );
     }
 

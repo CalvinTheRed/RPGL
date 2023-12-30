@@ -132,8 +132,8 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new DamageRoll();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -149,9 +149,9 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("rerollTypedDiceMatchingOrBelow re-roll all ones (fire damage)")
-    void rerollTypedDiceMatchingOrBelow_rerollAllOnes_fireDamage() {
-        damageRoll.rerollTypedDiceMatchingOrBelow(1, "fire");
+    @DisplayName("re-rolls low damage dice (specific damage type)")
+    void rerollsLowDamageDice_specificDamageType() {
+        damageRoll.rerollDamageDiceMatchingOrBelow(1, "fire");
 
         String expected = """
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
@@ -161,9 +161,21 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("setTypedDiceMatchingOrBelow set all ones to twos (fire damage)")
-    void setTypedDiceMatchingOrBelow_setAllOnesToTwos_fireDamage() {
-        damageRoll.setTypedDiceMatchingOrBelow(1, 2, "fire");
+    @DisplayName("re-rolls low damage dice (all damage types)")
+    void rerollsLowDamageDice_allDamageTypes() {
+        damageRoll.rerollDamageDiceMatchingOrBelow(1, null);
+
+        String expected = """
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[],"roll":4,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
+                "all die which had a roll of 1 should be re-rolled to a 4"
+        );
+    }
+
+    @Test
+    @DisplayName("sets low damage dice (specific damage type)")
+    void setsLowDamageDice_specificDamageType() {
+        damageRoll.setDamageDiceMatchingOrBelow(1, 2, "fire");
 
         String expected = """
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
@@ -173,8 +185,20 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("getDamage returns total typed damage values")
-    void getDamage_returnsTotalTypedDamageValues() {
+    @DisplayName("sets low damage dice (all damage types)")
+    void setsLowDamageDice_allDamageTypes() {
+        damageRoll.setDamageDiceMatchingOrBelow(1, 2, null);
+
+        String expected = """
+                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
+        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
+                "all dice which had a roll of 1 should be set to a 2"
+        );
+    }
+
+    @Test
+    @DisplayName("gets damage")
+    void getsDamage() {
         String expected = """
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
         assertEquals(expected, damageRoll.getDamage().toString(),
@@ -183,20 +207,8 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("roll all dice roll to fours")
-    void roll_allDiceRollToOnes() {
-        damageRoll.roll();
-
-        String expected = """
-                [{"bonus":1,"damage_type":"fire","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]}]""";
-        assertEquals(expected, damageRoll.json.getJsonArray("damage").toString(),
-                "all dice should roll to 4"
-        );
-    }
-
-    @Test
-    @DisplayName("prepare all dice roll to fours")
-    void prepare_allDiceRollToOnes() throws Exception {
+    @DisplayName("prepares and rolls damage")
+    void preparesAndRollsDamage() throws Exception {
         damageRoll.prepare(new DummyContext(), List.of());
 
         String expected = """
@@ -207,9 +219,9 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("maximizeDamageDice maximizes damage correctly (fire only)")
-    void maximizeTypedDamageDice_maximizesDamageCorrectly_fireOnly() {
-        damageRoll.maximizeTypedDamageDice("fire");
+    @DisplayName("maximizes damage (specific damage type)")
+    void maximizesDamage_specificDamageType() {
+        damageRoll.maximizeDamageDice("fire");
 
         String expected = """
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":1,"size":4},{"determined":[4],"roll":2,"size":4},{"determined":[4],"roll":3,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
@@ -219,9 +231,9 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("maximizeDamageDice maximizes damage correctly (all damage)")
-    void maximizeTypedDamageDice_maximizesDamageCorrectly_allDamage() {
-        damageRoll.maximizeTypedDamageDice(null);
+    @DisplayName("maximizes damage (all damage types)")
+    void maximizesDamage_allDamageTypes() {
+        damageRoll.maximizeDamageDice(null);
 
         String expected = """
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4},{"determined":[4],"roll":4,"size":4}]}]""";
@@ -231,16 +243,16 @@ public class DamageRollTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns true (damage type included)")
-    void includesDamageType_returnsTrue_damageTypeIncluded() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         assertTrue(damageRoll.includesDamageType("fire"),
                 "should return true when damage type is included"
         );
     }
 
     @Test
-    @DisplayName("includesDamageType returns true (damage type not included)")
-    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+    @DisplayName("recognizes absent damage type")
+    void recognizesAbsentDamageType() {
         assertFalse(damageRoll.includesDamageType("acid"),
                 "should return false when damage type is not included"
         );

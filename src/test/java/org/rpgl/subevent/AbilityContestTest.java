@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -51,8 +50,8 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new AbilityContest();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -68,14 +67,8 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("resolveNestedSubevents invokes pass subevents (on pass)")
-    void resolveNestedSubevents_invokesPassSubevents_onPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("invokes passing subevents")
+    void invokesPassingSubevents() throws Exception {
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject() {{
             this.putJsonArray("pass", new JsonArray() {{
@@ -84,10 +77,8 @@ public class AbilityContestTest {
                 }});
             }});
         }});
-        abilityContest.setSource(source);
-        abilityContest.setTarget(target);
 
-        abilityContest.resolveNestedSubevents("pass", context, List.of());
+        abilityContest.resolveNestedSubevents("pass", new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -95,14 +86,8 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("resolveNestedSubevents does not invoke fail subevents (on pass)")
-    void resolveNestedSubevents_doesNotInvokeFailSubevents_onPass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("invokes failing subevents")
+    void invokesFailingSubevents() throws Exception {
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject() {{
             this.putJsonArray("fail", new JsonArray() {{
@@ -111,37 +96,8 @@ public class AbilityContestTest {
                 }});
             }});
         }});
-        abilityContest.setSource(source);
-        abilityContest.setTarget(target);
 
-        abilityContest.resolveNestedSubevents("pass", context, List.of());
-
-        assertEquals(0, DummySubevent.counter,
-                "dummy subevent should not be invoked on fail"
-        );
-    }
-
-    @Test
-    @DisplayName("resolveNestedSubevents invokes fail subevents (on fail)")
-    void resolveNestedSubevents_invokesFailSubevents_onFail() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        AbilityContest abilityContest = new AbilityContest();
-        abilityContest.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("fail", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-        }});
-        abilityContest.setSource(source);
-        abilityContest.setTarget(target);
-
-        abilityContest.resolveNestedSubevents("fail", context, List.of());
+        abilityContest.resolveNestedSubevents("fail", new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -149,40 +105,10 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("resolveNestedSubevents does not invoke pass subevents (on fail)")
-    void resolveNestedSubevents_doesNotInvokePassSubevents_onFail() throws Exception {
+    @DisplayName("gets ability check from source")
+    void getsAbilityCheckFromSource() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        AbilityContest abilityContest = new AbilityContest();
-        abilityContest.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("fail", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-        }});
-        abilityContest.setSource(source);
-        abilityContest.setTarget(target);
-
-        abilityContest.resolveNestedSubevents("pass", context, List.of());
-
-        assertEquals(0, DummySubevent.counter,
-                "dummy subevent should not be invoked on pass"
-        );
-    }
-
-    @Test
-    @DisplayName("getSourceAbilityCheck returns source ability check result")
-    void getSourceAbilityCheck_returnsSourceAbilityCheckResult() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         source.getAbilityScores().putInteger("wis", 20);
 
@@ -206,19 +132,16 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        assertEquals(25, abilityContest.getSourceAbilityCheck(context, List.of()),
-                "source ability check should evaluate to 25 (20+5)"
+        assertEquals(20 /*base*/ +5 /*ability*/, abilityContest.getSourceAbilityCheck(new DummyContext(), List.of()),
+                "source ability check should total to 25"
         );
     }
 
     @Test
-    @DisplayName("getTargetAbilityCheck returns target ability check result")
-    void getTargetAbilityCheck_returnsTargetAbilityCheckResult() throws Exception {
+    @DisplayName("gets ability check from target")
+    void getsAbilityCheckFromTarget() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         target.getAbilityScores().putInteger("wis", 20);
 
@@ -242,22 +165,20 @@ public class AbilityContestTest {
         abilityContest.setSource(source);
         abilityContest.setTarget(target);
 
-        assertEquals(25, abilityContest.getTargetAbilityCheck(context, List.of()),
-                "target ability check should evaluate to 25 (20+5)"
+        assertEquals(20 /*base*/ +5 /*modifier*/, abilityContest.getTargetAbilityCheck(new DummyContext(), List.of()),
+                "target ability check should total to 25"
         );
     }
 
     @Test
-    @DisplayName("prepare prepares subevent")
-    void prepare_preparesSubevent() throws Exception {
+    @DisplayName("prepares")
+    void prepares() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
 
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject());
         abilityContest.setSource(source);
-        abilityContest.prepare(context, List.of());
+        abilityContest.prepare(new DummyContext(), List.of());
 
         assertTrue(abilityContest.getTags().asList().contains("ability_contest"),
                 "subevent should be given the ability_contest tag upon preparation"
@@ -265,13 +186,10 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("invoke invokes pass subevents (on pass)")
-    void invoke_invokesPassSubevents_onPass() throws Exception {
+    @DisplayName("invokes pass subevents on pass")
+    void invokesPassSubeventsOnPass() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject() {{
@@ -313,9 +231,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context, List.of());
+        abilityContest.prepare(new DummyContext(), List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context, List.of());
+        abilityContest.invoke(new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -323,13 +241,10 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("invoke does not invoke pass subevents (on fail)")
-    void invoke_doesNotInvokePassSubevents_onFail() throws Exception {
+    @DisplayName("does not invoke pass subevents on fail")
+    void doesNotInvokePassSubeventsOnFail() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject() {{
@@ -371,9 +286,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context, List.of());
+        abilityContest.prepare(new DummyContext(), List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context, List.of());
+        abilityContest.invoke(new DummyContext(), List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on fail"
@@ -381,13 +296,10 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("invoke invokes fail subevents (on fail)")
-    void invoke_invokesFailSubevents_onFail() throws Exception {
+    @DisplayName("invokes fail subevents on fail")
+    void invokesFailSubeventsOnFail() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject() {{
@@ -429,9 +341,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context, List.of());
+        abilityContest.prepare(new DummyContext(), List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context, List.of());
+        abilityContest.invoke(new DummyContext(), List.of());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -439,13 +351,10 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("invoke does not invoke fail subevents (on pass)")
-    void invoke_doesNotInvokeFailSubevents_onPass() throws Exception {
+    @DisplayName("does not invoke fail subevent on pass")
+    void doesNotInvokeFailSubeventsOnPass() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject() {{
@@ -487,9 +396,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context, List.of());
+        abilityContest.prepare(new DummyContext(), List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context, List.of());
+        abilityContest.invoke(new DummyContext(), List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on pass"
@@ -497,13 +406,10 @@ public class AbilityContestTest {
     }
 
     @Test
-    @DisplayName("invoke does not invoke any subevents (on tie)")
-    void invoke_doesNotInvokeAnySubevents_onTie() throws Exception {
+    @DisplayName("invokes no subevents on tie")
+    void invokesNoSubeventsOnTie() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
 
         AbilityContest abilityContest = new AbilityContest();
         abilityContest.joinSubeventData(new JsonObject() {{
@@ -553,9 +459,9 @@ public class AbilityContestTest {
             }});
         }});
         abilityContest.setSource(source);
-        abilityContest.prepare(context, List.of());
+        abilityContest.prepare(new DummyContext(), List.of());
         abilityContest.setTarget(target);
-        abilityContest.invoke(context, List.of());
+        abilityContest.invoke(new DummyContext(), List.of());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on tie"

@@ -49,96 +49,69 @@ public class GrantResistanceTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new GrantResistance();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new GrantResistance().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute grants resistance to a specific damage type")
-    void execute_grantsResistance_specificDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        String damageTypeFire = "fire";
-        String damageTypeCold = "cold";
+    @DisplayName("grants resistance (specific damage type)")
+    void grantsResistance_specificDamageType() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType(damageTypeFire);
-        damageAffinity.addDamageType(damageTypeCold);
-        damageAffinity.setSource(source);
-        damageAffinity.prepare(context, List.of());
-        damageAffinity.setTarget(target);
+        damageAffinity.setSource(object);
+        damageAffinity.addDamageType("fire");
+        damageAffinity.addDamageType("cold");
+        damageAffinity.prepare(new DummyContext(), List.of());
 
-        GrantResistance grantResistance = new GrantResistance();
-        JsonObject functionJson = new JsonObject() {{
+        new GrantResistance().execute(null, damageAffinity, new JsonObject() {{
             /*{
                 "function": "grant_resistance",
                 "damage_type": "fire"
             }*/
             this.putString("function", "grant_resistance");
-            this.putString("damage_type", damageTypeFire);
-        }};
+            this.putString("damage_type", "fire");
+        }}, new DummyContext(), List.of());
 
-        grantResistance.execute(null, damageAffinity, functionJson, context, List.of());
-
-        assertTrue(damageAffinity.isResistant(damageTypeFire),
+        assertTrue(damageAffinity.isResistant("fire"),
                 "execute should grant resistance to fire damage"
         );
-        assertFalse(damageAffinity.isResistant(damageTypeCold),
+        assertFalse(damageAffinity.isResistant("cold"),
                 "execute should not grant resistance to other damage types"
         );
     }
 
     @Test
-    @DisplayName("execute grants resistance to all damage types with unlisted damage type")
-    void execute_grantsResistanceToAllDamageTypes_unlistedDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        String damageTypeFire = "fire";
-        String damageTypeCold = "cold";
+    @DisplayName("grants resistance (all damage types)")
+    void grantsResistance_allDamageTypes() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType(damageTypeFire);
-        damageAffinity.addDamageType(damageTypeCold);
-        damageAffinity.setSource(source);
-        damageAffinity.prepare(context, List.of());
-        damageAffinity.setTarget(target);
+        damageAffinity.setSource(object);
+        damageAffinity.addDamageType("fire");
+        damageAffinity.addDamageType("cold");
+        damageAffinity.prepare(new DummyContext(), List.of());
 
-        GrantResistance grantResistance = new GrantResistance();
-        JsonObject functionJson = new JsonObject() {{
+        new GrantResistance().execute(null, damageAffinity, new JsonObject() {{
             /*{
                 "function": "grant_resistance"
             }*/
             this.putString("function", "grant_resistance");
-        }};
+        }}, new DummyContext(), List.of());
 
-        grantResistance.execute(null, damageAffinity, functionJson, context, List.of());
-
-        assertTrue(damageAffinity.isResistant(damageTypeFire),
+        assertTrue(damageAffinity.isResistant("fire"),
                 "execute should grant resistance to fire damage"
         );
-        assertTrue(damageAffinity.isResistant(damageTypeCold),
+        assertTrue(damageAffinity.isResistant("cold"),
                 "execute should grant resistance to cold damage"
         );
     }

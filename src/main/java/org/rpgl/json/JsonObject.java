@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This class represents a JSON object and provides several utility methods which make it easier to interface with that
@@ -15,6 +16,8 @@ import java.util.Objects;
 public class JsonObject {
 
     public static final ObjectMapper MAPPER = new ObjectMapper();
+
+    static final String INDENT = "  ";
 
     HashMap<String, Object> data;
 
@@ -104,7 +107,7 @@ public class JsonObject {
             } else if (otherValue instanceof ArrayList otherList) {
                 Object thisValue = this.data.get(otherKey);
                 if (thisValue instanceof ArrayList thisList) {
-                    // union if a list if being joined to a list
+                    // union if a list is being joined to a list
                     for (Object element : otherList) {
                         if (!thisList.contains(element)) {
                             thisList.add(element);
@@ -558,6 +561,53 @@ public class JsonObject {
         } else {
             this.putBoolean(path, b);
         }
+    }
+
+    /**
+     * Generates an easy-to-read String representation of the object.
+     *
+     * @return a String
+     */
+    public String prettyPrint() {
+        return this.prettyPrint(0);
+    }
+
+    /**
+     * This recursive helper method is what generates the return value for the public prettyPrint() method.
+     *
+     * @param indent how deeply indented this iteration of the method is.
+     * @return a String
+     */
+    String prettyPrint(int indent) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Optional<String> lastElement = this.data.keySet().stream().sorted().reduce((first, second) -> second);
+        if (lastElement.isEmpty()) {
+            stringBuilder.append("{ }");
+        } else {
+            stringBuilder.append("{\n");
+            this.data.keySet().stream().sorted().forEach(key -> {
+                Object value = this.data.get(key);
+                stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent + 1)))
+                        .append('"').append(key).append("\": ");
+                if (value instanceof HashMap) {
+                    stringBuilder.append(this.getJsonObject(key).prettyPrint(indent + 1));
+                } else if (value instanceof ArrayList) {
+                    stringBuilder.append(this.getJsonArray(key).prettyPrint(indent + 1));
+                } else if (value instanceof String string) {
+                    stringBuilder.append('"').append(string).append('"');
+                } else if (value == null) {
+                    stringBuilder.append("null");
+                } else {
+                    stringBuilder.append(value);
+                }
+                if (!Objects.equals(lastElement.get(), key)) {
+                    stringBuilder.append(',');
+                }
+                stringBuilder.append('\n');
+            });
+            stringBuilder.append(JsonObject.INDENT.repeat(Math.max(0, indent))).append('}');
+        }
+        return stringBuilder.toString();
     }
 
     // =================================================================================================================

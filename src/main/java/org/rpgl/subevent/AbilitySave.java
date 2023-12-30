@@ -20,6 +20,9 @@ import java.util.List;
  */
 public class AbilitySave extends Subevent {
 
+    // TODO base and target damage collections?
+    // TODO use_origin_difficulty_class_ability support?
+
     public AbilitySave() {
         super("ability_save");
     }
@@ -55,9 +58,9 @@ public class AbilitySave extends Subevent {
             this.putJsonArray("tags", new JsonArray(json.getJsonArray("tags").asList()));
             this.putJsonArray("determined", json.getJsonArray("determined"));
         }});
-        abilityCheck.setSource(this.getSource());
+        abilityCheck.setSource(super.getTarget());
         abilityCheck.prepare(context, resources);
-        abilityCheck.setTarget(this.getTarget());
+        abilityCheck.setTarget(super.getSource());
         abilityCheck.invoke(context, resources);
 
         if (abilityCheck.get() < this.json.getInteger("save_difficulty_class")) {
@@ -77,15 +80,14 @@ public class AbilitySave extends Subevent {
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
-        String difficultyClassAbility = this.json.getString("difficulty_class_ability");
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", difficultyClassAbility);
+            this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
-        calculateSaveDifficultyClass.setSource(this.getSource());
+        calculateSaveDifficultyClass.setSource(super.getSource());
         calculateSaveDifficultyClass.prepare(context, resources);
-        calculateSaveDifficultyClass.setTarget(this.getSource());
+        calculateSaveDifficultyClass.setTarget(super.getSource());
         calculateSaveDifficultyClass.invoke(context, resources);
         this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
     }
@@ -106,9 +108,9 @@ public class AbilitySave extends Subevent {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
-                subevent.setSource(this.getSource());
+                subevent.setSource(super.getSource());
                 subevent.prepare(context, resources);
-                subevent.setTarget(this.getTarget());
+                subevent.setTarget(super.getTarget());
                 subevent.invoke(context, resources);
             }
         }

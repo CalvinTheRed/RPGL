@@ -48,42 +48,29 @@ public class ObjectAbilityScoreComparisonTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new ObjectAbilityScoreComparison();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new ObjectAbilityScoreComparison().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (equals) (score equal to value)")
-    void evaluate_returnsTrue_equals_scoreEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates true (equals)")
+    void evaluatesTrue_equals() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -102,31 +89,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", "=");
             this.putInteger("compare_to", 15);
-        }};
-
-        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return true for equal comparison when score equals value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false (equals) (score not equal to value)")
-    void evaluate_returnsTrue_equals_scoreNotEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates false (equals)")
+    void evaluatesFalse_equals() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -145,31 +122,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", "=");
             this.putInteger("compare_to", 10);
-        }};
-
-        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return false for equal comparison when score does not equal value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (less than) (score less than value)")
-    void evaluate_returnsTrue_lessThan_scoreLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates true (less than)")
+    void evaluatesTrue_lessThan() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -188,31 +155,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", "<");
             this.putInteger("compare_to", 20);
-        }};
-
-        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return true for less-than comparison when score is less than value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false (less than) (score not less than value)")
-    void evaluate_returnsFalse_lessThan_scoreNotLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates false (less than)")
+    void evaluatesFalse_lessThan() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -231,31 +188,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", "<");
             this.putInteger("compare_to", 10);
-        }};
-
-        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return false for less-than comparison when score is not less than value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (more than) (score more than value)")
-    void evaluate_returnsTrue_moreThan_scoreMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates true (greater than)")
+    void evaluatesTrue_greaterThan() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -274,31 +221,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", ">");
             this.putInteger("compare_to", 10);
-        }};
-
-        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return true for more-than comparison when score is more than value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false (more than) (score not more than value)")
-    void evaluate_returnsFalse_moreThan_scoreNotMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates false (greater than)")
+    void evaluatesFalse_greaterThan() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -317,31 +254,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", ">");
             this.putInteger("compare_to", 20);
-        }};
-
-        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
-                "evaluate should return false for more-than comparison when score is not more than value"
+        }}, new DummyContext()),
+                "evaluate should return true for more-than comparison when score is more than value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (less than or equal to) (score less than value)")
-    void evaluate_returnsTrue_lessThanOrEqualTo_scoreLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates true (less than or equal to) (less than)")
+    void evaluatesTrue_lessThanOrEqualTo_lessThan() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -360,31 +287,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", "<=");
             this.putInteger("compare_to", 20);
-        }};
-
-        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return true for less-than-or-equal-to comparison when score is less than value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (less than or equal to) (score equal to value)")
-    void evaluate_returnsTrue_lessThanOrEqualTo_scoreEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates true (less than or equal to) (equals)")
+    void evaluatesTrue_lessThanOrEqualTo_equals() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -403,31 +320,21 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", "<=");
             this.putInteger("compare_to", 15);
-        }};
-
-        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return true for less-than-or-equal-to comparison when score is equal to value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false (less than or equal to) (score more than value)")
-    void evaluate_returnsFalse_lessThanOrEqualTo_scoreMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
+    @DisplayName("evaluates false (less than or equal to)")
+    void evaluatesFalse_lessThanOrEqualTo() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -446,31 +353,23 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", "<=");
             this.putInteger("compare_to", 10);
-        }};
-
-        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
-                "evaluate should return false for less-than-or-equal-to comparison when score is more than value"
+        }}, new DummyContext()),
+                "evaluate should return false for less-than-or-equal-to comparison when score is greater than value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (more than or equal to) (score more than value)")
-    void evaluate_returnsTrue_moreThanOrEqualTo_scoreMoreThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("evaluates true (greater than or equal to) (greater than)")
+    void evaluatesTrue_greaterThanOrEqualTo_greaterThan() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        source.getAbilityScores().putInteger("str", 15);
         DummyContext context = new DummyContext();
         context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -489,31 +388,23 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", ">=");
             this.putInteger("compare_to", 10);
-        }};
-
-        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, context),
                 "evaluate should return true for more-than-or-equal-to comparison when score is more than value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (more than or equal to) (score equal to value)")
-    void evaluate_returnsTrue_moreThanOrEqualTo_scoreEqualToValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("evaluates true (greater than or equal to) (equals)")
+    void evaluatesTrue_greaterThanOrEqualTo_equals() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        source.getAbilityScores().putInteger("str", 15);
         DummyContext context = new DummyContext();
         context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -532,31 +423,23 @@ public class ObjectAbilityScoreComparisonTest {
             this.putString("ability", "str");
             this.putString("comparison", ">=");
             this.putInteger("compare_to", 15);
-        }};
-
-        assertTrue(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+        }}, context),
                 "evaluate should return true for more-than-or-equal-to comparison when score is equal to value"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false (more than or equal to) (score less than value)")
-    void evaluate_returnsFalse_moreThanOrEqualTo_scoreLessThanValue() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("evaluates false (greater than or equal to)")
+    void evaluatesFalse_greaterThanOrEqualTo() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        source.getAbilityScores().putInteger("str", 15);
         DummyContext context = new DummyContext();
         context.add(source);
-        context.add(target);
-
-        source.getAbilityScores().putInteger("str", 15);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        ObjectAbilityScoreComparison objectAbilityScoreComparison = new ObjectAbilityScoreComparison();
-
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new ObjectAbilityScoreComparison().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "object_ability_score_comparison",
                 "object": {
@@ -567,17 +450,15 @@ public class ObjectAbilityScoreComparisonTest {
                 "comparison": ">=",
                 "compare_to": 20
             }*/
-            this.putString("condition", "object_ability_score_comparison");
-            this.putJsonObject("object", new JsonObject() {{
-                this.putString("from", "subevent");
-                this.putString("object", "source");
-            }});
-            this.putString("ability", "str");
-            this.putString("comparison", ">=");
-            this.putInteger("compare_to", 20);
-        }};
-
-        assertFalse(objectAbilityScoreComparison.evaluate(null, dummySubevent, conditionJson, context),
+                    this.putString("condition", "object_ability_score_comparison");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                    this.putString("ability", "str");
+                    this.putString("comparison", ">=");
+                    this.putInteger("compare_to", 20);
+                }}, context),
                 "evaluate should return false for more-than-or-equal-to comparison when score is less than value"
         );
     }

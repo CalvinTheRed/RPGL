@@ -49,38 +49,31 @@ public class UserIdsMatchTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new UserIdsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new UserIdsMatch().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate matching user ids (true)")
-    void evaluate_matchingUserIds_true() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject dragon = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
+    @DisplayName("evaluates true")
+    void evaluatesTrue() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLEffect dummyEffect = new RPGLEffect();
-        dummyEffect.setSource(knight);
+        dummyEffect.setSource(object);
 
         DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dragon);
+        dummySubevent.setSource(object);
 
-        Condition condition = new UserIdsMatch();
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new UserIdsMatch().evaluate(dummyEffect, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "user_ids_match",
                 "effect": "source",
@@ -89,29 +82,24 @@ public class UserIdsMatchTest {
             this.putString("condition", "user_ids_match");
             this.putString("effect", "source");
             this.putString("subevent", "source");
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertTrue(condition.evaluate(dummyEffect, dummySubevent, conditionJson, context),
-                "condition should evaluate true when user ids match"
+        }}, new DummyContext()),
+                "should evaluate true when user ids match"
         );
     }
 
     @Test
-    @DisplayName("evaluate differing user ids (false)")
-    void evaluate_differingUserIds_false() throws Exception {
-        RPGLObject knight = RPGLFactory.newObject("std:humanoid/knight", "player-one");
-        RPGLObject dragon = RPGLFactory.newObject("std:dragon/red/young", "player-two");
+    @DisplayName("evaluates false")
+    void evaluatesFalse() throws Exception {
+        RPGLObject object_1 = RPGLFactory.newObject("debug:dummy", "user-1");
+        RPGLObject object_2 = RPGLFactory.newObject("debug:dummy", "user-2");
 
         RPGLEffect dummyEffect = new RPGLEffect();
-        dummyEffect.setSource(knight);
+        dummyEffect.setSource(object_1);
 
         DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dragon);
+        dummySubevent.setSource(object_2);
 
-        Condition condition = new UserIdsMatch();
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new UserIdsMatch().evaluate(dummyEffect, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "user_ids_match",
                 "effect": "source",
@@ -120,12 +108,8 @@ public class UserIdsMatchTest {
             this.putString("condition", "user_ids_match");
             this.putString("effect", "source");
             this.putString("subevent", "source");
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertFalse(condition.evaluate(dummyEffect, dummySubevent, conditionJson, context),
-                "condition should evaluate false when user ids differ"
+        }}, new DummyContext()),
+                "should evaluate false when user ids do not match"
         );
     }
 

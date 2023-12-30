@@ -49,8 +49,8 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newEffect using std:common/damage/immunity/fire")
-    void newEffect_fireImmunity() {
+    @DisplayName("creates new effects")
+    void createsNewEffects() {
         RPGLEffect effect = RPGLFactory.newEffect("std:common/damage/immunity/fire");
         String expected;
 
@@ -77,8 +77,8 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newEvent using std:object/dragon/red/young/breath")
-    void newEvent_youngRedDragonFireBreath() {
+    @DisplayName("creates new events")
+    void createsNewEvents() {
         RPGLEvent event = RPGLFactory.newEvent("std:object/dragon/red/young/breath");
         String expected;
 
@@ -108,8 +108,8 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newItem using std:weapon/melee/martial/scimitar/frostbrand")
-    void newItem_frostbrand() {
+    @DisplayName("creates new items")
+    void createsNewItems() {
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/scimitar/frostbrand");
         String expected;
 
@@ -166,8 +166,8 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newObject using std:dragon/red/young")
-    void newObject_youngRedDragon() {
+    @DisplayName("creates new objects")
+    void createsNewObjects() {
         RPGLObject object = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
         String expected;
 
@@ -226,8 +226,8 @@ public class RPGLFactoryTest {
     }
 
     @Test
-    @DisplayName("newResource using std:common/action/01")
-    void newResource_action() {
+    @DisplayName("creates new resources")
+    void createsNewResources() {
         RPGLResource resource = RPGLFactory.newResource("std:common/action/01");
         String expected;
 

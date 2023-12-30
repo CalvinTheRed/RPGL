@@ -5,7 +5,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -49,8 +48,8 @@ public class CalculateCriticalHitThresholdTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CalculateCriticalHitThreshold();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -66,16 +65,13 @@ public class CalculateCriticalHitThresholdTest {
     }
 
     @Test
-    @DisplayName("prepare sets the base of the calculation to 20")
-    void prepare_setsBaseToTwenty() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("defaults base to 20")
+    void defaultsBaseTo20() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
         calculateCriticalHitThreshold.setSource(object);
-        calculateCriticalHitThreshold.setTarget(object);
-        calculateCriticalHitThreshold.prepare(context, List.of());
+        calculateCriticalHitThreshold.prepare(new DummyContext(), List.of());
 
         assertEquals(20, calculateCriticalHitThreshold.get(),
                 "calculateCriticalHitThreshold should have a base of 20 after prepare()"

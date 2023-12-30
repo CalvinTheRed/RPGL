@@ -15,8 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * This Function is dedicated to adding to a DamageCollection or a CriticalHitDamageCollection Subevent. Note that while
- * this Function can add negative bonuses, it can not add "negative dice."
+ * This Function is dedicated to adding to a DamageCollection or a CriticalHitDamageCollection Subevent.
  *
  * @author Calvin Withun
  */

@@ -48,8 +48,8 @@ public class GetEventsTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new GetEvents();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -65,15 +65,13 @@ public class GetEventsTest {
     }
 
     @Test
-    @DisplayName("getEvents is empty by default")
-    void getEvents_isEmptyByDefault() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("defaults to empty list")
+    void defaultsToEmptyList() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(object);
-        getEvents.prepare(context, List.of());
+        getEvents.prepare(new DummyContext(), List.of());
 
         assertTrue(getEvents.getEvents().isEmpty(),
                 "getEvents should return an empty array by default"
@@ -81,16 +79,14 @@ public class GetEventsTest {
     }
 
     @Test
-    @DisplayName("getEvents returns the correct events")
-    void getEvents_returnsCorrectEvents() throws Exception {
+    @DisplayName("returns events")
+    void returnsEvents() throws Exception {
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(object);
-        getEvents.prepare(context, List.of());
+        getEvents.prepare(new DummyContext(), List.of());
 
         getEvents.addEvent("std:item/weapon/melee/martial/longsword/melee", item.getUuid(), null);
         getEvents.addEvent("std:common/improvised_thrown", item.getUuid(), null);

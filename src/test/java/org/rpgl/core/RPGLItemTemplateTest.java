@@ -42,8 +42,8 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
-    @DisplayName("processEvents defaults events to empty arrays")
-    void processEvents_defaultsEventsToEmptyArrays() {
+    @DisplayName("defaults events list to empty arrays")
+    void defaultsEventsListToEmptyArrays() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("common/teacup");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
@@ -59,8 +59,8 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
-    @DisplayName("processEquippedEffects processes effects correctly")
-    void processEquippedEffects_processesEffectsCorrectly() {
+    @DisplayName("creates equipped effects")
+    void createsEquippedEffects() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("weapon/melee/martial/scimitar/frostbrand");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
@@ -81,8 +81,8 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
-    @DisplayName("processEquippedResources processes resources correctly")
-    void processEquippedResources_processesResourcesCorrectly() {
+    @DisplayName("creates equipped resources")
+    void createsEquippedResources() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("wand/wand_of_fireballs");
         RPGLItem item = new RPGLItem();
         item.join(itemTemplate);
@@ -101,8 +101,8 @@ public class RPGLItemTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance correctly creates frostbrand from template")
-    void newInstance_correctlyCreatesFrostbrandFromTemplate() {
+    @DisplayName("creates new items")
+    void createsNewItems() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("weapon/melee/martial/scimitar/frostbrand");
         RPGLItem item = itemTemplate.newInstance();
         String expected;

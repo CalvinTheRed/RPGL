@@ -43,8 +43,8 @@ public class TemporaryHitPointsDeliveryTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new TemporaryHitPointsDelivery();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -60,8 +60,8 @@ public class TemporaryHitPointsDeliveryTest {
     }
 
     @Test
-    @DisplayName("getTemporaryHitPoints returns stored temporary hit point amount")
-    void getTemporaryHitPoints_returnsStoredDamageValues() {
+    @DisplayName("returns temporary hit points")
+    void returnsTemporaryHitPoints() {
         TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
         temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -93,8 +93,8 @@ public class TemporaryHitPointsDeliveryTest {
     }
 
     @Test
-    @DisplayName("maximizeTemporaryHitPointDice maximizes all temporary hit point dice")
-    void maximizeTemporaryHitPointDice_maximizesAllTemporaryHitPointDice() {
+    @DisplayName("maximizes temporary hit point dice")
+    void maximizesTemporaryHitPointDice() {
         TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
         temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
             /*{

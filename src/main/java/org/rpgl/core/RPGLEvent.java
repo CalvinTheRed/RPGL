@@ -24,7 +24,7 @@ public class RPGLEvent extends DatapackContent {
      * @return a JsonObject representing the area of effect of the RPGLEvent
      */
     public JsonObject getAreaOfEffect() {
-        return this.getJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS);
+        return super.getJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS);
     }
 
     /**
@@ -33,7 +33,7 @@ public class RPGLEvent extends DatapackContent {
      * @param areaOfEffect a new area of effect JsonObject
      */
     public void setAreaOfEffect(JsonObject areaOfEffect) {
-        this.putJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS, areaOfEffect);
+        super.putJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS, areaOfEffect);
     }
 
     /**
@@ -42,7 +42,7 @@ public class RPGLEvent extends DatapackContent {
      * @return a JsonArray containing Subevent instructions
      */
     public JsonArray getSubevents() {
-        return this.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
+        return super.getJsonArray(RPGLEventTO.SUBEVENTS_ALIAS);
     }
 
     /**
@@ -51,7 +51,7 @@ public class RPGLEvent extends DatapackContent {
      * @param subevents a new subevents JsonArray
      */
     public void setSubevents(JsonArray subevents) {
-        this.putJsonArray(RPGLEventTO.SUBEVENTS_ALIAS, subevents);
+        super.putJsonArray(RPGLEventTO.SUBEVENTS_ALIAS, subevents);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RPGLEvent extends DatapackContent {
      * @return a JsonArray containing cost information
      */
     public JsonArray getCost() {
-        return this.getJsonArray(RPGLEventTO.COST_ALIAS);
+        return super.getJsonArray(RPGLEventTO.COST_ALIAS);
     }
 
     /**
@@ -69,7 +69,7 @@ public class RPGLEvent extends DatapackContent {
      * @param cost a new cost for the RPGLEvent
      */
     public void setCost(JsonArray cost) {
-        this.putJsonArray(RPGLEventTO.COST_ALIAS, cost);
+        super.putJsonArray(RPGLEventTO.COST_ALIAS, cost);
     }
 
     // =================================================================================================================
@@ -82,7 +82,7 @@ public class RPGLEvent extends DatapackContent {
      * @return an RPGLItem UUID, or null if the event was not produced using an item.
      */
     public String getOriginItem() {
-        return this.getString("origin_item");
+        return super.getString("origin_item");
     }
 
     /**
@@ -91,7 +91,7 @@ public class RPGLEvent extends DatapackContent {
      * @param originItem a RPGLItem UUID
      */
     public void setOriginItem(String originItem) {
-        this.putString("origin_item", originItem);
+        super.putString("origin_item", originItem);
     }
 
     /**
@@ -121,7 +121,7 @@ public class RPGLEvent extends DatapackContent {
                     JsonObject scalingElement = scaling.getJsonObject(j);
                     int magnitude = scalingElement.getInteger("magnitude");
                     String field = scalingElement.getString("field");
-                    this.insertInteger(field, this.seekInteger(field) + potencyDifference * magnitude);
+                    super.insertInteger(field, super.seekInteger(field) + potencyDifference * magnitude);
                 }
             }
         }

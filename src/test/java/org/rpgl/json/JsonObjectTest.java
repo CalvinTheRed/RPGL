@@ -46,8 +46,8 @@ public class JsonObjectTest {
     }
 
     @Test
-    @DisplayName("toString: comprehensive unit test")
-    void toString_test() {
+    @DisplayName("prints as string")
+    void printsAsString() {
         JsonObject toStringJsonObject = new JsonObject() {{
             /*{
                 "empty_object": { },
@@ -1009,6 +1009,65 @@ public class JsonObjectTest {
         json.insertBoolean("key.nestedKey", true);
         assertTrue(json.seekBoolean("key.nestedKey"),
                 "key 'key.nestedKey' should have value of true"
+        );
+    }
+
+    @Test
+    @DisplayName("pretty prints")
+    void prettyPrints() {
+        JsonObject json = new JsonObject() {{
+            /*{
+              "string_key": "string",
+              "integer_key": 10,
+              "double_key": 123.456,
+              "boolean_key": true,
+              "array_key": [ ],
+              "object_key": { },
+              "nested_object_key": {
+                "string_key": "string",
+                "integer_key": 10,
+                "double_key": 123.456,
+                "boolean_key": true,
+                "array_key": [ ],
+                "object_key": { }
+              }
+            }*/
+            this.putString("string_key", "string");
+            this.putInteger("integer_key", 10);
+            this.putDouble("double_key", 123.456);
+            this.putBoolean("boolean_key", true);
+            this.putJsonArray("array_key", new JsonArray());
+            this.putJsonObject("object_key", new JsonObject());
+            this.putJsonObject("nested_object_key", new JsonObject() {{
+                this.putString("string_key", "string");
+                this.putInteger("integer_key", 10);
+                this.putDouble("double_key", 123.456);
+                this.putBoolean("boolean_key", true);
+                this.putJsonArray("array_key", new JsonArray());
+                this.putJsonObject("object_key", new JsonObject());
+            }});
+        }};
+
+        String expected = """
+                {
+                  "array_key": [ ],
+                  "boolean_key": true,
+                  "double_key": 123.456,
+                  "integer_key": 10,
+                  "nested_object_key": {
+                    "array_key": [ ],
+                    "boolean_key": true,
+                    "double_key": 123.456,
+                    "integer_key": 10,
+                    "object_key": { },
+                    "string_key": "string"
+                  },
+                  "object_key": { },
+                  "string_key": "string"
+                }""";
+
+        assertEquals(expected, json.prettyPrint(),
+                ""
         );
     }
 

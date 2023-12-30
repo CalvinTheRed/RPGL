@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class GiveExpertise extends Function {
 
+    // TODO make a generic solution to make use of scale objects?
+
     private static final Logger LOGGER = LoggerFactory.getLogger(GiveExpertise.class);
 
     public GiveExpertise() {

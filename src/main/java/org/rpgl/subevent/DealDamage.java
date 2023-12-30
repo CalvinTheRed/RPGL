@@ -94,9 +94,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
             }});
         }});
         baseDamageCollection.setOriginItem(this.getOriginItem());
-        baseDamageCollection.setSource(this.getSource());
+        baseDamageCollection.setSource(super.getSource());
         baseDamageCollection.prepare(context, resources);
-        baseDamageCollection.setTarget(this.getSource());
+        baseDamageCollection.setTarget(super.getSource());
         baseDamageCollection.invoke(context, resources);
 
         /*
@@ -111,9 +111,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
             }});
         }});
         baseDamageRoll.setOriginItem(this.getOriginItem());
-        baseDamageRoll.setSource(this.getSource());
+        baseDamageRoll.setSource(super.getSource());
         baseDamageRoll.prepare(context, resources);
-        baseDamageRoll.setTarget(this.getSource());
+        baseDamageRoll.setTarget(super.getSource());
         baseDamageRoll.invoke(context, resources);
 
         /*
@@ -142,9 +142,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
             }});
         }});
         targetDamageCollection.setOriginItem(this.getOriginItem());
-        targetDamageCollection.setSource(this.getSource());
+        targetDamageCollection.setSource(super.getSource());
         targetDamageCollection.prepare(context, resources);
-        targetDamageCollection.setTarget(this.getTarget());
+        targetDamageCollection.setTarget(super.getTarget());
         targetDamageCollection.invoke(context, resources);
 
         /*
@@ -159,9 +159,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
             }});
         }});
         targetDamageRoll.setOriginItem(this.getOriginItem());
-        targetDamageRoll.setSource(this.getSource());
+        targetDamageRoll.setSource(super.getSource());
         targetDamageRoll.prepare(context, resources);
-        targetDamageRoll.setTarget(this.getTarget());
+        targetDamageRoll.setTarget(super.getTarget());
         targetDamageRoll.invoke(context, resources);
 
         this.json.getJsonArray("damage").asList().addAll(targetDamageRoll.getDamage().asList());
@@ -181,9 +181,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
             this.putJsonArray("damage", json.getJsonArray("damage"));
         }});
         damageDelivery.setOriginItem(this.getOriginItem());
-        damageDelivery.setSource(this.getSource());
+        damageDelivery.setSource(super.getSource());
         damageDelivery.prepare(context, resources);
-        damageDelivery.setTarget(this.getTarget());
+        damageDelivery.setTarget(super.getTarget());
         damageDelivery.invoke(context, resources);
 
         JsonObject damageByType = damageDelivery.getTarget().receiveDamage(damageDelivery, context);

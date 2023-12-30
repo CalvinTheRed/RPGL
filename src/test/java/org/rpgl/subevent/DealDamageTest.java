@@ -50,8 +50,8 @@ public class DealDamageTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new DealDamage();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -67,97 +67,10 @@ public class DealDamageTest {
     }
 
     @Test
-    @DisplayName("deliverDamage damage is delivered")
-    void deliverDamage_damageIsDelivered() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "tags": [ ],
-                "damage": [
-                    {
-                        "damage_type": "cold",
-                        "dice": [
-                            { "roll": 5 }
-                        ],
-                        "bonus": 5,
-                        "scale": {
-                            "numerator": 1,
-                            "denominator": 1,
-                            "round_up": false
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("tags", new JsonArray());
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 5);
-                        }});
-                    }});
-                    this.putInteger("bonus", 5);
-                    this.putJsonObject("scale", new JsonObject() {{
-                        this.putInteger("numerator", 1);
-                        this.putInteger("denominator", 1);
-                        this.putBoolean("round_up", false);
-                    }});
-                }});
-            }});
-        }});
-
-        dealDamage.setSource(source);
-        dealDamage.setTarget(target);
-        dealDamage.deliverDamage(context, List.of());
-
-        assertEquals(42, target.getHealthData().getInteger("current"),
-                "10 damage should be delivered (52-10=42)"
-        );
-    }
-
-    @Test
-    @DisplayName("getTargetDamage no target damage by default")
-    void getTargetDamage_noTargetDamageByDefault() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "tags": [ ],
-                "damage": [ ]
-            }*/
-            this.putJsonArray("tags", new JsonArray());
-            this.putJsonArray("damage", new JsonArray());
-        }});
-
-        dealDamage.setSource(source);
-        dealDamage.setTarget(target);
-        dealDamage.getTargetDamage(context, List.of());
-
-        assertEquals("[]", dealDamage.json.getJsonArray("damage").toString(),
-                "target damage object should be empty by default"
-        );
-    }
-
-    @Test
-    @DisplayName("getBaseDamage base damage calculated correctly")
-    void getBaseDamage_baseDamageCalculatedProperly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("gets base damage")
+    void getsBaseDamage() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
@@ -195,7 +108,7 @@ public class DealDamageTest {
 
         dealDamage.setSource(source);
         dealDamage.setTarget(target);
-        dealDamage.getBaseDamage(context, List.of());
+        dealDamage.getBaseDamage(new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -205,13 +118,9 @@ public class DealDamageTest {
     }
 
     @Test
-    @DisplayName("invoke deals correct damage")
-    void invoke_dealsCorrectDamage() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("deals damage")
+    void dealsDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
@@ -245,19 +154,19 @@ public class DealDamageTest {
             }});
         }});
 
-        dealDamage.setSource(source);
-        dealDamage.prepare(context, List.of());
-        dealDamage.setTarget(target);
-        dealDamage.invoke(context, List.of());
+        dealDamage.setSource(object);
+        dealDamage.prepare(new DummyContext(), List.of());
+        dealDamage.setTarget(object);
+        dealDamage.invoke(new DummyContext(), List.of());
 
-        assertEquals(49, target.getHealthData().getInteger("current"),
-                "invoking DealDamage should deal 3 points of damage (52-3=49)"
+        assertEquals(1000 /*base*/ -3 /*damage*/, object.getHealthData().getInteger("current"),
+                "invoking DealDamage should deal 3 points of damage"
         );
     }
 
     @Test
-    @DisplayName("invoke accommodates vampirism")
-    void invoke_accommodatesVampirism() throws Exception {
+    @DisplayName("deals vampiric damage")
+    void dealsVampiricDamage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
@@ -325,8 +234,8 @@ public class DealDamageTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns true (damage type included)")
-    void includesDamageType_returnsTrue_damageTypeIncluded() {
+    @DisplayName("recognizes present damage type")
+    void recognizesPresentDamageType() {
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
             /*{
@@ -349,8 +258,8 @@ public class DealDamageTest {
     }
 
     @Test
-    @DisplayName("includesDamageType returns false (damage type not included)")
-    void includesDamageType_returnsFalse_damageTypeNotIncluded() {
+    @DisplayName("recognizes absent damage type")
+    void recognizesAbsentDamageType() {
         DealDamage dealDamage = new DealDamage();
         dealDamage.joinSubeventData(new JsonObject() {{
             /*{

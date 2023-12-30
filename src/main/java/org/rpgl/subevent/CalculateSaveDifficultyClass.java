@@ -1,8 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -44,15 +44,46 @@ public class CalculateSaveDifficultyClass extends Calculation {
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
         super.setBase(8);
-        RPGLObject source = this.getSource();
-        super.addBonus(new JsonObject() {{
-            this.putInteger("bonus", source.getEffectiveProficiencyBonus(context));
-            this.putJsonArray("dice", new JsonArray());
-        }});
-        super.addBonus(new JsonObject() {{
-            this.putInteger("bonus", source.getAbilityModifierFromAbilityName(json.getString("difficulty_class_ability"), context));
-            this.putJsonArray("dice", new JsonArray());
-        }});
+        new AddBonus().execute(null, this, new JsonObject() {{
+                /*{
+                    "function": "add_bonus",
+                    "bonus": [
+                        {
+                            "formula": "proficiency",
+                            "object": {
+                                "from": "subevent",
+                                "object": "source"
+                            }
+                        },
+                        {
+                            "formula": "modifier",
+                            "ability": <difficulty_class_ability>
+                            "object": {
+                                "from": "subevent",
+                                "object": "source"
+                            }
+                        }
+                    ]
+                }*/
+            this.putString("function", "add_bonus");
+            this.putJsonArray("bonus", new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("formula", "proficiency");
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("formula", "modifier");
+                    this.putString("ability", json.getString("difficulty_class_ability"));
+                    this.putJsonObject("object", new JsonObject() {{
+                        this.putString("from", "subevent");
+                        this.putString("object", "source");
+                    }});
+                }});
+            }});
+        }}, context, resources);
     }
 
 }

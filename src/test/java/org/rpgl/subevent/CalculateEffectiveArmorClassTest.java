@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class CalculateEffectiveArmorClassTest {
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CalculateEffectiveArmorClass();
         subevent.joinSubeventData(new JsonObject() {{
             /*{

@@ -49,47 +49,31 @@ public class ObjectsMatchTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new ObjectsMatch().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true (effect source same as subevent source)")
-    void evaluate_returnsTrue_effectSourceSameAsSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = effectSource;
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
+    @DisplayName("evaluates true")
+    void evaluatesTrue() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLEffect effect = new RPGLEffect();
-        effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
+        effect.setSource(object);
 
         DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
+        dummySubevent.setSource(object);
 
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new ObjectsMatch().evaluate(effect, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "objects_match",
                 "effect": "source",
@@ -98,36 +82,24 @@ public class ObjectsMatchTest {
             this.putString("condition", "objects_match");
             this.putString("effect", "source");
             this.putString("subevent", "source");
-        }};
-
-        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
+        }}, new DummyContext()),
                 "evaluate should return true when objects match"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns false (effect source different than subevent source)")
-    void evaluate_returnsFalse_effectSourceDifferentThanSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
+    @DisplayName("evaluates false")
+    void evaluatesFalse() throws Exception {
+        RPGLObject effectSource = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject subeventSource = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLEffect effect = new RPGLEffect();
         effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
 
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new ObjectsMatch().evaluate(effect, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "objects_match",
                 "effect": "source",
@@ -136,238 +108,8 @@ public class ObjectsMatchTest {
             this.putString("condition", "objects_match");
             this.putString("effect", "source");
             this.putString("subevent", "source");
-        }};
-
-        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
-                "evaluate should return false when objects don't match"
-        );
-    }
-
-    @Test
-    @DisplayName("evaluate returns true (effect source same as subevent target)")
-    void evaluate_returnsTrue_effectSourceSameAsSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventTarget = effectSource;
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
-
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "objects_match",
-                "effect": "source",
-                "subevent": "target"
-            }*/
-            this.putString("condition", "objects_match");
-            this.putString("effect", "source");
-            this.putString("subevent", "target");
-        }};
-
-        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
-                "evaluate should return true when objects match"
-        );
-    }
-
-    @Test
-    @DisplayName("evaluate returns false (effect source different than subevent target)")
-    void evaluate_returnsFalse_effectSourceDifferentThanSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
-
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "objects_match",
-                "effect": "source",
-                "subevent": "target"
-            }*/
-            this.putString("condition", "objects_match");
-            this.putString("effect", "source");
-            this.putString("subevent", "target");
-        }};
-
-        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
-                "evaluate should return false when objects don't match"
-        );
-    }
-
-    @Test
-    @DisplayName("evaluate returns true (effect target same as subevent source)")
-    void evaluate_returnsTrue_effectTargetSameAsSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = effectTarget;
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
-
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "objects_match",
-                "effect": "target",
-                "subevent": "source"
-            }*/
-            this.putString("condition", "objects_match");
-            this.putString("effect", "target");
-            this.putString("subevent", "source");
-        }};
-
-        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
-                "evaluate should return true when objects match"
-        );
-    }
-
-    @Test
-    @DisplayName("evaluate returns false (effect target different than subevent source)")
-    void evaluate_returnsFalse_effectTargetDifferentThanSubeventSource() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
-
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "objects_match",
-                "effect": "target",
-                "subevent": "source"
-            }*/
-            this.putString("condition", "objects_match");
-            this.putString("effect", "target");
-            this.putString("subevent", "source");
-        }};
-
-        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
-                "evaluate should return false when objects don't match"
-        );
-    }
-
-    @Test
-    @DisplayName("evaluate returns true (effect target same as subevent target)")
-    void evaluate_returnsTrue_effectTargetSameAsSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventTarget = effectTarget;
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
-
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "objects_match",
-                "effect": "target",
-                "subevent": "target"
-            }*/
-            this.putString("condition", "objects_match");
-            this.putString("effect", "target");
-            this.putString("subevent", "target");
-        }};
-
-        assertTrue(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
-                "evaluate should return true when objects match"
-        );
-    }
-
-    @Test
-    @DisplayName("evaluate returns false (effect target different than subevent target)")
-    void evaluate_returnsFalse_effectTargetDifferentThanSubeventTarget() throws Exception {
-        RPGLObject effectSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject effectTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventSource = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject subeventTarget = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(effectSource);
-        context.add(effectTarget);
-        context.add(subeventSource);
-        context.add(subeventTarget);
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(effectSource);
-        effect.setTarget(effectTarget);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(subeventSource);
-        dummySubevent.setTarget(subeventTarget);
-
-        ObjectsMatch objectsMatch = new ObjectsMatch();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "objects_match",
-                "effect": "target",
-                "subevent": "target"
-            }*/
-            this.putString("condition", "objects_match");
-            this.putString("effect", "target");
-            this.putString("subevent", "target");
-        }};
-
-        assertFalse(objectsMatch.evaluate(effect, dummySubevent, conditionJson, context),
-                "evaluate should return false when objects don't match"
+        }}, new DummyContext()),
+                "evaluate should return false when objects do not match"
         );
     }
 

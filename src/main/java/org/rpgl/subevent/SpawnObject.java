@@ -65,12 +65,12 @@ public class SpawnObject extends Subevent {
                 this.json.getJsonArray("object_bonuses")
         );
 
-        spawnedObject.setOriginObject(this.getSource().getUuid());
+        spawnedObject.setOriginObject(super.getSource().getUuid());
 
         JsonArray extraEffects = this.json.getJsonArray("extra_effects");
         for (int i = 0; i < extraEffects.size(); i++) {
             RPGLEffect effect = RPGLFactory.newEffect(extraEffects.getString(i), this.getOriginItem(), resources);
-            effect.setSource(this.getSource());
+            effect.setSource(super.getSource());
             effect.setTarget(spawnedObject);
             spawnedObject.addEffect(effect);
         }
@@ -83,7 +83,7 @@ public class SpawnObject extends Subevent {
         }
 
         if (this.json.getBoolean("extend_proficiency_bonus")) {
-            spawnedObject.setProficiencyBonus(this.getSource().getEffectiveProficiencyBonus(context));
+            spawnedObject.setProficiencyBonus(super.getSource().getEffectiveProficiencyBonus(context));
         }
 
         context.add(spawnedObject);

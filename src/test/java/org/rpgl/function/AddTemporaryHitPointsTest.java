@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -50,39 +49,29 @@ public class AddTemporaryHitPointsTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddTemporaryHitPoints();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddTemporaryHitPoints().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds temporary hit points to subevent")
-    void execute_addsTemporaryHitPointsToSubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("adds temporary hit points")
+    void addsTemporaryHitPoints() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepare(context, List.of());
+        temporaryHitPointCollection.setSource(object);
+        temporaryHitPointCollection.prepare(new DummyContext(), List.of());
 
-        AddTemporaryHitPoints addTemporaryHitPoints = new AddTemporaryHitPoints();
-        JsonObject functionJson = new JsonObject() {{
+        new AddTemporaryHitPoints().execute(null, temporaryHitPointCollection, new JsonObject() {{
             /*{
                 "function": "add_temporary_hit_points",
                 "temporary_hit_points": [
@@ -111,13 +100,7 @@ public class AddTemporaryHitPointsTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-
-        addTemporaryHitPoints.execute(effect, temporaryHitPointCollection, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

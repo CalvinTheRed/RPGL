@@ -43,8 +43,8 @@ public class HealingDeliveryTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new HealingDelivery();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -60,8 +60,8 @@ public class HealingDeliveryTest {
     }
 
     @Test
-    @DisplayName("getHealing returns stored healing amount")
-    void getHealing_returnsStoredDamageValues() {
+    @DisplayName("gets healing")
+    void getsHealing() {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -88,13 +88,13 @@ public class HealingDeliveryTest {
         }});
 
         assertEquals(5, healingDelivery.getHealing(),
-                "getHealing should return the healing being conveyed by the subevent"
+                "getHealing should return the healing being specified by the subevent"
         );
     }
 
     @Test
-    @DisplayName("maximizeHealingDice maximizes all healing dice")
-    void maximizeHealingDice_maximizesAllHealingDice() {
+    @DisplayName("maximizes healing dice")
+    void maximizesHealingDice() {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
             /*{

@@ -49,100 +49,73 @@ public class RevokeImmunityTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new RevokeImmunity();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new RevokeImmunity().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute revokes immunity for single damage type")
-    void execute_revokesImmunityForSingleDamageType() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        String damageTypeFire = "fire";
-        String damageTypeCold = "cold";
+    @DisplayName("revokes immunity (specific damage type)")
+    void revokesImmunity_specificDamageType() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType(damageTypeFire);
-        damageAffinity.addDamageType(damageTypeCold);
-        damageAffinity.setSource(source);
-        damageAffinity.prepare(context, List.of());
-        damageAffinity.setTarget(target);
-        damageAffinity.grantImmunity(damageTypeFire);
-        damageAffinity.grantImmunity(damageTypeCold);
+        damageAffinity.setSource(object);
+        damageAffinity.addDamageType("fire");
+        damageAffinity.addDamageType("cold");
+        damageAffinity.prepare(new DummyContext(), List.of());
+        damageAffinity.grantImmunity("fire");
+        damageAffinity.grantImmunity("cold");
 
-        RevokeImmunity revokeImmunity = new RevokeImmunity();
-        JsonObject functionJson = new JsonObject() {{
+        new RevokeImmunity().execute(null, damageAffinity, new JsonObject() {{
             /*{
                 "function": "revoke_immunity",
                 "damage_type": "fire"
             }*/
             this.putString("function", "revoke_immunity");
-            this.putString("damage_type", damageTypeFire);
-        }};
+            this.putString("damage_type", "fire");
+        }}, new DummyContext(), List.of());
 
-        revokeImmunity.execute(null, damageAffinity, functionJson, context, List.of());
-
-        assertFalse(damageAffinity.isImmune(damageTypeFire),
+        assertFalse(damageAffinity.isImmune("fire"),
                 "execute should revoke immunity to counter the granted fire immunity"
         );
-        assertTrue(damageAffinity.isImmune(damageTypeCold),
+        assertTrue(damageAffinity.isImmune("cold"),
                 "execute should not revoke immunity to counter the granted cold immunity"
         );
     }
 
     @Test
-    @DisplayName("execute revokes immunity for all damage types")
-    void execute_revokesImmunityForAllDamageTypes() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
-
-        String damageTypeFire = "fire";
-        String damageTypeCold = "cold";
+    @DisplayName("revokes immunity (all damage types)")
+    void revokesImmunity_allDamageTypes() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType(damageTypeFire);
-        damageAffinity.addDamageType(damageTypeCold);
-        damageAffinity.setSource(source);
-        damageAffinity.prepare(context, List.of());
-        damageAffinity.setTarget(target);
-        damageAffinity.grantImmunity(damageTypeFire);
-        damageAffinity.grantImmunity(damageTypeCold);
+        damageAffinity.setSource(object);
+        damageAffinity.addDamageType("fire");
+        damageAffinity.addDamageType("cold");
+        damageAffinity.prepare(new DummyContext(), List.of());
+        damageAffinity.grantImmunity("fire");
+        damageAffinity.grantImmunity("cold");
 
-        RevokeImmunity revokeImmunity = new RevokeImmunity();
-        JsonObject functionJson = new JsonObject() {{
+        new RevokeImmunity().execute(null, damageAffinity, new JsonObject() {{
             /*{
                 "function": "revoke_immunity"
             }*/
             this.putString("function", "revoke_immunity");
-        }};
+        }}, new DummyContext(), List.of());
 
-        revokeImmunity.execute(null, damageAffinity, functionJson, context, List.of());
-
-        assertFalse(damageAffinity.isImmune(damageTypeFire),
+        assertFalse(damageAffinity.isImmune("fire"),
                 "execute should revoke immunity to counter the granted fire immunity"
         );
-        assertFalse(damageAffinity.isImmune(damageTypeCold),
+        assertFalse(damageAffinity.isImmune("cold"),
                 "execute should revoke immunity to counter the granted cold immunity"
         );
     }

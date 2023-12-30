@@ -45,8 +45,8 @@ public class CalculateMaximumHitPointsTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CalculateMaximumHitPoints();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -62,16 +62,14 @@ public class CalculateMaximumHitPointsTest {
     }
 
     @Test
-    @DisplayName("prepare calculates correct default hit point maximum")
-    void prepare_calculatesCorrectDefaultHitPointMaximum() throws Exception {
+    @DisplayName("defaults to normal max hit point count")
+    void defaultsToNormalBaseHitPointCount() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
 
         CalculateMaximumHitPoints calculateMaximumHitPoints = new CalculateMaximumHitPoints();
 
         calculateMaximumHitPoints.setSource(source);
-        calculateMaximumHitPoints.prepare(context, List.of());
+        calculateMaximumHitPoints.prepare(new DummyContext(), List.of());
 
         assertEquals(178, calculateMaximumHitPoints.get(),
                 "prepare() should calculate the default maximum hit points for a RPGLObject (93+(17*5)=178)"

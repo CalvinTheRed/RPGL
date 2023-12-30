@@ -24,7 +24,7 @@ public class RPGLClass extends DatapackContent {
      * @return the level at which this class gains a subclass
      */
     public Integer getSubclassLevel() {
-        return this.getInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS);
+        return super.getInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS);
     }
 
     /**
@@ -33,7 +33,7 @@ public class RPGLClass extends DatapackContent {
      * @param subclassLevel the new level at which this class gains a subclass
      */
     public void setSubclassLevel(int subclassLevel) {
-        this.putInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS, subclassLevel);
+        super.putInteger(RPGLClassTO.SUBCLASS_LEVEL_ALIAS, subclassLevel);
     }
 
     /**
@@ -42,7 +42,7 @@ public class RPGLClass extends DatapackContent {
      * @return an array of levels at which this class grants ability score increases
      */
     public JsonArray getAbilityScoreIncreases() {
-        return this.getJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS);
+        return super.getJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS);
     }
 
     /**
@@ -51,7 +51,7 @@ public class RPGLClass extends DatapackContent {
      * @param abilityScoreIncreases the new array of levels at which this class grants ability score increases
      */
     public void setAbilityScoreIncreases(JsonArray abilityScoreIncreases) {
-        this.putJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS, abilityScoreIncreases);
+        super.putJsonArray(RPGLClassTO.ABILITY_SCORE_INCREASES_ALIAS, abilityScoreIncreases);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RPGLClass extends DatapackContent {
      * @return an array of multiclassing requirements which must be met to multiclass into or out of this class
      */
     public JsonArray getMulticlassingRequirements() {
-        return this.getJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS);
+        return super.getJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS);
     }
 
     /**
@@ -70,7 +70,7 @@ public class RPGLClass extends DatapackContent {
      *                                  or out of this class
      */
     public void setMulticlassingRequirements(JsonArray multiclassingRequirements) {
-        this.putJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS, multiclassingRequirements);
+        super.putJsonArray(RPGLClassTO.MULTICLASSING_REQUIREMENTS_ALIAS, multiclassingRequirements);
     }
 
     /**
@@ -79,7 +79,7 @@ public class RPGLClass extends DatapackContent {
      * @return an array of class IDs for classes nested within this class
      */
     public JsonObject getNestedClasses() {
-        return this.getJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS);
+        return super.getJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS);
     }
 
     /**
@@ -88,7 +88,7 @@ public class RPGLClass extends DatapackContent {
      * @param nestedClasses the new array of class IDs for classes nested within this class
      */
     public void setNestedClasses(JsonObject nestedClasses) {
-        this.putJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS, nestedClasses);
+        super.putJsonObject(RPGLClassTO.NESTED_CLASSES_ALIAS, nestedClasses);
     }
 
     /**
@@ -98,7 +98,7 @@ public class RPGLClass extends DatapackContent {
      * level
      */
     public JsonObject getStartingFeatures() {
-        return this.getJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS);
+        return super.getJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS);
     }
 
     /**
@@ -108,7 +108,7 @@ public class RPGLClass extends DatapackContent {
      *                         as an object's first level
      */
     public void setStartingFeatures(JsonObject startingFeatures) {
-        this.putJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS, startingFeatures);
+        super.putJsonObject(RPGLClassTO.STARTING_FEATURES_ALIAS, startingFeatures);
     }
 
     /**
@@ -117,7 +117,7 @@ public class RPGLClass extends DatapackContent {
      * @return a JSON object indicating features to be gained or lost at specified levels in this class
      */
     public JsonObject getFeatures() {
-        return this.getJsonObject(RPGLClassTO.FEATURES_ALIAS);
+        return super.getJsonObject(RPGLClassTO.FEATURES_ALIAS);
     }
 
     /**
@@ -126,7 +126,7 @@ public class RPGLClass extends DatapackContent {
      * @param features the new JSON object indicating features to be gained or lost at specified levels in this class
      */
     public void setFeatures(JsonObject features) {
-        this.putJsonObject(RPGLClassTO.FEATURES_ALIAS, features);
+        super.putJsonObject(RPGLClassTO.FEATURES_ALIAS, features);
     }
 
     // =================================================================================================================
@@ -187,7 +187,7 @@ public class RPGLClass extends DatapackContent {
             JsonArray classes = object.getClasses();
             for (int i = 0; i < classes.size(); i++) {
                 JsonObject classData = classes.getJsonObject(i);
-                if (Objects.equals(this.getId(), classData.getString("id"))) {
+                if (Objects.equals(super.getId(), classData.getString("id"))) {
                     classData.putInteger("level", level);
                     break;
                 }

@@ -29,7 +29,7 @@ public class SetDamageDiceMatchingOrBelow extends Function {
     public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
                     List<RPGLResource> resources) {
         if (subevent instanceof DamageRoll damageRoll) {
-            damageRoll.setTypedDiceMatchingOrBelow(
+            damageRoll.setDamageDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),
                     functionJson.getInteger("set"),
                     functionJson.getString("damage_type")

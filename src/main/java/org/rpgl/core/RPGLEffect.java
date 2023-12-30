@@ -31,7 +31,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @return a JsonObject representing the RPGLEffect object's Subevent filters
      */
     public JsonObject getSubeventFilters() {
-        return this.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS);
+        return super.getJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS);
     }
 
     /**
@@ -40,7 +40,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @param subeventFilters a new subevent filters JsonObject
      */
     public void setSubeventFilters(JsonObject subeventFilters) {
-        this.putJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS, subeventFilters);
+        super.putJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS, subeventFilters);
     }
 
     /**
@@ -49,7 +49,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @return a RPGLObject
      */
     public RPGLObject getSource() {
-        return UUIDTable.getObject(this.getString(RPGLEffectTO.SOURCE_ALIAS));
+        return UUIDTable.getObject(super.getString(RPGLEffectTO.SOURCE_ALIAS));
     }
 
     /**
@@ -58,7 +58,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @param source a RPGLObject
      */
     public void setSource(RPGLObject source) {
-        this.putString(RPGLEffectTO.SOURCE_ALIAS, source.getUuid());
+        super.putString(RPGLEffectTO.SOURCE_ALIAS, source.getUuid());
     }
 
     /**
@@ -67,7 +67,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @return a RPGLObject
      */
     public RPGLObject getTarget() {
-        return UUIDTable.getObject(this.getString(RPGLEffectTO.TARGET_ALIAS));
+        return UUIDTable.getObject(super.getString(RPGLEffectTO.TARGET_ALIAS));
     }
 
     /**
@@ -76,7 +76,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @param target a RPGLObject
      */
     public void setTarget(RPGLObject target) {
-        this.putString(RPGLEffectTO.TARGET_ALIAS, target.getUuid());
+        super.putString(RPGLEffectTO.TARGET_ALIAS, target.getUuid());
     }
 
     /**
@@ -85,7 +85,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @return an RPGLItem UUID, or null if the effect was not produced by an item.
      */
     public String getOriginItem() {
-        return this.getString(RPGLEffectTO.ORIGIN_ITEM_ALIAS);
+        return super.getString(RPGLEffectTO.ORIGIN_ITEM_ALIAS);
     }
 
     /**
@@ -94,7 +94,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @param originItem a RPGLItem UUID
      */
     public void setOriginItem(String originItem) {
-        this.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
+        super.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
     }
 
     /**
@@ -103,7 +103,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @return an array indicating how the effect scales with more potent resources
      */
     public JsonArray getScale() {
-        return this.getJsonArray(RPGLEffectTO.SCALE_ALIAS);
+        return super.getJsonArray(RPGLEffectTO.SCALE_ALIAS);
     }
 
     /**
@@ -112,7 +112,7 @@ public class RPGLEffect extends RPGLTaggable {
      * @param scale a new array indicating scale data
      */
     public void setScale(JsonArray scale) {
-        this.putJsonArray(RPGLEffectTO.SCALE_ALIAS, scale);
+        super.putJsonArray(RPGLEffectTO.SCALE_ALIAS, scale);
     }
 
     // =================================================================================================================

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
@@ -50,39 +49,29 @@ public class AddHealingTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new AddHealing();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new AddHealing().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute adds healing to subevent")
-    void execute_addsHealingToSubevent() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("adds healing")
+    void addsHealing() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         HealingCollection healingCollection = new HealingCollection();
-        healingCollection.setSource(source);
-        healingCollection.prepare(context, List.of());
+        healingCollection.setSource(object);
+        healingCollection.prepare(new DummyContext(), List.of());
 
-        AddHealing addHealing = new AddHealing();
-        JsonObject functionJson = new JsonObject() {{
+        new AddHealing().execute(null, healingCollection, new JsonObject() {{
            /*{
                 "function": "add_healing",
                 "healing": [
@@ -111,13 +100,7 @@ public class AddHealingTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }};
-
-        RPGLEffect effect = new RPGLEffect();
-        effect.setSource(source);
-        effect.setTarget(target);
-
-        addHealing.execute(effect, healingCollection, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

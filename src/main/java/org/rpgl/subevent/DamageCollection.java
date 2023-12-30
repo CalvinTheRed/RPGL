@@ -73,8 +73,8 @@ public class DamageCollection extends Subevent implements DamageTypeSubevent {
         this.json.putJsonArray("damage", new JsonArray());
 
         RPGLEffect effect = new RPGLEffect();
-        effect.setSource(this.getSource());
-        effect.setTarget(this.getSource());
+        effect.setSource(super.getSource());
+        effect.setTarget(super.getSource());
         for (int i = 0; i < damageArray.size(); i++) {
             JsonObject damageElement = damageArray.getJsonObject(i);
             JsonObject damage = Calculation.processBonusJson(effect, this, damageElement, context);

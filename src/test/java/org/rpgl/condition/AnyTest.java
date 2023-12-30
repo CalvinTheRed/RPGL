@@ -26,49 +26,38 @@ public class AnyTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new Any();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new Any().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate for no sub-conditions")
-    void evaluate_default_true() throws Exception {
-        Condition condition = new Any();
-        JsonObject conditionJson = new JsonObject() {{
+    @DisplayName("evaluates true (no conditions)")
+    void evaluatesTrue_noConditions() throws Exception {
+        assertTrue(new Any().evaluate(null, null, new JsonObject() {{
             /*{
                 "condition": "any",
                 "conditions": [ ]
             }*/
             this.putString("condition", "any");
             this.putJsonArray("conditions", new JsonArray());
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertTrue(condition.evaluate(null, null, conditionJson, context),
-                "Any condition should evaluate true for no sub-conditions"
+        }}, new DummyContext()),
+                "Any condition should evaluate true by default"
         );
     }
 
     @Test
-    @DisplayName("evaluate for true, true")
-    void evaluate_trueTrue_true() throws Exception {
-        Condition condition = new Any();
-        JsonObject conditionJson = new JsonObject() {{
+    @DisplayName("evaluates true (multiple true)")
+    void evaluatesTrue_multipleTrue() throws Exception {
+        assertTrue(new Any().evaluate(null, null, new JsonObject() {{
             /*{
                 "condition": "any",
                 "conditions": [
@@ -85,20 +74,15 @@ public class AnyTest {
                     this.putString("condition", "true");
                 }});
             }});
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertTrue(condition.evaluate(null, null, conditionJson, context),
+        }}, new DummyContext()),
                 "Any condition should evaluate true for 2 true conditions"
         );
     }
 
     @Test
-    @DisplayName("evaluate for true, false")
-    void evaluate_trueFalse_true() throws Exception {
-        Condition condition = new Any();
-        JsonObject conditionJson = new JsonObject() {{
+    @DisplayName("evaluates true (true and false)")
+    void evaluatesTrue_trueAndFalse() throws Exception {
+        assertTrue(new Any().evaluate(null, null, new JsonObject() {{
             /*{
                 "condition": "any",
                 "conditions": [
@@ -115,20 +99,15 @@ public class AnyTest {
                     this.putString("condition", "false");
                 }});
             }});
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertTrue(condition.evaluate(null, null, conditionJson, context),
-                "Any condition should evaluate true for 1 true and 1 false condition"
+        }}, new DummyContext()),
+                "Any condition should evaluate false for 1 true and 1 false condition"
         );
     }
 
     @Test
-    @DisplayName("evaluate for false, false")
-    void evaluate_falseFalse_false() throws Exception {
-        Condition condition = new Any();
-        JsonObject conditionJson = new JsonObject() {{
+    @DisplayName("evaluates false (multiple false)")
+    void evaluatesFalse_multipleFalse() throws Exception {
+        assertFalse(new Any().evaluate(null, null, new JsonObject() {{
             /*{
                 "condition": "any",
                 "conditions": [
@@ -145,11 +124,7 @@ public class AnyTest {
                     this.putString("condition", "false");
                 }});
             }});
-        }};
-
-        DummyContext context = new DummyContext();
-
-        assertFalse(condition.evaluate(null, null, conditionJson, context),
+        }}, new DummyContext()),
                 "Any condition should evaluate false for 2 false conditions"
         );
     }

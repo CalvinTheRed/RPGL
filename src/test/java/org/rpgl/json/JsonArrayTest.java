@@ -358,4 +358,62 @@ public class JsonArrayTest {
         );
     }
 
+    @Test
+    @DisplayName("pretty prints")
+    void prettyPrints() {
+        JsonArray json = new JsonArray() {{
+            /*[
+                "string",
+                10,
+                123.456,
+                true,
+                [ ],
+                { },
+                [
+                    "string",
+                    10,
+                    123.456,
+                    true,
+                    [ ],
+                    { }
+                ]
+            ]*/
+            this.addString("string");
+            this.addInteger(10);
+            this.addDouble(123.456);
+            this.addBoolean(true);
+            this.addJsonArray(new JsonArray());
+            this.addJsonObject(new JsonObject());
+            this.addJsonArray(new JsonArray() {{
+                this.addString("string");
+                this.addInteger(10);
+                this.addDouble(123.456);
+                this.addBoolean(true);
+                this.addJsonArray(new JsonArray());
+                this.addJsonObject(new JsonObject());
+            }});
+        }};
+
+        String expected = """
+                [
+                  "string",
+                  10,
+                  123.456,
+                  true,
+                  [ ],
+                  { },
+                  [
+                    "string",
+                    10,
+                    123.456,
+                    true,
+                    [ ],
+                    { }
+                  ]
+                ]""";
+        assertEquals(expected, json.prettyPrint(),
+                ""
+        );
+    }
+
 }

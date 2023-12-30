@@ -79,27 +79,51 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("addBonus should be able to go negative and should be additive")
-    void addBonus_canGoNegativeAndIsAdditive() {
+    @DisplayName("bonuses can scale")
+    void bonusesCanScale() {
         calculation.addBonus(new JsonObject() {{
-            this.putInteger("bonus", -5);
+            this.putInteger("bonus", 5);
             this.putJsonArray("dice", new JsonArray());
+            this.putJsonObject("scale", new JsonObject() {{
+                this.putInteger("numerator", -1);
+                this.putInteger("denominator", 1);
+                this.putBoolean("round_up", false);
+            }});
         }});
         assertEquals(-5, calculation.getBonus(),
-                "bonus should be able to no below 0"
-        );
-        calculation.addBonus(new JsonObject() {{
-            this.putInteger("bonus", 10);
-            this.putJsonArray("dice", new JsonArray());
-        }});
-        assertEquals(5, calculation.getBonus(),
-                "bonus values should be additive"
+                "bonus should scale"
         );
     }
 
     @Test
-    @DisplayName("setBase should be the most recent value")
-    void setBase_mostRecentValue() {
+    @DisplayName("bonuses are additive")
+    void bonusesAreAdditive() {
+        calculation.addBonus(new JsonObject() {{
+            this.putInteger("bonus", 5);
+            this.putJsonArray("dice", new JsonArray());
+            this.putJsonObject("scale", new JsonObject() {{
+                this.putInteger("numerator", 1);
+                this.putInteger("denominator", 1);
+                this.putBoolean("round_up", false);
+            }});
+        }});
+        calculation.addBonus(new JsonObject() {{
+            this.putInteger("bonus", 5);
+            this.putJsonArray("dice", new JsonArray());
+            this.putJsonObject("scale", new JsonObject() {{
+                this.putInteger("numerator", 1);
+                this.putInteger("denominator", 1);
+                this.putBoolean("round_up", false);
+            }});
+        }});
+        assertEquals(5+5, calculation.getBonus(),
+                "bonuses should be cumulative"
+        );
+    }
+
+    @Test
+    @DisplayName("base gets overridden with latest")
+    void baseGetsOverriddenWithLatest() {
         calculation.setBase(1);
         assertEquals(1, calculation.getBase(),
                 "base should be most recent value (1)"
@@ -115,21 +139,26 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("get returns base + bonus when set is null")
-    void get_notSet() {
+    @DisplayName("calculates without set")
+    void calculatesWithoutSet() {
         calculation.setBase(10);
         calculation.addBonus(new JsonObject() {{
             this.putInteger("bonus", 5);
             this.putJsonArray("dice", new JsonArray());
+            this.putJsonObject("scale", new JsonObject() {{
+                this.putInteger("numerator", 1);
+                this.putInteger("denominator", 1);
+                this.putBoolean("round_up", false);
+            }});
         }});
-        assertEquals(15, calculation.get(),
-                "get should return base + bonus (10+5) when set is null"
+        assertEquals(10 /*base*/ +5 /*bonus*/, calculation.get(),
+                "get should return base + bonus when set is null"
         );
     }
 
     @Test
-    @DisplayName("scale should calculate half rounded down (default behavior)")
-    void scale_shouldCalculateHalfRoundedDown_defaultBehavior() {
+    @DisplayName("scale rounds down by default")
+    void scaleRoundsDownByDefault() {
         int value = 11;
         int scaledValue = Calculation.scale(value, new JsonObject());
 
@@ -139,9 +168,22 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("scale should calculate according to specified ratio and rounding")
-    void scale_shouldCalculateAccordingToSpecifiedRatioAndRounding() {
+    @DisplayName("scale rounds up")
+    void scaleRoundsUp() {
         int value = 11;
+        int scaledValue = Calculation.scale(value, new JsonObject() {{
+            this.putBoolean("round_up", true);
+        }});
+
+        assertEquals(6, scaledValue,
+                "scaled value should be half (of 11) rounded up"
+        );
+    }
+
+    @Test
+    @DisplayName("scale matches specified ratio")
+    void scaleMatchesSpecifiedRatio() {
+        int value = 9;
         int scaledValue = Calculation.scale(value, new JsonObject() {{
             /*{
                 "numerator": 1,
@@ -153,14 +195,14 @@ public class CalculationTest {
             this.putBoolean("round_up", true);
         }});
 
-        assertEquals(4, scaledValue,
-                "scaled value should be one third (of 11) rounded up"
+        assertEquals(3, scaledValue,
+                "scaled value should be one third (of 9)"
         );
     }
 
     @Test
-    @DisplayName("processBonusJson generates correct bonus (range)")
-    void processBonusJson_generatesCorrectBonus_range() throws Exception {
+    @DisplayName("processes bonus (range)")
+    void processesBonus_range() throws Exception {
         JsonObject formulaJson = new JsonObject() {{
             /*{
                 "formula": "range",
@@ -190,8 +232,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processBonusJson generates correct bonus (modifier)")
-    void processBonusJson_generatesCorrectBonus_modifier() throws Exception {
+    @DisplayName("processes bonus (modifier)")
+    void processesBonus_modifier() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.getAbilityScores().putInteger("str", 20);
 
@@ -225,8 +267,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processBonusJson generates correct bonus (ability)")
-    void processBonusJson_generatesCorrectBonus_ability() throws Exception {
+    @DisplayName("processes bonus (ability)")
+    void processesBonus_ability() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.getAbilityScores().putInteger("str", 20);
 
@@ -260,8 +302,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processBonusJson generates correct bonus (proficiency)")
-    void processBonusJson_generatesCorrectBonus_proficiency() throws Exception {
+    @DisplayName("processes bonus (proficiency)")
+    void processesBonus_proficiency() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.setProficiencyBonus(5);
 
@@ -293,8 +335,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processBonusJson generates correct bonus (level)")
-    void processBonusJson_generatesCorrectBonus_level() throws Exception {
+    @DisplayName("processes bonus (level) (class specified)")
+    void processesBonus_level_classSpecified() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.levelUp("debug:blank", new JsonObject());
 
@@ -328,8 +370,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processBonusJson generates correct bonus (level) (no class specified)")
-    void processBonusJson_generatesCorrectBonus_level_noClassSpecified() throws Exception {
+    @DisplayName("processes bonus (level) (no class specified)")
+    void processesBonus_level_noClassSpecified() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.levelUp("debug:blank", new JsonObject());
 
@@ -361,8 +403,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processSetJson generates correct set value (number)")
-    void processSetJson_generatesCorrectSetValue_number() throws Exception {
+    @DisplayName("processes set (number)")
+    void processesSet_number() throws Exception {
         JsonObject formulaJson = new JsonObject() {{
             /*{
                 "formula": "number",
@@ -378,8 +420,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processSetJson generates correct set value (modifier)")
-    void processSetJson_generatesCorrectSetValue_modifier() throws Exception {
+    @DisplayName("processes set (modifier)")
+    void processesSet_modifier() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.getAbilityScores().putInteger("str", 20);
 
@@ -411,8 +453,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processSetJson generates correct set value (ability)")
-    void processSetJson_generatesCorrectSetValue_ability() throws Exception {
+    @DisplayName("processes set (ability)")
+    void processesSet_ability() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.getAbilityScores().putInteger("str", 20);
 
@@ -444,8 +486,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processSetJson generates correct set value (proficiency)")
-    void processSetJson_generatesCorrectSetValue_proficiency() throws Exception {
+    @DisplayName("processes set (proficiency)")
+    void processesSet_proficiency() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.setProficiencyBonus(5);
 
@@ -475,8 +517,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processSetJson generates correct set value (level)")
-    void processSetJson_generatesCorrectSetValue_level() throws Exception {
+    @DisplayName("processes set (level) (class specified)")
+    void processesSet_level_classSpecified() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.levelUp("debug:blank", new JsonObject());
 
@@ -508,8 +550,8 @@ public class CalculationTest {
     }
 
     @Test
-    @DisplayName("processSetJson generates correct set value (level) (no class specified)")
-    void processSetJson_generatesCorrectSetValue_level_noClassSpecified() throws Exception {
+    @DisplayName("processes set (level) (no class specified)")
+    void processesSet_level_noClassSpecified() throws Exception {
         RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         dummy.levelUp("debug:blank", new JsonObject());
 

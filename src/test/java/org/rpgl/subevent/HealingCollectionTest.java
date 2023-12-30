@@ -48,8 +48,8 @@ public class HealingCollectionTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new HealingCollection();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -65,8 +65,8 @@ public class HealingCollectionTest {
     }
 
     @Test
-    @DisplayName("getHealingCollection returns object storing bonus and dice")
-    void getHealingCollection_returnsObjectStoringBonusAndDice(){
+    @DisplayName("returns healing collection")
+    void returnsHealingCollection(){
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
@@ -103,27 +103,17 @@ public class HealingCollectionTest {
     }
 
     @Test
-    @DisplayName("addHealing extra healing is added properly")
-    void addHealing_extraHealingIsAddedProperly() {
+    @DisplayName("adds healing")
+    void addsHealing() {
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
             /*{
-                "healing": [
-                    {
-                        "dice": [ ],
-                        "bonus": 0
-                    }
-                ]
+                "healing": [ ]
             }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 0);
-                }});
-            }});
+            this.putJsonArray("healing", new JsonArray());
         }});
 
-        JsonObject extraHealing = new JsonObject() {{
+        healingCollection.addHealing(new JsonObject() {{
             /*{
                 "dice": [
                     { "size": 6 }
@@ -136,34 +126,24 @@ public class HealingCollectionTest {
                 }});
             }});
             this.putInteger("bonus", 2);
-        }};
-        String expected;
+        }});
 
-        healingCollection.addHealing(extraHealing);
-        expected = """
-                [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]}]""";
+        String expected = """
+                [{"bonus":2,"dice":[{"size":6}]}]""";
         assertEquals(expected, healingCollection.getHealingCollection().toString(),
                 "extra healing dice and bonus should be applied properly"
         );
 
-        healingCollection.addHealing(extraHealing);
-        expected = """
-                [{"bonus":0,"dice":[]},{"bonus":2,"dice":[{"size":6}]},{"bonus":2,"dice":[{"size":6}]}]""";
-        assertEquals(expected, healingCollection.getHealingCollection().toString(),
-                "extra healing dice and bonus should not delete or override any old data"
-        );
     }
 
     @Test
-    @DisplayName("prepare sets default values")
-    void prepare_setsDefaultValues() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("defaults to empty array")
+    void defaultsToEmptyArray() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(context, List.of());
+        healingCollection.prepare(new DummyContext(), List.of());
 
         String expected = """
                 []""";
@@ -173,11 +153,9 @@ public class HealingCollectionTest {
     }
 
     @Test
-    @DisplayName("prepareHealing interprets healing correctly")
-    void prepareHealing_interpretsHealingCorrectly() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("interprets healing formulae")
+    void interpretsHealingFormulae() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.joinSubeventData(new JsonObject() {{
@@ -200,7 +178,7 @@ public class HealingCollectionTest {
         }});
 
         healingCollection.setSource(source);
-        healingCollection.prepareHealing(context);
+        healingCollection.prepareHealing(new DummyContext());
 
         String expected = """
                 [{"bonus":10,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

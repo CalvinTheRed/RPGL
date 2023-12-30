@@ -48,45 +48,34 @@ public class GiveHalfProficiencyTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new GiveHalfProficiency();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new GiveHalfProficiency().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute gives half proficiency")
-    void execute_givesHalfProficiency() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("gives half proficiency")
+    void givesHalfProficiency() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
-        abilityCheck.setTarget(object);
+        abilityCheck.prepare(new DummyContext(), List.of());
 
-        GiveHalfProficiency giveHalfProficiency = new GiveHalfProficiency();
-        JsonObject functionJson = new JsonObject() {{
+        new GiveHalfProficiency().execute(null, abilityCheck, new JsonObject() {{
             /*{
                 "function": "give_half_proficiency"
             }*/
             this.putString("function", "give_half_proficiency");
-        }};
-
-        giveHalfProficiency.execute(null, abilityCheck, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         assertTrue(abilityCheck.hasHalfProficiency(),
                 "execute should give half proficiency to roll"

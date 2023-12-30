@@ -88,9 +88,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
             }});
         }});
         baseTemporaryHitPointCollection.setOriginItem(this.getOriginItem());
-        baseTemporaryHitPointCollection.setSource(this.getSource());
+        baseTemporaryHitPointCollection.setSource(super.getSource());
         baseTemporaryHitPointCollection.prepare(context, resources);
-        baseTemporaryHitPointCollection.setTarget(this.getSource());
+        baseTemporaryHitPointCollection.setTarget(super.getSource());
         baseTemporaryHitPointCollection.invoke(context, resources);
 
         /*
@@ -105,9 +105,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
             }});
         }});
         baseTemporaryHitPointRoll.setOriginItem(this.getOriginItem());
-        baseTemporaryHitPointRoll.setSource(this.getSource());
+        baseTemporaryHitPointRoll.setSource(super.getSource());
         baseTemporaryHitPointRoll.prepare(context, resources);
-        baseTemporaryHitPointRoll.setTarget(this.getSource());
+        baseTemporaryHitPointRoll.setTarget(super.getSource());
         baseTemporaryHitPointRoll.invoke(context, resources);
 
         /*
@@ -137,9 +137,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
             }});
         }});
         targetTemporaryHitPointsCollection.setOriginItem(this.getOriginItem());
-        targetTemporaryHitPointsCollection.setSource(this.getSource());
+        targetTemporaryHitPointsCollection.setSource(super.getSource());
         targetTemporaryHitPointsCollection.prepare(context, resources);
-        targetTemporaryHitPointsCollection.setTarget(this.getTarget());
+        targetTemporaryHitPointsCollection.setTarget(super.getTarget());
         targetTemporaryHitPointsCollection.invoke(context, resources);
 
         /*
@@ -154,9 +154,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
             }});
         }});
         targetTemporaryHitPointRoll.setOriginItem(this.getOriginItem());
-        targetTemporaryHitPointRoll.setSource(this.getSource());
+        targetTemporaryHitPointRoll.setSource(super.getSource());
         targetTemporaryHitPointRoll.prepare(context, resources);
-        targetTemporaryHitPointRoll.setTarget(this.getTarget());
+        targetTemporaryHitPointRoll.setTarget(super.getTarget());
         targetTemporaryHitPointRoll.invoke(context, resources);
 
         /*
@@ -180,11 +180,11 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
         temporaryHitPointsDelivery.setOriginItem(this.getOriginItem());
-        temporaryHitPointsDelivery.setSource(this.getSource());
+        temporaryHitPointsDelivery.setSource(super.getSource());
         temporaryHitPointsDelivery.prepare(context, resources);
-        temporaryHitPointsDelivery.setTarget(this.getTarget());
+        temporaryHitPointsDelivery.setTarget(super.getTarget());
         temporaryHitPointsDelivery.invoke(context, resources);
-        this.getTarget().receiveTemporaryHitPoints(temporaryHitPointsDelivery, this.json.getJsonArray("rider_effects"));
+        super.getTarget().receiveTemporaryHitPoints(temporaryHitPointsDelivery, this.json.getJsonArray("rider_effects"));
     }
 
 }

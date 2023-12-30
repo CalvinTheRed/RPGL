@@ -60,8 +60,8 @@ public class HealingCollection extends Subevent {
         this.json.putJsonArray("healing", new JsonArray());
         if (healingArray != null) {
             RPGLEffect effect = new RPGLEffect();
-            effect.setSource(this.getSource());
-            effect.setTarget(this.getSource());
+            effect.setSource(super.getSource());
+            effect.setTarget(super.getSource());
             for (int i = 0; i < healingArray.size(); i++) {
                 JsonObject healingJson = healingArray.getJsonObject(i);
                 this.addHealing(Calculation.processBonusJson(effect, this, healingJson, context));

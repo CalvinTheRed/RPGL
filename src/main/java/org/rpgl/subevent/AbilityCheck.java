@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * <br>
  * Source: an RPGLObject initiating an ability check
  * <br>
- * Target: an RPGLObject being required to make an ability check
+ * Target: same as source, or an RPGLObject against whom the ability check is being made if different
  *
  * @author Calvin Withun
  */
@@ -51,14 +52,64 @@ public class AbilityCheck extends Roll {
     public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
-            this.addBonus(new JsonObject() {{
-                this.putInteger("bonus", getTarget().getAbilityModifierFromAbilityName(getAbility(context), context));
-                this.putJsonArray("dice", new JsonArray());
-            }});
-            this.addBonus(new JsonObject() {{
-                this.putInteger("bonus", getProficiencyBonus());
-                this.putJsonArray("dice", new JsonArray());
-            }});
+            new AddBonus().execute(null, this, new JsonObject() {{
+                /*{
+                    "function": "add_bonus",
+                    "bonus": [
+                        {
+                            "formula": "modifier",
+                            "ability": <getAbility>
+                            "object": {
+                                "from": "subevent",
+                                "object": "source"
+                            }
+                        },
+                        {
+                            "formula": "proficiency",
+                            "object": {
+                                "from": "subevent",
+                                "object": "source"
+                            },
+                            "scale": {
+                                "numerator": 0 | 1 | 2,
+                                "denominator": 1 | 2,
+                                "round_up": false
+                            }
+                        }
+                    ]
+                }*/
+                this.putString("function", "add_bonus");
+                this.putJsonArray("bonus", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "modifier");
+                        this.putString("ability", getAbility(context));
+                        this.putJsonObject("object", new JsonObject() {{
+                            this.putString("from", "subevent");
+                            this.putString("object", "source");
+                        }});
+                    }});
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "proficiency");
+                        this.putJsonObject("object", new JsonObject() {{
+                            this.putString("from", "subevent");
+                            this.putString("object", "source");
+                        }});
+                        this.putJsonObject("scale", new JsonObject() {{
+                            this.putInteger("numerator", 0);
+                            this.putInteger("denominator", 1);
+                            this.putBoolean("round_up", false);
+                            if (json.getBoolean("has_expertise")) {
+                                this.putInteger("numerator", 2);
+                            } else if (json.getBoolean("has_proficiency")) {
+                                this.putInteger("numerator", 1);
+                            } else if (json.getBoolean("has_half_proficiency")) {
+                                this.putInteger("numerator", 1);
+                                this.putInteger("denominator", 2);
+                            }
+                        }});
+                    }});
+                }});
+            }}, context, resources);
         }
     }
 
@@ -97,6 +148,8 @@ public class AbilityCheck extends Roll {
         this.json.putBoolean("has_expertise", true);
     }
 
+    // TODO are the below even used for anything?
+
     /**
      * Returns whether the subevent should add half proficiency as a bonus for the ability check.
      *
@@ -124,24 +177,6 @@ public class AbilityCheck extends Roll {
      */
     public boolean hasExpertise() {
         return this.json.getBoolean("has_expertise");
-    }
-
-    /**
-     * This helper method returns the proficiency bonus which should be applied to the check, after considering half
-     * proficiency and expertise.
-     *
-     * @return a proficiency bonus
-     */
-    int getProficiencyBonus() {
-        if (this.json.getBoolean("has_expertise")) {
-            return this.getSource().getProficiencyBonus() * 2;
-        } else if (this.json.getBoolean("has_proficiency")) {
-            return this.getSource().getProficiencyBonus();
-        } else if (this.json.getBoolean("has_half_proficiency")) {
-            return this.getSource().getProficiencyBonus() / 2;
-        } else {
-            return 0;
-        }
     }
 
 }

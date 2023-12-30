@@ -106,7 +106,13 @@ public abstract class Condition {
         } else {
             // else proceed as usual
             ACTIVE_CONDITIONS.push(conditionJson);
-            boolean result = this.run(effect, subevent, conditionJson, context);
+            boolean result;
+            try {
+                result = this.run(effect, subevent, conditionJson, context);
+            } catch (Exception e) {
+                ACTIVE_CONDITIONS.pop();
+                throw e;
+            }
             ACTIVE_CONDITIONS.pop();
 
             if (exitingConditionLoop) {

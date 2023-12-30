@@ -52,8 +52,8 @@ public class RemoveEffect extends Subevent implements CancelableSubevent {
     public void run(RPGLContext context, List<RPGLResource> resources) {
         if (this.isNotCanceled()) {
             JsonArray effectTags = this.json.getJsonArray("effect_tags");
-            JsonArray effects = this.getTarget().getEffects().deepClone();
-            RPGLObject target = this.getTarget();
+            JsonArray effects = super.getTarget().getEffects().deepClone();
+            RPGLObject target = super.getTarget();
             for (int i = 0; i < effects.size(); i++) {
                 String effectUuid = effects.getString(i);
                 RPGLEffect effect = UUIDTable.getEffect(effectUuid);

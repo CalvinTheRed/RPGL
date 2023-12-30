@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class AddSubeventTag extends Function {
 
+    // TODO support multiple tags?
+
     public AddSubeventTag() {
         super("add_subevent_tag");
     }

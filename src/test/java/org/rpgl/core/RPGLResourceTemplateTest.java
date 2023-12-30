@@ -41,8 +41,8 @@ public class RPGLResourceTemplateTest {
     }
 
     @Test
-    @DisplayName("newInstance comprehensive test using std:common/action/01 template")
-    void newInstance_actionTemplate() {
+    @DisplayName("creates new resources")
+    void createsNewResources() {
         RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("common/action/01");
         RPGLResource resource = resourceTemplate.newInstance();
         String expected;
@@ -82,17 +82,15 @@ public class RPGLResourceTemplateTest {
     }
 
     @Test
-    @DisplayName("processRefreshCriterionGenerators unpacks dice correctly")
-    void processRefreshCriterionGenerators_unpacksDiceCorrectly() {
+    @DisplayName("unpacks refresh criterion generator dice")
+    void unpacksRefreshCriterionGeneratorDice() {
         RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("class/warlock/the_undead_patron/necrotic_husk");
         RPGLResource resource = new RPGLResource();
         resource.join(resourceTemplate);
 
         RPGLResourceTemplate.processRefreshCriterionGenerators(resource);
 
-        String expected;
-
-        expected = """
+        String expected = """
                 [{"required_generator":{"bonus":0,"dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]},"subevent":"info_subevent","tags":["long_rest"]}]""";
         assertEquals(expected, resource.getRefreshCriterion().toString(),
                 "required generators should have unpacked all compact dice representations"
@@ -100,8 +98,8 @@ public class RPGLResourceTemplateTest {
     }
 
     @Test
-    @DisplayName("processRefreshCriterion infers optional required generator values correctly")
-    void processRefreshCriterion_infersOptionalRequiredGeneratorValuesCorrectly() {
+    @DisplayName("sets default required generator")
+    void setsDefaultRequiredGenerator() {
         RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("common/spell_slot/pact_magic/01");
         RPGLResource resource = new RPGLResource();
         resource.join(resourceTemplate);

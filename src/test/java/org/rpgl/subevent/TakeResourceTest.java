@@ -48,8 +48,8 @@ public class TakeResourceTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new TakeResource();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -65,16 +65,12 @@ public class TakeResourceTest {
     }
 
     @Test
-    @DisplayName("invoke only takes resources with temporary tag")
-    void invoke_onlyTakesResourcesWithTemporaryTag() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("only takes resources with temporary tag")
+    void onlyTakesResourcesWithTemporaryTag() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
-        target.addResource(resource);
+        object.addResource(resource);
 
         TakeResource takeResource = new TakeResource();
         takeResource.joinSubeventData(new JsonObject() {{
@@ -83,37 +79,32 @@ public class TakeResourceTest {
             }*/
             this.putString("resource_tag", "necrotic_husk");
         }});
-        takeResource.setSource(source);
-        takeResource.prepare(context, List.of());
-        takeResource.setTarget(target);
+        takeResource.setSource(object);
+        takeResource.prepare(new DummyContext(), List.of());
+        takeResource.setTarget(object);
+        takeResource.invoke(new DummyContext(), List.of());
 
-        takeResource.invoke(context, List.of());
-
-        assertEquals(1, target.getResourceObjects().size(),
+        assertEquals(1, object.getResourceObjects().size(),
                 "target should not have a non-temporary resource taken away"
         );
 
         resource.addTag("temporary");
-        takeResource.invoke(context, List.of());
+        takeResource.invoke(new DummyContext(), List.of());
 
-        assertEquals(0, target.getResourceObjects().size(),
+        assertEquals(0, object.getResourceObjects().size(),
                 "resource should be taken away once it has temporary tag"
         );
     }
 
     @Test
-    @DisplayName("invoke removes all matching resources when no count specified")
-    void invoke_removesAllMatchingResourcesWhenNoCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("removes all matching resources by default")
+    void removesAllMatchingResourcesByDefault() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         for (int i = 0; i < 5; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
             resource.addTag("temporary");
-            target.addResource(resource);
+            object.addResource(resource);
         }
 
         TakeResource takeResource = new TakeResource();
@@ -123,30 +114,26 @@ public class TakeResourceTest {
             }*/
             this.putString("resource_tag", "necrotic_husk");
         }});
-        takeResource.setSource(source);
-        takeResource.prepare(context, List.of());
-        takeResource.setTarget(target);
+        takeResource.setSource(object);
+        takeResource.prepare(new DummyContext(), List.of());
+        takeResource.setTarget(object);
 
-        takeResource.invoke(context, List.of());
+        takeResource.invoke(new DummyContext(), List.of());
 
-        assertEquals(0, target.getResourceObjects().size(),
+        assertEquals(0, object.getResourceObjects().size(),
                 "target should have all matching resources taken away when count is not specified"
         );
     }
 
     @Test
-    @DisplayName("invoke removes correct number of resources when count specified")
-    void invoke_removesCorrectNumberOfResourcesWhenCountSpecified() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+    @DisplayName("removes specific number of resources")
+    void removesSpecificNumberOfResources() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         for (int i = 0; i < 5; i++) {
             RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
             resource.addTag("temporary");
-            target.addResource(resource);
+            object.addResource(resource);
         }
 
         TakeResource takeResource = new TakeResource();
@@ -158,12 +145,12 @@ public class TakeResourceTest {
             this.putString("resource_tag", "necrotic_husk");
             this.putInteger("count", 3);
         }});
-        takeResource.setSource(source);
-        takeResource.setTarget(target);
+        takeResource.setSource(object);
+        takeResource.setTarget(object);
 
-        takeResource.invoke(context, List.of());
+        takeResource.invoke(new DummyContext(), List.of());
 
-        assertEquals(2, target.getResourceObjects().size(),
+        assertEquals(2, object.getResourceObjects().size(),
                 "target have 3 of 5 resources taken away when count of 3 is specified"
         );
     }

@@ -48,45 +48,34 @@ public class GiveExpertiseTest {
     }
 
     @Test
-    @DisplayName("execute wrong function")
-    void execute_wrongFunction_throwsException() {
-        Function function = new GiveExpertise();
-        JsonObject functionJson = new JsonObject() {{
-            /*{
-                "function": "not_a_function"
-            }*/
-            this.putString("function", "not_a_function");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong function")
+    void errorsOnWrongFunction() {
         assertThrows(FunctionMismatchException.class,
-                () -> function.execute(null, null, functionJson, context, List.of()),
+                () -> new GiveExpertise().execute(null, null, new JsonObject() {{
+                    /*{
+                        "function": "not_a_function"
+                    }*/
+                    this.putString("function", "not_a_function");
+                }}, new DummyContext(), List.of()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
 
     @Test
-    @DisplayName("execute gives expertise")
-    void execute_givesExpertise() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(object);
+    @DisplayName("gives expertise")
+    void givesExpertise() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(context, List.of());
-        abilityCheck.setTarget(object);
+        abilityCheck.prepare(new DummyContext(), List.of());
 
-        GiveExpertise giveExpertise = new GiveExpertise();
-        JsonObject functionJson = new JsonObject() {{
+        new GiveExpertise().execute(null, abilityCheck, new JsonObject() {{
             /*{
                 "function": "give_expertise"
             }*/
             this.putString("function", "give_expertise");
-        }};
-
-        giveExpertise.execute(null, abilityCheck, functionJson, context, List.of());
+        }}, new DummyContext(), List.of());
 
         assertTrue(abilityCheck.hasExpertise(),
                 "execute should give expertise to roll"

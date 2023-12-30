@@ -45,8 +45,8 @@ public class CalculateSaveDifficultyClassTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CalculateSaveDifficultyClass();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -62,11 +62,9 @@ public class CalculateSaveDifficultyClassTest {
     }
 
     @Test
-    @DisplayName("prepare calculates DC 17 (young red dragon, Constitution save DC)")
-    void prepare_calculatesSeventeen_youngRedDragonConstitutionSaveDC() throws Exception {
+    @DisplayName("calculates save DC")
+    void calculatesSaveDC() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
 
         CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
         calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
@@ -74,9 +72,9 @@ public class CalculateSaveDifficultyClassTest {
         }});
 
         calculateSaveDifficultyClass.setSource(source);
-        calculateSaveDifficultyClass.prepare(context, List.of());
+        calculateSaveDifficultyClass.prepare(new DummyContext(), List.of());
 
-        assertEquals(17, calculateSaveDifficultyClass.get(),
+        assertEquals(8 /*base*/ +5 /*ability*/ +4 /*proficiency*/, calculateSaveDifficultyClass.get(),
                 "young red dragon save DC calculated from Constitution should be 17"
         );
     }

@@ -48,39 +48,30 @@ public class IsObjectsTurnTest {
     }
 
     @Test
-    @DisplayName("evaluate wrong condition")
-    void evaluate_wrongCondition_throwsException() {
-        Condition condition = new IsObjectsTurn();
-        JsonObject conditionJson = new JsonObject() {{
-            /*{
-                "condition": "not_a_condition"
-            }*/
-            this.putString("condition", "not_a_condition");
-        }};
-
-        DummyContext context = new DummyContext();
-
+    @DisplayName("errors on wrong condition")
+    void errorsOnWrongCondition() {
         assertThrows(ConditionMismatchException.class,
-                () -> condition.evaluate(null, null, conditionJson, context),
+                () -> new IsObjectsTurn().evaluate(null, null, new JsonObject() {{
+                    /*{
+                        "condition": "not_a_condition"
+                    }*/
+                    this.putString("condition", "not_a_condition");
+                }}, new DummyContext()),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true when it is object's turn")
-    void evaluate_returnsTrueWhenObjectsTurn() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("evaluates true")
+    void evaluatesTrue() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+        context.setIsTurn(true);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        IsObjectsTurn isObjectsTurn = new IsObjectsTurn();
-        JsonObject conditionJson = new JsonObject() {{
+        assertTrue(new IsObjectsTurn().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "is_objects_turn",
                 "object": {
@@ -93,29 +84,22 @@ public class IsObjectsTurnTest {
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-        }};
-
-        context.setIsTurn(true);
-        assertTrue(isObjectsTurn.evaluate(null, dummySubevent, conditionJson, context),
+        }}, context),
                 "evaluate should return true when it is object's turn"
         );
     }
 
     @Test
-    @DisplayName("evaluate returns true when it is object's turn")
-    void evaluate_returnsFalseWhenNotObjectsTurn() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("std:humanoid/commoner", TestUtils.TEST_USER);
+    @DisplayName("evaluates false")
+    void evaluatesFalse() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
-        context.add(source);
-        context.add(target);
+        context.setIsTurn(false);
 
         DummySubevent dummySubevent = new DummySubevent();
         dummySubevent.setSource(source);
-        dummySubevent.setTarget(target);
 
-        IsObjectsTurn isObjectsTurn = new IsObjectsTurn();
-        JsonObject conditionJson = new JsonObject() {{
+        assertFalse(new IsObjectsTurn().evaluate(null, dummySubevent, new JsonObject() {{
             /*{
                 "condition": "is_objects_turn",
                 "object": {
@@ -128,10 +112,7 @@ public class IsObjectsTurnTest {
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-        }};
-
-        context.setIsTurn(false);
-        assertFalse(isObjectsTurn.evaluate(null, dummySubevent, conditionJson, context),
+        }}, context),
                 "evaluate should return false when it is not object's turn"
         );
     }

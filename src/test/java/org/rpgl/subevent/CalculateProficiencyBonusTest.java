@@ -45,8 +45,8 @@ public class CalculateProficiencyBonusTest {
     }
 
     @Test
-    @DisplayName("invoke wrong subevent")
-    void invoke_wrongSubevent_throwsException() {
+    @DisplayName("errors on wrong subevent")
+    void errorsOnWrongSubevent() {
         Subevent subevent = new CalculateProficiencyBonus();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
@@ -62,19 +62,18 @@ public class CalculateProficiencyBonusTest {
     }
 
     @Test
-    @DisplayName("prepare sets base proficiency bonus from source json")
-    void prepare_setsBaseProficiencyBonusFromSourceJson() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
+    @DisplayName("defaults to normal proficiency bonus")
+    void defaultsToNormalProficiencyBonus() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setProficiencyBonus(5);
 
         CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
 
-        calculateProficiencyBonus.setSource(source);
-        calculateProficiencyBonus.prepare(context, List.of());
+        calculateProficiencyBonus.setSource(object);
+        calculateProficiencyBonus.prepare(new DummyContext(), List.of());
 
-        assertEquals(4, calculateProficiencyBonus.getBase(),
-                "prepare() should assign the proficiency bonus from the source json to the subevent base value"
+        assertEquals(5, calculateProficiencyBonus.getBase(),
+                "should default to object's base proficiency bonus"
         );
     }
 
