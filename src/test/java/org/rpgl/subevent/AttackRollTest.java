@@ -105,36 +105,12 @@ public class AttackRollTest {
     }
 
     @Test
-    @DisplayName("recognizes critical hits")
-    void recognizesCriticalHits() throws Exception {
+    @DisplayName("calculates critical hit threshold")
+    void calculatesCriticalHitThreshold() throws Exception {
         AttackRoll attackRoll = new AttackRoll();
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "base": {
-                    "value": 20
-                }
-            }*/
-            this.putJsonObject("base", new JsonObject() {{
-                this.putInteger("value", 20);
-            }});
-        }});
-        assertTrue(attackRoll.isCriticalHit(new DummyContext(), List.of()),
-                "attack roll with base of 20 should register as a critical hit"
-        );
-
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "base": {
-                    "value": 19
-                }
-            }*/
-            this.putJsonObject("base", new JsonObject() {{
-                this.putInteger("value", 19);
-            }});
-        }});
-        assertFalse(attackRoll.isCriticalHit(new DummyContext(), List.of()),
-                "attack roll with base of 19 should not register as a critical hit"
+        attackRoll.calculateCriticalHitThreshold(new DummyContext(), List.of());
+        assertEquals(20, attackRoll.getCriticalHitThreshold(),
+                "critical hit threshold should default to 20"
         );
     }
 

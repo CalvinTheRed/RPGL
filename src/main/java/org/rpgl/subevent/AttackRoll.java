@@ -51,6 +51,7 @@ public class AttackRoll extends Roll {
         this.json.asMap().putIfAbsent("withhold_damage_modifier", false);
         this.json.asMap().putIfAbsent("use_origin_attack_ability", false);
         this.json.asMap().putIfAbsent("target_armor_class", Integer.MIN_VALUE);
+        this.json.asMap().putIfAbsent("critical_hit_threshold", 20);
 
         // Add tag so nested subevents such as DamageCollection can know they
         // hail from an attack roll made using a particular attack ability.
@@ -116,7 +117,8 @@ public class AttackRoll extends Roll {
             }}, context, resources);
 
             this.calculateTargetArmorClass(context, resources);
-            if (this.isCriticalHit(context, resources)) {
+            this.calculateCriticalHitThreshold(context, resources);
+            if (this.getBase() >= this.getCriticalHitThreshold()) {
                 this.getBaseDamage(context, resources);
                 this.getTargetDamage(context, resources);
                 if (this.confirmCriticalDamage(context, resources)) {
@@ -294,15 +296,24 @@ public class AttackRoll extends Roll {
     }
 
     /**
-     * This helper method returns whether the attack roll is a critical hit.
+     * Getter method for the attack's critical hit threshold. Note that calling this method before the target's critical
+     * hit threshold is calculated will return <code>20</code>.
+     *
+     * @return the attack's critical hit threshold, or <code>20</code>
+     */
+    public int getCriticalHitThreshold() {
+        return this.json.getInteger("critical_hit_threshold");
+    }
+
+    /**
+     * This helper method calculates the critical hit threshold for the attack.
      *
      * @param context the context this Subevent takes place in
      * @param resources a list of resources used to produce this subevent
-     * @return true if the attack is a critical hit
      *
      * @throws Exception if an exception occurs.
      */
-    boolean isCriticalHit(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void calculateCriticalHitThreshold(RPGLContext context, List<RPGLResource> resources) throws Exception {
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
         calculateCriticalHitThreshold.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray() {{
@@ -315,7 +326,7 @@ public class AttackRoll extends Roll {
         calculateCriticalHitThreshold.setTarget(super.getTarget());
         calculateCriticalHitThreshold.invoke(context, resources);
 
-        return this.getBase() >= calculateCriticalHitThreshold.get();
+        this.json.putInteger("critical_hit_threshold", calculateCriticalHitThreshold.get());
     }
 
     /**
