@@ -50,6 +50,7 @@ public class AttackRoll extends Roll {
         super.prepare(context, resources);
         this.json.asMap().putIfAbsent("withhold_damage_modifier", false);
         this.json.asMap().putIfAbsent("use_origin_attack_ability", false);
+        this.json.asMap().putIfAbsent("target_armor_class", Integer.MIN_VALUE);
 
         // Add tag so nested subevents such as DamageCollection can know they
         // hail from an attack roll made using a particular attack ability.
@@ -256,6 +257,12 @@ public class AttackRoll extends Roll {
         this.json.getJsonArray("damage").asList().addAll(targetDamageCollection.getDamageCollection().asList());
     }
 
+    /**
+     * Getter method for the target's final armor class value. Note that calling this method before the target's armor
+     * class is calculated will return <code>Integer.MIN_VALUE</code>.
+     *
+     * @return the target's final armor class, or <code>Integer.MIN_VALUE</code>
+     */
     public int getTargetArmorClass() {
         return this.json.getInteger("target_armor_class");
     }
