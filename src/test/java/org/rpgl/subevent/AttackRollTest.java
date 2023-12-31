@@ -249,8 +249,9 @@ public class AttackRollTest {
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
+        attackRoll.calculateTargetArmorClass(new DummyContext(), List.of());
 
-        assertEquals(18 /*plate armor*/ +2 /*shield*/, attackRoll.getTargetArmorClass(new DummyContext(), List.of()),
+        assertEquals(18 /*plate armor*/ +2 /*shield*/, attackRoll.getTargetArmorClass(),
                 "target armor class should total to 20"
         );
     }
