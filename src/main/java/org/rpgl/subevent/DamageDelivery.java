@@ -98,7 +98,7 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
                 String damageType = damageJson.getString("damage_type");
                 damage.putInteger(damageType, Calculation.scale(
                         Objects.requireNonNullElse(damage.getInteger(damageType), 0) + total,
-                        damageJson.removeJsonObject("scale")
+                        damageJson.getJsonObject("scale")
                 ));
             }
             if ("half".equals(damageProportion)) {
