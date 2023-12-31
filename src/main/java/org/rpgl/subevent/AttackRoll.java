@@ -50,6 +50,7 @@ public class AttackRoll extends Roll {
         super.prepare(context, resources);
         this.json.asMap().putIfAbsent("withhold_damage_modifier", false);
         this.json.asMap().putIfAbsent("use_origin_attack_ability", false);
+        this.json.asMap().putIfAbsent("target_armor_class", Integer.MIN_VALUE);
 
         // Add tag so nested subevents such as DamageCollection can know they
         // hail from an attack roll made using a particular attack ability.
@@ -114,7 +115,7 @@ public class AttackRoll extends Roll {
                 }});
             }}, context, resources);
 
-            int armorClass = this.getTargetArmorClass(context, resources);
+            this.calculateTargetArmorClass(context, resources);
             if (this.isCriticalHit(context, resources)) {
                 this.getBaseDamage(context, resources);
                 this.getTargetDamage(context, resources);
@@ -123,7 +124,7 @@ public class AttackRoll extends Roll {
                 }
                 this.resolveDamage(context, resources);
                 this.resolveNestedSubevents("hit", context, resources);
-            } else if (this.isCriticalMiss() || super.get() < armorClass) {
+            } else if (this.isCriticalMiss() || super.get() < this.getTargetArmorClass()) {
                 this.resolveNestedSubevents("miss", context, resources);
             } else {
                 this.getBaseDamage(context, resources);
@@ -257,17 +258,26 @@ public class AttackRoll extends Roll {
     }
 
     /**
+     * Getter method for the target's final armor class value. Note that calling this method before the target's armor
+     * class is calculated will return <code>Integer.MIN_VALUE</code>.
+     *
+     * @return the target's final armor class, or <code>Integer.MIN_VALUE</code>
+     */
+    public int getTargetArmorClass() {
+        return this.json.getInteger("target_armor_class");
+    }
+
+    /**
      * This helper method evaluates the effective armor class of the target to determine if the attack hits or misses.
      * This value can be influenced by the target after the attack roll is made to attempt to avoid the attack, and may
-     * be different than the target's base armor class.
+     * be different from the target's base armor class.
      *
      * @param context the context this Subevent takes place in
      * @param resources a list of resources used to produce this subevent
-     * @return the target's effective (final) armor class
      *
      * @throws Exception if an exception occurs.
      */
-    int getTargetArmorClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void calculateTargetArmorClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
         CalculateEffectiveArmorClass calculateEffectiveArmorClass = new CalculateEffectiveArmorClass();
         calculateEffectiveArmorClass.joinSubeventData(new JsonObject() {{
             this.putJsonObject("base", new JsonObject() {{
@@ -280,7 +290,7 @@ public class AttackRoll extends Roll {
         calculateEffectiveArmorClass.prepare(context, resources);
         calculateEffectiveArmorClass.setTarget(super.getTarget());
         calculateEffectiveArmorClass.invoke(context, resources);
-        return calculateEffectiveArmorClass.get();
+        this.json.putInteger("target_armor_class", calculateEffectiveArmorClass.get());
     }
 
     /**
