@@ -803,7 +803,7 @@ public class AttackRollTest {
         attackRoll.setTarget(target);
         attackRoll.run(new DummyContext(), List.of());
 
-        assertEquals(1000-3, target.getHealthData().getInteger("current"),
+        assertEquals(1000 /*base*/ -3 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken damage"
         );
     }

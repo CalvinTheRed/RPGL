@@ -5,11 +5,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -63,7 +66,9 @@ public class DamageDeliveryTest {
 
     @Test
     @DisplayName("returns damage")
-    void returnsDamage() {
+    void returnsDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -113,6 +118,9 @@ public class DamageDeliveryTest {
                 }});
             }});
         }});
+
+        damageDelivery.setTarget(object);
+        damageDelivery.run(new DummyContext(), List.of());
 
         String expected = """
                 {"cold":10,"fire":10}""";
@@ -123,7 +131,9 @@ public class DamageDeliveryTest {
 
     @Test
     @DisplayName("returns scaled damage")
-    void returnsScaledDamage() {
+    void returnsScaledDamage() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -173,6 +183,9 @@ public class DamageDeliveryTest {
                 }});
             }});
         }});
+
+        damageDelivery.setTarget(object);
+        damageDelivery.run(new DummyContext(), List.of());
 
         String expected = """
                 {"cold":20,"fire":5}""";
@@ -183,7 +196,9 @@ public class DamageDeliveryTest {
 
     @Test
     @DisplayName("rounds damage up")
-    void roundsDamageUp() {
+    void roundsDamageUp() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -234,6 +249,9 @@ public class DamageDeliveryTest {
             }});
         }});
 
+        damageDelivery.setTarget(object);
+        damageDelivery.run(new DummyContext(), List.of());
+
         String expected = """
                 {"cold":20,"fire":6}""";
         assertEquals(expected, damageDelivery.getDamage().toString(),
@@ -243,7 +261,9 @@ public class DamageDeliveryTest {
 
     @Test
     @DisplayName("maximizes damage (specific damage type)")
-    void maximizesDamage_specificDamageType() {
+    void maximizesDamage_specificDamageType() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -309,6 +329,8 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.maximizeTypedDamageDice("fire");
+        damageDelivery.setTarget(object);
+        damageDelivery.run(new DummyContext(), List.of());
 
         String expected = """
                 {"cold":1,"fire":4}""";
@@ -319,7 +341,9 @@ public class DamageDeliveryTest {
 
     @Test
     @DisplayName("maximizes damage (all damage types)")
-    void maximizesDamage_allDamageTypes() {
+    void maximizesDamage_allDamageTypes() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             /*{
@@ -385,6 +409,8 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.maximizeTypedDamageDice(null);
+        damageDelivery.setTarget(object);
+        damageDelivery.run(new DummyContext(), List.of());
 
         String expected = """
                 {"cold":4,"fire":4}""";

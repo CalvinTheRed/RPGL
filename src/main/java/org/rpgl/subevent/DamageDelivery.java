@@ -48,6 +48,43 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
+    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        // apply damage affinities
+        this.calculateRawDamage();
+        JsonObject damageJson = this.json.removeJsonObject("damage");
+        DamageAffinity damageAffinity = new DamageAffinity();
+        damageAffinity.joinSubeventData(new JsonObject() {{
+            this.putJsonArray("tags", new JsonArray() {{
+                this.asList().addAll(json.getJsonArray("tags").asList());
+            }});
+        }});
+        for (Map.Entry<String, ?> entry : damageJson.asMap().entrySet()) {
+            damageAffinity.addDamageType(entry.getKey());
+        }
+        damageAffinity.setSource(this.getSource());
+        damageAffinity.prepare(context, List.of());
+        damageAffinity.setTarget(this.getTarget());
+        damageAffinity.invoke(context, List.of());
+
+        JsonObject damageWithAffinity = new JsonObject();
+        for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
+            String damageType = damageJsonEntry.getKey();
+            if (!damageAffinity.isImmune(damageType)) {
+                int typedDamage = damageJson.getInteger(damageType);
+                if (damageAffinity.isResistant(damageType)) {
+                    typedDamage /= 2;
+                }
+                if (damageAffinity.isVulnerable(damageType)) {
+                    typedDamage *= 2;
+                }
+                damageWithAffinity.putInteger(damageType, typedDamage);
+            }
+        }
+        this.json.putJsonObject("damage", damageWithAffinity);
+        this.getTarget().receiveDamage(this, context);
+    }
+
+    @Override
     public boolean includesDamageType(String damageType) {
         JsonArray damageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < damageArray.size(); i++) {
@@ -79,15 +116,13 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
     }
 
     /**
-     * This method returns the typed damage being delivered to <code>target</code>.
-     *
-     * @return an object of damage types and values
+     * This helper method calculates the typed damage being delivered to <code>target</code>.
      */
-    public JsonObject getDamage() {
+    void calculateRawDamage() {
         String damageProportion = this.json.getString("damage_proportion");
         if (!"none".equals(damageProportion)) {
             JsonObject damage = new JsonObject();
-            JsonArray damageArray = this.json.getJsonArray("damage");
+            JsonArray damageArray = this.json.removeJsonArray("damage");
             for (int i = 0; i < damageArray.size(); i++) {
                 JsonObject damageJson = damageArray.getJsonObject(i);
                 int total = damageJson.getInteger("bonus");
@@ -107,10 +142,20 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
                     damage.putInteger(damageType, damage.getInteger(damageType) / 2);
                 }
             }
-            return damage;
+            this.json.putJsonObject("damage", damage);
         } else {
-            return new JsonObject();
+            this.json.putJsonObject("damage", new JsonObject());
         }
+    }
+
+    /**
+     * This method returns the damage being delivered, after accounting for damage affinities. Note that this method
+     * will not work correctly if called prior to invoking the subevent.
+     *
+     * @return an object of damage types and values
+     */
+    public JsonObject getDamage() {
+        return this.json.getJsonObject("damage");
     }
 
 }
