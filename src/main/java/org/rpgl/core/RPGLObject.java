@@ -8,7 +8,6 @@ import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateBaseArmorClass;
 import org.rpgl.subevent.CalculateMaximumHitPoints;
 import org.rpgl.subevent.CalculateProficiencyBonus;
-import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.GetEvents;
 import org.rpgl.subevent.GetObjectTags;
@@ -554,50 +553,16 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param damageDelivery a DamageDelivery object containing damage data
      * @param context the RPGLContext in which the RPGLObject takes damage
-     * @return a JSON object indicating the final damage suffered by the target by damage type
      *
      * @throws Exception if an exception occurs.
      */
-    public JsonObject receiveDamage(DamageDelivery damageDelivery, RPGLContext context) throws Exception {
+    public void receiveDamage(DamageDelivery damageDelivery, RPGLContext context) throws Exception {
         JsonObject damageJson = damageDelivery.getDamage();
-        DamageAffinity damageAffinity = new DamageAffinity();
-        for (Map.Entry<String, ?> entry : damageJson.asMap().entrySet()) {
-            damageAffinity.addDamageType(entry.getKey());
-        }
-        damageAffinity.setSource(damageDelivery.getSource());
-        damageAffinity.prepare(context, List.of());
-        damageAffinity.setTarget(this);
-        damageAffinity.invoke(context, List.of());
-
-        JsonObject finalDamageByType = new JsonObject();
-        for (Map.Entry<String, ?> entry : damageJson.asMap().entrySet()) {
-            String damageType = entry.getKey();
-            int typedDamage = damageJson.getInteger(entry.getKey());
-
-            if (!damageAffinity.isImmune(damageType)) {
-                if (damageAffinity.isResistant(damageType)) {
-                    typedDamage /= 2;
-                }
-                if (damageAffinity.isVulnerable(damageType)) {
-                    typedDamage *= 2;
-                }
-                if (typedDamage > 0) {
-                    if (finalDamageByType.asMap().containsKey(damageType)) {
-                        finalDamageByType.putInteger(damageType, finalDamageByType.getInteger(damageType) + typedDamage);
-                    } else {
-                        finalDamageByType.putInteger(damageType, typedDamage);
-                    }
-                }
-            }
-        }
-
         int damage = 0;
-        for (Map.Entry<String, ?> entry : finalDamageByType.asMap().entrySet()) {
-            damage += finalDamageByType.getInteger(entry.getKey());
+        for (Map.Entry<String, ?> entry : damageJson.asMap().entrySet()) {
+            damage += damageJson.getInteger(entry.getKey());
         }
         this.reduceHitPoints(damage, context);
-
-        return finalDamageByType;
     }
 
     /**

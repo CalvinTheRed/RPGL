@@ -96,4 +96,11 @@ public abstract class RPGLContext {
     public void viewCompletedSubevent(@SuppressWarnings("unused") Subevent subevent) {
     }
 
+    /**
+     * This method clears all objects from the context.
+     */
+    public void clear() {
+        this.contextObjects.clear();
+    }
+
 }

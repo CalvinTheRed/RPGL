@@ -287,6 +287,9 @@ public class MaximizeDamageTest {
             this.putString("damage_type", "fire");
         }}, new DummyContext(), List.of());
 
+        damageDelivery.setTarget(object);
+        damageDelivery.run(new DummyContext(), List.of());
+
         String expected = """
                 {"cold":2,"fire":12}""";
         assertEquals(expected, damageDelivery.getDamage().toString(),
@@ -308,6 +311,9 @@ public class MaximizeDamageTest {
             }*/
             this.putString("function", "maximize_damage");
         }}, new DummyContext(), List.of());
+
+        damageDelivery.setTarget(object);
+        damageDelivery.run(new DummyContext(), List.of());
 
         String expected = """
                 {"cold":12,"fire":12}""";

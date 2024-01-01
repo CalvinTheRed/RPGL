@@ -474,7 +474,7 @@ public class AttackRoll extends Roll {
         damageDelivery.setTarget(super.getTarget());
         damageDelivery.invoke(context, resources);
 
-        JsonObject damageByType = damageDelivery.getTarget().receiveDamage(damageDelivery, context);
+        JsonObject damageByType = damageDelivery.getDamage();
         if (this.json.asMap().containsKey("vampirism")) {
             VampiricSubevent.handleVampirism(this, damageByType, context, resources);
         }
