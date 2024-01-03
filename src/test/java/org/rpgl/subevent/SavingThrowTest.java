@@ -219,7 +219,7 @@ public class SavingThrowTest {
         savingThrow.setSource(object);
         savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getSaveDifficultyClass(),
                 "save DC should calculate according to the formula DC = 8 + proficiency + modifier"
         );
     }
@@ -243,7 +243,7 @@ public class SavingThrowTest {
         savingThrow.setSource(object);
         savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getSaveDifficultyClass(),
                 "save DC should calculate using origin object's ability scores"
         );
     }
@@ -293,7 +293,7 @@ public class SavingThrowTest {
         savingThrow.setSource(object);
         savingThrow.prepare(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.json.getInteger("save_difficulty_class"),
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getSaveDifficultyClass(),
                 "save DC was calculated incorrectly"
         );
         String expected = """
