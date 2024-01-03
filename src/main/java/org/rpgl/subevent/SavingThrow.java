@@ -285,7 +285,13 @@ public class SavingThrow extends Roll {
         }
     }
 
-    public int getSaveDifficultyClass() {
+    /**
+     * Returns the save's difficulty class. Note that this method will return null if called before the subevent is
+     * prepared.
+     *
+     * @return the save's difficulty class
+     */
+    public Integer getSaveDifficultyClass() {
         return this.json.getInteger("save_difficulty_class");
     }
 
