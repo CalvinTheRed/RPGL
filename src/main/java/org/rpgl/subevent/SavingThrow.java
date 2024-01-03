@@ -93,7 +93,7 @@ public class SavingThrow extends Roll {
     public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
-            if (super.get() < this.json.getInteger("save_difficulty_class")) {
+            if (super.get() < this.getSaveDifficultyClass()) {
                 this.getTargetDamage(context, resources);
                 this.deliverDamage("all", context, resources);
                 this.resolveNestedSubevents("fail", context, resources);
@@ -283,6 +283,16 @@ public class SavingThrow extends Roll {
                 VampiricSubevent.handleVampirism(this, damageByType, context, resources);
             }
         }
+    }
+
+    /**
+     * Returns the save's difficulty class. Note that this method will return null if called before the subevent is
+     * prepared.
+     *
+     * @return the save's difficulty class
+     */
+    public Integer getSaveDifficultyClass() {
+        return this.json.getInteger("save_difficulty_class");
     }
 
 }
