@@ -19,7 +19,9 @@ import java.io.File;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing class for the org.rpgl.subevent.CalculateBaseArmorClass class.
@@ -88,14 +90,22 @@ public class CalculateBaseArmorClassTest {
     void preparesBaseArmor() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.getAbilityScores().putInteger("dex", 16);
+        CalculateBaseArmorClass calculateBaseArmorClass;
 
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
+        calculateBaseArmorClass = new CalculateBaseArmorClass();
         calculateBaseArmorClass.setSource(object);
-
         assertEquals(13, calculateBaseArmorClass.prepareUnarmored(new DummyContext()),
                 "should have 13 AC when unarmored"
         );
+        assertTrue(calculateBaseArmorClass.hasTag("unarmored"),
+                "should have unarmored tag"
+        );
+        assertFalse(calculateBaseArmorClass.hasTag("armored"),
+                "should not have armored tag"
+        );
 
+        calculateBaseArmorClass = new CalculateBaseArmorClass();
+        calculateBaseArmorClass.setSource(object);
         assertEquals(11 /*base*/ +3 /*dex bonus*/,
                 calculateBaseArmorClass.prepareArmored(
                         RPGLFactory.newItem("std:armor/light/leather"),
@@ -103,7 +113,15 @@ public class CalculateBaseArmorClassTest {
                 ),
                 "should have 14 AC when armored with leather armor"
         );
+        assertFalse(calculateBaseArmorClass.hasTag("unarmored"),
+                "should not have unarmored tag"
+        );
+        assertTrue(calculateBaseArmorClass.hasTag("armored"),
+                "should have armored tag"
+        );
 
+        calculateBaseArmorClass = new CalculateBaseArmorClass();
+        calculateBaseArmorClass.setSource(object);
         assertEquals(14 /*base*/ +2 /*limited dex bonus*/,
                 calculateBaseArmorClass.prepareArmored(
                         RPGLFactory.newItem("std:armor/medium/breastplate"),
@@ -111,13 +129,27 @@ public class CalculateBaseArmorClassTest {
                 ),
                 "should have 16 AC when armored with breastplate armor"
         );
+        assertFalse(calculateBaseArmorClass.hasTag("unarmored"),
+                "should not have unarmored tag"
+        );
+        assertTrue(calculateBaseArmorClass.hasTag("armored"),
+                "should have armored tag"
+        );
 
+        calculateBaseArmorClass = new CalculateBaseArmorClass();
+        calculateBaseArmorClass.setSource(object);
         assertEquals(18 /*base*/,
                 calculateBaseArmorClass.prepareArmored(
                         RPGLFactory.newItem("std:armor/heavy/plate"),
                         new DummyContext()
                 ),
                 "should have 18 AC when armored with plate armor"
+        );
+        assertFalse(calculateBaseArmorClass.hasTag("unarmored"),
+                "should not have unarmored tag"
+        );
+        assertTrue(calculateBaseArmorClass.hasTag("armored"),
+                "should have armored tag"
         );
     }
 
