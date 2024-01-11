@@ -82,6 +82,7 @@ public class CalculateBaseArmorClass extends Calculation {
      */
     int prepareArmored(RPGLItem armor, RPGLContext context) throws Exception {
         Integer baseArmorClass = armor.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS);
+        super.addTag("armored");
 
         // Add dexterity bonus, if not 0 (or lower)
         Integer dexterityBonusMaximum = armor.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS);
@@ -107,6 +108,7 @@ public class CalculateBaseArmorClass extends Calculation {
      * @throws Exception if an exception occurs.
      */
     int prepareUnarmored(RPGLContext context) throws Exception {
+        super.addTag("unarmored");
         return 10 + super.getSource().getAbilityModifierFromAbilityName("dex", context);
     }
 
