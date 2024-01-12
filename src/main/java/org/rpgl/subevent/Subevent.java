@@ -215,10 +215,10 @@ public abstract class Subevent {
     }
 
     /**
-     * Checks if the Subevent has already been modified by the RPGLEffect or a similar one.
+     * Checks if the Subevent has already been modified by an RPGLEffect or a similar one.
      *
      * @param effect an RPGLEffect
-     * @return true if the Subevent has been modified by an instance of the passed Subevent or a similar one already
+     * @return true if the Subevent has been modified by the passed Subevent or a similar one
      */
     public boolean effectAlreadyApplied(RPGLEffect effect) {
         for (RPGLEffect appliedEffect : appliedEffects) {
