@@ -26,7 +26,7 @@ public class CriticalDamageConfirmation extends Subevent implements CancelableSu
     public Subevent clone() {
         Subevent clone = new CriticalDamageConfirmation();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -34,7 +34,7 @@ public class CriticalDamageConfirmation extends Subevent implements CancelableSu
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CriticalDamageConfirmation();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 

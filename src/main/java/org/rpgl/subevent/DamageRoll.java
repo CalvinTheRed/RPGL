@@ -29,7 +29,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
     public Subevent clone() {
         Subevent clone = new DamageRoll();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -37,7 +37,7 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new DamageRoll();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 

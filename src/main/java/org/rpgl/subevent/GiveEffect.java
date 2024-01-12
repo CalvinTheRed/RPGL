@@ -28,7 +28,7 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     public Subevent clone() {
         Subevent clone = new GiveEffect();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -36,7 +36,7 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new GiveEffect();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 

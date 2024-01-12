@@ -35,7 +35,7 @@ public class GetEvents extends Subevent {
         GetEvents clone = new GetEvents();
         clone.joinSubeventData(this.json);
         clone.events = new ArrayList<>(this.events);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -44,7 +44,7 @@ public class GetEvents extends Subevent {
         GetEvents clone = new GetEvents();
         clone.joinSubeventData(jsonData);
         clone.events = new ArrayList<>(this.events);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 

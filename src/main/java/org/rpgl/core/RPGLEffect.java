@@ -139,7 +139,7 @@ public class RPGLEffect extends RPGLTaggable {
                 for (int i = 0; i < matchedFilterBehaviors.size(); i++) {
                     JsonObject matchedFilterBehavior = matchedFilterBehaviors.getJsonObject(i);
                     JsonArray conditions = matchedFilterBehavior.getJsonArray("conditions");
-                    if (!subevent.hasModifyingEffect(this) && this.evaluateConditions(subevent, conditions, context)) {
+                    if (!subevent.effectAlreadyApplied(this) && this.evaluateConditions(subevent, conditions, context)) {
                         JsonArray functionJsonArray = matchedFilterBehavior.getJsonArray("functions");
                         executeFunctions(subevent, functionJsonArray, context, resources);
                         subevent.addModifyingEffect(this);

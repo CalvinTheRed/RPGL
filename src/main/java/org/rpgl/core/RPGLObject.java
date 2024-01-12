@@ -437,7 +437,6 @@ public class RPGLObject extends RPGLTaggable {
      * This method adds an RPGLEffect to the RPGLObject. This will do nothing if the object already possesses the passed
      * RPGLEffect.
      * <br>
-     * TODO should effects be restricted if they are of the same type? double-dipping
      *
      * @param effect a RPGLEffect
      */

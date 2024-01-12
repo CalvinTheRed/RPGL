@@ -33,7 +33,7 @@ public class AttackRoll extends Roll {
     public Subevent clone() {
         Subevent clone = new AttackRoll();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -41,7 +41,7 @@ public class AttackRoll extends Roll {
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new AttackRoll();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
