@@ -34,7 +34,7 @@ public abstract class Subevent {
 
     public JsonObject json = new JsonObject();
 
-    List<RPGLEffect> modifyingEffects = new LinkedList<>();
+    List<RPGLEffect> appliedEffects = new LinkedList<>();
 
     final String subeventId;
 
@@ -204,25 +204,26 @@ public abstract class Subevent {
 
     /**
      * Adds a modifying RPGLEffect to the Subevent. Once a RPGLEffect is added in this way, the Subevent cannot be
-     * modified by another RPGLEffect with the same effectId. RPGLEffects added in this way cannot be removed, and
-     * carry over when the <code>clone()</code> method is called (but not <code>clone(...)</code>).
+     * modified by that RPGLEffect or another with the same effectId (unless duplicates are allowed for that type of
+     * effect). RPGLEffects added in this way cannot be removed, and carry over when the <code>clone()</code> method is
+     * called (but not <code>clone(...)</code>).
      *
      * @param effect an RPGLEffect which has executed Functions in response to this Subevent being invoked
      */
     public void addModifyingEffect(RPGLEffect effect) {
-        this.modifyingEffects.add(effect);
+        this.appliedEffects.add(effect);
     }
 
     /**
-     * Checks if the Subevent has already been modified by an RPGLEffect with the same effectId as the passed RPGLEffect.
+     * Checks if the Subevent has already been modified by an RPGLEffect or a similar one.
      *
      * @param effect an RPGLEffect
-     * @return true if the Subevent has been modified by an instance of the passed Subevent already
+     * @return true if the Subevent has been modified by the passed Subevent or a similar one
      */
-    public boolean hasModifyingEffect(RPGLEffect effect) {
-        String effectId = effect.getString("id");
-        for (RPGLEffect modifyingEffect : modifyingEffects) {
-            if (Objects.equals(effectId, modifyingEffect.getString("id"))) {
+    public boolean effectAlreadyApplied(RPGLEffect effect) {
+        for (RPGLEffect appliedEffect : appliedEffects) {
+            if ((Objects.equals(effect.getId(), appliedEffect.getId()) && !effect.hasTag("allow_duplicates"))
+                    || Objects.equals(effect.getUuid(), appliedEffect.getUuid())) {
                 return true;
             }
         }

@@ -24,7 +24,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
     public Subevent clone() {
         Subevent clone = new DealDamage();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -32,7 +32,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new DealDamage();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 

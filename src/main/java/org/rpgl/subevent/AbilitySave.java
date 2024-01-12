@@ -31,7 +31,7 @@ public class AbilitySave extends Subevent {
     public Subevent clone() {
         Subevent clone = new AbilitySave();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -39,7 +39,7 @@ public class AbilitySave extends Subevent {
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new AbilitySave();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 

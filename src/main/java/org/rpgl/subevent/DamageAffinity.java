@@ -30,7 +30,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
     public Subevent clone() {
         Subevent clone = new DamageAffinity();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -38,7 +38,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new DamageAffinity();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 

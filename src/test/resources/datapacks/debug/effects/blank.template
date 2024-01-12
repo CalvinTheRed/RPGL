@@ -1,0 +1,8 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Blank Effect",
+  "description": "This effect does nothing.",
+  "subevent_filters": { }
+}

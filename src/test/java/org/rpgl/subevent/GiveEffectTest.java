@@ -86,6 +86,4 @@ public class GiveEffectTest {
         );
     }
 
-    // TODO still need test for not giving an effect already applied to the target
-
 }

@@ -29,7 +29,7 @@ public class CalculateMaximumHitPoints extends Calculation {
     public Subevent clone() {
         Subevent clone = new CalculateMaximumHitPoints();
         clone.joinSubeventData(this.json);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
@@ -37,7 +37,7 @@ public class CalculateMaximumHitPoints extends Calculation {
     public Subevent clone(JsonObject jsonData) {
         Subevent clone = new CalculateMaximumHitPoints();
         clone.joinSubeventData(jsonData);
-        clone.modifyingEffects.addAll(this.modifyingEffects);
+        clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
     }
 
