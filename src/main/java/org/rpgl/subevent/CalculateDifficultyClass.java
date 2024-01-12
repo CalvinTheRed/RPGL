@@ -18,15 +18,15 @@ import java.util.List;
  *
  * @author Calvin Withun
  */
-public class CalculateSaveDifficultyClass extends Calculation {
+public class CalculateDifficultyClass extends Calculation {
 
-    public CalculateSaveDifficultyClass() {
-        super("calculate_save_difficulty_class");
+    public CalculateDifficultyClass() {
+        super("calculate_difficulty_class");
     }
 
     @Override
     public Subevent clone() {
-        Subevent clone = new CalculateSaveDifficultyClass();
+        Subevent clone = new CalculateDifficultyClass();
         clone.joinSubeventData(this.json);
         clone.appliedEffects.addAll(this.appliedEffects);
         return clone;
@@ -34,7 +34,7 @@ public class CalculateSaveDifficultyClass extends Calculation {
 
     @Override
     public Subevent clone(JsonObject jsonData) {
-        Subevent clone = new CalculateSaveDifficultyClass();
+        Subevent clone = new CalculateDifficultyClass();
         clone.joinSubeventData(jsonData);
         clone.appliedEffects.addAll(this.appliedEffects);
         return clone;

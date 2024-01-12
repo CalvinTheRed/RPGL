@@ -219,7 +219,7 @@ public class SavingThrowTest {
         savingThrow.setSource(object);
         savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getSaveDifficultyClass(),
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
                 "save DC should calculate according to the formula DC = 8 + proficiency + modifier"
         );
     }
@@ -243,14 +243,14 @@ public class SavingThrowTest {
         savingThrow.setSource(object);
         savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getSaveDifficultyClass(),
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
                 "save DC should calculate using origin object's ability scores"
         );
     }
 
     @Test
-    @DisplayName("prepares save DC and base damage")
-    void preparesSaveDCAndBaseDamage() throws Exception {
+    @DisplayName("prepares difficulty class and base damage")
+    void preparesDifficultyClassAndBaseDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         object.getAbilityScores().putInteger("int", 20);
@@ -293,13 +293,34 @@ public class SavingThrowTest {
         savingThrow.setSource(object);
         savingThrow.prepare(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getSaveDifficultyClass(),
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
                 "save DC was calculated incorrectly"
         );
         String expected = """
                 [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
         assertEquals(expected, savingThrow.json.getJsonArray("damage").toString(),
                 "prepare should store 10 cold damage"
+        );
+    }
+
+    @Test
+    @DisplayName("prepares assigned difficulty class")
+    void preparesAssignedDifficultyClass() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        SavingThrow savingThrow = new SavingThrow();
+        savingThrow.joinSubeventData(new JsonObject() {{
+            /*{
+                "difficulty_class": 20
+            }*/
+            this.putInteger("difficulty_class", 20);
+        }});
+
+        savingThrow.setSource(object);
+        savingThrow.prepare(new DummyContext(), List.of());
+
+        assertEquals(20, savingThrow.getDifficultyClass(),
+                "should preserve the assigned difficulty class"
         );
     }
 

@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Calvin Withun
  */
-public class CalculateSaveDifficultyClassTest {
+public class CalculateDifficultyClassTest {
 
     @BeforeAll
     static void beforeAll() {
@@ -47,7 +47,7 @@ public class CalculateSaveDifficultyClassTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new CalculateSaveDifficultyClass();
+        Subevent subevent = new CalculateDifficultyClass();
         subevent.joinSubeventData(new JsonObject() {{
             /*{
                 "subevent": "not_a_subevent"
@@ -66,15 +66,15 @@ public class CalculateSaveDifficultyClassTest {
     void calculatesSaveDC() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
 
-        CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
-        calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
+        CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
+        calculateDifficultyClass.joinSubeventData(new JsonObject() {{
             this.putString("difficulty_class_ability", "con");
         }});
 
-        calculateSaveDifficultyClass.setSource(source);
-        calculateSaveDifficultyClass.prepare(new DummyContext(), List.of());
+        calculateDifficultyClass.setSource(source);
+        calculateDifficultyClass.prepare(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +5 /*ability*/ +4 /*proficiency*/, calculateSaveDifficultyClass.get(),
+        assertEquals(8 /*base*/ +5 /*ability*/ +4 /*proficiency*/, calculateDifficultyClass.get(),
                 "young red dragon save DC calculated from Constitution should be 17"
         );
     }
