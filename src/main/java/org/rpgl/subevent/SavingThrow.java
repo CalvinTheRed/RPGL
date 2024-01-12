@@ -119,7 +119,7 @@ public class SavingThrow extends Roll {
      * @throws Exception if an exception occurs.
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        Integer difficultyClass = this.json.getInteger("difficulty_class");
+        Integer difficultyClass = this.getDifficultyClass();
         if (difficultyClass == null) {
             CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
             String difficultyClassAbility = this.json.getString("difficulty_class_ability");

@@ -79,7 +79,7 @@ public class AbilitySave extends Subevent {
      * @throws Exception if an exception occurs.
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        Integer difficultyClass = this.json.getInteger("difficulty_class");
+        Integer difficultyClass = this.getDifficultyClass();
         if (difficultyClass == null) {
             CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
             calculateDifficultyClass.joinSubeventData(new JsonObject() {{
