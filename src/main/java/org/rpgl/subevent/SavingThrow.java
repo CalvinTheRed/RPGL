@@ -93,7 +93,7 @@ public class SavingThrow extends Roll {
     public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
-            if (super.get() < this.getSaveDifficultyClass()) {
+            if (super.get() < this.getDifficultyClass()) {
                 this.getTargetDamage(context, resources);
                 this.deliverDamage("all", context, resources);
                 this.resolveNestedSubevents("fail", context, resources);
@@ -119,21 +119,25 @@ public class SavingThrow extends Roll {
      * @throws Exception if an exception occurs.
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
-        String difficultyClassAbility = this.json.getString("difficulty_class_ability");
-        calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", difficultyClassAbility);
-            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
-        }});
-        calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
-        calculateSaveDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
-                ? UUIDTable.getObject(super.getSource().getOriginObject())
-                : super.getSource()
-        );
-        calculateSaveDifficultyClass.prepare(context, resources);
-        calculateSaveDifficultyClass.setTarget(super.getSource());
-        calculateSaveDifficultyClass.invoke(context, resources);
-        this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
+        Integer difficultyClass = this.getDifficultyClass();
+        if (difficultyClass == null) {
+            CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
+            String difficultyClassAbility = this.json.getString("difficulty_class_ability");
+            calculateDifficultyClass.joinSubeventData(new JsonObject() {{
+                this.putString("difficulty_class_ability", difficultyClassAbility);
+                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            }});
+            calculateDifficultyClass.setOriginItem(this.getOriginItem());
+            calculateDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
+                    ? UUIDTable.getObject(super.getSource().getOriginObject())
+                    : super.getSource()
+            );
+            calculateDifficultyClass.prepare(context, resources);
+            calculateDifficultyClass.setTarget(super.getSource());
+            calculateDifficultyClass.invoke(context, resources);
+            difficultyClass = calculateDifficultyClass.get();
+        }
+        this.json.putInteger("difficulty_class", difficultyClass);
     }
 
     /**
@@ -286,13 +290,13 @@ public class SavingThrow extends Roll {
     }
 
     /**
-     * Returns the save's difficulty class. Note that this method will return null if called before the subevent is
+     * Returns the save's difficulty class. Note that this method may return null if called before the subevent is
      * prepared.
      *
      * @return the save's difficulty class
      */
-    public Integer getSaveDifficultyClass() {
-        return this.json.getInteger("save_difficulty_class");
+    public Integer getDifficultyClass() {
+        return this.json.getInteger("difficulty_class");
     }
 
 }

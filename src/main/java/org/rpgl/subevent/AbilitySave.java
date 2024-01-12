@@ -63,7 +63,7 @@ public class AbilitySave extends Subevent {
         abilityCheck.setTarget(super.getSource());
         abilityCheck.invoke(context, resources);
 
-        if (abilityCheck.get() < this.json.getInteger("save_difficulty_class")) {
+        if (abilityCheck.get() < this.getDifficultyClass()) {
             this.resolveNestedSubevents("fail", context, resources);
         } else {
             this.resolveNestedSubevents("pass", context, resources);
@@ -79,17 +79,21 @@ public class AbilitySave extends Subevent {
      * @throws Exception if an exception occurs.
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        CalculateSaveDifficultyClass calculateSaveDifficultyClass = new CalculateSaveDifficultyClass();
-        calculateSaveDifficultyClass.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
-            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
-        }});
-        calculateSaveDifficultyClass.setOriginItem(this.getOriginItem());
-        calculateSaveDifficultyClass.setSource(super.getSource());
-        calculateSaveDifficultyClass.prepare(context, resources);
-        calculateSaveDifficultyClass.setTarget(super.getSource());
-        calculateSaveDifficultyClass.invoke(context, resources);
-        this.json.putInteger("save_difficulty_class", calculateSaveDifficultyClass.get());
+        Integer difficultyClass = this.getDifficultyClass();
+        if (difficultyClass == null) {
+            CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
+            calculateDifficultyClass.joinSubeventData(new JsonObject() {{
+                this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
+                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            }});
+            calculateDifficultyClass.setOriginItem(this.getOriginItem());
+            calculateDifficultyClass.setSource(super.getSource());
+            calculateDifficultyClass.prepare(context, resources);
+            calculateDifficultyClass.setTarget(super.getSource());
+            calculateDifficultyClass.invoke(context, resources);
+            difficultyClass = calculateDifficultyClass.get();
+        }
+        this.json.putInteger("difficulty_class", difficultyClass);
     }
 
     /**
@@ -114,6 +118,16 @@ public class AbilitySave extends Subevent {
                 subevent.invoke(context, resources);
             }
         }
+    }
+
+    /**
+     * Returns the save's difficulty class. Note that this method may return null if called before the subevent is
+     * prepared.
+     *
+     * @return the save's difficulty class
+     */
+    public Integer getDifficultyClass() {
+        return this.json.getInteger("difficulty_class");
     }
 
 }

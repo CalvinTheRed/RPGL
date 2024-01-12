@@ -117,14 +117,14 @@ public class AbilitySaveTest {
 
         abilitySave.calculateDifficultyClass(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +5 /*ability*/ +6 /*proficiency*/, abilitySave.json.getInteger("save_difficulty_class"),
+        assertEquals(8 /*base*/ +5 /*ability*/ +6 /*proficiency*/, abilitySave.getDifficultyClass(),
                 "difficulty class should be calculated to 19"
         );
     }
 
     @Test
-    @DisplayName("prepares")
-    void prepares() throws Exception {
+    @DisplayName("prepares difficulty class")
+    void preparesDifficultyClass() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         source.getAbilityScores().putInteger("wis", 20);
         source.setProficiencyBonus(6);
@@ -139,8 +139,28 @@ public class AbilitySaveTest {
         abilitySave.setSource(source);
         abilitySave.prepare(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +5 /*ability*/ +6 /*proficiency*/, abilitySave.json.getInteger("save_difficulty_class"),
+        assertEquals(8 /*base*/ +5 /*ability*/ +6 /*proficiency*/, abilitySave.getDifficultyClass(),
                 "difficulty class should be calculated to 19"
+        );
+    }
+
+    @Test
+    @DisplayName("prepares assigned difficulty class")
+    void preparesAssignedDifficultyClass() throws Exception {
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        AbilitySave abilitySave = new AbilitySave();
+        abilitySave.joinSubeventData(new JsonObject() {{
+            /*{
+                "difficulty_class": 20
+            }*/
+            this.putInteger("difficulty_class", 20);
+        }});
+        abilitySave.setSource(source);
+        abilitySave.prepare(new DummyContext(), List.of());
+
+        assertEquals(20, abilitySave.getDifficultyClass(),
+                "should preserve the assigned difficulty class"
         );
     }
 
