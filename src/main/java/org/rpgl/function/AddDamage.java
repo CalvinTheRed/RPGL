@@ -35,7 +35,12 @@ public class AddDamage extends Function {
             for (int i = 0; i < damageArray.size(); i++) {
                 JsonObject damageElement = damageArray.getJsonObject(i);
                 JsonObject damage = Calculation.processBonusJson(effect, subevent, damageElement, context);
-                damage.putString("damage_type", damageElement.getString("damage_type"));
+                String damageType = damageElement.getString("damage_type");
+                if (damageType == null) {
+                    damage.putString("damage_type", damageCollection.getDamageCollection().getJsonObject(0).getString("damage_type"));
+                } else {
+                    damage.putString("damage_type", damageType);
+                }
                 damageCollection.addDamage(damage);
             }
         } else if (subevent instanceof CriticalHitDamageCollection criticalHitDamageCollection) {
@@ -43,7 +48,12 @@ public class AddDamage extends Function {
             for (int i = 0; i < damageArray.size(); i++) {
                 JsonObject damageElement = damageArray.getJsonObject(i);
                 JsonObject damage = Calculation.processBonusJson(effect, subevent, damageElement, context);
-                damage.putString("damage_type", damageElement.getString("damage_type"));
+                String damageType = damageElement.getString("damage_type");
+                if (damageType == null) {
+                    damage.putString("damage_type", criticalHitDamageCollection.getDamageCollection().getJsonObject(0).getString("damage_type"));
+                } else {
+                    damage.putString("damage_type", damageType);
+                }
                 criticalHitDamageCollection.addDamage(damage);
             }
         } else {
