@@ -87,7 +87,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("base_temporary_hit_point_collection");
             }});
         }});
-        baseTemporaryHitPointCollection.setOriginItem(this.getOriginItem());
+        baseTemporaryHitPointCollection.setOriginItem(super.getOriginItem());
         baseTemporaryHitPointCollection.setSource(super.getSource());
         baseTemporaryHitPointCollection.prepare(context, resources);
         baseTemporaryHitPointCollection.setTarget(super.getSource());
@@ -104,7 +104,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("base_temporary_hit_points_roll");
             }});
         }});
-        baseTemporaryHitPointRoll.setOriginItem(this.getOriginItem());
+        baseTemporaryHitPointRoll.setOriginItem(super.getOriginItem());
         baseTemporaryHitPointRoll.setSource(super.getSource());
         baseTemporaryHitPointRoll.prepare(context, resources);
         baseTemporaryHitPointRoll.setTarget(super.getSource());
@@ -136,7 +136,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("target_temporary_hit_point_collection");
             }});
         }});
-        targetTemporaryHitPointsCollection.setOriginItem(this.getOriginItem());
+        targetTemporaryHitPointsCollection.setOriginItem(super.getOriginItem());
         targetTemporaryHitPointsCollection.setSource(super.getSource());
         targetTemporaryHitPointsCollection.prepare(context, resources);
         targetTemporaryHitPointsCollection.setTarget(super.getTarget());
@@ -153,7 +153,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
                 this.addString("target_healing_roll");
             }});
         }});
-        targetTemporaryHitPointRoll.setOriginItem(this.getOriginItem());
+        targetTemporaryHitPointRoll.setOriginItem(super.getOriginItem());
         targetTemporaryHitPointRoll.setSource(super.getSource());
         targetTemporaryHitPointRoll.prepare(context, resources);
         targetTemporaryHitPointRoll.setTarget(super.getTarget());
@@ -179,7 +179,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
             this.putJsonArray("temporary_hit_points", json.getJsonArray("temporary_hit_points"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
-        temporaryHitPointsDelivery.setOriginItem(this.getOriginItem());
+        temporaryHitPointsDelivery.setOriginItem(super.getOriginItem());
         temporaryHitPointsDelivery.setSource(super.getSource());
         temporaryHitPointsDelivery.prepare(context, resources);
         temporaryHitPointsDelivery.setTarget(super.getTarget());

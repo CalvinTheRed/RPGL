@@ -69,7 +69,7 @@ public class SpawnObject extends Subevent {
 
         JsonArray extraEffects = this.json.getJsonArray("extra_effects");
         for (int i = 0; i < extraEffects.size(); i++) {
-            RPGLEffect effect = RPGLFactory.newEffect(extraEffects.getString(i), this.getOriginItem(), resources);
+            RPGLEffect effect = RPGLFactory.newEffect(extraEffects.getString(i), super.getOriginItem(), resources);
             effect.setSource(super.getSource());
             effect.setTarget(spawnedObject);
             spawnedObject.addEffect(effect);

@@ -103,51 +103,33 @@ public class AbilitySaveTest {
     }
 
     @Test
-    @DisplayName("calculates difficulty class")
-    void calculatesDifficultyClass() throws Exception {
+    @DisplayName("prepares difficulty class and base damage")
+    void preparesDifficultyClassAndBaseDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        object.getAbilityScores().putInteger("wis", 20);
-        object.setProficiencyBonus(6);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", "wis");
-        }});
-        abilitySave.setSource(object);
-
-        abilitySave.calculateDifficultyClass(new DummyContext(), List.of());
-
-        assertEquals(8 /*base*/ +5 /*ability*/ +6 /*proficiency*/, abilitySave.getDifficultyClass(),
-                "difficulty class should be calculated to 19"
-        );
-    }
-
-    @Test
-    @DisplayName("prepares difficulty class")
-    void preparesDifficultyClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        source.getAbilityScores().putInteger("wis", 20);
-        source.setProficiencyBonus(6);
+        object.getAbilityScores().putInteger("int", 20);
+        object.setProficiencyBonus(2);
 
         AbilitySave abilitySave = new AbilitySave();
         abilitySave.joinSubeventData(new JsonObject() {{
             /*{
-                "difficulty_class_ability": "wis"
+                "difficulty_class_ability": "int"
             }*/
-            this.putString("difficulty_class_ability", "wis");
+            this.putString("difficulty_class_ability", "int");
         }});
-        abilitySave.setSource(source);
+
+        abilitySave.setSource(object);
         abilitySave.prepare(new DummyContext(), List.of());
 
-        assertEquals(8 /*base*/ +5 /*ability*/ +6 /*proficiency*/, abilitySave.getDifficultyClass(),
-                "difficulty class should be calculated to 19"
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, abilitySave.getDifficultyClass(),
+                "save DC was calculated incorrectly"
         );
     }
 
     @Test
     @DisplayName("prepares assigned difficulty class")
     void preparesAssignedDifficultyClass() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         AbilitySave abilitySave = new AbilitySave();
         abilitySave.joinSubeventData(new JsonObject() {{
@@ -156,11 +138,36 @@ public class AbilitySaveTest {
             }*/
             this.putInteger("difficulty_class", 20);
         }});
-        abilitySave.setSource(source);
+
+        abilitySave.setSource(object);
         abilitySave.prepare(new DummyContext(), List.of());
 
         assertEquals(20, abilitySave.getDifficultyClass(),
                 "should preserve the assigned difficulty class"
+        );
+    }
+
+    @Test
+    @DisplayName("prepares difficulty class as origin")
+    void preparesDifficultyClassAsOrigin() throws Exception {
+        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        origin.getAbilityScores().putInteger("int", 20);
+        object.setOriginObject(origin.getUuid());
+        object.setProficiencyBonus(2);
+
+        AbilitySave abilitySave = new AbilitySave();
+        abilitySave.joinSubeventData(new JsonObject() {{
+            this.putString("difficulty_class_ability", "int");
+            this.putBoolean("use_origin_difficulty_class_ability", true);
+        }});
+
+        abilitySave.setSource(object);
+        abilitySave.prepare(new DummyContext(), List.of());
+
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, abilitySave.getDifficultyClass(),
+                "save DC should calculate using origin object's ability scores"
         );
     }
 

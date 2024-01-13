@@ -119,25 +119,31 @@ public class SavingThrow extends Roll {
      * @throws Exception if an exception occurs.
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
+
         Integer difficultyClass = this.getDifficultyClass();
         if (difficultyClass == null) {
-            CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
-            String difficultyClassAbility = this.json.getString("difficulty_class_ability");
             calculateDifficultyClass.joinSubeventData(new JsonObject() {{
-                this.putString("difficulty_class_ability", difficultyClassAbility);
+                this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
                 this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
             }});
-            calculateDifficultyClass.setOriginItem(this.getOriginItem());
-            calculateDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
-                    ? UUIDTable.getObject(super.getSource().getOriginObject())
-                    : super.getSource()
-            );
-            calculateDifficultyClass.prepare(context, resources);
-            calculateDifficultyClass.setTarget(super.getSource());
-            calculateDifficultyClass.invoke(context, resources);
-            difficultyClass = calculateDifficultyClass.get();
+        } else {
+            calculateDifficultyClass.joinSubeventData(new JsonObject() {{
+                this.putInteger("difficulty_class", difficultyClass);
+                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            }});
         }
-        this.json.putInteger("difficulty_class", difficultyClass);
+
+        calculateDifficultyClass.setOriginItem(super.getOriginItem());
+        calculateDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
+                ? UUIDTable.getObject(super.getSource().getOriginObject())
+                : super.getSource()
+        );
+        calculateDifficultyClass.prepare(context, resources);
+        calculateDifficultyClass.setTarget(super.getSource());
+        calculateDifficultyClass.invoke(context, resources);
+
+        this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
 
     /**
@@ -160,7 +166,7 @@ public class SavingThrow extends Roll {
                 this.addString("base_damage_collection");
             }});
         }});
-        baseDamageCollection.setOriginItem(this.getOriginItem());
+        baseDamageCollection.setOriginItem(super.getOriginItem());
         baseDamageCollection.setSource(super.getSource());
         baseDamageCollection.prepare(context, resources);
         baseDamageCollection.setTarget(super.getSource());
@@ -177,7 +183,7 @@ public class SavingThrow extends Roll {
                 this.addString("base_damage_roll");
             }});
         }});
-        baseDamageRoll.setOriginItem(this.getOriginItem());
+        baseDamageRoll.setOriginItem(super.getOriginItem());
         baseDamageRoll.setSource(super.getSource());
         baseDamageRoll.prepare(context, resources);
         baseDamageRoll.setTarget(super.getSource());
@@ -208,7 +214,7 @@ public class SavingThrow extends Roll {
                 this.addString("target_damage_collection");
             }});
         }});
-        targetDamageCollection.setOriginItem(this.getOriginItem());
+        targetDamageCollection.setOriginItem(super.getOriginItem());
         targetDamageCollection.setSource(super.getSource());
         targetDamageCollection.prepare(context, resources);
         targetDamageCollection.setTarget(super.getTarget());
@@ -225,7 +231,7 @@ public class SavingThrow extends Roll {
                 this.addString("target_damage_roll");
             }});
         }});
-        targetDamageRoll.setOriginItem(this.getOriginItem());
+        targetDamageRoll.setOriginItem(super.getOriginItem());
         targetDamageRoll.setSource(super.getSource());
         targetDamageRoll.prepare(context, resources);
         targetDamageRoll.setTarget(super.getTarget());
@@ -276,7 +282,7 @@ public class SavingThrow extends Roll {
                 this.putString("damage_proportion", damageProportion);
                 this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
             }});
-            damageDelivery.setOriginItem(this.getOriginItem());
+            damageDelivery.setOriginItem(super.getOriginItem());
             damageDelivery.setSource(super.getSource());
             damageDelivery.prepare(context, resources);
             damageDelivery.setTarget(super.getTarget());

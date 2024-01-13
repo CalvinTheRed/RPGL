@@ -58,7 +58,7 @@ public class AttackRoll extends Roll {
         this.addTag(this.getAbility(context));
 
         // Add weapon attack bonus, if applicable
-        if (this.getOriginItem() != null) {
+        if (super.getOriginItem() != null) {
             new AddBonus().execute(null, this, new JsonObject() {{
                 /*{
                     "function": "add_bonus",
@@ -160,7 +160,7 @@ public class AttackRoll extends Roll {
                 this.addString("base_damage_collection");
             }});
         }});
-        baseDamageCollection.setOriginItem(this.getOriginItem());
+        baseDamageCollection.setOriginItem(super.getOriginItem());
         baseDamageCollection.setSource(super.getSource());
         baseDamageCollection.prepare(context, resources);
         baseDamageCollection.setTarget(super.getSource());
@@ -203,7 +203,7 @@ public class AttackRoll extends Roll {
         }
 
         // Add origin item damage bonus, if applicable
-        if (this.getOriginItem() != null) {
+        if (super.getOriginItem() != null) {
             new AddDamage().execute(null, baseDamageCollection, new JsonObject() {{
                 /*{
                     "function": "add_damage",
@@ -249,7 +249,7 @@ public class AttackRoll extends Roll {
                 this.addString("target_damage_collection");
             }});
         }});
-        targetDamageCollection.setOriginItem(this.getOriginItem());
+        targetDamageCollection.setOriginItem(super.getOriginItem());
         targetDamageCollection.setSource(super.getSource());
         targetDamageCollection.prepare(context, resources);
         targetDamageCollection.setTarget(super.getTarget());
@@ -287,7 +287,7 @@ public class AttackRoll extends Roll {
                 this.putInteger("number", getTarget().getBaseArmorClass(context));
             }});
         }});
-        calculateEffectiveArmorClass.setOriginItem(this.getOriginItem());
+        calculateEffectiveArmorClass.setOriginItem(super.getOriginItem());
         calculateEffectiveArmorClass.setSource(super.getSource());
         calculateEffectiveArmorClass.prepare(context, resources);
         calculateEffectiveArmorClass.setTarget(super.getTarget());
@@ -320,7 +320,7 @@ public class AttackRoll extends Roll {
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});
         }});
-        calculateCriticalHitThreshold.setOriginItem(this.getOriginItem());
+        calculateCriticalHitThreshold.setOriginItem(super.getOriginItem());
         calculateCriticalHitThreshold.setSource(super.getSource());
         calculateCriticalHitThreshold.prepare(context, resources);
         calculateCriticalHitThreshold.setTarget(super.getTarget());
@@ -345,7 +345,7 @@ public class AttackRoll extends Roll {
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});
         }});
-        criticalDamageConfirmation.setOriginItem(this.getOriginItem());
+        criticalDamageConfirmation.setOriginItem(super.getOriginItem());
         criticalDamageConfirmation.setSource(super.getSource());
         criticalDamageConfirmation.prepare(context, resources);
         criticalDamageConfirmation.setTarget(super.getTarget());
@@ -389,7 +389,7 @@ public class AttackRoll extends Roll {
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});
         }});
-        criticalHitDamageCollection.setOriginItem(this.getOriginItem());
+        criticalHitDamageCollection.setOriginItem(super.getOriginItem());
         criticalHitDamageCollection.setSource(super.getSource());
         criticalHitDamageCollection.prepare(context, resources);
         criticalHitDamageCollection.setTarget(super.getTarget());
@@ -417,7 +417,7 @@ public class AttackRoll extends Roll {
                 this.addString("attack_damage_roll");
             }});
         }});
-        damageRoll.setOriginItem(this.getOriginItem());
+        damageRoll.setOriginItem(super.getOriginItem());
         damageRoll.setSource(super.getSource());
         damageRoll.prepare(context, resources);
         damageRoll.setTarget(super.getTarget());
@@ -444,7 +444,7 @@ public class AttackRoll extends Roll {
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject nestedSubeventJson = subeventJsonArray.getJsonObject(i);
             Subevent subevent = Subevent.SUBEVENTS.get(nestedSubeventJson.getString("subevent")).clone(nestedSubeventJson);
-            subevent.setOriginItem(this.getOriginItem());
+            subevent.setOriginItem(super.getOriginItem());
             subevent.setSource(super.getSource());
             subevent.prepare(context, resources);
             subevent.setTarget(super.getTarget());
@@ -468,7 +468,7 @@ public class AttackRoll extends Roll {
                 this.asList().addAll(json.getJsonArray("tags").asList());
             }});
         }});
-        damageDelivery.setOriginItem(this.getOriginItem());
+        damageDelivery.setOriginItem(super.getOriginItem());
         damageDelivery.setSource(super.getSource());
         damageDelivery.prepare(context, resources);
         damageDelivery.setTarget(super.getTarget());

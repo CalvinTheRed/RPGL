@@ -93,7 +93,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
                 this.addString("base_damage_collection");
             }});
         }});
-        baseDamageCollection.setOriginItem(this.getOriginItem());
+        baseDamageCollection.setOriginItem(super.getOriginItem());
         baseDamageCollection.setSource(super.getSource());
         baseDamageCollection.prepare(context, resources);
         baseDamageCollection.setTarget(super.getSource());
@@ -110,7 +110,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
                 this.addString("base_damage_roll");
             }});
         }});
-        baseDamageRoll.setOriginItem(this.getOriginItem());
+        baseDamageRoll.setOriginItem(super.getOriginItem());
         baseDamageRoll.setSource(super.getSource());
         baseDamageRoll.prepare(context, resources);
         baseDamageRoll.setTarget(super.getSource());
@@ -141,7 +141,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
                 this.addString("target_damage_collection");
             }});
         }});
-        targetDamageCollection.setOriginItem(this.getOriginItem());
+        targetDamageCollection.setOriginItem(super.getOriginItem());
         targetDamageCollection.setSource(super.getSource());
         targetDamageCollection.prepare(context, resources);
         targetDamageCollection.setTarget(super.getTarget());
@@ -158,7 +158,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
                 this.addString("target_damage_roll");
             }});
         }});
-        targetDamageRoll.setOriginItem(this.getOriginItem());
+        targetDamageRoll.setOriginItem(super.getOriginItem());
         targetDamageRoll.setSource(super.getSource());
         targetDamageRoll.prepare(context, resources);
         targetDamageRoll.setTarget(super.getTarget());
@@ -180,7 +180,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", json.getJsonArray("damage"));
         }});
-        damageDelivery.setOriginItem(this.getOriginItem());
+        damageDelivery.setOriginItem(super.getOriginItem());
         damageDelivery.setSource(super.getSource());
         damageDelivery.prepare(context, resources);
         damageDelivery.setTarget(super.getTarget());

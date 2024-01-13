@@ -44,7 +44,7 @@ public class AttackAbilityCollection extends Subevent {
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
         this.json.putJsonArray("abilities", new JsonArray());
-        if (UUIDTable.getItem(this.getOriginItem()).hasTag("finesse")) {
+        if (UUIDTable.getItem(super.getOriginItem()).hasTag("finesse")) {
             this.addAbility("dex");
         }
     }

@@ -42,7 +42,7 @@ public class AddOriginItemTag extends Subevent {
 
     @Override
     public void run(RPGLContext context, List<RPGLResource> resources) {
-        RPGLItem originItem = UUIDTable.getItem(this.getOriginItem());
+        RPGLItem originItem = UUIDTable.getItem(super.getOriginItem());
         if (originItem != null) {
             originItem.addTag(this.json.getString("tag"));
         }
