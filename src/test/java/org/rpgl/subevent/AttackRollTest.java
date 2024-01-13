@@ -71,6 +71,29 @@ public class AttackRollTest {
     }
 
     @Test
+    @DisplayName("prepares tags")
+    void preparesTags() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        AttackRoll attackRoll = new AttackRoll();
+        attackRoll.joinSubeventData(new JsonObject() {{
+            /*{
+                "attack_ability": "str",
+                "attack_type": "melee"
+            }*/
+            this.putString("attack_ability", "str");
+            this.putString("attack_type", "melee");
+        }});
+
+        attackRoll.setSource(object);
+        attackRoll.prepare(new DummyContext(), List.of());
+
+        assertTrue(attackRoll.getTags().asList().containsAll(List.of("str", "melee")),
+                "should have tags for attack ability and attack type"
+        );
+    }
+
+    @Test
     @DisplayName("recognizes critical misses")
     void recognizesCriticalMisses() {
         AttackRoll attackRoll = new AttackRoll();
