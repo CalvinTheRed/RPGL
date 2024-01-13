@@ -103,8 +103,8 @@ public class AbilitySaveTest {
     }
 
     @Test
-    @DisplayName("prepares difficulty class and base damage")
-    void preparesDifficultyClassAndBaseDamage() throws Exception {
+    @DisplayName("prepares difficulty class")
+    void preparesDifficultyClass() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         object.getAbilityScores().putInteger("int", 20);
