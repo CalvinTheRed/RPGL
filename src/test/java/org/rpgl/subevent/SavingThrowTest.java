@@ -203,52 +203,6 @@ public class SavingThrowTest {
     }
 
     @Test
-    @DisplayName("calculateDifficultyClass calculates correctly")
-    void calculateDifficultyClass_calculatesCorrectly() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
-        object.getAbilityScores().putInteger("con", 20);
-        object.setProficiencyBonus(2);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", "con");
-            this.putBoolean("use_origin_difficulty_class_ability", false);
-        }});
-
-        savingThrow.setSource(object);
-        savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
-
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
-                "save DC should calculate according to the formula DC = 8 + proficiency + modifier"
-        );
-    }
-
-    @Test
-    @DisplayName("uses origin object ability for calculating difficulty class")
-    void usesOriginObjectForCalculatingDifficultyClass() throws Exception {
-        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
-        origin.getAbilityScores().putInteger("int", 20);
-        object.setOriginObject(origin.getUuid());
-        object.setProficiencyBonus(2);
-
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", "int");
-            this.putBoolean("use_origin_difficulty_class_ability", true);
-        }});
-
-        savingThrow.setSource(object);
-        savingThrow.calculateDifficultyClass(new DummyContext(), List.of());
-
-        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
-                "save DC should calculate using origin object's ability scores"
-        );
-    }
-
-    @Test
     @DisplayName("prepares difficulty class and base damage")
     void preparesDifficultyClassAndBaseDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
@@ -321,6 +275,30 @@ public class SavingThrowTest {
 
         assertEquals(20, savingThrow.getDifficultyClass(),
                 "should preserve the assigned difficulty class"
+        );
+    }
+
+    @Test
+    @DisplayName("prepares difficulty class as origin")
+    void preparesDifficultyClassAsOrigin() throws Exception {
+        RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        origin.getAbilityScores().putInteger("int", 20);
+        object.setOriginObject(origin.getUuid());
+        object.setProficiencyBonus(2);
+
+        SavingThrow savingThrow = new SavingThrow();
+        savingThrow.joinSubeventData(new JsonObject() {{
+            this.putString("difficulty_class_ability", "int");
+            this.putBoolean("use_origin_difficulty_class_ability", true);
+        }});
+
+        savingThrow.setSource(object);
+        savingThrow.prepare(new DummyContext(), List.of());
+
+        assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
+                "save DC should calculate using origin object's ability scores"
         );
     }
 

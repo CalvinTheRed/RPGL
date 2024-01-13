@@ -4,6 +4,7 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
+import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.List;
 
@@ -21,7 +22,6 @@ import java.util.List;
 public class AbilitySave extends Subevent {
 
     // TODO base and target damage collections?
-    // TODO use_origin_difficulty_class_ability support?
 
     public AbilitySave() {
         super("ability_save");
@@ -46,6 +46,7 @@ public class AbilitySave extends Subevent {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
+        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
         this.calculateDifficultyClass(context, resources);
     }
 
@@ -79,21 +80,31 @@ public class AbilitySave extends Subevent {
      * @throws Exception if an exception occurs.
      */
     void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
+        CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
+
         Integer difficultyClass = this.getDifficultyClass();
         if (difficultyClass == null) {
-            CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
             calculateDifficultyClass.joinSubeventData(new JsonObject() {{
                 this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
                 this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
             }});
-            calculateDifficultyClass.setOriginItem(this.getOriginItem());
-            calculateDifficultyClass.setSource(super.getSource());
-            calculateDifficultyClass.prepare(context, resources);
-            calculateDifficultyClass.setTarget(super.getSource());
-            calculateDifficultyClass.invoke(context, resources);
-            difficultyClass = calculateDifficultyClass.get();
+        } else {
+            calculateDifficultyClass.joinSubeventData(new JsonObject() {{
+                this.putInteger("difficulty_class", difficultyClass);
+                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+            }});
         }
-        this.json.putInteger("difficulty_class", difficultyClass);
+
+        calculateDifficultyClass.setOriginItem(super.getOriginItem());
+        calculateDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
+                ? UUIDTable.getObject(super.getSource().getOriginObject())
+                : super.getSource()
+        );
+        calculateDifficultyClass.prepare(context, resources);
+        calculateDifficultyClass.setTarget(super.getSource());
+        calculateDifficultyClass.invoke(context, resources);
+
+        this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
 
     /**

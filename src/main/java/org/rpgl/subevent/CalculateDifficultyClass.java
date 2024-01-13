@@ -43,8 +43,10 @@ public class CalculateDifficultyClass extends Calculation {
     @Override
     public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
         super.prepare(context, resources);
-        super.setBase(8);
-        new AddBonus().execute(null, this, new JsonObject() {{
+        Integer difficultyClass = this.json.getInteger("difficulty_class");
+        if (difficultyClass == null) {
+            super.setBase(8);
+            new AddBonus().execute(null, this, new JsonObject() {{
                 /*{
                     "function": "add_bonus",
                     "bonus": [
@@ -65,25 +67,28 @@ public class CalculateDifficultyClass extends Calculation {
                         }
                     ]
                 }*/
-            this.putString("function", "add_bonus");
-            this.putJsonArray("bonus", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "proficiency");
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
+                this.putString("function", "add_bonus");
+                this.putJsonArray("bonus", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "proficiency");
+                        this.putJsonObject("object", new JsonObject() {{
+                            this.putString("from", "subevent");
+                            this.putString("object", "source");
+                        }});
+                    }});
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "modifier");
+                        this.putString("ability", json.getString("difficulty_class_ability"));
+                        this.putJsonObject("object", new JsonObject() {{
+                            this.putString("from", "subevent");
+                            this.putString("object", "source");
+                        }});
                     }});
                 }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "modifier");
-                    this.putString("ability", json.getString("difficulty_class_ability"));
-                    this.putJsonObject("object", new JsonObject() {{
-                        this.putString("from", "subevent");
-                        this.putString("object", "source");
-                    }});
-                }});
-            }});
-        }}, context, resources);
+            }}, context, resources);
+        } else {
+            super.setBase(difficultyClass);
+        }
     }
 
 }

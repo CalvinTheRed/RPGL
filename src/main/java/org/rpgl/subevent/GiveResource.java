@@ -53,7 +53,7 @@ public class GiveResource extends Subevent {
         Integer potency = this.json.getInteger("potency");
         for (int i = 0; i < count; i++) {
             RPGLResource resource = RPGLFactory.newResource(resourceId);
-            resource.setOriginItem(this.getOriginItem());
+            resource.setOriginItem(super.getOriginItem());
             resource.addTag("temporary");
             if (potency != null) {
                 resource.setPotency(potency);

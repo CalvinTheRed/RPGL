@@ -47,7 +47,7 @@ public class DestroyOriginItem extends Subevent {
 
     @Override
     public void run(RPGLContext context, List<RPGLResource> resources) {
-        String originItemUuid = this.getOriginItem();
+        String originItemUuid = super.getOriginItem();
         RPGLItem originItem = UUIDTable.getItem(originItemUuid);
         if (originItem != null) {
             RPGLObject source = super.getSource();

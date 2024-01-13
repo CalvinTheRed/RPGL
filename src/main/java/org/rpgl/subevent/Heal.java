@@ -87,7 +87,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("base_healing_collection");
             }});
         }});
-        baseHealingCollection.setOriginItem(this.getOriginItem());
+        baseHealingCollection.setOriginItem(super.getOriginItem());
         baseHealingCollection.setSource(super.getSource());
         baseHealingCollection.prepare(context, resources);
         baseHealingCollection.setTarget(super.getSource());
@@ -104,7 +104,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("base_healing_roll");
             }});
         }});
-        baseHealingRoll.setOriginItem(this.getOriginItem());
+        baseHealingRoll.setOriginItem(super.getOriginItem());
         baseHealingRoll.setSource(super.getSource());
         baseHealingRoll.prepare(context, resources);
         baseHealingRoll.setTarget(super.getSource());
@@ -127,7 +127,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("target_healing_collection");
             }});
         }});
-        targetHealingCollection.setOriginItem(this.getOriginItem());
+        targetHealingCollection.setOriginItem(super.getOriginItem());
         targetHealingCollection.setSource(super.getSource());
         targetHealingCollection.prepare(context, resources);
         targetHealingCollection.setTarget(super.getTarget());
@@ -144,7 +144,7 @@ public class Heal extends Subevent implements CancelableSubevent {
                 this.addString("target_healing_roll");
             }});
         }});
-        targetHealingRoll.setOriginItem(this.getOriginItem());
+        targetHealingRoll.setOriginItem(super.getOriginItem());
         targetHealingRoll.setSource(super.getSource());
         targetHealingRoll.prepare(context, resources);
         targetHealingRoll.setTarget(super.getTarget());
@@ -170,7 +170,7 @@ public class Heal extends Subevent implements CancelableSubevent {
             this.putJsonArray("healing", json.getJsonArray("healing"));
             this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
         }});
-        healingDelivery.setOriginItem(this.getOriginItem());
+        healingDelivery.setOriginItem(super.getOriginItem());
         healingDelivery.setSource(super.getSource());
         healingDelivery.prepare(context, resources);
         healingDelivery.setTarget(super.getTarget());
