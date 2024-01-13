@@ -57,6 +57,10 @@ public class AttackRoll extends Roll {
         // hail from an attack roll made using a particular attack ability.
         this.addTag(this.getAbility(context));
 
+        // Add tag so nested subevents such as DamageCollection can know they
+        // hail from an attack roll of a particular attack type.
+        this.addTag(this.json.getString("attack_type"));
+
         // Add weapon attack bonus, if applicable
         if (super.getOriginItem() != null) {
             new AddBonus().execute(null, this, new JsonObject() {{
