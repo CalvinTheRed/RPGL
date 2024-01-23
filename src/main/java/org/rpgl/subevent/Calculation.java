@@ -448,7 +448,7 @@ public abstract class Calculation extends Subevent {
             int bonus = bonusJson.getInteger("bonus");
             JsonArray dice = bonusJson.getJsonArray("dice");
             for (int j = 0; j < dice.size(); j++) {
-                JsonObject die = dice.getJsonObject(i);
+                JsonObject die = dice.getJsonObject(j);
                 bonus += Objects.requireNonNullElseGet(die.getInteger("roll"), () -> Die.roll(die));
             }
             totalBonus += scale(bonus, bonusJson.getJsonObject("scale"));
