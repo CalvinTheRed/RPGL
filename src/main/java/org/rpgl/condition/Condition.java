@@ -44,12 +44,12 @@ public abstract class Condition {
         Condition.CONDITIONS.put("all", new All());
         Condition.CONDITIONS.put("any", new Any());
         Condition.CONDITIONS.put("check_ability", new CheckAbility());
+        Condition.CONDITIONS.put("check_ability_score", new CheckAbilityScore());
         Condition.CONDITIONS.put("check_skill", new CheckSkill());
         Condition.CONDITIONS.put("equipped_item_has_tag", new EquippedItemHasTag());
         Condition.CONDITIONS.put("includes_damage_type", new IncludesDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
         Condition.CONDITIONS.put("is_objects_turn", new IsObjectsTurn());
-        Condition.CONDITIONS.put("object_ability_score_comparison", new ObjectAbilityScoreComparison());
         Condition.CONDITIONS.put("object_has_tag", new ObjectHasTag());
         Condition.CONDITIONS.put("object_wielding_origin_item", new ObjectWieldingOriginItem());
         Condition.CONDITIONS.put("objects_match", new ObjectsMatch());
@@ -154,7 +154,7 @@ public abstract class Condition {
      *
      * @throws Exception if an invalid comparison operator is provided
      */
-    boolean compareValues(int value, int target, String comparison) throws Exception {
+    public static boolean compareValues(int value, int target, String comparison) throws Exception {
         switch(comparison) {
             case "=":
                 return value == target;

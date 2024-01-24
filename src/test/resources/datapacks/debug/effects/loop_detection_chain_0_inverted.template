@@ -15,7 +15,7 @@
           {
             "condition": "invert",
             "invert": {
-              "condition": "object_ability_score_comparison",
+              "condition": "check_ability_score",
               "object": {
                 "from": "subevent",
                 "object": "source"
