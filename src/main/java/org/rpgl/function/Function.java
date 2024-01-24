@@ -65,6 +65,7 @@ public abstract class Function {
         Function.FUNCTIONS.put("maximize_damage", new MaximizeDamage());
         Function.FUNCTIONS.put("maximize_healing", new MaximizeHealing());
         Function.FUNCTIONS.put("maximize_temporary_hit_points", new MaximizeTemporaryHitPoints());
+        Function.FUNCTIONS.put("repeat_damage_dice", new RepeatDamageDice());
         Function.FUNCTIONS.put("reroll_damage_dice_matching_or_below", new RerollDamageDiceMatchingOrBelow());
         Function.FUNCTIONS.put("reroll_healing_dice_matching_or_below", new RerollHealingDiceMatchingOrBelow());
         Function.FUNCTIONS.put("reroll_temporary_hit_point_dice_matching_or_below", new RerollTemporaryHitPointDiceMatchingOrBelow());

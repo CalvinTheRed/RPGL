@@ -11,16 +11,16 @@ import org.rpgl.subevent.Subevent;
  *
  * @author Calvin Withun
  */
-public class ObjectAbilityScoreComparison extends Condition {
+public class CheckAbilityScore extends Condition {
 
-    public ObjectAbilityScoreComparison() {
-        super("object_ability_score_comparison");
+    public CheckAbilityScore() {
+        super("check_ability_score");
     }
 
     @Override
     public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
         RPGLObject object = RPGLEffect.getObject(effect, subevent, conditionJson.getJsonObject("object"));
-        return super.compareValues(
+        return Condition.compareValues(
                 object.getAbilityScoreFromAbilityName(conditionJson.getString("ability"), context),
                 conditionJson.getInteger("compare_to"),
                 conditionJson.getString("comparison")
