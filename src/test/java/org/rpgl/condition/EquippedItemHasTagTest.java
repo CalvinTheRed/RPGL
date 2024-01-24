@@ -11,6 +11,7 @@ import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
@@ -78,7 +79,7 @@ public class EquippedItemHasTagTest {
                     "from": "subevent",
                     "object": "source"
                 },
-                "slot": "mainhand",
+                "slot": [ "mainhand" ],
                 "tag": "test"
             }*/
             this.putString("condition", "equipped_item_has_tag");
@@ -86,21 +87,54 @@ public class EquippedItemHasTagTest {
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-            this.putString("slot", "mainhand");
+            this.putJsonArray("slot", new JsonArray() {{
+                this.addString("mainhand");
+            }});
             this.putString("tag", "test");
+        }}, new DummyContext()),
+                "condition should evaluate false when indicated slot is empty"
+        );
+
+        assertFalse(new EquippedItemHasTag().evaluate(null, subevent, new JsonObject() {{
+            /*{
+                "condition": "equipped_item_has_tag",
+                "object": {
+                    "from": "subevent",
+                    "object": "source"
+                },
+                "slot": [ "mainhand" ],
+                "tag": "test",
+                "invert": true
+            }*/
+            this.putString("condition", "equipped_item_has_tag");
+            this.putJsonObject("object", new JsonObject() {{
+                this.putString("from", "subevent");
+                this.putString("object", "source");
+            }});
+            this.putJsonArray("slot", new JsonArray() {{
+                this.addString("mainhand");
+            }});
+            this.putString("tag", "test");
+            this.putBoolean("invert", true);
         }}, new DummyContext()),
                 "condition should evaluate false when indicated slot is empty"
         );
     }
 
     @Test
-    @DisplayName("evaluates true (item has tag)")
-    void evaluatesTrue_itemHasTag() throws Exception {
+    @DisplayName("evaluates true")
+    void evaluatesTrue() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        RPGLItem item;
+
+        item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
         item.addTag("test");
         object.giveItem(item.getUuid());
         object.equipItem(item.getUuid(), "mainhand");
+
+        item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "offhand");
 
         Subevent subevent = new DummySubevent();
         subevent.setSource(object);
@@ -112,7 +146,7 @@ public class EquippedItemHasTagTest {
                     "from": "subevent",
                     "object": "source"
                 },
-                "slot": "mainhand",
+                "slot": [ "mainhand", "offhand" ],
                 "tag": "test"
             }*/
             this.putString("condition", "equipped_item_has_tag");
@@ -120,16 +154,19 @@ public class EquippedItemHasTagTest {
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-            this.putString("slot", "mainhand");
+            this.putJsonArray("slot", new JsonArray() {{
+                this.addString("mainhand");
+                this.addString("offhand");
+            }});
             this.putString("tag", "test");
         }}, new DummyContext()),
-                "condition should evaluate true when equipped item has tag"
+                "condition should evaluate true when an item in an indicated slot has tag"
         );
     }
 
     @Test
-    @DisplayName("evaluates false (item does not have tag)")
-    void evaluatesFalse_itemDoesNotHaveTag() throws Exception {
+    @DisplayName("evaluates false")
+    void evaluatesFalse() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
         object.giveItem(item.getUuid());
@@ -145,7 +182,7 @@ public class EquippedItemHasTagTest {
                     "from": "subevent",
                     "object": "source"
                 },
-                "slot": "mainhand",
+                "slot": [ "mainhand" ],
                 "tag": "test"
             }*/
             this.putString("condition", "equipped_item_has_tag");
@@ -153,11 +190,103 @@ public class EquippedItemHasTagTest {
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-            this.putString("slot", "mainhand");
+            this.putJsonArray("slot", new JsonArray() {{
+                this.addString("mainhand");
+            }});
             this.putString("tag", "test");
         }}, new DummyContext()),
-                "condition should evaluate false when equipped item does not have tag"
+                "condition should evaluate false when no items in the indicated slots have tag"
         );
     }
 
+    @Test
+    @DisplayName("evaluates true (inverted)")
+    void evaluatesTrue_inverted() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLItem item;
+
+        item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        item.addTag("test");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "mainhand");
+
+        item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "offhand");
+
+        Subevent subevent = new DummySubevent();
+        subevent.setSource(object);
+
+        assertTrue(new EquippedItemHasTag().evaluate(null, subevent, new JsonObject() {{
+            /*{
+                "condition": "equipped_item_has_tag",
+                "object": {
+                    "from": "subevent",
+                    "object": "source"
+                },
+                "slot": [ "mainhand", "offhand" ],
+                "tag": "test",
+                "invert": true
+            }*/
+            this.putString("condition", "equipped_item_has_tag");
+            this.putJsonObject("object", new JsonObject() {{
+                this.putString("from", "subevent");
+                this.putString("object", "source");
+            }});
+            this.putJsonArray("slot", new JsonArray() {{
+                this.addString("mainhand");
+                this.addString("offhand");
+            }});
+            this.putString("tag", "test");
+            this.putBoolean("invert", true);
+        }}, new DummyContext()),
+                "condition should evaluate true when an item in an indicated slot does not have tag"
+        );
+    }
+
+    @Test
+    @DisplayName("evaluates false (inverted)")
+    void evaluatesFalse_inverted() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLItem item;
+
+        item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        item.addTag("test");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "mainhand");
+
+        item = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
+        item.addTag("test");
+        object.giveItem(item.getUuid());
+        object.equipItem(item.getUuid(), "offhand");
+
+        Subevent subevent = new DummySubevent();
+        subevent.setSource(object);
+
+        assertFalse(new EquippedItemHasTag().evaluate(null, subevent, new JsonObject() {{
+            /*{
+                "condition": "equipped_item_has_tag",
+                "object": {
+                    "from": "subevent",
+                    "object": "source"
+                },
+                "slot": [ "mainhand", "offhand" ],
+                "tag": "test",
+                "invert": true
+            }*/
+            this.putString("condition", "equipped_item_has_tag");
+            this.putJsonObject("object", new JsonObject() {{
+                this.putString("from", "subevent");
+                this.putString("object", "source");
+            }});
+            this.putJsonArray("slot", new JsonArray() {{
+                this.addString("mainhand");
+                this.addString("offhand");
+            }});
+            this.putString("tag", "test");
+            this.putBoolean("invert", true);
+        }}, new DummyContext()),
+                "condition should evaluate false when an item in an indicated slot has tag"
+        );
+    }
 }
