@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,7 +60,7 @@ public class AbilityCheckTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -100,7 +99,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext(), List.of());
+        abilityCheck.prepare(new DummyContext());
 
         abilityCheck.giveHalfProficiency();
 
@@ -123,7 +122,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext(), List.of());
+        abilityCheck.prepare(new DummyContext());
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -147,7 +146,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext(), List.of());
+        abilityCheck.prepare(new DummyContext());
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -171,7 +170,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext(), List.of());
+        abilityCheck.prepare(new DummyContext());
 
         assertFalse(abilityCheck.hasHalfProficiency(),
                 "should not have half proficiency"
@@ -204,9 +203,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext(), List.of());
+        abilityCheck.prepare(new DummyContext());
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(new DummyContext(), List.of());
+        abilityCheck.invoke(new DummyContext());
 
         assertEquals(10, abilityCheck.get(),
                 "abilityCheck should roll 10 (10+0)"
@@ -234,9 +233,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext(), List.of());
+        abilityCheck.prepare(new DummyContext());
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(new DummyContext(), List.of());
+        abilityCheck.invoke(new DummyContext());
 
         assertEquals(10 /*base*/ +5 /*ability bonus*/, abilityCheck.get(),
                 "abilityCheck should total 15"

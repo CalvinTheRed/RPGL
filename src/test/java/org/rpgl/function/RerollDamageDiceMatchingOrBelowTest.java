@@ -19,7 +19,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -160,7 +159,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -171,7 +170,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageRoll.setSource(object);
-        damageRoll.prepare(new DummyContext(), List.of());
+        damageRoll.prepare(new DummyContext());
 
         new RerollDamageDiceMatchingOrBelow().execute(null, damageRoll, new JsonObject() {{
             /*{
@@ -182,7 +181,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putString("damage_type", "fire");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[6],"roll":1,"size":6},{"determined":[6],"roll":2,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";
@@ -197,7 +196,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageRoll.setSource(object);
-        damageRoll.prepare(new DummyContext(), List.of());
+        damageRoll.prepare(new DummyContext());
 
         new RerollDamageDiceMatchingOrBelow().execute(null, damageRoll, new JsonObject() {{
             /*{
@@ -208,7 +207,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putString("damage_type", "");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";

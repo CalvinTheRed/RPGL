@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,7 +60,7 @@ public class ExhaustResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -92,9 +91,9 @@ public class ExhaustResourceTest {
             this.putString("selection_mode", "low_first");
         }});
         exhaustResource.setSource(source);
-        exhaustResource.prepare(new DummyContext(), List.of());
+        exhaustResource.prepare(new DummyContext());
         exhaustResource.setTarget(target);
-        exhaustResource.invoke(new DummyContext(), List.of());
+        exhaustResource.invoke(new DummyContext());
 
         boolean[] expectedExhaustValues = {
                 false,
@@ -143,9 +142,9 @@ public class ExhaustResourceTest {
             this.putString("selection_mode", "high_first");
         }});
         exhaustResource.setSource(source);
-        exhaustResource.prepare(new DummyContext(), List.of());
+        exhaustResource.prepare(new DummyContext());
         exhaustResource.setTarget(target);
-        exhaustResource.invoke(new DummyContext(), List.of());
+        exhaustResource.invoke(new DummyContext());
 
         boolean[] expectedExhaustValues = {
                 false,
@@ -192,9 +191,9 @@ public class ExhaustResourceTest {
             this.putInteger("count", 2);
         }});
         exhaustResource.setSource(source);
-        exhaustResource.prepare(new DummyContext(), List.of());
+        exhaustResource.prepare(new DummyContext());
         exhaustResource.setTarget(target);
-        exhaustResource.invoke(new DummyContext(), List.of());
+        exhaustResource.invoke(new DummyContext());
 
         assertTrue(spellSlot.getExhausted(),
                 "matching resource should be exhausted"

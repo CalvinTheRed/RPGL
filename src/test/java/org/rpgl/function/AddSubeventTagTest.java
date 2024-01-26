@@ -14,7 +14,6 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,7 +52,7 @@ public class AddSubeventTagTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -70,7 +69,7 @@ public class AddSubeventTagTest {
             }*/
             this.putString("function", "add_subevent_tag");
             this.putString("tag", "test_tag");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertTrue(dummySubevent.hasTag("test_tag"),
                 "execute should add tag to subevent"

@@ -3,7 +3,6 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -164,11 +163,10 @@ public abstract class Subevent {
      * assign a source RPGLObject to the Subevent for this method to work reliably.
      *
      * @param context the context in which the Subevent is being prepared
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void prepare(@SuppressWarnings("unused") RPGLContext context) throws Exception {
         if (this.json.getJsonArray("tags") == null) {
             this.json.putJsonArray("tags", new JsonArray());
         }
@@ -179,14 +177,13 @@ public abstract class Subevent {
      * passes the completed version of it to the RPGLContext for viewing.
      *
      * @param context the context in which the Subevent is being invoked
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void invoke(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);
-        context.processSubevent(this, context, resources);
-        this.run(context, resources);
+        context.processSubevent(this, context);
+        this.run(context);
         context.viewCompletedSubevent(this);
     }
 
@@ -195,11 +192,11 @@ public abstract class Subevent {
      * this method is called. This method does nothing by default.
      *
      * @param context the context in which the Subevent is being invoked
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(@SuppressWarnings("unused") RPGLContext context) throws Exception {
+        // this method does nothing by default
     }
 
     /**

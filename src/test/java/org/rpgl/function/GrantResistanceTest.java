@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,7 +56,7 @@ public class GrantResistanceTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -71,7 +70,7 @@ public class GrantResistanceTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext(), List.of());
+        damageAffinity.prepare(new DummyContext());
 
         new GrantResistance().execute(null, damageAffinity, new JsonObject() {{
             /*{
@@ -80,7 +79,7 @@ public class GrantResistanceTest {
             }*/
             this.putString("function", "grant_resistance");
             this.putString("damage_type", "fire");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertTrue(damageAffinity.isResistant("fire"),
                 "execute should grant resistance to fire damage"
@@ -99,14 +98,14 @@ public class GrantResistanceTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext(), List.of());
+        damageAffinity.prepare(new DummyContext());
 
         new GrantResistance().execute(null, damageAffinity, new JsonObject() {{
             /*{
                 "function": "grant_resistance"
             }*/
             this.putString("function", "grant_resistance");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertTrue(damageAffinity.isResistant("fire"),
                 "execute should grant resistance to fire damage"

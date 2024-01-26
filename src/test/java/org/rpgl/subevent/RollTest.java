@@ -18,7 +18,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -80,7 +79,7 @@ public class RollTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(object);
-        roll.prepare(new DummyContext(), List.of());
+        roll.prepare(new DummyContext());
 
         assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
@@ -99,7 +98,7 @@ public class RollTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(source);
-        roll.prepare(new DummyContext(), List.of());
+        roll.prepare(new DummyContext());
         roll.grantAdvantage();
 
         assertTrue(roll.isAdvantageRoll(),
@@ -119,7 +118,7 @@ public class RollTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(source);
-        roll.prepare(new DummyContext(), List.of());
+        roll.prepare(new DummyContext());
         roll.grantDisadvantage();
 
         assertFalse(roll.isAdvantageRoll(),
@@ -161,7 +160,7 @@ public class RollTest {
         }});
 
         roll.setSource(object);
-        roll.prepare(new DummyContext(), List.of());
+        roll.prepare(new DummyContext());
         roll.roll();
 
         assertEquals(5, roll.get(),
@@ -215,7 +214,7 @@ public class RollTest {
         }});
 
         roll.setSource(source);
-        roll.prepare(new DummyContext(), List.of());
+        roll.prepare(new DummyContext());
         roll.grantAdvantage();
         roll.roll();
 
@@ -246,7 +245,7 @@ public class RollTest {
         }});
 
         roll.setSource(object);
-        roll.prepare(new DummyContext(), List.of());
+        roll.prepare(new DummyContext());
         roll.grantDisadvantage();
         roll.roll();
 

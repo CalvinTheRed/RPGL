@@ -18,7 +18,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,7 +56,7 @@ public class AddSpawnObjectTagsTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -69,7 +68,7 @@ public class AddSpawnObjectTagsTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(new DummyContext(), List.of());
+        spawnObject.prepare(new DummyContext());
 
         new AddSpawnObjectTags().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -84,7 +83,7 @@ public class AddSpawnObjectTagsTest {
                 this.addString("test-tag-1");
                 this.addString("test-tag-2");
             }});
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 ["test-tag-1","test-tag-2"]""";

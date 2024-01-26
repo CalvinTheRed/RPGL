@@ -16,7 +16,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -59,7 +58,7 @@ public class CalculateBaseArmorClassTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -164,7 +163,7 @@ public class CalculateBaseArmorClassTest {
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
 
         calculateBaseArmorClass.setSource(source);
-        calculateBaseArmorClass.prepare(new DummyContext(), List.of());
+        calculateBaseArmorClass.prepare(new DummyContext());
 
         assertEquals(10 /*base*/ +2 /*shield*/, calculateBaseArmorClass.get(),
                 "shield should raise AC to 12"

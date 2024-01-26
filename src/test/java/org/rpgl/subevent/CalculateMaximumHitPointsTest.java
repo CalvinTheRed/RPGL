@@ -15,7 +15,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -56,7 +55,7 @@ public class CalculateMaximumHitPointsTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -69,7 +68,7 @@ public class CalculateMaximumHitPointsTest {
         CalculateMaximumHitPoints calculateMaximumHitPoints = new CalculateMaximumHitPoints();
 
         calculateMaximumHitPoints.setSource(source);
-        calculateMaximumHitPoints.prepare(new DummyContext(), List.of());
+        calculateMaximumHitPoints.prepare(new DummyContext());
 
         assertEquals(178, calculateMaximumHitPoints.get(),
                 "prepare() should calculate the default maximum hit points for a RPGLObject (93+(17*5)=178)"

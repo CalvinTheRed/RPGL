@@ -18,7 +18,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -62,7 +61,7 @@ public class SpawnObjectTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -78,9 +77,9 @@ public class SpawnObjectTest {
             this.putString("object_id", "debug:dummy");
         }});
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertEquals(1, context.getContextObjects().size(),
                 "There should be 1 new object in context following spawn"
@@ -105,9 +104,9 @@ public class SpawnObjectTest {
             this.putString("object_id", "debug:dummy");
         }});
         spawnObject.setSource(source);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(target);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertEquals(2, UUIDTable.getObjectsByUserId(source.getUserId()).size(),
                 "SpawnObject should use source's user id by default"
@@ -127,9 +126,9 @@ public class SpawnObjectTest {
             this.putString("controlled_by", "target");
         }});
         spawnObject.setSource(source);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(target);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertEquals(2, UUIDTable.getObjectsByUserId(target.getUserId()).size(),
                 "SpawnObject should use target's user id when specified"
@@ -153,9 +152,9 @@ public class SpawnObjectTest {
         }});
         spawnObject.setOriginItem(originItem.getUuid());
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         RPGLObject spawnedObject = context.getContextObjects().get(0);
         RPGLEffect effect;
@@ -208,9 +207,9 @@ public class SpawnObjectTest {
             }});
         }});
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         JsonArray events = context.getContextObjects().get(0).getEvents();
 
@@ -240,9 +239,9 @@ public class SpawnObjectTest {
             }});
         }});
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertTrue(context.getContextObjects().get(0).getTags().asList().contains("extra-tag-1"),
                 "new object should have an extra tag"
@@ -269,9 +268,9 @@ public class SpawnObjectTest {
             }});
         }});
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertEquals(10, context.getContextObjects().get(0).getHealthData().getInteger("temporary"),
                 "object should receive a +10 bonus to temporary hit points"
@@ -291,9 +290,9 @@ public class SpawnObjectTest {
             this.putString("object_id", "debug:dummy");
         }});
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertNotEquals(1, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should not extend source proficiency bonus by default"
@@ -314,9 +313,9 @@ public class SpawnObjectTest {
             this.putBoolean("extend_proficiency_bonus", true);
         }});
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertEquals(5, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should extend source proficiency bonus"
@@ -334,9 +333,9 @@ public class SpawnObjectTest {
             this.putString("object_id", "std:dragon/red/young");
         }});
         spawnObject.setSource(summoner);
-        spawnObject.prepare(context, List.of());
+        spawnObject.prepare(context);
         spawnObject.setTarget(summoner);
-        spawnObject.invoke(context, List.of());
+        spawnObject.invoke(context);
 
         assertEquals(summoner.getUuid(), context.getContextObjects().get(0).getOriginObject(),
                 "new object should have summoner as origin object"

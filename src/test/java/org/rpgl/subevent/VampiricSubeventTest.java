@@ -15,7 +15,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -77,7 +76,7 @@ public class VampiricSubeventTest {
         VampiricSubevent.handleVampirism(dummySubevent, new JsonObject() {{
             this.putInteger("necrotic", 10);
             this.putInteger("radiant", 10);
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half necrotic damage via vampirism"
@@ -119,7 +118,7 @@ public class VampiricSubeventTest {
         dummySubevent.setSource(source);
         dummySubevent.setTarget(target);
 
-        VampiricSubevent.handleVampirism(dummySubevent, damageByType, new DummyContext(), List.of());
+        VampiricSubevent.handleVampirism(dummySubevent, damageByType, new DummyContext());
 
         assertEquals(11, source.getHealthData().getInteger("current"),
                 "source should be healed for half total damage via vampirism"

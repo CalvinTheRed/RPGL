@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -60,7 +59,7 @@ public class AbilitySaveTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -77,7 +76,7 @@ public class AbilitySaveTest {
             }});
         }});
 
-        abilitySave.resolveNestedSubevents("pass", new DummyContext(), List.of());
+        abilitySave.resolveNestedSubevents("pass", new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -95,7 +94,7 @@ public class AbilitySaveTest {
             }});
         }});
 
-        abilitySave.resolveNestedSubevents("fail", new DummyContext(), List.of());
+        abilitySave.resolveNestedSubevents("fail", new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -119,7 +118,7 @@ public class AbilitySaveTest {
         }});
 
         abilitySave.setSource(object);
-        abilitySave.prepare(new DummyContext(), List.of());
+        abilitySave.prepare(new DummyContext());
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, abilitySave.getDifficultyClass(),
                 "save DC was calculated incorrectly"
@@ -140,7 +139,7 @@ public class AbilitySaveTest {
         }});
 
         abilitySave.setSource(object);
-        abilitySave.prepare(new DummyContext(), List.of());
+        abilitySave.prepare(new DummyContext());
 
         assertEquals(20, abilitySave.getDifficultyClass(),
                 "should preserve the assigned difficulty class"
@@ -164,7 +163,7 @@ public class AbilitySaveTest {
         }});
 
         abilitySave.setSource(object);
-        abilitySave.prepare(new DummyContext(), List.of());
+        abilitySave.prepare(new DummyContext());
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, abilitySave.getDifficultyClass(),
                 "save DC should calculate using origin object's ability scores"
@@ -201,9 +200,9 @@ public class AbilitySaveTest {
             }});
         }});
         abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext(), List.of());
+        abilitySave.prepare(new DummyContext());
         abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext(), List.of());
+        abilitySave.invoke(new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -240,9 +239,9 @@ public class AbilitySaveTest {
             }});
         }});
         abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext(), List.of());
+        abilitySave.prepare(new DummyContext());
         abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext(), List.of());
+        abilitySave.invoke(new DummyContext());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on fail"
@@ -279,9 +278,9 @@ public class AbilitySaveTest {
             }});
         }});
         abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext(), List.of());
+        abilitySave.prepare(new DummyContext());
         abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext(), List.of());
+        abilitySave.invoke(new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -318,9 +317,9 @@ public class AbilitySaveTest {
             }});
         }});
         abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext(), List.of());
+        abilitySave.prepare(new DummyContext());
         abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext(), List.of());
+        abilitySave.invoke(new DummyContext());
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on pass"

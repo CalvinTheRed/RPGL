@@ -7,7 +7,6 @@ import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -63,7 +62,7 @@ public class RPGLItemTemplate extends JsonObject {
         JsonArray equippedEffectsUuidArray = new JsonArray();
         for (int i = 0; i < equippedEffectsIdArray.size(); i++) {
             String effectId = equippedEffectsIdArray.getString(i);
-            RPGLEffect effect = RPGLFactory.newEffect(effectId, item.getUuid(), List.of());
+            RPGLEffect effect = RPGLFactory.newEffect(effectId, item.getUuid());
             equippedEffectsUuidArray.addString(effect.getUuid());
         }
         item.setEquippedEffects(equippedEffectsUuidArray);

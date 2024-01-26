@@ -1,11 +1,9 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,11 +21,10 @@ public final class VampiricSubevent {
      * @param subevent the vampiric subevent
      * @param damageByType a JSON object indicating damage dealt by the subevent by damage type
      * @param context the context in which the vampiric subevent was invoked
-     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    static void handleVampirism(Subevent subevent, JsonObject damageByType, RPGLContext context, List<RPGLResource> resources) throws Exception {
+    static void handleVampirism(Subevent subevent, JsonObject damageByType, RPGLContext context) throws Exception {
         JsonObject vampirismJson = subevent.json.getJsonObject("vampirism");
         String vampiricDamageType = vampirismJson.getString("damage_type");
 
@@ -46,13 +43,13 @@ public final class VampiricSubevent {
             }});
             vampiricHealingCollection.setOriginItem(subevent.getOriginItem());
             vampiricHealingCollection.setSource(subevent.getSource());
-            vampiricHealingCollection.prepare(context, resources);
+            vampiricHealingCollection.prepare(context);
             vampiricHealingCollection.addHealing(new JsonObject() {{
                 this.putJsonArray("dice", new JsonArray());
                 this.putInteger("bonus", vampiricHealing);
             }});
             vampiricHealingCollection.setTarget(subevent.getSource());
-            vampiricHealingCollection.invoke(context, resources);
+            vampiricHealingCollection.invoke(context);
 
             HealingRoll vampiricHealingRoll = new HealingRoll();
             vampiricHealingRoll.joinSubeventData(new JsonObject() {{
@@ -64,9 +61,9 @@ public final class VampiricSubevent {
             }});
             vampiricHealingRoll.setOriginItem(subevent.getOriginItem());
             vampiricHealingRoll.setSource(subevent.getSource());
-            vampiricHealingRoll.prepare(context, resources);
+            vampiricHealingRoll.prepare(context);
             vampiricHealingRoll.setTarget(subevent.getSource());
-            vampiricHealingRoll.invoke(context, resources);
+            vampiricHealingRoll.invoke(context);
 
             HealingDelivery vampiricHealingDelivery = new HealingDelivery();
             vampiricHealingDelivery.joinSubeventData(new JsonObject() {{
@@ -78,9 +75,9 @@ public final class VampiricSubevent {
             }});
             vampiricHealingDelivery.setOriginItem(subevent.getOriginItem());
             vampiricHealingDelivery.setSource(subevent.getSource());
-            vampiricHealingDelivery.prepare(context, resources);
+            vampiricHealingDelivery.prepare(context);
             vampiricHealingDelivery.setTarget(subevent.getSource());
-            vampiricHealingDelivery.invoke(context, resources);
+            vampiricHealingDelivery.invoke(context);
 
             subevent.getSource().receiveHealing(vampiricHealingDelivery, context);
         }

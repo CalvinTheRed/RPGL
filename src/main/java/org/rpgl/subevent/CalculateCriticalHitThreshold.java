@@ -1,10 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
-
-import java.util.List;
 
 /**
  * This subevent is dedicated to calculating the threshold which must be met on the d20 of an attack to count as a
@@ -40,8 +37,8 @@ public class CalculateCriticalHitThreshold extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         super.setBase(20);
     }
 

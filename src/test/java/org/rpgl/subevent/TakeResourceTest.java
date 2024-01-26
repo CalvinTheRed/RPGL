@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,7 +58,7 @@ public class TakeResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -80,16 +79,16 @@ public class TakeResourceTest {
             this.putString("resource_tag", "necrotic_husk");
         }});
         takeResource.setSource(object);
-        takeResource.prepare(new DummyContext(), List.of());
+        takeResource.prepare(new DummyContext());
         takeResource.setTarget(object);
-        takeResource.invoke(new DummyContext(), List.of());
+        takeResource.invoke(new DummyContext());
 
         assertEquals(1, object.getResourceObjects().size(),
                 "target should not have a non-temporary resource taken away"
         );
 
         resource.addTag("temporary");
-        takeResource.invoke(new DummyContext(), List.of());
+        takeResource.invoke(new DummyContext());
 
         assertEquals(0, object.getResourceObjects().size(),
                 "resource should be taken away once it has temporary tag"
@@ -115,10 +114,10 @@ public class TakeResourceTest {
             this.putString("resource_tag", "necrotic_husk");
         }});
         takeResource.setSource(object);
-        takeResource.prepare(new DummyContext(), List.of());
+        takeResource.prepare(new DummyContext());
         takeResource.setTarget(object);
 
-        takeResource.invoke(new DummyContext(), List.of());
+        takeResource.invoke(new DummyContext());
 
         assertEquals(0, object.getResourceObjects().size(),
                 "target should have all matching resources taken away when count is not specified"
@@ -148,7 +147,7 @@ public class TakeResourceTest {
         takeResource.setSource(object);
         takeResource.setTarget(object);
 
-        takeResource.invoke(new DummyContext(), List.of());
+        takeResource.invoke(new DummyContext());
 
         assertEquals(2, object.getResourceObjects().size(),
                 "target have 3 of 5 resources taken away when count of 3 is specified"

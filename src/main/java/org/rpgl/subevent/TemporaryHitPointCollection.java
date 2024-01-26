@@ -2,11 +2,8 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-
-import java.util.List;
 
 /**
  * This Subevent is dedicated to collecting unrolled temporary hit point dice and bonuses.
@@ -41,8 +38,8 @@ public class TemporaryHitPointCollection extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.prepareTemporaryHitPoints(context);
     }
 

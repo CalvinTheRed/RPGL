@@ -18,7 +18,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,7 +56,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -145,7 +144,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
             }});
         }});
         temporaryHitPointRoll.setSource(object);
-        temporaryHitPointRoll.prepare(new DummyContext(), List.of());
+        temporaryHitPointRoll.prepare(new DummyContext());
 
         new SetTemporaryHitPointDiceMatchingOrBelow().execute(null, temporaryHitPointRoll, new JsonObject() {{
             /*{
@@ -156,7 +155,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
             this.putString("function", "set_temporary_hit_point_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":4,"size":6}]}]""";

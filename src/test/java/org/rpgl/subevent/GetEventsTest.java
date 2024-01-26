@@ -59,7 +59,7 @@ public class GetEventsTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -71,7 +71,7 @@ public class GetEventsTest {
 
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(object);
-        getEvents.prepare(new DummyContext(), List.of());
+        getEvents.prepare(new DummyContext());
 
         assertTrue(getEvents.getEvents().isEmpty(),
                 "getEvents should return an empty array by default"
@@ -86,7 +86,7 @@ public class GetEventsTest {
 
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(object);
-        getEvents.prepare(new DummyContext(), List.of());
+        getEvents.prepare(new DummyContext());
 
         getEvents.addEvent("std:item/weapon/melee/martial/longsword/melee", item.getUuid(), null);
         getEvents.addEvent("std:common/improvised_thrown", item.getUuid(), null);

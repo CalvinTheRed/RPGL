@@ -1,12 +1,9 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-
-import java.util.List;
 
 /**
  * This Subevent is dedicated to performing ability checks and skill checks.
@@ -41,15 +38,15 @@ public class AbilityCheck extends Roll {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.putBoolean("has_half_proficiency", false);
         this.json.putBoolean("has_proficiency", false);
         this.json.putBoolean("has_expertise", false);
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             new AddBonus().execute(null, this, new JsonObject() {{
@@ -109,7 +106,7 @@ public class AbilityCheck extends Roll {
                         }});
                     }});
                 }});
-            }}, context, resources);
+            }}, context);
         }
     }
 

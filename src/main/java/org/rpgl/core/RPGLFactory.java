@@ -6,8 +6,6 @@ import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 /**
  * This class is a factory which creates RPGL-x objects. Any time such objects are needed, they should be created using
  * methods from this class.
@@ -23,16 +21,16 @@ public final class RPGLFactory {
      *
      * @param effectId an effect ID <code>(namespace:name)</code>
      * @param originItem an item UUID to be stored for the new effect's origin item
-     * @param resources a list of resources used to produce a new effect
+     * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLEffect object
      */
-    public static RPGLEffect newEffect(String effectId, String originItem, List<RPGLResource> resources) {
+    public static RPGLEffect newEffect(String effectId, String originItem, JsonArray bonuses) {
         String[] effectIdSplit = effectId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
-                    .get(effectIdSplit[0])
-                    .getEffectTemplate(effectIdSplit[1])
-                    .newInstance(originItem, resources);
+            RPGLEffectTemplate template = new RPGLEffectTemplate();
+            template.join(DatapackLoader.DATAPACKS.get(effectIdSplit[0]).getEffectTemplate(effectIdSplit[1]));
+            applyBonuses(template, bonuses);
+            return template.newInstance(originItem);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEffect: " + effectId);
             throw new RuntimeException("Encountered an error building a new RPGLEffect", e);
@@ -43,10 +41,21 @@ public final class RPGLFactory {
      * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
      *
      * @param effectId an effect ID <code>(namespace:name)</code>
+     * @param originItem an item UUID to be stored for the new effect's origin item
+     * @return a new RPGLEffect object
+     */
+    public static RPGLEffect newEffect(String effectId, String originItem) {
+        return newEffect(effectId, originItem, new JsonArray());
+    }
+
+    /**
+     * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
+     *
+     * @param effectId an effect ID <code>(namespace:name)</code>
      * @return a new RPGLEffect object
      */
     public static RPGLEffect newEffect(String effectId) {
-        return newEffect(effectId, null, List.of());
+        return newEffect(effectId, null);
     }
 
     /**
@@ -117,19 +126,15 @@ public final class RPGLFactory {
      *
      * @param objectId an object ID <code>(namespace:name)</code>
      * @param userId the id for the user controlling the new object
-     * @param fieldBonuses an array of bonuses to be applied to specified fields in the template
+     * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLObject object
      */
-    public static RPGLObject newObject(String objectId, String userId, JsonArray fieldBonuses) {
+    public static RPGLObject newObject(String objectId, String userId, JsonArray bonuses) {
         String[] objectIdSplit = objectId.split(":");
         try {
             RPGLObjectTemplate template = new RPGLObjectTemplate();
             template.join(DatapackLoader.DATAPACKS.get(objectIdSplit[0]).getObjectTemplate(objectIdSplit[1]));
-            for (int i = 0; i < fieldBonuses.size(); i++) {
-                JsonObject fieldBonus = fieldBonuses.getJsonObject(i);
-                String field = fieldBonus.getString("field");
-                template.insertInteger(field, template.seekInteger(field) + fieldBonus.getInteger("bonus"));
-            }
+            applyBonuses(template, bonuses);
             return template.newInstance(userId);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLObject: " + objectId);
@@ -200,6 +205,20 @@ public final class RPGLFactory {
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error getting RPGLRace: " + raceId);
             throw new RuntimeException("Encountered an error getting a RPGLRace", e);
+        }
+    }
+
+    /**
+     * This helper method applies bonuses to template fields.
+     *
+     * @param template a template to receive bonuses
+     * @param bonuses the bonuses to apply to the template
+     */
+    static void applyBonuses(JsonObject template, JsonArray bonuses) {
+        for (int i = 0; i < bonuses.size(); i++) {
+            JsonObject fieldBonus = bonuses.getJsonObject(i);
+            String field = fieldBonus.getString("field");
+            template.insertInteger(field, template.seekInteger(field) + fieldBonus.getInteger("bonus"));
         }
     }
 

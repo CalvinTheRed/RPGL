@@ -3,10 +3,9 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This Subevent is dedicated to assigning an RPGLEffect to an RPGLObject.
@@ -41,15 +40,20 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.putBoolean("canceled", false);
+        this.json.asMap().putIfAbsent("effect_bonuses", new ArrayList<>());
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) {
+    public void run(RPGLContext context) {
         if (this.isNotCanceled()) {
-            RPGLEffect effect = RPGLFactory.newEffect(this.json.getString("effect"), super.getOriginItem(), resources);
+            RPGLEffect effect = RPGLFactory.newEffect(
+                    this.json.getString("effect"),
+                    super.getOriginItem(),
+                    this.json.getJsonArray("effect_bonuses")
+            );
             effect.setSource(super.getSource());
             effect.setTarget(super.getTarget());
             effect.setOriginItem(super.getOriginItem());

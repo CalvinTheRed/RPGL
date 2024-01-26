@@ -10,8 +10,6 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -41,7 +39,7 @@ public class DummyFunctionTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -54,7 +52,7 @@ public class DummyFunctionTest {
                 "function": "dummy_function"
             }*/
             this.putString("function", "dummy_function");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertEquals(1, DummyFunction.counter,
                 "DummyFunction function should increment static counter variable upon execution"

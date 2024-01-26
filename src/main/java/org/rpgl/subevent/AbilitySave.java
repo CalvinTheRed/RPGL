@@ -1,12 +1,9 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
-
-import java.util.List;
 
 /**
  * This Subevent is dedicated to making an ability save and resolving all fallout from making the save. This is a
@@ -44,14 +41,14 @@ public class AbilitySave extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context, resources);
+        this.calculateDifficultyClass(context);
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             this.putString("ability", json.getString("ability"));
@@ -60,14 +57,14 @@ public class AbilitySave extends Subevent {
             this.putJsonArray("determined", json.getJsonArray("determined"));
         }});
         abilityCheck.setSource(super.getTarget());
-        abilityCheck.prepare(context, resources);
+        abilityCheck.prepare(context);
         abilityCheck.setTarget(super.getSource());
-        abilityCheck.invoke(context, resources);
+        abilityCheck.invoke(context);
 
         if (abilityCheck.get() < this.getDifficultyClass()) {
-            this.resolveNestedSubevents("fail", context, resources);
+            this.resolveNestedSubevents("fail", context);
         } else {
-            this.resolveNestedSubevents("pass", context, resources);
+            this.resolveNestedSubevents("pass", context);
         }
     }
 
@@ -75,11 +72,10 @@ public class AbilitySave extends Subevent {
      * This helper method calculates and records the save DC of the ability save.
      *
      * @param context the context this Subevent takes place in
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
 
         Integer difficultyClass = this.getDifficultyClass();
@@ -100,9 +96,9 @@ public class AbilitySave extends Subevent {
                 ? UUIDTable.getObject(super.getSource().getOriginObject())
                 : super.getSource()
         );
-        calculateDifficultyClass.prepare(context, resources);
+        calculateDifficultyClass.prepare(context);
         calculateDifficultyClass.setTarget(super.getSource());
-        calculateDifficultyClass.invoke(context, resources);
+        calculateDifficultyClass.invoke(context);
 
         this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
@@ -113,20 +109,19 @@ public class AbilitySave extends Subevent {
      *
      * @param passOrFail a String indicating whether the ability save was passed or failed
      * @param context the context this Subevent takes place in
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void resolveNestedSubevents(String passOrFail, RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void resolveNestedSubevents(String passOrFail, RPGLContext context) throws Exception {
         JsonArray subeventJsonArray = this.json.getJsonArray(passOrFail);
         if (subeventJsonArray != null) {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
                 subevent.setSource(super.getSource());
-                subevent.prepare(context, resources);
+                subevent.prepare(context);
                 subevent.setTarget(super.getTarget());
-                subevent.invoke(context, resources);
+                subevent.invoke(context);
             }
         }
     }

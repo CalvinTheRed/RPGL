@@ -20,7 +20,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -81,7 +80,7 @@ public class GrantAdvantageTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -92,14 +91,14 @@ public class GrantAdvantageTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(object);
-        roll.prepare(new DummyContext(), List.of());
+        roll.prepare(new DummyContext());
 
         new GrantAdvantage().execute(null, roll, new JsonObject() {{
             /*{
                 "function": "grant_advantage"
             }*/
             this.putString("function", "grant_advantage");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertTrue(roll.isAdvantageRoll(),
                 "execute should grant advantage to roll"

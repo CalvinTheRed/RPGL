@@ -20,7 +20,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -76,7 +75,7 @@ public class AddBonusTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -87,7 +86,7 @@ public class AddBonusTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         calculation.setSource(object);
-        calculation.prepare(new DummyContext(), List.of());
+        calculation.prepare(new DummyContext());
 
         new AddBonus().execute(null, calculation, new JsonObject() {{
             /*{
@@ -119,7 +118,7 @@ public class AddBonusTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

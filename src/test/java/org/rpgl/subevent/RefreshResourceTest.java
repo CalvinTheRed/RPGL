@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,7 +60,7 @@ public class RefreshResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -92,9 +91,9 @@ public class RefreshResourceTest {
             this.putString("selection_mode", "low_first");
         }});
         refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext(), List.of());
+        refreshResource.prepare(new DummyContext());
         refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext(), List.of());
+        refreshResource.invoke(new DummyContext());
 
         boolean[] expectedExhaustValues = {
                 true,
@@ -142,9 +141,9 @@ public class RefreshResourceTest {
             this.putString("selection_mode", "high_first");
         }});
         refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext(), List.of());
+        refreshResource.prepare(new DummyContext());
         refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext(), List.of());
+        refreshResource.invoke(new DummyContext());
 
         boolean[] expectedExhaustValues = {
                 true,
@@ -192,9 +191,9 @@ public class RefreshResourceTest {
             this.putInteger("count", 2);
         }});
         refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext(), List.of());
+        refreshResource.prepare(new DummyContext());
         refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext(), List.of());
+        refreshResource.invoke(new DummyContext());
 
         assertTrue(spellSlot.getExhausted(),
                 "non-matching resource should be exhausted"

@@ -16,7 +16,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -57,7 +56,7 @@ public class AddOriginItemTagTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -76,9 +75,9 @@ public class AddOriginItemTagTest {
         }});
         addOriginItemTag.setOriginItem(item.getUuid());
         addOriginItemTag.setSource(object);
-        addOriginItemTag.prepare(context, List.of());
+        addOriginItemTag.prepare(context);
         addOriginItemTag.setTarget(object);
-        addOriginItemTag.invoke(context, List.of());
+        addOriginItemTag.invoke(context);
 
         assertTrue(item.getTags().asList().contains("test_tag"),
                 "invoke should add intended tag to origin item"

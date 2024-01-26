@@ -1,11 +1,9 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,17 +35,17 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.putBoolean("canceled", false);
-        this.getBaseDamage(context, resources);
+        this.getBaseDamage(context);
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
-            this.getTargetDamage(context, resources);
-            this.deliverDamage(context, resources);
+            this.getTargetDamage(context);
+            this.deliverDamage(context);
         }
     }
 
@@ -76,11 +74,10 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * This helper method collects, rolls, and stores all target-agnostic damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void getBaseDamage(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void getBaseDamage(RPGLContext context) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
          */
@@ -95,9 +92,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         baseDamageCollection.setOriginItem(super.getOriginItem());
         baseDamageCollection.setSource(super.getSource());
-        baseDamageCollection.prepare(context, resources);
+        baseDamageCollection.prepare(context);
         baseDamageCollection.setTarget(super.getSource());
-        baseDamageCollection.invoke(context, resources);
+        baseDamageCollection.invoke(context);
 
         /*
          * Roll base damage dice
@@ -112,9 +109,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         baseDamageRoll.setOriginItem(super.getOriginItem());
         baseDamageRoll.setSource(super.getSource());
-        baseDamageRoll.prepare(context, resources);
+        baseDamageRoll.prepare(context);
         baseDamageRoll.setTarget(super.getSource());
-        baseDamageRoll.invoke(context, resources);
+        baseDamageRoll.invoke(context);
 
         /*
          * Replace damage key with base damage calculation
@@ -126,11 +123,10 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * This helper method collects, rolls, and stores all target-specific damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void getTargetDamage(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
          */
@@ -143,9 +139,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         targetDamageCollection.setOriginItem(super.getOriginItem());
         targetDamageCollection.setSource(super.getSource());
-        targetDamageCollection.prepare(context, resources);
+        targetDamageCollection.prepare(context);
         targetDamageCollection.setTarget(super.getTarget());
-        targetDamageCollection.invoke(context, resources);
+        targetDamageCollection.invoke(context);
 
         /*
          * Roll target damage dice
@@ -160,9 +156,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         targetDamageRoll.setOriginItem(super.getOriginItem());
         targetDamageRoll.setSource(super.getSource());
-        targetDamageRoll.prepare(context, resources);
+        targetDamageRoll.prepare(context);
         targetDamageRoll.setTarget(super.getTarget());
-        targetDamageRoll.invoke(context, resources);
+        targetDamageRoll.invoke(context);
 
         this.json.getJsonArray("damage").asList().addAll(targetDamageRoll.getDamage().asList());
     }
@@ -171,24 +167,23 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * Delivers the finalized damage to the target.
      *
      * @param context the context this Subevent takes place in
-     * @param resources a listof resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void deliverDamage(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void deliverDamage(RPGLContext context) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", json.getJsonArray("damage"));
         }});
         damageDelivery.setOriginItem(super.getOriginItem());
         damageDelivery.setSource(super.getSource());
-        damageDelivery.prepare(context, resources);
+        damageDelivery.prepare(context);
         damageDelivery.setTarget(super.getTarget());
-        damageDelivery.invoke(context, resources);
+        damageDelivery.invoke(context);
 
         JsonObject damageByType = damageDelivery.getDamage();
         if (this.json.asMap().containsKey("vampirism")) {
-            VampiricSubevent.handleVampirism(this, damageByType, context, resources);
+            VampiricSubevent.handleVampirism(this, damageByType, context);
         }
     }
 

@@ -1,10 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
-
-import java.util.List;
 
 /**
  * This Subevent is dedicated to confirming that a critical hit deals critical damage.
@@ -39,8 +36,8 @@ public class CriticalDamageConfirmation extends Subevent implements CancelableSu
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.putBoolean("canceled", false);
     }
 
