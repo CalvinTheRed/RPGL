@@ -3,7 +3,6 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
@@ -46,7 +45,7 @@ public class DestroyOriginItem extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) {
+    public void run(RPGLContext context) {
         String originItemUuid = super.getOriginItem();
         RPGLItem originItem = UUIDTable.getItem(originItemUuid);
         if (originItem != null) {

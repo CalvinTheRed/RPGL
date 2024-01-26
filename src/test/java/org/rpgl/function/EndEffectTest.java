@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,7 +56,7 @@ public class EndEffectTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -81,7 +80,7 @@ public class EndEffectTest {
                 "function": "end_effect"
             }*/
             this.putString("function", "end_effect");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertFalse(object.getEffects().asList().contains(fireImmunity.getUuid()),
                 "object should no longer have effect after it is ended"

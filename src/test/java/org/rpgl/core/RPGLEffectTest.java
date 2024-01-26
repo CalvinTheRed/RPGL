@@ -16,7 +16,6 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -96,13 +95,12 @@ public class RPGLEffectTest {
     @DisplayName("executes functions")
     void executesFunctions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext(), List.of());
+        subevent.prepare(new DummyContext());
 
         effect.executeFunctions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("functions"),
-                new DummyContext(),
-                List.of()
+                new DummyContext()
         );
 
         assertEquals(2, DummyFunction.counter,
@@ -114,7 +112,7 @@ public class RPGLEffectTest {
     @DisplayName("evaluates conditions")
     void evaluatesConditions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext(), List.of());
+        subevent.prepare(new DummyContext());
 
         boolean evaluation = effect.evaluateConditions(
                 subevent,
@@ -131,9 +129,9 @@ public class RPGLEffectTest {
     @DisplayName("processes subevents")
     void processesSubevents() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext(), List.of());
+        subevent.prepare(new DummyContext());
 
-        effect.processSubevent(subevent, new DummyContext(), List.of());
+        effect.processSubevent(subevent, new DummyContext());
 
         assertEquals(2, DummyFunction.counter,
                 "both instances of dummy_function should be executed"

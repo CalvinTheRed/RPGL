@@ -2,12 +2,10 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,8 +41,8 @@ public class DamageCollection extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
         this.prepareDamage(context);
     }

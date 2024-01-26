@@ -5,8 +5,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 
-import java.util.List;
-
 /**
  * This Subevent is dedicated to giving a new RPGLResource to a RPGLObject. This Subevent allows for the specification
  * of the new resource's potency, with a default of 1 if not specified.
@@ -41,13 +39,13 @@ public class GiveResource extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.asMap().putIfAbsent("count", 1);
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         int count = this.json.getInteger("count");
         String resourceId = this.json.getString("resource");
         Integer potency = this.json.getInteger("potency");

@@ -14,6 +14,7 @@ import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.datapack.RPGLResourceTO;
 import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
+import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -73,6 +74,24 @@ public class RPGLFactoryTest {
                 {"damage_affinity":[{"conditions":[{"condition":"objects_match","effect":"target","subevent":"target"}],"functions":[{"damage_type":"fire","function":"grant_immunity"}]}]}""";
         assertEquals(expected, effect.getSubeventFilters().toString(),
                 "incorrect field value: " + RPGLEffectTO.SUBEVENT_FILTERS_ALIAS
+        );
+    }
+
+    @Test
+    @DisplayName("creates new effect with bonus")
+    void createsNewEffectWithBonus() {
+        RPGLEffect effect = RPGLFactory.newEffect(
+            "std:spell/wrathful_smite/passive",
+            null,
+            new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("field", "subevent_filters.damage_collection[0].functions[1].damage[0].dice[0].count");
+                    this.putInteger("bonus", 2);
+                }});
+            }}
+        );
+        assertEquals(3, effect.seekInteger("subevent_filters.damage_collection[0].functions[1].damage[0].dice[0].count"),
+                "effect should have a bonus applied to the target field"
         );
     }
 
@@ -222,6 +241,20 @@ public class RPGLFactoryTest {
         }
         assertEquals(4, object.getProficiencyBonus(),
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
+        );
+    }
+
+    @Test
+    @DisplayName("creates new object with bonus")
+    void createsNewObjectWithBonus() {
+        RPGLObject object = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER, new JsonArray() {{
+            this.addJsonObject(new JsonObject() {{
+                this.putString("field", "health_data.temporary");
+                this.putInteger("bonus", 10);
+            }});
+        }});
+        assertEquals(10, object.getHealthData().getInteger("temporary"),
+                "object should have a bonus applied to the target field"
         );
     }
 

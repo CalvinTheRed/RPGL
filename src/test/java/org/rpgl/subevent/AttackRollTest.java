@@ -65,7 +65,7 @@ public class AttackRollTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -86,7 +86,7 @@ public class AttackRollTest {
         }});
 
         attackRoll.setSource(object);
-        attackRoll.prepare(new DummyContext(), List.of());
+        attackRoll.prepare(new DummyContext());
 
         assertTrue(attackRoll.getTags().asList().containsAll(List.of("str", "melee")),
                 "should have tags for attack ability and attack type"
@@ -131,7 +131,7 @@ public class AttackRollTest {
     @DisplayName("calculates critical hit threshold")
     void calculatesCriticalHitThreshold() throws Exception {
         AttackRoll attackRoll = new AttackRoll();
-        attackRoll.calculateCriticalHitThreshold(new DummyContext(), List.of());
+        attackRoll.calculateCriticalHitThreshold(new DummyContext());
         assertEquals(20, attackRoll.getCriticalHitThreshold(),
                 "critical hit threshold should default to 20"
         );
@@ -156,7 +156,7 @@ public class AttackRollTest {
             }});
         }});
 
-        attackRoll.resolveNestedSubevents("hit", new DummyContext(), List.of());
+        attackRoll.resolveNestedSubevents("hit", new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "DummySubevent counter should increment by 1 from resolving nested subevents on hit"
@@ -182,7 +182,7 @@ public class AttackRollTest {
             }});
         }});
 
-        attackRoll.resolveNestedSubevents("miss", new DummyContext(), List.of());
+        attackRoll.resolveNestedSubevents("miss", new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "DummySubevent counter should increment by 1 from resolving nested subevents on miss"
@@ -232,7 +232,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(object);
         attackRoll.setTarget(object);
-        attackRoll.deliverDamage(new DummyContext(), List.of());
+        attackRoll.deliverDamage(new DummyContext());
 
         assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
                 "target should lose 10 health"
@@ -248,7 +248,7 @@ public class AttackRollTest {
         AttackRoll attackRoll = new AttackRoll();
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.calculateTargetArmorClass(new DummyContext(), List.of());
+        attackRoll.calculateTargetArmorClass(new DummyContext());
 
         assertEquals(18 /*plate armor*/ +2 /*shield*/, attackRoll.getTargetArmorClass(),
                 "target armor class should total to 20"
@@ -316,7 +316,7 @@ public class AttackRollTest {
             }});
         }});
 
-        attackRoll.getCriticalHitDamage(new DummyContext(), List.of());
+        attackRoll.getCriticalHitDamage(new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"},{"bonus":0,"damage_type":"fire","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"}]""";
@@ -371,7 +371,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(object);
         attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext(), List.of());
+        attackRoll.getBaseDamage(new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -425,7 +425,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(object);
         attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext(), List.of());
+        attackRoll.getBaseDamage(new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -483,7 +483,7 @@ public class AttackRollTest {
         attackRoll.setOriginItem(item.getUuid());
         attackRoll.setSource(object);
         attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext(), List.of());
+        attackRoll.getBaseDamage(new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":1,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -542,9 +542,9 @@ public class AttackRollTest {
         }});
 
         attackRoll.setSource(object);
-        attackRoll.prepare(new DummyContext(), List.of());
+        attackRoll.prepare(new DummyContext());
         attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext(), List.of());
+        attackRoll.getBaseDamage(new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -573,7 +573,7 @@ public class AttackRollTest {
 
         attackRoll.setOriginItem(item.getUuid());
         attackRoll.setSource(source);
-        attackRoll.prepare(new DummyContext(), List.of());
+        attackRoll.prepare(new DummyContext());
 
         assertEquals(1, attackRoll.getBonus(),
                 "attack roll should include bonus from weapon attack bonus"
@@ -638,7 +638,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(object);
         attackRoll.setTarget(object);
-        attackRoll.resolveDamage(new DummyContext(), List.of());
+        attackRoll.resolveDamage(new DummyContext());
 
         assertEquals(1000 /*base*/ -6 /*damage*/, object.getHealthData().getInteger("current"),
                 "dummy should take 6 damage"
@@ -693,7 +693,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(new DummyContext(), List.of());
+        attackRoll.run(new DummyContext());
 
         assertEquals(1000, target.getHealthData().getInteger("current"),
                 "target should not have been hit"
@@ -754,7 +754,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(new DummyContext(), List.of());
+        attackRoll.run(new DummyContext());
 
         assertEquals(1000, target.getHealthData().getInteger("current"),
                 "target should not have been hit"
@@ -824,7 +824,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(new DummyContext(), List.of());
+        attackRoll.run(new DummyContext());
 
         assertEquals(1000 /*base*/ -3 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken damage"
@@ -899,7 +899,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(context, List.of());
+        attackRoll.run(context);
 
         assertEquals(1000 /*base*/ -3 /*damage*/ -3 /*critical bonus*/, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken critical damage"
@@ -953,7 +953,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.deliverDamage(new DummyContext(), List.of());
+        attackRoll.deliverDamage(new DummyContext());
 
         assertEquals(11 /*base*/ -10 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should suffer 10 damage and receive no healing from vampirism"
@@ -966,7 +966,7 @@ public class AttackRollTest {
     @Test
     @DisplayName("confirms critical damage")
     void confirmsCriticalDamage() throws Exception {
-        assertTrue(new AttackRoll().confirmCriticalDamage(new DummyContext(), List.of()),
+        assertTrue(new AttackRoll().confirmCriticalDamage(new DummyContext()),
                 "critical damage should be confirmed"
         );
     }
@@ -989,7 +989,7 @@ public class AttackRollTest {
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
 
-        assertFalse(attackRoll.confirmCriticalDamage(context, List.of()),
+        assertFalse(attackRoll.confirmCriticalDamage(context),
                 "critical damage should not be confirmed"
         );
     }
@@ -1067,7 +1067,7 @@ public class AttackRollTest {
 
         attackRoll.setSource(source);
         attackRoll.setTarget(target);
-        attackRoll.run(context, List.of());
+        attackRoll.run(context);
 
         assertEquals(1000 /*base*/ -3 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should have been hit but should not have suffered critical damage"

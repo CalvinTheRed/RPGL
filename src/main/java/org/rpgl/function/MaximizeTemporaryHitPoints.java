@@ -2,15 +2,12 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.subevent.TemporaryHitPointRoll;
 import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * This Function is dedicated to maximizing the temporary hit point dice of TemporaryHitPointRoll and
@@ -25,8 +22,7 @@ public class MaximizeTemporaryHitPoints extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
-                    List<RPGLResource> resources) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof TemporaryHitPointRoll temporaryHitPointRoll) {
             temporaryHitPointRoll.maximizeTemporaryHitPointsDice();
         } else if (subevent instanceof TemporaryHitPointsDelivery temporaryHitPointsDelivery) {

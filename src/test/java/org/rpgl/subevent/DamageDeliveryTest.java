@@ -16,7 +16,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -59,7 +58,7 @@ public class DamageDeliveryTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -120,7 +119,7 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext(), List.of());
+        damageDelivery.run(new DummyContext());
 
         String expected = """
                 {"cold":10,"fire":10}""";
@@ -185,7 +184,7 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext(), List.of());
+        damageDelivery.run(new DummyContext());
 
         String expected = """
                 {"cold":20,"fire":5}""";
@@ -250,7 +249,7 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext(), List.of());
+        damageDelivery.run(new DummyContext());
 
         String expected = """
                 {"cold":20,"fire":6}""";
@@ -330,7 +329,7 @@ public class DamageDeliveryTest {
 
         damageDelivery.maximizeTypedDamageDice("fire");
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext(), List.of());
+        damageDelivery.run(new DummyContext());
 
         String expected = """
                 {"cold":1,"fire":4}""";
@@ -410,7 +409,7 @@ public class DamageDeliveryTest {
 
         damageDelivery.maximizeTypedDamageDice(null);
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext(), List.of());
+        damageDelivery.run(new DummyContext());
 
         String expected = """
                 {"cold":4,"fire":4}""";

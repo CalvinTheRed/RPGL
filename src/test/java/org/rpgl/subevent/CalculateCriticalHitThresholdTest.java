@@ -16,7 +16,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,7 +58,7 @@ public class CalculateCriticalHitThresholdTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -71,7 +70,7 @@ public class CalculateCriticalHitThresholdTest {
 
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
         calculateCriticalHitThreshold.setSource(object);
-        calculateCriticalHitThreshold.prepare(new DummyContext(), List.of());
+        calculateCriticalHitThreshold.prepare(new DummyContext());
 
         assertEquals(20, calculateCriticalHitThreshold.get(),
                 "calculateCriticalHitThreshold should have a base of 20 after prepare()"

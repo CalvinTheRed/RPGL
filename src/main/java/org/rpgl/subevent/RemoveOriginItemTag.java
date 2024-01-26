@@ -2,11 +2,8 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
-
-import java.util.List;
 
 /**
  * This Subevent is dedicated to removing a tag from an item (specifically the origin item of an event).
@@ -41,7 +38,7 @@ public class RemoveOriginItemTag extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) {
+    public void run(RPGLContext context) {
         RPGLItem originItem = UUIDTable.getItem(super.getOriginItem());
         if (originItem != null) {
             originItem.removeTag(this.json.getString("tag"));

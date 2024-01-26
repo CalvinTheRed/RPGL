@@ -19,7 +19,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,7 +57,7 @@ public class MaximizeTemporaryHitPointsTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -103,14 +102,14 @@ public class MaximizeTemporaryHitPointsTest {
         }});
 
         temporaryHitPointRoll.setSource(object);
-        temporaryHitPointRoll.prepare(new DummyContext(), List.of());
+        temporaryHitPointRoll.prepare(new DummyContext());
 
         new MaximizeTemporaryHitPoints().execute(null, temporaryHitPointRoll, new JsonObject() {{
             /*{
                 "function": "maximize_temporary_hit_points"
             }*/
             this.putString("function", "maximize_temporary_hit_points");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
@@ -155,14 +154,14 @@ public class MaximizeTemporaryHitPointsTest {
         }});
 
         temporaryHitPointsDelivery.setSource(object);
-        temporaryHitPointsDelivery.prepare(new DummyContext(), List.of());
+        temporaryHitPointsDelivery.prepare(new DummyContext());
 
         new MaximizeTemporaryHitPoints().execute(null, temporaryHitPointsDelivery, new JsonObject() {{
             /*{
                 "function": "maximize_temporary_hit_points"
             }*/
             this.putString("function", "maximize_temporary_hit_points");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertEquals(12, temporaryHitPointsDelivery.getTemporaryHitPoints(),
                 "execute should set all temporary hit point dice to their maximum face value"

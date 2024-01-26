@@ -18,7 +18,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,7 +56,7 @@ public class AddTemporaryHitPointsTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -69,7 +68,7 @@ public class AddTemporaryHitPointsTest {
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
         temporaryHitPointCollection.setSource(object);
-        temporaryHitPointCollection.prepare(new DummyContext(), List.of());
+        temporaryHitPointCollection.prepare(new DummyContext());
 
         new AddTemporaryHitPoints().execute(null, temporaryHitPointCollection, new JsonObject() {{
             /*{
@@ -100,7 +99,7 @@ public class AddTemporaryHitPointsTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

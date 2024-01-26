@@ -19,7 +19,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,7 +58,7 @@ public class InvokeSubeventTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -103,7 +102,7 @@ public class InvokeSubeventTest {
                     this.putString("object", "source");
                 }});
             }});
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertEquals(1, DummySubevent.counter,
                 "execute should invoke dummy subevent"

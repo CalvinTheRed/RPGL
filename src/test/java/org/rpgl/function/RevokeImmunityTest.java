@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -57,7 +56,7 @@ public class RevokeImmunityTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -71,7 +70,7 @@ public class RevokeImmunityTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext(), List.of());
+        damageAffinity.prepare(new DummyContext());
         damageAffinity.grantImmunity("fire");
         damageAffinity.grantImmunity("cold");
 
@@ -82,7 +81,7 @@ public class RevokeImmunityTest {
             }*/
             this.putString("function", "revoke_immunity");
             this.putString("damage_type", "fire");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertFalse(damageAffinity.isImmune("fire"),
                 "execute should revoke immunity to counter the granted fire immunity"
@@ -101,7 +100,7 @@ public class RevokeImmunityTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext(), List.of());
+        damageAffinity.prepare(new DummyContext());
         damageAffinity.grantImmunity("fire");
         damageAffinity.grantImmunity("cold");
 
@@ -110,7 +109,7 @@ public class RevokeImmunityTest {
                 "function": "revoke_immunity"
             }*/
             this.putString("function", "revoke_immunity");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertFalse(damageAffinity.isImmune("fire"),
                 "execute should revoke immunity to counter the granted fire immunity"

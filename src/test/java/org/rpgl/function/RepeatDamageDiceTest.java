@@ -19,7 +19,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,7 +57,7 @@ public class RepeatDamageDiceTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -100,14 +99,14 @@ public class RepeatDamageDiceTest {
             }});
         }});
         damageCollection.setSource(object);
-        damageCollection.prepare(new DummyContext(), List.of());
+        damageCollection.prepare(new DummyContext());
 
         new RepeatDamageDice().execute(null, damageCollection, new JsonObject() {{
             /*{
                 "function": "repeat_damage_dice"
             }*/
             this.putString("function", "repeat_damage_dice");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[5],"size":10},{"determined":[5],"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -153,7 +152,7 @@ public class RepeatDamageDiceTest {
             }});
         }});
         damageCollection.setSource(object);
-        damageCollection.prepare(new DummyContext(), List.of());
+        damageCollection.prepare(new DummyContext());
 
         new RepeatDamageDice().execute(null, damageCollection, new JsonObject() {{
             /*{
@@ -162,7 +161,7 @@ public class RepeatDamageDiceTest {
             }*/
             this.putString("function", "repeat_damage_dice");
             this.putInteger("count", 2);
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[5],"size":10},{"determined":[5],"size":10},{"determined":[5],"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -215,7 +214,7 @@ public class RepeatDamageDiceTest {
             }});
         }});
         criticalHitDamageCollection.setSource(object);
-        criticalHitDamageCollection.prepare(new DummyContext(), List.of());
+        criticalHitDamageCollection.prepare(new DummyContext());
 
         new RepeatDamageDice().execute(null, criticalHitDamageCollection, new JsonObject() {{
             /*{
@@ -224,7 +223,7 @@ public class RepeatDamageDiceTest {
             }*/
             this.putString("function", "repeat_damage_dice");
             this.putInteger("count", 2);
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[5],"size":10},{"determined":[5],"size":10},{"determined":[5],"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -240,7 +239,7 @@ public class RepeatDamageDiceTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(object);
-        damageCollection.prepare(new DummyContext(), List.of());
+        damageCollection.prepare(new DummyContext());
 
         new RepeatDamageDice().execute(null, damageCollection, new JsonObject() {{
             /*{
@@ -249,7 +248,7 @@ public class RepeatDamageDiceTest {
             }*/
             this.putString("function", "repeat_damage_dice");
             this.putInteger("count", 2);
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertEquals("[]", damageCollection.getDamageCollection().toString(),
                 "function should do nothing when no initial damage is present"
@@ -283,7 +282,7 @@ public class RepeatDamageDiceTest {
             }});
         }});
         damageCollection.setSource(object);
-        damageCollection.prepare(new DummyContext(), List.of());
+        damageCollection.prepare(new DummyContext());
 
         new RepeatDamageDice().execute(null, damageCollection, new JsonObject() {{
             /*{
@@ -292,7 +291,7 @@ public class RepeatDamageDiceTest {
             }*/
             this.putString("function", "repeat_damage_dice");
             this.putInteger("count", 2);
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

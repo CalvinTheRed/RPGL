@@ -47,8 +47,8 @@ public class ExhaustResource extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
         this.json.asMap().putIfAbsent("maximum_potency", Integer.MAX_VALUE);
         this.json.asMap().putIfAbsent("minimum_potency", 0);
@@ -56,7 +56,7 @@ public class ExhaustResource extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) {
+    public void run(RPGLContext context) {
         switch (this.json.getString("selection_mode")) {
             case "low_first" -> this.runLowFirst();
             case "high_first" -> this.runHighFirst();

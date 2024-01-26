@@ -1,14 +1,12 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This Subevent is dedicated to making a saving throw and resolving all fallout from making the save. This is a
@@ -44,16 +42,16 @@ public class SavingThrow extends Roll {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
         this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context, resources);
-        this.getBaseDamage(context, resources);
+        this.calculateDifficultyClass(context);
+        this.getBaseDamage(context);
     }
 
     @Override
-    public void invoke(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void invoke(RPGLContext context) throws Exception {
         this.verifySubevent(this.subeventId);
 
         // Override invoke() code to insert additional post-preparatory logic
@@ -82,25 +80,25 @@ public class SavingThrow extends Roll {
                     }});
                 }});
             }});
-        }}, context, resources);
+        }}, context);
 
-        context.processSubevent(this, context, resources);
-        this.run(context, resources);
+        context.processSubevent(this, context);
+        this.run(context);
         context.viewCompletedSubevent(this);
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             if (super.get() < this.getDifficultyClass()) {
-                this.getTargetDamage(context, resources);
-                this.deliverDamage("all", context, resources);
-                this.resolveNestedSubevents("fail", context, resources);
+                this.getTargetDamage(context);
+                this.deliverDamage("all", context);
+                this.resolveNestedSubevents("fail", context);
             } else {
-                this.getTargetDamage(context, resources);
-                this.deliverDamage(this.json.getString("damage_on_pass"), context, resources);
-                this.resolveNestedSubevents("pass", context, resources);
+                this.getTargetDamage(context);
+                this.deliverDamage(this.json.getString("damage_on_pass"), context);
+                this.resolveNestedSubevents("pass", context);
             }
         }
     }
@@ -114,11 +112,10 @@ public class SavingThrow extends Roll {
      * This helper method calculates and records the save DC of the saving throw.
      *
      * @param context the context this Subevent takes place in
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void calculateDifficultyClass(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
 
         Integer difficultyClass = this.getDifficultyClass();
@@ -139,9 +136,9 @@ public class SavingThrow extends Roll {
                 ? UUIDTable.getObject(super.getSource().getOriginObject())
                 : super.getSource()
         );
-        calculateDifficultyClass.prepare(context, resources);
+        calculateDifficultyClass.prepare(context);
         calculateDifficultyClass.setTarget(super.getSource());
-        calculateDifficultyClass.invoke(context, resources);
+        calculateDifficultyClass.invoke(context);
 
         this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
@@ -150,11 +147,10 @@ public class SavingThrow extends Roll {
      * This helper method collects, rolls, and stores all target-agnostic damage for this Subevent.
      *
      * @param context the context in which the base damage for this Subevent is being calculated
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs
      */
-    void getBaseDamage(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void getBaseDamage(RPGLContext context) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
          */
@@ -168,9 +164,9 @@ public class SavingThrow extends Roll {
         }});
         baseDamageCollection.setOriginItem(super.getOriginItem());
         baseDamageCollection.setSource(super.getSource());
-        baseDamageCollection.prepare(context, resources);
+        baseDamageCollection.prepare(context);
         baseDamageCollection.setTarget(super.getSource());
-        baseDamageCollection.invoke(context, resources);
+        baseDamageCollection.invoke(context);
 
         /*
          * Roll base damage dice
@@ -185,9 +181,9 @@ public class SavingThrow extends Roll {
         }});
         baseDamageRoll.setOriginItem(super.getOriginItem());
         baseDamageRoll.setSource(super.getSource());
-        baseDamageRoll.prepare(context, resources);
+        baseDamageRoll.prepare(context);
         baseDamageRoll.setTarget(super.getSource());
-        baseDamageRoll.invoke(context, resources);
+        baseDamageRoll.invoke(context);
 
         /*
          * Replace damage key with base damage calculation
@@ -199,11 +195,10 @@ public class SavingThrow extends Roll {
      * This helper method collects, rolls, and stores all target-specific damage for this Subevent.
      *
      * @param context the context in which the target damage for this Subevent is being calculated
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs
      */
-    void getTargetDamage(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void getTargetDamage(RPGLContext context) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
          */
@@ -216,9 +211,9 @@ public class SavingThrow extends Roll {
         }});
         targetDamageCollection.setOriginItem(super.getOriginItem());
         targetDamageCollection.setSource(super.getSource());
-        targetDamageCollection.prepare(context, resources);
+        targetDamageCollection.prepare(context);
         targetDamageCollection.setTarget(super.getTarget());
-        targetDamageCollection.invoke(context, resources);
+        targetDamageCollection.invoke(context);
 
         /*
          * Roll target damage dice
@@ -233,9 +228,9 @@ public class SavingThrow extends Roll {
         }});
         targetDamageRoll.setOriginItem(super.getOriginItem());
         targetDamageRoll.setSource(super.getSource());
-        targetDamageRoll.prepare(context, resources);
+        targetDamageRoll.prepare(context);
         targetDamageRoll.setTarget(super.getTarget());
-        targetDamageRoll.invoke(context, resources);
+        targetDamageRoll.invoke(context);
 
         this.json.getJsonArray("damage").asList().addAll(targetDamageRoll.getDamage().asList());
     }
@@ -246,20 +241,19 @@ public class SavingThrow extends Roll {
      *
      * @param passOrFail a String indicating whether the saving throw was passed or failed
      * @param context the context this Subevent takes place in
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void resolveNestedSubevents(String passOrFail, RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void resolveNestedSubevents(String passOrFail, RPGLContext context) throws Exception {
         JsonArray subeventJsonArray = this.json.getJsonArray(passOrFail);
         if (subeventJsonArray != null) {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
                 subevent.setSource(super.getSource());
-                subevent.prepare(context, resources);
+                subevent.prepare(context);
                 subevent.setTarget(super.getTarget());
-                subevent.invoke(context, resources);
+                subevent.invoke(context);
             }
         }
     }
@@ -268,13 +262,12 @@ public class SavingThrow extends Roll {
      * This helper method delivers the final damage collection to the Subevent target.
      *
      * @param damageProportion the proportion of the damage to be dealt (can be <code>"all"</code>, <code>"half"</code>,
-     *                         or <code>"none"</code>).
-     * @param context the context in which the damage is being delivered to the target.
-     * @param resources a list of resources used to produce this subevent
+     *                         or <code>"none"</code>)
+     * @param context the context in which the damage is being delivered to the target
      *
      * @throws Exception if an exception occurs
      */
-    void deliverDamage(String damageProportion, RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void deliverDamage(String damageProportion, RPGLContext context) throws Exception {
         if (!"none".equals(damageProportion)) {
             DamageDelivery damageDelivery = new DamageDelivery();
             damageDelivery.joinSubeventData(new JsonObject() {{
@@ -284,13 +277,13 @@ public class SavingThrow extends Roll {
             }});
             damageDelivery.setOriginItem(super.getOriginItem());
             damageDelivery.setSource(super.getSource());
-            damageDelivery.prepare(context, resources);
+            damageDelivery.prepare(context);
             damageDelivery.setTarget(super.getTarget());
-            damageDelivery.invoke(context, resources);
+            damageDelivery.invoke(context);
 
             JsonObject damageByType = damageDelivery.getDamage();
             if (this.json.asMap().containsKey("vampirism")) {
-                VampiricSubevent.handleVampirism(this, damageByType, context, resources);
+                VampiricSubevent.handleVampirism(this, damageByType, context);
             }
         }
     }

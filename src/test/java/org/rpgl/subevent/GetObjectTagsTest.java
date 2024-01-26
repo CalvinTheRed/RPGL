@@ -15,7 +15,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -56,7 +55,7 @@ public class GetObjectTagsTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -68,7 +67,7 @@ public class GetObjectTagsTest {
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(new DummyContext(), List.of());
+        getObjectTags.prepare(new DummyContext());
 
         assertEquals("[]", getObjectTags.getObjectTags().toString(),
                 "getTags should return an empty array by default"
@@ -82,7 +81,7 @@ public class GetObjectTagsTest {
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(new DummyContext(), List.of());
+        getObjectTags.prepare(new DummyContext());
 
         getObjectTags.addObjectTag("test_tag_1");
         getObjectTags.addObjectTag("test_tag_2");

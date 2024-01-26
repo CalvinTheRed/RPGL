@@ -1,12 +1,9 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
-
-import java.util.List;
 
 /**
  * This Subevent is dedicated to collecting non-standard attack ability scores for attacks made with particular items.
@@ -41,8 +38,8 @@ public class AttackAbilityCollection extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.putJsonArray("abilities", new JsonArray());
         if (UUIDTable.getItem(super.getOriginItem()).hasTag("finesse")) {
             this.addAbility("dex");

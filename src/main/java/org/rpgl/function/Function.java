@@ -2,7 +2,6 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -10,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -110,14 +108,12 @@ public abstract class Function {
      * @param subevent a Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the Function to be executed
      * @param context the context in which the Function is being executed
-     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
-                        List<RPGLResource> resources) throws Exception {
+    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         this.verifyFunction(functionJson);
-        this.run(effect, subevent, functionJson, context, resources);
+        this.run(effect, subevent, functionJson, context);
     }
 
     /**
@@ -127,11 +123,9 @@ public abstract class Function {
      * @param subevent a Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the Function to be executed
      * @param context the context in which the Function is being executed
-     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
-                             List<RPGLResource> resources) throws Exception;
+    public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception;
 
 }

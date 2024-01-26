@@ -32,16 +32,15 @@ public abstract class RPGLContext {
      *
      * @param subevent a Subevent
      * @param context the context in which the passed subevent is being processed
-     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void processSubevent(Subevent subevent, RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         boolean wasProcessed;
         do {
             wasProcessed = false;
             for (Map.Entry<String, RPGLObject> contextObjectsEntry : this.contextObjects.entrySet()) {
-                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent, context, resources);
+                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent, context);
             }
         } while (wasProcessed);
     }

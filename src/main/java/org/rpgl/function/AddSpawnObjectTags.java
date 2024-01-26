@@ -2,15 +2,12 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.SpawnObject;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * This Function is dedicated to adding novel tags to a new object created by a SpawnObject subevent.
@@ -26,8 +23,7 @@ public class AddSpawnObjectTags extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
-                    List<RPGLResource> resources) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof SpawnObject spawnObject) {
             JsonArray tags = functionJson.getJsonArray("tags");
             for (int i = 0; i < tags.size(); i++) {

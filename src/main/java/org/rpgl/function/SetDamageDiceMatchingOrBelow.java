@@ -2,14 +2,11 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageRoll;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * This function is dedicated to setting typed damage dice matching or below a certain threshold in DamageRoll
@@ -26,8 +23,7 @@ public class SetDamageDiceMatchingOrBelow extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
-                    List<RPGLResource> resources) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
         if (subevent instanceof DamageRoll damageRoll) {
             damageRoll.setDamageDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),

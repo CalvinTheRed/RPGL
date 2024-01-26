@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,7 +58,7 @@ public class HealingCollectionTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -143,7 +142,7 @@ public class HealingCollectionTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(new DummyContext(), List.of());
+        healingCollection.prepare(new DummyContext());
 
         String expected = """
                 []""";

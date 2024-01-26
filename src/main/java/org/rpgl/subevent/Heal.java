@@ -1,12 +1,10 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This Subevent is dedicated to performing healing on an RPGLObject.
@@ -41,18 +39,18 @@ public class Heal extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.putBoolean("canceled", false);
         this.json.asMap().putIfAbsent("healing", new ArrayList<>());
-        this.getBaseHealing(context, resources);
+        this.getBaseHealing(context);
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         if (this.isNotCanceled()) {
-            this.getTargetHealing(context, resources);
-            this.deliverHealing(context, resources);
+            this.getTargetHealing(context);
+            this.deliverHealing(context);
         }
     }
 
@@ -71,11 +69,10 @@ public class Heal extends Subevent implements CancelableSubevent {
      * and bonuses involved in the heal's healing roll.
      *
      * @param context the context this Subevent takes place in
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs.
      */
-    void getBaseHealing(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void getBaseHealing(RPGLContext context) throws Exception {
         /*
          * Collect base typed healing dice and bonuses
          */
@@ -89,9 +86,9 @@ public class Heal extends Subevent implements CancelableSubevent {
         }});
         baseHealingCollection.setOriginItem(super.getOriginItem());
         baseHealingCollection.setSource(super.getSource());
-        baseHealingCollection.prepare(context, resources);
+        baseHealingCollection.prepare(context);
         baseHealingCollection.setTarget(super.getSource());
-        baseHealingCollection.invoke(context, resources);
+        baseHealingCollection.invoke(context);
 
         /*
          * Roll base healing dice
@@ -106,9 +103,9 @@ public class Heal extends Subevent implements CancelableSubevent {
         }});
         baseHealingRoll.setOriginItem(super.getOriginItem());
         baseHealingRoll.setSource(super.getSource());
-        baseHealingRoll.prepare(context, resources);
+        baseHealingRoll.prepare(context);
         baseHealingRoll.setTarget(super.getSource());
-        baseHealingRoll.invoke(context, resources);
+        baseHealingRoll.invoke(context);
 
         /*
          * Replace healing key with base healing roll
@@ -116,7 +113,7 @@ public class Heal extends Subevent implements CancelableSubevent {
         this.json.putJsonArray("healing", baseHealingRoll.getHealing());
     }
 
-    void getTargetHealing(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void getTargetHealing(RPGLContext context) throws Exception {
         /*
          * Collect target typed healing dice and bonuses
          */
@@ -129,9 +126,9 @@ public class Heal extends Subevent implements CancelableSubevent {
         }});
         targetHealingCollection.setOriginItem(super.getOriginItem());
         targetHealingCollection.setSource(super.getSource());
-        targetHealingCollection.prepare(context, resources);
+        targetHealingCollection.prepare(context);
         targetHealingCollection.setTarget(super.getTarget());
-        targetHealingCollection.invoke(context, resources);
+        targetHealingCollection.invoke(context);
 
         /*
          * Roll target healing dice
@@ -146,9 +143,9 @@ public class Heal extends Subevent implements CancelableSubevent {
         }});
         targetHealingRoll.setOriginItem(super.getOriginItem());
         targetHealingRoll.setSource(super.getSource());
-        targetHealingRoll.prepare(context, resources);
+        targetHealingRoll.prepare(context);
         targetHealingRoll.setTarget(super.getTarget());
-        targetHealingRoll.invoke(context, resources);
+        targetHealingRoll.invoke(context);
 
         /*
          * Add target healing roll to Subevent JSON
@@ -160,11 +157,10 @@ public class Heal extends Subevent implements CancelableSubevent {
      * This helper method delivers the final collection of healing determined by this Subevent to the target RPGLObject.
      *
      * @param context the context in which this Subevent was invoked
-     * @param resources a list of resources used to produce this subevent
      *
      * @throws Exception if an exception occurs
      */
-    void deliverHealing(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void deliverHealing(RPGLContext context) throws Exception {
         HealingDelivery healingDelivery = new HealingDelivery();
         healingDelivery.joinSubeventData(new JsonObject() {{
             this.putJsonArray("healing", json.getJsonArray("healing"));
@@ -172,9 +168,9 @@ public class Heal extends Subevent implements CancelableSubevent {
         }});
         healingDelivery.setOriginItem(super.getOriginItem());
         healingDelivery.setSource(super.getSource());
-        healingDelivery.prepare(context, resources);
+        healingDelivery.prepare(context);
         healingDelivery.setTarget(super.getTarget());
-        healingDelivery.invoke(context, resources);
+        healingDelivery.invoke(context);
         super.getTarget().receiveHealing(healingDelivery, context);
     }
 

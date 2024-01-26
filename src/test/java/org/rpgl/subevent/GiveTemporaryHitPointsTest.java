@@ -60,7 +60,7 @@ public class GiveTemporaryHitPointsTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -100,9 +100,9 @@ public class GiveTemporaryHitPointsTest {
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context, List.of());
+        giveTemporaryHitPoints.prepare(context);
         giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context, List.of());
+        giveTemporaryHitPoints.invoke(context);
 
         assertEquals(10, target.getHealthData().getInteger("temporary"),
                 "the subevent should grant 10 temporary hit points to the target"
@@ -153,9 +153,9 @@ public class GiveTemporaryHitPointsTest {
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context, List.of());
+        giveTemporaryHitPoints.prepare(context);
         giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context, List.of());
+        giveTemporaryHitPoints.invoke(context);
 
         assertEquals(10, target.getHealthData().getInteger("temporary"),
                 "the subevent should grant 10 temporary hit points to the target"
@@ -206,9 +206,9 @@ public class GiveTemporaryHitPointsTest {
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context, List.of());
+        giveTemporaryHitPoints.prepare(context);
         giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context, List.of());
+        giveTemporaryHitPoints.invoke(context);
 
         assertEquals(15, target.getHealthData().getInteger("temporary"),
                 "the subevent should not grant new temporary hit points to the target"

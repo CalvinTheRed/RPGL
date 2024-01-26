@@ -10,7 +10,6 @@ import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -97,24 +96,6 @@ public class RPGLEffect extends RPGLTaggable {
         super.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
     }
 
-    /**
-     * Returns the scale data for the RPGLEffect.
-     *
-     * @return an array indicating how the effect scales with more potent resources
-     */
-    public JsonArray getScale() {
-        return super.getJsonArray(RPGLEffectTO.SCALE_ALIAS);
-    }
-
-    /**
-     * Sets the scale data for the RPGLEffect.
-     *
-     * @param scale a new array indicating scale data
-     */
-    public void setScale(JsonArray scale) {
-        super.putJsonArray(RPGLEffectTO.SCALE_ALIAS, scale);
-    }
-
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================
@@ -125,13 +106,12 @@ public class RPGLEffect extends RPGLTaggable {
      *
      * @param subevent a Subevent
      * @param context the context in which the subevent is being processed
-     * @param resources a list of resources used to produce the passed subevent
      * @return true if the Subevent was present in this object's subevent filter and if the Conditions in that filter
      *         were satisfied
      *
      * @throws Exception if an exception occurs
      */
-    public boolean processSubevent(Subevent subevent, RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
         JsonObject subeventFilters = this.getSubeventFilters();
         for (Map.Entry<String, ?> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
             if (Objects.equals(subevent.getSubeventId(), subeventFilterEntry.getKey())) {
@@ -141,7 +121,7 @@ public class RPGLEffect extends RPGLTaggable {
                     JsonArray conditions = matchedFilterBehavior.getJsonArray("conditions");
                     if (!subevent.effectAlreadyApplied(this) && this.evaluateConditions(subevent, conditions, context)) {
                         JsonArray functionJsonArray = matchedFilterBehavior.getJsonArray("functions");
-                        executeFunctions(subevent, functionJsonArray, context, resources);
+                        executeFunctions(subevent, functionJsonArray, context);
                         subevent.addModifyingEffect(this);
                         return true;
                     }
@@ -178,16 +158,15 @@ public class RPGLEffect extends RPGLTaggable {
      * @param subevent the Subevent being invoked
      * @param functions a collection of JSON data defining Functions
      * @param context the context in which the Functions are being executed
-     * @param resources a list of resources used to produce the passed subevent
      *
      * @throws Exception if an exception occurs
      */
-    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context, List<RPGLResource> resources) throws Exception {
+    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context) throws Exception {
         for (int i = 0; i < functions.size(); i++) {
             JsonObject functionJson = functions.getJsonObject(i);
             Function.FUNCTIONS
                     .get(functionJson.getString("function"))
-                    .execute(this, subevent, functionJson, context, resources);
+                    .execute(this, subevent, functionJson, context);
         }
     }
 

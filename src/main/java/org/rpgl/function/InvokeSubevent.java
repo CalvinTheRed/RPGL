@@ -3,12 +3,9 @@ package org.rpgl.function;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
-
-import java.util.List;
 
 /**
  * This Function is dedicated to invoking a particular Subevent. This Function allows for the fine control of the
@@ -23,8 +20,7 @@ public class InvokeSubevent extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context,
-                    List<RPGLResource> resources) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
         RPGLObject source = RPGLEffect.getObject(effect, subevent, functionJson.getJsonObject("source"));
         JsonArray targets = functionJson.getJsonArray("targets");
         JsonObject nestedSubeventJson = functionJson.getJsonObject("subevent");
@@ -33,11 +29,11 @@ public class InvokeSubevent extends Function {
                 .clone(nestedSubeventJson);
         nestedSubevent.setOriginItem(subevent.getOriginItem());
         nestedSubevent.setSource(source);
-        nestedSubevent.prepare(context, resources);
+        nestedSubevent.prepare(context);
         for (int i = 0; i < targets.size(); i++) {
             Subevent subeventClone = nestedSubevent.clone();
             subeventClone.setTarget(RPGLEffect.getObject(effect, subevent, targets.getJsonObject(i)));
-            subeventClone.invoke(context, resources);
+            subeventClone.invoke(context);
         }
     }
 

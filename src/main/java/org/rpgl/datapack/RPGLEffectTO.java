@@ -3,10 +3,8 @@ package org.rpgl.datapack;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLEffectTemplate;
-import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -21,7 +19,6 @@ public class RPGLEffectTO extends RPGLTaggableTO {
     public static final String SOURCE_ALIAS = "source";
     public static final String TARGET_ALIAS = "target";
     public static final String ORIGIN_ITEM_ALIAS = "origin_item";
-    public static final String SCALE_ALIAS = "scale";
 
     @JsonProperty(SUBEVENT_FILTERS_ALIAS)
     HashMap<String, Object> subeventFilters;
@@ -31,8 +28,6 @@ public class RPGLEffectTO extends RPGLTaggableTO {
     String target;
     @JsonProperty(ORIGIN_ITEM_ALIAS)
     String originItem;
-    @JsonProperty(SCALE_ALIAS)
-    ArrayList<Object> scale;
 
     /**
      * Default constructor for RPGLEffectTO class.
@@ -53,7 +48,6 @@ public class RPGLEffectTO extends RPGLTaggableTO {
         this.source = rpglEffect.getSource().getUuid();
         this.target = rpglEffect.getTarget().getUuid();
         this.originItem = rpglEffect.getOriginItem();
-        this.scale = rpglEffect.getScale().asList();
     }
 
     /**
@@ -64,7 +58,6 @@ public class RPGLEffectTO extends RPGLTaggableTO {
     public RPGLEffectTemplate toRPGLEffectTemplate() {
         RPGLEffectTemplate rpglEffectTemplate = new RPGLEffectTemplate() {{
             this.putJsonObject(SUBEVENT_FILTERS_ALIAS, new JsonObject(subeventFilters));
-            this.putJsonArray(SCALE_ALIAS, new JsonArray(scale));
             // source not needed for template
             // target not needed for template
             // origin item not needed for template
@@ -84,7 +77,6 @@ public class RPGLEffectTO extends RPGLTaggableTO {
             this.putString(SOURCE_ALIAS, source);
             this.putString(TARGET_ALIAS, target);
             this.setOriginItem(originItem);
-            this.setScale(new JsonArray(scale));
         }};
         rpglEffect.join(super.getTemplateData());
         rpglEffect.join(super.getUUIDTableElementData());

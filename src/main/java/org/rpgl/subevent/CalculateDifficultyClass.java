@@ -1,12 +1,9 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
-
-import java.util.List;
 
 /**
  * This subevent is dedicated to calculating the save difficulty class against which saving throws are made.
@@ -41,8 +38,8 @@ public class CalculateDifficultyClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         Integer difficultyClass = this.json.getInteger("difficulty_class");
         if (difficultyClass == null) {
             super.setBase(8);
@@ -85,7 +82,7 @@ public class CalculateDifficultyClass extends Calculation {
                         }});
                     }});
                 }});
-            }}, context, resources);
+            }}, context);
         } else {
             super.setBase(difficultyClass);
         }

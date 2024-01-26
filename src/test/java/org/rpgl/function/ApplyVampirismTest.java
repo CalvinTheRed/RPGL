@@ -16,7 +16,6 @@ import org.rpgl.testUtils.DummyContext;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,7 +54,7 @@ public class ApplyVampirismTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -82,7 +81,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 {"subevent":"attack_roll","tags":["attack_roll"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -113,7 +112,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 {"subevent":"deal_damage","tags":["deal_damage"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -144,7 +143,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 {"subevent":"saving_throw","tags":["saving_throw"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";

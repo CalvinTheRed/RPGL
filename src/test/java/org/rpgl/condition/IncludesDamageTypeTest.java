@@ -9,8 +9,6 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.testUtils.DummyContext;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,7 +61,7 @@ public class IncludesDamageTypeTest {
     @DisplayName("evaluates false (damage type not included)")
     void evaluatesFalse_damageTypeNotIncluded() throws Exception {
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.prepare(new DummyContext(), List.of());
+        damageAffinity.prepare(new DummyContext());
 
         assertFalse(new IncludesDamageType().evaluate(null, damageAffinity, new JsonObject() {{
             /*{

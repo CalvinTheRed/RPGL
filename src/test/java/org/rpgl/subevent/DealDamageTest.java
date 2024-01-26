@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,7 +60,7 @@ public class DealDamageTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -108,7 +107,7 @@ public class DealDamageTest {
 
         dealDamage.setSource(source);
         dealDamage.setTarget(target);
-        dealDamage.getBaseDamage(new DummyContext(), List.of());
+        dealDamage.getBaseDamage(new DummyContext());
 
         String expected = """
                 [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -155,9 +154,9 @@ public class DealDamageTest {
         }});
 
         dealDamage.setSource(object);
-        dealDamage.prepare(new DummyContext(), List.of());
+        dealDamage.prepare(new DummyContext());
         dealDamage.setTarget(object);
-        dealDamage.invoke(new DummyContext(), List.of());
+        dealDamage.invoke(new DummyContext());
 
         assertEquals(1000 /*base*/ -3 /*damage*/, object.getHealthData().getInteger("current"),
                 "invoking DealDamage should deal 3 points of damage"
@@ -221,9 +220,9 @@ public class DealDamageTest {
         }});
 
         dealDamage.setSource(source);
-        dealDamage.prepare(context, List.of());
+        dealDamage.prepare(context);
         dealDamage.setTarget(target);
-        dealDamage.invoke(context, List.of());
+        dealDamage.invoke(context);
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"

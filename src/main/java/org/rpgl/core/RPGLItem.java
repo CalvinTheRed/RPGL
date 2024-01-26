@@ -352,9 +352,9 @@ public class RPGLItem extends RPGLTaggable {
         AttackAbilityCollection attackAbilityCollection = new AttackAbilityCollection();
         attackAbilityCollection.setOriginItem(super.getUuid());
         attackAbilityCollection.setSource(wielder);
-        attackAbilityCollection.prepare(context, List.of());
+        attackAbilityCollection.prepare(context);
         attackAbilityCollection.setTarget(wielder);
-        attackAbilityCollection.invoke(context, List.of());
+        attackAbilityCollection.invoke(context);
         JsonArray attackAbilities = attackAbilityCollection.getAbilities();
 
         for (int i = 0; i < attackAbilities.size(); i++) {

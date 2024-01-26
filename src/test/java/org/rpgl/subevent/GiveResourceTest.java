@@ -17,7 +17,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -61,7 +60,7 @@ public class GiveResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext(), List.of()),
+                () -> subevent.invoke(new DummyContext()),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -80,9 +79,9 @@ public class GiveResourceTest {
             this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
         }});
         giveResource.setSource(source);
-        giveResource.prepare(new DummyContext(), List.of());
+        giveResource.prepare(new DummyContext());
         giveResource.setTarget(target);
-        giveResource.invoke(new DummyContext(), List.of());
+        giveResource.invoke(new DummyContext());
 
         assertEquals(1, target.getResourceObjects().size(),
                 "target should be given one resource"
@@ -121,7 +120,7 @@ public class GiveResourceTest {
         giveResource.setSource(source);
         giveResource.setTarget(target);
 
-        giveResource.invoke(new DummyContext(), List.of());
+        giveResource.invoke(new DummyContext());
 
         assertEquals(2, target.getResourceObjects().size(),
                 "target should be given two resources"

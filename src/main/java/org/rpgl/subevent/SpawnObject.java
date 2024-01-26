@@ -4,12 +4,10 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
-import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This Subevent is dedicated to spawning a new RPGLObject into the game.
@@ -44,8 +42,8 @@ public class SpawnObject extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, List<RPGLResource> resources) throws Exception {
-        super.prepare(context, resources);
+    public void prepare(RPGLContext context) throws Exception {
+        super.prepare(context);
         this.json.asMap().putIfAbsent("controlled_by", "source");
         this.json.asMap().putIfAbsent("object_bonuses", new ArrayList<>());
         this.json.asMap().putIfAbsent("extra_effects", new ArrayList<>());
@@ -55,7 +53,7 @@ public class SpawnObject extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context, List<RPGLResource> resources) throws Exception {
+    public void run(RPGLContext context) throws Exception {
         RPGLObject spawnedObject = RPGLFactory.newObject(
                 this.json.getString("object_id"),
                 RPGLEffect.getObject(null, this, new JsonObject() {{
@@ -69,7 +67,7 @@ public class SpawnObject extends Subevent {
 
         JsonArray extraEffects = this.json.getJsonArray("extra_effects");
         for (int i = 0; i < extraEffects.size(); i++) {
-            RPGLEffect effect = RPGLFactory.newEffect(extraEffects.getString(i), super.getOriginItem(), resources);
+            RPGLEffect effect = RPGLFactory.newEffect(extraEffects.getString(i), super.getOriginItem());
             effect.setSource(super.getSource());
             effect.setTarget(spawnedObject);
             spawnedObject.addEffect(effect);

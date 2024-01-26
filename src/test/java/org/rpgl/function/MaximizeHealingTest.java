@@ -20,7 +20,6 @@ import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -64,7 +63,7 @@ public class MaximizeHealingTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext(), List.of()),
+                }}, new DummyContext()),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -109,14 +108,14 @@ public class MaximizeHealingTest {
         }});
 
         healingRoll.setSource(object);
-        healingRoll.prepare(new DummyContext(), List.of());
+        healingRoll.prepare(new DummyContext());
 
         new MaximizeHealing().execute(null, healingRoll, new JsonObject() {{
             /*{
                 "function": "maximize_healing"
             }*/
             this.putString("function", "maximize_healing");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
@@ -166,14 +165,14 @@ public class MaximizeHealingTest {
         }});
 
         healingDelivery.setSource(object);
-        healingDelivery.prepare(new DummyContext(), List.of());
+        healingDelivery.prepare(new DummyContext());
 
         new MaximizeHealing().execute(null, healingDelivery, new JsonObject() {{
             /*{
                 "function": "maximize_healing"
             }*/
             this.putString("function", "maximize_healing");
-        }}, new DummyContext(), List.of());
+        }}, new DummyContext());
 
         assertEquals(4+6+8, healingDelivery.getHealing(),
                 "execute should set all healing dice to their maximum face value"
