@@ -266,6 +266,24 @@ public class RPGLObject extends RPGLTaggable {
         super.putString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS, originObject);
     }
 
+    /**
+     * Getter for proxy.
+     *
+     * @return true if the object is a proxy for a different object, or false if it is not
+     */
+    public Boolean getProxy() {
+        return super.getBoolean(RPGLObjectTO.PROXY_ALIAS);
+    }
+
+    /**
+     * Setter for proxy.
+     *
+     * @param proxy a new proxy value
+     */
+    public void setProxy(Boolean proxy) {
+        super.putBoolean(RPGLObjectTO.PROXY_ALIAS, proxy);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================

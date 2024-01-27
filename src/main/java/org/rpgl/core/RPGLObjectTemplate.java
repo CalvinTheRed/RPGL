@@ -36,6 +36,7 @@ public class RPGLObjectTemplate extends JsonObject {
         this.asMap().putIfAbsent(RPGLObjectTO.CLASSES_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.RACES_ALIAS, new ArrayList<>());
         this.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0.0);
+        this.asMap().putIfAbsent(RPGLObjectTO.PROXY_ALIAS, false);
         UUIDTable.register(object);
         processEffects(object);
         processInventory(object);
