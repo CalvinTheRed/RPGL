@@ -380,6 +380,36 @@ public class RPGLObjectTest {
     }
 
     @Test
+    @DisplayName("does not have proxy resources by default")
+    void doesNotHaveProxyResourcesByDefault() {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setOriginObject(originObject.getUuid());
+        object.setProxy(false);
+
+        originObject.addResource(RPGLFactory.newResource("std:common/spell_slot/01"));
+
+        assertEquals(0, object.getResourceObjects().size(),
+                "object should not have access to origin object's resources"
+        );
+    }
+
+    @Test
+    @DisplayName("has proxy resources")
+    void hasProxyResources() {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setOriginObject(originObject.getUuid());
+        object.setProxy(true);
+
+        originObject.addResource(RPGLFactory.newResource("std:common/spell_slot/01"));
+
+        assertEquals(1, object.getResourceObjects().size(),
+                "object should have access to origin object's resources"
+        );
+    }
+
+    @Test
     @DisplayName("gets class level")
     void getsClassLevel() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
