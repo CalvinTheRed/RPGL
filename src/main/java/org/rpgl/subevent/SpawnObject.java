@@ -50,6 +50,7 @@ public class SpawnObject extends Subevent {
         this.json.asMap().putIfAbsent("extra_events", new ArrayList<>());
         this.json.asMap().putIfAbsent("extra_tags", new ArrayList<>());
         this.json.asMap().putIfAbsent("extend_proficiency_bonus", false);
+        this.json.asMap().putIfAbsent("proxy", false);
     }
 
     @Override
@@ -64,6 +65,7 @@ public class SpawnObject extends Subevent {
         );
 
         spawnedObject.setOriginObject(super.getSource().getUuid());
+        spawnedObject.setProxy(this.json.getBoolean("proxy"));
 
         JsonArray extraEffects = this.json.getJsonArray("extra_effects");
         for (int i = 0; i < extraEffects.size(); i++) {
