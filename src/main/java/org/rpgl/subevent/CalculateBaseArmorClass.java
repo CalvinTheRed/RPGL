@@ -2,8 +2,6 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
-import org.rpgl.datapack.RPGLItemTO;
-import org.rpgl.datapack.RPGLObjectTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -48,7 +46,7 @@ public class CalculateBaseArmorClass extends Calculation {
     public void prepare(RPGLContext context) throws Exception {
         super.prepare(context);
         // Set base armor class from armor (or no armor)
-        String armorUuid = super.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS).getString("armor");
+        String armorUuid = super.getSource().getEquippedItems().getString("armor");
         int baseArmorClass;
         if (armorUuid == null) {
             // if equipment slot is empty, you are unarmored
@@ -79,11 +77,11 @@ public class CalculateBaseArmorClass extends Calculation {
      * @throws Exception if an exception occurs.
      */
     int prepareArmored(RPGLItem armor, RPGLContext context) throws Exception {
-        Integer baseArmorClass = armor.getInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS);
+        int baseArmorClass = armor.getArmorClassBase();
         super.addTag("armored");
 
         // Add dexterity bonus, if not 0 (or lower)
-        Integer dexterityBonusMaximum = armor.getInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS);
+        Integer dexterityBonusMaximum = armor.getArmorClassDexLimit();
         if (dexterityBonusMaximum == null) {
             // no limit to dexterity bonus
             int dexterityBonus = super.getSource().getAbilityModifierFromAbilityName("dex", context);
@@ -117,13 +115,13 @@ public class CalculateBaseArmorClass extends Calculation {
      */
     int getShieldBonus() {
         int shieldBonus = 0;
-        JsonObject equippedItems = super.getSource().getJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS);
+        JsonObject equippedItems = super.getSource().getEquippedItems();
         for (Map.Entry<String, Object> equippedItemsEntry : equippedItems.asMap().entrySet()) {
             String equipmentSlot = equippedItemsEntry.getKey();
             String itemUuid = equippedItems.getString(equipmentSlot);
             RPGLItem item = UUIDTable.getItem(itemUuid);
-            if (item.getJsonArray(RPGLItemTO.TAGS_ALIAS).asList().contains("shield")) {
-                int itemShieldBonus = item.getInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS);
+            if (item.getTags().asList().contains("shield")) {
+                int itemShieldBonus = item.getArmorClassBonus();
                 if (itemShieldBonus > shieldBonus) {
                     shieldBonus = itemShieldBonus;
                 }

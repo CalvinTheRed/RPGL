@@ -390,6 +390,13 @@ public class RPGLObject extends RPGLTaggable {
             resources.addAll(equippedItem.getEquippedResourcesObjects());
         }
 
+        // add proxy resources if applicable
+        String originObjectUuid = this.getOriginObject();
+        if (this.getProxy() && originObjectUuid != null) {
+            RPGLObject originObject = UUIDTable.getObject(originObjectUuid);
+            resources.addAll(originObject.getResourceObjects());
+        }
+
         return resources;
     }
 

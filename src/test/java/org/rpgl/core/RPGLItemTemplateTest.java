@@ -9,7 +9,6 @@ import org.rpgl.datapack.DatapackContentTO;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.datapack.RPGLItemTO;
 import org.rpgl.datapack.RPGLTaggableTO;
-import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -46,8 +45,7 @@ public class RPGLItemTemplateTest {
     void defaultsEventsListToEmptyArrays() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("common/teacup");
         RPGLItem item = new RPGLItem();
-        item.join(itemTemplate);
-        item.putJsonObject("events", new JsonObject());
+        itemTemplate.setup(item);
 
         RPGLItemTemplate.processEvents(item);
 
@@ -63,7 +61,7 @@ public class RPGLItemTemplateTest {
     void createsEquippedEffects() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("weapon/melee/martial/scimitar/frostbrand");
         RPGLItem item = new RPGLItem();
-        item.join(itemTemplate);
+        itemTemplate.setup(item);
 
         RPGLItemTemplate.processEquippedEffects(item);
 
@@ -85,7 +83,7 @@ public class RPGLItemTemplateTest {
     void createsEquippedResources() {
         RPGLItemTemplate itemTemplate = DatapackLoader.DATAPACKS.get("std").getItemTemplate("wand/wand_of_fireballs");
         RPGLItem item = new RPGLItem();
-        item.join(itemTemplate);
+        itemTemplate.setup(item);
 
         RPGLItemTemplate.processEquippedResources(item);
 

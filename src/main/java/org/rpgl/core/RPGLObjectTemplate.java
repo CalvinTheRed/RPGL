@@ -27,16 +27,7 @@ public class RPGLObjectTemplate extends JsonObject {
      */
     public RPGLObject newInstance(String userId) {
         RPGLObject object = new RPGLObject();
-        object.join(this);
-        this.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());
-        this.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
-        this.asMap().putIfAbsent(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, new HashMap<String, Object>());
-        this.asMap().putIfAbsent(RPGLObjectTO.EVENTS_ALIAS, new ArrayList<>());
-        this.asMap().putIfAbsent(RPGLObjectTO.RESOURCES_ALIAS, new ArrayList<>());
-        this.asMap().putIfAbsent(RPGLObjectTO.CLASSES_ALIAS, new ArrayList<>());
-        this.asMap().putIfAbsent(RPGLObjectTO.RACES_ALIAS, new ArrayList<>());
-        this.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0.0);
-        this.asMap().putIfAbsent(RPGLObjectTO.PROXY_ALIAS, false);
+        this.setup(object);
         UUIDTable.register(object);
         processEffects(object);
         processInventory(object);
@@ -47,6 +38,19 @@ public class RPGLObjectTemplate extends JsonObject {
         return object;
     }
 
+    void setup(RPGLObject object) {
+        object.join(this);
+        object.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());
+        object.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
+        object.asMap().putIfAbsent(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, new HashMap<String, Object>());
+        object.asMap().putIfAbsent(RPGLObjectTO.EVENTS_ALIAS, new ArrayList<>());
+        object.asMap().putIfAbsent(RPGLObjectTO.RESOURCES_ALIAS, new ArrayList<>());
+        object.asMap().putIfAbsent(RPGLObjectTO.CLASSES_ALIAS, new ArrayList<>());
+        object.asMap().putIfAbsent(RPGLObjectTO.RACES_ALIAS, new ArrayList<>());
+        object.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0.0);
+        object.asMap().putIfAbsent(RPGLObjectTO.PROXY_ALIAS, false);
+    }
+
     /**
      * This helper method converts effect IDs in an RPGLObjectTemplate's effects array to RPGLEffects. The UUID's of
      * these new RPGLEffects replace the original array contents.
@@ -54,7 +58,7 @@ public class RPGLObjectTemplate extends JsonObject {
      * @param object an RPGLObject
      */
     static void processEffects(RPGLObject object) {
-        JsonArray effectIdArray = object.removeJsonArray(RPGLObjectTO.EFFECTS_ALIAS);
+        JsonArray effectIdArray = object.getEffects();
         JsonArray effectUuidArray = new JsonArray();
         for (int i = 0; i < effectIdArray.size(); i++) {
             String effectId = effectIdArray.getString(i);
@@ -65,7 +69,7 @@ public class RPGLObjectTemplate extends JsonObject {
                 effectUuidArray.addString(effect.getUuid());
             }
         }
-        object.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effectUuidArray);
+        object.setEffects(effectUuidArray);
     }
 
     /**
@@ -86,7 +90,7 @@ public class RPGLObjectTemplate extends JsonObject {
             equippedItemUuids.putString(equippedItemEntry.getKey(), item.getUuid());
             inventoryUuids.addString(item.getUuid());
         }
-        object.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItemUuids);
+        object.setEquippedItems(equippedItemUuids);
     }
 
     /**
@@ -97,14 +101,14 @@ public class RPGLObjectTemplate extends JsonObject {
      * @param object a RPGLObject being created by this object
      */
     static void processInventory(RPGLObject object) {
-        JsonArray inventoryItemIds = object.removeJsonArray(RPGLObjectTO.INVENTORY_ALIAS);
+        JsonArray inventoryItemIds = object.getInventory();
         JsonArray inventoryItemUuids = new JsonArray();
         for (int i = 0; i < inventoryItemIds.size(); i++) {
             String itemId = inventoryItemIds.getString(i);
             RPGLItem item = RPGLFactory.newItem(itemId);
             inventoryItemUuids.addString(item.getUuid());
         }
-        object.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventoryItemUuids);
+        object.setInventory(inventoryItemUuids);
     }
 
     /**
@@ -114,7 +118,7 @@ public class RPGLObjectTemplate extends JsonObject {
      * @param object an RPGLObject
      */
     static void processResources(RPGLObject object) {
-        JsonArray resources = object.removeJsonArray(RPGLObjectTO.RESOURCES_ALIAS);
+        JsonArray resources = object.getResources();
         JsonArray resourceUuids = new JsonArray();
         for (int i = 0; i < resources.size(); i++) {
             JsonObject resourceInstructions = resources.getJsonObject(i);
@@ -123,7 +127,7 @@ public class RPGLObjectTemplate extends JsonObject {
                 resourceUuids.addString(RPGLFactory.newResource(resourceInstructions.getString("resource")).getUuid());
             }
         }
-        object.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resourceUuids);
+        object.setResources(resourceUuids);
     }
 
     /**
