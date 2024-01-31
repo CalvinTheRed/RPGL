@@ -1,0 +1,25 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Detect Target Invokes InfoSubevent",
+  "description": "This is a test effect meant to detect when its target invokes an InfoSubevent.",
+  "subevent_filters": {
+    "info_subevent": [
+      {
+        "conditions": [
+          {
+            "condition": "objects_match",
+            "effect": "target",
+            "subevent": "source"
+          }
+        ],
+        "functions": [
+          {
+            "function": "dummy_function"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -416,10 +416,17 @@ public class RPGLObject extends RPGLTaggable {
         }
         event.scale(resources);
 
-        String sourceUuid = event.getString("source");
-        RPGLObject source = sourceUuid != null
-                ? UUIDTable.getObject(sourceUuid)
-                : this;
+        RPGLObject source;
+        if (event.getString("source") != null) {
+            // events with a source pre-assigned via AddEvent take priority
+            source = UUIDTable.getObject(event.getString("source"));
+        } else if (this.getProxy()) {
+            // proxy objects set their origin object as the source for any events they invoke
+            source = UUIDTable.getObject(this.getOriginObject());
+        } else {
+            // ordinary event invocation sets the calling object as the source
+            source = this;
+        }
 
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {
