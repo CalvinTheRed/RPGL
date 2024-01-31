@@ -443,6 +443,36 @@ public class RPGLObjectTest {
     }
 
     @Test
+    @DisplayName("does not invoke event as proxy object by default")
+    void doesNotInvokeEventAsProxyObjectByDefault() throws Exception {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject proxyObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLContext context = new DummyContext();
+        context.add(originObject);
+        context.add(proxyObject);
+
+        // add effect to origin object to detect when it invokes an InfoSubevent
+        RPGLEffect detectorEffect = RPGLFactory.newEffect("debug:detect_target_invokes_info_subevent");
+        detectorEffect.setSource(originObject);
+        detectorEffect.setTarget(originObject);
+        originObject.addEffect(detectorEffect);
+
+        // set proxy object data (proxy defaults to false)
+        proxyObject.setOriginObject(originObject.getUuid());
+
+        proxyObject.invokeEvent(
+                new RPGLObject[] { proxyObject },
+                RPGLFactory.newEvent("debug:test_info_subevent"),
+                List.of(),
+                context
+        );
+
+        assertEquals(0, DummyFunction.counter,
+                "DummyFunction counter should not be incremented when proxy is false"
+        );
+    }
+
+    @Test
     @DisplayName("gets class level")
     void getsClassLevel() {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
