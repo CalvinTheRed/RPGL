@@ -29,6 +29,11 @@ public class RPGLEventTemplate extends JsonObject {
         return event;
     }
 
+    /**
+     * This helper method sets default values for a new RPGLEvent if they are not defined in the template.
+     *
+     * @param event an RPGLEvent
+     */
     void setup(RPGLEvent event) {
         event.join(this);
         event.asMap().putIfAbsent(RPGLEventTO.COST_ALIAS, new ArrayList<>());

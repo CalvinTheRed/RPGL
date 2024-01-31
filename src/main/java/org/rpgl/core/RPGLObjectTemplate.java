@@ -38,6 +38,11 @@ public class RPGLObjectTemplate extends JsonObject {
         return object;
     }
 
+    /**
+     * This helper method sets default values for a new RPGLObject if they are not defined in the template.
+     *
+     * @param object an RPGLObject
+     */
     void setup(RPGLObject object) {
         object.join(this);
         object.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());

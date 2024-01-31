@@ -344,6 +344,26 @@ public class SpawnObjectTest {
     }
 
     @Test
+    @DisplayName("does not spawn proxy object by default")
+    void doesNotSpawnProxyObjectByDefault() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context);
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context);
+
+        assertFalse(context.getContextObjects().get(0).getProxy(),
+                "new object should not be a proxy object"
+        );
+    }
+
+    @Test
     @DisplayName("spawns proxy object")
     void spawnsProxyObject() throws Exception {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
@@ -361,26 +381,6 @@ public class SpawnObjectTest {
 
         assertTrue(context.getContextObjects().get(0).getProxy(),
                 "new object should be a proxy object"
-        );
-    }
-
-    @Test
-    @DisplayName("defaults to spawning non-proxy object")
-    void defaultsToSpawningNonProxyObject() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
-
-        assertFalse(context.getContextObjects().get(0).getProxy(),
-                "new object should not be a proxy object"
         );
     }
 

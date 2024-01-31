@@ -45,6 +45,11 @@ public class RPGLResourceTemplate extends JsonObject {
         return resource;
     }
 
+    /**
+     * This helper method sets default values for a new RPGLResource if they are not defined in the template.
+     *
+     * @param resource an RPGLResource
+     */
     void setup(RPGLResource resource) {
         resource.join(this);
         resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 1);

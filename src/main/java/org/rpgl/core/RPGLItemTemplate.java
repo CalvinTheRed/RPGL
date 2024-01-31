@@ -33,6 +33,11 @@ public class RPGLItemTemplate extends JsonObject {
         return item;
     }
 
+    /**
+     * This helper method sets default values for a new RPGLItem if they are not defined in the template.
+     *
+     * @param item an RPGLItem
+     */
     void setup(RPGLItem item) {
         item.join(this);
         item.asMap().putIfAbsent(RPGLItemTO.WEIGHT_ALIAS, 0);
