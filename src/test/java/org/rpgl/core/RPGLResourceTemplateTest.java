@@ -86,7 +86,7 @@ public class RPGLResourceTemplateTest {
     void unpacksRefreshCriterionGeneratorDice() {
         RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("class/warlock/the_undead_patron/necrotic_husk");
         RPGLResource resource = new RPGLResource();
-        resource.join(resourceTemplate);
+        resourceTemplate.setup(resource);
 
         RPGLResourceTemplate.processRefreshCriterionGenerators(resource);
 
@@ -102,7 +102,7 @@ public class RPGLResourceTemplateTest {
     void setsDefaultRequiredGenerator() {
         RPGLResourceTemplate resourceTemplate = DatapackLoader.DATAPACKS.get("std").getResourceTemplate("common/spell_slot/pact_magic/01");
         RPGLResource resource = new RPGLResource();
-        resource.join(resourceTemplate);
+        resourceTemplate.setup(resource);
 
         RPGLResourceTemplate.processRefreshCriterion(resource);
 

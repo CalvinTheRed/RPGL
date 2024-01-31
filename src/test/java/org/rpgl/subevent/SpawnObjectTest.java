@@ -20,6 +20,7 @@ import org.rpgl.uuidtable.UUIDTable;
 import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -330,7 +331,7 @@ public class SpawnObjectTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "std:dragon/red/young");
+            this.putString("object_id", "debug:dummy");
         }});
         spawnObject.setSource(summoner);
         spawnObject.prepare(context);
@@ -339,6 +340,47 @@ public class SpawnObjectTest {
 
         assertEquals(summoner.getUuid(), context.getContextObjects().get(0).getOriginObject(),
                 "new object should have summoner as origin object"
+        );
+    }
+
+    @Test
+    @DisplayName("does not spawn proxy object by default")
+    void doesNotSpawnProxyObjectByDefault() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context);
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context);
+
+        assertFalse(context.getContextObjects().get(0).getProxy(),
+                "new object should not be a proxy object"
+        );
+    }
+
+    @Test
+    @DisplayName("spawns proxy object")
+    void spawnsProxyObject() throws Exception {
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        DummyContext context = new DummyContext();
+
+        SpawnObject spawnObject = new SpawnObject();
+        spawnObject.joinSubeventData(new JsonObject() {{
+            this.putString("object_id", "debug:dummy");
+            this.putBoolean("proxy", true);
+        }});
+        spawnObject.setSource(summoner);
+        spawnObject.prepare(context);
+        spawnObject.setTarget(summoner);
+        spawnObject.invoke(context);
+
+        assertTrue(context.getContextObjects().get(0).getProxy(),
+                "new object should be a proxy object"
         );
     }
 

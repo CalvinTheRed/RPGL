@@ -30,6 +30,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     public static final String CHALLENGE_RATING_ALIAS  = "challenge_rating";
     public static final String USER_ID                 = "user_id";
     public static final String ORIGIN_OBJECT_ALIAS     = "origin_object";
+    public static final String PROXY_ALIAS             = "proxy";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
     HashMap<String, Object> abilityScores;
@@ -57,6 +58,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     String userId;
     @JsonProperty(ORIGIN_OBJECT_ALIAS)
     String originObject;
+    @JsonProperty(PROXY_ALIAS)
+    Boolean proxy;
 
     /**
      * Default constructor for RPGLObjectTO class.
@@ -86,6 +89,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
         this.challengeRating = rpglObject.getChallengeRating();
         this.originObject = rpglObject.getOriginObject();
         this.userId = rpglObject.getUserId();
+        this.proxy = rpglObject.getProxy();
     }
 
     /**
@@ -108,6 +112,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.putDouble(CHALLENGE_RATING_ALIAS, challengeRating);
             // origin object not needed for template
             // user id not needed for template
+            this.putBoolean(PROXY_ALIAS, proxy);
         }};
         rpglObjectTemplate.join(super.getTemplateData());
         return rpglObjectTemplate;
@@ -133,6 +138,7 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.setChallengeRating(challengeRating);
             this.setUserId(userId);
             this.setOriginObject(originObject);
+            this.setProxy(proxy);
         }};
         rpglObject.join(super.getTemplateData());
         rpglObject.join(super.getUUIDTableElementData());

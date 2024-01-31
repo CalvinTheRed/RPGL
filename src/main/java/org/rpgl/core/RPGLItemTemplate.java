@@ -25,6 +25,20 @@ public class RPGLItemTemplate extends JsonObject {
      */
     public RPGLItem newInstance() {
         RPGLItem item = new RPGLItem();
+        this.setup(item);
+        UUIDTable.register(item);
+        processEvents(item);
+        processEquippedEffects(item);
+        processEquippedResources(item);
+        return item;
+    }
+
+    /**
+     * This helper method sets default values for a new RPGLItem if they are not defined in the template.
+     *
+     * @param item an RPGLItem
+     */
+    void setup(RPGLItem item) {
         item.join(this);
         item.asMap().putIfAbsent(RPGLItemTO.WEIGHT_ALIAS, 0);
         item.asMap().putIfAbsent(RPGLItemTO.ATTACK_BONUS_ALIAS, 0);
@@ -33,11 +47,6 @@ public class RPGLItemTemplate extends JsonObject {
         item.asMap().putIfAbsent(RPGLItemTO.EVENTS_ALIAS, new HashMap<String, Object>());
         item.asMap().putIfAbsent(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, new ArrayList<>());
         item.asMap().putIfAbsent(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, new ArrayList<>());
-        UUIDTable.register(item);
-        processEvents(item);
-        processEquippedEffects(item);
-        processEquippedResources(item);
-        return item;
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.rpgl.datapack.RPGLEventTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -22,11 +23,20 @@ public class RPGLEventTemplate extends JsonObject {
      */
     public RPGLEvent newInstance(String originItem) {
         RPGLEvent event = new RPGLEvent();
-        event.asMap().putIfAbsent("cost", new ArrayList<>());
-        event.join(this);
+        this.setup(event);
         event.setOriginItem(originItem);
         processCost(event);
         return event;
+    }
+
+    /**
+     * This helper method sets default values for a new RPGLEvent if they are not defined in the template.
+     *
+     * @param event an RPGLEvent
+     */
+    void setup(RPGLEvent event) {
+        event.join(this);
+        event.asMap().putIfAbsent(RPGLEventTO.COST_ALIAS, new ArrayList<>());
     }
 
     /**

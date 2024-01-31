@@ -1,0 +1,16 @@
+{
+  "metadata": {
+    "author": "Calvin Withun"
+  },
+  "name": "Test InfoSubevent",
+  "description": "This event invokes an InfoSubevent with the `test` tag.",
+  "area_of_effect": { },
+  "subevents": [
+    {
+      "subevent": "info_subevent",
+      "tags": [
+        "test"
+      ]
+    }
+  ]
+}

@@ -266,6 +266,24 @@ public class RPGLObject extends RPGLTaggable {
         super.putString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS, originObject);
     }
 
+    /**
+     * Getter for proxy.
+     *
+     * @return true if the object is a proxy for a different object, or false if it is not
+     */
+    public Boolean getProxy() {
+        return super.getBoolean(RPGLObjectTO.PROXY_ALIAS);
+    }
+
+    /**
+     * Setter for proxy.
+     *
+     * @param proxy a new proxy value
+     */
+    public void setProxy(Boolean proxy) {
+        super.putBoolean(RPGLObjectTO.PROXY_ALIAS, proxy);
+    }
+
     // =================================================================================================================
     // Methods not derived directly from transfer objects
     // =================================================================================================================
@@ -372,6 +390,13 @@ public class RPGLObject extends RPGLTaggable {
             resources.addAll(equippedItem.getEquippedResourcesObjects());
         }
 
+        // add proxy resources if applicable
+        String originObjectUuid = this.getOriginObject();
+        if (this.getProxy() && originObjectUuid != null) {
+            RPGLObject originObject = UUIDTable.getObject(originObjectUuid);
+            resources.addAll(originObject.getResourceObjects());
+        }
+
         return resources;
     }
 
@@ -391,10 +416,17 @@ public class RPGLObject extends RPGLTaggable {
         }
         event.scale(resources);
 
-        String sourceUuid = event.getString("source");
-        RPGLObject source = sourceUuid != null
-                ? UUIDTable.getObject(sourceUuid)
-                : this;
+        RPGLObject source;
+        if (event.getString("source") != null) {
+            // events with a source pre-assigned via AddEvent take priority
+            source = UUIDTable.getObject(event.getString("source"));
+        } else if (this.getProxy()) {
+            // proxy objects set their origin object as the source for any events they invoke
+            source = UUIDTable.getObject(this.getOriginObject());
+        } else {
+            // ordinary event invocation sets the calling object as the source
+            source = this;
+        }
 
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {

@@ -50,7 +50,7 @@ public class RPGLObjectTemplateTest {
     void createsEffects() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("test");
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processEffects(object);
 
@@ -72,7 +72,7 @@ public class RPGLObjectTemplateTest {
     void createsInventoryItems() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processInventory(object);
 
@@ -94,7 +94,7 @@ public class RPGLObjectTemplateTest {
     void createsEquippedItems() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processEquippedItems(object);
 
@@ -117,7 +117,7 @@ public class RPGLObjectTemplateTest {
     void createsResources() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("debug").getObjectTemplate("test");
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processResources(object);
 
@@ -151,7 +151,7 @@ public class RPGLObjectTemplateTest {
             }});
         }});
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processClasses(object);
 
@@ -188,7 +188,7 @@ public class RPGLObjectTemplateTest {
             }});
         }});
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processClasses(object);
 
@@ -245,7 +245,7 @@ public class RPGLObjectTemplateTest {
             }});
         }});
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processClasses(object);
 
@@ -287,7 +287,7 @@ public class RPGLObjectTemplateTest {
             this.addString("std:human");
         }});
         RPGLObject object = new RPGLObject();
-        object.join(objectTemplate);
+        objectTemplate.setup(object);
 
         RPGLObjectTemplate.processClasses(object);
 

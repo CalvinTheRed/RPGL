@@ -37,17 +37,27 @@ public class RPGLResourceTemplate extends JsonObject {
      */
     public RPGLResource newInstance(String originItem) {
         RPGLResource resource = new RPGLResource();
-        resource.join(this);
+        this.setup(resource);
         resource.setOriginItem(originItem);
-        resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 1);
-        resource.asMap().putIfAbsent(RPGLResourceTO.EXHAUSTED_ALIAS, false);
-        if (resource.getRefreshCriterion().asList().isEmpty()) {
-            resource.setRefreshCriterion(DEFAULT_REFRESH_CRITERION.deepClone());
-        }
         UUIDTable.register(resource);
         processRefreshCriterion(resource);
         processRefreshCriterionGenerators(resource);
         return resource;
+    }
+
+    /**
+     * This helper method sets default values for a new RPGLResource if they are not defined in the template.
+     *
+     * @param resource an RPGLResource
+     */
+    void setup(RPGLResource resource) {
+        resource.join(this);
+        resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 1);
+        resource.asMap().putIfAbsent(RPGLResourceTO.EXHAUSTED_ALIAS, false);
+        resource.asMap().putIfAbsent(RPGLResourceTO.REFRESH_CRITERION_ALIAS, DEFAULT_REFRESH_CRITERION.deepClone().asList());
+        if (resource.getRefreshCriterion().asList().isEmpty()) {
+            resource.setRefreshCriterion(DEFAULT_REFRESH_CRITERION.deepClone());
+        }
     }
 
     /**

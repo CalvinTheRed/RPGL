@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.datapack.DatapackLoader;
+import org.rpgl.function.DummyFunction;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.HealingDelivery;
@@ -45,6 +46,7 @@ public class RPGLObjectTest {
     @AfterEach
     void afterEach() {
         UUIDTable.clear();
+        DummyFunction.resetCounter();
     }
 
     @Test
@@ -377,6 +379,97 @@ public class RPGLObjectTest {
                     "resource should be a std:item/wand/wand_of_fireballs_charge"
             );
         }
+    }
+
+    @Test
+    @DisplayName("does not have proxy resources by default")
+    void doesNotHaveProxyResourcesByDefault() {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setOriginObject(originObject.getUuid());
+        object.setProxy(false);
+
+        originObject.addResource(RPGLFactory.newResource("std:common/spell_slot/01"));
+
+        assertEquals(0, object.getResourceObjects().size(),
+                "object should not have access to origin object's resources"
+        );
+    }
+
+    @Test
+    @DisplayName("has proxy resources")
+    void hasProxyResources() {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.setOriginObject(originObject.getUuid());
+        object.setProxy(true);
+
+        originObject.addResource(RPGLFactory.newResource("std:common/spell_slot/01"));
+
+        assertEquals(1, object.getResourceObjects().size(),
+                "object should have access to origin object's resources"
+        );
+    }
+
+    @Test
+    @DisplayName("does not invoke event as proxy object by default")
+    void doesNotInvokeEventAsProxyObjectByDefault() throws Exception {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject proxyObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLContext context = new DummyContext();
+        context.add(originObject);
+        context.add(proxyObject);
+
+        // add effect to origin object to detect when it invokes an InfoSubevent
+        RPGLEffect detectorEffect = RPGLFactory.newEffect("debug:detect_target_invokes_info_subevent");
+        detectorEffect.setSource(originObject);
+        detectorEffect.setTarget(originObject);
+        originObject.addEffect(detectorEffect);
+
+        // set proxy object data (proxy defaults to false)
+        proxyObject.setOriginObject(originObject.getUuid());
+
+        proxyObject.invokeEvent(
+                new RPGLObject[] { proxyObject },
+                RPGLFactory.newEvent("debug:test_info_subevent"),
+                List.of(),
+                context
+        );
+
+        assertEquals(0, DummyFunction.counter,
+                "DummyFunction counter should not be incremented when proxy is false"
+        );
+    }
+
+    @Test
+    @DisplayName("invokes event as proxy object")
+    void invokesEventAsProxyObject() throws Exception {
+        RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject proxyObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLContext context = new DummyContext();
+        context.add(originObject);
+        context.add(proxyObject);
+
+        // add effect to origin object to detect when it invokes an InfoSubevent
+        RPGLEffect detectorEffect = RPGLFactory.newEffect("debug:detect_target_invokes_info_subevent");
+        detectorEffect.setSource(originObject);
+        detectorEffect.setTarget(originObject);
+        originObject.addEffect(detectorEffect);
+
+        // set proxy object data
+        proxyObject.setOriginObject(originObject.getUuid());
+        proxyObject.setProxy(true);
+
+        proxyObject.invokeEvent(
+                new RPGLObject[] { proxyObject },
+                RPGLFactory.newEvent("debug:test_info_subevent"),
+                List.of(),
+                context
+        );
+
+        assertEquals(1, DummyFunction.counter,
+                "DummyFunction counter should be incremented due to origin object being the source of the proxy event"
+        );
     }
 
     @Test
