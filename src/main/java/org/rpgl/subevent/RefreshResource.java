@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -45,21 +46,48 @@ public class RefreshResource extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public RefreshResource invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (RefreshResource) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public RefreshResource joinSubeventData(JsonObject other) {
+        return (RefreshResource) super.joinSubeventData(other);
+    }
+
+    @Override
+    public RefreshResource prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
         this.json.asMap().putIfAbsent("maximum_potency", Integer.MAX_VALUE);
         this.json.asMap().putIfAbsent("minimum_potency", 0);
         this.json.asMap().putIfAbsent("selection_mode", "low_first");
+        return this;
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) {
+    public RefreshResource run(RPGLContext context, JsonArray originPoint) {
         switch (this.json.getString("selection_mode")) {
             case "low_first" -> this.runLowFirst();
             case "high_first" -> this.runHighFirst();
             case "random" -> this.runRandom();
         }
+        return this;
+    }
+
+    @Override
+    public RefreshResource setOriginItem(String originItem) {
+        return (RefreshResource) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public RefreshResource setSource(RPGLObject source) {
+        return (RefreshResource) super.setSource(source);
+    }
+
+    @Override
+    public RefreshResource setTarget(RPGLObject target) {
+        return (RefreshResource) super.setTarget(target);
     }
 
     /**

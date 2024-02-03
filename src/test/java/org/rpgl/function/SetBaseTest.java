@@ -6,11 +6,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
@@ -56,6 +58,11 @@ public class SetBaseTest {
             @Override
             public Subevent clone(JsonObject jsonData) {
                 return null;
+            }
+
+            @Override
+            public Calculation run(RPGLContext context, JsonArray originPoint) {
+                return this;
             }
         };
     }

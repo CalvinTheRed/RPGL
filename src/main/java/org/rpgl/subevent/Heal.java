@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -39,19 +40,46 @@ public class Heal extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public Heal invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (Heal) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public Heal joinSubeventData(JsonObject other) {
+        return (Heal) super.joinSubeventData(other);
+    }
+
+    @Override
+    public Heal prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.putBoolean("canceled", false);
         this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.getBaseHealing(context, originPoint);
+        return this;
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public Heal run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
             this.getTargetHealing(context, originPoint);
             this.deliverHealing(context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public Heal setOriginItem(String originItem) {
+        return (Heal) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public Heal setSource(RPGLObject source) {
+        return (Heal) super.setSource(source);
+    }
+
+    @Override
+    public Heal setTarget(RPGLObject target) {
+        return (Heal) super.setTarget(target);
     }
 
     @Override

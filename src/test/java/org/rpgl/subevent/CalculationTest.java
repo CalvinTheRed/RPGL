@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -44,7 +45,6 @@ public class CalculationTest {
 
     @BeforeEach
     void beforeEach() {
-        // create an anonymous class for Calculation for the purpose of running tests on it
         calculation = new Calculation("calculation") {
 
             @Override
@@ -54,6 +54,11 @@ public class CalculationTest {
 
             @Override
             public Subevent clone(JsonObject jsonData) {
+                return this;
+            }
+
+            @Override
+            public Calculation run(RPGLContext context, JsonArray originPoint) {
                 return this;
             }
 

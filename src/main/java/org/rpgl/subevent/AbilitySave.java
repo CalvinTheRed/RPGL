@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -41,14 +42,25 @@ public class AbilitySave extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context, originPoint);
+    public AbilitySave invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AbilitySave) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public AbilitySave joinSubeventData(JsonObject other) {
+        return (AbilitySave) super.joinSubeventData(other);
+    }
+
+    @Override
+    public AbilitySave prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
+        this.calculateDifficultyClass(context, originPoint);
+        return this;
+    }
+
+    @Override
+    public AbilitySave run(RPGLContext context, JsonArray originPoint) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             this.putString("ability", json.getString("ability"));
@@ -66,6 +78,22 @@ public class AbilitySave extends Subevent {
         } else {
             this.resolveNestedSubevents("pass", context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public AbilitySave setOriginItem(String originItem) {
+        return (AbilitySave) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public AbilitySave setSource(RPGLObject source) {
+        return (AbilitySave) super.setSource(source);
+    }
+
+    @Override
+    public AbilitySave setTarget(RPGLObject target) {
+        return (AbilitySave) super.setTarget(target);
     }
 
     /**

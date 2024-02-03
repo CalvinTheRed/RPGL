@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -37,7 +38,17 @@ public class AbilityContest extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public AbilityContest invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AbilityContest) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public AbilityContest joinSubeventData(JsonObject other) {
+        return (AbilityContest) super.joinSubeventData(other);
+    }
+
+    @Override
+    public AbilityContest run(RPGLContext context, JsonArray originPoint) throws Exception {
         int sourceAbilityCheck = this.getSourceAbilityCheck(context, originPoint);
         int targetAbilityCheck = this.getTargetAbilityCheck(context, originPoint);
 
@@ -46,6 +57,22 @@ public class AbilityContest extends Subevent {
         } else if (sourceAbilityCheck > targetAbilityCheck) {
             this.resolveNestedSubevents("pass", context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public AbilityContest setOriginItem(String originItem) {
+        return (AbilityContest) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public AbilityContest setSource(RPGLObject source) {
+        return (AbilityContest) super.setSource(source);
+    }
+
+    @Override
+    public AbilityContest setTarget(RPGLObject target) {
+        return (AbilityContest) super.setTarget(target);
     }
 
     /**

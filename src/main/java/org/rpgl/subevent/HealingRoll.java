@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -40,10 +41,41 @@ public class HealingRoll extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public HealingRoll invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (HealingRoll) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public HealingRoll joinSubeventData(JsonObject other) {
+        return (HealingRoll) super.joinSubeventData(other);
+    }
+
+    @Override
+    public HealingRoll prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.roll();
+        return this;
+    }
+
+    @Override
+    public HealingRoll run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public HealingRoll setOriginItem(String originItem) {
+        return (HealingRoll) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public HealingRoll setSource(RPGLObject source) {
+        return (HealingRoll) super.setSource(source);
+    }
+
+    @Override
+    public HealingRoll setTarget(RPGLObject target) {
+        return (HealingRoll) super.setTarget(target);
     }
 
     /**

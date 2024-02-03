@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.function.AddBonus;
 import org.rpgl.function.AddDamage;
 import org.rpgl.json.JsonArray;
@@ -44,7 +45,17 @@ public class AttackRoll extends Roll {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public AttackRoll invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AttackRoll) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public AttackRoll joinSubeventData(JsonObject other) {
+        return (AttackRoll) super.joinSubeventData(other);
+    }
+
+    @Override
+    public AttackRoll prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("withhold_damage_modifier", false);
         this.json.asMap().putIfAbsent("use_origin_attack_ability", false);
@@ -82,10 +93,11 @@ public class AttackRoll extends Roll {
                 }});
             }}, context, originPoint);
         }
+        return this;
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public AttackRoll run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             this.json.asMap().putIfAbsent("damage", new ArrayList<>());
@@ -137,6 +149,22 @@ public class AttackRoll extends Roll {
                 this.resolveNestedSubevents("hit", context, originPoint);
             }
         }
+        return this;
+    }
+
+    @Override
+    public AttackRoll setOriginItem(String originItem) {
+        return (AttackRoll) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public AttackRoll setSource(RPGLObject source) {
+        return (AttackRoll) super.setSource(source);
+    }
+
+    @Override
+    public AttackRoll setTarget(RPGLObject target) {
+        return (AttackRoll) super.setTarget(target);
     }
 
     @Override

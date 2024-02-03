@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -38,9 +39,40 @@ public class TemporaryHitPointCollection extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public TemporaryHitPointCollection invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (TemporaryHitPointCollection) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public TemporaryHitPointCollection joinSubeventData(JsonObject other) {
+        return (TemporaryHitPointCollection) super.joinSubeventData(other);
+    }
+
+    @Override
+    public TemporaryHitPointCollection prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.prepareTemporaryHitPoints(context);
+        return this;
+    }
+
+    @Override
+    public TemporaryHitPointCollection run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public TemporaryHitPointCollection setOriginItem(String originItem) {
+        return (TemporaryHitPointCollection) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public TemporaryHitPointCollection setSource(RPGLObject source) {
+        return (TemporaryHitPointCollection) super.setSource(source);
+    }
+
+    @Override
+    public TemporaryHitPointCollection setTarget(RPGLObject target) {
+        return (TemporaryHitPointCollection) super.setTarget(target);
     }
 
     /**

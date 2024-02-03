@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -43,7 +44,17 @@ public class CalculateBaseArmorClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public CalculateBaseArmorClass invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CalculateBaseArmorClass) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CalculateBaseArmorClass joinSubeventData(JsonObject other) {
+        return (CalculateBaseArmorClass) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CalculateBaseArmorClass prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         // Set base armor class from armor (or no armor)
         String armorUuid = super.getSource().getEquippedItems().getString("armor");
@@ -64,7 +75,29 @@ public class CalculateBaseArmorClass extends Calculation {
         }
 
         // Set base armor class value in json
-        this.setBase(baseArmorClass + getShieldBonus());
+        super.setBase(baseArmorClass + getShieldBonus());
+
+        return this;
+    }
+
+    @Override
+    public CalculateBaseArmorClass run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CalculateBaseArmorClass setOriginItem(String originItem) {
+        return (CalculateBaseArmorClass) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CalculateBaseArmorClass setSource(RPGLObject source) {
+        return (CalculateBaseArmorClass) super.setSource(source);
+    }
+
+    @Override
+    public CalculateBaseArmorClass setTarget(RPGLObject target) {
+        return (CalculateBaseArmorClass) super.setTarget(target);
     }
 
     /**

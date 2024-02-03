@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -35,18 +36,45 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        this.json.putBoolean("canceled", false);
-        this.getBaseDamage(context, originPoint);
+    public DealDamage invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DealDamage) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public DealDamage joinSubeventData(JsonObject other) {
+        return (DealDamage) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DealDamage prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.putBoolean("canceled", false);
+        this.getBaseDamage(context, originPoint);
+        return this;
+    }
+
+    @Override
+    public DealDamage run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
             this.getTargetDamage(context, originPoint);
             this.deliverDamage(context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public DealDamage setOriginItem(String originItem) {
+        return (DealDamage) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DealDamage setSource(RPGLObject source) {
+        return (DealDamage) super.setSource(source);
+    }
+
+    @Override
+    public DealDamage setTarget(RPGLObject target) {
+        return (DealDamage) super.setTarget(target);
     }
 
     @Override

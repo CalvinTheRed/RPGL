@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -57,6 +58,11 @@ public class AddBonusTest {
             @Override
             public Subevent clone(JsonObject jsonData) {
                 return null;
+            }
+
+            @Override
+            public Calculation run(RPGLContext context, JsonArray originPoint) {
+                return this;
             }
         };
     }

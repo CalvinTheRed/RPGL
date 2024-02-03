@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -38,12 +39,43 @@ public class AttackAbilityCollection extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public AttackAbilityCollection invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AttackAbilityCollection) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public AttackAbilityCollection joinSubeventData(JsonObject other) {
+        return (AttackAbilityCollection) super.joinSubeventData(other);
+    }
+
+    @Override
+    public AttackAbilityCollection prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.putJsonArray("abilities", new JsonArray());
         if (UUIDTable.getItem(super.getOriginItem()).hasTag("finesse")) {
             this.addAbility("dex");
         }
+        return this;
+    }
+
+    @Override
+    public AttackAbilityCollection run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public AttackAbilityCollection setOriginItem(String originItem) {
+        return (AttackAbilityCollection) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public AttackAbilityCollection setSource(RPGLObject source) {
+        return (AttackAbilityCollection) super.setSource(source);
+    }
+
+    @Override
+    public AttackAbilityCollection setTarget(RPGLObject target) {
+        return (AttackAbilityCollection) super.setTarget(target);
     }
 
     /**

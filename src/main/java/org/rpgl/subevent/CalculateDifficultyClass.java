@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -38,7 +39,17 @@ public class CalculateDifficultyClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public CalculateDifficultyClass invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CalculateDifficultyClass) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CalculateDifficultyClass joinSubeventData(JsonObject other) {
+        return (CalculateDifficultyClass) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CalculateDifficultyClass prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         Integer difficultyClass = this.json.getInteger("difficulty_class");
         if (difficultyClass == null) {
@@ -86,6 +97,27 @@ public class CalculateDifficultyClass extends Calculation {
         } else {
             super.setBase(difficultyClass);
         }
+        return this;
+    }
+
+    @Override
+    public CalculateDifficultyClass run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CalculateDifficultyClass setOriginItem(String originItem) {
+        return (CalculateDifficultyClass) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CalculateDifficultyClass setSource(RPGLObject source) {
+        return (CalculateDifficultyClass) super.setSource(source);
+    }
+
+    @Override
+    public CalculateDifficultyClass setTarget(RPGLObject target) {
+        return (CalculateDifficultyClass) super.setTarget(target);
     }
 
 }

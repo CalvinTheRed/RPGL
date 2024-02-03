@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -39,10 +40,37 @@ public class RemoveOriginItemTag extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) {
+    public RemoveOriginItemTag invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (RemoveOriginItemTag) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public RemoveOriginItemTag joinSubeventData(JsonObject other) {
+        return (RemoveOriginItemTag) super.joinSubeventData(other);
+    }
+
+    @Override
+    public RemoveOriginItemTag run(RPGLContext context, JsonArray originPoint) {
         RPGLItem originItem = UUIDTable.getItem(super.getOriginItem());
         if (originItem != null) {
             originItem.removeTag(this.json.getString("tag"));
         }
+        return this;
     }
+
+    @Override
+    public RemoveOriginItemTag setOriginItem(String originItem) {
+        return (RemoveOriginItemTag) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public RemoveOriginItemTag setSource(RPGLObject source) {
+        return (RemoveOriginItemTag) super.setSource(source);
+    }
+
+    @Override
+    public RemoveOriginItemTag setTarget(RPGLObject target) {
+        return (RemoveOriginItemTag) super.setTarget(target);
+    }
+
 }

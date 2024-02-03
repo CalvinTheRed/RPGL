@@ -47,7 +47,6 @@ public class RollTest {
 
     @BeforeEach
     void beforeEach() {
-        // create an anonymous class for Roll for the purpose of running tests on it
         roll = new Roll("roll") {
 
             @Override
@@ -57,6 +56,11 @@ public class RollTest {
 
             @Override
             public Subevent clone(JsonObject jsonData) {
+                return this;
+            }
+
+            @Override
+            public Roll run(RPGLContext context, JsonArray originPoint) {
                 return this;
             }
 

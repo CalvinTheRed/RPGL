@@ -280,7 +280,8 @@ public class RPGLItem extends RPGLTaggable {
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
             // construct specified events
-            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i))
+                    .setOriginItem(super.getUuid());
             JsonObject subevent = event.getSubevents().getJsonObject(0);
             JsonArray tags = subevent.getJsonArray("tags");
             if (tags == null) {
@@ -290,7 +291,6 @@ public class RPGLItem extends RPGLTaggable {
             if (!tags.asList().contains("improvised")) {
                 tags.asList().addAll(super.getTags().asList());
             }
-            event.setOriginItem(super.getUuid());
             events.add(event);
 
             // construct derived events
@@ -314,7 +314,8 @@ public class RPGLItem extends RPGLTaggable {
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
             // construct specified events
-            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i))
+                    .setOriginItem(super.getUuid());
             JsonObject subevent = event.getSubevents().getJsonObject(0);
             JsonArray tags = subevent.getJsonArray("tags");
             if (tags == null) {
@@ -324,7 +325,6 @@ public class RPGLItem extends RPGLTaggable {
             if (!tags.asList().contains("improvised")) {
                 tags.asList().addAll(super.getTags().asList());
             }
-            event.setOriginItem(super.getUuid());
             events.add(event);
 
             // construct derived events
@@ -342,9 +342,8 @@ public class RPGLItem extends RPGLTaggable {
         JsonArray eventIds = this.getEvents().getJsonArray("special");
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
-            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
-            event.setOriginItem(super.getUuid());
-            events.add(event);
+            events.add(RPGLFactory.newEvent(eventIds.getString(i))
+                    .setOriginItem(super.getUuid()));
         }
         return events;
     }
@@ -358,10 +357,9 @@ public class RPGLItem extends RPGLTaggable {
     public void updateEquippedEffects(RPGLObject wielder) {
         JsonArray whileEquippedEffects = this.getEquippedEffects();
         for (int i = 0; i < whileEquippedEffects.size(); i++) {
-            String effectUuid = whileEquippedEffects.getString(i);
-            RPGLEffect effect = UUIDTable.getEffect(effectUuid);
-            effect.setSource(wielder);
-            effect.setTarget(wielder);
+            UUIDTable.getEffect(whileEquippedEffects.getString(i))
+                    .setSource(wielder)
+                    .setTarget(wielder);
         }
     }
 
@@ -377,16 +375,15 @@ public class RPGLItem extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     List<RPGLEvent> getDerivedEvents(RPGLEvent event, RPGLObject wielder, RPGLContext context) throws Exception {
+        JsonArray attackAbilities = new AttackAbilityCollection()
+                .setOriginItem(super.getUuid())
+                .setSource(wielder)
+                .prepare(context, wielder.getPosition())
+                .setTarget(wielder)
+                .invoke(context, wielder.getPosition())
+                .getAbilities();
+
         List<RPGLEvent> derivedEvents = new ArrayList<>();
-
-        AttackAbilityCollection attackAbilityCollection = new AttackAbilityCollection();
-        attackAbilityCollection.setOriginItem(super.getUuid());
-        attackAbilityCollection.setSource(wielder);
-        attackAbilityCollection.prepare(context, wielder.getPosition());
-        attackAbilityCollection.setTarget(wielder);
-        attackAbilityCollection.invoke(context, wielder.getPosition());
-        JsonArray attackAbilities = attackAbilityCollection.getAbilities();
-
         for (int i = 0; i < attackAbilities.size(); i++) {
             RPGLEvent derivedEvent = new RPGLEvent();
             derivedEvent.join(event.deepClone());

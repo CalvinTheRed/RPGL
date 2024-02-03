@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -41,10 +42,41 @@ public class DamageCollection extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public DamageCollection invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DamageCollection) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public DamageCollection joinSubeventData(JsonObject other) {
+        return (DamageCollection) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DamageCollection prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
         this.prepareDamage(context);
+        return this;
+    }
+
+    @Override
+    public DamageCollection run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public DamageCollection setOriginItem(String originItem) {
+        return (DamageCollection) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DamageCollection setSource(RPGLObject source) {
+        return (DamageCollection) super.setSource(source);
+    }
+
+    @Override
+    public DamageCollection setTarget(RPGLObject target) {
+        return (DamageCollection) super.setTarget(target);
     }
 
     @Override

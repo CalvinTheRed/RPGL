@@ -43,13 +43,24 @@ public class TakeResource extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
+    public TakeResource invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (TakeResource) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) {
+    public TakeResource joinSubeventData(JsonObject other) {
+        return (TakeResource) super.joinSubeventData(other);
+    }
+
+    @Override
+    public TakeResource prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
+        return this;
+    }
+
+    @Override
+    public TakeResource run(RPGLContext context, JsonArray originPoint) {
         String resourceTag = this.json.getString("resource_tag");
         int count = this.json.getInteger("count");
         RPGLObject target = super.getTarget();
@@ -60,6 +71,22 @@ public class TakeResource extends Subevent {
                 count--;
             }
         }
+        return this;
+    }
+
+    @Override
+    public TakeResource setOriginItem(String originItem) {
+        return (TakeResource) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public TakeResource setSource(RPGLObject source) {
+        return (TakeResource) super.setSource(source);
+    }
+
+    @Override
+    public TakeResource setTarget(RPGLObject target) {
+        return (TakeResource) super.setTarget(target);
     }
 
 }

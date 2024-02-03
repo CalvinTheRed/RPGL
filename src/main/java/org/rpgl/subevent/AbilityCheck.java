@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -38,15 +39,26 @@ public class AbilityCheck extends Roll {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public AbilityCheck invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AbilityCheck) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public AbilityCheck joinSubeventData(JsonObject other) {
+        return (AbilityCheck) super.joinSubeventData(other);
+    }
+
+    @Override
+    public AbilityCheck prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.putBoolean("has_half_proficiency", false);
         this.json.putBoolean("has_proficiency", false);
         this.json.putBoolean("has_expertise", false);
+        return this;
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public AbilityCheck run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             new AddBonus().execute(null, this, new JsonObject() {{
@@ -108,6 +120,22 @@ public class AbilityCheck extends Roll {
                 }});
             }}, context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public AbilityCheck setOriginItem(String originItem) {
+        return (AbilityCheck) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public AbilityCheck setSource(RPGLObject source) {
+        return (AbilityCheck) super.setSource(source);
+    }
+
+    @Override
+    public AbilityCheck setTarget(RPGLObject target) {
+        return (AbilityCheck) super.setTarget(target);
     }
 
     @Override

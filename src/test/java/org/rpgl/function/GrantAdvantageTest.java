@@ -12,6 +12,7 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Roll;
 import org.rpgl.subevent.Subevent;
@@ -62,6 +63,11 @@ public class GrantAdvantageTest {
             @Override
             public Subevent clone(JsonObject jsonData) {
                 return null;
+            }
+
+            @Override
+            public Roll run(RPGLContext context, JsonArray originPoint) {
+                return this;
             }
         };
     }

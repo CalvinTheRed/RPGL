@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -40,16 +41,28 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        this.json.asMap().putIfAbsent("damage_proportion", "all");
+    public DamageDelivery invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DamageDelivery) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public DamageDelivery joinSubeventData(JsonObject other) {
+        return (DamageDelivery) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DamageDelivery prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.asMap().putIfAbsent("damage_proportion", "all");
+        return this;
+    }
+
+    @Override
+    public DamageDelivery run(RPGLContext context, JsonArray originPoint) throws Exception {
         // apply damage affinities
         this.calculateRawDamage();
         JsonObject damageJson = this.json.removeJsonObject("damage");
+
         DamageAffinity damageAffinity = new DamageAffinity();
         damageAffinity.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray() {{
@@ -59,10 +72,11 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
         for (Map.Entry<String, ?> entry : damageJson.asMap().entrySet()) {
             damageAffinity.addDamageType(entry.getKey());
         }
-        damageAffinity.setSource(this.getSource());
-        damageAffinity.prepare(context, originPoint);
-        damageAffinity.setTarget(this.getTarget());
-        damageAffinity.invoke(context, originPoint);
+        damageAffinity
+                .setSource(this.getSource())
+                .prepare(context, originPoint)
+                .setTarget(this.getTarget())
+                .invoke(context, originPoint);
 
         JsonObject damageWithAffinity = new JsonObject();
         for (Map.Entry<String, ?> damageJsonEntry : damageJson.asMap().entrySet()) {
@@ -80,6 +94,23 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
         }
         this.json.putJsonObject("damage", damageWithAffinity);
         this.getTarget().receiveDamage(this, context);
+
+        return this;
+    }
+
+    @Override
+    public DamageDelivery setOriginItem(String originItem) {
+        return (DamageDelivery) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DamageDelivery setSource(RPGLObject source) {
+        return (DamageDelivery) super.setSource(source);
+    }
+
+    @Override
+    public DamageDelivery setTarget(RPGLObject target) {
+        return (DamageDelivery) super.setTarget(target);
     }
 
     @Override

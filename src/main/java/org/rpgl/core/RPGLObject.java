@@ -8,6 +8,7 @@ import org.rpgl.subevent.CalculateAbilityScore;
 import org.rpgl.subevent.CalculateBaseArmorClass;
 import org.rpgl.subevent.CalculateMaximumHitPoints;
 import org.rpgl.subevent.CalculateProficiencyBonus;
+import org.rpgl.subevent.CalculateReach;
 import org.rpgl.subevent.DamageDelivery;
 import org.rpgl.subevent.GetEvents;
 import org.rpgl.subevent.GetObjectTags;
@@ -388,12 +389,12 @@ public class RPGLObject extends RPGLTaggable {
         }
 
         // get events from effects
-        GetEvents getEvents = new GetEvents();
-        getEvents.setSource(this);
-        getEvents.prepare(context, this.getPosition());
-        getEvents.setTarget(this);
-        getEvents.invoke(context, this.getPosition());
-        events.addAll(getEvents.getEvents());
+        events.addAll(new GetEvents()
+                .setSource(this)
+                .prepare(context, this.getPosition())
+                .setTarget(this)
+                .invoke(context, this.getPosition())
+                .getEvents());
 
         // get events granted by equipped items
         JsonObject equippedItems = this.getEquippedItems();
@@ -466,15 +467,15 @@ public class RPGLObject extends RPGLTaggable {
         // get resources from equipped items
         JsonObject equippedItems = this.getEquippedItems();
         for (Map.Entry<String, Object> equippedItemEntry : equippedItems.asMap().entrySet()) {
-            RPGLItem equippedItem = UUIDTable.getItem(equippedItems.getString(equippedItemEntry.getKey()));
-            resources.addAll(equippedItem.getEquippedResourcesObjects());
+            resources.addAll(
+                    UUIDTable.getItem(equippedItems.getString(equippedItemEntry.getKey())).getEquippedResourcesObjects()
+            );
         }
 
         // add proxy resources if applicable
         String originObjectUuid = this.getOriginObject();
         if (this.getProxy() && originObjectUuid != null) {
-            RPGLObject originObject = UUIDTable.getObject(originObjectUuid);
-            resources.addAll(originObject.getResourceObjects());
+            resources.addAll(UUIDTable.getObject(originObjectUuid).getResourceObjects());
         }
 
         return resources;
@@ -483,6 +484,7 @@ public class RPGLObject extends RPGLTaggable {
     /**
      * This method exhausts resources and then precipitates the process of invoking an RPGLEvent.
      *
+     * @param originPoint the point from which the passed event emanates
      * @param targets an array of RPGLObjects targeted by the RPGLEvent being invoked
      * @param event the RPGLEvent being invoked
      * @param resources a list of resources to be exhausted through the invocation of the passed event
@@ -511,15 +513,13 @@ public class RPGLObject extends RPGLTaggable {
         JsonArray subeventJsonArray = event.getJsonArray("subevents");
         for (int i = 0; i < subeventJsonArray.size(); i++) {
             JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
-            String subeventId = subeventJson.getString("subevent");
-            Subevent subevent = Subevent.SUBEVENTS.get(subeventId).clone(subeventJson);
-            subevent.setSource(source);
-            subevent.setOriginItem(event.getOriginItem());
-            subevent.prepare(context, originPoint);
+            Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent"))
+                    .clone(subeventJson)
+                    .setSource(source)
+                    .setOriginItem(event.getOriginItem())
+                    .prepare(context, originPoint);
             for (RPGLObject target : targets) {
-                Subevent subeventClone = subevent.clone();
-                subeventClone.setTarget(target);
-                subeventClone.invoke(context, originPoint);
+                subevent.clone().setTarget(target).invoke(context, originPoint);
             }
         }
     }
@@ -602,12 +602,12 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs.
      */
     public int getEffectiveProficiencyBonus(RPGLContext context, JsonArray originPoint) throws Exception {
-        CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
-        calculateProficiencyBonus.setSource(this);
-        calculateProficiencyBonus.prepare(context, originPoint);
-        calculateProficiencyBonus.setTarget(this);
-        calculateProficiencyBonus.invoke(context, originPoint);
-        return calculateProficiencyBonus.get();
+        return new CalculateProficiencyBonus()
+                .setSource(this)
+                .prepare(context, originPoint)
+                .setTarget(this)
+                .invoke(context, originPoint)
+                .get();
     }
 
     /**
@@ -620,15 +620,15 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public int getAbilityScoreFromAbilityName(String ability, RPGLContext context) throws Exception {
-        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
-        calculateAbilityScore.joinSubeventData(new JsonObject() {{
-            this.putString("ability", ability);
-        }});
-        calculateAbilityScore.setSource(this);
-        calculateAbilityScore.prepare(context, this.getPosition());
-        calculateAbilityScore.setTarget(this);
-        calculateAbilityScore.invoke(context, this.getPosition());
-        return calculateAbilityScore.get();
+        return new CalculateAbilityScore()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("ability", ability);
+                }})
+                .setSource(this)
+                .prepare(context, this.getPosition())
+                .setTarget(this)
+                .invoke(context, this.getPosition())
+                .get();
     }
 
     /**
@@ -708,10 +708,10 @@ public class RPGLObject extends RPGLTaggable {
         if (healthData.getInteger("temporary") < temporaryHitPointsDelivery.getTemporaryHitPoints()) {
             healthData.putInteger("temporary", temporaryHitPointsDelivery.getTemporaryHitPoints());
             for (int i = 0; i < riderEffects.size(); i++) {
-                RPGLEffect effect = RPGLFactory.newEffect(riderEffects.getString(i));
-                effect.setSource(temporaryHitPointsDelivery.getSource());
-                effect.setTarget(temporaryHitPointsDelivery.getTarget());
-                this.addEffect(effect);
+                this.addEffect(RPGLFactory.newEffect(riderEffects.getString(i))
+                        .setSource(temporaryHitPointsDelivery.getSource())
+                        .setTarget(temporaryHitPointsDelivery.getTarget())
+                );
             }
         }
     }
@@ -725,12 +725,12 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public int getMaximumHitPoints(RPGLContext context) throws Exception {
-        CalculateMaximumHitPoints calculateMaximumHitPoints = new CalculateMaximumHitPoints();
-        calculateMaximumHitPoints.setSource(this);
-        calculateMaximumHitPoints.prepare(context, this.getPosition());
-        calculateMaximumHitPoints.setTarget(this);
-        calculateMaximumHitPoints.invoke(context, this.getPosition());
-        return calculateMaximumHitPoints.get();
+        return new CalculateMaximumHitPoints()
+                .setSource(this)
+                .prepare(context, this.getPosition())
+                .setTarget(this)
+                .invoke(context, this.getPosition())
+                .get();
     }
 
     /**
@@ -780,22 +780,21 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public InfoSubevent invokeInfoSubevent(RPGLContext context, String... tags) throws Exception {
-        InfoSubevent infoSubevent = new InfoSubevent();
-        infoSubevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "tags": [ <tags> ]
-            }*/
-            JsonArray subeventTags = new JsonArray();
-            for (String tag : tags) {
-                subeventTags.addString(tag);
-            }
-            this.putJsonArray("tags", subeventTags);
-        }});
-        infoSubevent.setSource(this);
-        infoSubevent.prepare(context, this.getPosition());
-        infoSubevent.setTarget(this);
-        infoSubevent.invoke(context, this.getPosition());
-        return infoSubevent;
+        return new InfoSubevent()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "tags": [ <tags> ]
+                    }*/
+                    JsonArray subeventTags = new JsonArray();
+                    for (String tag : tags) {
+                        subeventTags.addString(tag);
+                    }
+                    this.putJsonArray("tags", subeventTags);
+                }})
+                .setSource(this)
+                .prepare(context, this.getPosition())
+                .setTarget(this)
+                .invoke(context, this.getPosition());
     }
 
     /**
@@ -807,12 +806,12 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs.
      */
     public int getBaseArmorClass(RPGLContext context) throws Exception {
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.setSource(this);
-        calculateBaseArmorClass.prepare(context, this.getPosition());
-        calculateBaseArmorClass.setTarget(this);
-        calculateBaseArmorClass.invoke(context, this.getPosition());
-        return calculateBaseArmorClass.get();
+        return new CalculateBaseArmorClass()
+                .setSource(this)
+                .prepare(context, this.getPosition())
+                .setTarget(this)
+                .invoke(context, this.getPosition())
+                .get();
     }
 
     /**
@@ -885,11 +884,11 @@ public class RPGLObject extends RPGLTaggable {
             tagsList.add(tags.getString(i));
         }
 
-        GetObjectTags getObjectTags = new GetObjectTags();
-        getObjectTags.setSource(this);
-        getObjectTags.prepare(context, originPoint);
-        getObjectTags.setTarget(this);
-        getObjectTags.invoke(context, originPoint);
+        GetObjectTags getObjectTags = new GetObjectTags()
+                .setSource(this)
+                .prepare(context, originPoint)
+                .setTarget(this)
+                .invoke(context, originPoint);
 
         tags = getObjectTags.getObjectTags();
         for (int i = 0; i < tags.size(); i++) {
@@ -1101,20 +1100,19 @@ public class RPGLObject extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     public int abilityCheck(String ability, String skill, RPGLContext context) throws Exception {
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.joinSubeventData(new JsonObject() {{
-            this.putString("ability", ability);
-            this.putString("skill", skill);
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(10);
-            }});
-        }});
-
-        abilityCheck.setSource(this);
-        abilityCheck.prepare(context, this.getPosition());
-        abilityCheck.setTarget(this);
-        abilityCheck.invoke(context, this.getPosition());
-        return abilityCheck.get();
+        return new AbilityCheck()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("ability", ability);
+                    this.putString("skill", skill);
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(10);
+                    }});
+                }})
+                .setSource(this)
+                .prepare(context, this.getPosition())
+                .setTarget(this)
+                .invoke(context, this.getPosition())
+                .get();
     }
 
     /**
@@ -1122,8 +1120,10 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param eventId an event ID
      */
-    public void giveEvent(String eventId) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject giveEvent(String eventId) {
         this.getEvents().addString(eventId);
+        return this;
     }
 
     /**
@@ -1133,6 +1133,23 @@ public class RPGLObject extends RPGLTaggable {
      */
     public void removeEvent(String eventId) {
         this.getEvents().asList().remove(eventId);
+    }
+
+    /**
+     * Returns the object's reach.
+     *
+     * @param context the context in which the object's reach is being calculated
+     * @return the object's reach
+     *
+     * @throws Exception if an exception occurs
+     */
+    public int getReach(RPGLContext context) throws Exception {
+        return new CalculateReach()
+                .setSource(this)
+                .prepare(context, this.getPosition())
+                .setTarget(this)
+                .invoke(context, this.getPosition())
+                .get();
     }
 
 }

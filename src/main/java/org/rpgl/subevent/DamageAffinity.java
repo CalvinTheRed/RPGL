@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -41,9 +42,40 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public DamageAffinity invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DamageAffinity) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public DamageAffinity joinSubeventData(JsonObject other) {
+        return (DamageAffinity) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DamageAffinity prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("affinities", new ArrayList<>());
+        return this;
+    }
+
+    @Override
+    public DamageAffinity run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public DamageAffinity setOriginItem(String originItem) {
+        return (DamageAffinity) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DamageAffinity setSource(RPGLObject source) {
+        return (DamageAffinity) super.setSource(source);
+    }
+
+    @Override
+    public DamageAffinity setTarget(RPGLObject target) {
+        return (DamageAffinity) super.setTarget(target);
     }
 
     @Override

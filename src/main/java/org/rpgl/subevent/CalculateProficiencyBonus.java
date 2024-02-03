@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -39,12 +40,44 @@ public class CalculateProficiencyBonus extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        super.setBase(Objects.requireNonNullElse(
-                getSource().getProficiencyBonus(),
-                getSource().getProficiencyBonusByLevel())
+    public CalculateProficiencyBonus invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CalculateProficiencyBonus) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CalculateProficiencyBonus joinSubeventData(JsonObject other) {
+        return (CalculateProficiencyBonus) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CalculateProficiencyBonus prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint).setBase(
+                Objects.requireNonNullElse(
+                    getSource().getProficiencyBonus(),
+                    getSource().getProficiencyBonusByLevel()
+                )
         );
+        return this;
+    }
+
+    @Override
+    public CalculateProficiencyBonus run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CalculateProficiencyBonus setOriginItem(String originItem) {
+        return (CalculateProficiencyBonus) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CalculateProficiencyBonus setSource(RPGLObject source) {
+        return (CalculateProficiencyBonus) super.setSource(source);
+    }
+
+    @Override
+    public CalculateProficiencyBonus setTarget(RPGLObject target) {
+        return (CalculateProficiencyBonus) super.setTarget(target);
     }
 
 }

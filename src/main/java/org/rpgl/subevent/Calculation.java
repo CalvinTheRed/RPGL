@@ -27,11 +27,12 @@ public abstract class Calculation extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public Calculation prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.prepareBase(context);
         this.prepareBonuses(context);
         this.prepareMinimum(context);
+        return this;
     }
 
     /**

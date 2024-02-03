@@ -3,6 +3,7 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -41,14 +42,25 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        this.json.putBoolean("canceled", false);
-        this.json.asMap().putIfAbsent("effect_bonuses", new ArrayList<>());
+    public GiveEffect invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (GiveEffect) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) {
+    public GiveEffect joinSubeventData(JsonObject other) {
+        return (GiveEffect) super.joinSubeventData(other);
+    }
+
+    @Override
+    public GiveEffect prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.putBoolean("canceled", false);
+        this.json.asMap().putIfAbsent("effect_bonuses", new ArrayList<>());
+        return this;
+    }
+
+    @Override
+    public GiveEffect run(RPGLContext context, JsonArray originPoint) {
         if (this.isNotCanceled()) {
             RPGLEffect effect = RPGLFactory
                     .newEffect(this.json.getString("effect"), this.json.getJsonArray("effect_bonuses"))
@@ -59,6 +71,22 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
             effect.addTag("temporary");
             super.getTarget().addEffect(effect);
         }
+        return this;
+    }
+
+    @Override
+    public GiveEffect setOriginItem(String originItem) {
+        return (GiveEffect) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public GiveEffect setSource(RPGLObject source) {
+        return (GiveEffect) super.setSource(source);
+    }
+
+    @Override
+    public GiveEffect setTarget(RPGLObject target) {
+        return (GiveEffect) super.setTarget(target);
     }
 
     @Override

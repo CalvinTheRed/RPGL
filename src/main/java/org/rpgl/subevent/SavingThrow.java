@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.function.AddBonus;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -42,16 +43,7 @@ public class SavingThrow extends Roll {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        this.json.asMap().putIfAbsent("damage", new ArrayList<>());
-        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context, originPoint);
-        this.getBaseDamage(context, originPoint);
-    }
-
-    @Override
-    public void invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+    public SavingThrow invoke(RPGLContext context, JsonArray originPoint) throws Exception {
         this.verifySubevent(this.subeventId);
 
         // Override invoke() code to insert additional post-preparatory logic
@@ -85,10 +77,26 @@ public class SavingThrow extends Roll {
         context.processSubevent(this, context, originPoint);
         this.run(context, originPoint);
         context.viewCompletedSubevent(this);
+        return this;
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public SavingThrow joinSubeventData(JsonObject other) {
+        return (SavingThrow) super.joinSubeventData(other);
+    }
+
+    @Override
+    public SavingThrow prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
+        this.calculateDifficultyClass(context, originPoint);
+        this.getBaseDamage(context, originPoint);
+        return this;
+    }
+
+    @Override
+    public SavingThrow run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             if (super.get() < this.getDifficultyClass()) {
@@ -101,6 +109,22 @@ public class SavingThrow extends Roll {
                 this.resolveNestedSubevents("pass", context, originPoint);
             }
         }
+        return this;
+    }
+
+    @Override
+    public SavingThrow setOriginItem(String originItem) {
+        return (SavingThrow) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public SavingThrow setSource(RPGLObject source) {
+        return (SavingThrow) super.setSource(source);
+    }
+
+    @Override
+    public SavingThrow setTarget(RPGLObject target) {
+        return (SavingThrow) super.setTarget(target);
     }
 
     @Override

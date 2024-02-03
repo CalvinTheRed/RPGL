@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -40,9 +41,40 @@ public class CriticalHitDamageCollection extends Subevent implements DamageTypeS
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public CriticalHitDamageCollection invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CriticalHitDamageCollection) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CriticalHitDamageCollection joinSubeventData(JsonObject other) {
+        return (CriticalHitDamageCollection) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CriticalHitDamageCollection prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
+        return this;
+    }
+
+    @Override
+    public CriticalHitDamageCollection run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CriticalHitDamageCollection setOriginItem(String originItem) {
+        return (CriticalHitDamageCollection) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CriticalHitDamageCollection setSource(RPGLObject source) {
+        return (CriticalHitDamageCollection) super.setSource(source);
+    }
+
+    @Override
+    public CriticalHitDamageCollection setTarget(RPGLObject target) {
+        return (CriticalHitDamageCollection) super.setTarget(target);
     }
 
     @Override

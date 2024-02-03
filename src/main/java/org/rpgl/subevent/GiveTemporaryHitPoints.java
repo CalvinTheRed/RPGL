@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -38,20 +39,47 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public GiveTemporaryHitPoints invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (GiveTemporaryHitPoints) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public GiveTemporaryHitPoints joinSubeventData(JsonObject other) {
+        return (GiveTemporaryHitPoints) super.joinSubeventData(other);
+    }
+
+    @Override
+    public GiveTemporaryHitPoints prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.putBoolean("canceled", false);
         this.json.asMap().putIfAbsent("temporary_hit_points", new ArrayList<>());
         this.json.asMap().putIfAbsent("rider_effects", new ArrayList<>());
         this.getBaseTemporaryHitPoints(context, originPoint);
+        return this;
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public GiveTemporaryHitPoints run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
             this.getTargetTemporaryHitPoints(context, originPoint);
             this.deliverTemporaryHitPoints(context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public GiveTemporaryHitPoints setOriginItem(String originItem) {
+        return (GiveTemporaryHitPoints) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public GiveTemporaryHitPoints setSource(RPGLObject source) {
+        return (GiveTemporaryHitPoints) super.setSource(source);
+    }
+
+    @Override
+    public GiveTemporaryHitPoints setTarget(RPGLObject target) {
+        return (GiveTemporaryHitPoints) super.setTarget(target);
     }
 
     @Override

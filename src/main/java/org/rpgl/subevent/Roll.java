@@ -22,11 +22,12 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+    public Roll prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.putBoolean("canceled", false);
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
+        return this;
     }
 
     @Override

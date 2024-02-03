@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
@@ -40,13 +41,24 @@ public class GiveResource extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
-        super.prepare(context, originPoint);
-        this.json.asMap().putIfAbsent("count", 1);
+    public GiveResource invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (GiveResource) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
+    public GiveResource joinSubeventData(JsonObject other) {
+        return (GiveResource) super.joinSubeventData(other);
+    }
+
+    @Override
+    public GiveResource prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.asMap().putIfAbsent("count", 1);
+        return this;
+    }
+
+    @Override
+    public GiveResource run(RPGLContext context, JsonArray originPoint) throws Exception {
         int count = this.json.getInteger("count");
         String resourceId = this.json.getString("resource");
         Integer potency = this.json.getInteger("potency");
@@ -59,6 +71,22 @@ public class GiveResource extends Subevent {
             }
             super.getTarget().addResource(resource);
         }
+        return this;
+    }
+
+    @Override
+    public GiveResource setOriginItem(String originItem) {
+        return (GiveResource) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public GiveResource setSource(RPGLObject source) {
+        return (GiveResource) super.setSource(source);
+    }
+
+    @Override
+    public GiveResource setTarget(RPGLObject target) {
+        return (GiveResource) super.setTarget(target);
     }
 
 }
