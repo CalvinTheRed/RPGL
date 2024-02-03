@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Calvin Withun
  */
 public class AbilityCheckTest {
+
     @BeforeAll
     static void beforeAll() {
         DatapackLoader.loadDatapacks(
