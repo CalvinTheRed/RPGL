@@ -37,9 +37,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Setter for subevent filters.
      *
      * @param subeventFilters a new subevent filters JsonObject
+     * @return this RPGLEffect
      */
-    public void setSubeventFilters(JsonObject subeventFilters) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setSubeventFilters(JsonObject subeventFilters) {
         super.putJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS, subeventFilters);
+        return this;
     }
 
     /**
@@ -55,9 +58,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Sets the source of the RPGLEffect.
      *
      * @param source a RPGLObject
+     * @return this RPGLEffect
      */
-    public void setSource(RPGLObject source) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setSource(RPGLObject source) {
         super.putString(RPGLEffectTO.SOURCE_ALIAS, source.getUuid());
+        return this;
     }
 
     /**
@@ -73,9 +79,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Sets the target of the RPGLEffect.
      *
      * @param target a RPGLObject
+     * @return this RPGLEffect
      */
-    public void setTarget(RPGLObject target) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setTarget(RPGLObject target) {
         super.putString(RPGLEffectTO.TARGET_ALIAS, target.getUuid());
+        return this;
     }
 
     /**
@@ -91,9 +100,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Sets the origin item UUID of the RPGLEffect.
      *
      * @param originItem a RPGLItem UUID
+     * @return this RPGLEffect
      */
-    public void setOriginItem(String originItem) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setOriginItem(String originItem) {
         super.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
+        return this;
     }
 
     // =================================================================================================================

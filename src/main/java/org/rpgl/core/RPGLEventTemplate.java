@@ -12,41 +12,34 @@ import java.util.ArrayList;
  *
  * @author Calvin Withun
  */
-public class RPGLEventTemplate extends JsonObject {
+public class RPGLEventTemplate extends RPGLTemplate {
 
-    /**
-     * Constructs a new RPGLEvent object corresponding to the contents of the RPGLEventTemplate object. The new object
-     * is registered to the UUIDTable class when it is constructed.
-     *
-     * @param originItem an item UUID to be stored for the new event's origin item
-     * @return a new RPGLEvent object
-     */
-    public RPGLEvent newInstance(String originItem) {
+    public RPGLEventTemplate() {
+        super();
+    }
+
+    public RPGLEventTemplate(JsonObject other) {
+        this();
+        this.join(other);
+    }
+
+    @Override
+    public RPGLEvent newInstance() {
         RPGLEvent event = new RPGLEvent();
         this.setup(event);
-        event.setOriginItem(originItem);
         processCost(event);
         return event;
     }
 
-    /**
-     * This helper method sets default values for a new RPGLEvent if they are not defined in the template.
-     *
-     * @param event an RPGLEvent
-     */
-    void setup(RPGLEvent event) {
-        event.join(this);
+    @Override
+    public void setup(JsonObject event) {
+        super.setup(event);
         event.asMap().putIfAbsent(RPGLEventTO.COST_ALIAS, new ArrayList<>());
     }
 
-    /**
-     * Constructs a new RPGLEvent object corresponding to the contents of the RPGLEventTemplate object. The new object
-     * is registered to the UUIDTable class when it is constructed.
-     *
-     * @return a new RPGLEvent object
-     */
-    public RPGLEvent newInstance() {
-        return this.newInstance(null);
+    @Override
+    public RPGLEventTemplate applyBonuses(JsonArray bonuses) {
+        return new RPGLEventTemplate(super.applyBonuses(bonuses));
     }
 
     /**

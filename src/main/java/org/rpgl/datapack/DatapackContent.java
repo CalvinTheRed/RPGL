@@ -82,4 +82,22 @@ public class DatapackContent extends JsonObject {
         super.putString(DatapackContentTO.ID_ALIAS, id);
     }
 
+    /**
+     * Returns the texture of the DatapackContent.
+     *
+     * @return the texture of the DatapackContent
+     */
+    public String getTexture() {
+        return super.getString(DatapackContentTO.TEXTURE_ALIAS);
+    }
+
+    /**
+     * Setter for texture.
+     *
+     * @param texture a new texture
+     */
+    public void setTexture(String texture) {
+        super.putString(DatapackContentTO.TEXTURE_ALIAS, texture);
+    }
+
 }

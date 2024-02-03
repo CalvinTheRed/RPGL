@@ -18,6 +18,7 @@ public class DatapackContentTO {
     public static final String NAME_ALIAS = "name";
     public static final String DESCRIPTION_ALIAS = "description";
     public static final String ID_ALIAS = "id";
+    public static final String TEXTURE_ALIAS = "texture";
 
     @JsonProperty(METADATA_ALIAS)
     HashMap<String, Object> metadata;
@@ -27,6 +28,8 @@ public class DatapackContentTO {
     String description;
     @JsonProperty(ID_ALIAS)
     String id;
+    @JsonProperty(TEXTURE_ALIAS)
+    String texture;
 
     /**
      * Default constructor for DatapackContentTO class.
@@ -45,6 +48,7 @@ public class DatapackContentTO {
         this.name = datapackContent.getName();
         this.description = datapackContent.getDescription();
         this.id = datapackContent.getId();
+        this.texture = datapackContent.getTexture();
     }
 
     /**
@@ -59,6 +63,7 @@ public class DatapackContentTO {
             this.putString(NAME_ALIAS, name);
             this.putString(DESCRIPTION_ALIAS, description);
             this.putString(ID_ALIAS, id);
+            this.putString(TEXTURE_ALIAS, texture);
         }};
     }
 

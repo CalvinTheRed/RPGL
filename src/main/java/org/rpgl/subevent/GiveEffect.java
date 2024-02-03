@@ -49,14 +49,12 @@ public class GiveEffect extends Subevent implements CancelableSubevent {
     @Override
     public void run(RPGLContext context) {
         if (this.isNotCanceled()) {
-            RPGLEffect effect = RPGLFactory.newEffect(
-                    this.json.getString("effect"),
-                    super.getOriginItem(),
-                    this.json.getJsonArray("effect_bonuses")
-            );
-            effect.setSource(super.getSource());
-            effect.setTarget(super.getTarget());
-            effect.setOriginItem(super.getOriginItem());
+            RPGLEffect effect = RPGLFactory
+                    .newEffect(this.json.getString("effect"), this.json.getJsonArray("effect_bonuses"))
+                    .setOriginItem(super.getOriginItem())
+                    .setSource(super.getSource())
+                    .setTarget(super.getTarget())
+                    .setOriginItem(super.getOriginItem());
             effect.addTag("temporary");
             super.getTarget().addEffect(effect);
         }

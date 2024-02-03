@@ -44,9 +44,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for ability scores.
      *
      * @param abilityScores a new ability scores JsonObject
+     * @return this RPGLObject
      */
-    public void setAbilityScores(JsonObject abilityScores) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setAbilityScores(JsonObject abilityScores) {
         super.putJsonObject(RPGLObjectTO.ABILITY_SCORES_ALIAS, abilityScores);
+        return this;
     }
 
     /**
@@ -63,9 +66,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for health data.
      *
      * @param healthData a new health data JsonObject
+     * @return this RPGLObject
      */
-    public void setHealthData(JsonObject healthData) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setHealthData(JsonObject healthData) {
         super.putJsonObject(RPGLObjectTO.HEALTH_DATA_ALIAS, healthData);
+        return this;
     }
 
     /**
@@ -81,9 +87,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for equipped items.
      *
      * @param equippedItems a new equipped items JsonObject
+     * @return this RPGLObject
      */
-    public void setEquippedItems(JsonObject equippedItems) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setEquippedItems(JsonObject equippedItems) {
         super.putJsonObject(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, equippedItems);
+        return this;
     }
 
     /**
@@ -99,9 +108,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for inventory.
      *
      * @param inventory a new inventory JsonArray
+     * @return this RPGLObject
      */
-    public void setInventory(JsonArray inventory) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setInventory(JsonArray inventory) {
         super.putJsonArray(RPGLObjectTO.INVENTORY_ALIAS, inventory);
+        return this;
     }
 
     /**
@@ -117,9 +129,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for events.
      *
      * @param events a new events JsonArray
+     * @return this RPGLObject
      */
-    public void setEvents(JsonArray events) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setEvents(JsonArray events) {
         super.putJsonArray(RPGLObjectTO.EVENTS_ALIAS, events);
+        return this;
     }
 
     /**
@@ -135,9 +150,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for effects.
      *
      * @param effects a new effects JsonArray
+     * @return this RPGLObject
      */
-    public void setEffects(JsonArray effects) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setEffects(JsonArray effects) {
         super.putJsonArray(RPGLObjectTO.EFFECTS_ALIAS, effects);
+        return this;
     }
 
     /**
@@ -153,9 +171,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for proficiency bonus.
      *
      * @param proficiencyBonus a new proficiency bonus int
+     * @return this RPGLObject
      */
-    public void setProficiencyBonus(int proficiencyBonus) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setProficiencyBonus(int proficiencyBonus) {
         super.putInteger(RPGLObjectTO.PROFICIENCY_BONUS_ALIAS, proficiencyBonus);
+        return this;
     }
 
     /**
@@ -171,9 +192,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for resources.
      *
      * @param resources a new resources UUID array
+     * @return this RPGLObject
      */
-    public void setResources(JsonArray resources) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setResources(JsonArray resources) {
         super.putJsonArray(RPGLObjectTO.RESOURCES_ALIAS, resources);
+        return this;
     }
 
     /**
@@ -189,9 +213,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for classes.
      *
      * @param classes a new array of class and level data
+     * @return this RPGLObject
      */
-    public void setClasses(JsonArray classes) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setClasses(JsonArray classes) {
         super.putJsonArray(RPGLObjectTO.CLASSES_ALIAS, classes);
+        return this;
     }
 
     /**
@@ -207,9 +234,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for races.
      *
      * @param races a new array of race IDs
+     * @return this RPGLObject
      */
-    public void setRaces(JsonArray races) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setRaces(JsonArray races) {
         super.putJsonArray(RPGLObjectTO.RACES_ALIAS, races);
+        return this;
     }
 
     /**
@@ -225,9 +255,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for challenge rating.
      *
      * @param challengeRating a new challenge rating
+     * @return this RPGLObject
      */
-    public void setChallengeRating(double challengeRating) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setChallengeRating(double challengeRating) {
         super.putDouble(RPGLObjectTO.CHALLENGE_RATING_ALIAS, challengeRating);
+        return this;
     }
 
     /**
@@ -243,9 +276,12 @@ public class RPGLObject extends RPGLTaggable {
      * Setter for the user id.
      *
      * @param userId a new user id (this is the user id for the new user which will control this object)
+     * @return this RPGLObject
      */
-    public void setUserId(String userId) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setUserId(String userId) {
         super.putString(RPGLObjectTO.USER_ID, userId);
+        return this;
     }
 
     /**
@@ -262,8 +298,10 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param originObject a new origin object id
      */
-    public void setOriginObject(String originObject) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setOriginObject(String originObject) {
         super.putString(RPGLObjectTO.ORIGIN_OBJECT_ALIAS, originObject);
+        return this;
     }
 
     /**
@@ -280,8 +318,50 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param proxy a new proxy value
      */
-    public void setProxy(Boolean proxy) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setProxy(Boolean proxy) {
         super.putBoolean(RPGLObjectTO.PROXY_ALIAS, proxy);
+        return this;
+    }
+
+    /**
+     * Getter for position.
+     *
+     * @return the object's position array
+     */
+    public JsonArray getPosition() {
+        return super.getJsonArray(RPGLObjectTO.POSITION_ALIAS);
+    }
+
+    /**
+     * Setter for position.
+     *
+     * @param position a new position array
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setPosition(JsonArray position) {
+        super.putJsonArray(RPGLObjectTO.POSITION_ALIAS, position);
+        return this;
+    }
+
+    /**
+     * Getter for rotation.
+     *
+     * @return the object's rotation array
+     */
+    public JsonArray getRotation() {
+        return super.getJsonArray(RPGLObjectTO.ROTATION_ALIAS);
+    }
+
+    /**
+     * Setter for rotation.
+     *
+     * @param rotation a new rotation array
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject setRotation(JsonArray rotation) {
+        super.putJsonArray(RPGLObjectTO.ROTATION_ALIAS, rotation);
+        return this;
     }
 
     // =================================================================================================================

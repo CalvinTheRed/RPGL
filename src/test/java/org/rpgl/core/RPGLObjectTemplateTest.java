@@ -12,7 +12,6 @@ import org.rpgl.datapack.RPGLTaggableTO;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
-import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -303,7 +302,7 @@ public class RPGLObjectTemplateTest {
     @DisplayName("creates new objects (knight)")
     void createsNewObjects_knight() {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("humanoid/knight");
-        RPGLObject object = objectTemplate.newInstance(TestUtils.TEST_USER);
+        RPGLObject object = objectTemplate.newInstance();
         String expected;
 
         expected = """
@@ -360,16 +359,13 @@ public class RPGLObjectTemplateTest {
         assertEquals(2, object.getProficiencyBonus(),
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
         );
-        assertEquals(TestUtils.TEST_USER, object.getUserId(),
-                "incorrect field value: " + RPGLObjectTO.USER_ID
-        );
     }
 
     @Test
     @DisplayName("creates new objects (young red dragon)")
     void createsNewObjects_youngRedDragon() throws Exception {
         RPGLObjectTemplate objectTemplate = DatapackLoader.DATAPACKS.get("std").getObjectTemplate("dragon/red/young");
-        RPGLObject object = objectTemplate.newInstance(TestUtils.TEST_USER);
+        RPGLObject object = objectTemplate.newInstance();
         String expected;
 
         expected = """
@@ -418,9 +414,6 @@ public class RPGLObjectTemplateTest {
         }
         assertEquals(4, object.getProficiencyBonus(),
                 "incorrect field value: " + RPGLObjectTO.PROFICIENCY_BONUS_ALIAS
-        );
-        assertEquals(TestUtils.TEST_USER, object.getUserId(),
-                "incorrect field value: " + RPGLObjectTO.USER_ID
         );
     }
 

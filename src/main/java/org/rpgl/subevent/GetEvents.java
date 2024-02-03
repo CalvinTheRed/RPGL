@@ -62,7 +62,8 @@ public class GetEvents extends Subevent {
      *                   null otherwise
      */
     public void addEvent(String eventId, String originItem, String sourceUuid) {
-        this.json.getJsonArray("events").addJsonObject(RPGLFactory.newEvent(eventId, originItem, sourceUuid));
+        this.json.getJsonArray("events").addJsonObject(RPGLFactory
+                .newEvent(eventId).setOriginItem(originItem).setSource(sourceUuid));
     }
 
     /**

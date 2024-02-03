@@ -31,9 +31,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for weight.
      *
      * @param weight a new weight int
+     * @return this RPGLItem
      */
-    public void setWeight(Integer weight) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setWeight(Integer weight) {
         super.putInteger(RPGLItemTO.WEIGHT_ALIAS, weight);
+        return this;
     }
 
     /**
@@ -49,9 +52,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for cost.
      *
      * @param cost a new cost int
+     * @return this RPGLItem
      */
-    public void setCost(Integer cost) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setCost(Integer cost) {
         super.putInteger(RPGLItemTO.COST_ALIAS, cost);
+        return this;
     }
 
     /**
@@ -67,9 +73,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for events.
      *
      * @param events a new events JsonObject
+     * @return this RPGLItem
      */
-    public void setEvents(JsonObject events) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setEvents(JsonObject events) {
         super.putJsonObject(RPGLItemTO.EVENTS_ALIAS, events);
+        return this;
     }
 
     /**
@@ -86,9 +95,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for attack bonus.
      *
      * @param attackBonus a new attack bonus int
+     * @return this RPGLItem
      */
-    public void setAttackBonus(Integer attackBonus) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setAttackBonus(Integer attackBonus) {
         super.putInteger(RPGLItemTO.ATTACK_BONUS_ALIAS, attackBonus);
+        return this;
     }
 
     /**
@@ -106,9 +118,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for damage bonus.
      *
      * @param damageBonus a new attack bonus int
+     * @return this RPGLItem
      */
-    public void setDamageBonus(Integer damageBonus) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setDamageBonus(Integer damageBonus) {
         super.putInteger(RPGLItemTO.DAMAGE_BONUS_ALIAS, damageBonus);
+        return this;
     }
 
     /**
@@ -124,9 +139,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for the item's equipped effects.
      *
      * @param equippedEffects a new list of effect UUIDs
+     * @return this RPGLItem
      */
-    public void setEquippedEffects(JsonArray equippedEffects) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setEquippedEffects(JsonArray equippedEffects) {
         super.putJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, equippedEffects);
+        return this;
     }
 
     /**
@@ -142,9 +160,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for this item's resources.
      *
      * @param equippedResources a new list of resource UUIDs
+     * @return this RPGLItem
      */
-    public void setEquippedResources(JsonArray equippedResources) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setEquippedResources(JsonArray equippedResources) {
         super.putJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, equippedResources);
+        return this;
     }
 
     /**
@@ -160,9 +181,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for armor class base.
      *
      * @param armorClassBase a new armor class base int
+     * @return this RPGLItem
      */
-    public void setArmorClassBase(Integer armorClassBase) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setArmorClassBase(Integer armorClassBase) {
         super.putInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS, armorClassBase);
+        return this;
     }
 
     /**
@@ -179,9 +203,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for armor class dex limit.
      *
      * @param armorClassDexLimit a new armor class dex limit int
+     * @return this RPGLItem
      */
-    public void setArmorClassDexLimit(Integer armorClassDexLimit) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setArmorClassDexLimit(Integer armorClassDexLimit) {
         super.putInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
+        return this;
     }
 
     /**
@@ -197,9 +224,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for armor class bonus.
      *
      * @param armorClassBonus a new armor class bonus int
+     * @return this RPGLItem
      */
-    public void setArmorClassBonus(Integer armorClassBonus) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setArmorClassBonus(Integer armorClassBonus) {
         super.putInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
+        return this;
     }
 
     // =================================================================================================================

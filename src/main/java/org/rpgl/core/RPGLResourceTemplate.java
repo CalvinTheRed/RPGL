@@ -12,7 +12,7 @@ import org.rpgl.uuidtable.UUIDTable;
  *
  * @author Calvin Withun
  */
-public class RPGLResourceTemplate extends JsonObject {
+public class RPGLResourceTemplate extends RPGLTemplate {
 
     private static final JsonObject DEFAULT_REQUIRED_GENERATOR = new JsonObject() {{
         this.putJsonArray("dice", new JsonArray());
@@ -28,46 +28,39 @@ public class RPGLResourceTemplate extends JsonObject {
        }});
     }};
 
-    /**
-     * Constructs a new RPGLResource object corresponding to the contents of the RPGLResourceTemplate object. The new
-     * object is registered to the UUIDTable class when it is constructed.
-     *
-     * @param originItem an item UUID to be stored for the new resource's origin item
-     * @return a new RPGLResource object
-     */
-    public RPGLResource newInstance(String originItem) {
+    public RPGLResourceTemplate() {
+        super();
+    }
+
+    public RPGLResourceTemplate(JsonObject other) {
+        this();
+        this.join(other);
+    }
+
+    @Override
+    public RPGLResource newInstance() {
         RPGLResource resource = new RPGLResource();
         this.setup(resource);
-        resource.setOriginItem(originItem);
         UUIDTable.register(resource);
         processRefreshCriterion(resource);
         processRefreshCriterionGenerators(resource);
         return resource;
     }
 
-    /**
-     * This helper method sets default values for a new RPGLResource if they are not defined in the template.
-     *
-     * @param resource an RPGLResource
-     */
-    void setup(RPGLResource resource) {
-        resource.join(this);
+    @Override
+    public void setup(JsonObject resource) {
+        super.setup(resource);
         resource.asMap().putIfAbsent(RPGLResourceTO.POTENCY_ALIAS, 1);
         resource.asMap().putIfAbsent(RPGLResourceTO.EXHAUSTED_ALIAS, false);
         resource.asMap().putIfAbsent(RPGLResourceTO.REFRESH_CRITERION_ALIAS, DEFAULT_REFRESH_CRITERION.deepClone().asList());
-        if (resource.getRefreshCriterion().asList().isEmpty()) {
-            resource.setRefreshCriterion(DEFAULT_REFRESH_CRITERION.deepClone());
+        if (resource.getJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS).asList().isEmpty()) {
+            resource.putJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS, DEFAULT_REFRESH_CRITERION.deepClone());
         }
     }
 
-    /**
-     * Constructs a new RPGLResource object corresponding to the contents of the RPGLResourceTemplate object. The new
-     * object is registered to the UUIDTable class when it is constructed.
-     *
-     * @return a new RPGLResource object
-     */
-    public RPGLResource newInstance() {
-        return this.newInstance(null);
+    @Override
+    public RPGLResourceTemplate applyBonuses(JsonArray bonuses) {
+        return new RPGLResourceTemplate(super.applyBonuses(bonuses));
     }
 
     /**

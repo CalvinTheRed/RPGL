@@ -82,13 +82,12 @@ public class RPGLFactoryTest {
     void createsNewEffectWithBonus() {
         RPGLEffect effect = RPGLFactory.newEffect(
             "std:spell/wrathful_smite/passive",
-            null,
-            new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("field", "subevent_filters.damage_collection[0].functions[1].damage[0].dice[0].count");
-                    this.putInteger("bonus", 2);
-                }});
-            }}
+                new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("field", "subevent_filters.damage_collection[0].functions[1].damage[0].dice[0].count");
+                        this.putInteger("bonus", 2);
+                    }});
+                }}
         );
         assertEquals(3, effect.seekInteger("subevent_filters.damage_collection[0].functions[1].damage[0].dice[0].count"),
                 "effect should have a bonus applied to the target field"

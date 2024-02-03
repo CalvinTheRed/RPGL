@@ -16,16 +16,19 @@ import java.util.Objects;
  *
  * @author Calvin Withun
  */
-public class RPGLObjectTemplate extends JsonObject {
+public class RPGLObjectTemplate extends RPGLTemplate {
 
-    /**
-     * Constructs a new RPGLObject object corresponding to the contents of the RPGLObjectTemplate object. The new
-     * object is registered to the UUIDTable class when it is constructed.
-     *
-     * @param userId the ID for the user controlling the new object
-     * @return a new RPGLObject object
-     */
-    public RPGLObject newInstance(String userId) {
+    public RPGLObjectTemplate() {
+        super();
+    }
+
+    public RPGLObjectTemplate(JsonObject other) {
+        this();
+        this.join(other);
+    }
+
+    @Override
+    public RPGLObject newInstance() {
         RPGLObject object = new RPGLObject();
         this.setup(object);
         UUIDTable.register(object);
@@ -34,17 +37,12 @@ public class RPGLObjectTemplate extends JsonObject {
         processEquippedItems(object);
         processResources(object);
         processClasses(object);
-        object.setUserId(userId);
         return object;
     }
 
-    /**
-     * This helper method sets default values for a new RPGLObject if they are not defined in the template.
-     *
-     * @param object an RPGLObject
-     */
-    void setup(RPGLObject object) {
-        object.join(this);
+    @Override
+    public void setup(JsonObject object) {
+        super.setup(object);
         object.asMap().putIfAbsent(RPGLObjectTO.EFFECTS_ALIAS, new ArrayList<>());
         object.asMap().putIfAbsent(RPGLObjectTO.INVENTORY_ALIAS, new ArrayList<>());
         object.asMap().putIfAbsent(RPGLObjectTO.EQUIPPED_ITEMS_ALIAS, new HashMap<String, Object>());
@@ -54,6 +52,11 @@ public class RPGLObjectTemplate extends JsonObject {
         object.asMap().putIfAbsent(RPGLObjectTO.RACES_ALIAS, new ArrayList<>());
         object.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0.0);
         object.asMap().putIfAbsent(RPGLObjectTO.PROXY_ALIAS, false);
+    }
+
+    @Override
+    public RPGLObjectTemplate applyBonuses(JsonArray bonuses) {
+        return new RPGLObjectTemplate(super.applyBonuses(bonuses));
     }
 
     /**
@@ -69,9 +72,9 @@ public class RPGLObjectTemplate extends JsonObject {
             String effectId = effectIdArray.getString(i);
             RPGLEffect effect = RPGLFactory.newEffect(effectId);
             if (effect != null) {
-                effect.setSource(object);
-                effect.setTarget(object);
-                effectUuidArray.addString(effect.getUuid());
+                effectUuidArray.addString(
+                        effect.setSource(object).setTarget(object).getUuid()
+                );
             }
         }
         object.setEffects(effectUuidArray);
