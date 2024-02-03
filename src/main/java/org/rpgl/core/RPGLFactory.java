@@ -107,16 +107,26 @@ public final class RPGLFactory {
      *
      * @param objectId an object ID <code>(namespace:name)</code>
      * @param userId the id for the user controlling the new object
+     * @param position the object's position array
+     * @param rotation the object's rotation array
      * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLObject object
      */
-    public static RPGLObject newObject(String objectId, String userId, JsonArray bonuses) {
+    public static RPGLObject newObject(
+            String objectId,
+            String userId,
+            JsonArray position,
+            JsonArray rotation,
+            JsonArray bonuses
+    ) {
         String[] objectIdSplit = objectId.split(":");
         try {
             return DatapackLoader.DATAPACKS.get(objectIdSplit[0]).getObjectTemplate(objectIdSplit[1])
                     .applyBonuses(bonuses)
                     .newInstance()
-                    .setUserId(userId);
+                    .setUserId(userId)
+                    .setPosition(position)
+                    .setRotation(rotation);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLObject: " + objectId);
             throw new RuntimeException("Encountered an error building a new RPGLObject", e);
@@ -128,10 +138,34 @@ public final class RPGLFactory {
      *
      * @param objectId an object ID <code>(namespace:name)</code>
      * @param userId the id for the user controlling the new object
+     * @param position the object's position array
+     * @param rotation the object's rotation array
+     * @return a new RPGLObject object
+     */
+    public static RPGLObject newObject(String objectId, String userId, JsonArray position, JsonArray rotation) {
+        return newObject(objectId, userId, position, rotation, new JsonArray());
+    }
+
+    /**
+     * This method creates a new RPGLObject instance.
+     * <br />
+     * NOTE: this override of newObject should only be used while testing, as it always places the object at <code>
+     * [ 0.0, 0.0, 0.0 ]</code>
+     *
+     * @param objectId an object ID <code>(namespace:name)</code>
+     * @param userId the id for the user controlling the new object
      * @return a new RPGLObject object
      */
     public static RPGLObject newObject(String objectId, String userId) {
-        return newObject(objectId, userId, new JsonArray());
+        return newObject(objectId, userId, new JsonArray() {{
+            this.addDouble(0.0);
+            this.addDouble(0.0);
+            this.addDouble(0.0);
+        }}, new JsonArray() {{
+            this.addDouble(0.0);
+            this.addDouble(0.0);
+            this.addDouble(0.0);
+        }});
     }
 
     /**

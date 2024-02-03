@@ -61,6 +61,8 @@ public class SpawnObject extends Subevent {
                     this.putString("from", "subevent");
                     this.putString("object", json.getString("controlled_by"));
                 }}).getUserId(),
+                new JsonArray(), // position
+                new JsonArray(), // rotation
                 this.json.getJsonArray("object_bonuses")
         );
 
