@@ -14,6 +14,7 @@ import org.rpgl.subevent.GetEvents;
 import org.rpgl.subevent.GetObjectTags;
 import org.rpgl.subevent.HealingDelivery;
 import org.rpgl.subevent.InfoSubevent;
+import org.rpgl.subevent.Movement;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.subevent.TemporaryHitPointsDelivery;
 import org.rpgl.uuidtable.UUIDTable;
@@ -1158,6 +1159,23 @@ public class RPGLObject extends RPGLTaggable {
                 .setTarget(this)
                 .invoke(context, this.getPosition())
                 .get();
+    }
+
+    /**
+     * Moves the RPGLObject to the passed destination. Note that this method moves the object in one step, so effects
+     * which pertain to location and movement may not respond as expected if this method is used to traverse a great
+     * distance.
+     *
+     * @param context the context in which the RPGLObject is moving
+     * @param destination the destination of the motion
+     * @return this RPGLObject
+     *
+     * @throws Exception if an exception occurs
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLObject move(RPGLContext context, JsonArray destination) throws Exception {
+        new Movement().setSource(this).prepare(context, destination).setTarget(this).invoke(context, destination);
+        return this;
     }
 
 }

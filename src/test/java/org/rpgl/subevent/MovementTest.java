@@ -10,7 +10,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
-import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.testUtils.TestUtils;
@@ -27,12 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author Calvin Withun
  */
 public class MovementTest {
-
-    private static final JsonArray DESTINATION_ARRAY = new JsonArray() {{
-        this.addDouble(10.0);
-        this.addDouble(10.0);
-        this.addDouble(10.0);
-    }};
 
     @BeforeAll
     static void beforeAll() {
@@ -78,9 +71,9 @@ public class MovementTest {
 
         new Movement()
                 .setSource(object)
-                .prepare(new DummyContext(), DESTINATION_ARRAY)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(object)
-                .invoke(new DummyContext(), DESTINATION_ARRAY);
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_10_10_10);
 
         String expected = """
                 [10.0,10.0,10.0]""";

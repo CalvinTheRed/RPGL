@@ -1021,4 +1021,17 @@ public class RPGLObjectTest {
         );
     }
 
+    @Test
+    @DisplayName("moves")
+    void moves() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER,
+                TestUtils.TEST_ARRAY_0_0_0, TestUtils.TEST_ARRAY_0_0_0);
+
+        String expected = """
+                [10.0,10.0,10.0]""";
+        assertEquals(expected, object.move(new DummyContext(), TestUtils.TEST_ARRAY_10_10_10).getPosition().toString(),
+                "object should arrive at its destination"
+        );
+    }
+
 }

@@ -25,6 +25,12 @@ public final class TestUtils {
         this.addDouble(0.0);
     }};
 
+    public static final JsonArray TEST_ARRAY_10_10_10 = new JsonArray() {{
+        this.addDouble(10.0);
+        this.addDouble(10.0);
+        this.addDouble(10.0);
+    }};
+
     /**
      * Returns an effect by ID from a list (first match)
      *

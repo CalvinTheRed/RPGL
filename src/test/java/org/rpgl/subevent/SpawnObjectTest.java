@@ -33,12 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class SpawnObjectTest {
 
-    private final JsonArray SPAWN_ORIGIN_POINT = new JsonArray() {{
-        this.addDouble(10.0);
-        this.addDouble(10.0);
-        this.addDouble(10.0);
-    }};
-
     @BeforeAll
     static void beforeAll() {
         DatapackLoader.loadDatapacks(
@@ -84,9 +78,9 @@ public class SpawnObjectTest {
                     this.putString("object_id", "debug:dummy");
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(1, context.getContextObjects().size(),
                 "There should be 1 new object in context following spawn"
@@ -111,9 +105,9 @@ public class SpawnObjectTest {
                     this.putString("object_id", "debug:dummy");
                 }})
                 .setSource(source)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(target)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(2, UUIDTable.getObjectsByUserId(source.getUserId()).size(),
                 "SpawnObject should use source's user id by default"
@@ -133,9 +127,9 @@ public class SpawnObjectTest {
                     this.putString("controlled_by", "target");
                 }})
                 .setSource(source)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(target)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(2, UUIDTable.getObjectsByUserId(target.getUserId()).size(),
                 "SpawnObject should use target's user id when specified"
@@ -159,9 +153,9 @@ public class SpawnObjectTest {
                 }})
                 .setOriginItem(originItem.getUuid())
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         RPGLObject spawnedObject = context.getContextObjects().get(0);
         RPGLEffect effect;
@@ -214,9 +208,9 @@ public class SpawnObjectTest {
                     }});
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         JsonArray events = context.getContextObjects().get(0).getEvents();
 
@@ -246,9 +240,9 @@ public class SpawnObjectTest {
                     }});
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertTrue(context.getContextObjects().get(0).getTags().asList().contains("extra-tag-1"),
                 "new object should have an extra tag"
@@ -275,9 +269,9 @@ public class SpawnObjectTest {
                     }});
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(10, context.getContextObjects().get(0).getHealthData().getInteger("temporary"),
                 "object should receive a +10 bonus to temporary hit points"
@@ -296,9 +290,9 @@ public class SpawnObjectTest {
                     this.putString("object_id", "debug:dummy");
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertNotEquals(1, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should not extend source proficiency bonus by default"
@@ -318,9 +312,9 @@ public class SpawnObjectTest {
                     this.putBoolean("extend_proficiency_bonus", true);
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(5, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should extend source proficiency bonus"
@@ -338,9 +332,9 @@ public class SpawnObjectTest {
                     this.putString("object_id", "debug:dummy");
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(summoner.getUuid(), context.getContextObjects().get(0).getOriginObject(),
                 "new object should have summoner as origin object"
@@ -358,9 +352,9 @@ public class SpawnObjectTest {
                     this.putString("object_id", "debug:dummy");
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertFalse(context.getContextObjects().get(0).getProxy(),
                 "new object should not be a proxy object"
@@ -379,9 +373,9 @@ public class SpawnObjectTest {
                     this.putBoolean("proxy", true);
                 }})
                 .setSource(summoner)
-                .prepare(context, SPAWN_ORIGIN_POINT)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
                 .setTarget(summoner)
-                .invoke(context, SPAWN_ORIGIN_POINT);
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertTrue(context.getContextObjects().get(0).getProxy(),
                 "new object should be a proxy object"

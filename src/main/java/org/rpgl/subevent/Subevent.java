@@ -58,6 +58,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("give_temporary_hit_points", new GiveTemporaryHitPoints());
         Subevent.SUBEVENTS.put("heal", new Heal());
         Subevent.SUBEVENTS.put("info_subevent", new InfoSubevent());
+        Subevent.SUBEVENTS.put("movement", new Movement());
         Subevent.SUBEVENTS.put("refresh_resource", new RefreshResource());
         Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("remove_origin_item_tag", new RemoveOriginItemTag());

@@ -12,7 +12,6 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
-import org.rpgl.json.JsonArray;
 import org.rpgl.testUtils.DummyContext;
 import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
@@ -34,12 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Calvin Withun
  */
 public class ScenariosTest {
-
-    private final JsonArray SPAWN_ORIGIN_POINT = new JsonArray() {{
-        this.addDouble(10.0);
-        this.addDouble(10.0);
-        this.addDouble(10.0);
-    }};
 
     @BeforeAll
     static void beforeAll() {
@@ -315,7 +308,7 @@ public class ScenariosTest {
         summoner.setProficiencyBonus(3);
 
         summoner.invokeEvent(
-                SPAWN_ORIGIN_POINT,
+                TestUtils.TEST_ARRAY_10_10_10,
                 new RPGLObject[] {
                         summoner
                 },
