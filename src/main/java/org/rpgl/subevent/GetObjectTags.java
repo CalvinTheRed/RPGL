@@ -78,9 +78,11 @@ public class GetObjectTags extends Subevent {
      * Adds a tag to the Subevent, to be applied to a RPGLObject later.
      *
      * @param tag a tag to be applied to a RPGLObject
+     * @return this GetObjectTags
      */
-    public void addObjectTag(String tag) {
+    public GetObjectTags addObjectTag(String tag) {
         this.getObjectTags().addString(tag);
+        return this;
     }
 
     /**

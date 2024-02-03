@@ -49,13 +49,13 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new HealingCollection();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new HealingCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -66,33 +66,33 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("returns healing collection")
     void returnsHealingCollection(){
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "dice": [
-                            { "roll": 1 },
-                            { "roll": 6 }
-                        ],
-                        "bonus": 2
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putJsonArray("dice", new JsonArray() {{
+        HealingCollection healingCollection = new HealingCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "healing": [
+                            {
+                                "dice": [
+                                    { "roll": 1 },
+                                    { "roll": 6 }
+                                ],
+                                "bonus": 2
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("healing", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 1);
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 6);
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("roll", 1);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("roll", 6);
+                                }});
+                            }});
+                            this.putInteger("bonus", 2);
                         }});
                     }});
-                    this.putInteger("bonus", 2);
                 }});
-            }});
-        }});
 
         String expected = """
                 [{"bonus":2,"dice":[{"roll":1},{"roll":6}]}]""";
@@ -104,28 +104,27 @@ public class HealingCollectionTest {
     @Test
     @DisplayName("adds healing")
     void addsHealing() {
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [ ]
-            }*/
-            this.putJsonArray("healing", new JsonArray());
-        }});
-
-        healingCollection.addHealing(new JsonObject() {{
-            /*{
-                "dice": [
-                    { "size": 6 }
-                ],
-                "bonus": 2
-            }*/
-            this.putJsonArray("dice", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 6);
+        HealingCollection healingCollection = new HealingCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "healing": [ ]
+                    }*/
+                    this.putJsonArray("healing", new JsonArray());
+                }})
+                .addHealing(new JsonObject() {{
+                    /*{
+                        "dice": [
+                            { "size": 6 }
+                        ],
+                        "bonus": 2
+                    }*/
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 6);
+                        }});
+                    }});
+                    this.putInteger("bonus", 2);
                 }});
-            }});
-            this.putInteger("bonus", 2);
-        }});
 
         String expected = """
                 [{"bonus":2,"dice":[{"size":6}]}]""";
@@ -140,9 +139,9 @@ public class HealingCollectionTest {
     void defaultsToEmptyArray() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.setSource(source);
-        healingCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        HealingCollection healingCollection = new HealingCollection()
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 []""";
@@ -156,27 +155,27 @@ public class HealingCollectionTest {
     void interpretsHealingFormulae() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        HealingCollection healingCollection = new HealingCollection();
-        healingCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "healing": [
-                    {
-                        "formula": "range",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ]
-            }*/
-            this.putJsonArray("healing", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-        }});
+        HealingCollection healingCollection = new HealingCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "healing": [
+                            {
+                                "formula": "range",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("healing", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                }})
+                .setSource(source);
 
-        healingCollection.setSource(source);
         healingCollection.prepareHealing(new DummyContext());
 
         String expected = """

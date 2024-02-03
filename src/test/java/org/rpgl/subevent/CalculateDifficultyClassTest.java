@@ -46,13 +46,13 @@ public class CalculateDifficultyClassTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new CalculateDifficultyClass();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new CalculateDifficultyClass()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -65,13 +65,12 @@ public class CalculateDifficultyClassTest {
     void calculatesSaveDC() throws Exception {
         RPGLObject source = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER);
 
-        CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
-        calculateDifficultyClass.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", "con");
-        }});
-
-        calculateDifficultyClass.setSource(source);
-        calculateDifficultyClass.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("difficulty_class_ability", "con");
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +5 /*ability*/ +4 /*proficiency*/, calculateDifficultyClass.get(),
                 "young red dragon save DC calculated from Constitution should be 17"

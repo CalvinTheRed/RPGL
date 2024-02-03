@@ -48,6 +48,11 @@ public class AbilityContest extends Subevent {
     }
 
     @Override
+    public AbilityContest prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AbilityContest) super.prepare(context, originPoint);
+    }
+
+    @Override
     public AbilityContest run(RPGLContext context, JsonArray originPoint) throws Exception {
         int sourceAbilityCheck = this.getSourceAbilityCheck(context, originPoint);
         int targetAbilityCheck = this.getTargetAbilityCheck(context, originPoint);

@@ -49,13 +49,13 @@ public class TakeResourceTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new TakeResource();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new TakeResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -66,22 +66,21 @@ public class TakeResourceTest {
     @Test
     @DisplayName("only takes resources with temporary tag")
     void onlyTakesResourcesWithTemporaryTag() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
         RPGLResource resource = RPGLFactory.newResource("std:class/warlock/the_undead_patron/necrotic_husk");
-        object.addResource(resource);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .addResource(resource);
 
-        TakeResource takeResource = new TakeResource();
-        takeResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource_tag": "necrotic_husk"
-            }*/
-            this.putString("resource_tag", "necrotic_husk");
-        }});
-        takeResource.setSource(object);
-        takeResource.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
-        takeResource.setTarget(object);
-        takeResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        TakeResource takeResource = new TakeResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource_tag": "necrotic_husk"
+                    }*/
+                    this.putString("resource_tag", "necrotic_husk");
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, object.getResourceObjects().size(),
                 "target should not have a non-temporary resource taken away"
@@ -106,18 +105,17 @@ public class TakeResourceTest {
             object.addResource(resource);
         }
 
-        TakeResource takeResource = new TakeResource();
-        takeResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource_tag": "necrotic_husk"
-            }*/
-            this.putString("resource_tag", "necrotic_husk");
-        }});
-        takeResource.setSource(object);
-        takeResource.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
-        takeResource.setTarget(object);
-
-        takeResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        new TakeResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource_tag": "necrotic_husk"
+                    }*/
+                    this.putString("resource_tag", "necrotic_husk");
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(0, object.getResourceObjects().size(),
                 "target should have all matching resources taken away when count is not specified"
@@ -135,19 +133,18 @@ public class TakeResourceTest {
             object.addResource(resource);
         }
 
-        TakeResource takeResource = new TakeResource();
-        takeResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource_tag": "necrotic_husk",
-                "count": 3
-            }*/
-            this.putString("resource_tag", "necrotic_husk");
-            this.putInteger("count", 3);
-        }});
-        takeResource.setSource(object);
-        takeResource.setTarget(object);
-
-        takeResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        new TakeResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource_tag": "necrotic_husk",
+                        "count": 3
+                    }*/
+                    this.putString("resource_tag", "necrotic_husk");
+                    this.putInteger("count", 3);
+                }})
+                .setSource(object)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(2, object.getResourceObjects().size(),
                 "target have 3 of 5 resources taken away when count of 3 is specified"

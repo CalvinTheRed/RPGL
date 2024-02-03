@@ -49,13 +49,13 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new CalculateBaseArmorClass();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new CalculateBaseArmorClass()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -66,17 +66,17 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("gets shield bonus")
     void getsShieldBonus() {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLItem shield = RPGLFactory.newItem("std:armor/shield/metal");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .giveItem(shield.getUuid());
 
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.setSource(object);
+        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass()
+                .setSource(object);
 
         assertEquals(0, calculateBaseArmorClass.getShieldBonus(),
                 "prepareUnarmored should return 0 when shield is not wielded"
         );
 
-        RPGLItem shield = RPGLFactory.newItem("std:armor/shield/metal");
-        object.giveItem(shield.getUuid());
         object.equipItem(shield.getUuid(), "offhand");
 
         assertEquals(2, calculateBaseArmorClass.getShieldBonus(),
@@ -91,8 +91,9 @@ public class CalculateBaseArmorClassTest {
         object.getAbilityScores().putInteger("dex", 16);
         CalculateBaseArmorClass calculateBaseArmorClass;
 
-        calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass = new CalculateBaseArmorClass()
+                .setSource(object);
+
         assertEquals(13, calculateBaseArmorClass.prepareUnarmored(new DummyContext()),
                 "should have 13 AC when unarmored"
         );
@@ -103,8 +104,9 @@ public class CalculateBaseArmorClassTest {
                 "should not have armored tag"
         );
 
-        calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass = new CalculateBaseArmorClass()
+                .setSource(object);
+
         assertEquals(11 /*base*/ +3 /*dex bonus*/,
                 calculateBaseArmorClass.prepareArmored(
                         RPGLFactory.newItem("std:armor/light/leather"),
@@ -119,8 +121,9 @@ public class CalculateBaseArmorClassTest {
                 "should have armored tag"
         );
 
-        calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass = new CalculateBaseArmorClass()
+                .setSource(object);
+
         assertEquals(14 /*base*/ +2 /*limited dex bonus*/,
                 calculateBaseArmorClass.prepareArmored(
                         RPGLFactory.newItem("std:armor/medium/breastplate"),
@@ -135,8 +138,9 @@ public class CalculateBaseArmorClassTest {
                 "should have armored tag"
         );
 
-        calculateBaseArmorClass = new CalculateBaseArmorClass();
-        calculateBaseArmorClass.setSource(object);
+        calculateBaseArmorClass = new CalculateBaseArmorClass()
+                .setSource(object);
+
         assertEquals(18 /*base*/,
                 calculateBaseArmorClass.prepareArmored(
                         RPGLFactory.newItem("std:armor/heavy/plate"),
@@ -155,15 +159,14 @@ public class CalculateBaseArmorClassTest {
     @Test
     @DisplayName("adds shield bonus to AC")
     void addsShieldBonusToAC() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLItem shield = RPGLFactory.newItem("std:armor/shield/metal");
-        source.giveItem(shield.getUuid());
-        source.equipItem(shield.getUuid(), "offhand");
+        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .giveItem(shield.getUuid())
+                .equipItem(shield.getUuid(), "offhand");
 
-        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
-
-        calculateBaseArmorClass.setSource(source);
-        calculateBaseArmorClass.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass()
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10 /*base*/ +2 /*shield*/, calculateBaseArmorClass.get(),
                 "shield should raise AC to 12"

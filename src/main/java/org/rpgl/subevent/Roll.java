@@ -42,16 +42,22 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
 
     /**
      * This method informs the subevent that advantage has been granted to the contest roll.
+     *
+     * @return this Roll
      */
-    public void grantAdvantage() {
+    public Roll grantAdvantage() {
         this.json.putBoolean("has_advantage", true);
+        return this;
     }
 
     /**
      * This method informs the subevent that disadvantage has been granted to the contest roll.
+     *
+     * @return this Roll
      */
-    public void grantDisadvantage() {
+    public Roll grantDisadvantage() {
         this.json.putBoolean("has_disadvantage", true);
+        return this;
     }
 
     /**

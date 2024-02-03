@@ -574,11 +574,13 @@ public class RPGLObject extends RPGLTaggable {
      * RPGLResource.
      *
      * @param resource a RPGLResource
+     * @return this RPGLObject
      */
-    public void addResource(RPGLResource resource) {
+    public RPGLObject addResource(RPGLResource resource) {
         if (!this.getResources().asList().contains(resource.getUuid())) {
             this.getResources().addString(resource.getUuid());
         }
+        return this;
     }
 
     /**
@@ -601,12 +603,12 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @throws Exception if an exception occurs.
      */
-    public int getEffectiveProficiencyBonus(RPGLContext context, JsonArray originPoint) throws Exception {
+    public int getEffectiveProficiencyBonus(RPGLContext context) throws Exception {
         return new CalculateProficiencyBonus()
                 .setSource(this)
-                .prepare(context, originPoint)
+                .prepare(context, this.getPosition())
                 .setTarget(this)
-                .invoke(context, originPoint)
+                .invoke(context, this.getPosition())
                 .get();
     }
 
@@ -818,12 +820,14 @@ public class RPGLObject extends RPGLTaggable {
      * This method adds a RPGLItem to the RPGLObject's inventory.
      *
      * @param itemUuid a RPGLItem's UUID String
+     * @return this RPGLObject
      */
-    public void giveItem(String itemUuid) {
+    public RPGLObject giveItem(String itemUuid) {
         JsonArray inventory = this.getInventory();
         if (!inventory.asList().contains(itemUuid)) {
             inventory.addString(itemUuid);
         }
+        return this;
     }
 
     /**
@@ -832,8 +836,9 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param itemUuid a RPGLItem's UUID String
      * @param equipmentSlot an equipment slot name (can be anything other than <code>"inventory"</code>)
+     * @return this RPGLObject
      */
-    public void equipItem(String itemUuid, String equipmentSlot) {
+    public RPGLObject equipItem(String itemUuid, String equipmentSlot) {
         JsonArray inventory = this.getInventory();
         if (inventory.asList().contains(itemUuid)) {
             JsonObject equippedItems = this.getEquippedItems();
@@ -842,6 +847,7 @@ public class RPGLObject extends RPGLTaggable {
             item.updateEquippedEffects(this);
             // TODO account for 2-handed items...
         }
+        return this;
     }
 
     /**
@@ -948,8 +954,9 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @param classId a class ID
      * @param choices a JSON object indicating any choices required to level up in the passed class
+     * @return this RPGLObject
      */
-    public void levelUp(String classId, JsonObject choices) {
+    public RPGLObject levelUp(String classId, JsonObject choices) {
         RPGLClass rpglClass = RPGLFactory.getClass(classId);
         if (this.getLevel() == 0) {
             rpglClass.grantStartingFeatures(this, choices);
@@ -958,6 +965,7 @@ public class RPGLObject extends RPGLTaggable {
         }
         this.levelUpNestedClasses(classId, choices);
         this.levelUpRaces(choices, this.getLevel());
+        return this;
     }
 
     /**

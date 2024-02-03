@@ -47,13 +47,13 @@ public class AddOriginItemTagTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new AddOriginItemTag();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new AddOriginItemTag()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -69,15 +69,15 @@ public class AddOriginItemTagTest {
         DummyContext context = new DummyContext();
         context.add(object);
 
-        AddOriginItemTag addOriginItemTag = new AddOriginItemTag();
-        addOriginItemTag.joinSubeventData(new JsonObject() {{
-            this.putString("tag", "test_tag");
-        }});
-        addOriginItemTag.setOriginItem(item.getUuid());
-        addOriginItemTag.setSource(object);
-        addOriginItemTag.prepare(context, TestUtils.TEST_ARRAY_0_0_0);
-        addOriginItemTag.setTarget(object);
-        addOriginItemTag.invoke(context, TestUtils.TEST_ARRAY_0_0_0);
+        new AddOriginItemTag()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("tag", "test_tag");
+                }})
+                .setOriginItem(item.getUuid())
+                .setSource(object)
+                .prepare(context, TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(context, TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(item.getTags().asList().contains("test_tag"),
                 "invoke should add intended tag to origin item"

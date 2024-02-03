@@ -48,7 +48,6 @@ public class RollTest {
     @BeforeEach
     void beforeEach() {
         roll = new Roll("roll") {
-
             @Override
             public Subevent clone() {
                 return this;
@@ -68,7 +67,6 @@ public class RollTest {
             public String getAbility(RPGLContext context) {
                 return null;
             }
-
         };
     }
 
@@ -82,8 +80,7 @@ public class RollTest {
     void defaultsToFlatRoll() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        roll.setSource(object);
-        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        roll.setSource(object).prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
@@ -101,8 +98,7 @@ public class RollTest {
     void gainsAdvantage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        roll.setSource(source);
-        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        roll.setSource(source).prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantAdvantage();
 
         assertTrue(roll.isAdvantageRoll(),
@@ -121,8 +117,7 @@ public class RollTest {
     void gainsDisadvantage() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        roll.setSource(source);
-        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        roll.setSource(source).prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantDisadvantage();
 
         assertFalse(roll.isAdvantageRoll(),
@@ -139,8 +134,7 @@ public class RollTest {
     @Test
     @DisplayName("cancels out advantage and disadvantage")
     void cancelsOutAdvantageAndDisadvantage() {
-        roll.grantAdvantage();
-        roll.grantDisadvantage();
+        roll.grantAdvantage().grantDisadvantage();
 
         assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
@@ -163,8 +157,7 @@ public class RollTest {
             this.addInteger(15);
         }});
 
-        roll.setSource(object);
-        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        roll.setSource(object).prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.roll();
 
         assertEquals(5, roll.get(),
@@ -187,9 +180,7 @@ public class RollTest {
             this.addInteger(5);
         }});
 
-        roll.grantAdvantage();
-        roll.grantDisadvantage();
-        roll.roll();
+        roll.grantAdvantage().grantDisadvantage().roll();
 
         assertEquals(15, roll.get(),
                 "default roll behavior should return the first value (15)"
@@ -217,8 +208,7 @@ public class RollTest {
             this.addInteger(15);
         }});
 
-        roll.setSource(source);
-        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        roll.setSource(source).prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantAdvantage();
         roll.roll();
 
@@ -248,8 +238,7 @@ public class RollTest {
             this.addInteger(5);
         }});
 
-        roll.setSource(object);
-        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        roll.setSource(object).prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantDisadvantage();
         roll.roll();
 

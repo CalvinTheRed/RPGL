@@ -96,7 +96,7 @@ public class SpawnObject extends Subevent {
         }
 
         if (this.json.getBoolean("extend_proficiency_bonus")) {
-            spawnedObject.setProficiencyBonus(super.getSource().getEffectiveProficiencyBonus(context, originPoint));
+            spawnedObject.setProficiencyBonus(super.getSource().getEffectiveProficiencyBonus(context));
         }
 
         context.add(spawnedObject);

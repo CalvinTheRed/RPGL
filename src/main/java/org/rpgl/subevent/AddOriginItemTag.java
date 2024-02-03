@@ -50,6 +50,11 @@ public class AddOriginItemTag extends Subevent {
     }
 
     @Override
+    public AddOriginItemTag prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AddOriginItemTag) super.prepare(context, originPoint);
+    }
+
+    @Override
     public AddOriginItemTag run(RPGLContext context, JsonArray originPoint) {
         RPGLItem originItem = UUIDTable.getItem(super.getOriginItem());
         if (originItem != null) {

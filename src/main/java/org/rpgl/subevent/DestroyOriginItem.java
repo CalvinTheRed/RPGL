@@ -55,6 +55,11 @@ public class DestroyOriginItem extends Subevent {
     }
 
     @Override
+    public DestroyOriginItem prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DestroyOriginItem) super.prepare(context, originPoint);
+    }
+
+    @Override
     public DestroyOriginItem run(RPGLContext context, JsonArray originPoint) {
         String originItemUuid = super.getOriginItem();
         if (UUIDTable.getItem(originItemUuid) != null) {

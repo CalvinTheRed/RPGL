@@ -103,9 +103,11 @@ public class HealingCollection extends Subevent {
      * Adds dice and/or a bonus to the healing collected by this Subevent.
      *
      * @param healingJson healing data to be added to the collection
+     * @return this HealingCollection
      */
-    public void addHealing(JsonObject healingJson) {
+    public HealingCollection addHealing(JsonObject healingJson) {
         this.getHealingCollection().addJsonObject(healingJson);
+        return this;
     }
 
     /**

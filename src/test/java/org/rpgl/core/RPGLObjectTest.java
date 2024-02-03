@@ -172,7 +172,7 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setProficiencyBonus(5);
 
-        assertEquals(5, object.getEffectiveProficiencyBonus(new DummyContext(), object.getPosition()),
+        assertEquals(5, object.getEffectiveProficiencyBonus(new DummyContext()),
                 "object should have proficiency bonus of +5"
         );
     }

@@ -48,6 +48,11 @@ public class HealingDelivery extends Subevent {
     }
 
     @Override
+    public HealingDelivery prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (HealingDelivery) super.prepare(context, originPoint);
+    }
+
+    @Override
     public HealingDelivery run(RPGLContext context, JsonArray originPoint) throws Exception {
         return this;
     }
@@ -69,8 +74,10 @@ public class HealingDelivery extends Subevent {
 
     /**
      * Maximizes all healing dice contained in this subevent.
+     *
+     * @return this HealingDelivery
      */
-    public void maximizeHealingDice() {
+    public HealingDelivery maximizeHealingDice() {
         JsonArray healingArray = this.json.getJsonArray("healing");
         for (int i = 0; i < healingArray.size(); i++) {
             JsonArray dice = healingArray.getJsonObject(i).getJsonArray("dice");
@@ -79,6 +86,7 @@ public class HealingDelivery extends Subevent {
                 die.putInteger("roll", die.getInteger("size"));
             }
         }
+        return this;
     }
 
     /**

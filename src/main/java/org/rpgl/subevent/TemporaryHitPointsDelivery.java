@@ -48,6 +48,11 @@ public class TemporaryHitPointsDelivery extends Subevent {
     }
 
     @Override
+    public TemporaryHitPointsDelivery prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (TemporaryHitPointsDelivery) super.prepare(context, originPoint);
+    }
+
+    @Override
     public TemporaryHitPointsDelivery run(RPGLContext context, JsonArray originPoint) throws Exception {
         return this;
     }
@@ -69,8 +74,10 @@ public class TemporaryHitPointsDelivery extends Subevent {
 
     /**
      * Maximizes all temporary hit point dice contained in this subevent.
+     *
+     * @return this TemporaryHitPointsDelivery
      */
-    public void maximizeTemporaryHitPointDice() {
+    public TemporaryHitPointsDelivery maximizeTemporaryHitPointDice() {
         JsonArray temporaryHitPointsArray = this.json.getJsonArray("temporary_hit_points");
         for (int i = 0; i < temporaryHitPointsArray.size(); i++) {
             JsonArray dice = temporaryHitPointsArray.getJsonObject(i).getJsonArray("dice");
@@ -79,6 +86,7 @@ public class TemporaryHitPointsDelivery extends Subevent {
                 die.putInteger("roll", die.getInteger("size"));
             }
         }
+        return this;
     }
 
     /**

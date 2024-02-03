@@ -46,7 +46,6 @@ public class CalculationTest {
     @BeforeEach
     void beforeEach() {
         calculation = new Calculation("calculation") {
-
             @Override
             public Subevent clone() {
                 return this;
@@ -61,7 +60,6 @@ public class CalculationTest {
             public Calculation run(RPGLContext context, JsonArray originPoint) {
                 return this;
             }
-
         };
 
         calculation.joinSubeventData(new JsonObject() {{
@@ -95,6 +93,7 @@ public class CalculationTest {
                 this.putBoolean("round_up", false);
             }});
         }});
+
         assertEquals(-5, calculation.getBonus(),
                 "bonus should scale"
         );
@@ -121,6 +120,7 @@ public class CalculationTest {
                 this.putBoolean("round_up", false);
             }});
         }});
+
         assertEquals(5+5, calculation.getBonus(),
                 "bonuses should be cumulative"
         );
@@ -133,10 +133,12 @@ public class CalculationTest {
         assertEquals(1, calculation.getBase(),
                 "base should be most recent value (1)"
         );
+
         calculation.setBase(-5);
         assertEquals(-5, calculation.getBase(),
                 "base should be most recent value (-5)"
         );
+
         calculation.setBase(5);
         assertEquals(5, calculation.getBase(),
                 "base should be most recent value (5)"
@@ -156,6 +158,7 @@ public class CalculationTest {
                 this.putBoolean("round_up", false);
             }});
         }});
+
         assertEquals(10 /*base*/ +5 /*bonus*/, calculation.get(),
                 "get should return base + bonus when set is null"
         );
@@ -175,8 +178,7 @@ public class CalculationTest {
     @Test
     @DisplayName("scale rounds up")
     void scaleRoundsUp() {
-        int value = 11;
-        int scaledValue = Calculation.scale(value, new JsonObject() {{
+        int scaledValue = Calculation.scale(11, new JsonObject() {{
             this.putBoolean("round_up", true);
         }});
 
@@ -188,8 +190,7 @@ public class CalculationTest {
     @Test
     @DisplayName("scale matches specified ratio")
     void scaleMatchesSpecifiedRatio() {
-        int value = 9;
-        int scaledValue = Calculation.scale(value, new JsonObject() {{
+        int scaledValue = Calculation.scale(9, new JsonObject() {{
             /*{
                 "numerator": 1,
                 "denominator": 3,
@@ -239,11 +240,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes bonus (modifier)")
     void processesBonus_modifier() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.getAbilityScores().putInteger("str", 20);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("str", 20);
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -266,7 +264,7 @@ public class CalculationTest {
 
         String expected = """
                 {"bonus":5,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}""";
-        assertEquals(expected, Calculation.processBonusJson(null, dummySubevent, formulaJson, new DummyContext()).toString(),
+        assertEquals(expected, Calculation.processBonusJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()).toString(),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -274,11 +272,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes bonus (ability)")
     void processesBonus_ability() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.getAbilityScores().putInteger("str", 20);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("str", 20);
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -301,7 +296,7 @@ public class CalculationTest {
 
         String expected = """
                 {"bonus":20,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}""";
-        assertEquals(expected, Calculation.processBonusJson(null, dummySubevent, formulaJson, new DummyContext()).toString(),
+        assertEquals(expected, Calculation.processBonusJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()).toString(),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -309,11 +304,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes bonus (proficiency)")
     void processesBonus_proficiency() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.setProficiencyBonus(5);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(5);
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -334,7 +326,7 @@ public class CalculationTest {
 
         String expected = """
                 {"bonus":5,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}""";
-        assertEquals(expected, Calculation.processBonusJson(null, dummySubevent, formulaJson, new DummyContext()).toString(),
+        assertEquals(expected, Calculation.processBonusJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()).toString(),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -342,11 +334,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes bonus (level) (class specified)")
     void processesBonus_level_classSpecified() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.levelUp("debug:blank", new JsonObject());
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .levelUp("debug:blank", new JsonObject());
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -369,7 +358,7 @@ public class CalculationTest {
 
         String expected = """
                 {"bonus":1,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}""";
-        assertEquals(expected, Calculation.processBonusJson(null, dummySubevent, formulaJson, new DummyContext()).toString(),
+        assertEquals(expected, Calculation.processBonusJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()).toString(),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -377,11 +366,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes bonus (level) (no class specified)")
     void processesBonus_level_noClassSpecified() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.levelUp("debug:blank", new JsonObject());
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .levelUp("debug:blank", new JsonObject());
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -402,7 +388,7 @@ public class CalculationTest {
 
         String expected = """
                 {"bonus":1,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}""";
-        assertEquals(expected, Calculation.processBonusJson(null, dummySubevent, formulaJson, new DummyContext()).toString(),
+        assertEquals(expected, Calculation.processBonusJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()).toString(),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -427,11 +413,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes set (modifier)")
     void processesSet_modifier() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.getAbilityScores().putInteger("str", 20);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("str", 20);
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -452,7 +435,7 @@ public class CalculationTest {
             }});
         }};
 
-        assertEquals(5, Calculation.processSetJson(null, dummySubevent, formulaJson, new DummyContext()),
+        assertEquals(5, Calculation.processSetJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -460,11 +443,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes set (ability)")
     void processesSet_ability() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.getAbilityScores().putInteger("str", 20);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        object.getAbilityScores().putInteger("str", 20);
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -485,7 +465,7 @@ public class CalculationTest {
             }});
         }};
 
-        assertEquals(20, Calculation.processSetJson(null, dummySubevent, formulaJson, new DummyContext()),
+        assertEquals(20, Calculation.processSetJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -493,11 +473,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes set (proficiency)")
     void processesSet_proficiency() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.setProficiencyBonus(5);
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(5);
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -516,7 +493,7 @@ public class CalculationTest {
             }});
         }};
 
-        assertEquals(5, Calculation.processSetJson(null, dummySubevent, formulaJson, new DummyContext()),
+        assertEquals(5, Calculation.processSetJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -524,11 +501,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes set (level) (class specified)")
     void processesSet_level_classSpecified() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.levelUp("debug:blank", new JsonObject());
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .levelUp("debug:blank", new JsonObject());
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -549,7 +523,7 @@ public class CalculationTest {
             }});
         }};
 
-        assertEquals(1, Calculation.processSetJson(null, dummySubevent, formulaJson, new DummyContext()),
+        assertEquals(1, Calculation.processSetJson(null, new DummySubevent().setSource(dummy), formulaJson, new DummyContext()),
                 "bonus object failed to evaluate correctly"
         );
     }
@@ -557,11 +531,8 @@ public class CalculationTest {
     @Test
     @DisplayName("processes set (level) (no class specified)")
     void processesSet_level_noClassSpecified() throws Exception {
-        RPGLObject dummy = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        dummy.levelUp("debug:blank", new JsonObject());
-
-        DummySubevent dummySubevent = new DummySubevent();
-        dummySubevent.setSource(dummy);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .levelUp("debug:blank", new JsonObject());
 
         JsonObject formulaJson = new JsonObject() {{
             /*{
@@ -580,7 +551,7 @@ public class CalculationTest {
             }});
         }};
 
-        assertEquals(1, Calculation.processSetJson(null, dummySubevent, formulaJson, new DummyContext()),
+        assertEquals(1, Calculation.processSetJson(null, new DummySubevent().setSource(object), formulaJson, new DummyContext()),
                 "bonus object failed to evaluate correctly"
         );
     }

@@ -46,13 +46,13 @@ public class CalculateProficiencyBonusTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new CalculateProficiencyBonus();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new CalculateProficiencyBonus()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -63,13 +63,12 @@ public class CalculateProficiencyBonusTest {
     @Test
     @DisplayName("defaults to normal proficiency bonus")
     void defaultsToNormalProficiencyBonus() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        object.setProficiencyBonus(5);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(5);
 
-        CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
-
-        calculateProficiencyBonus.setSource(object);
-        calculateProficiencyBonus.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(5, calculateProficiencyBonus.getBase(),
                 "should default to object's base proficiency bonus"

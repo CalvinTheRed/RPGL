@@ -168,6 +168,16 @@ public class AttackRoll extends Roll {
     }
 
     @Override
+    public AttackRoll grantAdvantage() {
+        return (AttackRoll) super.grantAdvantage();
+    }
+
+    @Override
+    public AttackRoll grantDisadvantage() {
+        return (AttackRoll) super.grantDisadvantage();
+    }
+
+    @Override
     public String getAbility(RPGLContext context) {
         return this.json.getString("attack_ability");
     }

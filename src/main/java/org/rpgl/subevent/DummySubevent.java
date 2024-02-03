@@ -52,6 +52,11 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
     }
 
     @Override
+    public DummySubevent prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DummySubevent) super.prepare(context, originPoint);
+    }
+
+    @Override
     public DummySubevent run(RPGLContext context, JsonArray originPoint) {
         DummySubevent.counter++;
         return this;

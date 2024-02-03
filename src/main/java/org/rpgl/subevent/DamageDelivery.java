@@ -129,8 +129,9 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
      * counts as a wild card and applies the changes to all damage types.
      *
      * @param damageType the damage type of dice to be changed by this method
+     * @return this DamageDelivery
      */
-    public void maximizeTypedDamageDice(String damageType) {
+    public DamageDelivery maximizeTypedDamageDice(String damageType) {
         JsonArray damageArray = this.json.getJsonArray("damage");
         for (int i = 0; i < damageArray.size(); i++) {
             JsonObject damageJson = damageArray.getJsonObject(i);
@@ -142,6 +143,7 @@ public class DamageDelivery extends Subevent implements DamageTypeSubevent {
                 }
             }
         }
+        return this;
     }
 
     /**

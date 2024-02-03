@@ -46,13 +46,13 @@ public class CalculateAbilityScoreTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new CalculateAbilityScore();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new CalculateAbilityScore()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -65,13 +65,12 @@ public class CalculateAbilityScoreTest {
     void defaultsToRawObjectAbilityScore() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore();
-        calculateAbilityScore.joinSubeventData(new JsonObject() {{
-            this.putString("ability", "str");
-        }});
-
-        calculateAbilityScore.setSource(object);
-        calculateAbilityScore.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        CalculateAbilityScore calculateAbilityScore = new CalculateAbilityScore()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("ability", "str");
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10, calculateAbilityScore.get(),
                 "base str score should be 10 after prepare()"

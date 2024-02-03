@@ -128,6 +128,16 @@ public class SavingThrow extends Roll {
     }
 
     @Override
+    public SavingThrow grantAdvantage() {
+        return (SavingThrow) super.grantAdvantage();
+    }
+
+    @Override
+    public SavingThrow grantDisadvantage() {
+        return (SavingThrow) super.grantDisadvantage();
+    }
+
+    @Override
     public String getAbility(RPGLContext context) {
         return this.json.getString("save_ability");
     }

@@ -51,13 +51,13 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new DamageCollection();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new DamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
                 () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
@@ -68,37 +68,36 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("adds damage")
     void addsDamage() {
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("damage", new JsonArray());
-        }});
-
-        damageCollection.addDamage(new JsonObject() {{
-            /*{
-                "damage_type": "fire",
-                "dice": [
-                    { "size": 4, "determined": [ 2 ] },
-                    { "size": 4, "determined": [ 2 ] }
-                ],
-                "bonus": 5
-            }*/
-            this.putString("damage_type", "fire");
-            this.putJsonArray("dice", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 4);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(2);
+        DamageCollection damageCollection = new DamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    this.putJsonArray("damage", new JsonArray());
+                }})
+                .addDamage(new JsonObject() {{
+                    /*{
+                        "damage_type": "fire",
+                        "dice": [
+                            { "size": 4, "determined": [ 2 ] },
+                            { "size": 4, "determined": [ 2 ] }
+                        ],
+                        "bonus": 5
+                    }*/
+                    this.putString("damage_type", "fire");
+                    this.putJsonArray("dice", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(2);
+                            }});
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putInteger("size", 4);
+                            this.putJsonArray("determined", new JsonArray() {{
+                                this.addInteger(2);
+                            }});
+                        }});
                     }});
+                    this.putInteger("bonus", 5);
                 }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putInteger("size", 4);
-                    this.putJsonArray("determined", new JsonArray() {{
-                        this.addInteger(2);
-                    }});
-                }});
-            }});
-            this.putInteger("bonus", 5);
-        }});
 
         String expected = """
                 [{"bonus":5,"damage_type":"fire","dice":[{"determined":[2],"size":4},{"determined":[2],"size":4}]}]""";
@@ -110,25 +109,25 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("recognizes present damage type")
     void recognizesPresentDamageType() {
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire",
-                        "dice": [ ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 0);
+        DamageCollection damageCollection = new DamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "fire",
+                                "dice": [ ],
+                                "bonus": 0
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 0);
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
         assertTrue(damageCollection.includesDamageType("fire"),
                 "includesDamageType() should return true when type is present"
@@ -138,10 +137,10 @@ public class DamageCollectionTest {
     @Test
     @DisplayName("recognizes absent damage type")
     void recognizesAbsentDamageType() {
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("damage", new JsonArray());
-        }});
+        DamageCollection damageCollection = new DamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    this.putJsonArray("damage", new JsonArray());
+                }});
 
         assertFalse(damageCollection.includesDamageType("fire"),
                 "includesDamageType() should return false when type is absent"
@@ -153,29 +152,29 @@ public class DamageCollectionTest {
     void interpretsDamageFormulae() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        DamageCollection damageCollection = new DamageCollection();
-        damageCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "fire",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-        }});
+        DamageCollection damageCollection = new DamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "fire",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                }})
+                .setSource(source);
 
-        damageCollection.setSource(source);
         damageCollection.prepareDamage(new DummyContext());
 
         String expected = """

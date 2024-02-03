@@ -92,10 +92,12 @@ public class GetEvents extends Subevent {
      * @param originItem a UUID for a RPGLItem if the event was provided by an item, or null otherwise
      * @param sourceUuid a UUID for the source of the event if it should differ from the object which invokes it, or
      *                   null otherwise
+     * @return this GetEvents
      */
-    public void addEvent(String eventId, String originItem, String sourceUuid) {
+    public GetEvents addEvent(String eventId, String originItem, String sourceUuid) {
         this.json.getJsonArray("events").addJsonObject(RPGLFactory
                 .newEvent(eventId).setOriginItem(originItem).setSource(sourceUuid));
+        return this;
     }
 
     /**

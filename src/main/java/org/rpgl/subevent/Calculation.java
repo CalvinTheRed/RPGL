@@ -163,7 +163,7 @@ public abstract class Calculation extends Subevent {
             }};
             case "proficiency" -> new JsonObject() {{
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
-                this.putInteger("bonus", object.getEffectiveProficiencyBonus(context, object.getPosition()));
+                this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
                 this.putJsonArray("dice", new JsonArray());
                 this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
                     this.putInteger("numerator", 1);
@@ -281,10 +281,8 @@ public abstract class Calculation extends Subevent {
                     .getAbilityModifierFromAbilityName(formulaData.getString("ability"), context);
             case "ability" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
                     .getAbilityScoreFromAbilityName(formulaData.getString("ability"), context);
-            case "proficiency" -> {
-                RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
-                yield object.getEffectiveProficiencyBonus(context, object.getPosition());
-            }
+            case "proficiency" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
+                    .getEffectiveProficiencyBonus(context);
             case "level" -> formulaData.getString("class") == null
                     ? RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object")).getLevel()
                     : RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object")).getLevel(formulaData.getString("class"));

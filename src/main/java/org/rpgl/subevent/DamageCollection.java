@@ -117,9 +117,11 @@ public class DamageCollection extends Subevent implements DamageTypeSubevent {
      * Adds damage to the damage collection.
      *
      * @param damageJson the JSON data for the damage to be added to the damage collection
+     * @return this DamageCollection
      */
-    public void addDamage(JsonObject damageJson) {
+    public DamageCollection addDamage(JsonObject damageJson) {
         this.getDamageCollection().addJsonObject(damageJson);
+        return this;
     }
 
     /**

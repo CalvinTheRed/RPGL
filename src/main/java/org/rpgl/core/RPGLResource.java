@@ -169,8 +169,10 @@ public class RPGLResource extends RPGLTaggable {
     /**
      * This method exhausts the resource to make it unable to fuel future RPGLEvents. This method also triggers the
      * generation of the next required count.
+     *
+     * @return this RPGLResource
      */
-    public void exhaust() {
+    public RPGLResource exhaust() {
         this.setExhausted(true);
         JsonArray refreshCriterion = this.getRefreshCriterion();
         for (int i = 0; i < refreshCriterion.size(); i++) {
@@ -178,6 +180,7 @@ public class RPGLResource extends RPGLTaggable {
             criterion.putInteger("completed", 0);
             criterion.putInteger("required", generateRequired(criterion.getJsonObject("required_generator")));
         }
+        return this;
     }
 
     /**

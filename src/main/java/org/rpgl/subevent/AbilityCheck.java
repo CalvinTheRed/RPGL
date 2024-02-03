@@ -139,6 +139,16 @@ public class AbilityCheck extends Roll {
     }
 
     @Override
+    public AbilityCheck grantAdvantage() {
+        return (AbilityCheck) super.grantAdvantage();
+    }
+
+    @Override
+    public AbilityCheck grantDisadvantage() {
+        return (AbilityCheck) super.grantDisadvantage();
+    }
+
+    @Override
     public String getAbility(RPGLContext context) {
         return this.json.getString("ability");
     }

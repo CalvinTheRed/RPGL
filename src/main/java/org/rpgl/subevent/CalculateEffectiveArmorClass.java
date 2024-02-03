@@ -52,6 +52,11 @@ public class CalculateEffectiveArmorClass extends Calculation {
     }
 
     @Override
+    public CalculateEffectiveArmorClass prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CalculateEffectiveArmorClass) super.prepare(context, originPoint);
+    }
+
+    @Override
     public CalculateEffectiveArmorClass run(RPGLContext context, JsonArray originPoint) throws Exception {
         return this;
     }
