@@ -40,13 +40,13 @@ public class RemoveEffect extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("canceled", false);
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, JsonArray originPoint) {
         if (this.isNotCanceled()) {
             JsonArray effectTags = this.json.getJsonArray("effect_tags");
             JsonArray effects = super.getTarget().getEffects().deepClone();

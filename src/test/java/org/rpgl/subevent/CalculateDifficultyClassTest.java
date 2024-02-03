@@ -55,7 +55,7 @@ public class CalculateDifficultyClassTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -71,7 +71,7 @@ public class CalculateDifficultyClassTest {
         }});
 
         calculateDifficultyClass.setSource(source);
-        calculateDifficultyClass.prepare(new DummyContext());
+        calculateDifficultyClass.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +5 /*ability*/ +4 /*proficiency*/, calculateDifficultyClass.get(),
                 "young red dragon save DC calculated from Constitution should be 17"

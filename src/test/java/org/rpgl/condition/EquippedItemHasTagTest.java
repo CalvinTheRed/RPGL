@@ -59,7 +59,7 @@ public class EquippedItemHasTagTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -91,7 +91,7 @@ public class EquippedItemHasTagTest {
                 this.addString("mainhand");
             }});
             this.putString("tag", "test");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "condition should evaluate false when indicated slot is empty"
         );
 
@@ -116,7 +116,7 @@ public class EquippedItemHasTagTest {
             }});
             this.putString("tag", "test");
             this.putBoolean("invert", true);
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "condition should evaluate false when indicated slot is empty"
         );
     }
@@ -159,7 +159,7 @@ public class EquippedItemHasTagTest {
                 this.addString("offhand");
             }});
             this.putString("tag", "test");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "condition should evaluate true when an item in an indicated slot has tag"
         );
     }
@@ -194,7 +194,7 @@ public class EquippedItemHasTagTest {
                 this.addString("mainhand");
             }});
             this.putString("tag", "test");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "condition should evaluate false when no items in the indicated slots have tag"
         );
     }
@@ -239,7 +239,7 @@ public class EquippedItemHasTagTest {
             }});
             this.putString("tag", "test");
             this.putBoolean("invert", true);
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "condition should evaluate true when an item in an indicated slot does not have tag"
         );
     }
@@ -285,7 +285,7 @@ public class EquippedItemHasTagTest {
             }});
             this.putString("tag", "test");
             this.putBoolean("invert", true);
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "condition should evaluate false when an item in an indicated slot has tag"
         );
     }

@@ -3,6 +3,7 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -42,13 +43,13 @@ public class TakeResource extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, JsonArray originPoint) {
         String resourceTag = this.json.getString("resource_tag");
         int count = this.json.getInteger("count");
         RPGLObject target = super.getTarget();

@@ -60,7 +60,7 @@ public class RefreshResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -91,9 +91,9 @@ public class RefreshResourceTest {
             this.putString("selection_mode", "low_first");
         }});
         refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext());
+        refreshResource.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext());
+        refreshResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         boolean[] expectedExhaustValues = {
                 true,
@@ -141,9 +141,9 @@ public class RefreshResourceTest {
             this.putString("selection_mode", "high_first");
         }});
         refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext());
+        refreshResource.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext());
+        refreshResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         boolean[] expectedExhaustValues = {
                 true,
@@ -191,9 +191,9 @@ public class RefreshResourceTest {
             this.putInteger("count", 2);
         }});
         refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext());
+        refreshResource.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext());
+        refreshResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(spellSlot.getExhausted(),
                 "non-matching resource should be exhausted"

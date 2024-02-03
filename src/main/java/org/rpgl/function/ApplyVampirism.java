@@ -2,6 +2,7 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.AttackRoll;
 import org.rpgl.subevent.DealDamage;
@@ -26,7 +27,7 @@ public class ApplyVampirism extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) {
         if (subevent instanceof AttackRoll || subevent instanceof DealDamage || subevent instanceof SavingThrow) {
             subevent.joinSubeventData(new JsonObject() {{
                 this.putJsonObject("vampirism", Objects.requireNonNullElse(

@@ -55,7 +55,7 @@ public class GetObjectTagsTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -67,7 +67,7 @@ public class GetObjectTagsTest {
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(new DummyContext());
+        getObjectTags.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals("[]", getObjectTags.getObjectTags().toString(),
                 "getTags should return an empty array by default"
@@ -81,7 +81,7 @@ public class GetObjectTagsTest {
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(new DummyContext());
+        getObjectTags.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         getObjectTags.addObjectTag("test_tag_1");
         getObjectTags.addObjectTag("test_tag_2");

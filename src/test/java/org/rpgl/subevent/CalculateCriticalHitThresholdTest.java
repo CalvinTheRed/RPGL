@@ -58,7 +58,7 @@ public class CalculateCriticalHitThresholdTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -70,7 +70,7 @@ public class CalculateCriticalHitThresholdTest {
 
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
         calculateCriticalHitThreshold.setSource(object);
-        calculateCriticalHitThreshold.prepare(new DummyContext());
+        calculateCriticalHitThreshold.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(20, calculateCriticalHitThreshold.get(),
                 "calculateCriticalHitThreshold should have a base of 20 after prepare()"

@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -92,12 +93,19 @@ public abstract class Condition {
      * @param subevent a Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
      * @param context the context in which the Condition is being invoked
+     * @param originPoint the point from which the passed subevent emanates
      * @return true if the condition is satisfied. Note that if a subevent-condition loop is formed, this method will
      * return false until that loop is exited.
      *
      * @throws Exception if an exception occurs
      */
-    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean evaluate(
+            RPGLEffect effect,
+            Subevent subevent,
+            JsonObject conditionJson,
+            RPGLContext context,
+            JsonArray originPoint
+    ) throws Exception {
         this.verifyCondition(conditionJson);
         if (ACTIVE_CONDITIONS.contains(conditionJson)) {
             // begin the back-out if you detect a loop
@@ -109,7 +117,7 @@ public abstract class Condition {
             ACTIVE_CONDITIONS.push(conditionJson);
             boolean result;
             try {
-                result = this.run(effect, subevent, conditionJson, context);
+                result = this.run(effect, subevent, conditionJson, context, originPoint);
             } catch (Exception e) {
                 ACTIVE_CONDITIONS.pop();
                 throw e;
@@ -136,10 +144,17 @@ public abstract class Condition {
      * @param subevent a Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
      * @param context the context in which the Condition is being invoked
+     * @param originPoint the point from which the passed subevent emanates
      *
      * @throws Exception if an exception occurs
      */
-    public abstract boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception;
+    public abstract boolean run(
+            RPGLEffect effect,
+            Subevent subevent,
+            JsonObject conditionJson,
+            RPGLContext context,
+            JsonArray originPoint
+    ) throws Exception;
 
     // =================================================================================================================
     // Condition helper methods

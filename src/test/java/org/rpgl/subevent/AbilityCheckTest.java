@@ -60,7 +60,7 @@ public class AbilityCheckTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -99,7 +99,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         abilityCheck.giveHalfProficiency();
 
@@ -122,7 +122,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -146,7 +146,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
@@ -170,7 +170,7 @@ public class AbilityCheckTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(abilityCheck.hasHalfProficiency(),
                 "should not have half proficiency"
@@ -203,9 +203,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(new DummyContext());
+        abilityCheck.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10, abilityCheck.get(),
                 "abilityCheck should roll 10 (10+0)"
@@ -233,9 +233,9 @@ public class AbilityCheckTest {
         }});
 
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         abilityCheck.setTarget(object);
-        abilityCheck.invoke(new DummyContext());
+        abilityCheck.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10 /*base*/ +5 /*ability bonus*/, abilityCheck.get(),
                 "abilityCheck should total 15"

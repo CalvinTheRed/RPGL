@@ -18,7 +18,7 @@ public class Any extends Condition {
     }
 
     @Override
-    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         JsonArray nestedConditionArray = conditionJson.getJsonArray("conditions");
         if (nestedConditionArray.size() == 0) {
             return true;
@@ -27,7 +27,7 @@ public class Any extends Condition {
             JsonObject nestedConditionJson = nestedConditionArray.getJsonObject(i);
             Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
             // once a single element returns true, iteration can short-circuit
-            if (nestedCondition.evaluate(effect, subevent, nestedConditionJson, context)) {
+            if (nestedCondition.evaluate(effect, subevent, nestedConditionJson, context, originPoint)) {
                 return true;
             }
         }

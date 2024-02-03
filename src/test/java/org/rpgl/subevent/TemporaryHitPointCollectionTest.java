@@ -58,7 +58,7 @@ public class TemporaryHitPointCollectionTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -160,7 +160,7 @@ public class TemporaryHitPointCollectionTest {
 
         TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
         temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepare(new DummyContext());
+        temporaryHitPointCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 []""";

@@ -60,7 +60,7 @@ public class GiveTemporaryHitPointsTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -100,9 +100,9 @@ public class GiveTemporaryHitPointsTest {
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context);
+        giveTemporaryHitPoints.prepare(context, target.getPosition());
         giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context);
+        giveTemporaryHitPoints.invoke(context, target.getPosition());
 
         assertEquals(10, target.getHealthData().getInteger("temporary"),
                 "the subevent should grant 10 temporary hit points to the target"
@@ -153,9 +153,9 @@ public class GiveTemporaryHitPointsTest {
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context);
+        giveTemporaryHitPoints.prepare(context, target.getPosition());
         giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context);
+        giveTemporaryHitPoints.invoke(context, target.getPosition());
 
         assertEquals(10, target.getHealthData().getInteger("temporary"),
                 "the subevent should grant 10 temporary hit points to the target"
@@ -206,9 +206,9 @@ public class GiveTemporaryHitPointsTest {
             }});
         }});
         giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context);
+        giveTemporaryHitPoints.prepare(context, target.getPosition());
         giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context);
+        giveTemporaryHitPoints.invoke(context, target.getPosition());
 
         assertEquals(15, target.getHealthData().getInteger("temporary"),
                 "the subevent should not grant new temporary hit points to the target"

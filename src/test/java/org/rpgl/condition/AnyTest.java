@@ -8,6 +8,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +35,7 @@ public class AnyTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -49,7 +50,7 @@ public class AnyTest {
             }*/
             this.putString("condition", "any");
             this.putJsonArray("conditions", new JsonArray());
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Any condition should evaluate true by default"
         );
     }
@@ -74,7 +75,7 @@ public class AnyTest {
                     this.putString("condition", "true");
                 }});
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Any condition should evaluate true for 2 true conditions"
         );
     }
@@ -99,7 +100,7 @@ public class AnyTest {
                     this.putString("condition", "false");
                 }});
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Any condition should evaluate false for 1 true and 1 false condition"
         );
     }
@@ -124,7 +125,7 @@ public class AnyTest {
                     this.putString("condition", "false");
                 }});
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Any condition should evaluate false for 2 false conditions"
         );
     }

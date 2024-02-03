@@ -56,7 +56,7 @@ public class RemoveOriginItemTagTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -76,9 +76,9 @@ public class RemoveOriginItemTagTest {
         }});
         removeOriginItemTag.setOriginItem(item.getUuid());
         removeOriginItemTag.setSource(object);
-        removeOriginItemTag.prepare(context);
+        removeOriginItemTag.prepare(context, object.getPosition());
         removeOriginItemTag.setTarget(object);
-        removeOriginItemTag.invoke(context);
+        removeOriginItemTag.invoke(context, object.getPosition());
 
         assertFalse(item.getTags().asList().contains("test_tag"),
                 "invoke should remove intended tag from origin item"

@@ -80,7 +80,7 @@ public class GrantDisadvantageTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -91,14 +91,14 @@ public class GrantDisadvantageTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(object);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new GrantDisadvantage().execute(null, roll, new JsonObject() {{
             /*{
                 "function": "grant_disadvantage"
             }*/
             this.putString("function", "grant_disadvantage");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(roll.isDisadvantageRoll(),
                 "execute should grant disadvantage to roll"

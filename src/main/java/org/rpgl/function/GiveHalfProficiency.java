@@ -2,6 +2,7 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.subevent.Subevent;
@@ -22,7 +23,7 @@ public class GiveHalfProficiency extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) {
         if (subevent instanceof AbilityCheck abilityCheck) {
             abilityCheck.giveHalfProficiency();
         } else {

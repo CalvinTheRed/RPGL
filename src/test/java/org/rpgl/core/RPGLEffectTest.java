@@ -95,12 +95,12 @@ public class RPGLEffectTest {
     @DisplayName("executes functions")
     void executesFunctions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext());
+        subevent.prepare(new DummyContext(), new JsonArray());
 
         effect.executeFunctions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("functions"),
-                new DummyContext()
+                new DummyContext(), new JsonArray()
         );
 
         assertEquals(2, DummyFunction.counter,
@@ -112,12 +112,12 @@ public class RPGLEffectTest {
     @DisplayName("evaluates conditions")
     void evaluatesConditions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext());
+        subevent.prepare(new DummyContext(), new JsonArray());
 
         boolean evaluation = effect.evaluateConditions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("conditions"),
-                new DummyContext()
+                new DummyContext(), new JsonArray()
         );
 
         assertTrue(evaluation,
@@ -129,9 +129,9 @@ public class RPGLEffectTest {
     @DisplayName("processes subevents")
     void processesSubevents() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext());
+        subevent.prepare(new DummyContext(), new JsonArray());
 
-        effect.processSubevent(subevent, new DummyContext());
+        effect.processSubevent(subevent, new DummyContext(), new JsonArray());
 
         assertEquals(2, DummyFunction.counter,
                 "both instances of dummy_function should be executed"

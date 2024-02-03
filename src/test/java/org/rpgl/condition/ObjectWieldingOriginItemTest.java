@@ -59,7 +59,7 @@ public class ObjectWieldingOriginItemTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -86,7 +86,7 @@ public class ObjectWieldingOriginItemTest {
                 this.putString("from", "effect");
                 this.putString("object", "source");
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate false when origin item is null"
         );
     }
@@ -116,7 +116,7 @@ public class ObjectWieldingOriginItemTest {
                 this.putString("from", "effect");
                 this.putString("object", "source");
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate false when origin item is not wielded"
         );
     }
@@ -147,7 +147,7 @@ public class ObjectWieldingOriginItemTest {
                 this.putString("from", "effect");
                 this.putString("object", "source");
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate true when origin item is being wielded"
         );
     }

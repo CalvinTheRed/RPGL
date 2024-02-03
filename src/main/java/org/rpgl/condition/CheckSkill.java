@@ -2,6 +2,7 @@ package org.rpgl.condition;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.AbilityCheck;
 import org.rpgl.subevent.Subevent;
@@ -24,7 +25,7 @@ public class CheckSkill extends Condition {
     }
 
     @Override
-    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) {
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) {
         if (subevent instanceof AbilityCheck abilityCheck) {
             return Objects.equals(abilityCheck.getSkill(), conditionJson.getString("skill"));
         }

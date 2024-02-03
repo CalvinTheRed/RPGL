@@ -159,7 +159,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -170,7 +170,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageRoll.setSource(object);
-        damageRoll.prepare(new DummyContext());
+        damageRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new RerollDamageDiceMatchingOrBelow().execute(null, damageRoll, new JsonObject() {{
             /*{
@@ -181,7 +181,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putString("damage_type", "fire");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[6],"roll":1,"size":6},{"determined":[6],"roll":2,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";
@@ -196,7 +196,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageRoll.setSource(object);
-        damageRoll.prepare(new DummyContext());
+        damageRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new RerollDamageDiceMatchingOrBelow().execute(null, damageRoll, new JsonObject() {{
             /*{
@@ -207,7 +207,7 @@ public class RerollDamageDiceMatchingOrBelowTest {
             this.putString("function", "reroll_damage_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putString("damage_type", "");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]},{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6},{"determined":[6],"roll":3,"size":6},{"determined":[6],"roll":4,"size":6}]}]""";

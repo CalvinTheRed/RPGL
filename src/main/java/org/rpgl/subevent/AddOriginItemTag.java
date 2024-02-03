@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -38,7 +39,7 @@ public class AddOriginItemTag extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, JsonArray originPoint) {
         RPGLItem originItem = UUIDTable.getItem(super.getOriginItem());
         if (originItem != null) {
             originItem.addTag(this.json.getString("tag"));

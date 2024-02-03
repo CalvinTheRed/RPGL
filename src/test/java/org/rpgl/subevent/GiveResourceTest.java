@@ -60,7 +60,7 @@ public class GiveResourceTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -79,9 +79,9 @@ public class GiveResourceTest {
             this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
         }});
         giveResource.setSource(source);
-        giveResource.prepare(new DummyContext());
+        giveResource.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         giveResource.setTarget(target);
-        giveResource.invoke(new DummyContext());
+        giveResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, target.getResourceObjects().size(),
                 "target should be given one resource"
@@ -120,7 +120,7 @@ public class GiveResourceTest {
         giveResource.setSource(source);
         giveResource.setTarget(target);
 
-        giveResource.invoke(new DummyContext());
+        giveResource.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(2, target.getResourceObjects().size(),
                 "target should be given two resources"

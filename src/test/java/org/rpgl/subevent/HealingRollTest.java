@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.rpgl.core.RPGLCore;
-import org.rpgl.core.RPGLFactory;
-import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
@@ -58,7 +56,7 @@ public class HealingRollTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -255,10 +253,6 @@ public class HealingRollTest {
     @Test
     @DisplayName("prepares and rolls")
     void preparesAndRolls() throws Exception {
-        RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        DummyContext context = new DummyContext();
-        context.add(source);
-
         HealingRoll healingRoll = new HealingRoll();
         healingRoll.joinSubeventData(new JsonObject() {{
             /*{
@@ -300,7 +294,7 @@ public class HealingRollTest {
             }});
         }});
 
-        healingRoll.prepare(context);
+        healingRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":2,"size":6},{"determined":[],"roll":3,"size":6}]}]""";

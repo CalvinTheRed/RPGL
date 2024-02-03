@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
@@ -20,7 +21,7 @@ public class UserIdsMatch extends Condition {
     }
 
     @Override
-    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         RPGLObject effectObject = RPGLEffect.getObject(effect, subevent, new JsonObject() {{
             this.putString("from", "effect");
             this.putString("object", conditionJson.getString("effect"));

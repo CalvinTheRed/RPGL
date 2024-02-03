@@ -163,10 +163,12 @@ public abstract class Subevent {
      * assign a source RPGLObject to the Subevent for this method to work reliably.
      *
      * @param context the context in which the Subevent is being prepared
+     * @param originPoint the point from which the subevent emanates
      *
      * @throws Exception if an exception occurs
      */
-    public void prepare(@SuppressWarnings("unused") RPGLContext context) throws Exception {
+    @SuppressWarnings("unused")
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.json.getJsonArray("tags") == null) {
             this.json.putJsonArray("tags", new JsonArray());
         }
@@ -180,10 +182,10 @@ public abstract class Subevent {
      *
      * @throws Exception if an exception occurs
      */
-    public void invoke(RPGLContext context) throws Exception {
+    public void invoke(RPGLContext context, JsonArray originPoint) throws Exception {
         this.verifySubevent(this.subeventId);
-        context.processSubevent(this, context);
-        this.run(context);
+        context.processSubevent(this, context, originPoint);
+        this.run(context, originPoint);
         context.viewCompletedSubevent(this);
     }
 
@@ -195,7 +197,7 @@ public abstract class Subevent {
      *
      * @throws Exception if an exception occurs
      */
-    public void run(@SuppressWarnings("unused") RPGLContext context) throws Exception {
+    public void run(@SuppressWarnings("unused") RPGLContext context, JsonArray originPoint) throws Exception {
         // this method does nothing by default
     }
 

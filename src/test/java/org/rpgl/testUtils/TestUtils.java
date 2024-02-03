@@ -4,6 +4,7 @@ import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.List;
@@ -17,6 +18,12 @@ import java.util.Objects;
 public final class TestUtils {
 
     public static final String TEST_USER = "test-user";
+
+    public static final JsonArray TEST_ARRAY_0_0_0 = new JsonArray() {{
+        this.addDouble(0.0);
+        this.addDouble(0.0);
+        this.addDouble(0.0);
+    }};
 
     /**
      * Returns an effect by ID from a list (first match)

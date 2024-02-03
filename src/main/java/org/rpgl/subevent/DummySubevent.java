@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -40,7 +41,7 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, JsonArray originPoint) {
         DummySubevent.counter++;
     }
 

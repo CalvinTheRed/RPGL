@@ -18,13 +18,13 @@ public class All extends Condition {
     }
 
     @Override
-    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         JsonArray nestedConditionList = conditionJson.getJsonArray("conditions");
         for (int i = 0; i < nestedConditionList.size(); i++) {
             JsonObject nestedConditionJson = nestedConditionList.getJsonObject(i);
             Condition nestedCondition = Condition.CONDITIONS.get(nestedConditionJson.getString("condition"));
             // once a single nested condition returns false, iteration can short-circuit
-            if (!nestedCondition.evaluate(effect, subevent, nestedConditionJson, context)) {
+            if (!nestedCondition.evaluate(effect, subevent, nestedConditionJson, context, originPoint)) {
                 return false;
             }
         }

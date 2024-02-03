@@ -23,7 +23,7 @@ public class AddBonus extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         if (subevent instanceof Calculation calculation) {
             JsonArray bonusArray = functionJson.getJsonArray("bonus");
             for (int i = 0; i < bonusArray.size(); i++) {

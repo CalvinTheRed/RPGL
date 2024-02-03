@@ -42,8 +42,8 @@ public class SpawnObject extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("controlled_by", "source");
         this.json.asMap().putIfAbsent("object_bonuses", new ArrayList<>());
         this.json.asMap().putIfAbsent("extra_effects", new ArrayList<>());
@@ -54,15 +54,15 @@ public class SpawnObject extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
         RPGLObject spawnedObject = RPGLFactory.newObject(
                 this.json.getString("object_id"),
                 RPGLEffect.getObject(null, this, new JsonObject() {{
                     this.putString("from", "subevent");
                     this.putString("object", json.getString("controlled_by"));
                 }}).getUserId(),
-                new JsonArray(), // position
-                new JsonArray(), // rotation
+                originPoint.deepClone(),
+                this.getSource().getRotation().deepClone(),
                 this.json.getJsonArray("object_bonuses")
         );
 
@@ -86,7 +86,7 @@ public class SpawnObject extends Subevent {
         }
 
         if (this.json.getBoolean("extend_proficiency_bonus")) {
-            spawnedObject.setProficiencyBonus(super.getSource().getEffectiveProficiencyBonus(context));
+            spawnedObject.setProficiencyBonus(super.getSource().getEffectiveProficiencyBonus(context, originPoint));
         }
 
         context.add(spawnedObject);

@@ -172,7 +172,7 @@ public class RPGLObjectTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setProficiencyBonus(5);
 
-        assertEquals(5, object.getEffectiveProficiencyBonus(new DummyContext()),
+        assertEquals(5, object.getEffectiveProficiencyBonus(new DummyContext(), object.getPosition()),
                 "object should have proficiency bonus of +5"
         );
     }
@@ -250,6 +250,7 @@ public class RPGLObjectTest {
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         youngRedDragon.invokeEvent(
+                TestUtils.TEST_ARRAY_0_0_0,
                 new RPGLObject[] { target },
                 RPGLFactory.newEvent("std:object/dragon/red/young/breath"),
                 new ArrayList<>() {{
@@ -295,9 +296,9 @@ public class RPGLObjectTest {
         }});
 
         healingDelivery.setSource(object);
-        healingDelivery.prepare(new DummyContext());
+        healingDelivery.prepare(new DummyContext(), object.getPosition());
         healingDelivery.setTarget(object);
-        healingDelivery.invoke(new DummyContext());
+        healingDelivery.invoke(new DummyContext(), object.getPosition());
 
         object.receiveHealing(healingDelivery, new DummyContext());
 
@@ -331,9 +332,9 @@ public class RPGLObjectTest {
         }});
 
         healingDelivery.setSource(object);
-        healingDelivery.prepare(new DummyContext());
+        healingDelivery.prepare(new DummyContext(), object.getPosition());
         healingDelivery.setTarget(object);
-        healingDelivery.invoke(new DummyContext());
+        healingDelivery.invoke(new DummyContext(), object.getPosition());
 
         object.receiveHealing(healingDelivery, new DummyContext());
 
@@ -430,6 +431,7 @@ public class RPGLObjectTest {
         proxyObject.setOriginObject(originObject.getUuid());
 
         proxyObject.invokeEvent(
+                TestUtils.TEST_ARRAY_0_0_0,
                 new RPGLObject[] { proxyObject },
                 RPGLFactory.newEvent("debug:test_info_subevent"),
                 List.of(),
@@ -461,6 +463,7 @@ public class RPGLObjectTest {
         proxyObject.setProxy(true);
 
         proxyObject.invokeEvent(
+                TestUtils.TEST_ARRAY_0_0_0,
                 new RPGLObject[] { proxyObject },
                 RPGLFactory.newEvent("debug:test_info_subevent"),
                 List.of(),

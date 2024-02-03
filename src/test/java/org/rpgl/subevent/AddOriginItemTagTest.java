@@ -56,7 +56,7 @@ public class AddOriginItemTagTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -75,9 +75,9 @@ public class AddOriginItemTagTest {
         }});
         addOriginItemTag.setOriginItem(item.getUuid());
         addOriginItemTag.setSource(object);
-        addOriginItemTag.prepare(context);
+        addOriginItemTag.prepare(context, TestUtils.TEST_ARRAY_0_0_0);
         addOriginItemTag.setTarget(object);
-        addOriginItemTag.invoke(context);
+        addOriginItemTag.invoke(context, TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(item.getTags().asList().contains("test_tag"),
                 "invoke should add intended tag to origin item"

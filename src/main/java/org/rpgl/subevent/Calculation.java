@@ -27,8 +27,8 @@ public abstract class Calculation extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.prepareBase(context);
         this.prepareBonuses(context);
         this.prepareMinimum(context);
@@ -162,7 +162,7 @@ public abstract class Calculation extends Subevent {
             }};
             case "proficiency" -> new JsonObject() {{
                 RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
-                this.putInteger("bonus", object.getEffectiveProficiencyBonus(context));
+                this.putInteger("bonus", object.getEffectiveProficiencyBonus(context, object.getPosition()));
                 this.putJsonArray("dice", new JsonArray());
                 this.putJsonObject("scale", Objects.requireNonNullElse(formulaData.getJsonObject("scale"), new JsonObject() {{
                     this.putInteger("numerator", 1);
@@ -273,14 +273,17 @@ public abstract class Calculation extends Subevent {
                 }
             }
         ]*/
+        // TODO can these operate with scales?
         return switch (formulaData.getString("formula")) {
             case "number" -> formulaData.getInteger("number");
             case "modifier" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
                     .getAbilityModifierFromAbilityName(formulaData.getString("ability"), context);
             case "ability" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
                     .getAbilityScoreFromAbilityName(formulaData.getString("ability"), context);
-            case "proficiency" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))
-                    .getEffectiveProficiencyBonus(context);
+            case "proficiency" -> {
+                RPGLObject object = RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"));
+                yield object.getEffectiveProficiencyBonus(context, object.getPosition());
+            }
             case "level" -> formulaData.getString("class") == null
                     ? RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object")).getLevel()
                     : RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object")).getLevel(formulaData.getString("class"));

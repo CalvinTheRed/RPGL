@@ -58,7 +58,7 @@ public class CalculateBaseArmorClassTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -163,7 +163,7 @@ public class CalculateBaseArmorClassTest {
         CalculateBaseArmorClass calculateBaseArmorClass = new CalculateBaseArmorClass();
 
         calculateBaseArmorClass.setSource(source);
-        calculateBaseArmorClass.prepare(new DummyContext());
+        calculateBaseArmorClass.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10 /*base*/ +2 /*shield*/, calculateBaseArmorClass.get(),
                 "shield should raise AC to 12"

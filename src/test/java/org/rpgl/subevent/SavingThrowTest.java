@@ -59,7 +59,7 @@ public class SavingThrowTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -107,7 +107,7 @@ public class SavingThrowTest {
 
         savingThrow.setSource(object);
         savingThrow.setTarget(object);
-        savingThrow.deliverDamage("all", new DummyContext());
+        savingThrow.deliverDamage("all", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
                 "target should take 10 cold damage (52-10=42)"
@@ -130,7 +130,7 @@ public class SavingThrowTest {
                 this.putString("subevent", "dummy_subevent");
             }});
         }});
-        savingThrow.resolveNestedSubevents("pass", new DummyContext());
+        savingThrow.resolveNestedSubevents("pass", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested pass subevent"
@@ -145,7 +145,7 @@ public class SavingThrowTest {
                 this.putString("subevent", "dummy_subevent");
             }});
         }});
-        savingThrow.resolveNestedSubevents("fail", new DummyContext());
+        savingThrow.resolveNestedSubevents("fail", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested fail subevent"
@@ -192,7 +192,7 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(object);
-        savingThrow.getBaseDamage(new DummyContext());
+        savingThrow.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -244,7 +244,7 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        savingThrow.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
                 "save DC was calculated incorrectly"
@@ -270,7 +270,7 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        savingThrow.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(20, savingThrow.getDifficultyClass(),
                 "should preserve the assigned difficulty class"
@@ -294,7 +294,7 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        savingThrow.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
                 "save DC should calculate using origin object's ability scores"
@@ -349,9 +349,9 @@ public class SavingThrowTest {
         }});
 
         savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        savingThrow.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         savingThrow.setTarget(object);
-        savingThrow.invoke(new DummyContext());
+        savingThrow.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
                 "invoke should deal full damage on a fail"
@@ -405,9 +405,9 @@ public class SavingThrowTest {
             }});
         }});
         savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        savingThrow.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         savingThrow.setTarget(object);
-        savingThrow.invoke(new DummyContext());
+        savingThrow.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -5 /*damage*/, object.getHealthData().getInteger("current"),
                 "invoke should deal half damage on a pass"
@@ -461,9 +461,9 @@ public class SavingThrowTest {
             }});
         }});
         savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        savingThrow.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         savingThrow.setTarget(object);
-        savingThrow.invoke(new DummyContext());
+        savingThrow.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000, object.getHealthData().getInteger("current"),
                 "invoke should deal no damage on a pass"
@@ -533,9 +533,9 @@ public class SavingThrowTest {
             }});
         }});
         savingThrow.setSource(source);
-        savingThrow.prepare(new DummyContext());
+        savingThrow.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         savingThrow.setTarget(target);
-        savingThrow.invoke(new DummyContext());
+        savingThrow.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"

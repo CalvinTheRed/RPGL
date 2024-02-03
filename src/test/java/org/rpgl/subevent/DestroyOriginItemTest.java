@@ -60,7 +60,7 @@ public class DestroyOriginItemTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -81,6 +81,7 @@ public class DestroyOriginItemTest {
         String potionOfHealingUuid = potionOfHealing.getUuid();
 
         object.invokeEvent(
+                object.getPosition(),
                 new RPGLObject[]{ object },
                 TestUtils.getEventById(object.getEventObjects(new DummyContext()), "std:item/potion/potion_of_healing/drink"),
                 object.getResourcesWithTag("action"),

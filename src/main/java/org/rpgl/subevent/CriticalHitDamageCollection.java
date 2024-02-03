@@ -40,8 +40,8 @@ public class CriticalHitDamageCollection extends Subevent implements DamageTypeS
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
     }
 

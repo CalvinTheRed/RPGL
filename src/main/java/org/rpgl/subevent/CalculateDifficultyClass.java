@@ -38,8 +38,8 @@ public class CalculateDifficultyClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         Integer difficultyClass = this.json.getInteger("difficulty_class");
         if (difficultyClass == null) {
             super.setBase(8);
@@ -82,7 +82,7 @@ public class CalculateDifficultyClass extends Calculation {
                         }});
                     }});
                 }});
-            }}, context);
+            }}, context, originPoint);
         } else {
             super.setBase(difficultyClass);
         }

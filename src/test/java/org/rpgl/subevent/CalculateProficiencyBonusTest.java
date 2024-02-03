@@ -55,7 +55,7 @@ public class CalculateProficiencyBonusTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -69,7 +69,7 @@ public class CalculateProficiencyBonusTest {
         CalculateProficiencyBonus calculateProficiencyBonus = new CalculateProficiencyBonus();
 
         calculateProficiencyBonus.setSource(object);
-        calculateProficiencyBonus.prepare(new DummyContext());
+        calculateProficiencyBonus.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(5, calculateProficiencyBonus.getBase(),
                 "should default to object's base proficiency bonus"

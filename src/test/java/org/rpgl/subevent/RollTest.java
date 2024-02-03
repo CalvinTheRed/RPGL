@@ -79,7 +79,7 @@ public class RollTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(object);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(roll.isAdvantageRoll(),
                 "grantAdvantage should not yield an advantage roll"
@@ -98,7 +98,7 @@ public class RollTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(source);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantAdvantage();
 
         assertTrue(roll.isAdvantageRoll(),
@@ -118,7 +118,7 @@ public class RollTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(source);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantDisadvantage();
 
         assertFalse(roll.isAdvantageRoll(),
@@ -160,7 +160,7 @@ public class RollTest {
         }});
 
         roll.setSource(object);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.roll();
 
         assertEquals(5, roll.get(),
@@ -214,7 +214,7 @@ public class RollTest {
         }});
 
         roll.setSource(source);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantAdvantage();
         roll.roll();
 
@@ -245,7 +245,7 @@ public class RollTest {
         }});
 
         roll.setSource(object);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         roll.grantDisadvantage();
         roll.roll();
 

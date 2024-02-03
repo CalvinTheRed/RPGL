@@ -57,7 +57,7 @@ public class AddDamageTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -69,7 +69,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(object);
-        damageCollection.prepare(new DummyContext());
+        damageCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddDamage().execute(null, damageCollection, new JsonObject() {{
             /*{
@@ -102,7 +102,7 @@ public class AddDamageTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -118,7 +118,7 @@ public class AddDamageTest {
 
         DamageCollection damageCollection = new DamageCollection();
         damageCollection.setSource(object);
-        damageCollection.prepare(new DummyContext());
+        damageCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         damageCollection.addDamage(new JsonObject() {{
             /*{
                 "damage_type": "fire",
@@ -169,7 +169,7 @@ public class AddDamageTest {
                     this.putInteger("bonus", 0);
                 }});
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":5,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":0,"damage_type":"fire","dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -185,7 +185,7 @@ public class AddDamageTest {
 
         CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
         criticalHitDamageCollection.setSource(object);
-        criticalHitDamageCollection.prepare(new DummyContext());
+        criticalHitDamageCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddDamage().execute(null, criticalHitDamageCollection, new JsonObject() {{
             /*{
@@ -218,7 +218,7 @@ public class AddDamageTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -234,7 +234,7 @@ public class AddDamageTest {
 
         CriticalHitDamageCollection criticalHitDamageCollection = new CriticalHitDamageCollection();
         criticalHitDamageCollection.setSource(object);
-        criticalHitDamageCollection.prepare(new DummyContext());
+        criticalHitDamageCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         criticalHitDamageCollection.addDamage(new JsonObject() {{
             /*{
                 "damage_type": "fire",
@@ -285,7 +285,7 @@ public class AddDamageTest {
                     this.putInteger("bonus", 0);
                 }});
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":5,"damage_type":"fire","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":0,"damage_type":"fire","dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

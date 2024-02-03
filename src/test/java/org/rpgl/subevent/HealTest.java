@@ -58,7 +58,7 @@ public class HealTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -96,7 +96,7 @@ public class HealTest {
         heal.setSource(object);
         heal.setTarget(object);
 
-        heal.deliverHealing(new DummyContext());
+        heal.deliverHealing(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10 /*base*/ +10 /*healing*/, object.getHealthData().getInteger("current"),
                 "object should recover 10 hit points"
@@ -139,7 +139,7 @@ public class HealTest {
         }});
 
         heal.setSource(object);
-        heal.getBaseHealing(new DummyContext());
+        heal.getBaseHealing(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -186,9 +186,9 @@ public class HealTest {
         }});
 
         heal.setSource(object);
-        heal.prepare(new DummyContext());
+        heal.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         heal.setTarget(object);
-        heal.invoke(new DummyContext());
+        heal.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10 /*base*/ +4 /*healing*/, object.getHealthData().getInteger("current"),
                 "invoking heal should restore 4 hit points"
@@ -231,7 +231,7 @@ public class HealTest {
         }});
 
         heal.setSource(source);
-        heal.prepare(new DummyContext());
+        heal.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -274,7 +274,7 @@ public class HealTest {
         }});
 
         heal.setSource(object);
-        heal.getBaseHealing(new DummyContext());
+        heal.getBaseHealing(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":5,"dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

@@ -246,12 +246,15 @@ public class RPGLFactoryTest {
     @Test
     @DisplayName("creates new object with bonus")
     void createsNewObjectWithBonus() {
-        RPGLObject object = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER, new JsonArray() {{
-            this.addJsonObject(new JsonObject() {{
-                this.putString("field", "health_data.temporary");
-                this.putInteger("bonus", 10);
-            }});
-        }});
+        RPGLObject object = RPGLFactory.newObject("std:dragon/red/young", TestUtils.TEST_USER,
+                TestUtils.TEST_ARRAY_0_0_0, TestUtils.TEST_ARRAY_0_0_0,
+                new JsonArray() {{
+                this.addJsonObject(new JsonObject() {{
+                    this.putString("field", "health_data.temporary");
+                    this.putInteger("bonus", 10);
+                }});
+            }}
+        );
         assertEquals(10, object.getHealthData().getInteger("temporary"),
                 "object should have a bonus applied to the target field"
         );

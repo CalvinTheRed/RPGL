@@ -55,7 +55,7 @@ public class CalculateAbilityScoreTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -71,7 +71,7 @@ public class CalculateAbilityScoreTest {
         }});
 
         calculateAbilityScore.setSource(object);
-        calculateAbilityScore.prepare(new DummyContext());
+        calculateAbilityScore.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10, calculateAbilityScore.get(),
                 "base str score should be 10 after prepare()"

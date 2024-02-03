@@ -60,7 +60,7 @@ public class DealDamageTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -107,7 +107,7 @@ public class DealDamageTest {
 
         dealDamage.setSource(source);
         dealDamage.setTarget(target);
-        dealDamage.getBaseDamage(new DummyContext());
+        dealDamage.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -154,9 +154,9 @@ public class DealDamageTest {
         }});
 
         dealDamage.setSource(object);
-        dealDamage.prepare(new DummyContext());
+        dealDamage.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         dealDamage.setTarget(object);
-        dealDamage.invoke(new DummyContext());
+        dealDamage.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -3 /*damage*/, object.getHealthData().getInteger("current"),
                 "invoking DealDamage should deal 3 points of damage"
@@ -220,9 +220,9 @@ public class DealDamageTest {
         }});
 
         dealDamage.setSource(source);
-        dealDamage.prepare(context);
+        dealDamage.prepare(context, target.getPosition());
         dealDamage.setTarget(target);
-        dealDamage.invoke(context);
+        dealDamage.invoke(context, target.getPosition());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"

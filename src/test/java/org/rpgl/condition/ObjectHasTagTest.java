@@ -56,7 +56,7 @@ public class ObjectHasTagTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -85,7 +85,7 @@ public class ObjectHasTagTest {
                 this.putString("object", "source");
             }});
             this.putString("tag", "test_tag");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return true when object has desired tag"
         );
     }
@@ -113,7 +113,7 @@ public class ObjectHasTagTest {
                 this.putString("object", "source");
             }});
             this.putString("tag", "missing_tag");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return false when object does not have desired tag"
         );
     }

@@ -56,7 +56,7 @@ public class GrantImmunityTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -70,7 +70,7 @@ public class GrantImmunityTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext());
+        damageAffinity.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new GrantImmunity().execute(null, damageAffinity, new JsonObject() {{
             /*{
@@ -79,7 +79,7 @@ public class GrantImmunityTest {
             }*/
             this.putString("function", "grant_immunity");
             this.putString("damage_type", "fire");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(damageAffinity.isImmune("fire"),
                 "execute should grant immunity to fire damage"
@@ -98,14 +98,14 @@ public class GrantImmunityTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext());
+        damageAffinity.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new GrantImmunity().execute(null, damageAffinity, new JsonObject() {{
             /*{
                 "function": "grant_immunity"
             }*/
             this.putString("function", "grant_immunity");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(damageAffinity.isImmune("fire"),
                 "execute should grant immunity to fire damage"

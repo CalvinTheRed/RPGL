@@ -2,6 +2,7 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
@@ -23,7 +24,7 @@ public class SetMinimum extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         if (subevent instanceof Calculation calculation) {
             calculation.setMinimum(Calculation.processSetJson(effect, subevent, functionJson.getJsonObject("minimum"), context));
         } else {

@@ -43,8 +43,8 @@ public class CalculateBaseArmorClass extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         // Set base armor class from armor (or no armor)
         String armorUuid = super.getSource().getEquippedItems().getString("armor");
         int baseArmorClass;

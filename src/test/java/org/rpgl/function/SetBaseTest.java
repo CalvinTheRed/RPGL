@@ -74,7 +74,7 @@ public class SetBaseTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -85,7 +85,7 @@ public class SetBaseTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         calculation.setSource(object);
-        calculation.prepare(new DummyContext());
+        calculation.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new SetBase().execute(null, calculation, new JsonObject() {{
             /*{
@@ -100,7 +100,7 @@ public class SetBaseTest {
                 this.putString("formula", "number");
                 this.putInteger("number", 13);
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(13, calculation.getBase(),
                 "execute should set calculation base to 13"

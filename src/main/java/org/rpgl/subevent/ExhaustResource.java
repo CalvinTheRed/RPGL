@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLResource;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 import java.util.ArrayList;
@@ -47,8 +48,8 @@ public class ExhaustResource extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("count", Integer.MAX_VALUE);
         this.json.asMap().putIfAbsent("maximum_potency", Integer.MAX_VALUE);
         this.json.asMap().putIfAbsent("minimum_potency", 0);
@@ -56,7 +57,7 @@ public class ExhaustResource extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public void run(RPGLContext context, JsonArray originPoint) {
         switch (this.json.getString("selection_mode")) {
             case "low_first" -> this.runLowFirst();
             case "high_first" -> this.runHighFirst();

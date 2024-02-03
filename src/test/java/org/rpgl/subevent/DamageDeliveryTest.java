@@ -58,7 +58,7 @@ public class DamageDeliveryTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -119,7 +119,7 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext());
+        damageDelivery.run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"cold":10,"fire":10}""";
@@ -184,7 +184,7 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext());
+        damageDelivery.run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"cold":20,"fire":5}""";
@@ -249,7 +249,7 @@ public class DamageDeliveryTest {
         }});
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext());
+        damageDelivery.run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"cold":20,"fire":6}""";
@@ -329,7 +329,7 @@ public class DamageDeliveryTest {
 
         damageDelivery.maximizeTypedDamageDice("fire");
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext());
+        damageDelivery.run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"cold":1,"fire":4}""";
@@ -409,7 +409,7 @@ public class DamageDeliveryTest {
 
         damageDelivery.maximizeTypedDamageDice(null);
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext());
+        damageDelivery.run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"cold":4,"fire":4}""";

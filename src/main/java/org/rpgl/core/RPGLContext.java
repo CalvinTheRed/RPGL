@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.rpgl.json.JsonArray;
 import org.rpgl.subevent.Subevent;
 
 import java.util.ArrayList;
@@ -32,15 +33,16 @@ public abstract class RPGLContext {
      *
      * @param subevent a Subevent
      * @param context the context in which the passed subevent is being processed
+     * @param originPoint the point from which the passed subevent emanates
      *
      * @throws Exception if an exception occurs
      */
-    public void processSubevent(Subevent subevent, RPGLContext context) throws Exception {
+    public void processSubevent(Subevent subevent, RPGLContext context, JsonArray originPoint) throws Exception {
         boolean wasProcessed;
         do {
             wasProcessed = false;
             for (Map.Entry<String, RPGLObject> contextObjectsEntry : this.contextObjects.entrySet()) {
-                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent, context);
+                wasProcessed |= contextObjectsEntry.getValue().processSubevent(subevent, context, originPoint);
             }
         } while (wasProcessed);
     }

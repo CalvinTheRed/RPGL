@@ -55,7 +55,7 @@ public class GiveHalfProficiencyTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -67,14 +67,14 @@ public class GiveHalfProficiencyTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new GiveHalfProficiency().execute(null, abilityCheck, new JsonObject() {{
             /*{
                 "function": "give_half_proficiency"
             }*/
             this.putString("function", "give_half_proficiency");
-        }}, new DummyContext());
+        }}, new DummyContext(),TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(abilityCheck.hasHalfProficiency(),
                 "execute should give half proficiency to roll"

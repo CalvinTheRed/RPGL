@@ -41,14 +41,14 @@ public class AbilitySave extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context);
+        this.calculateDifficultyClass(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             this.putString("ability", json.getString("ability"));
@@ -57,14 +57,14 @@ public class AbilitySave extends Subevent {
             this.putJsonArray("determined", json.getJsonArray("determined"));
         }});
         abilityCheck.setSource(super.getTarget());
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, originPoint);
         abilityCheck.setTarget(super.getSource());
-        abilityCheck.invoke(context);
+        abilityCheck.invoke(context, originPoint);
 
         if (abilityCheck.get() < this.getDifficultyClass()) {
-            this.resolveNestedSubevents("fail", context);
+            this.resolveNestedSubevents("fail", context, originPoint);
         } else {
-            this.resolveNestedSubevents("pass", context);
+            this.resolveNestedSubevents("pass", context, originPoint);
         }
     }
 
@@ -75,7 +75,7 @@ public class AbilitySave extends Subevent {
      *
      * @throws Exception if an exception occurs.
      */
-    void calculateDifficultyClass(RPGLContext context) throws Exception {
+    void calculateDifficultyClass(RPGLContext context, JsonArray originPoint) throws Exception {
         CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
 
         Integer difficultyClass = this.getDifficultyClass();
@@ -96,9 +96,9 @@ public class AbilitySave extends Subevent {
                 ? UUIDTable.getObject(super.getSource().getOriginObject())
                 : super.getSource()
         );
-        calculateDifficultyClass.prepare(context);
+        calculateDifficultyClass.prepare(context, originPoint);
         calculateDifficultyClass.setTarget(super.getSource());
-        calculateDifficultyClass.invoke(context);
+        calculateDifficultyClass.invoke(context, originPoint);
 
         this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
@@ -112,16 +112,16 @@ public class AbilitySave extends Subevent {
      *
      * @throws Exception if an exception occurs.
      */
-    void resolveNestedSubevents(String passOrFail, RPGLContext context) throws Exception {
+    void resolveNestedSubevents(String passOrFail, RPGLContext context, JsonArray originPoint) throws Exception {
         JsonArray subeventJsonArray = this.json.getJsonArray(passOrFail);
         if (subeventJsonArray != null) {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
                 subevent.setSource(super.getSource());
-                subevent.prepare(context);
+                subevent.prepare(context, originPoint);
                 subevent.setTarget(super.getTarget());
-                subevent.invoke(context);
+                subevent.invoke(context, originPoint);
             }
         }
     }

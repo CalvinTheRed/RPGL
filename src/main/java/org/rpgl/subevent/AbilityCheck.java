@@ -38,15 +38,15 @@ public class AbilityCheck extends Roll {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public void prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.putBoolean("has_half_proficiency", false);
         this.json.putBoolean("has_proficiency", false);
         this.json.putBoolean("has_expertise", false);
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public void run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
             this.roll();
             new AddBonus().execute(null, this, new JsonObject() {{
@@ -106,7 +106,7 @@ public class AbilityCheck extends Roll {
                         }});
                     }});
                 }});
-            }}, context);
+            }}, context, originPoint);
         }
     }
 

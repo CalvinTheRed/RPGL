@@ -13,6 +13,7 @@ import org.rpgl.subevent.AttackRoll;
 import org.rpgl.subevent.DealDamage;
 import org.rpgl.subevent.SavingThrow;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -54,7 +55,7 @@ public class ApplyVampirismTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -81,7 +82,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"subevent":"attack_roll","tags":["attack_roll"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -112,7 +113,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"subevent":"deal_damage","tags":["deal_damage"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";
@@ -143,7 +144,7 @@ public class ApplyVampirismTest {
                 this.putBoolean("round_up", false);
                 this.putString("damage_type", "necrotic");
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"subevent":"saving_throw","tags":["saving_throw"],"vampirism":{"damage_type":"necrotic","denominator":2,"numerator":1,"round_up":false}}""";

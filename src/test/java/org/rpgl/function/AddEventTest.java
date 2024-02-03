@@ -56,7 +56,7 @@ public class AddEventTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -68,7 +68,7 @@ public class AddEventTest {
 
         GetEvents getEvents = new GetEvents();
         getEvents.setSource(object);
-        getEvents.prepare(new DummyContext());
+        getEvents.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddEvent().execute(new RPGLEffect(), getEvents, new JsonObject() {{
             /*{
@@ -77,7 +77,7 @@ public class AddEventTest {
             }*/
             this.putString("function", "add_event");
             this.putString("event", "std:common/dodge");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals("std:common/dodge", getEvents.getEvents().get(0).getId(),
                 "execute should add the correct event to the subevent"

@@ -58,7 +58,7 @@ public class HealingCollectionTest {
         }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -142,7 +142,7 @@ public class HealingCollectionTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(source);
-        healingCollection.prepare(new DummyContext());
+        healingCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 []""";
