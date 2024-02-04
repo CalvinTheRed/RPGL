@@ -56,13 +56,13 @@ public class CheckLevelTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
 
     @Test
-    @DisplayName("evaluates true ")
+    @DisplayName("evaluates true")
     void evaluatesTrue() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
@@ -92,7 +92,7 @@ public class CheckLevelTest {
             this.putString("class", "debug:blank");
             this.putString("comparison", "=");
             this.putInteger("compare_to", 15);
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return true"
         );
     }
@@ -128,7 +128,7 @@ public class CheckLevelTest {
             this.putString("class", "debug:blank");
             this.putString("comparison", "=");
             this.putInteger("compare_to", 15);
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return false"
         );
     }

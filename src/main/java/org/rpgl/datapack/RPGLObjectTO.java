@@ -31,6 +31,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     public static final String USER_ID                 = "user_id";
     public static final String ORIGIN_OBJECT_ALIAS     = "origin_object";
     public static final String PROXY_ALIAS             = "proxy";
+    public static final String POSITION_ALIAS          = "position";
+    public static final String ROTATION_ALIAS          = "rotation";
 
     @JsonProperty(ABILITY_SCORES_ALIAS)
     HashMap<String, Object> abilityScores;
@@ -60,6 +62,10 @@ public class RPGLObjectTO extends RPGLTaggableTO {
     String originObject;
     @JsonProperty(PROXY_ALIAS)
     Boolean proxy;
+    @JsonProperty(POSITION_ALIAS)
+    ArrayList<Object> position;
+    @JsonProperty(ROTATION_ALIAS)
+    ArrayList<Object> rotation;
 
     /**
      * Default constructor for RPGLObjectTO class.
@@ -90,6 +96,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
         this.originObject = rpglObject.getOriginObject();
         this.userId = rpglObject.getUserId();
         this.proxy = rpglObject.getProxy();
+        this.position = rpglObject.getPosition().asList();
+        this.rotation = rpglObject.getRotation().asList();
     }
 
     /**
@@ -113,6 +121,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             // origin object not needed for template
             // user id not needed for template
             this.putBoolean(PROXY_ALIAS, proxy);
+            this.putJsonArray(POSITION_ALIAS, new JsonArray(position));
+            this.putJsonArray(ROTATION_ALIAS, new JsonArray(rotation));
         }};
         rpglObjectTemplate.join(super.getTemplateData());
         return rpglObjectTemplate;
@@ -139,6 +149,8 @@ public class RPGLObjectTO extends RPGLTaggableTO {
             this.setUserId(userId);
             this.setOriginObject(originObject);
             this.setProxy(proxy);
+            this.setPosition(new JsonArray(position));
+            this.setRotation(new JsonArray(rotation));
         }};
         rpglObject.join(super.getTemplateData());
         rpglObject.join(super.getUUIDTableElementData());

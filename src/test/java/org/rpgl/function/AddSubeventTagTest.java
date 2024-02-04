@@ -11,6 +11,7 @@ import org.rpgl.exception.FunctionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -52,7 +53,7 @@ public class AddSubeventTagTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -69,7 +70,7 @@ public class AddSubeventTagTest {
             }*/
             this.putString("function", "add_subevent_tag");
             this.putString("tag", "test_tag");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(dummySubevent.hasTag("test_tag"),
                 "execute should add tag to subevent"

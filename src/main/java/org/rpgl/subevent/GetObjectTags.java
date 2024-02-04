@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -37,18 +38,51 @@ public class GetObjectTags extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public GetObjectTags invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (GetObjectTags) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public GetObjectTags joinSubeventData(JsonObject other) {
+        return (GetObjectTags) super.joinSubeventData(other);
+    }
+
+    @Override
+    public GetObjectTags prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.putJsonArray("object_tags", new JsonArray());
+        return this;
+    }
+
+    @Override
+    public GetObjectTags run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public GetObjectTags setOriginItem(String originItem) {
+        return (GetObjectTags) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public GetObjectTags setSource(RPGLObject source) {
+        return (GetObjectTags) super.setSource(source);
+    }
+
+    @Override
+    public GetObjectTags setTarget(RPGLObject target) {
+        return (GetObjectTags) super.setTarget(target);
     }
 
     /**
      * Adds a tag to the Subevent, to be applied to a RPGLObject later.
      *
      * @param tag a tag to be applied to a RPGLObject
+     * @return this GetObjectTags
      */
-    public void addObjectTag(String tag) {
+    public GetObjectTags addObjectTag(String tag) {
         this.getObjectTags().addString(tag);
+        return this;
     }
 
     /**

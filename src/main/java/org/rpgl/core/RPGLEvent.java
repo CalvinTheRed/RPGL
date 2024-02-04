@@ -31,9 +31,12 @@ public class RPGLEvent extends DatapackContent {
      * Setter for area of effect.
      *
      * @param areaOfEffect a new area of effect JsonObject
+     * @return this RPGLEvent
      */
-    public void setAreaOfEffect(JsonObject areaOfEffect) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEvent setAreaOfEffect(JsonObject areaOfEffect) {
         super.putJsonObject(RPGLEventTO.AREA_OF_EFFECT_ALIAS, areaOfEffect);
+        return this;
     }
 
     /**
@@ -49,9 +52,12 @@ public class RPGLEvent extends DatapackContent {
      * Setter for subevents.
      *
      * @param subevents a new subevents JsonArray
+     * @return this RPGLEvent
      */
-    public void setSubevents(JsonArray subevents) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEvent setSubevents(JsonArray subevents) {
         super.putJsonArray(RPGLEventTO.SUBEVENTS_ALIAS, subevents);
+        return this;
     }
 
     /**
@@ -67,14 +73,13 @@ public class RPGLEvent extends DatapackContent {
      * Setter for cost.
      *
      * @param cost a new cost for the RPGLEvent
+     * @return this RPGLEvent
      */
-    public void setCost(JsonArray cost) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEvent setCost(JsonArray cost) {
         super.putJsonArray(RPGLEventTO.COST_ALIAS, cost);
+        return this;
     }
-
-    // =================================================================================================================
-    // Methods not derived directly from transfer objects
-    // =================================================================================================================
 
     /**
      * Returns the origin item UUID for the RPGLEvent if it has one.
@@ -89,9 +94,28 @@ public class RPGLEvent extends DatapackContent {
      * Sets the origin item UUID of the RPGLEvent.
      *
      * @param originItem a RPGLItem UUID
+     * @return this RPGLEvent
      */
-    public void setOriginItem(String originItem) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEvent setOriginItem(String originItem) {
         super.putString("origin_item", originItem);
+        return this;
+    }
+
+    // =================================================================================================================
+    // Methods not derived directly from transfer objects
+    // =================================================================================================================
+
+    /**
+     * Set the event's source.
+     *
+     * @param sourceUuid the UUID of the event's source
+     * @return the RPGLEvent
+     */
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEvent setSource(String sourceUuid) {
+        this.putString("source", sourceUuid);
+        return this;
     }
 
     /**

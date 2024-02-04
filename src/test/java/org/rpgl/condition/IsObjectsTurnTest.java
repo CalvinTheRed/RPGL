@@ -56,7 +56,7 @@ public class IsObjectsTurnTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -84,7 +84,7 @@ public class IsObjectsTurnTest {
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-        }}, context),
+        }}, context, TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return true when it is object's turn"
         );
     }
@@ -112,7 +112,7 @@ public class IsObjectsTurnTest {
                 this.putString("from", "subevent");
                 this.putString("object", "source");
             }});
-        }}, context),
+        }}, context, TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return false when it is not object's turn"
         );
     }

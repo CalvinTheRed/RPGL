@@ -9,6 +9,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -31,117 +32,117 @@ public class DamageRollTest {
 
     @BeforeEach
     void beforeEach() {
-        damageRoll = new DamageRoll();
-        damageRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire",
-                        "dice": [
-                            { "size": 4, "roll": 1, "determined": [ 4 ] },
-                            { "size": 4, "roll": 2, "determined": [ 4 ] },
-                            { "size": 4, "roll": 3, "determined": [ 4 ] },
-                            { "size": 4, "roll": 4, "determined": [ 4 ] }
-                        ],
-                        "bonus": 1
-                    },{
-                        "damage_type": "cold",
-                        "dice": [
-                            { "size": 4, "roll": 1, "determined": [ 4 ] },
-                            { "size": 4, "roll": 2, "determined": [ 4 ] },
-                            { "size": 4, "roll": 3, "determined": [ 4 ] },
-                            { "size": 4, "roll": 4, "determined": [ 4 ] }
-                        ],
-                        "bonus": 1
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
+        damageRoll = new DamageRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "fire",
+                                "dice": [
+                                    { "size": 4, "roll": 1, "determined": [ 4 ] },
+                                    { "size": 4, "roll": 2, "determined": [ 4 ] },
+                                    { "size": 4, "roll": 3, "determined": [ 4 ] },
+                                    { "size": 4, "roll": 4, "determined": [ 4 ] }
+                                ],
+                                "bonus": 1
+                            },{
+                                "damage_type": "cold",
+                                "dice": [
+                                    { "size": 4, "roll": 1, "determined": [ 4 ] },
+                                    { "size": 4, "roll": 2, "determined": [ 4 ] },
+                                    { "size": 4, "roll": 3, "determined": [ 4 ] },
+                                    { "size": 4, "roll": 4, "determined": [ 4 ] }
+                                ],
+                                "bonus": 1
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 1);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 2);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 3);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 4);
+                                }});
                             }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 1);
+                            this.putInteger("bonus", 1);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 1);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 2);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 3);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(4);
+                                    }});
+                                    this.putInteger("size", 4);
+                                    this.putInteger("roll", 4);
+                                }});
                             }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 2);
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
-                            }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 3);
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
-                            }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 4);
+                            this.putInteger("bonus", 1);
                         }});
                     }});
-                    this.putInteger("bonus", 1);
                 }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
-                            }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 1);
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
-                            }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 2);
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
-                            }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 3);
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(4);
-                            }});
-                            this.putInteger("size", 4);
-                            this.putInteger("roll", 4);
-                        }});
-                    }});
-                    this.putInteger("bonus", 1);
-                }});
-            }});
-        }});
     }
 
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new DamageRoll();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new DamageRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -207,7 +208,7 @@ public class DamageRollTest {
     @Test
     @DisplayName("prepares and rolls damage")
     void preparesAndRollsDamage() throws Exception {
-        damageRoll.prepare(new DummyContext());
+        damageRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":1,"damage_type":"fire","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]},{"bonus":1,"damage_type":"cold","dice":[{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4},{"determined":[],"roll":4,"size":4}]}]""";

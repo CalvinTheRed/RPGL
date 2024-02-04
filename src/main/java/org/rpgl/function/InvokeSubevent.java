@@ -20,7 +20,7 @@ public class InvokeSubevent extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         RPGLObject source = RPGLEffect.getObject(effect, subevent, functionJson.getJsonObject("source"));
         JsonArray targets = functionJson.getJsonArray("targets");
         JsonObject nestedSubeventJson = functionJson.getJsonObject("subevent");
@@ -29,11 +29,11 @@ public class InvokeSubevent extends Function {
                 .clone(nestedSubeventJson);
         nestedSubevent.setOriginItem(subevent.getOriginItem());
         nestedSubevent.setSource(source);
-        nestedSubevent.prepare(context);
+        nestedSubevent.prepare(context, originPoint);
         for (int i = 0; i < targets.size(); i++) {
             Subevent subeventClone = nestedSubevent.clone();
             subeventClone.setTarget(RPGLEffect.getObject(effect, subevent, targets.getJsonObject(i)));
-            subeventClone.invoke(context);
+            subeventClone.invoke(context, originPoint);
         }
     }
 

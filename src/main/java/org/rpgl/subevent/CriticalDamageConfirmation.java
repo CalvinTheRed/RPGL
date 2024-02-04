@@ -1,6 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -36,9 +38,40 @@ public class CriticalDamageConfirmation extends Subevent implements CancelableSu
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public CriticalDamageConfirmation invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CriticalDamageConfirmation) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CriticalDamageConfirmation joinSubeventData(JsonObject other) {
+        return (CriticalDamageConfirmation) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CriticalDamageConfirmation prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.putBoolean("canceled", false);
+        return this;
+    }
+
+    @Override
+    public CriticalDamageConfirmation run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CriticalDamageConfirmation setOriginItem(String originItem) {
+        return (CriticalDamageConfirmation) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CriticalDamageConfirmation setSource(RPGLObject source) {
+        return (CriticalDamageConfirmation) super.setSource(source);
+    }
+
+    @Override
+    public CriticalDamageConfirmation setTarget(RPGLObject target) {
+        return (CriticalDamageConfirmation) super.setTarget(target);
     }
 
     @Override

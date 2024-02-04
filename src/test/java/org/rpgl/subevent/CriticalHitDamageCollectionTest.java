@@ -7,6 +7,7 @@ import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,75 +26,75 @@ public class CriticalHitDamageCollectionTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new CriticalHitDamageCollection();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new CriticalHitDamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
 
     @BeforeEach
     void beforeEach() {
-        criticalHitDamageCollection = new CriticalHitDamageCollection();
-        criticalHitDamageCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire",
-                        "dice": [
-                            { "size": 6, "determined": [ 3 ] },
-                            { "size": 6, "determined": [ 3 ] }
-                        ],
-                        "bonus": 1
-                    },{
-                        "damage_type": "cold",
-                        "dice": [
-                            { "size": 10, "determined": [ 5 ] }
-                        ],
-                        "bonus": 1
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
+        criticalHitDamageCollection = new CriticalHitDamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "fire",
+                                "dice": [
+                                    { "size": 6, "determined": [ 3 ] },
+                                    { "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 1
+                            },{
+                                "damage_type": "cold",
+                                "dice": [
+                                    { "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 1
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 1);
                         }});
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 1);
                         }});
                     }});
-                    this.putInteger("bonus", 1);
                 }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
-                            }});
-                        }});
-                    }});
-                    this.putInteger("bonus", 1);
-                }});
-            }});
-        }});
     }
 
     @Test

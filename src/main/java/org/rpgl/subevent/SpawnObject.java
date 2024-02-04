@@ -42,8 +42,18 @@ public class SpawnObject extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public SpawnObject invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (SpawnObject) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public SpawnObject joinSubeventData(JsonObject other) {
+        return (SpawnObject) super.joinSubeventData(other);
+    }
+
+    @Override
+    public SpawnObject prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("controlled_by", "source");
         this.json.asMap().putIfAbsent("object_bonuses", new ArrayList<>());
         this.json.asMap().putIfAbsent("extra_effects", new ArrayList<>());
@@ -51,28 +61,31 @@ public class SpawnObject extends Subevent {
         this.json.asMap().putIfAbsent("extra_tags", new ArrayList<>());
         this.json.asMap().putIfAbsent("extend_proficiency_bonus", false);
         this.json.asMap().putIfAbsent("proxy", false);
+        return this;
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public SpawnObject run(RPGLContext context, JsonArray originPoint) throws Exception {
         RPGLObject spawnedObject = RPGLFactory.newObject(
                 this.json.getString("object_id"),
                 RPGLEffect.getObject(null, this, new JsonObject() {{
                     this.putString("from", "subevent");
                     this.putString("object", json.getString("controlled_by"));
                 }}).getUserId(),
+                originPoint.deepClone(),
+                this.getSource().getRotation().deepClone(),
                 this.json.getJsonArray("object_bonuses")
-        );
-
-        spawnedObject.setOriginObject(super.getSource().getUuid());
-        spawnedObject.setProxy(this.json.getBoolean("proxy"));
+        )
+                .setOriginObject(super.getSource().getUuid())
+                .setProxy(this.json.getBoolean("proxy"));
 
         JsonArray extraEffects = this.json.getJsonArray("extra_effects");
         for (int i = 0; i < extraEffects.size(); i++) {
-            RPGLEffect effect = RPGLFactory.newEffect(extraEffects.getString(i), super.getOriginItem());
-            effect.setSource(super.getSource());
-            effect.setTarget(spawnedObject);
-            spawnedObject.addEffect(effect);
+            spawnedObject.addEffect(RPGLFactory.newEffect(extraEffects.getString(i))
+                    .setOriginItem(super.getOriginItem())
+                    .setSource(super.getSource())
+                    .setTarget(spawnedObject)
+            );
         }
 
         spawnedObject.getEvents().asList().addAll(this.json.getJsonArray("extra_events").asList());
@@ -87,6 +100,23 @@ public class SpawnObject extends Subevent {
         }
 
         context.add(spawnedObject);
+
+        return this;
+    }
+
+    @Override
+    public SpawnObject setOriginItem(String originItem) {
+        return (SpawnObject) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public SpawnObject setSource(RPGLObject source) {
+        return (SpawnObject) super.setSource(source);
+    }
+
+    @Override
+    public SpawnObject setTarget(RPGLObject target) {
+        return (SpawnObject) super.setTarget(target);
     }
 
     /**

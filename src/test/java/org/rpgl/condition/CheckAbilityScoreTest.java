@@ -56,7 +56,7 @@ public class CheckAbilityScoreTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -89,7 +89,7 @@ public class CheckAbilityScoreTest {
             this.putString("ability", "str");
             this.putString("comparison", "=");
             this.putInteger("compare_to", 15);
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return true"
         );
     }
@@ -122,7 +122,7 @@ public class CheckAbilityScoreTest {
             this.putString("ability", "str");
             this.putString("comparison", "=");
             this.putInteger("compare_to", 10);
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return false"
         );
     }

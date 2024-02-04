@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -40,9 +41,40 @@ public class DamageRoll extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public DamageRoll invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DamageRoll) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public DamageRoll joinSubeventData(JsonObject other) {
+        return (DamageRoll) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DamageRoll prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.roll();
+        return this;
+    }
+
+    @Override
+    public DamageRoll run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public DamageRoll setOriginItem(String originItem) {
+        return (DamageRoll) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DamageRoll setSource(RPGLObject source) {
+        return (DamageRoll) super.setSource(source);
+    }
+
+    @Override
+    public DamageRoll setTarget(RPGLObject target) {
+        return (DamageRoll) super.setTarget(target);
     }
 
     @Override

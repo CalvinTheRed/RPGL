@@ -2,6 +2,7 @@ package org.rpgl.condition;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 
@@ -20,7 +21,7 @@ public class OriginItemsMatch extends Condition {
     }
 
     @Override
-    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         String effectOriginItem = effect.getOriginItem();
         String eventOriginItem = subevent.getOriginItem();
         return effectOriginItem != null && Objects.equals(effectOriginItem, eventOriginItem);

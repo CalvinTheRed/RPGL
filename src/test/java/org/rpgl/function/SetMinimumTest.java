@@ -6,11 +6,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Calculation;
 import org.rpgl.subevent.Subevent;
@@ -57,6 +59,11 @@ public class SetMinimumTest {
             public Subevent clone(JsonObject jsonData) {
                 return null;
             }
+
+            @Override
+            public Calculation run(RPGLContext context, JsonArray originPoint) {
+                return this;
+            }
         };
     }
 
@@ -74,7 +81,7 @@ public class SetMinimumTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -85,7 +92,7 @@ public class SetMinimumTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         calculation.setSource(object);
-        calculation.prepare(new DummyContext());
+        calculation.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new SetMinimum().execute(null, calculation, new JsonObject() {{
             /*{
@@ -100,7 +107,7 @@ public class SetMinimumTest {
                 this.putString("formula", "number");
                 this.putInteger("number", 13);
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(13, calculation.getMinimum(),
                 "execute should set calculation minimum to 13"

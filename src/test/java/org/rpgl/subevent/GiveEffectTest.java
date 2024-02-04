@@ -48,16 +48,16 @@ public class GiveEffectTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new GiveEffect();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new GiveEffect()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -68,14 +68,14 @@ public class GiveEffectTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        GiveEffect giveEffect = new GiveEffect();
-        giveEffect.joinSubeventData(new JsonObject() {{
-            this.putString("effect", "std:common/damage/immunity/fire");
-        }});
-        giveEffect.setSource(source);
-        giveEffect.prepare(new DummyContext());
-        giveEffect.setTarget(target);
-        giveEffect.invoke(new DummyContext());
+        new GiveEffect()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("effect", "std:common/damage/immunity/fire");
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         List<RPGLEffect> effects = target.getEffectObjects();
         assertEquals(1, effects.size(),

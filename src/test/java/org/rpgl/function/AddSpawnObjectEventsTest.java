@@ -56,7 +56,7 @@ public class AddSpawnObjectEventsTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -68,7 +68,7 @@ public class AddSpawnObjectEventsTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(new DummyContext());
+        spawnObject.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddSpawnObjectEvents().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -83,7 +83,7 @@ public class AddSpawnObjectEventsTest {
                 this.addString("std:spell/fire_bolt");
                 this.addString("std:common/dodge");
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 ["std:spell/fire_bolt","std:common/dodge"]""";

@@ -3,6 +3,8 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.exception.DimensionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -45,9 +47,12 @@ public abstract class Condition {
         Condition.CONDITIONS.put("any", new Any());
         Condition.CONDITIONS.put("check_ability", new CheckAbility());
         Condition.CONDITIONS.put("check_ability_score", new CheckAbilityScore());
+        Condition.CONDITIONS.put("check_distance", new CheckDistance());
         Condition.CONDITIONS.put("check_level", new CheckLevel());
         Condition.CONDITIONS.put("check_skill", new CheckSkill());
+        Condition.CONDITIONS.put("entering_reach", new EnteringReach());
         Condition.CONDITIONS.put("equipped_item_has_tag", new EquippedItemHasTag());
+        Condition.CONDITIONS.put("exiting_reach", new ExitingReach());
         Condition.CONDITIONS.put("includes_damage_type", new IncludesDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
         Condition.CONDITIONS.put("is_objects_turn", new IsObjectsTurn());
@@ -92,12 +97,19 @@ public abstract class Condition {
      * @param subevent a Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
      * @param context the context in which the Condition is being invoked
+     * @param originPoint the point from which the passed subevent emanates
      * @return true if the condition is satisfied. Note that if a subevent-condition loop is formed, this method will
      * return false until that loop is exited.
      *
      * @throws Exception if an exception occurs
      */
-    public boolean evaluate(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean evaluate(
+            RPGLEffect effect,
+            Subevent subevent,
+            JsonObject conditionJson,
+            RPGLContext context,
+            JsonArray originPoint
+    ) throws Exception {
         this.verifyCondition(conditionJson);
         if (ACTIVE_CONDITIONS.contains(conditionJson)) {
             // begin the back-out if you detect a loop
@@ -109,7 +121,7 @@ public abstract class Condition {
             ACTIVE_CONDITIONS.push(conditionJson);
             boolean result;
             try {
-                result = this.run(effect, subevent, conditionJson, context);
+                result = this.run(effect, subevent, conditionJson, context, originPoint);
             } catch (Exception e) {
                 ACTIVE_CONDITIONS.pop();
                 throw e;
@@ -136,10 +148,17 @@ public abstract class Condition {
      * @param subevent a Subevent being invoked
      * @param conditionJson a JsonObject containing additional information necessary for the Condition to be evaluated
      * @param context the context in which the Condition is being invoked
+     * @param originPoint the point from which the passed subevent emanates
      *
      * @throws Exception if an exception occurs
      */
-    public abstract boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception;
+    public abstract boolean run(
+            RPGLEffect effect,
+            Subevent subevent,
+            JsonObject conditionJson,
+            RPGLContext context,
+            JsonArray originPoint
+    ) throws Exception;
 
     // =================================================================================================================
     // Condition helper methods
@@ -148,14 +167,14 @@ public abstract class Condition {
     /**
      * This helper method compares two integer values in accordance with a specified comparison operator.
      *
-     * @param value the int being compared to another value
-     * @param target the int being compared against
+     * @param value the double being compared to another value
+     * @param target the double being compared against
      * @param comparison the operator being used for the comparison (<code>"=", "<", "<=", ">", ">="</code>)
      * @return true if the comparison is satisfied
      *
      * @throws Exception if an invalid comparison operator is provided
      */
-    public static boolean compareValues(int value, int target, String comparison) throws Exception {
+    public static boolean compareValues(double value, double target, String comparison) throws Exception {
         switch(comparison) {
             case "=":
                 return value == target;
@@ -173,6 +192,58 @@ public abstract class Condition {
                 throw e;
             }
         }
+    }
+
+    /**
+     * Finds the distance between two N-dimensional points. pos1 and pos2 must be of the same degree.
+     *
+     * @param pos1 a point in coordinate space
+     * @param pos2 a point in coordinate space
+     * @param algorithm the algorithm to measure distance (<code>"direct"</code> or <code>"taxicab"</code>)
+     * @return the distance between the two passed points
+     *
+     * @throws DimensionMismatchException if the passed points have different degrees
+     */
+    public static double getDistance(JsonArray pos1, JsonArray pos2, String algorithm) throws DimensionMismatchException {
+        if (pos1.size() == pos2.size()) {
+            return switch (algorithm) {
+                case "direct" -> getDirectDistance(pos1, pos2);
+                case "taxicab" -> getTaxicabDistance(pos1, pos2);
+                default -> -1;
+            };
+        } else {
+            throw new DimensionMismatchException(pos1, pos2);
+        }
+    }
+
+    /**
+     * This helper method calculates the distance between two points by the shortest distance.
+     *
+     * @param pos1 a point in coordinate space
+     * @param pos2 a point in coordinate space
+     * @return the direct distance between the two passed points.
+     */
+    private static double getDirectDistance(JsonArray pos1, JsonArray pos2) {
+        double sum = 0d;
+        for (int i = 0; i < pos1.size(); i++) {
+            sum += Math.pow((pos1.getDouble(i) - pos2.getDouble(i)), 2);
+        }
+        return Math.sqrt(sum);
+    }
+
+    /**
+     * This helper method calculates the distance between two points via taxicab distance.
+     *
+     * @param pos1 a point in coordinate space
+     * @param pos2 a point in coordinate space
+     * @return the taxicab distance between the two passed points.
+     */
+    private static double getTaxicabDistance(JsonArray pos1, JsonArray pos2) {
+        double sum = 0d;
+        for (int i = 0; i < pos1.size(); i++) {
+            sum += Math.abs(pos1.getDouble(i) - pos2.getDouble(i));
+        }
+        return sum;
     }
 
 }

@@ -1,6 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -40,8 +42,39 @@ public class DummySubevent extends Subevent implements AbilitySubevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public DummySubevent invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DummySubevent) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public DummySubevent joinSubeventData(JsonObject other) {
+        return (DummySubevent) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DummySubevent prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DummySubevent) super.prepare(context, originPoint);
+    }
+
+    @Override
+    public DummySubevent run(RPGLContext context, JsonArray originPoint) {
         DummySubevent.counter++;
+        return this;
+    }
+
+    @Override
+    public DummySubevent setOriginItem(String originItem) {
+        return (DummySubevent) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DummySubevent setSource(RPGLObject source) {
+        return (DummySubevent) super.setSource(source);
+    }
+
+    @Override
+    public DummySubevent setTarget(RPGLObject target) {
+        return (DummySubevent) super.setTarget(target);
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -41,9 +42,40 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public DamageAffinity invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DamageAffinity) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public DamageAffinity joinSubeventData(JsonObject other) {
+        return (DamageAffinity) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DamageAffinity prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("affinities", new ArrayList<>());
+        return this;
+    }
+
+    @Override
+    public DamageAffinity run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public DamageAffinity setOriginItem(String originItem) {
+        return (DamageAffinity) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DamageAffinity setSource(RPGLObject source) {
+        return (DamageAffinity) super.setSource(source);
+    }
+
+    @Override
+    public DamageAffinity setTarget(RPGLObject target) {
+        return (DamageAffinity) super.setTarget(target);
     }
 
     @Override
@@ -62,15 +94,16 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
      * DamageAffinity, this method does nothing.
      *
      * @param damageType a damage type
+     * @return this DamageAffinity
      */
-    public void addDamageType(String damageType) {
+    public DamageAffinity addDamageType(String damageType) {
         this.json.asMap().putIfAbsent("affinities", new ArrayList<>());
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
             JsonObject affinity = affinities.getJsonObject(i);
             if (Objects.equals(affinity.getString("damage_type"), damageType)) {
                 // short-circuit if the damage type is already included
-                return;
+                return this;
             }
         }
 
@@ -84,6 +117,8 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
             this.putBoolean("resistance_revoked", false);
             this.putBoolean("vulnerability_revoked", false);
         }});
+
+        return this;
     }
 
     /**
@@ -100,8 +135,10 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
      * is null, the immunity is applied to all included damage types.
      *
      * @param damageType a damage type
+     * @return this DamageAffinity
      */
-    public void grantImmunity(String damageType) {
+    @SuppressWarnings("UnusedReturnValue")
+    public DamageAffinity grantImmunity(String damageType) {
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
             JsonObject affinity = affinities.getJsonObject(i);
@@ -109,6 +146,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
                 affinity.putBoolean("immunity", true);
             }
         }
+        return this;
     }
 
     /**
@@ -116,8 +154,10 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
      * type is null, the resistance is applied to all included damage types.
      *
      * @param damageType a damage type
+     * @return this DamageAffinity
      */
-    public void grantResistance(String damageType) {
+    @SuppressWarnings("UnusedReturnValue")
+    public DamageAffinity grantResistance(String damageType) {
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
             JsonObject affinity = affinities.getJsonObject(i);
@@ -125,6 +165,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
                 affinity.putBoolean("resistance", true);
             }
         }
+        return this;
     }
 
     /**
@@ -132,8 +173,10 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
      * type is null, the vulnerability is applied to all included damage types.
      *
      * @param damageType a damage type
+     * @return this DamageAffinity
      */
-    public void grantVulnerability(String damageType) {
+    @SuppressWarnings("UnusedReturnValue")
+    public DamageAffinity grantVulnerability(String damageType) {
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
             JsonObject affinity = affinities.getJsonObject(i);
@@ -141,6 +184,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
                 affinity.putBoolean("vulnerability", true);
             }
         }
+        return this;
     }
 
     /**
@@ -148,8 +192,10 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
      * If the damage type is null, the revocation is applied to all included damage types.
      *
      * @param damageType a damage type
+     * @return this DamageAffinity
      */
-    public void revokeImmunity(String damageType) {
+    @SuppressWarnings("UnusedReturnValue")
+    public DamageAffinity revokeImmunity(String damageType) {
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
             JsonObject affinity = affinities.getJsonObject(i);
@@ -157,6 +203,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
                 affinity.putBoolean("immunity_revoked", true);
             }
         }
+        return this;
     }
 
     /**
@@ -164,8 +211,10 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
      * revoked. If the damage type is null, the revocation is applied to all included damage types.
      *
      * @param damageType a damage type
+     * @return this DamageAffinity
      */
-    public void revokeResistance(String damageType) {
+    @SuppressWarnings("UnusedReturnValue")
+    public DamageAffinity revokeResistance(String damageType) {
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
             JsonObject affinity = affinities.getJsonObject(i);
@@ -173,6 +222,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
                 affinity.putBoolean("resistance_revoked", true);
             }
         }
+        return this;
     }
 
     /**
@@ -180,8 +230,10 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
      * revoked. If the damage type is null, the revocation is applied to all included damage types.
      *
      * @param damageType a damage type
+     * @return this DamageAffinity
      */
-    public void revokeVulnerability(String damageType) {
+    @SuppressWarnings("UnusedReturnValue")
+    public DamageAffinity revokeVulnerability(String damageType) {
         JsonArray affinities = this.getAffinities();
         for (int i = 0; i < affinities.size(); i++) {
             JsonObject affinity = affinities.getJsonObject(i);
@@ -189,6 +241,7 @@ public class DamageAffinity extends Subevent implements DamageTypeSubevent {
                 affinity.putBoolean("vulnerability_revoked", true);
             }
         }
+        return this;
     }
 
     /**

@@ -50,16 +50,16 @@ public class GetEventsTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new GetEvents();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new GetEvents()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -69,9 +69,9 @@ public class GetEventsTest {
     void defaultsToEmptyList() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        GetEvents getEvents = new GetEvents();
-        getEvents.setSource(object);
-        getEvents.prepare(new DummyContext());
+        GetEvents getEvents = new GetEvents()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(getEvents.getEvents().isEmpty(),
                 "getEvents should return an empty array by default"
@@ -84,14 +84,13 @@ public class GetEventsTest {
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        GetEvents getEvents = new GetEvents();
-        getEvents.setSource(object);
-        getEvents.prepare(new DummyContext());
+        List<RPGLEvent> events = new GetEvents()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .addEvent("std:item/weapon/melee/martial/longsword/melee", item.getUuid(), null)
+                .addEvent("std:common/improvised_thrown", item.getUuid(), null)
+                .getEvents();
 
-        getEvents.addEvent("std:item/weapon/melee/martial/longsword/melee", item.getUuid(), null);
-        getEvents.addEvent("std:common/improvised_thrown", item.getUuid(), null);
-
-        List<RPGLEvent> events = getEvents.getEvents();
         assertEquals(2, events.size(),
                 "2 events should be granted"
         );

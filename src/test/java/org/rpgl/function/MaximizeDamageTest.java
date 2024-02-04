@@ -218,7 +218,7 @@ public class MaximizeDamageTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -229,7 +229,7 @@ public class MaximizeDamageTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageRoll.setSource(object);
-        damageRoll.prepare(new DummyContext());
+        damageRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new MaximizeDamage().execute(null, damageRoll, new JsonObject() {{
             /*{
@@ -238,7 +238,7 @@ public class MaximizeDamageTest {
             }*/
             this.putString("function", "maximize_damage");
             this.putString("damage_type", "fire");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":1,"size":6},{"determined":[],"roll":1,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -253,14 +253,14 @@ public class MaximizeDamageTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageRoll.setSource(object);
-        damageRoll.prepare(new DummyContext());
+        damageRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new MaximizeDamage().execute(null, damageRoll, new JsonObject() {{
             /*{
                 "function": "maximize_damage"
             }*/
             this.putString("function", "maximize_damage");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"damage_type":"fire","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":2,"damage_type":"cold","dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -275,7 +275,7 @@ public class MaximizeDamageTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageDelivery.setSource(object);
-        damageDelivery.prepare(new DummyContext());
+        damageDelivery.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new MaximizeDamage().execute(null, damageDelivery, new JsonObject() {{
             /*{
@@ -284,10 +284,10 @@ public class MaximizeDamageTest {
             }*/
             this.putString("function", "maximize_damage");
             this.putString("damage_type", "fire");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext());
+        damageDelivery.run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"cold":2,"fire":12}""";
@@ -302,17 +302,17 @@ public class MaximizeDamageTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         damageDelivery.setSource(object);
-        damageDelivery.prepare(new DummyContext());
+        damageDelivery.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new MaximizeDamage().execute(null, damageDelivery, new JsonObject() {{
             /*{
                 "function": "maximize_damage"
             }*/
             this.putString("function", "maximize_damage");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         damageDelivery.setTarget(object);
-        damageDelivery.run(new DummyContext());
+        damageDelivery.run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 {"cold":12,"fire":12}""";

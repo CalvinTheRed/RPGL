@@ -8,6 +8,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DamageAffinity;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +35,7 @@ public class IncludesDamageTypeTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -52,7 +53,7 @@ public class IncludesDamageTypeTest {
             }*/
             this.putString("condition", "includes_damage_type");
             this.putString("damage_type", "fire");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate true when damage type included"
         );
     }
@@ -61,7 +62,7 @@ public class IncludesDamageTypeTest {
     @DisplayName("evaluates false (damage type not included)")
     void evaluatesFalse_damageTypeNotIncluded() throws Exception {
         DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.prepare(new DummyContext());
+        damageAffinity.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(new IncludesDamageType().evaluate(null, damageAffinity, new JsonObject() {{
             /*{
@@ -70,7 +71,7 @@ public class IncludesDamageTypeTest {
             }*/
             this.putString("condition", "includes_damage_type");
             this.putString("damage_type", "fire");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate false when damage type not included"
         );
     }

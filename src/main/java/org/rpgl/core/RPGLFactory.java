@@ -2,7 +2,6 @@ package org.rpgl.core;
 
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.json.JsonArray;
-import org.rpgl.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,20 +16,18 @@ public final class RPGLFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(RPGLFactory.class);
 
     /**
-     * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
+     * This method creates a new RPGLEffect instance.
      *
      * @param effectId an effect ID <code>(namespace:name)</code>
-     * @param originItem an item UUID to be stored for the new effect's origin item
      * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLEffect object
      */
-    public static RPGLEffect newEffect(String effectId, String originItem, JsonArray bonuses) {
+    public static RPGLEffect newEffect(String effectId, JsonArray bonuses) {
         String[] effectIdSplit = effectId.split(":");
         try {
-            RPGLEffectTemplate template = new RPGLEffectTemplate();
-            template.join(DatapackLoader.DATAPACKS.get(effectIdSplit[0]).getEffectTemplate(effectIdSplit[1]));
-            applyBonuses(template, bonuses);
-            return template.newInstance(originItem);
+            return DatapackLoader.DATAPACKS.get(effectIdSplit[0]).getEffectTemplate(effectIdSplit[1])
+                    .applyBonuses(bonuses)
+                    .newInstance();
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEffect: " + effectId);
             throw new RuntimeException("Encountered an error building a new RPGLEffect", e);
@@ -38,42 +35,28 @@ public final class RPGLFactory {
     }
 
     /**
-     * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
-     *
-     * @param effectId an effect ID <code>(namespace:name)</code>
-     * @param originItem an item UUID to be stored for the new effect's origin item
-     * @return a new RPGLEffect object
-     */
-    public static RPGLEffect newEffect(String effectId, String originItem) {
-        return newEffect(effectId, originItem, new JsonArray());
-    }
-
-    /**
-     * This method creates a new RPGLEffect instance according to template data stored at the given effect ID.
+     * This method creates a new RPGLEffect instance.
      *
      * @param effectId an effect ID <code>(namespace:name)</code>
      * @return a new RPGLEffect object
      */
     public static RPGLEffect newEffect(String effectId) {
-        return newEffect(effectId, null);
+        return newEffect(effectId, new JsonArray());
     }
 
     /**
-     * This method creates a new RPGLEvent instance according to template data stored at the given event ID.
+     * This method creates a new RPGLEvent instance.
      *
      * @param eventId an event ID <code>(namespace:name)</code>
-     * @param originItem an item UUID to be stored for the new event's origin item
+     * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLEvent object
      */
-    public static RPGLEvent newEvent(String eventId, String originItem, String sourceUuid) {
+    public static RPGLEvent newEvent(String eventId, JsonArray bonuses) {
         String[] eventIdSplit = eventId.split(":");
         try {
-            RPGLEvent event = DatapackLoader.DATAPACKS
-                    .get(eventIdSplit[0])
-                    .getEventTemplate(eventIdSplit[1])
-                    .newInstance(originItem);
-            event.putString("source", sourceUuid);
-            return event;
+            return DatapackLoader.DATAPACKS.get(eventIdSplit[0]).getEventTemplate(eventIdSplit[1])
+                    .applyBonuses(bonuses)
+                    .newInstance();
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLEvent: " + eventId);
             throw new RuntimeException("Encountered an error building a new RPGLEvent", e);
@@ -81,27 +64,27 @@ public final class RPGLFactory {
     }
 
     /**
-     * This method creates a new RPGLEvent instance according to template data stored at the given event ID.
+     * This method creates a new RPGLEvent instance.
      *
      * @param eventId an event ID <code>(namespace:name)</code>
      * @return a new RPGLEvent object
      */
     public static RPGLEvent newEvent(String eventId) {
-        return newEvent(eventId, null, null);
+        return newEvent(eventId, new JsonArray());
     }
 
     /**
-     * This method creates a new RPGLItem instance according to template data stored at the given item ID.
+     * This method creates a new RPGLItem instance.
      *
      * @param itemId an item ID <code>(namespace:name)</code>
+     * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLItem object
      */
-    public static RPGLItem newItem(String itemId) {
+    public static RPGLItem newItem(String itemId, JsonArray bonuses) {
         String[] itemIdSplit = itemId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
-                    .get(itemIdSplit[0])
-                    .getItemTemplate(itemIdSplit[1])
+            return DatapackLoader.DATAPACKS.get(itemIdSplit[0]).getItemTemplate(itemIdSplit[1])
+                    .applyBonuses(bonuses)
                     .newInstance();
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLItem: " + itemId);
@@ -110,32 +93,40 @@ public final class RPGLFactory {
     }
 
     /**
-     * This method creates a new RPGLObject instance according to template data stored at the given object ID.
+     * This method creates a new RPGLItem instance.
      *
-     * @param objectId an object ID <code>(namespace:name)</code>
-     * @param userId the id for the user controlling the new object
-     * @return a new RPGLObject object
+     * @param itemId an item ID <code>(namespace:name)</code>
+     * @return a new RPGLItem object
      */
-    public static RPGLObject newObject(String objectId, String userId) {
-        return newObject(objectId, userId, new JsonArray());
+    public static RPGLItem newItem(String itemId) {
+        return newItem(itemId, new JsonArray());
     }
 
     /**
-     * This method creates a new RPGLObject instance according to template data stored at the given object ID. This
-     * method allows for bonuses to be applied to that template.
+     * This method creates a new RPGLObject instance.
      *
      * @param objectId an object ID <code>(namespace:name)</code>
      * @param userId the id for the user controlling the new object
+     * @param position the object's position array
+     * @param rotation the object's rotation array
      * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLObject object
      */
-    public static RPGLObject newObject(String objectId, String userId, JsonArray bonuses) {
+    public static RPGLObject newObject(
+            String objectId,
+            String userId,
+            JsonArray position,
+            JsonArray rotation,
+            JsonArray bonuses
+    ) {
         String[] objectIdSplit = objectId.split(":");
         try {
-            RPGLObjectTemplate template = new RPGLObjectTemplate();
-            template.join(DatapackLoader.DATAPACKS.get(objectIdSplit[0]).getObjectTemplate(objectIdSplit[1]));
-            applyBonuses(template, bonuses);
-            return template.newInstance(userId);
+            return DatapackLoader.DATAPACKS.get(objectIdSplit[0]).getObjectTemplate(objectIdSplit[1])
+                    .applyBonuses(bonuses)
+                    .newInstance()
+                    .setUserId(userId)
+                    .setPosition(position)
+                    .setRotation(rotation);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLObject: " + objectId);
             throw new RuntimeException("Encountered an error building a new RPGLObject", e);
@@ -143,19 +134,53 @@ public final class RPGLFactory {
     }
 
     /**
-     * This method creates a new RPGLResource instance according to template data stored at the given resource ID.
+     * This method creates a new RPGLObject instance.
+     *
+     * @param objectId an object ID <code>(namespace:name)</code>
+     * @param userId the id for the user controlling the new object
+     * @param position the object's position array
+     * @param rotation the object's rotation array
+     * @return a new RPGLObject object
+     */
+    public static RPGLObject newObject(String objectId, String userId, JsonArray position, JsonArray rotation) {
+        return newObject(objectId, userId, position, rotation, new JsonArray());
+    }
+
+    /**
+     * This method creates a new RPGLObject instance.
+     * <br />
+     * NOTE: this override of newObject should only be used while testing, as it always places the object at <code>
+     * [ 0.0, 0.0, 0.0 ]</code>
+     *
+     * @param objectId an object ID <code>(namespace:name)</code>
+     * @param userId the id for the user controlling the new object
+     * @return a new RPGLObject object
+     */
+    public static RPGLObject newObject(String objectId, String userId) {
+        return newObject(objectId, userId, new JsonArray() {{
+            this.addDouble(0d);
+            this.addDouble(0d);
+            this.addDouble(0d);
+        }}, new JsonArray() {{
+            this.addDouble(0d);
+            this.addDouble(0d);
+            this.addDouble(0d);
+        }});
+    }
+
+    /**
+     * This method creates a new RPGLResource instance.
      *
      * @param resourceId a resource ID <code>(namespace:name)</code>
-     * @param originItem an item UUID to be stored for the new resource's origin item
+     * @param bonuses an array of bonuses to be applied to specified fields in the template
      * @return a new RPGLResource object
      */
-    public static RPGLResource newResource(String resourceId, String originItem) {
+    public static RPGLResource newResource(String resourceId, JsonArray bonuses) {
         String[] resourceIdSplit = resourceId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
-                    .get(resourceIdSplit[0])
-                    .getResourceTemplate(resourceIdSplit[1])
-                    .newInstance(originItem);
+            return DatapackLoader.DATAPACKS.get(resourceIdSplit[0]).getResourceTemplate(resourceIdSplit[1])
+                    .applyBonuses(bonuses)
+                    .newInstance();
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error creating RPGLResource: " + resourceId);
             throw new RuntimeException("Encountered an error building a new RPGLResource", e);
@@ -163,13 +188,13 @@ public final class RPGLFactory {
     }
 
     /**
-     * This method creates a new RPGLResource instance according to template data stored at the given resource ID.
+     * This method creates a new RPGLResource instance.
      *
      * @param resourceId a resource ID <code>(namespace:name)</code>
      * @return a new RPGLResource object
      */
     public static RPGLResource newResource(String resourceId) {
-        return newResource(resourceId, null);
+        return newResource(resourceId, new JsonArray());
     }
 
     /**
@@ -181,9 +206,7 @@ public final class RPGLFactory {
     public static RPGLClass getClass(String classId) {
         String[] classIdSplit = classId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
-                    .get(classIdSplit[0])
-                    .getClass(classIdSplit[1]);
+            return DatapackLoader.DATAPACKS.get(classIdSplit[0]).getClass(classIdSplit[1]);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error getting RPGLClass: " + classId);
             throw new RuntimeException("Encountered an error getting a RPGLClass", e);
@@ -199,26 +222,10 @@ public final class RPGLFactory {
     public static RPGLRace getRace(String raceId) {
         String[] raceIdSplit = raceId.split(":");
         try {
-            return DatapackLoader.DATAPACKS
-                    .get(raceIdSplit[0])
-                    .getRace(raceIdSplit[1]);
+            return DatapackLoader.DATAPACKS.get(raceIdSplit[0]).getRace(raceIdSplit[1]);
         } catch (NullPointerException e) {
             LOGGER.error("encountered an error getting RPGLRace: " + raceId);
             throw new RuntimeException("Encountered an error getting a RPGLRace", e);
-        }
-    }
-
-    /**
-     * This helper method applies bonuses to template fields.
-     *
-     * @param template a template to receive bonuses
-     * @param bonuses the bonuses to apply to the template
-     */
-    static void applyBonuses(JsonObject template, JsonArray bonuses) {
-        for (int i = 0; i < bonuses.size(); i++) {
-            JsonObject fieldBonus = bonuses.getJsonObject(i);
-            String field = fieldBonus.getString("field");
-            template.insertInteger(field, template.seekInteger(field) + fieldBonus.getInteger("bonus"));
         }
     }
 

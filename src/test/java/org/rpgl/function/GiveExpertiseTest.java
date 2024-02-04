@@ -55,7 +55,7 @@ public class GiveExpertiseTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -67,14 +67,14 @@ public class GiveExpertiseTest {
 
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        abilityCheck.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new GiveExpertise().execute(null, abilityCheck, new JsonObject() {{
             /*{
                 "function": "give_expertise"
             }*/
             this.putString("function", "give_expertise");
-        }}, new DummyContext());
+        }}, new DummyContext(),TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(abilityCheck.hasExpertise(),
                 "execute should give expertise to roll"

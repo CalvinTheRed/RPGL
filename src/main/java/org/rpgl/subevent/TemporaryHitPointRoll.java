@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -40,10 +41,41 @@ public class TemporaryHitPointRoll extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public TemporaryHitPointRoll invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (TemporaryHitPointRoll) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public TemporaryHitPointRoll joinSubeventData(JsonObject other) {
+        return (TemporaryHitPointRoll) super.joinSubeventData(other);
+    }
+
+    @Override
+    public TemporaryHitPointRoll prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("temporary_hit_points", new ArrayList<>());
         this.roll();
+        return this;
+    }
+
+    @Override
+    public TemporaryHitPointRoll run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public TemporaryHitPointRoll setOriginItem(String originItem) {
+        return (TemporaryHitPointRoll) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public TemporaryHitPointRoll setSource(RPGLObject source) {
+        return (TemporaryHitPointRoll) super.setSource(source);
+    }
+
+    @Override
+    public TemporaryHitPointRoll setTarget(RPGLObject target) {
+        return (TemporaryHitPointRoll) super.setTarget(target);
     }
 
     /**

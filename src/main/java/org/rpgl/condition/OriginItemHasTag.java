@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.uuidtable.UUIDTable;
@@ -21,7 +22,7 @@ public class OriginItemHasTag extends Condition {
     }
 
     @Override
-    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         String originItemAlias = conditionJson.getString("origin_item");
         RPGLItem originItem = null;
         if (Objects.equals(originItemAlias, "subevent")) {

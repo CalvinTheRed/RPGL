@@ -2,6 +2,7 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.AttackAbilityCollection;
 import org.rpgl.subevent.Subevent;
@@ -18,7 +19,7 @@ public class AddAttackAbility extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) {
         if (subevent instanceof AttackAbilityCollection attackAbilityCollection) {
             String attackAbility = functionJson.getString("ability");
             if (!attackAbilityCollection.getAbilities().asList().contains(attackAbility)) {

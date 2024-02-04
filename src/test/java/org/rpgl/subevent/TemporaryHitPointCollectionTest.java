@@ -49,16 +49,16 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new TemporaryHitPointCollection();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new TemporaryHitPointCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -66,33 +66,33 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("returns temporary hit points")
     void returnsTemporaryHitPoints(){
-        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "dice": [
-                            { "roll": 1 },
-                            { "roll": 6 }
-                        ],
-                        "bonus": 2
-                    }
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putJsonArray("dice", new JsonArray() {{
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "temporary_hit_points": [
+                            {
+                                "dice": [
+                                    { "roll": 1 },
+                                    { "roll": 6 }
+                                ],
+                                "bonus": 2
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("temporary_hit_points", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 1);
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 6);
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("roll", 1);
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("roll", 6);
+                                }});
+                            }});
+                            this.putInteger("bonus", 2);
                         }});
                     }});
-                    this.putInteger("bonus", 2);
                 }});
-            }});
-        }});
 
         String expected = """
                 [{"bonus":2,"dice":[{"roll":1},{"roll":6}]}]""";
@@ -104,23 +104,23 @@ public class TemporaryHitPointCollectionTest {
     @Test
     @DisplayName("adds temporary hit points")
     void addsTemporaryHitPoints() {
-        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "dice": [ ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 0);
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "temporary_hit_points": [
+                            {
+                                "dice": [ ],
+                                "bonus": 0
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 0);
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
         JsonObject extraTemporaryHitPoints = new JsonObject() {{
             /*{
@@ -158,9 +158,9 @@ public class TemporaryHitPointCollectionTest {
     void defaultsToEmptyArray() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.setSource(source);
-        temporaryHitPointCollection.prepare(new DummyContext());
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection()
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 []""";
@@ -174,27 +174,27 @@ public class TemporaryHitPointCollectionTest {
     void prepareTemporaryHitPoints_interpretsTemporaryHitPoints() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection();
-        temporaryHitPointCollection.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "formula": "range",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-        }});
+        TemporaryHitPointCollection temporaryHitPointCollection = new TemporaryHitPointCollection()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "temporary_hit_points": [
+                            {
+                                "formula": "range",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                }})
+                .setSource(source);
 
-        temporaryHitPointCollection.setSource(source);
         temporaryHitPointCollection.prepareTemporaryHitPoints(new DummyContext());
 
         String expected = """

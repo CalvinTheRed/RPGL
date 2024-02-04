@@ -1,8 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
-import org.rpgl.core.RPGLItem;
 import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 import org.slf4j.Logger;
@@ -45,10 +45,24 @@ public class DestroyOriginItem extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public DestroyOriginItem invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DestroyOriginItem) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public DestroyOriginItem joinSubeventData(JsonObject other) {
+        return (DestroyOriginItem) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DestroyOriginItem prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DestroyOriginItem) super.prepare(context, originPoint);
+    }
+
+    @Override
+    public DestroyOriginItem run(RPGLContext context, JsonArray originPoint) {
         String originItemUuid = super.getOriginItem();
-        RPGLItem originItem = UUIDTable.getItem(originItemUuid);
-        if (originItem != null) {
+        if (UUIDTable.getItem(originItemUuid) != null) {
             RPGLObject source = super.getSource();
             // remove origin item from equipped items
             List<String> originItemEquippedSlots = new ArrayList<>();
@@ -69,5 +83,22 @@ public class DestroyOriginItem extends Subevent {
         } else {
             LOGGER.warn("Could not destroy origin item - subevent has no origin item!");
         }
+        return this;
     }
+
+    @Override
+    public DestroyOriginItem setOriginItem(String originItem) {
+        return (DestroyOriginItem) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DestroyOriginItem setSource(RPGLObject source) {
+        return (DestroyOriginItem) super.setSource(source);
+    }
+
+    @Override
+    public DestroyOriginItem setTarget(RPGLObject target) {
+        return (DestroyOriginItem) super.setTarget(target);
+    }
+
 }

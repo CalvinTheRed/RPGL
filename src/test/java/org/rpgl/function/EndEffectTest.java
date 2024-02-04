@@ -56,7 +56,7 @@ public class EndEffectTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -80,7 +80,7 @@ public class EndEffectTest {
                 "function": "end_effect"
             }*/
             this.putString("function", "end_effect");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(object.getEffects().asList().contains(fireImmunity.getUuid()),
                 "object should no longer have effect after it is ended"

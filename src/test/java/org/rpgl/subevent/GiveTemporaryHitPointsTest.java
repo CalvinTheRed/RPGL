@@ -51,16 +51,16 @@ public class GiveTemporaryHitPointsTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new GiveTemporaryHitPoints();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new GiveTemporaryHitPoints()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -74,35 +74,35 @@ public class GiveTemporaryHitPointsTest {
         context.add(source);
         context.add(target);
 
-        GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
-        giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "formula": "range",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ],
-                "rider_effects": [
-                    "std:common/damage/immunity/fire"
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-            this.putJsonArray("rider_effects", new JsonArray() {{
-                this.addString("std:common/damage/immunity/fire");
-            }});
-        }});
-        giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context);
-        giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context);
+        new GiveTemporaryHitPoints()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "temporary_hit_points": [
+                            {
+                                "formula": "range",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ],
+                        "rider_effects": [
+                            "std:common/damage/immunity/fire"
+                        ]
+                    }*/
+                    this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                    this.putJsonArray("rider_effects", new JsonArray() {{
+                        this.addString("std:common/damage/immunity/fire");
+                    }});
+                }})
+                .setSource(source)
+                .prepare(context, TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(context, TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10, target.getHealthData().getInteger("temporary"),
                 "the subevent should grant 10 temporary hit points to the target"
@@ -127,35 +127,35 @@ public class GiveTemporaryHitPointsTest {
 
         target.getHealthData().putInteger("temporary", 5);
 
-        GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
-        giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "formula": "range",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ],
-                "rider_effects": [
-                    "std:common/damage/immunity/fire"
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-            this.putJsonArray("rider_effects", new JsonArray() {{
-                this.addString("std:common/damage/immunity/fire");
-            }});
-        }});
-        giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context);
-        giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context);
+        new GiveTemporaryHitPoints()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "temporary_hit_points": [
+                            {
+                                "formula": "range",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ],
+                        "rider_effects": [
+                            "std:common/damage/immunity/fire"
+                        ]
+                    }*/
+                    this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                    this.putJsonArray("rider_effects", new JsonArray() {{
+                        this.addString("std:common/damage/immunity/fire");
+                    }});
+                }})
+                .setSource(source)
+                .prepare(context, TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(context, TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10, target.getHealthData().getInteger("temporary"),
                 "the subevent should grant 10 temporary hit points to the target"
@@ -180,35 +180,35 @@ public class GiveTemporaryHitPointsTest {
 
         target.getHealthData().putInteger("temporary", 15);
 
-        GiveTemporaryHitPoints giveTemporaryHitPoints = new GiveTemporaryHitPoints();
-        giveTemporaryHitPoints.joinSubeventData(new JsonObject() {{
-            /*{
-                "temporary_hit_points": [
-                    {
-                        "formula": "range",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ],
-                "rider_effects": [
-                    "std:common/damage/immunity/fire"
-                ]
-            }*/
-            this.putJsonArray("temporary_hit_points", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-            this.putJsonArray("rider_effects", new JsonArray() {{
-                this.addString("std:common/damage/immunity/fire");
-            }});
-        }});
-        giveTemporaryHitPoints.setSource(source);
-        giveTemporaryHitPoints.prepare(context);
-        giveTemporaryHitPoints.setTarget(target);
-        giveTemporaryHitPoints.invoke(context);
+        new GiveTemporaryHitPoints()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "temporary_hit_points": [
+                            {
+                                "formula": "range",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ],
+                        "rider_effects": [
+                            "std:common/damage/immunity/fire"
+                        ]
+                    }*/
+                    this.putJsonArray("temporary_hit_points", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                    this.putJsonArray("rider_effects", new JsonArray() {{
+                        this.addString("std:common/damage/immunity/fire");
+                    }});
+                }})
+                .setSource(source)
+                .prepare(context, TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(context, TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(15, target.getHealthData().getInteger("temporary"),
                 "the subevent should not grant new temporary hit points to the target"

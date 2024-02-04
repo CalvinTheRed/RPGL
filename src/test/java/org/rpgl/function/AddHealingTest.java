@@ -56,7 +56,7 @@ public class AddHealingTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -68,7 +68,7 @@ public class AddHealingTest {
 
         HealingCollection healingCollection = new HealingCollection();
         healingCollection.setSource(object);
-        healingCollection.prepare(new DummyContext());
+        healingCollection.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddHealing().execute(null, healingCollection, new JsonObject() {{
            /*{
@@ -99,7 +99,7 @@ public class AddHealingTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

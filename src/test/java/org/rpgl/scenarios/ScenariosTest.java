@@ -81,6 +81,7 @@ public class ScenariosTest {
 
         // make an attack, not activated
         source.invokeEvent(
+                target.getPosition(),
                 new RPGLObject[] {
                         target
                 },
@@ -101,6 +102,7 @@ public class ScenariosTest {
 
         // activate
         source.invokeEvent(
+                source.getPosition(),
                 new RPGLObject[] {
                         source
                 },
@@ -118,6 +120,7 @@ public class ScenariosTest {
 
         // make an attack, activated
         source.invokeEvent(
+                target.getPosition(),
                 new RPGLObject[] {
                         target
                 },
@@ -138,6 +141,7 @@ public class ScenariosTest {
 
         // deactivate
         source.invokeEvent(
+                source.getPosition(),
                 new RPGLObject[] {
                         source
                 },
@@ -155,6 +159,7 @@ public class ScenariosTest {
 
         // make an attack, activated
         source.invokeEvent(
+                target.getPosition(),
                 new RPGLObject[] {
                         target
                 },
@@ -205,6 +210,7 @@ public class ScenariosTest {
         // start doing stuff
 
         source.invokeEvent(
+                source.getPosition(),
                 new RPGLObject[] {
                         source
                 },
@@ -222,6 +228,7 @@ public class ScenariosTest {
         );
 
         source.invokeEvent(
+                target.getPosition(),
                 new RPGLObject[] {
                         target
                 },
@@ -246,6 +253,7 @@ public class ScenariosTest {
         target.invokeInfoSubevent(context, "start_turn");
 
         target.invokeEvent(
+                target.getPosition(),
                 new RPGLObject[] {
                         target
                 },
@@ -270,6 +278,7 @@ public class ScenariosTest {
         target.getAbilityScores().putInteger("wis", 20); // save bonus +5
 
         target.invokeEvent(
+                target.getPosition(),
                 new RPGLObject[] {
                         target
                 },
@@ -299,6 +308,7 @@ public class ScenariosTest {
         summoner.setProficiencyBonus(3);
 
         summoner.invokeEvent(
+                TestUtils.TEST_ARRAY_10_10_10,
                 new RPGLObject[] {
                         summoner
                 },
@@ -326,6 +336,7 @@ public class ScenariosTest {
 
         summoner.getAbilityScores().putInteger("dex", 28); // set AC to 19 to avoid hit
         summonedUndead.invokeEvent(
+                summoner.getPosition(),
                 new RPGLObject[] { summoner },
                 TestUtils.getEventById(summonedUndead.getEventObjects(context), "std:spell/summon_undead/grave_bolt"),
                 List.of(summonedUndead.getResourcesWithTag("action").get(0)),
@@ -340,6 +351,7 @@ public class ScenariosTest {
 
         summoner.getAbilityScores().putInteger("dex", 26); // set AC to 18 to suffer hit
         summonedUndead.invokeEvent(
+                summoner.getPosition(),
                 new RPGLObject[] { summoner },
                 TestUtils.getEventById(summonedUndead.getEventObjects(context), "std:spell/summon_undead/grave_bolt"),
                 List.of(summonedUndead.getResourcesWithTag("action").get(0)),

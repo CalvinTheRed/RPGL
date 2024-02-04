@@ -1,5 +1,6 @@
 package org.rpgl.core;
 
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -9,31 +10,33 @@ import org.rpgl.uuidtable.UUIDTable;
  *
  * @author Calvin Withun
  */
-public class RPGLEffectTemplate extends JsonObject {
+public class RPGLEffectTemplate extends RPGLTemplate {
 
-    /**
-     * Constructs a new RPGLEffect object corresponding to the contents of the RPGLEffectTemplate object. The new
-     * object is registered to the UUIDTable class when it is constructed.
-     *
-     * @param originItem an item UUID to be stored for the new effect's origin item
-     * @return a new RPGLEffect object
-     */
-    public RPGLEffect newInstance(String originItem) {
+    public RPGLEffectTemplate() {
+        super();
+    }
+
+    public RPGLEffectTemplate(JsonObject other) {
+        this();
+        this.join(other);
+    }
+
+    @Override
+    public RPGLEffect newInstance() {
         RPGLEffect effect = new RPGLEffect();
-        effect.join(this);
-        effect.setOriginItem(originItem);
+        this.setup(effect);
         UUIDTable.register(effect);
         return effect;
     }
 
-    /**
-     * Constructs a new RPGLEffect object corresponding to the contents of the RPGLEffectTemplate object. The new
-     * object is registered to the UUIDTable class when it is constructed.
-     *
-     * @return a new RPGLEffect object
-     */
-    public RPGLEffect newInstance() {
-        return this.newInstance(null);
+    @Override
+    public void setup(JsonObject effect) {
+        super.setup(effect);
+    }
+
+    @Override
+    public RPGLEffectTemplate applyBonuses(JsonArray bonuses) {
+        return new RPGLEffectTemplate(super.applyBonuses(bonuses));
     }
 
 }

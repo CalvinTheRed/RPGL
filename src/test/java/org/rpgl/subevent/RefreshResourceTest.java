@@ -51,16 +51,16 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new TakeResource();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new TakeResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -71,29 +71,28 @@ public class RefreshResourceTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            resource.exhaust();
-            object.addResource(resource);
+            object.addResource(RPGLFactory.newResource("std:common/spell_slot/01")
+                    .setPotency(i)
+                    .exhaust());
         }
 
-        RefreshResource refreshResource = new RefreshResource();
-        refreshResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource_tag":"spell_slot",
-                "count": 5,
-                "minimum_potency": 3,
-                "selection_mode", "low_first"
-            }*/
-            this.putString("resource_tag", "spell_slot");
-            this.putInteger("count", 5);
-            this.putInteger("minimum_potency", 3);
-            this.putString("selection_mode", "low_first");
-        }});
-        refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext());
-        refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext());
+        new RefreshResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource_tag":"spell_slot",
+                        "count": 5,
+                        "minimum_potency": 3,
+                        "selection_mode", "low_first"
+                    }*/
+                    this.putString("resource_tag", "spell_slot");
+                    this.putInteger("count", 5);
+                    this.putInteger("minimum_potency", 3);
+                    this.putString("selection_mode", "low_first");
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         boolean[] expectedExhaustValues = {
                 true,
@@ -122,28 +121,27 @@ public class RefreshResourceTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         for (int i = 1; i < 10; i++) {
-            RPGLResource resource = RPGLFactory.newResource("std:common/spell_slot/01");
-            resource.setPotency(i);
-            resource.exhaust();
-            object.addResource(resource);
+            object.addResource(RPGLFactory.newResource("std:common/spell_slot/01")
+                    .setPotency(i)
+                    .exhaust());
         }
 
-        RefreshResource refreshResource = new RefreshResource();
-        refreshResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource_tag":"spell_slot",
-                "count": 5,
-                "maximum_potency": 7
-            }*/
-            this.putString("resource_tag", "spell_slot");
-            this.putInteger("count", 5);
-            this.putInteger("maximum_potency", 7);
-            this.putString("selection_mode", "high_first");
-        }});
-        refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext());
-        refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext());
+        new RefreshResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource_tag":"spell_slot",
+                        "count": 5,
+                        "maximum_potency": 7
+                    }*/
+                    this.putString("resource_tag", "spell_slot");
+                    this.putInteger("count", 5);
+                    this.putInteger("maximum_potency", 7);
+                    this.putString("selection_mode", "high_first");
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         boolean[] expectedExhaustValues = {
                 true,
@@ -169,31 +167,30 @@ public class RefreshResourceTest {
     @Test
     @DisplayName("refreshes resources (default priority)")
     void refreshesResources_defaultPriority() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01")
+                .setPotency(1)
+                .exhaust();
+        RPGLResource pactSpellSlot = RPGLFactory.newResource("std:common/spell_slot/pact_magic/01")
+                .setPotency(1)
+                .exhaust();
 
-        RPGLResource spellSlot = RPGLFactory.newResource("std:common/spell_slot/01");
-        spellSlot.exhaust();
-        spellSlot.setPotency(1);
-        object.addResource(spellSlot);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .addResource(spellSlot)
+                .addResource(pactSpellSlot);
 
-        RPGLResource pactSpellSlot = RPGLFactory.newResource("std:common/spell_slot/pact_magic/01");
-        pactSpellSlot.exhaust();
-        pactSpellSlot.setPotency(1);
-        object.addResource(pactSpellSlot);
-
-        RefreshResource refreshResource = new RefreshResource();
-        refreshResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource_tag":"pact_spell_slot",
-                "count": 2
-            }*/
-            this.putString("resource_tag", "pact_spell_slot");
-            this.putInteger("count", 2);
-        }});
-        refreshResource.setSource(object);
-        refreshResource.prepare(new DummyContext());
-        refreshResource.setTarget(object);
-        refreshResource.invoke(new DummyContext());
+        new RefreshResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource_tag":"pact_spell_slot",
+                        "count": 2
+                    }*/
+                    this.putString("resource_tag", "pact_spell_slot");
+                    this.putInteger("count", 2);
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(spellSlot.getExhausted(),
                 "non-matching resource should be exhausted"

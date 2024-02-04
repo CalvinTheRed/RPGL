@@ -24,7 +24,7 @@ public class EquippedItemHasTag extends Condition {
     }
 
     @Override
-    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context) throws Exception {
+    public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         RPGLObject object = RPGLEffect.getObject(effect, subevent, conditionJson.getJsonObject("object"));
         JsonArray slots = conditionJson.getJsonArray("slot");
         boolean invert = Objects.requireNonNullElse(conditionJson.getBoolean("invert"), false);

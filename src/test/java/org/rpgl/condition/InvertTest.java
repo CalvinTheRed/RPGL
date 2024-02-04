@@ -7,6 +7,7 @@ import org.rpgl.core.RPGLCore;
 import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,7 +34,7 @@ public class InvertTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -52,7 +53,7 @@ public class InvertTest {
             this.putJsonObject("invert", new JsonObject() {{
                 this.putString("condition", "false");
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return true for false condition"
         );
     }
@@ -71,7 +72,7 @@ public class InvertTest {
             this.putJsonObject("invert", new JsonObject() {{
                 this.putString("condition", "true");
             }});
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return false for true condition"
         );
     }

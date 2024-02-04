@@ -76,7 +76,7 @@ public class VampiricSubeventTest {
         VampiricSubevent.handleVampirism(dummySubevent, new JsonObject() {{
             this.putInteger("necrotic", 10);
             this.putInteger("radiant", 10);
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half necrotic damage via vampirism"
@@ -118,7 +118,7 @@ public class VampiricSubeventTest {
         dummySubevent.setSource(source);
         dummySubevent.setTarget(target);
 
-        VampiricSubevent.handleVampirism(dummySubevent, damageByType, new DummyContext());
+        VampiricSubevent.handleVampirism(dummySubevent, damageByType, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(11, source.getHealthData().getInteger("current"),
                 "source should be healed for half total damage via vampirism"

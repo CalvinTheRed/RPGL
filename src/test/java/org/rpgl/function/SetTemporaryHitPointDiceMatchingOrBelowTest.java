@@ -56,7 +56,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -144,7 +144,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
             }});
         }});
         temporaryHitPointRoll.setSource(object);
-        temporaryHitPointRoll.prepare(new DummyContext());
+        temporaryHitPointRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new SetTemporaryHitPointDiceMatchingOrBelow().execute(null, temporaryHitPointRoll, new JsonObject() {{
             /*{
@@ -155,7 +155,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelowTest {
             this.putString("function", "set_temporary_hit_point_dice_matching_or_below");
             this.putInteger("threshold", 2);
             this.putInteger("set", 3);
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":4,"size":6}]}]""";

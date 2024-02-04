@@ -40,13 +40,24 @@ public class RemoveEffect extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
-        this.json.asMap().putIfAbsent("canceled", false);
+    public RemoveEffect invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (RemoveEffect) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public RemoveEffect joinSubeventData(JsonObject other) {
+        return (RemoveEffect) super.joinSubeventData(other);
+    }
+
+    @Override
+    public RemoveEffect prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.asMap().putIfAbsent("canceled", false);
+        return this;
+    }
+
+    @Override
+    public RemoveEffect run(RPGLContext context, JsonArray originPoint) {
         if (this.isNotCanceled()) {
             JsonArray effectTags = this.json.getJsonArray("effect_tags");
             JsonArray effects = super.getTarget().getEffects().deepClone();
@@ -59,6 +70,22 @@ public class RemoveEffect extends Subevent implements CancelableSubevent {
                 }
             }
         }
+        return this;
+    }
+
+    @Override
+    public RemoveEffect setOriginItem(String originItem) {
+        return (RemoveEffect) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public RemoveEffect setSource(RPGLObject source) {
+        return (RemoveEffect) super.setSource(source);
+    }
+
+    @Override
+    public RemoveEffect setTarget(RPGLObject target) {
+        return (RemoveEffect) super.setTarget(target);
     }
 
     @Override

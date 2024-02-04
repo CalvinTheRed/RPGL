@@ -2,6 +2,7 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -40,10 +41,41 @@ public class HealingCollection extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public HealingCollection invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (HealingCollection) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public HealingCollection joinSubeventData(JsonObject other) {
+        return (HealingCollection) super.joinSubeventData(other);
+    }
+
+    @Override
+    public HealingCollection prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.prepareHealing(context);
+        return this;
+    }
+
+    @Override
+    public HealingCollection run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public HealingCollection setOriginItem(String originItem) {
+        return (HealingCollection) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public HealingCollection setSource(RPGLObject source) {
+        return (HealingCollection) super.setSource(source);
+    }
+
+    @Override
+    public HealingCollection setTarget(RPGLObject target) {
+        return (HealingCollection) super.setTarget(target);
     }
 
     /**
@@ -71,9 +103,11 @@ public class HealingCollection extends Subevent {
      * Adds dice and/or a bonus to the healing collected by this Subevent.
      *
      * @param healingJson healing data to be added to the collection
+     * @return this HealingCollection
      */
-    public void addHealing(JsonObject healingJson) {
+    public HealingCollection addHealing(JsonObject healingJson) {
         this.getHealingCollection().addJsonObject(healingJson);
+        return this;
     }
 
     /**

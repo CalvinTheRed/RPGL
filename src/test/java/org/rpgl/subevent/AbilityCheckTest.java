@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Calvin Withun
  */
 public class AbilityCheckTest {
+
     @BeforeAll
     static void beforeAll() {
         DatapackLoader.loadDatapacks(
@@ -51,16 +52,16 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new AbilityCheck();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new AbilityCheck()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -68,10 +69,10 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("gets ability")
     void getsAbility() {
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.joinSubeventData(new JsonObject() {{
-            this.putString("ability", "str");
-        }});
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("ability", "str");
+                }});
 
         assertEquals("str", abilityCheck.getAbility(new DummyContext()),
                 "getAbility should return the correct ability"
@@ -81,10 +82,10 @@ public class AbilityCheckTest {
     @Test
     @DisplayName("gets skill")
     void getsSkill() {
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.joinSubeventData(new JsonObject() {{
-            this.putString("skill", "athletics");
-        }});
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("skill", "athletics");
+                }});
 
         assertEquals("athletics", abilityCheck.getSkill(),
                 "getSkill should return the correct skill"
@@ -97,10 +98,9 @@ public class AbilityCheckTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setProficiencyBonus(2);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
-
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         abilityCheck.giveHalfProficiency();
 
         assertTrue(abilityCheck.hasHalfProficiency(),
@@ -120,10 +120,9 @@ public class AbilityCheckTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setProficiencyBonus(2);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
-
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
 
@@ -144,10 +143,9 @@ public class AbilityCheckTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.setProficiencyBonus(2);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
-
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         abilityCheck.giveHalfProficiency();
         abilityCheck.giveProficiency();
         abilityCheck.giveExpertise();
@@ -168,9 +166,9 @@ public class AbilityCheckTest {
     void defaultsToProficiencyBonusOfZero() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(abilityCheck.hasHalfProficiency(),
                 "should not have half proficiency"
@@ -188,24 +186,23 @@ public class AbilityCheckTest {
     void rollsBaseDie() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "ability_check",
-                "ability": "str",
-                "determined": [ 10 ]
-            }*/
-            this.putString("subevent", "ability_check");
-            this.putString("ability", "str");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(10);
-            }});
-        }});
-
-        abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
-        abilityCheck.setTarget(object);
-        abilityCheck.invoke(new DummyContext());
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "ability_check",
+                        "ability": "str",
+                        "determined": [ 10 ]
+                    }*/
+                    this.putString("subevent", "ability_check");
+                    this.putString("ability", "str");
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(10);
+                    }});
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10, abilityCheck.get(),
                 "abilityCheck should roll 10 (10+0)"
@@ -218,24 +215,23 @@ public class AbilityCheckTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.getAbilityScores().putInteger("str", 20);
 
-        AbilityCheck abilityCheck = new AbilityCheck();
-        abilityCheck.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "ability_check",
-                "ability": "str",
-                "determined": [ 10 ]
-            }*/
-            this.putString("subevent", "ability_check");
-            this.putString("ability", "str");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(10);
-            }});
-        }});
-
-        abilityCheck.setSource(object);
-        abilityCheck.prepare(new DummyContext());
-        abilityCheck.setTarget(object);
-        abilityCheck.invoke(new DummyContext());
+        AbilityCheck abilityCheck = new AbilityCheck()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "ability_check",
+                        "ability": "str",
+                        "determined": [ 10 ]
+                    }*/
+                    this.putString("subevent", "ability_check");
+                    this.putString("ability", "str");
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(10);
+                    }});
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(10 /*base*/ +5 /*ability bonus*/, abilityCheck.get(),
                 "abilityCheck should total 15"

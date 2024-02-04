@@ -11,6 +11,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class SubeventHasTagTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -71,7 +72,7 @@ public class SubeventHasTagTest {
             }*/
             this.putString("condition", "subevent_has_tag");
             this.putString("tag", "test_tag");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate true when subevent has desired tag"
         );
     }
@@ -86,7 +87,7 @@ public class SubeventHasTagTest {
             }*/
             this.putString("condition", "subevent_has_tag");
             this.putString("tag", "test_tag");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate false when subevent does not have desired tag"
         );
     }

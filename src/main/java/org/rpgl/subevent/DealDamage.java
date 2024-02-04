@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -35,18 +36,45 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
-        this.json.putBoolean("canceled", false);
-        this.getBaseDamage(context);
+    public DealDamage invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (DealDamage) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public DealDamage joinSubeventData(JsonObject other) {
+        return (DealDamage) super.joinSubeventData(other);
+    }
+
+    @Override
+    public DealDamage prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.putBoolean("canceled", false);
+        this.getBaseDamage(context, originPoint);
+        return this;
+    }
+
+    @Override
+    public DealDamage run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
-            this.getTargetDamage(context);
-            this.deliverDamage(context);
+            this.getTargetDamage(context, originPoint);
+            this.deliverDamage(context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public DealDamage setOriginItem(String originItem) {
+        return (DealDamage) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public DealDamage setSource(RPGLObject source) {
+        return (DealDamage) super.setSource(source);
+    }
+
+    @Override
+    public DealDamage setTarget(RPGLObject target) {
+        return (DealDamage) super.setTarget(target);
     }
 
     @Override
@@ -74,10 +102,11 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * This helper method collects, rolls, and stores all target-agnostic damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs.
      */
-    void getBaseDamage(RPGLContext context) throws Exception {
+    void getBaseDamage(RPGLContext context, JsonArray originPoint) throws Exception {
         /*
          * Collect base typed damage dice and bonuses
          */
@@ -92,9 +121,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         baseDamageCollection.setOriginItem(super.getOriginItem());
         baseDamageCollection.setSource(super.getSource());
-        baseDamageCollection.prepare(context);
+        baseDamageCollection.prepare(context, originPoint);
         baseDamageCollection.setTarget(super.getSource());
-        baseDamageCollection.invoke(context);
+        baseDamageCollection.invoke(context, originPoint);
 
         /*
          * Roll base damage dice
@@ -109,9 +138,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         baseDamageRoll.setOriginItem(super.getOriginItem());
         baseDamageRoll.setSource(super.getSource());
-        baseDamageRoll.prepare(context);
+        baseDamageRoll.prepare(context, originPoint);
         baseDamageRoll.setTarget(super.getSource());
-        baseDamageRoll.invoke(context);
+        baseDamageRoll.invoke(context, originPoint);
 
         /*
          * Replace damage key with base damage calculation
@@ -123,10 +152,11 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * This helper method collects, rolls, and stores all target-specific damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs.
      */
-    void getTargetDamage(RPGLContext context) throws Exception {
+    void getTargetDamage(RPGLContext context, JsonArray originPoint) throws Exception {
         /*
          * Collect target typed damage dice and bonuses
          */
@@ -139,9 +169,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         targetDamageCollection.setOriginItem(super.getOriginItem());
         targetDamageCollection.setSource(super.getSource());
-        targetDamageCollection.prepare(context);
+        targetDamageCollection.prepare(context, originPoint);
         targetDamageCollection.setTarget(super.getTarget());
-        targetDamageCollection.invoke(context);
+        targetDamageCollection.invoke(context, originPoint);
 
         /*
          * Roll target damage dice
@@ -156,9 +186,9 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
         }});
         targetDamageRoll.setOriginItem(super.getOriginItem());
         targetDamageRoll.setSource(super.getSource());
-        targetDamageRoll.prepare(context);
+        targetDamageRoll.prepare(context, originPoint);
         targetDamageRoll.setTarget(super.getTarget());
-        targetDamageRoll.invoke(context);
+        targetDamageRoll.invoke(context, originPoint);
 
         this.json.getJsonArray("damage").asList().addAll(targetDamageRoll.getDamage().asList());
     }
@@ -167,23 +197,24 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * Delivers the finalized damage to the target.
      *
      * @param context the context this Subevent takes place in
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs.
      */
-    void deliverDamage(RPGLContext context) throws Exception {
+    void deliverDamage(RPGLContext context, JsonArray originPoint) throws Exception {
         DamageDelivery damageDelivery = new DamageDelivery();
         damageDelivery.joinSubeventData(new JsonObject() {{
             this.putJsonArray("damage", json.getJsonArray("damage"));
         }});
         damageDelivery.setOriginItem(super.getOriginItem());
         damageDelivery.setSource(super.getSource());
-        damageDelivery.prepare(context);
+        damageDelivery.prepare(context, originPoint);
         damageDelivery.setTarget(super.getTarget());
-        damageDelivery.invoke(context);
+        damageDelivery.invoke(context, originPoint);
 
         JsonObject damageByType = damageDelivery.getDamage();
         if (this.json.asMap().containsKey("vampirism")) {
-            VampiricSubevent.handleVampirism(this, damageByType, context);
+            VampiricSubevent.handleVampirism(this, damageByType, context, originPoint);
         }
     }
 

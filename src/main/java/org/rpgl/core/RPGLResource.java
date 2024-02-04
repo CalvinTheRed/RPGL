@@ -34,9 +34,12 @@ public class RPGLResource extends RPGLTaggable {
      * Setter for potency.
      *
      * @param potency a new potency
+     * @return this RPGLResource
      */
-    public void setPotency(int potency) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLResource setPotency(int potency) {
         super.putInteger(RPGLResourceTO.POTENCY_ALIAS, potency);
+        return this;
     }
 
     /**
@@ -56,9 +59,12 @@ public class RPGLResource extends RPGLTaggable {
      * <code>exhaust()</code> methods instead, respectively.
      *
      * @param exhausted a new exhausted
+     * @return this RPGLResource
      */
-    public void setExhausted(boolean exhausted) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLResource setExhausted(boolean exhausted) {
         super.putBoolean(RPGLResourceTO.EXHAUSTED_ALIAS, exhausted);
+        return this;
     }
 
     /**
@@ -74,9 +80,12 @@ public class RPGLResource extends RPGLTaggable {
      * Setter for potency.
      *
      * @param refreshCriterion a new refresh criterion
+     * @return this RPGLResource
      */
-    public void setRefreshCriterion(JsonArray refreshCriterion) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLResource setRefreshCriterion(JsonArray refreshCriterion) {
         super.putJsonArray(RPGLResourceTO.REFRESH_CRITERION_ALIAS, refreshCriterion);
+        return this;
     }
 
     /**
@@ -92,9 +101,12 @@ public class RPGLResource extends RPGLTaggable {
      * Sets the origin item UUID of the RPGLResource.
      *
      * @param originItem a RPGLItem UUID
+     * @return this RPGLResource
      */
-    public void setOriginItem(String originItem) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLResource setOriginItem(String originItem) {
         super.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
+        return this;
     }
 
     // =================================================================================================================
@@ -157,8 +169,10 @@ public class RPGLResource extends RPGLTaggable {
     /**
      * This method exhausts the resource to make it unable to fuel future RPGLEvents. This method also triggers the
      * generation of the next required count.
+     *
+     * @return this RPGLResource
      */
-    public void exhaust() {
+    public RPGLResource exhaust() {
         this.setExhausted(true);
         JsonArray refreshCriterion = this.getRefreshCriterion();
         for (int i = 0; i < refreshCriterion.size(); i++) {
@@ -166,6 +180,7 @@ public class RPGLResource extends RPGLTaggable {
             criterion.putInteger("completed", 0);
             criterion.putInteger("required", generateRequired(criterion.getJsonObject("required_generator")));
         }
+        return this;
     }
 
     /**

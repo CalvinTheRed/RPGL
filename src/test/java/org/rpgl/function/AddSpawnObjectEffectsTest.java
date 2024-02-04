@@ -56,7 +56,7 @@ public class AddSpawnObjectEffectsTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -68,7 +68,7 @@ public class AddSpawnObjectEffectsTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(new DummyContext());
+        spawnObject.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddSpawnObjectEffects().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -83,7 +83,7 @@ public class AddSpawnObjectEffectsTest {
                 this.addString("std:common/damage/immunity/fire");
                 this.addString("std:common/damage/immunity/poison");
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 ["std:common/damage/immunity/fire","std:common/damage/immunity/poison"]""";

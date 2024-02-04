@@ -56,7 +56,7 @@ public class RevokeResistanceTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -70,7 +70,7 @@ public class RevokeResistanceTest {
         damageAffinity.setSource(source);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext());
+        damageAffinity.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         damageAffinity.grantResistance("fire");
         damageAffinity.grantResistance("cold");
 
@@ -81,7 +81,7 @@ public class RevokeResistanceTest {
             }*/
             this.putString("function", "revoke_resistance");
             this.putString("damage_type", "fire");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(damageAffinity.isResistant("fire"),
                 "execute should revoke resistance to counter the granted fire resistance"
@@ -100,7 +100,7 @@ public class RevokeResistanceTest {
         damageAffinity.setSource(source);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext());
+        damageAffinity.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         damageAffinity.grantResistance("fire");
         damageAffinity.grantResistance("cold");
 
@@ -109,7 +109,7 @@ public class RevokeResistanceTest {
                 "function": "revoke_resistance"
             }*/
             this.putString("function", "revoke_resistance");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(damageAffinity.isResistant("fire"),
                 "execute should revoke resistance to counter the granted fire resistance"

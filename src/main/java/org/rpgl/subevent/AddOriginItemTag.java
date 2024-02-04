@@ -2,6 +2,8 @@ package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLItem;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
 
@@ -38,10 +40,41 @@ public class AddOriginItemTag extends Subevent {
     }
 
     @Override
-    public void run(RPGLContext context) {
+    public AddOriginItemTag invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AddOriginItemTag) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public AddOriginItemTag joinSubeventData(JsonObject other) {
+        return (AddOriginItemTag) super.joinSubeventData(other);
+    }
+
+    @Override
+    public AddOriginItemTag prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AddOriginItemTag) super.prepare(context, originPoint);
+    }
+
+    @Override
+    public AddOriginItemTag run(RPGLContext context, JsonArray originPoint) {
         RPGLItem originItem = UUIDTable.getItem(super.getOriginItem());
         if (originItem != null) {
             originItem.addTag(this.json.getString("tag"));
         }
+        return this;
+    }
+
+    @Override
+    public AddOriginItemTag setOriginItem(String originItem) {
+        return (AddOriginItemTag) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public AddOriginItemTag setSource(RPGLObject source) {
+        return (AddOriginItemTag) super.setSource(source);
+    }
+
+    @Override
+    public AddOriginItemTag setTarget(RPGLObject target) {
+        return (AddOriginItemTag) super.setTarget(target);
     }
 }

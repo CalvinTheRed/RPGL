@@ -50,16 +50,16 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new AbilitySave();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -67,16 +67,21 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("invokes pass subevents")
     void invokesPassSubevents() throws Exception {
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("pass", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
+        AbilitySave abilitySave = new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "pass": [
+                            { "subevent": "dummy_subevent" }
+                        ]
+                    }*/
+                    this.putJsonArray("pass", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
-        abilitySave.resolveNestedSubevents("pass", new DummyContext());
+        abilitySave.resolveNestedSubevents("pass", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -85,16 +90,22 @@ public class AbilitySaveTest {
 
     @Test
     @DisplayName("invokes fail subevents")
-    void invokesFailSubevents() throws Exception {AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("fail", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
+    void invokesFailSubevents() throws Exception {
+        AbilitySave abilitySave = new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "fail": [
+                            { "subevent": "dummy_subevent" }
+                        ]
+                    }*/
+                    this.putJsonArray("fail", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
-        abilitySave.resolveNestedSubevents("fail", new DummyContext());
+        abilitySave.resolveNestedSubevents("fail", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -104,21 +115,19 @@ public class AbilitySaveTest {
     @Test
     @DisplayName("prepares difficulty class")
     void preparesDifficultyClass() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(2);
         object.getAbilityScores().putInteger("int", 20);
-        object.setProficiencyBonus(2);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class_ability": "int"
-            }*/
-            this.putString("difficulty_class_ability", "int");
-        }});
-
-        abilitySave.setSource(object);
-        abilitySave.prepare(new DummyContext());
+        AbilitySave abilitySave = new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class_ability": "int"
+                    }*/
+                    this.putString("difficulty_class_ability", "int");
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, abilitySave.getDifficultyClass(),
                 "save DC was calculated incorrectly"
@@ -130,16 +139,15 @@ public class AbilitySaveTest {
     void preparesAssignedDifficultyClass() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class": 20
-            }*/
-            this.putInteger("difficulty_class", 20);
-        }});
-
-        abilitySave.setSource(object);
-        abilitySave.prepare(new DummyContext());
+        AbilitySave abilitySave = new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class": 20
+                    }*/
+                    this.putInteger("difficulty_class", 20);
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(20, abilitySave.getDifficultyClass(),
                 "should preserve the assigned difficulty class"
@@ -150,20 +158,19 @@ public class AbilitySaveTest {
     @DisplayName("prepares difficulty class as origin")
     void preparesDifficultyClassAsOrigin() throws Exception {
         RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
         origin.getAbilityScores().putInteger("int", 20);
-        object.setOriginObject(origin.getUuid());
-        object.setProficiencyBonus(2);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", "int");
-            this.putBoolean("use_origin_difficulty_class_ability", true);
-        }});
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(2)
+                .setOriginObject(origin.getUuid());
 
-        abilitySave.setSource(object);
-        abilitySave.prepare(new DummyContext());
+        AbilitySave abilitySave = new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("difficulty_class_ability", "int");
+                    this.putBoolean("use_origin_difficulty_class_ability", true);
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, abilitySave.getDifficultyClass(),
                 "save DC should calculate using origin object's ability scores"
@@ -176,33 +183,33 @@ public class AbilitySaveTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "ability_save",
-                "ability": "con",
-                "difficulty_class_ability": "wis",
-                "determined": [ 20 ],
-                "pass": [
-                    { "subevent": "dummy_subevent" }
-                ]
-            }*/
-            this.putString("subevent", "ability_save");
-            this.putString("ability", "con");
-            this.putString("difficulty_class_ability", "wis");
-            this.putJsonArray("pass", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(20);
-            }});
-        }});
-        abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext());
-        abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext());
+        new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "ability_save",
+                        "ability": "con",
+                        "difficulty_class_ability": "wis",
+                        "determined": [ 20 ],
+                        "pass": [
+                            { "subevent": "dummy_subevent" }
+                        ]
+                    }*/
+                    this.putString("subevent", "ability_save");
+                    this.putString("ability", "con");
+                    this.putString("difficulty_class_ability", "wis");
+                    this.putJsonArray("pass", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(20);
+                    }});
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on pass"
@@ -215,33 +222,33 @@ public class AbilitySaveTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "ability_save",
-                "ability": "con",
-                "difficulty_class_ability": "wis",
-                "determined": [ 1 ],
-                "pass": [
-                    { "subevent": "dummy_subevent" }
-                ]
-            }*/
-            this.putString("subevent", "ability_save");
-            this.putString("ability", "con");
-            this.putString("difficulty_class_ability", "wis");
-            this.putJsonArray("pass", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(1);
-            }});
-        }});
-        abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext());
-        abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext());
+        new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "ability_save",
+                        "ability": "con",
+                        "difficulty_class_ability": "wis",
+                        "determined": [ 1 ],
+                        "pass": [
+                            { "subevent": "dummy_subevent" }
+                        ]
+                    }*/
+                    this.putString("subevent", "ability_save");
+                    this.putString("ability", "con");
+                    this.putString("difficulty_class_ability", "wis");
+                    this.putJsonArray("pass", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(1);
+                    }});
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on fail"
@@ -254,33 +261,33 @@ public class AbilitySaveTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "ability_save",
-                "ability": "con",
-                "difficulty_class_ability": "wis",
-                "determined": [ 1 ],
-                "fail": [
-                    { "subevent": "dummy_subevent" }
-                ]
-            }*/
-            this.putString("subevent", "ability_save");
-            this.putString("ability", "con");
-            this.putString("difficulty_class_ability", "wis");
-            this.putJsonArray("fail", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(1);
-            }});
-        }});
-        abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext());
-        abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext());
+        new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "ability_save",
+                        "ability": "con",
+                        "difficulty_class_ability": "wis",
+                        "determined": [ 1 ],
+                        "fail": [
+                            { "subevent": "dummy_subevent" }
+                        ]
+                    }*/
+                    this.putString("subevent", "ability_save");
+                    this.putString("ability", "con");
+                    this.putString("difficulty_class_ability", "wis");
+                    this.putJsonArray("fail", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(1);
+                    }});
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "dummy subevent should be invoked on fail"
@@ -293,33 +300,33 @@ public class AbilitySaveTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AbilitySave abilitySave = new AbilitySave();
-        abilitySave.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "ability_save",
-                "ability": "con",
-                "difficulty_class_ability": "wis",
-                "determined": [ 20 ],
-                "fail": [
-                    { "subevent": "dummy_subevent" }
-                ]
-            }*/
-            this.putString("subevent", "ability_save");
-            this.putString("ability", "con");
-            this.putString("difficulty_class_ability", "wis");
-            this.putJsonArray("fail", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
-                }});
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(20);
-            }});
-        }});
-        abilitySave.setSource(source);
-        abilitySave.prepare(new DummyContext());
-        abilitySave.setTarget(target);
-        abilitySave.invoke(new DummyContext());
+        new AbilitySave()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "ability_save",
+                        "ability": "con",
+                        "difficulty_class_ability": "wis",
+                        "determined": [ 20 ],
+                        "fail": [
+                            { "subevent": "dummy_subevent" }
+                        ]
+                    }*/
+                    this.putString("subevent", "ability_save");
+                    this.putString("ability", "con");
+                    this.putString("difficulty_class_ability", "wis");
+                    this.putJsonArray("fail", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(20);
+                    }});
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(0, DummySubevent.counter,
                 "dummy subevent should not be invoked on pass"

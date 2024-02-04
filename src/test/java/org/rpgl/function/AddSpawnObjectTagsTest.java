@@ -56,7 +56,7 @@ public class AddSpawnObjectTagsTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -68,7 +68,7 @@ public class AddSpawnObjectTagsTest {
 
         SpawnObject spawnObject = new SpawnObject();
         spawnObject.setSource(summoner);
-        spawnObject.prepare(new DummyContext());
+        spawnObject.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddSpawnObjectTags().execute(null, spawnObject, new JsonObject() {{
             /*{
@@ -83,7 +83,7 @@ public class AddSpawnObjectTagsTest {
                 this.addString("test-tag-1");
                 this.addString("test-tag-2");
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 ["test-tag-1","test-tag-2"]""";

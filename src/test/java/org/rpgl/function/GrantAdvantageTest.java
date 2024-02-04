@@ -12,6 +12,7 @@ import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
 import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Roll;
 import org.rpgl.subevent.Subevent;
@@ -63,6 +64,11 @@ public class GrantAdvantageTest {
             public Subevent clone(JsonObject jsonData) {
                 return null;
             }
+
+            @Override
+            public Roll run(RPGLContext context, JsonArray originPoint) {
+                return this;
+            }
         };
     }
 
@@ -80,7 +86,7 @@ public class GrantAdvantageTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -91,14 +97,14 @@ public class GrantAdvantageTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         roll.setSource(object);
-        roll.prepare(new DummyContext());
+        roll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new GrantAdvantage().execute(null, roll, new JsonObject() {{
             /*{
                 "function": "grant_advantage"
             }*/
             this.putString("function", "grant_advantage");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(roll.isAdvantageRoll(),
                 "execute should grant advantage to roll"

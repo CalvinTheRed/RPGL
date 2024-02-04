@@ -22,11 +22,12 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public Roll prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.putBoolean("canceled", false);
         this.json.putBoolean("has_advantage", false);
         this.json.putBoolean("has_disadvantage", false);
+        return this;
     }
 
     @Override
@@ -41,16 +42,22 @@ public abstract class Roll extends Calculation implements AbilitySubevent, Cance
 
     /**
      * This method informs the subevent that advantage has been granted to the contest roll.
+     *
+     * @return this Roll
      */
-    public void grantAdvantage() {
+    public Roll grantAdvantage() {
         this.json.putBoolean("has_advantage", true);
+        return this;
     }
 
     /**
      * This method informs the subevent that disadvantage has been granted to the contest roll.
+     *
+     * @return this Roll
      */
-    public void grantDisadvantage() {
+    public Roll grantDisadvantage() {
         this.json.putBoolean("has_disadvantage", true);
+        return this;
     }
 
     /**

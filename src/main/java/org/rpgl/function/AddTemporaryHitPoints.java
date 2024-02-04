@@ -24,7 +24,7 @@ public class AddTemporaryHitPoints extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         if (subevent instanceof TemporaryHitPointCollection temporaryHitPointCollection) {
             JsonArray temporaryHitPointsArray = functionJson.getJsonArray("temporary_hit_points");
             for (int i = 0; i < temporaryHitPointsArray.size(); i++) {

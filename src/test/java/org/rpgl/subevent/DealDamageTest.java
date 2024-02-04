@@ -51,16 +51,16 @@ public class DealDamageTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new DealDamage();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new DealDamage()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -71,43 +71,43 @@ public class DealDamageTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "tags": [ ],
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "force",
-                        "dice": [
-                            { "count": 1, "size": 4, "determined": [ 2 ] }
-                        ],
-                        "bonus": 1
-                    }
-                ]
-            }*/
-            this.putJsonArray("tags", new JsonArray());
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "force");
-                    this.putJsonArray("dice", new JsonArray() {{
+        DealDamage dealDamage = new DealDamage()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "tags": [ ],
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "force",
+                                "dice": [
+                                    { "count": 1, "size": 4, "determined": [ 2 ] }
+                                ],
+                                "bonus": 1
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("tags", new JsonArray());
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 1);
-                            this.putInteger("size", 4);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(2);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "force");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 1);
+                                    this.putInteger("size", 4);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(2);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 1);
                         }});
                     }});
-                    this.putInteger("bonus", 1);
-                }});
-            }});
-        }});
+                }})
+                .setSource(source)
+                .setTarget(target);
 
-        dealDamage.setSource(source);
-        dealDamage.setTarget(target);
-        dealDamage.getBaseDamage(new DummyContext());
+        dealDamage.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":1,"damage_type":"force","dice":[{"determined":[],"roll":2,"size":4}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -121,42 +121,41 @@ public class DealDamageTest {
     void dealsDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "force",
-                        "dice": [
-                            { "count": 1, "size": 4, "determined": [ 2 ] }
-                        ],
-                        "bonus": 1
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "force");
-                    this.putJsonArray("dice", new JsonArray() {{
+        new DealDamage()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "force",
+                                "dice": [
+                                    { "count": 1, "size": 4, "determined": [ 2 ] }
+                                ],
+                                "bonus": 1
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 1);
-                            this.putInteger("size", 4);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(2);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "force");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 1);
+                                    this.putInteger("size", 4);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(2);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 1);
                         }});
                     }});
-                    this.putInteger("bonus", 1);
-                }});
-            }});
-        }});
-
-        dealDamage.setSource(object);
-        dealDamage.prepare(new DummyContext());
-        dealDamage.setTarget(object);
-        dealDamage.invoke(new DummyContext());
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0).setTarget(object)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -3 /*damage*/, object.getHealthData().getInteger("current"),
                 "invoking DealDamage should deal 3 points of damage"
@@ -175,54 +174,53 @@ public class DealDamageTest {
         source.getHealthData().putInteger("current", 1);
         target.getHealthData().putInteger("current", 11);
 
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "necrotic",
-                        "dice": [
-                            { "count": 2, "size": 10, "determined": [ 5 ] }
+        new DealDamage()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "necrotic",
+                                "dice": [
+                                    { "count": 2, "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "vampirism": {
-                    "numerator": 1,
-                    "denominator": 2,
-                    "round_up": false,
-                    "damage_type": "necrotic"
-                }
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "necrotic");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "vampirism": {
+                            "numerator": 1,
+                            "denominator": 2,
+                            "round_up": false,
+                            "damage_type": "necrotic"
+                        }
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "necrotic");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putJsonObject("vampirism", new JsonObject() {{
-                this.putInteger("numerator", 1);
-                this.putInteger("denominator", 2);
-                this.putBoolean("round_up", false);
-                this.putString("damage_type", "necrotic");
-            }});
-        }});
-
-        dealDamage.setSource(source);
-        dealDamage.prepare(context);
-        dealDamage.setTarget(target);
-        dealDamage.invoke(context);
+                    this.putJsonObject("vampirism", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 2);
+                        this.putBoolean("round_up", false);
+                        this.putString("damage_type", "necrotic");
+                    }});
+                }})
+                .setSource(source)
+                .prepare(context, target.getPosition())
+                .setTarget(target)
+                .invoke(context, target.getPosition());
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"
@@ -235,21 +233,21 @@ public class DealDamageTest {
     @Test
     @DisplayName("recognizes present damage type")
     void recognizesPresentDamageType() {
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire"
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
+        DealDamage dealDamage = new DealDamage()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "fire"
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("damage_type", "fire");
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
         assertTrue(dealDamage.includesDamageType("fire"),
                 "should return true when damage type is present"
@@ -259,21 +257,21 @@ public class DealDamageTest {
     @Test
     @DisplayName("recognizes absent damage type")
     void recognizesAbsentDamageType() {
-        DealDamage dealDamage = new DealDamage();
-        dealDamage.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire"
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
+        DealDamage dealDamage = new DealDamage()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "fire"
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("damage_type", "fire");
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
         assertFalse(dealDamage.includesDamageType("cold"),
                 "should return false when damage type is not present"

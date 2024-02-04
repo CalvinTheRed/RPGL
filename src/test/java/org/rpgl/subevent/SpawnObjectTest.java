@@ -53,16 +53,16 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new SpawnObject();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -73,14 +73,14 @@ public class SpawnObjectTest {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(1, context.getContextObjects().size(),
                 "There should be 1 new object in context following spawn"
@@ -100,14 +100,14 @@ public class SpawnObjectTest {
         RPGLObject target = RPGLFactory.newObject("debug:dummy", "user-two");
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(source);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(target);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                }})
+                .setSource(source)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(target)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(2, UUIDTable.getObjectsByUserId(source.getUserId()).size(),
                 "SpawnObject should use source's user id by default"
@@ -121,15 +121,15 @@ public class SpawnObjectTest {
         RPGLObject target = RPGLFactory.newObject("debug:dummy", "user-two");
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-            this.putString("controlled_by", "target");
-        }});
-        spawnObject.setSource(source);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(target);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                    this.putString("controlled_by", "target");
+                }})
+                .setSource(source)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(target)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(2, UUIDTable.getObjectsByUserId(target.getUserId()).size(),
                 "SpawnObject should use target's user id when specified"
@@ -143,19 +143,19 @@ public class SpawnObjectTest {
         DummyContext context = new DummyContext();
         RPGLItem originItem = RPGLFactory.newItem("std:weapon/melee/simple/dagger");
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-            this.putJsonArray("extra_effects", new JsonArray() {{
-                this.addString("std:common/damage/immunity/fire");
-                this.addString("std:common/damage/immunity/poison");
-            }});
-        }});
-        spawnObject.setOriginItem(originItem.getUuid());
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                    this.putJsonArray("extra_effects", new JsonArray() {{
+                        this.addString("std:common/damage/immunity/fire");
+                        this.addString("std:common/damage/immunity/poison");
+                    }});
+                }})
+                .setOriginItem(originItem.getUuid())
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         RPGLObject spawnedObject = context.getContextObjects().get(0);
         RPGLEffect effect;
@@ -199,18 +199,18 @@ public class SpawnObjectTest {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-            this.putJsonArray("extra_events", new JsonArray() {{
-                this.addString("std:spell/fire_bolt");
-                this.addString("std:common/dodge");
-            }});
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                    this.putJsonArray("extra_events", new JsonArray() {{
+                        this.addString("std:spell/fire_bolt");
+                        this.addString("std:common/dodge");
+                    }});
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         JsonArray events = context.getContextObjects().get(0).getEvents();
 
@@ -231,18 +231,18 @@ public class SpawnObjectTest {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-            this.putJsonArray("extra_tags", new JsonArray() {{
-                this.addString("extra-tag-1");
-                this.addString("extra-tag-2");
-            }});
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                    this.putJsonArray("extra_tags", new JsonArray() {{
+                        this.addString("extra-tag-1");
+                        this.addString("extra-tag-2");
+                    }});
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertTrue(context.getContextObjects().get(0).getTags().asList().contains("extra-tag-1"),
                 "new object should have an extra tag"
@@ -258,20 +258,20 @@ public class SpawnObjectTest {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-            this.putJsonArray("object_bonuses", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("field", "health_data.temporary");
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                    this.putJsonArray("object_bonuses", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("field", "health_data.temporary");
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(10, context.getContextObjects().get(0).getHealthData().getInteger("temporary"),
                 "object should receive a +10 bonus to temporary hit points"
@@ -281,19 +281,18 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("assigns object default proficiency bonus")
     void assignsObjectDefaultProficiencyBonus() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(1);
         DummyContext context = new DummyContext();
 
-        summoner.setProficiencyBonus(1);
-
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertNotEquals(1, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should not extend source proficiency bonus by default"
@@ -303,20 +302,19 @@ public class SpawnObjectTest {
     @Test
     @DisplayName("extends origin object proficiency bonus")
     void extendsOriginObjectProficiencyBonus() throws Exception {
-        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+        RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(5);
         DummyContext context = new DummyContext();
 
-        summoner.setProficiencyBonus(5);
-
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-            this.putBoolean("extend_proficiency_bonus", true);
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                    this.putBoolean("extend_proficiency_bonus", true);
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(5, context.getContextObjects().get(0).getEffectiveProficiencyBonus(context),
                 "new object should extend source proficiency bonus"
@@ -329,14 +327,14 @@ public class SpawnObjectTest {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertEquals(summoner.getUuid(), context.getContextObjects().get(0).getOriginObject(),
                 "new object should have summoner as origin object"
@@ -349,14 +347,14 @@ public class SpawnObjectTest {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertFalse(context.getContextObjects().get(0).getProxy(),
                 "new object should not be a proxy object"
@@ -369,15 +367,15 @@ public class SpawnObjectTest {
         RPGLObject summoner = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         DummyContext context = new DummyContext();
 
-        SpawnObject spawnObject = new SpawnObject();
-        spawnObject.joinSubeventData(new JsonObject() {{
-            this.putString("object_id", "debug:dummy");
-            this.putBoolean("proxy", true);
-        }});
-        spawnObject.setSource(summoner);
-        spawnObject.prepare(context);
-        spawnObject.setTarget(summoner);
-        spawnObject.invoke(context);
+        new SpawnObject()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("object_id", "debug:dummy");
+                    this.putBoolean("proxy", true);
+                }})
+                .setSource(summoner)
+                .prepare(context, TestUtils.TEST_ARRAY_10_10_10)
+                .setTarget(summoner)
+                .invoke(context, TestUtils.TEST_ARRAY_10_10_10);
 
         assertTrue(context.getContextObjects().get(0).getProxy(),
                 "new object should be a proxy object"

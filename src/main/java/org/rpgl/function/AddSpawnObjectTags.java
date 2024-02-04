@@ -23,7 +23,7 @@ public class AddSpawnObjectTags extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) {
         if (subevent instanceof SpawnObject spawnObject) {
             JsonArray tags = functionJson.getJsonArray("tags");
             for (int i = 0; i < tags.size(); i++) {

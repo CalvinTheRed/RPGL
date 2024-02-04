@@ -56,16 +56,16 @@ public class AttackRollTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new AttackRoll();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -75,18 +75,17 @@ public class AttackRollTest {
     void preparesTags() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_ability": "str",
-                "attack_type": "melee"
-            }*/
-            this.putString("attack_ability", "str");
-            this.putString("attack_type", "melee");
-        }});
-
-        attackRoll.setSource(object);
-        attackRoll.prepare(new DummyContext());
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_ability": "str",
+                        "attack_type": "melee"
+                    }*/
+                    this.putString("attack_ability", "str");
+                    this.putString("attack_type", "melee");
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertTrue(attackRoll.getTags().asList().containsAll(List.of("str", "melee")),
                 "should have tags for attack ability and attack type"
@@ -96,18 +95,18 @@ public class AttackRollTest {
     @Test
     @DisplayName("recognizes critical misses")
     void recognizesCriticalMisses() {
-        AttackRoll attackRoll = new AttackRoll();
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "base": {
+                            "value": 1
+                        }
+                    }*/
+                    this.putJsonObject("base", new JsonObject() {{
+                        this.putInteger("value", 1);
+                    }});
+                }});
 
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "base": {
-                    "value": 1
-                }
-            }*/
-            this.putJsonObject("base", new JsonObject() {{
-                this.putInteger("value", 1);
-            }});
-        }});
         assertTrue(attackRoll.isCriticalMiss(),
                 "attack roll with base of 1 should register as a critical miss"
         );
@@ -122,6 +121,7 @@ public class AttackRollTest {
                 this.putInteger("value", 2);
             }});
         }});
+
         assertFalse(attackRoll.isCriticalMiss(),
                 "attack roll with base of 2 should not register as a critical miss"
         );
@@ -130,8 +130,11 @@ public class AttackRollTest {
     @Test
     @DisplayName("calculates critical hit threshold")
     void calculatesCriticalHitThreshold() throws Exception {
-        AttackRoll attackRoll = new AttackRoll();
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        AttackRoll attackRoll = new AttackRoll().setSource(object);
         attackRoll.calculateCriticalHitThreshold(new DummyContext());
+
         assertEquals(20, attackRoll.getCriticalHitThreshold(),
                 "critical hit threshold should default to 20"
         );
@@ -140,23 +143,23 @@ public class AttackRollTest {
     @Test
     @DisplayName("invokes hit subevents")
     void invokesHitSubevents() throws Exception {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "hit": [
-                    {
-                        "subevent": "dummy_subevent"
-                    }
-                ]
-            }*/
-            this.putJsonArray("hit", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "hit": [
+                            {
+                                "subevent": "dummy_subevent"
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("hit", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
-        attackRoll.resolveNestedSubevents("hit", new DummyContext());
+        attackRoll.resolveNestedSubevents("hit", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "DummySubevent counter should increment by 1 from resolving nested subevents on hit"
@@ -166,23 +169,23 @@ public class AttackRollTest {
     @Test
     @DisplayName("invokes miss subevents")
     void invokesMissSubevents() throws Exception {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "miss": [
-                    {
-                        "subevent": "dummy_subevent"
-                    }
-                ]
-            }*/
-            this.putJsonArray("miss", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("subevent", "dummy_subevent");
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "miss": [
+                            {
+                                "subevent": "dummy_subevent"
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("miss", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("subevent", "dummy_subevent");
+                        }});
+                    }});
                 }});
-            }});
-        }});
 
-        attackRoll.resolveNestedSubevents("miss", new DummyContext());
+        attackRoll.resolveNestedSubevents("miss", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "DummySubevent counter should increment by 1 from resolving nested subevents on miss"
@@ -194,45 +197,45 @@ public class AttackRollTest {
     void deliversDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "fire",
-                        "dice": [
-                            { "roll": 5 }
-                        ],
-                        "bonus": 5,
-                        "scale": {
-                            "numerator": 1,
-                            "denominator": 1,
-                            "round_up": false
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "fire",
+                                "dice": [
+                                    { "roll": 5 }
+                                ],
+                                "bonus": 5,
+                                "scale": {
+                                    "numerator": 1,
+                                    "denominator": 1,
+                                    "round_up": false
+                                }
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 5);
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("roll", 5);
+                                }});
+                            }});
+                            this.putInteger("bonus", 5);
+                            this.putJsonObject("scale", new JsonObject() {{
+                                this.putInteger("numerator", 1);
+                                this.putInteger("denominator", 1);
+                                this.putBoolean("round_up", false);
+                            }});
                         }});
                     }});
-                    this.putInteger("bonus", 5);
-                    this.putJsonObject("scale", new JsonObject() {{
-                        this.putInteger("numerator", 1);
-                        this.putInteger("denominator", 1);
-                        this.putBoolean("round_up", false);
-                    }});
-                }});
-            }});
-        }});
+                }})
+                .setSource(object)
+                .setTarget(object);
 
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
-        attackRoll.deliverDamage(new DummyContext());
+        attackRoll.deliverDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
                 "target should lose 10 health"
@@ -245,9 +248,10 @@ public class AttackRollTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("std:humanoid/knight", TestUtils.TEST_USER);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
+        AttackRoll attackRoll = new AttackRoll()
+                .setSource(source)
+                .setTarget(target);
+
         attackRoll.calculateTargetArmorClass(new DummyContext());
 
         assertEquals(18 /*plate armor*/ +2 /*shield*/, attackRoll.getTargetArmorClass(),
@@ -258,65 +262,65 @@ public class AttackRollTest {
     @Test
     @DisplayName("gets critical hit damage")
     void getsCriticalHitDamage() throws Exception {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "slashing",
-                        "dice": [
-                            { "count": 2, "size": 6, "determined": [ 3 ] }
-                        ],
-                        "bonus": 0
-                    },
-                    {
-                        "formula": "range",
-                        "damage_type": "fire",
-                        "dice": [
-                            { "count": 2, "size": 6, "determined": [ 3 ] }
-                        ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "slashing");
-                    this.putJsonArray("dice", new JsonArray() {{
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_type": "melee",
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "slashing",
+                                "dice": [
+                                    { "count": 2, "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            },
+                            {
+                                "formula": "range",
+                                "damage_type": "fire",
+                                "dice": [
+                                    { "count": 2, "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            }
+                        ]
+                    }*/
+                    this.putString("attack_type", "melee");
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "slashing");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
+                        }});
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
+                            }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
                 }});
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
-                            }});
-                        }});
-                    }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-        }});
 
-        attackRoll.getCriticalHitDamage(new DummyContext());
+        attackRoll.getCriticalHitDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"},{"bonus":0,"damage_type":"fire","dice":[{"count":2,"determined":[3],"size":6},{"count":2,"determined":[3],"size":6}],"formula":"range"}]""";
@@ -331,47 +335,47 @@ public class AttackRollTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         object.getAbilityScores().putInteger("str", 20);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "slashing",
-                        "dice": [
-                            { "count": 2, "size": 6, "determined": [ 3 ] }
-                        ],
-                        "bonus": 0
-                    }
-                ],
-                "withhold_damage_modifier": false
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "slashing");
-                    this.putJsonArray("dice", new JsonArray() {{
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                /*{
+                    "attack_type": "melee",
+                    "attack_ability": "str",
+                    "damage": [
+                        {
+                            "formula": "range",
+                            "damage_type": "slashing",
+                            "dice": [
+                                { "count": 2, "size": 6, "determined": [ 3 ] }
+                            ],
+                            "bonus": 0
+                        }
+                    ],
+                    "withhold_damage_modifier": false
+                }*/
+                this.putString("attack_type", "melee");
+                this.putString("attack_ability", "str");
+                this.putJsonArray("damage", new JsonArray() {{
+                    this.addJsonObject(new JsonObject() {{
+                        this.putString("formula", "range");
+                        this.putString("damage_type", "slashing");
+                        this.putJsonArray("dice", new JsonArray() {{
+                            this.addJsonObject(new JsonObject() {{
+                                this.putInteger("count", 2);
+                                this.putInteger("size", 6);
+                                this.putJsonArray("determined", new JsonArray() {{
+                                    this.addInteger(3);
+                                }});
                             }});
                         }});
+                        this.putInteger("bonus", 0);
                     }});
-                    this.putInteger("bonus", 0);
                 }});
-            }});
-            this.putBoolean("withhold_damage_modifier", false);
-        }});
+                this.putBoolean("withhold_damage_modifier", false);
+            }})
+                .setSource(object)
+                .setTarget(object);
 
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext());
+        attackRoll.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -385,47 +389,47 @@ public class AttackRollTest {
     void getsBaseDamageWithoutDamageModifier() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "slashing",
-                        "dice": [
-                            { "count": 2, "size": 6, "determined": [ 3 ] }
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_type": "melee",
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "slashing",
+                                "dice": [
+                                    { "count": 2, "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "withhold_damage_modifier": true
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "slashing");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "withhold_damage_modifier": true
+                    }*/
+                    this.putString("attack_type", "melee");
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "slashing");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-        }});
+                    this.putBoolean("withhold_damage_modifier", true);
+                }})
+                .setSource(object)
+                .setTarget(object);
 
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext());
+        attackRoll.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -442,48 +446,48 @@ public class AttackRollTest {
         RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
         item.setDamageBonus(1);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "slashing",
-                        "dice": [
-                            { "count": 2, "size": 6, "determined": [ 3 ] }
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_type": "melee",
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "slashing",
+                                "dice": [
+                                    { "count": 2, "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "withhold_damage_modifier": true
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "slashing");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "withhold_damage_modifier": true
+                    }*/
+                    this.putString("attack_type", "melee");
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "slashing");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-        }});
+                    this.putBoolean("withhold_damage_modifier", true);
+                }})
+                .setOriginItem(item.getUuid())
+                .setSource(object)
+                .setTarget(object);
 
-        attackRoll.setOriginItem(item.getUuid());
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext());
+        attackRoll.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":1,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -496,55 +500,55 @@ public class AttackRollTest {
     @DisplayName("gets base damage using origin object stats")
     void getsBaseDamageUsingOriginObjectStats() throws Exception {
         RPGLObject originObject = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
         originObject.getAbilityScores().putInteger("int", 20);
-        object.setOriginObject(originObject.getUuid());
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "int",
-                "use_origin_attack_ability": true,
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "slashing",
-                        "dice": [
-                            { "count": 2, "size": 6, "determined": [ 3 ] }
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setOriginObject(originObject.getUuid());
+
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_type": "melee",
+                        "attack_ability": "int",
+                        "use_origin_attack_ability": true,
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "slashing",
+                                "dice": [
+                                    { "count": 2, "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "withhold_damage_modifier": false
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "int");
-            this.putBoolean("use_origin_attack_ability", true);
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "slashing");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "withhold_damage_modifier": false
+                    }*/
+                    this.putString("attack_type", "melee");
+                    this.putString("attack_ability", "int");
+                    this.putBoolean("use_origin_attack_ability", true);
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "slashing");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putBoolean("withhold_damage_modifier", false);
-        }});
+                    this.putBoolean("withhold_damage_modifier", false);
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object);
 
-        attackRoll.setSource(object);
-        attackRoll.prepare(new DummyContext());
-        attackRoll.setTarget(object);
-        attackRoll.getBaseDamage(new DummyContext());
+        attackRoll.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"slashing","dice":[{"determined":[3],"size":6},{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}},{"bonus":5,"damage_type":"slashing","dice":[],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -558,22 +562,21 @@ public class AttackRollTest {
     void addsOriginItemAttackBonus() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword");
-        item.setAttackBonus(1);
+        RPGLItem item = RPGLFactory.newItem("std:weapon/melee/martial/longsword")
+                .setAttackBonus(1);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str"
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-        }});
-
-        attackRoll.setOriginItem(item.getUuid());
-        attackRoll.setSource(source);
-        attackRoll.prepare(new DummyContext());
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_type": "melee",
+                        "attack_ability": "str"
+                    }*/
+                    this.putString("attack_type", "melee");
+                    this.putString("attack_ability", "str");
+                }})
+                .setOriginItem(item.getUuid())
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, attackRoll.getBonus(),
                 "attack roll should include bonus from weapon attack bonus"
@@ -585,60 +588,60 @@ public class AttackRollTest {
     void rollsAndDeliversDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_type": "melee",
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "slashing",
-                        "dice": [
-                            { "size": 6, "determined": [ 3 ] },
-                            { "size": 6, "determined": [ 3 ] }
-                        ],
-                        "bonus": 0,
-                        "scale": {
-                            "numerator": 1,
-                            "denominator": 1,
-                            "round_up": false
-                        }
-                    }
-                ]
-            }*/
-            this.putString("attack_type", "melee");
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "slashing");
-                    this.putJsonArray("dice", new JsonArray() {{
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_type": "melee",
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "slashing",
+                                "dice": [
+                                    { "size": 6, "determined": [ 3 ] },
+                                    { "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0,
+                                "scale": {
+                                    "numerator": 1,
+                                    "denominator": 1,
+                                    "round_up": false
+                                }
+                            }
+                        ]
+                    }*/
+                    this.putString("attack_type", "melee");
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("damage_type", "slashing");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
-                        }});
-                        this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putInteger("bonus", 0);
+                            this.putJsonObject("scale", new JsonObject() {{
+                                this.putInteger("numerator", 1);
+                                this.putInteger("denominator", 1);
+                                this.putBoolean("round_up", false);
                             }});
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                    this.putJsonObject("scale", new JsonObject() {{
-                        this.putInteger("numerator", 1);
-                        this.putInteger("denominator", 1);
-                        this.putBoolean("round_up", false);
-                    }});
-                }});
-            }});
-        }});
+                }})
+                .setSource(object)
+                .setTarget(object);
 
-        attackRoll.setSource(object);
-        attackRoll.setTarget(object);
-        attackRoll.resolveDamage(new DummyContext());
+        attackRoll.resolveDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -6 /*damage*/, object.getHealthData().getInteger("current"),
                 "dummy should take 6 damage"
@@ -653,47 +656,46 @@ public class AttackRollTest {
 
         source.getAbilityScores().putInteger("str", 100); // should land a hit without critical miss rule
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "fire",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ],
-                "has_advantage": false,
-                "has_disadvantage": false,
-                "bonuses": [ ],
-                "determined": [ 1 ],
-                "canceled": false,
-                "use_origin_attack_ability": false
-            }*/
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-            this.putBoolean("has_advantage", false);
-            this.putBoolean("has_disadvantage", false);
-            this.putJsonArray("bonuses", new JsonArray());
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(1);
-            }});
-            this.putBoolean("canceled", false);
-            this.putBoolean("use_origin_attack_ability", false);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.run(new DummyContext());
+        new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "fire",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ],
+                        "has_advantage": false,
+                        "has_disadvantage": false,
+                        "bonuses": [ ],
+                        "determined": [ 1 ],
+                        "canceled": false,
+                        "use_origin_attack_ability": false
+                    }*/
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                    this.putBoolean("has_advantage", false);
+                    this.putBoolean("has_disadvantage", false);
+                    this.putJsonArray("bonuses", new JsonArray());
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(1);
+                    }});
+                    this.putBoolean("canceled", false);
+                    this.putBoolean("use_origin_attack_ability", false);
+                }})
+                .setSource(source)
+                .setTarget(target)
+                .run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000, target.getHealthData().getInteger("current"),
                 "target should not have been hit"
@@ -708,53 +710,52 @@ public class AttackRollTest {
 
         target.getAbilityScores().putInteger("dex", 100); // should be able to avoid a hit normally
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "fire",
-                        "dice": [ ],
-                        "bonus": 10
-                    }
-                ],
-                "has_advantage": false,
-                "has_disadvantage": false,
-                "bonuses": [ ],
-                "minimum": {
-                    "value": Integer.MIN_VALUE
-                },
-                "determined": [ 2 ],
-                "canceled": false,
-                "use_origin_attack_ability": false
-            }*/
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                }});
-            }});
-            this.putBoolean("has_advantage", false);
-            this.putBoolean("has_disadvantage", false);
-            this.putJsonArray("bonuses", new JsonArray());
-            this.putJsonObject("minimum", new JsonObject() {{
-                this.putInteger("value", Integer.MIN_VALUE);
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(2);
-            }});
-            this.putBoolean("canceled", false);
-            this.putBoolean("use_origin_attack_ability", false);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.run(new DummyContext());
+        new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "fire",
+                                "dice": [ ],
+                                "bonus": 10
+                            }
+                        ],
+                        "has_advantage": false,
+                        "has_disadvantage": false,
+                        "bonuses": [ ],
+                        "minimum": {
+                            "value": Integer.MIN_VALUE
+                        },
+                        "determined": [ 2 ],
+                        "canceled": false,
+                        "use_origin_attack_ability": false
+                    }*/
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                        }});
+                    }});
+                    this.putBoolean("has_advantage", false);
+                    this.putBoolean("has_disadvantage", false);
+                    this.putJsonArray("bonuses", new JsonArray());
+                    this.putJsonObject("minimum", new JsonObject() {{
+                        this.putInteger("value", Integer.MIN_VALUE);
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(2);
+                    }});
+                    this.putBoolean("canceled", false);
+                    this.putBoolean("use_origin_attack_ability", false);
+                }})
+                .setSource(source)
+                .setTarget(target)
+                .run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000, target.getHealthData().getInteger("current"),
                 "target should not have been hit"
@@ -767,64 +768,63 @@ public class AttackRollTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "fire",
-                        "dice": [
-                            { "size": 6, "determined": [ 3 ] }
+        new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "fire",
+                                "dice": [
+                                    { "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "has_advantage": false,
-                "has_disadvantage": false,
-                "bonuses": [ ],
-                "minimum": {
-                    "value": Integer.MIN_VALUE
-                },
-                "determined": [ 19 ],
-                "withhold_damage_modifier": true,
-                "canceled": false,
-                "use_origin_attack_ability": false
-            }*/
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "has_advantage": false,
+                        "has_disadvantage": false,
+                        "bonuses": [ ],
+                        "minimum": {
+                            "value": Integer.MIN_VALUE
+                        },
+                        "determined": [ 19 ],
+                        "withhold_damage_modifier": true,
+                        "canceled": false,
+                        "use_origin_attack_ability": false
+                    }*/
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putBoolean("has_advantage", false);
-            this.putBoolean("has_disadvantage", false);
-            this.putJsonArray("bonuses", new JsonArray());
-            this.putJsonObject("minimum", new JsonObject() {{
-                this.putInteger("value", Integer.MIN_VALUE);
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(19);
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-            this.putBoolean("canceled", false);
-            this.putBoolean("use_origin_attack_ability", false);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.run(new DummyContext());
+                    this.putBoolean("has_advantage", false);
+                    this.putBoolean("has_disadvantage", false);
+                    this.putJsonArray("bonuses", new JsonArray());
+                    this.putJsonObject("minimum", new JsonObject() {{
+                        this.putInteger("value", Integer.MIN_VALUE);
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(19);
+                    }});
+                    this.putBoolean("withhold_damage_modifier", true);
+                    this.putBoolean("canceled", false);
+                    this.putBoolean("use_origin_attack_ability", false);
+                }})
+                .setSource(source)
+                .setTarget(target)
+                .run(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -3 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken damage"
@@ -842,64 +842,63 @@ public class AttackRollTest {
 
         target.getAbilityScores().putInteger("dex", 100);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "fire",
-                        "dice": [
-                            { "size": 6, "determined": [ 3 ] }
+        new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "fire",
+                                "dice": [
+                                    { "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "has_advantage": false,
-                "has_disadvantage": false,
-                "bonuses": [ ],
-                "minimum": {
-                    "value": Integer.MIN_VALUE
-                },
-                "determined": [ 20 ],
-                "withhold_damage_modifier": true,
-                "canceled": false,
-                "use_origin_attack_ability": false
-            }*/
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "has_advantage": false,
+                        "has_disadvantage": false,
+                        "bonuses": [ ],
+                        "minimum": {
+                            "value": Integer.MIN_VALUE
+                        },
+                        "determined": [ 20 ],
+                        "withhold_damage_modifier": true,
+                        "canceled": false,
+                        "use_origin_attack_ability": false
+                    }*/
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putBoolean("has_advantage", false);
-            this.putBoolean("has_disadvantage", false);
-            this.putJsonArray("bonuses", new JsonArray());
-            this.putJsonObject("minimum", new JsonObject() {{
-                this.putInteger("value", Integer.MIN_VALUE);
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(20);
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-            this.putBoolean("canceled", false);
-            this.putBoolean("use_origin_attack_ability", false);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.run(context);
+                    this.putBoolean("has_advantage", false);
+                    this.putBoolean("has_disadvantage", false);
+                    this.putJsonArray("bonuses", new JsonArray());
+                    this.putJsonObject("minimum", new JsonObject() {{
+                        this.putInteger("value", Integer.MIN_VALUE);
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(20);
+                    }});
+                    this.putBoolean("withhold_damage_modifier", true);
+                    this.putBoolean("canceled", false);
+                    this.putBoolean("use_origin_attack_ability", false);
+                }})
+                .setSource(source)
+                .setTarget(target)
+                .run(context, target.getPosition());
 
         assertEquals(1000 /*base*/ -3 /*damage*/ -3 /*critical bonus*/, target.getHealthData().getInteger("current"),
                 "target should have been hit and taken critical damage"
@@ -910,50 +909,50 @@ public class AttackRollTest {
     @DisplayName("heals source via vampirism (all damage types")
     void healsSourceViaVampirism_allDamageTypes() throws Exception {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
         source.getHealthData().putInteger("current", 1);
+
+        RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         target.getHealthData().putInteger("current", 11);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "necrotic",
-                        "dice": [ ],
-                        "bonus": 10,
-                        "scale": {
-                            "numerator": 1,
-                            "denominator": 1,
-                            "round_up": false
+        AttackRoll attackRoll = new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "necrotic",
+                                "dice": [ ],
+                                "bonus": 10,
+                                "scale": {
+                                    "numerator": 1,
+                                    "denominator": 1,
+                                    "round_up": false
+                                }
+                            }
+                        ],
+                        "vampirism": {
+                            "damage_type": "necrotic"
                         }
-                    }
-                ],
-                "vampirism": {
-                    "damage_type": "necrotic"
-                }
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "necrotic");
-                    this.putJsonArray("dice", new JsonArray());
-                    this.putInteger("bonus", 10);
-                    this.putJsonObject("scale", new JsonObject() {{
-                        this.putInteger("numerator", 1);
-                        this.putInteger("denominator", 1);
-                        this.putBoolean("round_up", false);
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
+                        this.addJsonObject(new JsonObject() {{
+                            this.putString("damage_type", "necrotic");
+                            this.putJsonArray("dice", new JsonArray());
+                            this.putInteger("bonus", 10);
+                            this.putJsonObject("scale", new JsonObject() {{
+                                this.putInteger("numerator", 1);
+                                this.putInteger("denominator", 1);
+                                this.putBoolean("round_up", false);
+                            }});
+                        }});
                     }});
-                }});
-            }});
-            this.putJsonObject("vampirism", new JsonObject() {{
-                this.putString("damage_type", "necrotic");
-            }});
-        }});
+                    this.putJsonObject("vampirism", new JsonObject() {{
+                        this.putString("damage_type", "necrotic");
+                    }});
+                }})
+                .setSource(source)
+                .setTarget(target);
 
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.deliverDamage(new DummyContext());
+        attackRoll.deliverDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(11 /*base*/ -10 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should suffer 10 damage and receive no healing from vampirism"
@@ -966,8 +965,10 @@ public class AttackRollTest {
     @Test
     @DisplayName("confirms critical damage")
     void confirmsCriticalDamage() throws Exception {
-        assertTrue(new AttackRoll().confirmCriticalDamage(new DummyContext()),
-                "critical damage should be confirmed"
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        assertTrue(new AttackRoll().setSource(object).confirmCriticalDamage(new DummyContext()),
+                "critical damage should be confirmed by default"
         );
     }
 
@@ -980,14 +981,14 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine");
-        adamantineArmorEffect.setSource(target);
-        adamantineArmorEffect.setTarget(target);
+        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine")
+                .setSource(target)
+                .setTarget(target);
         target.addEffect(adamantineArmorEffect);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
+        AttackRoll attackRoll = new AttackRoll()
+                .setSource(source)
+                .setTarget(target);
 
         assertFalse(attackRoll.confirmCriticalDamage(context),
                 "critical damage should not be confirmed"
@@ -1003,71 +1004,70 @@ public class AttackRollTest {
         context.add(source);
         context.add(target);
 
-        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine");
-        adamantineArmorEffect.setSource(target);
-        adamantineArmorEffect.setTarget(target);
+        RPGLEffect adamantineArmorEffect = RPGLFactory.newEffect("std:item/armor/adamantine")
+                .setSource(target)
+                .setTarget(target);
         target.addEffect(adamantineArmorEffect);
 
         target.getAbilityScores().putInteger("dex", 100);
 
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.joinSubeventData(new JsonObject() {{
-            /*{
-                "attack_ability": "str",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "fire",
-                        "dice": [
-                            { "size": 6, "determined": [ 3 ] }
+        new AttackRoll()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "attack_ability": "str",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "fire",
+                                "dice": [
+                                    { "size": 6, "determined": [ 3 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "has_advantage": false,
-                "has_disadvantage": false,
-                "bonuses": [ ],
-                "minimum": {
-                    "value": Integer.MIN_VALUE
-                },
-                "determined": [ 20 ],
-                "withhold_damage_modifier": true,
-                "canceled": false,
-                "use_origin_attack_ability": false
-            }*/
-            this.putString("attack_ability", "str");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "fire");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "has_advantage": false,
+                        "has_disadvantage": false,
+                        "bonuses": [ ],
+                        "minimum": {
+                            "value": Integer.MIN_VALUE
+                        },
+                        "determined": [ 20 ],
+                        "withhold_damage_modifier": true,
+                        "canceled": false,
+                        "use_origin_attack_ability": false
+                    }*/
+                    this.putString("attack_ability", "str");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("size", 6);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(3);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "fire");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("size", 6);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(3);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putBoolean("has_advantage", false);
-            this.putBoolean("has_disadvantage", false);
-            this.putJsonArray("bonuses", new JsonArray());
-            this.putJsonObject("minimum", new JsonObject() {{
-                this.putInteger("value", Integer.MIN_VALUE);
-            }});
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(20);
-            }});
-            this.putBoolean("withhold_damage_modifier", true);
-            this.putBoolean("canceled", false);
-            this.putBoolean("use_origin_attack_ability", false);
-        }});
-
-        attackRoll.setSource(source);
-        attackRoll.setTarget(target);
-        attackRoll.run(context);
+                    this.putBoolean("has_advantage", false);
+                    this.putBoolean("has_disadvantage", false);
+                    this.putJsonArray("bonuses", new JsonArray());
+                    this.putJsonObject("minimum", new JsonObject() {{
+                        this.putInteger("value", Integer.MIN_VALUE);
+                    }});
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(20);
+                    }});
+                    this.putBoolean("withhold_damage_modifier", true);
+                    this.putBoolean("canceled", false);
+                    this.putBoolean("use_origin_attack_ability", false);
+                }})
+                .setSource(source)
+                .setTarget(target)
+                .run(context, target.getPosition());
 
         assertEquals(1000 /*base*/ -3 /*damage*/, target.getHealthData().getInteger("current"),
                 "target should have been hit but should not have suffered critical damage"

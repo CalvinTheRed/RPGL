@@ -57,7 +57,7 @@ public class UserIdsMatchTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -82,7 +82,7 @@ public class UserIdsMatchTest {
             this.putString("condition", "user_ids_match");
             this.putString("effect", "source");
             this.putString("subevent", "source");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate true when user ids match"
         );
     }
@@ -108,7 +108,7 @@ public class UserIdsMatchTest {
             this.putString("condition", "user_ids_match");
             this.putString("effect", "source");
             this.putString("subevent", "source");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate false when user ids do not match"
         );
     }

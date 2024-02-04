@@ -57,7 +57,7 @@ public class MaximizeTemporaryHitPointsTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -102,14 +102,14 @@ public class MaximizeTemporaryHitPointsTest {
         }});
 
         temporaryHitPointRoll.setSource(object);
-        temporaryHitPointRoll.prepare(new DummyContext());
+        temporaryHitPointRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new MaximizeTemporaryHitPoints().execute(null, temporaryHitPointRoll, new JsonObject() {{
             /*{
                 "function": "maximize_temporary_hit_points"
             }*/
             this.putString("function", "maximize_temporary_hit_points");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[],"roll":6,"size":6},{"determined":[],"roll":6,"size":6}]}]""";
@@ -154,14 +154,14 @@ public class MaximizeTemporaryHitPointsTest {
         }});
 
         temporaryHitPointsDelivery.setSource(object);
-        temporaryHitPointsDelivery.prepare(new DummyContext());
+        temporaryHitPointsDelivery.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new MaximizeTemporaryHitPoints().execute(null, temporaryHitPointsDelivery, new JsonObject() {{
             /*{
                 "function": "maximize_temporary_hit_points"
             }*/
             this.putString("function", "maximize_temporary_hit_points");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(12, temporaryHitPointsDelivery.getTemporaryHitPoints(),
                 "execute should set all temporary hit point dice to their maximum face value"

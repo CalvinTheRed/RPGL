@@ -51,16 +51,16 @@ public class GiveResourceTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new GiveResource();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new GiveResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -71,17 +71,17 @@ public class GiveResourceTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        GiveResource giveResource = new GiveResource();
-        giveResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:class/warlock/the_undead_patron/necrotic_husk"
-            }*/
-            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
-        }});
-        giveResource.setSource(source);
-        giveResource.prepare(new DummyContext());
-        giveResource.setTarget(target);
-        giveResource.invoke(new DummyContext());
+        new GiveResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource":"std:class/warlock/the_undead_patron/necrotic_husk"
+                    }*/
+                    this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, target.getResourceObjects().size(),
                 "target should be given one resource"
@@ -106,21 +106,20 @@ public class GiveResourceTest {
         RPGLObject source = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        GiveResource giveResource = new GiveResource();
-        giveResource.joinSubeventData(new JsonObject() {{
-            /*{
-                "resource":"std:class/warlock/the_undead_patron/necrotic_husk",
-                "count": 2,
-                "potency": 2
-            }*/
-            this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
-            this.putInteger("count", 2);
-            this.putInteger("potency", 2);
-        }});
-        giveResource.setSource(source);
-        giveResource.setTarget(target);
-
-        giveResource.invoke(new DummyContext());
+        new GiveResource()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "resource":"std:class/warlock/the_undead_patron/necrotic_husk",
+                        "count": 2,
+                        "potency": 2
+                    }*/
+                    this.putString("resource", "std:class/warlock/the_undead_patron/necrotic_husk");
+                    this.putInteger("count", 2);
+                    this.putInteger("potency", 2);
+                }})
+                .setSource(source)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(2, target.getResourceObjects().size(),
                 "target should be given two resources"

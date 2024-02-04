@@ -51,16 +51,16 @@ public class DestroyOriginItemTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new DestroyOriginItem();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new DestroyOriginItem()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -68,19 +68,16 @@ public class DestroyOriginItemTest {
     @Test
     @DisplayName("destroys origin item")
     void destroysOriginItem() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
-        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
-        object.addResource(action);
-
         RPGLItem potionOfHealing = RPGLFactory.newItem("std:potion/potion_of_healing");
-        object.giveItem(potionOfHealing.getUuid());
-        object.equipItem(potionOfHealing.getUuid(), "left_hand");
-        object.equipItem(potionOfHealing.getUuid(), "right_hand");
-
-        String potionOfHealingUuid = potionOfHealing.getUuid();
+        RPGLResource action = RPGLFactory.newResource("std:common/action/01");
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .addResource(action)
+                .giveItem(potionOfHealing.getUuid())
+                .equipItem(potionOfHealing.getUuid(), "left_hand")
+                .equipItem(potionOfHealing.getUuid(), "right_hand");
 
         object.invokeEvent(
+                object.getPosition(),
                 new RPGLObject[]{ object },
                 TestUtils.getEventById(object.getEventObjects(new DummyContext()), "std:item/potion/potion_of_healing/drink"),
                 object.getResourcesWithTag("action"),
@@ -93,10 +90,10 @@ public class DestroyOriginItemTest {
         assertNull(object.getEquippedItems().getString("right_hand"),
                 "left_hand equipment slot should be empty once origin item is destroyed"
         );
-        assertFalse(object.getInventory().asList().contains(potionOfHealingUuid),
+        assertFalse(object.getInventory().asList().contains(potionOfHealing.getUuid()),
                 "inventory should not contain origin item uuid once it is destroyed"
         );
-        assertNull(UUIDTable.getItem(potionOfHealingUuid),
+        assertNull(UUIDTable.getItem(potionOfHealing.getUuid()),
                 "UUIDTable should no longer have potion of healing registered"
         );
         assertNull(potionOfHealing.getUuid(),

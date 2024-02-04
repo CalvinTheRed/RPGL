@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.math.Die;
@@ -40,10 +41,41 @@ public class HealingRoll extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public HealingRoll invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (HealingRoll) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public HealingRoll joinSubeventData(JsonObject other) {
+        return (HealingRoll) super.joinSubeventData(other);
+    }
+
+    @Override
+    public HealingRoll prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("healing", new ArrayList<>());
         this.roll();
+        return this;
+    }
+
+    @Override
+    public HealingRoll run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public HealingRoll setOriginItem(String originItem) {
+        return (HealingRoll) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public HealingRoll setSource(RPGLObject source) {
+        return (HealingRoll) super.setSource(source);
+    }
+
+    @Override
+    public HealingRoll setTarget(RPGLObject target) {
+        return (HealingRoll) super.setTarget(target);
     }
 
     /**
@@ -65,8 +97,9 @@ public class HealingRoll extends Subevent {
      * Re-rolls all healing dice which rolled matching or below the passed threshold.
      *
      * @param threshold the value which a die must roll at or below to be changed by this method
+     * @return this HealingRoll
      */
-    public void rerollHealingDiceMatchingOrBelow(int threshold) {
+    public HealingRoll rerollHealingDiceMatchingOrBelow(int threshold) {
         JsonArray healingArray = this.json.getJsonArray("healing");
         for (int i = 0; i < healingArray.size(); i++) {
             JsonObject healingJson = healingArray.getJsonObject(i);
@@ -78,6 +111,7 @@ public class HealingRoll extends Subevent {
                 }
             }
         }
+        return this;
     }
 
     /**
@@ -85,8 +119,9 @@ public class HealingRoll extends Subevent {
      *
      * @param threshold the value which a die must roll at or below to be changed by this method
      * @param set the value to set for each die changed by this method
+     * @return this HealingRoll
      */
-    public void setHealingDiceMatchingOrBelow(int threshold, int set) {
+    public HealingRoll setHealingDiceMatchingOrBelow(int threshold, int set) {
         JsonArray healingArray = this.json.getJsonArray("healing");
         for (int i = 0; i < healingArray.size(); i++) {
             JsonObject healingJson = healingArray.getJsonObject(i);
@@ -98,12 +133,15 @@ public class HealingRoll extends Subevent {
                 }
             }
         }
+        return this;
     }
 
     /**
      * Sets all healing dice to their maximum face value.
+     *
+     * @return this HealingRoll
      */
-    public void maximizeHealingDice() {
+    public HealingRoll maximizeHealingDice() {
         JsonArray healingArray = this.json.getJsonArray("healing");
         for (int i = 0; i < healingArray.size(); i++) {
             JsonObject healingJson = healingArray.getJsonObject(i);
@@ -113,6 +151,7 @@ public class HealingRoll extends Subevent {
                 die.putInteger("roll", die.getInteger("size"));
             }
         }
+        return this;
     }
 
     /**

@@ -1,6 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -37,9 +39,39 @@ public class CalculateCriticalHitThreshold extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
-        super.setBase(20);
+    public CalculateCriticalHitThreshold invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CalculateCriticalHitThreshold) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CalculateCriticalHitThreshold joinSubeventData(JsonObject other) {
+        return (CalculateCriticalHitThreshold) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CalculateCriticalHitThreshold prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint).setBase(20);
+        return this;
+    }
+
+    @Override
+    public CalculateCriticalHitThreshold run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CalculateCriticalHitThreshold setOriginItem(String originItem) {
+        return (CalculateCriticalHitThreshold) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CalculateCriticalHitThreshold setSource(RPGLObject source) {
+        return (CalculateCriticalHitThreshold) super.setSource(source);
+    }
+
+    @Override
+    public CalculateCriticalHitThreshold setTarget(RPGLObject target) {
+        return (CalculateCriticalHitThreshold) super.setTarget(target);
     }
 
 }

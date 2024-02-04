@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLCore;
 import org.rpgl.core.RPGLFactory;
 import org.rpgl.core.RPGLObject;
@@ -58,6 +59,11 @@ public class AddBonusTest {
             public Subevent clone(JsonObject jsonData) {
                 return null;
             }
+
+            @Override
+            public Calculation run(RPGLContext context, JsonArray originPoint) {
+                return this;
+            }
         };
     }
 
@@ -75,7 +81,7 @@ public class AddBonusTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -86,7 +92,7 @@ public class AddBonusTest {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         calculation.setSource(object);
-        calculation.prepare(new DummyContext());
+        calculation.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddBonus().execute(null, calculation, new JsonObject() {{
             /*{
@@ -118,7 +124,7 @@ public class AddBonusTest {
                     this.putInteger("bonus", 2);
                 }});
             }});
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":2,"dice":[{"determined":[3],"size":6}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";

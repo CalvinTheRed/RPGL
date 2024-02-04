@@ -31,9 +31,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for weight.
      *
      * @param weight a new weight int
+     * @return this RPGLItem
      */
-    public void setWeight(Integer weight) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setWeight(Integer weight) {
         super.putInteger(RPGLItemTO.WEIGHT_ALIAS, weight);
+        return this;
     }
 
     /**
@@ -49,9 +52,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for cost.
      *
      * @param cost a new cost int
+     * @return this RPGLItem
      */
-    public void setCost(Integer cost) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setCost(Integer cost) {
         super.putInteger(RPGLItemTO.COST_ALIAS, cost);
+        return this;
     }
 
     /**
@@ -67,9 +73,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for events.
      *
      * @param events a new events JsonObject
+     * @return this RPGLItem
      */
-    public void setEvents(JsonObject events) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setEvents(JsonObject events) {
         super.putJsonObject(RPGLItemTO.EVENTS_ALIAS, events);
+        return this;
     }
 
     /**
@@ -86,9 +95,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for attack bonus.
      *
      * @param attackBonus a new attack bonus int
+     * @return this RPGLItem
      */
-    public void setAttackBonus(Integer attackBonus) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setAttackBonus(Integer attackBonus) {
         super.putInteger(RPGLItemTO.ATTACK_BONUS_ALIAS, attackBonus);
+        return this;
     }
 
     /**
@@ -106,9 +118,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for damage bonus.
      *
      * @param damageBonus a new attack bonus int
+     * @return this RPGLItem
      */
-    public void setDamageBonus(Integer damageBonus) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setDamageBonus(Integer damageBonus) {
         super.putInteger(RPGLItemTO.DAMAGE_BONUS_ALIAS, damageBonus);
+        return this;
     }
 
     /**
@@ -124,9 +139,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for the item's equipped effects.
      *
      * @param equippedEffects a new list of effect UUIDs
+     * @return this RPGLItem
      */
-    public void setEquippedEffects(JsonArray equippedEffects) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setEquippedEffects(JsonArray equippedEffects) {
         super.putJsonArray(RPGLItemTO.EQUIPPED_EFFECTS_ALIAS, equippedEffects);
+        return this;
     }
 
     /**
@@ -142,9 +160,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for this item's resources.
      *
      * @param equippedResources a new list of resource UUIDs
+     * @return this RPGLItem
      */
-    public void setEquippedResources(JsonArray equippedResources) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setEquippedResources(JsonArray equippedResources) {
         super.putJsonArray(RPGLItemTO.EQUIPPED_RESOURCES_ALIAS, equippedResources);
+        return this;
     }
 
     /**
@@ -160,9 +181,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for armor class base.
      *
      * @param armorClassBase a new armor class base int
+     * @return this RPGLItem
      */
-    public void setArmorClassBase(Integer armorClassBase) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setArmorClassBase(Integer armorClassBase) {
         super.putInteger(RPGLItemTO.ARMOR_CLASS_BASE_ALIAS, armorClassBase);
+        return this;
     }
 
     /**
@@ -179,9 +203,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for armor class dex limit.
      *
      * @param armorClassDexLimit a new armor class dex limit int
+     * @return this RPGLItem
      */
-    public void setArmorClassDexLimit(Integer armorClassDexLimit) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setArmorClassDexLimit(Integer armorClassDexLimit) {
         super.putInteger(RPGLItemTO.ARMOR_CLASS_DEX_LIMIT_ALIAS, armorClassDexLimit);
+        return this;
     }
 
     /**
@@ -197,9 +224,12 @@ public class RPGLItem extends RPGLTaggable {
      * Setter for armor class bonus.
      *
      * @param armorClassBonus a new armor class bonus int
+     * @return this RPGLItem
      */
-    public void setArmorClassBonus(Integer armorClassBonus) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLItem setArmorClassBonus(Integer armorClassBonus) {
         super.putInteger(RPGLItemTO.ARMOR_CLASS_BONUS_ALIAS, armorClassBonus);
+        return this;
     }
 
     // =================================================================================================================
@@ -250,7 +280,8 @@ public class RPGLItem extends RPGLTaggable {
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
             // construct specified events
-            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i))
+                    .setOriginItem(super.getUuid());
             JsonObject subevent = event.getSubevents().getJsonObject(0);
             JsonArray tags = subevent.getJsonArray("tags");
             if (tags == null) {
@@ -260,7 +291,6 @@ public class RPGLItem extends RPGLTaggable {
             if (!tags.asList().contains("improvised")) {
                 tags.asList().addAll(super.getTags().asList());
             }
-            event.setOriginItem(super.getUuid());
             events.add(event);
 
             // construct derived events
@@ -284,7 +314,8 @@ public class RPGLItem extends RPGLTaggable {
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
             // construct specified events
-            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
+            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i))
+                    .setOriginItem(super.getUuid());
             JsonObject subevent = event.getSubevents().getJsonObject(0);
             JsonArray tags = subevent.getJsonArray("tags");
             if (tags == null) {
@@ -294,7 +325,6 @@ public class RPGLItem extends RPGLTaggable {
             if (!tags.asList().contains("improvised")) {
                 tags.asList().addAll(super.getTags().asList());
             }
-            event.setOriginItem(super.getUuid());
             events.add(event);
 
             // construct derived events
@@ -312,9 +342,8 @@ public class RPGLItem extends RPGLTaggable {
         JsonArray eventIds = this.getEvents().getJsonArray("special");
         List<RPGLEvent> events = new ArrayList<>();
         for (int i = 0; i < eventIds.size(); i++) {
-            RPGLEvent event = RPGLFactory.newEvent(eventIds.getString(i));
-            event.setOriginItem(super.getUuid());
-            events.add(event);
+            events.add(RPGLFactory.newEvent(eventIds.getString(i))
+                    .setOriginItem(super.getUuid()));
         }
         return events;
     }
@@ -328,10 +357,9 @@ public class RPGLItem extends RPGLTaggable {
     public void updateEquippedEffects(RPGLObject wielder) {
         JsonArray whileEquippedEffects = this.getEquippedEffects();
         for (int i = 0; i < whileEquippedEffects.size(); i++) {
-            String effectUuid = whileEquippedEffects.getString(i);
-            RPGLEffect effect = UUIDTable.getEffect(effectUuid);
-            effect.setSource(wielder);
-            effect.setTarget(wielder);
+            UUIDTable.getEffect(whileEquippedEffects.getString(i))
+                    .setSource(wielder)
+                    .setTarget(wielder);
         }
     }
 
@@ -347,16 +375,15 @@ public class RPGLItem extends RPGLTaggable {
      * @throws Exception if an exception occurs
      */
     List<RPGLEvent> getDerivedEvents(RPGLEvent event, RPGLObject wielder, RPGLContext context) throws Exception {
+        JsonArray attackAbilities = new AttackAbilityCollection()
+                .setOriginItem(super.getUuid())
+                .setSource(wielder)
+                .prepare(context, wielder.getPosition())
+                .setTarget(wielder)
+                .invoke(context, wielder.getPosition())
+                .getAbilities();
+
         List<RPGLEvent> derivedEvents = new ArrayList<>();
-
-        AttackAbilityCollection attackAbilityCollection = new AttackAbilityCollection();
-        attackAbilityCollection.setOriginItem(super.getUuid());
-        attackAbilityCollection.setSource(wielder);
-        attackAbilityCollection.prepare(context);
-        attackAbilityCollection.setTarget(wielder);
-        attackAbilityCollection.invoke(context);
-        JsonArray attackAbilities = attackAbilityCollection.getAbilities();
-
         for (int i = 0; i < attackAbilities.size(); i++) {
             RPGLEvent derivedEvent = new RPGLEvent();
             derivedEvent.join(event.deepClone());

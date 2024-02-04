@@ -56,7 +56,7 @@ public class RerollHealingDiceMatchingOrBelowTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -148,7 +148,7 @@ public class RerollHealingDiceMatchingOrBelowTest {
             }});
         }});
         healingRoll.setSource(object);
-        healingRoll.prepare(new DummyContext());
+        healingRoll.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new RerollHealingDiceMatchingOrBelow().execute(null, healingRoll, new JsonObject() {{
             /*{
@@ -157,7 +157,7 @@ public class RerollHealingDiceMatchingOrBelowTest {
             }*/
             this.putString("function", "reroll_healing_dice_matching_or_below");
             this.putInteger("threshold", 2);
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[],"roll":6,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":3,"size":6}]},{"bonus":0,"dice":[{"determined":[6],"roll":4,"size":6}]}]""";

@@ -27,11 +27,12 @@ public abstract class Calculation extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public Calculation prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.prepareBase(context);
         this.prepareBonuses(context);
         this.prepareMinimum(context);
+        return this;
     }
 
     /**
@@ -273,6 +274,7 @@ public abstract class Calculation extends Subevent {
                 }
             }
         ]*/
+        // TODO can these operate with scales?
         return switch (formulaData.getString("formula")) {
             case "number" -> formulaData.getInteger("number");
             case "modifier" -> RPGLEffect.getObject(effect, subevent, formulaData.getJsonObject("object"))

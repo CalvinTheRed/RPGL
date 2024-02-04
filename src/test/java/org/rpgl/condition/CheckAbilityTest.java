@@ -8,6 +8,7 @@ import org.rpgl.exception.ConditionMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +35,7 @@ public class CheckAbilityTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -49,7 +50,7 @@ public class CheckAbilityTest {
             }*/
             this.putString("condition", "check_ability");
             this.putString("ability", "str");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return true when subevent uses indicated ability"
         );
     }
@@ -64,7 +65,7 @@ public class CheckAbilityTest {
             }*/
             this.putString("condition", "check_ability");
             this.putString("ability", "not_str"); // <-- DummySubevent is a str AbilitySubevent
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "evaluate should return false when subevent does not use indicated ability"
         );
     }

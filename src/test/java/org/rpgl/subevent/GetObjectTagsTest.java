@@ -46,16 +46,16 @@ public class GetObjectTagsTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new GetObjectTags();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new GetObjectTags()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -65,9 +65,9 @@ public class GetObjectTagsTest {
     void defaultsToEmptyList() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        GetObjectTags getObjectTags = new GetObjectTags();
-        getObjectTags.setSource(object);
-        getObjectTags.prepare(new DummyContext());
+        GetObjectTags getObjectTags = new GetObjectTags()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals("[]", getObjectTags.getObjectTags().toString(),
                 "getTags should return an empty array by default"
@@ -79,12 +79,11 @@ public class GetObjectTagsTest {
     void returnsTags() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        GetObjectTags getObjectTags = new GetObjectTags();
-        getObjectTags.setSource(object);
-        getObjectTags.prepare(new DummyContext());
-
-        getObjectTags.addObjectTag("test_tag_1");
-        getObjectTags.addObjectTag("test_tag_2");
+        GetObjectTags getObjectTags = new GetObjectTags()
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .addObjectTag("test_tag_1")
+                .addObjectTag("test_tag_2");
 
         String expected = """
                 ["test_tag_1","test_tag_2"]""";

@@ -3,6 +3,7 @@ package org.rpgl.function;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.exception.FunctionMismatchException;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.slf4j.Logger;
@@ -108,12 +109,13 @@ public abstract class Function {
      * @param subevent a Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the Function to be executed
      * @param context the context in which the Function is being executed
+     * @param originPoint the point from which the passed subevent emanates
      *
      * @throws Exception if an exception occurs
      */
-    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception {
+    public void execute(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         this.verifyFunction(functionJson);
-        this.run(effect, subevent, functionJson, context);
+        this.run(effect, subevent, functionJson, context, originPoint);
     }
 
     /**
@@ -123,9 +125,10 @@ public abstract class Function {
      * @param subevent a Subevent being invoked
      * @param functionJson a JsonObject containing additional information necessary for the Function to be executed
      * @param context the context in which the Function is being executed
+     * @param originPoint the point from which the passed subevent emanates
      *
      * @throws Exception if an exception occurs
      */
-    public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) throws Exception;
+    public abstract void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) throws Exception;
 
 }

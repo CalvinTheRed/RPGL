@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -38,20 +39,47 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
-        this.json.putBoolean("canceled", false);
-        this.json.asMap().putIfAbsent("temporary_hit_points", new ArrayList<>());
-        this.json.asMap().putIfAbsent("rider_effects", new ArrayList<>());
-        this.getBaseTemporaryHitPoints(context);
+    public GiveTemporaryHitPoints invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (GiveTemporaryHitPoints) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public GiveTemporaryHitPoints joinSubeventData(JsonObject other) {
+        return (GiveTemporaryHitPoints) super.joinSubeventData(other);
+    }
+
+    @Override
+    public GiveTemporaryHitPoints prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.putBoolean("canceled", false);
+        this.json.asMap().putIfAbsent("temporary_hit_points", new ArrayList<>());
+        this.json.asMap().putIfAbsent("rider_effects", new ArrayList<>());
+        this.getBaseTemporaryHitPoints(context, originPoint);
+        return this;
+    }
+
+    @Override
+    public GiveTemporaryHitPoints run(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.isNotCanceled()) {
-            this.getTargetTemporaryHitPoints(context);
-            this.deliverTemporaryHitPoints(context);
+            this.getTargetTemporaryHitPoints(context, originPoint);
+            this.deliverTemporaryHitPoints(context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public GiveTemporaryHitPoints setOriginItem(String originItem) {
+        return (GiveTemporaryHitPoints) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public GiveTemporaryHitPoints setSource(RPGLObject source) {
+        return (GiveTemporaryHitPoints) super.setSource(source);
+    }
+
+    @Override
+    public GiveTemporaryHitPoints setTarget(RPGLObject target) {
+        return (GiveTemporaryHitPoints) super.setTarget(target);
     }
 
     @Override
@@ -72,7 +100,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
      *
      * @throws Exception if an exception occurs.
      */
-    void getBaseTemporaryHitPoints(RPGLContext context) throws Exception {
+    void getBaseTemporaryHitPoints(RPGLContext context, JsonArray originPoint) throws Exception {
         /*
          * Collect base temporary hit point dice and bonuses
          */
@@ -86,9 +114,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         }});
         baseTemporaryHitPointCollection.setOriginItem(super.getOriginItem());
         baseTemporaryHitPointCollection.setSource(super.getSource());
-        baseTemporaryHitPointCollection.prepare(context);
+        baseTemporaryHitPointCollection.prepare(context, originPoint);
         baseTemporaryHitPointCollection.setTarget(super.getSource());
-        baseTemporaryHitPointCollection.invoke(context);
+        baseTemporaryHitPointCollection.invoke(context, originPoint);
 
         /*
          * Roll base temporary hit point dice
@@ -103,9 +131,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         }});
         baseTemporaryHitPointRoll.setOriginItem(super.getOriginItem());
         baseTemporaryHitPointRoll.setSource(super.getSource());
-        baseTemporaryHitPointRoll.prepare(context);
+        baseTemporaryHitPointRoll.prepare(context, originPoint);
         baseTemporaryHitPointRoll.setTarget(super.getSource());
-        baseTemporaryHitPointRoll.invoke(context);
+        baseTemporaryHitPointRoll.invoke(context, originPoint);
 
         /*
          * Replace temporary hit points key with base temporary hit points calculation
@@ -121,7 +149,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
      *
      * @throws Exception if an exception occurs.
      */
-    void getTargetTemporaryHitPoints(RPGLContext context) throws Exception {
+    void getTargetTemporaryHitPoints(RPGLContext context, JsonArray originPoint) throws Exception {
         /*
          * Collect target typed temporary hit points dice and bonuses
          */
@@ -134,9 +162,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         }});
         targetTemporaryHitPointsCollection.setOriginItem(super.getOriginItem());
         targetTemporaryHitPointsCollection.setSource(super.getSource());
-        targetTemporaryHitPointsCollection.prepare(context);
+        targetTemporaryHitPointsCollection.prepare(context, originPoint);
         targetTemporaryHitPointsCollection.setTarget(super.getTarget());
-        targetTemporaryHitPointsCollection.invoke(context);
+        targetTemporaryHitPointsCollection.invoke(context, originPoint);
 
         /*
          * Roll target temporary hit points dice
@@ -151,9 +179,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         }});
         targetTemporaryHitPointRoll.setOriginItem(super.getOriginItem());
         targetTemporaryHitPointRoll.setSource(super.getSource());
-        targetTemporaryHitPointRoll.prepare(context);
+        targetTemporaryHitPointRoll.prepare(context, originPoint);
         targetTemporaryHitPointRoll.setTarget(super.getTarget());
-        targetTemporaryHitPointRoll.invoke(context);
+        targetTemporaryHitPointRoll.invoke(context, originPoint);
 
         /*
          * Add target temporary hit points to subevent temporary hit points
@@ -168,7 +196,7 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
      *
      * @throws Exception if an exception occurs
      */
-    void deliverTemporaryHitPoints(RPGLContext context) throws Exception {
+    void deliverTemporaryHitPoints(RPGLContext context, JsonArray originPoint) throws Exception {
         TemporaryHitPointsDelivery temporaryHitPointsDelivery = new TemporaryHitPointsDelivery();
         temporaryHitPointsDelivery.joinSubeventData(new JsonObject() {{
             this.putJsonArray("temporary_hit_points", json.getJsonArray("temporary_hit_points"));
@@ -176,9 +204,9 @@ public class GiveTemporaryHitPoints extends Subevent implements CancelableSubeve
         }});
         temporaryHitPointsDelivery.setOriginItem(super.getOriginItem());
         temporaryHitPointsDelivery.setSource(super.getSource());
-        temporaryHitPointsDelivery.prepare(context);
+        temporaryHitPointsDelivery.prepare(context, originPoint);
         temporaryHitPointsDelivery.setTarget(super.getTarget());
-        temporaryHitPointsDelivery.invoke(context);
+        temporaryHitPointsDelivery.invoke(context, originPoint);
         super.getTarget().receiveTemporaryHitPoints(temporaryHitPointsDelivery, this.json.getJsonArray("rider_effects"));
     }
 

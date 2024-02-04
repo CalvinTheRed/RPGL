@@ -55,7 +55,7 @@ public class AddObjectTagTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -67,7 +67,7 @@ public class AddObjectTagTest {
 
         GetObjectTags getObjectTags = new GetObjectTags();
         getObjectTags.setSource(object);
-        getObjectTags.prepare(new DummyContext());
+        getObjectTags.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         new AddObjectTag().execute(null, getObjectTags, new JsonObject() {{
             /*{
@@ -76,7 +76,7 @@ public class AddObjectTagTest {
             }*/
             this.putString("function", "add_object_tag");
             this.putString("tag", "test_tag");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 ["test_tag"]""";

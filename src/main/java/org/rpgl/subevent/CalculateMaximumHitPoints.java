@@ -39,8 +39,18 @@ public class CalculateMaximumHitPoints extends Calculation {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public CalculateMaximumHitPoints invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CalculateMaximumHitPoints) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CalculateMaximumHitPoints joinSubeventData(JsonObject other) {
+        return (CalculateMaximumHitPoints) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CalculateMaximumHitPoints prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         RPGLObject source = super.getSource();
         super.setBase(source.getHealthData().getInteger("base"));
         new AddBonus().execute(null, this, new JsonObject() {{
@@ -62,7 +72,28 @@ public class CalculateMaximumHitPoints extends Calculation {
                     this.putInteger("bonus", source.getAbilityModifierFromAbilityName("con", context) * source.getLevel());
                 }});
             }});
-        }}, context);
+        }}, context, originPoint);
+        return this;
+    }
+
+    @Override
+    public CalculateMaximumHitPoints run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CalculateMaximumHitPoints setOriginItem(String originItem) {
+        return (CalculateMaximumHitPoints) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CalculateMaximumHitPoints setSource(RPGLObject source) {
+        return (CalculateMaximumHitPoints) super.setSource(source);
+    }
+
+    @Override
+    public CalculateMaximumHitPoints setTarget(RPGLObject target) {
+        return (CalculateMaximumHitPoints) super.setTarget(target);
     }
 
 }

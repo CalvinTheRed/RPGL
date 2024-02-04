@@ -37,9 +37,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Setter for subevent filters.
      *
      * @param subeventFilters a new subevent filters JsonObject
+     * @return this RPGLEffect
      */
-    public void setSubeventFilters(JsonObject subeventFilters) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setSubeventFilters(JsonObject subeventFilters) {
         super.putJsonObject(RPGLEffectTO.SUBEVENT_FILTERS_ALIAS, subeventFilters);
+        return this;
     }
 
     /**
@@ -55,9 +58,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Sets the source of the RPGLEffect.
      *
      * @param source a RPGLObject
+     * @return this RPGLEffect
      */
-    public void setSource(RPGLObject source) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setSource(RPGLObject source) {
         super.putString(RPGLEffectTO.SOURCE_ALIAS, source.getUuid());
+        return this;
     }
 
     /**
@@ -73,9 +79,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Sets the target of the RPGLEffect.
      *
      * @param target a RPGLObject
+     * @return this RPGLEffect
      */
-    public void setTarget(RPGLObject target) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setTarget(RPGLObject target) {
         super.putString(RPGLEffectTO.TARGET_ALIAS, target.getUuid());
+        return this;
     }
 
     /**
@@ -91,9 +100,12 @@ public class RPGLEffect extends RPGLTaggable {
      * Sets the origin item UUID of the RPGLEffect.
      *
      * @param originItem a RPGLItem UUID
+     * @return this RPGLEffect
      */
-    public void setOriginItem(String originItem) {
+    @SuppressWarnings("UnusedReturnValue")
+    public RPGLEffect setOriginItem(String originItem) {
         super.putString(RPGLEffectTO.ORIGIN_ITEM_ALIAS, originItem);
+        return this;
     }
 
     // =================================================================================================================
@@ -106,12 +118,13 @@ public class RPGLEffect extends RPGLTaggable {
      *
      * @param subevent a Subevent
      * @param context the context in which the subevent is being processed
+     * @param originPoint the point from which the passed subevent emanates
      * @return true if the Subevent was present in this object's subevent filter and if the Conditions in that filter
      *         were satisfied
      *
      * @throws Exception if an exception occurs
      */
-    public boolean processSubevent(Subevent subevent, RPGLContext context) throws Exception {
+    public boolean processSubevent(Subevent subevent, RPGLContext context, JsonArray originPoint) throws Exception {
         JsonObject subeventFilters = this.getSubeventFilters();
         for (Map.Entry<String, ?> subeventFilterEntry : subeventFilters.asMap().entrySet()) {
             if (Objects.equals(subevent.getSubeventId(), subeventFilterEntry.getKey())) {
@@ -119,9 +132,9 @@ public class RPGLEffect extends RPGLTaggable {
                 for (int i = 0; i < matchedFilterBehaviors.size(); i++) {
                     JsonObject matchedFilterBehavior = matchedFilterBehaviors.getJsonObject(i);
                     JsonArray conditions = matchedFilterBehavior.getJsonArray("conditions");
-                    if (!subevent.effectAlreadyApplied(this) && this.evaluateConditions(subevent, conditions, context)) {
+                    if (!subevent.effectAlreadyApplied(this) && this.evaluateConditions(subevent, conditions, context, originPoint)) {
                         JsonArray functionJsonArray = matchedFilterBehavior.getJsonArray("functions");
-                        executeFunctions(subevent, functionJsonArray, context);
+                        executeFunctions(subevent, functionJsonArray, context, originPoint);
                         subevent.addModifyingEffect(this);
                         return true;
                     }
@@ -137,17 +150,18 @@ public class RPGLEffect extends RPGLTaggable {
      * @param subevent the Subevent being invoked
      * @param conditions a collection of JSON data defining Conditions
      * @param context the context in which the Conditions are being evaluated
+     * @param originPoint the point from which the passed subevent emanates
      * @return true if any Conditions evaluated to true
      *
      * @throws Exception if an exception occurs
      */
-    boolean evaluateConditions(Subevent subevent, JsonArray conditions, RPGLContext context) throws Exception {
+    boolean evaluateConditions(Subevent subevent, JsonArray conditions, RPGLContext context, JsonArray originPoint) throws Exception {
         boolean conditionsMet = true;
         for (int i = 0; i < conditions.size(); i++) {
             JsonObject conditionJson = conditions.getJsonObject(i);
             conditionsMet &= Condition.CONDITIONS
                     .get(conditionJson.getString("condition"))
-                    .evaluate(this, subevent, conditionJson, context);
+                    .evaluate(this, subevent, conditionJson, context, originPoint);
         }
         return conditionsMet;
     }
@@ -158,15 +172,16 @@ public class RPGLEffect extends RPGLTaggable {
      * @param subevent the Subevent being invoked
      * @param functions a collection of JSON data defining Functions
      * @param context the context in which the Functions are being executed
+     * @param originPoint the point from which the passed subevent emanates
      *
      * @throws Exception if an exception occurs
      */
-    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context) throws Exception {
+    void executeFunctions(Subevent subevent, JsonArray functions, RPGLContext context, JsonArray originPoint) throws Exception {
         for (int i = 0; i < functions.size(); i++) {
             JsonObject functionJson = functions.getJsonObject(i);
             Function.FUNCTIONS
                     .get(functionJson.getString("function"))
-                    .execute(this, subevent, functionJson, context);
+                    .execute(this, subevent, functionJson, context, originPoint);
         }
     }
 

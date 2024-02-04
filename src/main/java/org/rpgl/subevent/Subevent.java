@@ -58,6 +58,7 @@ public abstract class Subevent {
         Subevent.SUBEVENTS.put("give_temporary_hit_points", new GiveTemporaryHitPoints());
         Subevent.SUBEVENTS.put("heal", new Heal());
         Subevent.SUBEVENTS.put("info_subevent", new InfoSubevent());
+        Subevent.SUBEVENTS.put("movement", new Movement());
         Subevent.SUBEVENTS.put("refresh_resource", new RefreshResource());
         Subevent.SUBEVENTS.put("remove_effect", new RemoveEffect());
         Subevent.SUBEVENTS.put("remove_origin_item_tag", new RemoveOriginItemTag());
@@ -132,10 +133,12 @@ public abstract class Subevent {
      * This method joins the passed JSON data to the current Subevent JSON data. This method is primarily intended to be
      * used when Subevents must be created which are not included in <code>Subevent.SUBEVENTS</code>.
      *
-     * @param subeventData the JSON data to be joined to the current Subevent JSON
+     * @param other the JSON data to be joined to the current Subevent JSON
+     * @return this Subevent
      */
-    public void joinSubeventData(JsonObject subeventData) {
-        this.json.join(subeventData);
+    public Subevent joinSubeventData(JsonObject other) {
+        this.json.join(other);
+        return this;
     }
 
     /**
@@ -163,13 +166,17 @@ public abstract class Subevent {
      * assign a source RPGLObject to the Subevent for this method to work reliably.
      *
      * @param context the context in which the Subevent is being prepared
+     * @param originPoint the point from which the subevent emanates
+     * @return this Subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void prepare(@SuppressWarnings("unused") RPGLContext context) throws Exception {
+    @SuppressWarnings("unused")
+    public Subevent prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         if (this.json.getJsonArray("tags") == null) {
             this.json.putJsonArray("tags", new JsonArray());
         }
+        return this;
     }
 
     /**
@@ -177,14 +184,17 @@ public abstract class Subevent {
      * passes the completed version of it to the RPGLContext for viewing.
      *
      * @param context the context in which the Subevent is being invoked
+     * @param originPoint the point from which this subevent emanates
+     * @return this Subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void invoke(RPGLContext context) throws Exception {
+    public Subevent invoke(RPGLContext context, JsonArray originPoint) throws Exception {
         this.verifySubevent(this.subeventId);
-        context.processSubevent(this, context);
-        this.run(context);
+        context.processSubevent(this, context, originPoint);
+        this.run(context, originPoint);
         context.viewCompletedSubevent(this);
+        return this;
     }
 
     /**
@@ -192,12 +202,12 @@ public abstract class Subevent {
      * this method is called. This method does nothing by default.
      *
      * @param context the context in which the Subevent is being invoked
+     * @param originPoint the point from which the passed subevent emanates
+     * @return this Subevent
      *
      * @throws Exception if an exception occurs
      */
-    public void run(@SuppressWarnings("unused") RPGLContext context) throws Exception {
-        // this method does nothing by default
-    }
+    public abstract Subevent run(@SuppressWarnings("unused") RPGLContext context, JsonArray originPoint) throws Exception;
 
     /**
      * Adds a modifying RPGLEffect to the Subevent. Once a RPGLEffect is added in this way, the Subevent cannot be
@@ -231,26 +241,30 @@ public abstract class Subevent {
      * Assigns a RPGLObject as the source of this Subevent.
      *
      * @param source an RPGLObject
+     * @return this Subevent
      */
-    public void setSource(RPGLObject source) {
+    public Subevent setSource(RPGLObject source) {
         if (source == null) {
             this.json.putString("source", null);
         } else {
             this.json.putString("source", source.getUuid());
         }
+        return this;
     }
 
     /**
      * Assigns a RPGLObject as the target of this Subevent.
      *
      * @param target an RPGLObject
+     * @return this Subevent
      */
-    public void setTarget(RPGLObject target) {
+    public Subevent setTarget(RPGLObject target) {
         if (target == null) {
             this.json.putString("target", null);
         } else {
             this.json.putString("target", target.getUuid());
         }
+        return this;
     }
 
     /**
@@ -293,9 +307,11 @@ public abstract class Subevent {
      * Sets the origin item UUID of the Subevent.
      *
      * @param originItem a RPGLItem UUID
+     * @return this Subevent
      */
-    public void setOriginItem(String originItem) {
+    public Subevent setOriginItem(String originItem) {
         this.json.putString("origin_item", originItem);
+        return this;
     }
 
     @Override

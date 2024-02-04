@@ -50,16 +50,16 @@ public class SavingThrowTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new SavingThrow();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -69,45 +69,45 @@ public class SavingThrowTest {
     void deliversDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "damage_type": "cold",
-                        "dice": [
-                            { "roll": 5 }
-                        ],
-                        "bonus": 5,
-                        "scale": {
-                            "numerator": 1,
-                            "denominator": 1,
-                            "round_up": false
-                        }
-                    }
-                ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
+        SavingThrow savingThrow = new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "damage_type": "cold",
+                                "dice": [
+                                    { "roll": 5 }
+                                ],
+                                "bonus": 5,
+                                "scale": {
+                                    "numerator": 1,
+                                    "denominator": 1,
+                                    "round_up": false
+                                }
+                            }
+                        ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("roll", 5);
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("roll", 5);
+                                }});
+                            }});
+                            this.putInteger("bonus", 5);
+                            this.putJsonObject("scale", new JsonObject() {{
+                                this.putInteger("numerator", 1);
+                                this.putInteger("denominator", 1);
+                                this.putBoolean("round_up", false);
+                            }});
                         }});
                     }});
-                    this.putInteger("bonus", 5);
-                    this.putJsonObject("scale", new JsonObject() {{
-                        this.putInteger("numerator", 1);
-                        this.putInteger("denominator", 1);
-                        this.putBoolean("round_up", false);
-                    }});
-                }});
-            }});
-        }});
+                }})
+                .setSource(object)
+                .setTarget(object);
 
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
-        savingThrow.deliverDamage("all", new DummyContext());
+        savingThrow.deliverDamage("all", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
                 "target should take 10 cold damage (52-10=42)"
@@ -119,9 +119,9 @@ public class SavingThrowTest {
     void resolvesNestedSubevents() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.setSource(object);
-        savingThrow.setTarget(object);
+        SavingThrow savingThrow = new SavingThrow()
+                .setSource(object)
+                .setTarget(object);
 
         // resolves nested subevents for passing
 
@@ -130,7 +130,7 @@ public class SavingThrowTest {
                 this.putString("subevent", "dummy_subevent");
             }});
         }});
-        savingThrow.resolveNestedSubevents("pass", new DummyContext());
+        savingThrow.resolveNestedSubevents("pass", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested pass subevent"
@@ -145,7 +145,7 @@ public class SavingThrowTest {
                 this.putString("subevent", "dummy_subevent");
             }});
         }});
-        savingThrow.resolveNestedSubevents("fail", new DummyContext());
+        savingThrow.resolveNestedSubevents("fail", new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1, DummySubevent.counter,
                 "counter should be incremented once from invoking nested fail subevent"
@@ -157,42 +157,41 @@ public class SavingThrowTest {
     void getsBaseDamage() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "cold",
-                        "dice": [
-                            { "count": 2, "size": 10, "determined": [ 5 ] }
+        SavingThrow savingThrow = new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "cold",
+                                "dice": [
+                                    { "count": 2, "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "tags": [ ]
-            }*/
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "tags": [ ]
+                    }*/
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putJsonArray("tags", new JsonArray());
-        }});
+                    this.putJsonArray("tags", new JsonArray());
+                }}).setSource(object);
 
-        savingThrow.setSource(object);
-        savingThrow.getBaseDamage(new DummyContext());
+        savingThrow.getBaseDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         String expected = """
                 [{"bonus":0,"damage_type":"cold","dice":[{"determined":[],"roll":5,"size":10},{"determined":[],"roll":5,"size":10}],"scale":{"denominator":1,"numerator":1,"round_up":false}}]""";
@@ -204,47 +203,45 @@ public class SavingThrowTest {
     @Test
     @DisplayName("prepares difficulty class and base damage")
     void preparesDifficultyClassAndBaseDamage() throws Exception {
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setProficiencyBonus(2);
         object.getAbilityScores().putInteger("int", 20);
-        object.setProficiencyBonus(2);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class_ability": "int",
-                "damage": [
-                    {
-                        :formula": "range",
-                        "damage_type": "cold",
-                        "dice": [
-                            { "count": 2, "size": 10, "determined": [ 5 ] }
-                        ],
-                        "bonus": 0
-                    }
-                ]
-            }*/
-            this.putString("difficulty_class_ability", "int");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
+        SavingThrow savingThrow = new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class_ability": "int",
+                        "damage": [
+                            {
+                                :formula": "range",
+                                "damage_type": "cold",
+                                "dice": [
+                                    { "count": 2, "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 0
+                            }
+                        ]
+                    }*/
+                    this.putString("difficulty_class_ability", "int");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-        }});
-
-        savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
                 "save DC was calculated incorrectly"
@@ -261,16 +258,15 @@ public class SavingThrowTest {
     void preparesAssignedDifficultyClass() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class": 20
-            }*/
-            this.putInteger("difficulty_class", 20);
-        }});
-
-        savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        SavingThrow savingThrow = new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class": 20
+                    }*/
+                    this.putInteger("difficulty_class", 20);
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(20, savingThrow.getDifficultyClass(),
                 "should preserve the assigned difficulty class"
@@ -281,20 +277,19 @@ public class SavingThrowTest {
     @DisplayName("prepares difficulty class as origin")
     void preparesDifficultyClassAsOrigin() throws Exception {
         RPGLObject origin = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
-
         origin.getAbilityScores().putInteger("int", 20);
-        object.setOriginObject(origin.getUuid());
-        object.setProficiencyBonus(2);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            this.putString("difficulty_class_ability", "int");
-            this.putBoolean("use_origin_difficulty_class_ability", true);
-        }});
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER)
+                .setOriginObject(origin.getUuid())
+                .setProficiencyBonus(2);
 
-        savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
+        SavingThrow savingThrow = new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("difficulty_class_ability", "int");
+                    this.putBoolean("use_origin_difficulty_class_ability", true);
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(8 /*base*/ +2 /*proficiency*/ +5 /*modifier*/, savingThrow.getDifficultyClass(),
                 "save DC should calculate using origin object's ability scores"
@@ -306,52 +301,51 @@ public class SavingThrowTest {
     void dealsFullDamageOnFail() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class_ability": "con",
-                "save_ability": "dex",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "cold",
-                        "dice": [
-                            { "count": 2, "size": 10, "determined": [ 5 ] }
+        new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class_ability": "con",
+                        "save_ability": "dex",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "cold",
+                                "dice": [
+                                    { "count": 2, "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "damage_on_pass": "half",
-                "determined": [ 1 ]
-            }*/
-            this.putString("difficulty_class_ability", "con");
-            this.putString("save_ability", "dex");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "damage_on_pass": "half",
+                        "determined": [ 1 ]
+                    }*/
+                    this.putString("difficulty_class_ability", "con");
+                    this.putString("save_ability", "dex");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putString("damage_on_pass", "half");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(1);
-            }});
-        }});
-
-        savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
-        savingThrow.setTarget(object);
-        savingThrow.invoke(new DummyContext());
+                    this.putString("damage_on_pass", "half");
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(1);
+                    }});
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -10 /*damage*/, object.getHealthData().getInteger("current"),
                 "invoke should deal full damage on a fail"
@@ -363,51 +357,51 @@ public class SavingThrowTest {
     void dealsHalfDamageOnPass() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class_ability": "con",
-                "save_ability": "dex",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "cold",
-                        "dice": [
-                        { "count": 2, "size": 10, "determined": [ 5 ] }
+        new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class_ability": "con",
+                        "save_ability": "dex",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "cold",
+                                "dice": [
+                                { "count": 2, "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "damage_on_pass": "half",
-                "determined": [ 20 ]
-            }*/
-            this.putString("difficulty_class_ability", "con");
-            this.putString("save_ability", "dex");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "damage_on_pass": "half",
+                        "determined": [ 20 ]
+                    }*/
+                    this.putString("difficulty_class_ability", "con");
+                    this.putString("save_ability", "dex");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putString("damage_on_pass", "half");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(20);
-            }});
-        }});
-        savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
-        savingThrow.setTarget(object);
-        savingThrow.invoke(new DummyContext());
+                    this.putString("damage_on_pass", "half");
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(20);
+                    }});
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000 /*base*/ -5 /*damage*/, object.getHealthData().getInteger("current"),
                 "invoke should deal half damage on a pass"
@@ -419,51 +413,51 @@ public class SavingThrowTest {
     void dealsNoDamageOnPass() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class_ability": "con",
-                "save_ability": "dex",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "cold",
-                        "dice": [
-                        { "count": 2, "size": 10, "determined": [ 5 ] }
+        new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class_ability": "con",
+                        "save_ability": "dex",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "cold",
+                                "dice": [
+                                { "count": 2, "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "damage_on_pass": "none",
-                "determined": [ 20 ]
-            }*/
-            this.putString("difficulty_class_ability", "con");
-            this.putString("save_ability", "dex");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "cold");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "damage_on_pass": "none",
+                        "determined": [ 20 ]
+                    }*/
+                    this.putString("difficulty_class_ability", "con");
+                    this.putString("save_ability", "dex");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "cold");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putString("damage_on_pass", "none");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(20);
-            }});
-        }});
-        savingThrow.setSource(object);
-        savingThrow.prepare(new DummyContext());
-        savingThrow.setTarget(object);
-        savingThrow.invoke(new DummyContext());
+                    this.putString("damage_on_pass", "none");
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(20);
+                    }});
+                }})
+                .setSource(object)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(object)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(1000, object.getHealthData().getInteger("current"),
                 "invoke should deal no damage on a pass"
@@ -479,63 +473,63 @@ public class SavingThrowTest {
         source.getHealthData().putInteger("current", 1);
         target.getHealthData().putInteger("current", 11);
 
-        SavingThrow savingThrow = new SavingThrow();
-        savingThrow.joinSubeventData(new JsonObject() {{
-            /*{
-                "difficulty_class_ability": "int",
-                "save_ability": "con",
-                "damage": [
-                    {
-                        "formula": "range",
-                        "damage_type": "necrotic",
-                        "dice": [
-                        { "count": 2, "size": 10, "determined": [ 5 ] }
+        new SavingThrow()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "difficulty_class_ability": "int",
+                        "save_ability": "con",
+                        "damage": [
+                            {
+                                "formula": "range",
+                                "damage_type": "necrotic",
+                                "dice": [
+                                { "count": 2, "size": 10, "determined": [ 5 ] }
+                                ],
+                                "bonus": 0
+                            }
                         ],
-                        "bonus": 0
-                    }
-                ],
-                "vampirism": {
-                    "numerator": 1,
-                    "denominator": 2,
-                    "round_up": false,
-                    "damage_type": "necrotic"
-                },
-                "damage_on_pass": "half",
-                "determined": [ 1 ]
-            }*/
-            this.putString("difficulty_class_ability", "int");
-            this.putString("save_ability", "con");
-            this.putJsonArray("damage", new JsonArray() {{
-                this.addJsonObject(new JsonObject() {{
-                    this.putString("formula", "range");
-                    this.putString("damage_type", "necrotic");
-                    this.putJsonArray("dice", new JsonArray() {{
+                        "vampirism": {
+                            "numerator": 1,
+                            "denominator": 2,
+                            "round_up": false,
+                            "damage_type": "necrotic"
+                        },
+                        "damage_on_pass": "half",
+                        "determined": [ 1 ]
+                    }*/
+                    this.putString("difficulty_class_ability", "int");
+                    this.putString("save_ability", "con");
+                    this.putJsonArray("damage", new JsonArray() {{
                         this.addJsonObject(new JsonObject() {{
-                            this.putInteger("count", 2);
-                            this.putInteger("size", 10);
-                            this.putJsonArray("determined", new JsonArray() {{
-                                this.addInteger(5);
+                            this.putString("formula", "range");
+                            this.putString("damage_type", "necrotic");
+                            this.putJsonArray("dice", new JsonArray() {{
+                                this.addJsonObject(new JsonObject() {{
+                                    this.putInteger("count", 2);
+                                    this.putInteger("size", 10);
+                                    this.putJsonArray("determined", new JsonArray() {{
+                                        this.addInteger(5);
+                                    }});
+                                }});
                             }});
+                            this.putInteger("bonus", 0);
                         }});
                     }});
-                    this.putInteger("bonus", 0);
-                }});
-            }});
-            this.putJsonObject("vampirism", new JsonObject() {{
-                this.putInteger("numerator", 1);
-                this.putInteger("denominator", 2);
-                this.putBoolean("round_up", false);
-                this.putString("damage_type", "necrotic");
-            }});
-            this.putString("damage_on_pass", "half");
-            this.putJsonArray("determined", new JsonArray() {{
-                this.addInteger(1);
-            }});
-        }});
-        savingThrow.setSource(source);
-        savingThrow.prepare(new DummyContext());
-        savingThrow.setTarget(target);
-        savingThrow.invoke(new DummyContext());
+                    this.putJsonObject("vampirism", new JsonObject() {{
+                        this.putInteger("numerator", 1);
+                        this.putInteger("denominator", 2);
+                        this.putBoolean("round_up", false);
+                        this.putString("damage_type", "necrotic");
+                    }});
+                    this.putString("damage_on_pass", "half");
+                    this.putJsonArray("determined", new JsonArray() {{
+                        this.addInteger(1);
+                    }});
+                }})
+                .setSource(source)
+                .prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0)
+                .setTarget(target)
+                .invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(6, source.getHealthData().getInteger("current"),
                 "source should be healed for half damage from vampirism"

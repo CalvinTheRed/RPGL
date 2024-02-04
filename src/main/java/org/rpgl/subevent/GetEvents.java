@@ -3,6 +3,7 @@ package org.rpgl.subevent;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEvent;
 import org.rpgl.core.RPGLFactory;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -48,9 +49,40 @@ public class GetEvents extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public GetEvents invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (GetEvents) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public GetEvents joinSubeventData(JsonObject other) {
+        return (GetEvents) super.joinSubeventData(other);
+    }
+
+    @Override
+    public GetEvents prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.putJsonArray("events", new JsonArray());
+        return this;
+    }
+
+    @Override
+    public GetEvents run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public GetEvents setOriginItem(String originItem) {
+        return (GetEvents) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public GetEvents setSource(RPGLObject source) {
+        return (GetEvents) super.setSource(source);
+    }
+
+    @Override
+    public GetEvents setTarget(RPGLObject target) {
+        return (GetEvents) super.setTarget(target);
     }
 
     /**
@@ -60,9 +92,12 @@ public class GetEvents extends Subevent {
      * @param originItem a UUID for a RPGLItem if the event was provided by an item, or null otherwise
      * @param sourceUuid a UUID for the source of the event if it should differ from the object which invokes it, or
      *                   null otherwise
+     * @return this GetEvents
      */
-    public void addEvent(String eventId, String originItem, String sourceUuid) {
-        this.json.getJsonArray("events").addJsonObject(RPGLFactory.newEvent(eventId, originItem, sourceUuid));
+    public GetEvents addEvent(String eventId, String originItem, String sourceUuid) {
+        this.json.getJsonArray("events").addJsonObject(RPGLFactory
+                .newEvent(eventId).setOriginItem(originItem).setSource(sourceUuid));
+        return this;
     }
 
     /**

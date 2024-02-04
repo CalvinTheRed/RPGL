@@ -1,6 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -37,9 +39,39 @@ public class CalculateAbilityScore extends Calculation implements AbilitySubeven
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
-        this.setBase(getSource().getAbilityScores().getInteger(getAbility(context)));
+    public CalculateAbilityScore invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (CalculateAbilityScore) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public CalculateAbilityScore joinSubeventData(JsonObject other) {
+        return (CalculateAbilityScore) super.joinSubeventData(other);
+    }
+
+    @Override
+    public CalculateAbilityScore prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint).setBase(getSource().getAbilityScores().getInteger(getAbility(context)));
+        return this;
+    }
+
+    @Override
+    public CalculateAbilityScore run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public CalculateAbilityScore setOriginItem(String originItem) {
+        return (CalculateAbilityScore) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public CalculateAbilityScore setSource(RPGLObject source) {
+        return (CalculateAbilityScore) super.setSource(source);
+    }
+
+    @Override
+    public CalculateAbilityScore setTarget(RPGLObject target) {
+        return (CalculateAbilityScore) super.setTarget(target);
     }
 
     @Override

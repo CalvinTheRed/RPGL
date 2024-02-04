@@ -56,7 +56,7 @@ public class RevokeImmunityTest {
                         "function": "not_a_function"
                     }*/
                     this.putString("function", "not_a_function");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Function should throw a FunctionMismatchException if the specified function doesn't match"
         );
     }
@@ -70,7 +70,7 @@ public class RevokeImmunityTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext());
+        damageAffinity.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         damageAffinity.grantImmunity("fire");
         damageAffinity.grantImmunity("cold");
 
@@ -81,7 +81,7 @@ public class RevokeImmunityTest {
             }*/
             this.putString("function", "revoke_immunity");
             this.putString("damage_type", "fire");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(damageAffinity.isImmune("fire"),
                 "execute should revoke immunity to counter the granted fire immunity"
@@ -100,7 +100,7 @@ public class RevokeImmunityTest {
         damageAffinity.setSource(object);
         damageAffinity.addDamageType("fire");
         damageAffinity.addDamageType("cold");
-        damageAffinity.prepare(new DummyContext());
+        damageAffinity.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         damageAffinity.grantImmunity("fire");
         damageAffinity.grantImmunity("cold");
 
@@ -109,7 +109,7 @@ public class RevokeImmunityTest {
                 "function": "revoke_immunity"
             }*/
             this.putString("function", "revoke_immunity");
-        }}, new DummyContext());
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertFalse(damageAffinity.isImmune("fire"),
                 "execute should revoke immunity to counter the granted fire immunity"

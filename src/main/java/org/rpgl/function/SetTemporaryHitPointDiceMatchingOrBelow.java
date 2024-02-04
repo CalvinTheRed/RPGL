@@ -2,6 +2,7 @@ package org.rpgl.function;
 
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.subevent.TemporaryHitPointRoll;
@@ -23,7 +24,7 @@ public class SetTemporaryHitPointDiceMatchingOrBelow extends Function {
     }
 
     @Override
-    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context) {
+    public void run(RPGLEffect effect, Subevent subevent, JsonObject functionJson, RPGLContext context, JsonArray originPoint) {
         if (subevent instanceof TemporaryHitPointRoll temporaryHitPointRoll) {
             temporaryHitPointRoll.setTemporaryHitPointsDiceMatchingOrBelow(
                     functionJson.getInteger("threshold"),

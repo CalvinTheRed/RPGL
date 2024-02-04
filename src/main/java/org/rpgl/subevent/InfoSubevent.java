@@ -1,6 +1,8 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
+import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
 /**
@@ -38,9 +40,40 @@ public class InfoSubevent extends Subevent implements CancelableSubevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
+    public InfoSubevent invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (InfoSubevent) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public InfoSubevent joinSubeventData(JsonObject other) {
+        return (InfoSubevent) super.joinSubeventData(other);
+    }
+
+    @Override
+    public InfoSubevent prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
         this.json.putBoolean("canceled", false);
+        return this;
+    }
+
+    @Override
+    public InfoSubevent run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public InfoSubevent setOriginItem(String originItem) {
+        return (InfoSubevent) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public InfoSubevent setSource(RPGLObject source) {
+        return (InfoSubevent) super.setSource(source);
+    }
+
+    @Override
+    public InfoSubevent setTarget(RPGLObject target) {
+        return (InfoSubevent) super.setTarget(target);
     }
 
     @Override

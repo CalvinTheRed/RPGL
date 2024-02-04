@@ -250,6 +250,7 @@ public class RPGLObjectTest {
         RPGLObject target = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 
         youngRedDragon.invokeEvent(
+                TestUtils.TEST_ARRAY_0_0_0,
                 new RPGLObject[] { target },
                 RPGLFactory.newEvent("std:object/dragon/red/young/breath"),
                 new ArrayList<>() {{
@@ -295,9 +296,9 @@ public class RPGLObjectTest {
         }});
 
         healingDelivery.setSource(object);
-        healingDelivery.prepare(new DummyContext());
+        healingDelivery.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         healingDelivery.setTarget(object);
-        healingDelivery.invoke(new DummyContext());
+        healingDelivery.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         object.receiveHealing(healingDelivery, new DummyContext());
 
@@ -331,9 +332,9 @@ public class RPGLObjectTest {
         }});
 
         healingDelivery.setSource(object);
-        healingDelivery.prepare(new DummyContext());
+        healingDelivery.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         healingDelivery.setTarget(object);
-        healingDelivery.invoke(new DummyContext());
+        healingDelivery.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         object.receiveHealing(healingDelivery, new DummyContext());
 
@@ -430,6 +431,7 @@ public class RPGLObjectTest {
         proxyObject.setOriginObject(originObject.getUuid());
 
         proxyObject.invokeEvent(
+                TestUtils.TEST_ARRAY_0_0_0,
                 new RPGLObject[] { proxyObject },
                 RPGLFactory.newEvent("debug:test_info_subevent"),
                 List.of(),
@@ -461,6 +463,7 @@ public class RPGLObjectTest {
         proxyObject.setProxy(true);
 
         proxyObject.invokeEvent(
+                TestUtils.TEST_ARRAY_0_0_0,
                 new RPGLObject[] { proxyObject },
                 RPGLFactory.newEvent("debug:test_info_subevent"),
                 List.of(),
@@ -1015,6 +1018,19 @@ public class RPGLObjectTest {
 
         assertEquals(10+5+5, object.abilityCheck("str", "athletics", context),
                 "ability check should return a 20 (10+5+5)"
+        );
+    }
+
+    @Test
+    @DisplayName("moves")
+    void moves() throws Exception {
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER,
+                TestUtils.TEST_ARRAY_0_0_0, TestUtils.TEST_ARRAY_0_0_0);
+
+        String expected = """
+                [10.0,10.0,10.0]""";
+        assertEquals(expected, object.move(new DummyContext(), TestUtils.TEST_ARRAY_10_10_10).getPosition().toString(),
+                "object should arrive at its destination"
         );
     }
 

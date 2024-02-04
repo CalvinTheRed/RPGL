@@ -15,6 +15,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -57,7 +58,7 @@ public class OriginItemHasTagTest {
                         "condition": "not_a_condition"
                     }*/
                     this.putString("condition", "not_a_condition");
-                }}, new DummyContext()),
+                }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Condition should throw a ConditionMismatchException if the specified condition doesn't match"
         );
     }
@@ -80,7 +81,7 @@ public class OriginItemHasTagTest {
             this.putString("condition", "origin_item_has_tag");
             this.putString("origin_item", "subevent");
             this.putString("tag", "test");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate true when indicated tag is present"
         );
     }
@@ -102,7 +103,7 @@ public class OriginItemHasTagTest {
             this.putString("condition", "origin_item_has_tag");
             this.putString("origin_item", "subevent");
             this.putString("tag", "test");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate false when indicated tag is not present"
         );
     }
@@ -125,7 +126,7 @@ public class OriginItemHasTagTest {
             this.putString("condition", "origin_item_has_tag");
             this.putString("origin_item", "effect");
             this.putString("tag", "test");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate true when indicated tag is present"
         );
     }
@@ -147,7 +148,7 @@ public class OriginItemHasTagTest {
             this.putString("condition", "origin_item_has_tag");
             this.putString("origin_item", "effect");
             this.putString("tag", "test");
-        }}, new DummyContext()),
+        }}, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "should evaluate false when indicated tag is not present"
         );
     }

@@ -47,16 +47,16 @@ public class RemoveOriginItemTagTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new RemoveOriginItemTag();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new RemoveOriginItemTag()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -70,15 +70,15 @@ public class RemoveOriginItemTagTest {
         DummyContext context = new DummyContext();
         context.add(object);
 
-        RemoveOriginItemTag removeOriginItemTag = new RemoveOriginItemTag();
-        removeOriginItemTag.joinSubeventData(new JsonObject() {{
-            this.putString("tag", "test_tag");
-        }});
-        removeOriginItemTag.setOriginItem(item.getUuid());
-        removeOriginItemTag.setSource(object);
-        removeOriginItemTag.prepare(context);
-        removeOriginItemTag.setTarget(object);
-        removeOriginItemTag.invoke(context);
+        new RemoveOriginItemTag()
+                .joinSubeventData(new JsonObject() {{
+                    this.putString("tag", "test_tag");
+                }})
+                .setOriginItem(item.getUuid())
+                .setSource(object)
+                .prepare(context, object.getPosition())
+                .setTarget(object)
+                .invoke(context, object.getPosition());
 
         assertFalse(item.getTags().asList().contains("test_tag"),
                 "invoke should remove intended tag from origin item"

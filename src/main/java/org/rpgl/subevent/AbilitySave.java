@@ -1,6 +1,7 @@
 package org.rpgl.subevent;
 
 import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.uuidtable.UUIDTable;
@@ -41,14 +42,25 @@ public class AbilitySave extends Subevent {
     }
 
     @Override
-    public void prepare(RPGLContext context) throws Exception {
-        super.prepare(context);
-        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context);
+    public AbilitySave invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (AbilitySave) super.invoke(context, originPoint);
     }
 
     @Override
-    public void run(RPGLContext context) throws Exception {
+    public AbilitySave joinSubeventData(JsonObject other) {
+        return (AbilitySave) super.joinSubeventData(other);
+    }
+
+    @Override
+    public AbilitySave prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        super.prepare(context, originPoint);
+        this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
+        this.calculateDifficultyClass(context);
+        return this;
+    }
+
+    @Override
+    public AbilitySave run(RPGLContext context, JsonArray originPoint) throws Exception {
         AbilityCheck abilityCheck = new AbilityCheck();
         abilityCheck.joinSubeventData(new JsonObject() {{
             this.putString("ability", json.getString("ability"));
@@ -57,15 +69,31 @@ public class AbilitySave extends Subevent {
             this.putJsonArray("determined", json.getJsonArray("determined"));
         }});
         abilityCheck.setSource(super.getTarget());
-        abilityCheck.prepare(context);
+        abilityCheck.prepare(context, originPoint);
         abilityCheck.setTarget(super.getSource());
-        abilityCheck.invoke(context);
+        abilityCheck.invoke(context, originPoint);
 
         if (abilityCheck.get() < this.getDifficultyClass()) {
-            this.resolveNestedSubevents("fail", context);
+            this.resolveNestedSubevents("fail", context, originPoint);
         } else {
-            this.resolveNestedSubevents("pass", context);
+            this.resolveNestedSubevents("pass", context, originPoint);
         }
+        return this;
+    }
+
+    @Override
+    public AbilitySave setOriginItem(String originItem) {
+        return (AbilitySave) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public AbilitySave setSource(RPGLObject source) {
+        return (AbilitySave) super.setSource(source);
+    }
+
+    @Override
+    public AbilitySave setTarget(RPGLObject target) {
+        return (AbilitySave) super.setTarget(target);
     }
 
     /**
@@ -96,9 +124,9 @@ public class AbilitySave extends Subevent {
                 ? UUIDTable.getObject(super.getSource().getOriginObject())
                 : super.getSource()
         );
-        calculateDifficultyClass.prepare(context);
+        calculateDifficultyClass.prepare(context, this.getSource().getPosition());
         calculateDifficultyClass.setTarget(super.getSource());
-        calculateDifficultyClass.invoke(context);
+        calculateDifficultyClass.invoke(context, this.getSource().getPosition());
 
         this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
@@ -112,16 +140,16 @@ public class AbilitySave extends Subevent {
      *
      * @throws Exception if an exception occurs.
      */
-    void resolveNestedSubevents(String passOrFail, RPGLContext context) throws Exception {
+    void resolveNestedSubevents(String passOrFail, RPGLContext context, JsonArray originPoint) throws Exception {
         JsonArray subeventJsonArray = this.json.getJsonArray(passOrFail);
         if (subeventJsonArray != null) {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
                 Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
                 subevent.setSource(super.getSource());
-                subevent.prepare(context);
+                subevent.prepare(context, originPoint);
                 subevent.setTarget(super.getTarget());
-                subevent.invoke(context);
+                subevent.invoke(context, originPoint);
             }
         }
     }

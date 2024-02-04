@@ -1,5 +1,7 @@
 package org.rpgl.subevent;
 
+import org.rpgl.core.RPGLContext;
+import org.rpgl.core.RPGLObject;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 
@@ -35,10 +37,47 @@ public class HealingDelivery extends Subevent {
         return clone;
     }
 
+    @Override
+    public HealingDelivery invoke(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (HealingDelivery) super.invoke(context, originPoint);
+    }
+
+    @Override
+    public HealingDelivery joinSubeventData(JsonObject other) {
+        return (HealingDelivery) super.joinSubeventData(other);
+    }
+
+    @Override
+    public HealingDelivery prepare(RPGLContext context, JsonArray originPoint) throws Exception {
+        return (HealingDelivery) super.prepare(context, originPoint);
+    }
+
+    @Override
+    public HealingDelivery run(RPGLContext context, JsonArray originPoint) throws Exception {
+        return this;
+    }
+
+    @Override
+    public HealingDelivery setOriginItem(String originItem) {
+        return (HealingDelivery) super.setOriginItem(originItem);
+    }
+
+    @Override
+    public HealingDelivery setSource(RPGLObject source) {
+        return (HealingDelivery) super.setSource(source);
+    }
+
+    @Override
+    public HealingDelivery setTarget(RPGLObject target) {
+        return (HealingDelivery) super.setTarget(target);
+    }
+
     /**
      * Maximizes all healing dice contained in this subevent.
+     *
+     * @return this HealingDelivery
      */
-    public void maximizeHealingDice() {
+    public HealingDelivery maximizeHealingDice() {
         JsonArray healingArray = this.json.getJsonArray("healing");
         for (int i = 0; i < healingArray.size(); i++) {
             JsonArray dice = healingArray.getJsonObject(i).getJsonArray("dice");
@@ -47,6 +86,7 @@ public class HealingDelivery extends Subevent {
                 die.putInteger("roll", die.getInteger("size"));
             }
         }
+        return this;
     }
 
     /**

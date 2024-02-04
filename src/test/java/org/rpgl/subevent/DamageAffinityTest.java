@@ -7,6 +7,7 @@ import org.rpgl.datapack.DatapackLoader;
 import org.rpgl.exception.SubeventMismatchException;
 import org.rpgl.json.JsonObject;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,16 +28,16 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("errors on wrong subevent")
     void errorsOnWrongSubevent() {
-        Subevent subevent = new DamageAffinity();
-        subevent.joinSubeventData(new JsonObject() {{
-            /*{
-                "subevent": "not_a_subevent"
-            }*/
-            this.putString("subevent", "not_a_subevent");
-        }});
+        Subevent subevent = new DamageAffinity()
+                .joinSubeventData(new JsonObject() {{
+                    /*{
+                        "subevent": "not_a_subevent"
+                    }*/
+                    this.putString("subevent", "not_a_subevent");
+                }});
 
         assertThrows(SubeventMismatchException.class,
-                () -> subevent.invoke(new DummyContext()),
+                () -> subevent.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
                 "Subevent should throw a SubeventMismatchException if the specified subevent doesn't match"
         );
     }
@@ -44,8 +45,8 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("indicates normal damage")
     void indicatesNormalDamage() {
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType("fire");
+        DamageAffinity damageAffinity = new DamageAffinity()
+                .addDamageType("fire");
 
         assertFalse(damageAffinity.isImmune("fire"),
                 "damageAffinity should not report immune by default"
@@ -61,9 +62,9 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("indicates and revokes resistance")
     void indicatesAndRevokesResistance() {
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType("fire");
-        damageAffinity.grantResistance("fire");
+        DamageAffinity damageAffinity = new DamageAffinity()
+                .addDamageType("fire")
+                .grantResistance("fire");
 
         assertFalse(damageAffinity.isImmune("fire"),
                 "damageAffinity should not report immune to fire"
@@ -84,9 +85,9 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("indicates and revokes immunity")
     void indicatesAndRevokesImmunity() {
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType("fire");
-        damageAffinity.grantImmunity("fire");
+        DamageAffinity damageAffinity = new DamageAffinity()
+                .addDamageType("fire")
+                .grantImmunity("fire");
 
         assertTrue(damageAffinity.isImmune("fire"),
                 "damageAffinity should report immune to fire"
@@ -107,9 +108,9 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("indicates and revokes vulnerability")
     void indicatesAndRevokesVulnerability() {
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType("fire");
-        damageAffinity.grantVulnerability("fire");
+        DamageAffinity damageAffinity = new DamageAffinity()
+                .addDamageType("fire")
+                .grantVulnerability("fire");
 
         assertFalse(damageAffinity.isImmune("fire"),
                 "damageAffinity should not report immune to fire"
@@ -130,8 +131,8 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("recognizes present damage type")
     void recognizesPresentDamageType() {
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType("fire");
+        DamageAffinity damageAffinity = new DamageAffinity()
+                .addDamageType("fire");
 
         assertTrue(damageAffinity.includesDamageType("fire"),
                 "should return true when damage type is included"
@@ -141,8 +142,8 @@ public class DamageAffinityTest {
     @Test
     @DisplayName("recognizes absent damage type")
     void recognizesAbsentDamageType() {
-        DamageAffinity damageAffinity = new DamageAffinity();
-        damageAffinity.addDamageType("cold");
+        DamageAffinity damageAffinity = new DamageAffinity()
+                .addDamageType("cold");
 
         assertFalse(damageAffinity.includesDamageType("fire"),
                 "should return false when damage type is not included"
