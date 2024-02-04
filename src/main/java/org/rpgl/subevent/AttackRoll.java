@@ -131,7 +131,7 @@ public class AttackRoll extends Roll {
             }}, context, originPoint);
 
             this.calculateTargetArmorClass(context);
-            this.calculateCriticalHitThreshold(context, originPoint);
+            this.calculateCriticalHitThreshold(context);
             if (this.getBase() >= this.getCriticalHitThreshold()) {
                 this.getBaseDamage(context, originPoint);
                 this.getTargetDamage(context, originPoint);
@@ -349,7 +349,7 @@ public class AttackRoll extends Roll {
      *
      * @throws Exception if an exception occurs.
      */
-    void calculateCriticalHitThreshold(RPGLContext context, JsonArray originPoint) throws Exception {
+    void calculateCriticalHitThreshold(RPGLContext context) throws Exception {
         CalculateCriticalHitThreshold calculateCriticalHitThreshold = new CalculateCriticalHitThreshold();
         calculateCriticalHitThreshold.joinSubeventData(new JsonObject() {{
             this.putJsonArray("tags", new JsonArray() {{
@@ -358,9 +358,9 @@ public class AttackRoll extends Roll {
         }});
         calculateCriticalHitThreshold.setOriginItem(super.getOriginItem());
         calculateCriticalHitThreshold.setSource(super.getSource());
-        calculateCriticalHitThreshold.prepare(context, originPoint);
+        calculateCriticalHitThreshold.prepare(context, this.getSource().getPosition());
         calculateCriticalHitThreshold.setTarget(super.getTarget());
-        calculateCriticalHitThreshold.invoke(context, originPoint);
+        calculateCriticalHitThreshold.invoke(context, this.getSource().getPosition());
 
         this.json.putInteger("critical_hit_threshold", calculateCriticalHitThreshold.get());
     }

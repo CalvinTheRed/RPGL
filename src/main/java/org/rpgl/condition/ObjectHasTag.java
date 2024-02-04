@@ -21,7 +21,7 @@ public class ObjectHasTag extends Condition {
     @Override
     public boolean run(RPGLEffect effect, Subevent subevent, JsonObject conditionJson, RPGLContext context, JsonArray originPoint) throws Exception {
         RPGLObject object = RPGLEffect.getObject(effect, subevent, conditionJson.getJsonObject("object"));
-        return object.getAllTags(context, originPoint).contains(conditionJson.getString("tag"));
+        return object.getAllTags(context).contains(conditionJson.getString("tag"));
     }
 
 }

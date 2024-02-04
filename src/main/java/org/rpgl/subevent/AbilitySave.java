@@ -55,7 +55,7 @@ public class AbilitySave extends Subevent {
     public AbilitySave prepare(RPGLContext context, JsonArray originPoint) throws Exception {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context, originPoint);
+        this.calculateDifficultyClass(context);
         return this;
     }
 
@@ -103,7 +103,7 @@ public class AbilitySave extends Subevent {
      *
      * @throws Exception if an exception occurs.
      */
-    void calculateDifficultyClass(RPGLContext context, JsonArray originPoint) throws Exception {
+    void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
 
         Integer difficultyClass = this.getDifficultyClass();
@@ -124,9 +124,9 @@ public class AbilitySave extends Subevent {
                 ? UUIDTable.getObject(super.getSource().getOriginObject())
                 : super.getSource()
         );
-        calculateDifficultyClass.prepare(context, originPoint);
+        calculateDifficultyClass.prepare(context, this.getSource().getPosition());
         calculateDifficultyClass.setTarget(super.getSource());
-        calculateDifficultyClass.invoke(context, originPoint);
+        calculateDifficultyClass.invoke(context, this.getSource().getPosition());
 
         this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }

@@ -13,6 +13,7 @@ import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.DummySubevent;
 import org.rpgl.subevent.Subevent;
 import org.rpgl.testUtils.DummyContext;
+import org.rpgl.testUtils.TestUtils;
 import org.rpgl.uuidtable.UUIDTable;
 
 import java.io.File;
@@ -95,12 +96,12 @@ public class RPGLEffectTest {
     @DisplayName("executes functions")
     void executesFunctions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext(), new JsonArray());
+        subevent.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         effect.executeFunctions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("functions"),
-                new DummyContext(), new JsonArray()
+                new DummyContext(), TestUtils.TEST_ARRAY_0_0_0
         );
 
         assertEquals(2, DummyFunction.counter,
@@ -112,12 +113,12 @@ public class RPGLEffectTest {
     @DisplayName("evaluates conditions")
     void evaluatesConditions() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext(), new JsonArray());
+        subevent.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         boolean evaluation = effect.evaluateConditions(
                 subevent,
                 effect.getSubeventFilters().getJsonArray("dummy_subevent").getJsonObject(0).getJsonArray("conditions"),
-                new DummyContext(), new JsonArray()
+                new DummyContext(), TestUtils.TEST_ARRAY_0_0_0
         );
 
         assertTrue(evaluation,
@@ -129,9 +130,9 @@ public class RPGLEffectTest {
     @DisplayName("processes subevents")
     void processesSubevents() throws Exception {
         Subevent subevent = new DummySubevent();
-        subevent.prepare(new DummyContext(), new JsonArray());
+        subevent.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
-        effect.processSubevent(subevent, new DummyContext(), new JsonArray());
+        effect.processSubevent(subevent, new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         assertEquals(2, DummyFunction.counter,
                 "both instances of dummy_function should be executed"

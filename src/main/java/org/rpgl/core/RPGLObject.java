@@ -882,7 +882,7 @@ public class RPGLObject extends RPGLTaggable {
      *
      * @throws Exception if an exception occurs
      */
-    public ArrayList<String> getAllTags(RPGLContext context, JsonArray originPoint) throws Exception {
+    public ArrayList<String> getAllTags(RPGLContext context) throws Exception {
         ArrayList<String> tagsList = new ArrayList<>();
         JsonArray tags;
 
@@ -893,9 +893,9 @@ public class RPGLObject extends RPGLTaggable {
 
         GetObjectTags getObjectTags = new GetObjectTags()
                 .setSource(this)
-                .prepare(context, originPoint)
+                .prepare(context, this.getPosition())
                 .setTarget(this)
-                .invoke(context, originPoint);
+                .invoke(context, this.getPosition());
 
         tags = getObjectTags.getObjectTags();
         for (int i = 0; i < tags.size(); i++) {

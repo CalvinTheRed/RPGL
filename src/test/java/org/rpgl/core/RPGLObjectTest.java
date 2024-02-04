@@ -296,9 +296,9 @@ public class RPGLObjectTest {
         }});
 
         healingDelivery.setSource(object);
-        healingDelivery.prepare(new DummyContext(), object.getPosition());
+        healingDelivery.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         healingDelivery.setTarget(object);
-        healingDelivery.invoke(new DummyContext(), object.getPosition());
+        healingDelivery.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         object.receiveHealing(healingDelivery, new DummyContext());
 
@@ -332,9 +332,9 @@ public class RPGLObjectTest {
         }});
 
         healingDelivery.setSource(object);
-        healingDelivery.prepare(new DummyContext(), object.getPosition());
+        healingDelivery.prepare(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
         healingDelivery.setTarget(object);
-        healingDelivery.invoke(new DummyContext(), object.getPosition());
+        healingDelivery.invoke(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
 
         object.receiveHealing(healingDelivery, new DummyContext());
 

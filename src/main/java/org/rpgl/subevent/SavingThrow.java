@@ -90,7 +90,7 @@ public class SavingThrow extends Roll {
         super.prepare(context, originPoint);
         this.json.asMap().putIfAbsent("damage", new ArrayList<>());
         this.json.asMap().putIfAbsent("use_origin_difficulty_class_ability", false);
-        this.calculateDifficultyClass(context, originPoint);
+        this.calculateDifficultyClass(context);
         this.getBaseDamage(context, originPoint);
         return this;
     }
@@ -149,7 +149,7 @@ public class SavingThrow extends Roll {
      *
      * @throws Exception if an exception occurs.
      */
-    void calculateDifficultyClass(RPGLContext context, JsonArray originPoint) throws Exception {
+    void calculateDifficultyClass(RPGLContext context) throws Exception {
         CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
 
         Integer difficultyClass = this.getDifficultyClass();
@@ -170,9 +170,9 @@ public class SavingThrow extends Roll {
                 ? UUIDTable.getObject(super.getSource().getOriginObject())
                 : super.getSource()
         );
-        calculateDifficultyClass.prepare(context, originPoint);
+        calculateDifficultyClass.prepare(context, this.getSource().getPosition());
         calculateDifficultyClass.setTarget(super.getSource());
-        calculateDifficultyClass.invoke(context, originPoint);
+        calculateDifficultyClass.invoke(context, this.getSource().getPosition());
 
         this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
