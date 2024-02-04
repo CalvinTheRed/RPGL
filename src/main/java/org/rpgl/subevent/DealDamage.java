@@ -102,6 +102,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * This helper method collects, rolls, and stores all target-agnostic damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs.
      */
@@ -151,6 +152,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * This helper method collects, rolls, and stores all target-specific damage bonuses for this Subevent.
      *
      * @param context the context this Subevent takes place in
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs.
      */
@@ -195,6 +197,7 @@ public class DealDamage extends Subevent implements CancelableSubevent, DamageTy
      * Delivers the finalized damage to the target.
      *
      * @param context the context this Subevent takes place in
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs.
      */

@@ -181,6 +181,7 @@ public class SavingThrow extends Roll {
      * This helper method collects, rolls, and stores all target-agnostic damage for this Subevent.
      *
      * @param context the context in which the base damage for this Subevent is being calculated
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs
      */
@@ -229,6 +230,7 @@ public class SavingThrow extends Roll {
      * This helper method collects, rolls, and stores all target-specific damage for this Subevent.
      *
      * @param context the context in which the target damage for this Subevent is being calculated
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs
      */
@@ -275,6 +277,7 @@ public class SavingThrow extends Roll {
      *
      * @param passOrFail a String indicating whether the saving throw was passed or failed
      * @param context the context this Subevent takes place in
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs.
      */
@@ -298,6 +301,7 @@ public class SavingThrow extends Roll {
      * @param damageProportion the proportion of the damage to be dealt (can be <code>"all"</code>, <code>"half"</code>,
      *                         or <code>"none"</code>)
      * @param context the context in which the damage is being delivered to the target
+     * @param originPoint the point from which this subevent emanates
      *
      * @throws Exception if an exception occurs
      */

@@ -184,6 +184,7 @@ public abstract class Subevent {
      * passes the completed version of it to the RPGLContext for viewing.
      *
      * @param context the context in which the Subevent is being invoked
+     * @param originPoint the point from which this subevent emanates
      * @return this Subevent
      *
      * @throws Exception if an exception occurs
