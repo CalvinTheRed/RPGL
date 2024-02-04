@@ -194,6 +194,16 @@ public abstract class Condition {
         }
     }
 
+    /**
+     * Finds the distance between two N-dimensional points. pos1 and pos2 must be of the same degree.
+     *
+     * @param pos1 a point in coordinate space
+     * @param pos2 a point in coordinate space
+     * @param algorithm the algorithm to measure distance (<code>"direct"</code> or <code>"taxicab"</code>)
+     * @return the distance between the two passed points
+     *
+     * @throws DimensionMismatchException if the passed points have different degrees
+     */
     public static double getDistance(JsonArray pos1, JsonArray pos2, String algorithm) throws DimensionMismatchException {
         if (pos1.size() == pos2.size()) {
             return switch (algorithm) {
@@ -206,6 +216,13 @@ public abstract class Condition {
         }
     }
 
+    /**
+     * This helper method calculates the distance between two points by the shortest distance.
+     *
+     * @param pos1 a point in coordinate space
+     * @param pos2 a point in coordinate space
+     * @return the direct distance between the two passed points.
+     */
     private static double getDirectDistance(JsonArray pos1, JsonArray pos2) {
         double sum = 0d;
         for (int i = 0; i < pos1.size(); i++) {
@@ -214,6 +231,13 @@ public abstract class Condition {
         return Math.sqrt(sum);
     }
 
+    /**
+     * This helper method calculates the distance between two points via taxicab distance.
+     *
+     * @param pos1 a point in coordinate space
+     * @param pos2 a point in coordinate space
+     * @return the taxicab distance between the two passed points.
+     */
     private static double getTaxicabDistance(JsonArray pos1, JsonArray pos2) {
         double sum = 0d;
         for (int i = 0; i < pos1.size(); i++) {
