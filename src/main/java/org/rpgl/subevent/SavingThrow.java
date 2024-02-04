@@ -150,29 +150,26 @@ public class SavingThrow extends Roll {
      * @throws Exception if an exception occurs.
      */
     void calculateDifficultyClass(RPGLContext context) throws Exception {
-        CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass();
-
         Integer difficultyClass = this.getDifficultyClass();
-        if (difficultyClass == null) {
-            calculateDifficultyClass.joinSubeventData(new JsonObject() {{
-                this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
-                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
-            }});
-        } else {
-            calculateDifficultyClass.joinSubeventData(new JsonObject() {{
-                this.putInteger("difficulty_class", difficultyClass);
-                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
-            }});
-        }
 
-        calculateDifficultyClass.setOriginItem(super.getOriginItem());
-        calculateDifficultyClass.setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
-                ? UUIDTable.getObject(super.getSource().getOriginObject())
-                : super.getSource()
-        );
-        calculateDifficultyClass.prepare(context, this.getSource().getPosition());
-        calculateDifficultyClass.setTarget(super.getSource());
-        calculateDifficultyClass.invoke(context, this.getSource().getPosition());
+        CalculateDifficultyClass calculateDifficultyClass = new CalculateDifficultyClass()
+                .joinSubeventData(difficultyClass == null
+                        ? new JsonObject() {{
+                            this.putString("difficulty_class_ability", json.getString("difficulty_class_ability"));
+                            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+                        }}
+                        : new JsonObject() {{
+                            this.putInteger("difficulty_class", difficultyClass);
+                            this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+                        }})
+                .setOriginItem(super.getOriginItem())
+                .setSource(this.json.getBoolean("use_origin_difficulty_class_ability")
+                        ? UUIDTable.getObject(super.getSource().getOriginObject())
+                        : super.getSource()
+                )
+                .prepare(context, this.getSource().getPosition())
+                .setTarget(super.getSource())
+                .invoke(context, this.getSource().getPosition());
 
         this.json.putInteger("difficulty_class", calculateDifficultyClass.get());
     }
@@ -189,36 +186,36 @@ public class SavingThrow extends Roll {
         /*
          * Collect base typed damage dice and bonuses
          */
-        DamageCollection baseDamageCollection = new DamageCollection();
-        baseDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("base_damage_collection");
-            }});
-        }});
-        baseDamageCollection.setOriginItem(super.getOriginItem());
-        baseDamageCollection.setSource(super.getSource());
-        baseDamageCollection.prepare(context, originPoint);
-        baseDamageCollection.setTarget(super.getSource());
-        baseDamageCollection.invoke(context, originPoint);
+        DamageCollection baseDamageCollection = new DamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    this.putJsonArray("damage", json.getJsonArray("damage").deepClone());
+                    this.putJsonArray("tags", new JsonArray() {{
+                        this.asList().addAll(json.getJsonArray("tags").asList());
+                        this.addString("base_damage_collection");
+                    }});
+                }})
+                .setOriginItem(super.getOriginItem())
+                .setSource(super.getSource())
+                .prepare(context, originPoint)
+                .setTarget(super.getSource())
+                .invoke(context, originPoint);
 
         /*
          * Roll base damage dice
          */
-        DamageRoll baseDamageRoll = new DamageRoll();
-        baseDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("base_damage_roll");
-            }});
-        }});
-        baseDamageRoll.setOriginItem(super.getOriginItem());
-        baseDamageRoll.setSource(super.getSource());
-        baseDamageRoll.prepare(context, originPoint);
-        baseDamageRoll.setTarget(super.getSource());
-        baseDamageRoll.invoke(context, originPoint);
+        DamageRoll baseDamageRoll = new DamageRoll()
+                .joinSubeventData(new JsonObject() {{
+                    this.putJsonArray("damage", baseDamageCollection.getDamageCollection().deepClone());
+                    this.putJsonArray("tags", new JsonArray() {{
+                        this.asList().addAll(json.getJsonArray("tags").asList());
+                        this.addString("base_damage_roll");
+                    }});
+                }})
+                .setOriginItem(super.getOriginItem())
+                .setSource(super.getSource())
+                .prepare(context, originPoint)
+                .setTarget(super.getSource())
+                .invoke(context, originPoint);
 
         /*
          * Replace damage key with base damage calculation
@@ -238,35 +235,35 @@ public class SavingThrow extends Roll {
         /*
          * Collect target typed damage dice and bonuses
          */
-        DamageCollection targetDamageCollection = new DamageCollection();
-        targetDamageCollection.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("target_damage_collection");
-            }});
-        }});
-        targetDamageCollection.setOriginItem(super.getOriginItem());
-        targetDamageCollection.setSource(super.getSource());
-        targetDamageCollection.prepare(context, originPoint);
-        targetDamageCollection.setTarget(super.getTarget());
-        targetDamageCollection.invoke(context, originPoint);
+        DamageCollection targetDamageCollection = new DamageCollection()
+                .joinSubeventData(new JsonObject() {{
+                    this.putJsonArray("tags", new JsonArray() {{
+                        this.asList().addAll(json.getJsonArray("tags").asList());
+                        this.addString("target_damage_collection");
+                    }});
+                }})
+                .setOriginItem(super.getOriginItem())
+                .setSource(super.getSource())
+                .prepare(context, originPoint)
+                .setTarget(super.getTarget())
+                .invoke(context, originPoint);
 
         /*
          * Roll target damage dice
          */
-        DamageRoll targetDamageRoll = new DamageRoll();
-        targetDamageRoll.joinSubeventData(new JsonObject() {{
-            this.putJsonArray("damage", targetDamageCollection.getDamageCollection().deepClone());
-            this.putJsonArray("tags", new JsonArray() {{
-                this.asList().addAll(json.getJsonArray("tags").asList());
-                this.addString("target_damage_roll");
-            }});
-        }});
-        targetDamageRoll.setOriginItem(super.getOriginItem());
-        targetDamageRoll.setSource(super.getSource());
-        targetDamageRoll.prepare(context, originPoint);
-        targetDamageRoll.setTarget(super.getTarget());
-        targetDamageRoll.invoke(context, originPoint);
+        DamageRoll targetDamageRoll = new DamageRoll()
+                .joinSubeventData(new JsonObject() {{
+                    this.putJsonArray("damage", targetDamageCollection.getDamageCollection().deepClone());
+                    this.putJsonArray("tags", new JsonArray() {{
+                        this.asList().addAll(json.getJsonArray("tags").asList());
+                        this.addString("target_damage_roll");
+                    }});
+                }})
+                .setOriginItem(super.getOriginItem())
+                .setSource(super.getSource())
+                .prepare(context, originPoint)
+                .setTarget(super.getTarget())
+                .invoke(context, originPoint);
 
         this.json.getJsonArray("damage").asList().addAll(targetDamageRoll.getDamage().asList());
     }
@@ -286,11 +283,11 @@ public class SavingThrow extends Roll {
         if (subeventJsonArray != null) {
             for (int i = 0; i < subeventJsonArray.size(); i++) {
                 JsonObject subeventJson = subeventJsonArray.getJsonObject(i);
-                Subevent subevent = Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson);
-                subevent.setSource(super.getSource());
-                subevent.prepare(context, originPoint);
-                subevent.setTarget(super.getTarget());
-                subevent.invoke(context, originPoint);
+                Subevent.SUBEVENTS.get(subeventJson.getString("subevent")).clone(subeventJson)
+                        .setSource(super.getSource())
+                        .prepare(context, originPoint)
+                        .setTarget(super.getTarget())
+                        .invoke(context, originPoint);
             }
         }
     }
@@ -307,17 +304,17 @@ public class SavingThrow extends Roll {
      */
     void deliverDamage(String damageProportion, RPGLContext context, JsonArray originPoint) throws Exception {
         if (!"none".equals(damageProportion)) {
-            DamageDelivery damageDelivery = new DamageDelivery();
-            damageDelivery.joinSubeventData(new JsonObject() {{
-                this.putJsonArray("damage", json.getJsonArray("damage"));
-                this.putString("damage_proportion", damageProportion);
-                this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
-            }});
-            damageDelivery.setOriginItem(super.getOriginItem());
-            damageDelivery.setSource(super.getSource());
-            damageDelivery.prepare(context, originPoint);
-            damageDelivery.setTarget(super.getTarget());
-            damageDelivery.invoke(context, originPoint);
+            DamageDelivery damageDelivery = new DamageDelivery()
+                    .joinSubeventData(new JsonObject() {{
+                        this.putJsonArray("damage", json.getJsonArray("damage"));
+                        this.putString("damage_proportion", damageProportion);
+                        this.putJsonArray("tags", json.getJsonArray("tags").deepClone());
+                    }})
+                    .setOriginItem(super.getOriginItem())
+                    .setSource(super.getSource())
+                    .prepare(context, originPoint)
+                    .setTarget(super.getTarget())
+                    .invoke(context, originPoint);
 
             JsonObject damageByType = damageDelivery.getDamage();
             if (this.json.asMap().containsKey("vampirism")) {

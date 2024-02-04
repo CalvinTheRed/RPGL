@@ -130,8 +130,10 @@ public class AttackRollTest {
     @Test
     @DisplayName("calculates critical hit threshold")
     void calculatesCriticalHitThreshold() throws Exception {
-        AttackRoll attackRoll = new AttackRoll();
-        attackRoll.calculateCriticalHitThreshold(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0);
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        AttackRoll attackRoll = new AttackRoll().setSource(object);
+        attackRoll.calculateCriticalHitThreshold(new DummyContext());
 
         assertEquals(20, attackRoll.getCriticalHitThreshold(),
                 "critical hit threshold should default to 20"
@@ -963,7 +965,9 @@ public class AttackRollTest {
     @Test
     @DisplayName("confirms critical damage")
     void confirmsCriticalDamage() throws Exception {
-        assertTrue(new AttackRoll().confirmCriticalDamage(new DummyContext(), TestUtils.TEST_ARRAY_0_0_0),
+        RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
+
+        assertTrue(new AttackRoll().setSource(object).confirmCriticalDamage(new DummyContext()),
                 "critical damage should be confirmed by default"
         );
     }
@@ -986,7 +990,7 @@ public class AttackRollTest {
                 .setSource(source)
                 .setTarget(target);
 
-        assertFalse(attackRoll.confirmCriticalDamage(context, target.getPosition()),
+        assertFalse(attackRoll.confirmCriticalDamage(context),
                 "critical damage should not be confirmed"
         );
     }
