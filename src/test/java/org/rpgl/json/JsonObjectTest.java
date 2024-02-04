@@ -551,7 +551,7 @@ public class JsonObjectTest {
     @Test
     @DisplayName("get, put, remove: Double values")
     void getPutRemove_Double() {
-        Double value = 1.0;
+        Double value = 1d;
         /*
         verify put(...) behavior
          */

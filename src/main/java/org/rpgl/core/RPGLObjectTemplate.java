@@ -50,7 +50,7 @@ public class RPGLObjectTemplate extends RPGLTemplate {
         object.asMap().putIfAbsent(RPGLObjectTO.RESOURCES_ALIAS, new ArrayList<>());
         object.asMap().putIfAbsent(RPGLObjectTO.CLASSES_ALIAS, new ArrayList<>());
         object.asMap().putIfAbsent(RPGLObjectTO.RACES_ALIAS, new ArrayList<>());
-        object.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0.0);
+        object.asMap().putIfAbsent(RPGLObjectTO.CHALLENGE_RATING_ALIAS, 0d);
         object.asMap().putIfAbsent(RPGLObjectTO.PROXY_ALIAS, false);
     }
 

@@ -20,15 +20,15 @@ public final class TestUtils {
     public static final String TEST_USER = "test-user";
 
     public static final JsonArray TEST_ARRAY_0_0_0 = new JsonArray() {{
-        this.addDouble(0.0);
-        this.addDouble(0.0);
-        this.addDouble(0.0);
+        this.addDouble(0d);
+        this.addDouble(0d);
+        this.addDouble(0d);
     }};
 
     public static final JsonArray TEST_ARRAY_10_10_10 = new JsonArray() {{
-        this.addDouble(10.0);
-        this.addDouble(10.0);
-        this.addDouble(10.0);
+        this.addDouble(10d);
+        this.addDouble(10d);
+        this.addDouble(10d);
     }};
 
     /**

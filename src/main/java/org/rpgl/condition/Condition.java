@@ -3,6 +3,7 @@ package org.rpgl.condition;
 import org.rpgl.core.RPGLContext;
 import org.rpgl.core.RPGLEffect;
 import org.rpgl.exception.ConditionMismatchException;
+import org.rpgl.exception.DimensionMismatchException;
 import org.rpgl.json.JsonArray;
 import org.rpgl.json.JsonObject;
 import org.rpgl.subevent.Subevent;
@@ -46,9 +47,12 @@ public abstract class Condition {
         Condition.CONDITIONS.put("any", new Any());
         Condition.CONDITIONS.put("check_ability", new CheckAbility());
         Condition.CONDITIONS.put("check_ability_score", new CheckAbilityScore());
+        Condition.CONDITIONS.put("check_distance", new CheckDistance());
         Condition.CONDITIONS.put("check_level", new CheckLevel());
         Condition.CONDITIONS.put("check_skill", new CheckSkill());
+        Condition.CONDITIONS.put("entering_reach", new EnteringReach());
         Condition.CONDITIONS.put("equipped_item_has_tag", new EquippedItemHasTag());
+        Condition.CONDITIONS.put("exiting_reach", new ExitingReach());
         Condition.CONDITIONS.put("includes_damage_type", new IncludesDamageType());
         Condition.CONDITIONS.put("invert", new Invert());
         Condition.CONDITIONS.put("is_objects_turn", new IsObjectsTurn());
@@ -163,14 +167,14 @@ public abstract class Condition {
     /**
      * This helper method compares two integer values in accordance with a specified comparison operator.
      *
-     * @param value the int being compared to another value
-     * @param target the int being compared against
+     * @param value the double being compared to another value
+     * @param target the double being compared against
      * @param comparison the operator being used for the comparison (<code>"=", "<", "<=", ">", ">="</code>)
      * @return true if the comparison is satisfied
      *
      * @throws Exception if an invalid comparison operator is provided
      */
-    public static boolean compareValues(int value, int target, String comparison) throws Exception {
+    public static boolean compareValues(double value, double target, String comparison) throws Exception {
         switch(comparison) {
             case "=":
                 return value == target;
@@ -188,6 +192,34 @@ public abstract class Condition {
                 throw e;
             }
         }
+    }
+
+    public static double getDistance(JsonArray pos1, JsonArray pos2, String algorithm) throws DimensionMismatchException {
+        if (pos1.size() == pos2.size()) {
+            return switch (algorithm) {
+                case "direct" -> getDirectDistance(pos1, pos2);
+                case "taxicab" -> getTaxicabDistance(pos1, pos2);
+                default -> -1;
+            };
+        } else {
+            throw new DimensionMismatchException(pos1, pos2);
+        }
+    }
+
+    private static double getDirectDistance(JsonArray pos1, JsonArray pos2) {
+        double sum = 0d;
+        for (int i = 0; i < pos1.size(); i++) {
+            sum += Math.pow((pos1.getDouble(i) - pos2.getDouble(i)), 2);
+        }
+        return Math.sqrt(sum);
+    }
+
+    private static double getTaxicabDistance(JsonArray pos1, JsonArray pos2) {
+        double sum = 0d;
+        for (int i = 0; i < pos1.size(); i++) {
+            sum += Math.abs(pos1.getDouble(i) - pos2.getDouble(i));
+        }
+        return sum;
     }
 
 }

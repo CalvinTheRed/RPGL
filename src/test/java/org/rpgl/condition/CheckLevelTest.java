@@ -62,7 +62,7 @@ public class CheckLevelTest {
     }
 
     @Test
-    @DisplayName("evaluates true ")
+    @DisplayName("evaluates true")
     void evaluatesTrue() throws Exception {
         RPGLObject object = RPGLFactory.newObject("debug:dummy", TestUtils.TEST_USER);
 

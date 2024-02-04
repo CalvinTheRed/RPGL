@@ -1085,7 +1085,7 @@ public class RPGLObject extends RPGLTaggable {
      * @return the object's proficiency bonus according to its level
      */
     public int getProficiencyBonusByLevel() {
-        return (int) (1 + Math.ceil(this.getLevel() / 4.0));
+        return (int) (1 + Math.ceil(this.getLevel() / 4d));
     }
 
     /**

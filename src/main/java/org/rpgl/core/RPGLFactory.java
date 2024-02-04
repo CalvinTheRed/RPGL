@@ -158,13 +158,13 @@ public final class RPGLFactory {
      */
     public static RPGLObject newObject(String objectId, String userId) {
         return newObject(objectId, userId, new JsonArray() {{
-            this.addDouble(0.0);
-            this.addDouble(0.0);
-            this.addDouble(0.0);
+            this.addDouble(0d);
+            this.addDouble(0d);
+            this.addDouble(0d);
         }}, new JsonArray() {{
-            this.addDouble(0.0);
-            this.addDouble(0.0);
-            this.addDouble(0.0);
+            this.addDouble(0d);
+            this.addDouble(0d);
+            this.addDouble(0d);
         }});
     }
 
