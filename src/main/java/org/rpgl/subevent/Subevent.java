@@ -33,7 +33,7 @@ public abstract class Subevent {
 
     public JsonObject json = new JsonObject();
 
-    List<RPGLEffect> appliedEffects = new LinkedList<>();
+    public List<RPGLEffect> appliedEffects = new LinkedList<>();
 
     final String subeventId;
 
