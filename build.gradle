@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.rpgl'
-version 'v0.23.0-beta'
+version 'v0.23.1-beta'
 
 repositories {
     mavenCentral()
